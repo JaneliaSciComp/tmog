@@ -1,0 +1,153 @@
+/*
+ * Copyright © 2007 Howard Hughes Medical Institute. 
+ * All rights reserved.  
+ * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ */
+
+package org.janelia.it.ims.imagerenamer.field;
+
+import javax.swing.AbstractCellEditor;
+import javax.swing.JTextField;
+import javax.swing.JTable;
+import javax.swing.JOptionPane;
+import javax.swing.border.LineBorder;
+import javax.swing.table.TableCellEditor;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.Component;
+import java.awt.Color;
+import java.util.EventObject;
+
+/**
+ * This class supports the editing of a verified field cell
+ * within the file table.
+ *
+ * @author Eric Trautman
+ */
+public class VerifiedFieldEditor extends AbstractCellEditor
+        implements TableCellEditor, ActionListener, ItemListener {
+
+        private Component dialogParent;
+        private JTextField textField;
+        private VerifiedFieldModel verifiedFieldModel;
+        boolean isNextCellSelectValid;
+
+        public VerifiedFieldEditor(Component dialogParent) {
+            this.dialogParent = dialogParent;
+            this.textField = new JTextField();
+            this.textField.addActionListener(this);
+            this.isNextCellSelectValid = true;
+        }
+
+        public Component getTableCellEditorComponent(JTable table,
+                                                     Object value,
+                                                     boolean isSelected,
+                                                     int row,
+                                                     int column) {
+            if (value instanceof VerifiedFieldModel) {
+                verifiedFieldModel = (VerifiedFieldModel) value;
+                textField.setDocument(verifiedFieldModel);
+                textField.setBorder(new LineBorder(Color.gray));
+                if (isSelected) {
+                    textField.selectAll();
+                }
+            }
+            return textField;
+        }
+
+        public void setValue(Object value) {
+            textField.setText((value != null) ? value.toString() : "");
+        }
+
+        public Object getCellEditorValue() {
+            return textField.getDocument();
+        }
+
+        public boolean stopCellEditing() {
+            boolean isEditingStopped = true;
+
+            if (verifiedFieldModel.verify()) {
+                fireEditingStopped();
+            } else {
+                textField.setBorder(new LineBorder(Color.red));
+                textField.selectAll();
+                textField.requestFocusInWindow();
+
+                JOptionPane.showMessageDialog(dialogParent,
+                        verifiedFieldModel.getErrorMessage(), // field to display
+                        "Invalid Entry", // title
+                        JOptionPane.ERROR_MESSAGE);
+
+                isEditingStopped = false;
+                isNextCellSelectValid = false;
+            }
+
+            return isEditingStopped;
+		}
+
+        /**
+         * Returns true if <code>anEvent</code> is <b>not</b> a
+         * <code>MouseEvent</code>.  Otherwise, it returns true
+         * if the necessary number of clicks have occurred, and
+         * returns false otherwise.
+         *
+         * @param   anEvent         the event
+         * @return  true  if cell is ready for editing, false otherwise
+         * @see #shouldSelectCell
+         */
+        public boolean isCellEditable(EventObject anEvent) {
+            return !(anEvent instanceof MouseEvent) || ((MouseEvent) anEvent).getClickCount() >= 1;
+        }
+
+        /**
+         * Returns true to indicate that the editing cell may
+         * be selected.
+         *
+         * @param   anEvent         the event
+         * @return  true
+         * @see #isCellEditable
+         */
+         public boolean shouldSelectCell(EventObject anEvent) {
+            boolean isCurrentSelectValid = isNextCellSelectValid;
+            isNextCellSelectValid = true;
+            return isCurrentSelectValid;
+         }
+
+        /**
+         * @param  anEvent  the event
+         *
+         * @return true to indicate that editing has begun.
+         */
+        public boolean startCellEditing(EventObject anEvent) {
+            return true;
+        }
+
+        /**
+         * Cancels editing.  This method calls <code>fireEditingCanceled</code>.
+         */
+        public void cancelCellEditing() {
+            fireEditingCanceled();
+        }
+
+        /**
+         * When an action is performed, editing is ended.
+         * @param e the action event
+         * @see #stopCellEditing
+         */
+        public void actionPerformed(ActionEvent e) {
+            this.stopCellEditing();
+        }
+
+        /**
+         * When an item's state changes, editing is ended.
+         * @param e the action event
+         * @see #stopCellEditing
+         */
+        public void itemStateChanged(ItemEvent e) {
+            this.stopCellEditing();
+        }
+}
