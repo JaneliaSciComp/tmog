@@ -18,6 +18,7 @@ public class VerifiedTextModel extends VerifiedFieldModel {
     private Integer minimumLength;
     private Integer maximumLength;
     private String pattern;
+    private boolean upcase;
 
     public VerifiedTextModel() {
         super();
@@ -49,7 +50,7 @@ public class VerifiedTextModel extends VerifiedFieldModel {
             isValid = false;
             setErrorMessage("Please enter a value for this required field.");
         }
-
+        if (isValid && upcase) setText(getFullText().toUpperCase()); //force to upeer case only if valid
         return isValid;
     }
 
@@ -61,6 +62,7 @@ public class VerifiedTextModel extends VerifiedFieldModel {
         instance.minimumLength = minimumLength;
         instance.maximumLength = maximumLength;
         instance.pattern = pattern;
+        instance.upcase = upcase;
         return instance;
     }
 
@@ -76,6 +78,10 @@ public class VerifiedTextModel extends VerifiedFieldModel {
         return pattern;
     }
 
+    public boolean getUpcase() {
+        return upcase;
+    }
+
     public void setMinimumLength(Integer minimumLength) {
         this.minimumLength = minimumLength;
     }
@@ -86,6 +92,10 @@ public class VerifiedTextModel extends VerifiedFieldModel {
 
     public void setPattern(String pattern) {
         this.pattern = pattern;
+    }
+
+    public void setUpcase(boolean upcase) {
+        this.upcase = upcase;
     }
 
     private void setMinMaxErrorMessage() {
