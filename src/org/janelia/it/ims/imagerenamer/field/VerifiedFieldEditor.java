@@ -73,6 +73,24 @@ public class VerifiedFieldEditor extends AbstractCellEditor
             if (verifiedFieldModel.verify()) {
                 fireEditingStopped();
             } else {
+                if (verifiedFieldModel.getLength()==0) {
+                     int selection=JOptionPane.showConfirmDialog(dialogParent,
+                            verifiedFieldModel.getErrorMessage(), // field to display
+                            "Missing Entry", // title
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+                     if (selection==JOptionPane.NO_OPTION)  {
+                        fireEditingStopped();
+                        return isEditingStopped;
+                     }
+                     else {
+                        isEditingStopped = false;
+                        isNextCellSelectValid = false;
+                        return isEditingStopped;
+                     }
+                }
+
+
                 textField.setBorder(new LineBorder(Color.red));
                 textField.selectAll();
                 textField.requestFocusInWindow();

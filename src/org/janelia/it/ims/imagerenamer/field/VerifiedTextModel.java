@@ -48,7 +48,7 @@ public class VerifiedTextModel extends VerifiedFieldModel {
 
         } else if (isRequired()) {
             isValid = false;
-            setErrorMessage("Please enter a value for this required field.");
+            setErrorMessage("This is a required field.  Would you like to fill it in now?");
         }
         if (isValid && upcase) setText(getFullText().toUpperCase()); //force to upeer case only if valid
         return isValid;

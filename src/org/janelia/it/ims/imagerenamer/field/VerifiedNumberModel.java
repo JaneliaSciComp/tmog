@@ -44,7 +44,7 @@ public class VerifiedNumberModel extends VerifiedFieldModel {
 
         } else if (isRequired()) {
             isValid = false;
-            setErrorMessage("Please enter a value for this required field.");
+            setErrorMessage("This is a required field.  Would you like to fill it in now?");
         }
 
         return isValid;

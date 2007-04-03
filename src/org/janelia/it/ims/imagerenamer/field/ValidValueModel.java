@@ -7,8 +7,6 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
-import org.janelia.it.ims.imagerenamer.field.RenameField;
-
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
     private ArrayList<ValidValue> validValues;
     private ValidValue selectedValue;
     private String errorMessage;
-
+  
     public ValidValueModel() {
         this.validValues = new ArrayList<ValidValue>();
     }

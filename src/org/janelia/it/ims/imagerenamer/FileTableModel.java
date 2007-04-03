@@ -175,8 +175,9 @@ public class FileTableModel extends AbstractTableModel {
                     break;
                 }
             }
-
-            // perform any configured external validation
+          //  if (!isValid) return isValid; //Do not perform external validation if internal fails
+            
+            // perform any configured external validation only if internal validation is correct
             String externalErrorMsg = null;
             try {
                 for (RenameFieldRowValidator validator : externalValidators) {
