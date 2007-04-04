@@ -11,7 +11,7 @@
 
     <renamePattern>
         <separator value="GMR_" />
-        <number displayName="Plate" required="true" minimumValue="9" maximumValue="999"/>
+        <number displayName="Plate" required="true" minimumValue="1" maximumValue="999"/>
         <text displayName="Well" required="true" pattern="([A-H]|[a-h])(0[1-9]|1[0-2])" upcase="true"/>
         <separator value="_" />
         <validValueList displayName="Vector ID" required="true">
