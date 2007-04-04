@@ -8,7 +8,6 @@
 package org.janelia.it.ims.imagerenamer.field;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxEditor;
 import java.awt.event.FocusEvent;
 import java.awt.KeyboardFocusManager;
 import java.awt.Component;
