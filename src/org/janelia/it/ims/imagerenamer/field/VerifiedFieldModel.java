@@ -21,7 +21,6 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
     private String displayName;
     private boolean isRequired;
     private String errorMessage;
-//    private String requiredMessage;
 
     public VerifiedFieldModel() {
         super();
@@ -55,10 +54,6 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
         return errorMessage;
     }
 
-//    public String getRequiredMessage() {
-//        return requiredMessage;
-//    }
-
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
@@ -67,14 +62,13 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
         isRequired = required;
     }
 
-
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
-//    public void setRequiredMessage(String requiredMessage) {
-//        this.requiredMessage = requiredMessage;
-//    }
+    public void setRequiredErrorMessage() {
+        this.errorMessage = "This is a required field.";
+    }
 
     public String getFullText() {
         String text;

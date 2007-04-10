@@ -39,12 +39,12 @@ public class VerifiedNumberModel extends VerifiedFieldModel {
                 }
             } catch (NumberFormatException e) {
                 isValid = false;
-                setErrorMessage("Please enter a valid number.");
+                setErrorMessage("This field should contain a valid number.");
             }
 
         } else if (isRequired()) {
             isValid = false;
-            setErrorMessage("This is a required field.  Would you like to fill it in now?");
+            setRequiredErrorMessage();
         }
 
         return isValid;
@@ -97,15 +97,15 @@ public class VerifiedNumberModel extends VerifiedFieldModel {
         
         if (minimumValue != null) {
             if (maximumValue != null) {
-                msg = "Please enter a number that is between " +
-                        minimumValue + " and " + maximumValue + ".";
+                msg = "This field should contain a number that is between " +
+                      minimumValue + " and " + maximumValue + ".";
             } else {
-                msg = "Please enter a number that is greater than or equal to " +
-                        minimumValue + ".";
+                msg = "This field should contain a number that is " +
+                      "greater than or equal to " + minimumValue + ".";
             }
         } else if (maximumValue != null) {
-            msg = "Please enter a number that is less than or equal to " +
-                    maximumValue + ".";
+            msg = "This field should contain a number that is " +
+                  "less than or equal to " + maximumValue + ".";
         }
 
         setErrorMessage(msg);

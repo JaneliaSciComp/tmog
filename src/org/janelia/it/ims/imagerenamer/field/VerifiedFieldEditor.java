@@ -70,38 +70,31 @@ public class VerifiedFieldEditor extends AbstractCellEditor
         public boolean stopCellEditing() {
             boolean isEditingStopped = true;
 
-            if (verifiedFieldModel.verify()) {
-                fireEditingStopped();
-            } else {
-                if (verifiedFieldModel.getLength()==0) {
-                     int selection=JOptionPane.showConfirmDialog(dialogParent,
-                            verifiedFieldModel.getErrorMessage(), // field to display
-                            "Missing Entry", // title
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE);
-                     if (selection==JOptionPane.NO_OPTION)  {
-                        fireEditingStopped();
-                        return isEditingStopped;
-                     }
-                     else {
-                        isEditingStopped = false;
-                        isNextCellSelectValid = false;
-                        return isEditingStopped;
-                     }
-                }
+            if (! verifiedFieldModel.verify()) {
 
+                String dialogMsg = verifiedFieldModel.getErrorMessage() +
+                        "  Would you like to correct the field now?";
 
-                textField.setBorder(new LineBorder(Color.red));
-                textField.selectAll();
-                textField.requestFocusInWindow();
-
-                JOptionPane.showMessageDialog(dialogParent,
-                        verifiedFieldModel.getErrorMessage(), // field to display
+                int selection = JOptionPane.showConfirmDialog(
+                        dialogParent,
+                        dialogMsg,
                         "Invalid Entry", // title
-                        JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
 
-                isEditingStopped = false;
-                isNextCellSelectValid = false;
+                if (selection == JOptionPane.YES_OPTION)  {
+                    textField.setBorder(new LineBorder(Color.red));
+                    textField.selectAll();
+                    textField.requestFocusInWindow();
+                    isEditingStopped = false;
+                    isNextCellSelectValid = false;
+                } else {
+                    // TODO: determine how to restore key events
+                }
+            }
+
+            if (isEditingStopped) {
+                fireEditingStopped();
             }
 
             return isEditingStopped;
@@ -118,7 +111,8 @@ public class VerifiedFieldEditor extends AbstractCellEditor
          * @see #shouldSelectCell
          */
         public boolean isCellEditable(EventObject anEvent) {
-            return !(anEvent instanceof MouseEvent) || ((MouseEvent) anEvent).getClickCount() >= 1;
+            return !(anEvent instanceof MouseEvent) ||
+                    ((MouseEvent) anEvent).getClickCount() >= 1;
         }
 
         /**

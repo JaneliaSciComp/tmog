@@ -18,7 +18,7 @@ public class VerifiedTextModel extends VerifiedFieldModel {
     private Integer minimumLength;
     private Integer maximumLength;
     private String pattern;
-    private boolean upcase;
+    private boolean convertToUpperCase;
 
     public VerifiedTextModel() {
         super();
@@ -41,16 +41,16 @@ public class VerifiedTextModel extends VerifiedFieldModel {
                 if (! value.matches(pattern)) {
                     isValid = false;
                     setErrorMessage(
-                            "Please enter a value that matches the pattern: " +
-                            pattern);
+                            "This field should contain a value that " +
+                            "matches the pattern: " + pattern);
                 }
             }
 
         } else if (isRequired()) {
             isValid = false;
-            setErrorMessage("This is a required field.  Would you like to fill it in now?");
+            setRequiredErrorMessage();
         }
-        if (isValid && upcase) setText(getFullText().toUpperCase()); //force to upeer case only if valid
+
         return isValid;
     }
 
@@ -62,7 +62,7 @@ public class VerifiedTextModel extends VerifiedFieldModel {
         instance.minimumLength = minimumLength;
         instance.maximumLength = maximumLength;
         instance.pattern = pattern;
-        instance.upcase = upcase;
+        instance.convertToUpperCase = convertToUpperCase;
         return instance;
     }
 
@@ -78,8 +78,17 @@ public class VerifiedTextModel extends VerifiedFieldModel {
         return pattern;
     }
 
-    public boolean getUpcase() {
-        return upcase;
+    public boolean getConvertToUpperCase() {
+        return convertToUpperCase;
+    }
+
+    @Override
+    public void setText(String t) {
+        String text = t;
+        if ((t != null) && convertToUpperCase) {
+            text = t.toUpperCase();
+        }
+        super.setText(text);
     }
 
     public void setMinimumLength(Integer minimumLength) {
@@ -94,8 +103,8 @@ public class VerifiedTextModel extends VerifiedFieldModel {
         this.pattern = pattern;
     }
 
-    public void setUpcase(boolean upcase) {
-        this.upcase = upcase;
+    public void setConvertToUpperCase(boolean convertToUpperCase) {
+        this.convertToUpperCase = convertToUpperCase;
     }
 
     private void setMinMaxErrorMessage() {
@@ -103,14 +112,14 @@ public class VerifiedTextModel extends VerifiedFieldModel {
 
         if (minimumLength != null) {
             if (maximumLength != null) {
-                msg = "Please enter a value that is between " + minimumLength +
-                       " and " + maximumLength + " characters.";
+                msg = "This field should contain a value that is between " +
+                      minimumLength + " and " + maximumLength + " characters.";
             } else {
-                msg = "Please enter a value that with at least " +
+                msg = "This field should contain a value that with at least " +
                       minimumLength + " characters.";
             }
         } else if (maximumLength != null) {
-            msg = "Please enter a value with no more than " +
+            msg = "This field should contain a value with no more than " +
                    maximumLength + " characters.";
         }
 
