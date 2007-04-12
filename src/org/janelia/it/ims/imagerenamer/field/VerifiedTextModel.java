@@ -30,6 +30,12 @@ public class VerifiedTextModel extends VerifiedFieldModel {
         String value = getFullText();
 
         if ((value != null) && (value.length() > 0)) {
+
+            if (convertToUpperCase) {
+                value = value.toUpperCase();
+                setText(value);
+            }
+
             if ((minimumLength != null) && (value.length() < minimumLength)) {
                 isValid = false;
                 setMinMaxErrorMessage();
@@ -80,15 +86,6 @@ public class VerifiedTextModel extends VerifiedFieldModel {
 
     public boolean getConvertToUpperCase() {
         return convertToUpperCase;
-    }
-
-    @Override
-    public void setText(String t) {
-        String text = t;
-        if ((t != null) && convertToUpperCase) {
-            text = t.toUpperCase();
-        }
-        super.setText(text);
     }
 
     public void setMinimumLength(Integer minimumLength) {
