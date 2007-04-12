@@ -8,12 +8,11 @@
 package org.janelia.it.chacrm;
 
 import static org.janelia.it.chacrm.Transformant.Status;
-import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
+import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
-import org.janelia.it.ims.imagerenamer.plugin.CopyCompleteInfo;
-import org.janelia.it.ims.imagerenamer.plugin.CopyCompleteListener;
-import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
+import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
+import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
 
 import java.io.File;
 
@@ -23,7 +22,16 @@ import java.io.File;
  * @author Eric Trautman
  */
 public class RenamerEventManager implements RenameFieldRowValidator,
-                                            CopyCompleteListener {
+                                            CopyListener {
+
+    /** The plugin data name for image location rank information. */
+    private static final String IMAGE_LOCATION_RANK = "imageLocationRank";
+
+    /** Standard message to verify components of transformant identifier. */
+    private static final String MSG_VERIFY_TRANSFORMANT_COMPONENTS =
+            "Please verify your Plate, Well, Vector ID, and " +
+            "Landing Site settings for the file ";
+
 
     /** The data access object for retrieving and updating transformant data. */
     private TransformantDao dao;
@@ -80,16 +88,14 @@ public class RenamerEventManager implements RenameFieldRowValidator,
         Transformant transformant;
         try {
             transformantID = getTransformantID(row);
-            transformant = dao.getTransformant(transformantID);
+            transformant = dao.getTransformant(transformantID, false);
         } catch (TransformantNotFoundException e) {
             File fromFile = row.getFromFile();
             String fileName = fromFile.getName();
             throw new ExternalDataException(
                     "Transformant ID '" + transformantID +
                     "' does not exist in the ChaCRM database.  " +
-                    "Please verify your Plate, Well, Vector ID, and " +
-                    "Insertion Site settings for the file " +
-                    fileName, e);
+                    MSG_VERIFY_TRANSFORMANT_COMPONENTS + fileName, e);
         } catch (SystemException e) {
             throw new ExternalSystemException(
                     "Failed to retrieve ChaCRM status for transformant ID '" +
@@ -105,58 +111,162 @@ public class RenamerEventManager implements RenameFieldRowValidator,
                     "The ChaCRM status for transformant ID '" + transformantID +
                     "' is currently " + transformant.getStatus() +
                     " and may not be changed to a status of " + Status.imaged +
-                    ".  Please verify your Plate, Well, Vector ID, and " +
-                    "Insertion Site settings for the file " +
-                    fileName, e);
+                    ".  " + MSG_VERIFY_TRANSFORMANT_COMPONENTS + fileName, e);
         }
     }
 
     /**
-     * Updates the associated transformant status to imaged.
+     * Processes the specified copy event.
      *
-     * @param  info  details about the event.
+     * @param  eventType  type of copy event.
+     * @param  row        details about the event.
+     *
+     * @return the rename field row for processing (with any
+     *         updates from this plugin).
      *
      * @throws ExternalDataException
-     *   if the transformant does not exist or has an invalid status.
-     *
+     *   if a recoverable data error occurs during processing.
      * @throws ExternalSystemException
-     *   if any other error occurs during processing.
+     *   if a non-recoverable system error occurs during processing.
      */
-    public void completedSuccessfulCopy(CopyCompleteInfo info)
+    public RenameFieldRow processEvent(EventType eventType,
+                                       RenameFieldRow row)
+            throws ExternalDataException, ExternalSystemException {
+        switch (eventType) {
+            case END_FAIL:
+                failedCopy(row);
+                break;
+            case END_SUCCESS:
+                completedSuccessfulCopy(row);
+                break;
+            case START:
+                row = startingCopy(row);
+                break;
+        }
+        return row;
+    }
+
+    /**
+     * Processes start copy event.
+     *
+     * @param  row  the row information for the event.
+     *
+     * @return row information with updated rank.
+     *
+     * @throws ExternalDataException
+     *   if a recoverable data error occurs during processing.
+     * @throws ExternalSystemException
+     *   if a non-recoverable system error occurs during processing.
+     */
+    private RenameFieldRow startingCopy(RenameFieldRow row)
+            throws ExternalDataException, ExternalSystemException {
+
+        String transformantID = null;
+        try {
+            transformantID = getTransformantID(row);
+            Transformant transformant = dao.getTransformant(transformantID,
+                                                            true);
+            ImageLocation imageLocation = transformant.getImageLocation();
+            Integer rank = imageLocation.getRank();
+            row.setPluginDataValue(IMAGE_LOCATION_RANK, rank);
+        } catch (TransformantNotFoundException e) {
+            throw new ExternalDataException(
+                    "Failed to retrieve transformant image rank " +
+                    "because transformant ID " + transformantID +
+                    " does not exist in the ChaCRM database.  " +
+                    "Detailed data is: " + row, e);
+        } catch (SystemException e) {
+            throw new ExternalSystemException(
+                    "Failed to retrieve ChaCRM image rank for " +
+                    "transformant ID " + transformantID +
+                    ".  Detailed data is: " + row, e);
+        }
+
+        return row;
+    }
+
+    /**
+     * Processes completed copy successfully event.
+     *
+     * @param  row  the row information for the event.
+     *
+     * @throws ExternalDataException
+     *   if a recoverable data error occurs during processing.
+     * @throws ExternalSystemException
+     *   if a non-recoverable system error occurs during processing.
+     */
+    private void completedSuccessfulCopy(RenameFieldRow row)
             throws ExternalDataException, ExternalSystemException {
 
         String transformantID = null;
         Status currentStatus = null;
         try {
-            transformantID = getTransformantID(info);
-            Transformant transformant = dao.getTransformant(transformantID);
+            transformantID = getTransformantID(row);
+            Transformant transformant = dao.getTransformant(transformantID,
+                                                            false);
             currentStatus = transformant.getStatus();
             transformant.setStatus(Status.imaged);
-            File renameFile = info.getToFile();
+            File renameFile = row.getRenamedFile();
             File renameDir = renameFile.getParentFile();
-            String imageLoc;
+            String relativePath;
             if (renameDir == null) {
-                imageLoc = renameFile.getName();                
+                relativePath = renameFile.getName();
             } else {
-                imageLoc = renameDir.getName() + "/" + renameFile.getName();
+                relativePath = renameDir.getName() + "/" + renameFile.getName();
             }
-            transformant.setImageLocation(imageLoc);
-            dao.setTransformantStatus(transformant);
+            Integer rank = (Integer)
+                    row.getPluginDataValue(IMAGE_LOCATION_RANK);
+            ImageLocation imageLocation = new ImageLocation(relativePath, rank);
+            transformant.setImageLocation(imageLocation);
+            dao.setTransformantStatusAndLocation(transformant);
         } catch (TransformantNotFoundException e) {
             throw new ExternalDataException(
                     "Failed to update ChaCRM status because transformant ID " +
                     transformantID + " does not exist in the database.  " +
-                    "Copy information is: " + info, e);
+                    "Detailed data is: " + row, e);
         } catch (IllegalStateException e) {
             throw new ExternalDataException(
                     "The ChaCRM status for transformant ID " + transformantID +
                     " is currently " + currentStatus +
                     " and may not be changed to a status of " + Status.imaged +
-                    ".  Copy information is: " + info, e);
-        } catch (SystemException e) {
+                    ".  Detailed data is: " + row, e);
+        } catch (Exception e) {
             throw new ExternalSystemException(
                     "Failed to update ChaCRM status for transformant ID " +
-                     transformantID + ".  Copy information is: " + info, e);
+                     transformantID + ".  Detailed data is: " + row, e);
+        }
+    }
+
+    /**
+     * Processes completed copy failure event.
+     *
+     * @param  row  the row information for the event.
+     *
+     * @throws ExternalDataException
+     *   if a recoverable data error occurs during processing.
+     * @throws ExternalSystemException
+     *   if a non-recoverable system error occurs during processing.
+     */
+    private void failedCopy(RenameFieldRow row)
+            throws ExternalDataException, ExternalSystemException {
+        try {
+            String transformantID = getTransformantID(row);
+            Transformant transformant = dao.getTransformant(transformantID,
+                                                            false);
+            Integer rank = (Integer)
+                    row.getPluginDataValue(IMAGE_LOCATION_RANK);
+            ImageLocation imageLocation = new ImageLocation("", rank);
+            transformant.setImageLocation(imageLocation);
+            dao.deleteImageLocation(transformant);
+        } catch (TransformantNotFoundException e) {
+            throw new ExternalDataException(
+                    "Failed to delete transformant image location from ChaCRM" +
+                    "database becasue the location could not be found.  " +
+                    "Detailed data is: " + row, e);
+        } catch (Exception e) {
+            throw new ExternalSystemException(
+                    "Failed to delete transformant image location from ChaCRM" +
+                    "database.  Detailed data is: " + row, e);
         }
     }
 
@@ -185,7 +295,7 @@ public class RenamerEventManager implements RenameFieldRowValidator,
         String plate = row.getFileNameValue("Plate");
         String well = row.getFileNameValue("Well");
         String vector = row.getFileNameValue("Vector ID");
-        String insertionSite = row.getFileNameValue("Insertion Site");
+        String insertionSite = row.getFileNameValue("Landing Site");
         transformantID =
                 Transformant.constructTransformantID(plate,
                                                      well,
@@ -193,5 +303,4 @@ public class RenamerEventManager implements RenameFieldRowValidator,
                                                      insertionSite);
         return transformantID;
     }
-
 }

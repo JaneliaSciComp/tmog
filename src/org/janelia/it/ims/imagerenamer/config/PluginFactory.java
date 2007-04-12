@@ -7,9 +7,9 @@
 
 package org.janelia.it.ims.imagerenamer.config;
 
-import org.janelia.it.ims.imagerenamer.plugin.CopyCompleteListener;
-import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
+import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
+import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -17,35 +17,35 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * This class constructs configured CopyCompleteListener instances.
+ * This class constructs configured CopyListener instances.
  *
  * @author Eric Trautman
  */
 public class PluginFactory {
 
-    private Set<PluginConfiguration> copyCompleteListenerPlugins;
-    private Set<CopyCompleteListener> copyCompleteListeners;
+    private Set<PluginConfiguration> copyListenerPlugins;
+    private Set<CopyListener> copyListeners;
 
     private Set<PluginConfiguration> rowValidatorPlugins;
     private Set<RenameFieldRowValidator> rowValidators;
 
     public PluginFactory() {
-        copyCompleteListenerPlugins = new HashSet<PluginConfiguration>();
-        copyCompleteListeners = new HashSet<CopyCompleteListener>();
+        copyListenerPlugins = new HashSet<PluginConfiguration>();
+        copyListeners = new HashSet<CopyListener>();
         rowValidatorPlugins = new HashSet<PluginConfiguration>();
         rowValidators = new HashSet<RenameFieldRowValidator>();
     }
 
-    public void addCopyCompleteListenerPlugin(PluginConfiguration plugin) {
-        copyCompleteListenerPlugins.add(plugin);
+    public void addCopyListenerPlugin(PluginConfiguration plugin) {
+        copyListenerPlugins.add(plugin);
     }
 
     public void addRowValidatorPlugin(PluginConfiguration plugin) {
         rowValidatorPlugins.add(plugin);
     }
 
-    public Set<CopyCompleteListener> getCopyCompleteListeners() {
-        return copyCompleteListeners;
+    public Set<CopyListener> getCopyListeners() {
+        return copyListeners;
     }
 
     public Set<RenameFieldRowValidator> getRowValidators() {
@@ -54,23 +54,23 @@ public class PluginFactory {
 
     public void constructInstances() throws ConfigurationException {
 
-        for (PluginConfiguration pluginConfig : copyCompleteListenerPlugins) {
+        for (PluginConfiguration pluginConfig : copyListenerPlugins) {
             String className = pluginConfig.getClassName();
             Object newInstance = constructInstance(className);
-            if (newInstance instanceof CopyCompleteListener) {
-                CopyCompleteListener plugin =
-                        (CopyCompleteListener) newInstance;
+            if (newInstance instanceof CopyListener) {
+                CopyListener plugin =
+                        (CopyListener) newInstance;
                 try {
                     plugin.init();
                 } catch (ExternalSystemException e) {
                     throw new ConfigurationException(e.getMessage(), e);
                 }
-                copyCompleteListeners.add(plugin);
+                copyListeners.add(plugin);
             } else {
                 throw new ConfigurationException(
                         "configured copy complete listener class (" +
                         className + ") does not implement " +
-                        CopyCompleteListener.class.getName());
+                        CopyListener.class.getName());
             }
         }
 

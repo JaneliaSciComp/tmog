@@ -6,7 +6,7 @@
 
     <plugins>
         <rowValidator className="org.janelia.it.chacrm.RenamerEventManager" />
-        <copyCompleteListener className="org.janelia.it.chacrm.RenamerEventManager" />
+        <copyListener className="org.janelia.it.chacrm.RenamerEventManager" />
     </plugins>
 
     <renamePattern>
@@ -22,9 +22,11 @@
             <validValue displayName="AE: pBPGUw" value="AE" />
         </validValueList>
         <separator value="_" />
-        <validValueList displayName="Insertion Site" required="true">
+        <validValueList displayName="Landing Site" required="true">
             <validValue displayName="01: attP2" value="01" />
         </validValueList>
+        <separator value="_" />
+        <pluginData displayName="imageLocationRank" format="%02d"/>
         <separator value="-" />
         <validValueList displayName="Gender" required="true">
             <validValue displayName="m: Male" value="m" />
@@ -67,7 +69,8 @@
         See http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html
         for datePattern options.
         -->
-        <runTime datePattern="_yyyyMMddHHmmssSSS_" />
-        <fileModificationTime datePattern="'C'yyMMdd" />
+        <fileModificationTime datePattern="'_C'yyMMdd'_'" />
+        <runTime datePattern="yyyyMMddHHmmssSSS" />
+        <separator value=".lsm" />
     </renamePattern>
 </renameConfiguration>

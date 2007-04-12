@@ -7,15 +7,15 @@
 
 package org.janelia.it.ims.imagerenamer;
 
+import org.apache.log4j.Logger;
 import org.janelia.it.ims.imagerenamer.config.RenameConfiguration;
 import org.janelia.it.ims.imagerenamer.field.FileModificationTimeModel;
 import org.janelia.it.ims.imagerenamer.field.RenameField;
 import org.janelia.it.ims.imagerenamer.field.ValidValueModel;
-import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
-import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
-import org.apache.log4j.Logger;
+import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
+import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -27,11 +27,11 @@ import java.awt.Component;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Arrays;
 
 /**
  * This class contains the data model for renaming a set of files.
@@ -152,7 +152,8 @@ public class FileTableModel extends AbstractTableModel {
     
     public boolean validateAllFields(JTable fileTable,
                                      Set<RenameFieldRowValidator> externalValidators,
-                                     Component dialogParent) {
+                                     Component dialogParent,
+                                     File outputDirectory) {
         boolean isValid = true;
 
         for (int rowIndex = 0; isValid && (rowIndex < fields.length); rowIndex++) {
@@ -182,7 +183,8 @@ public class FileTableModel extends AbstractTableModel {
             try {
                 for (RenameFieldRowValidator validator : externalValidators) {
                     validator.validate(new RenameFieldRow(files[rowIndex],
-                                                          rowFields));
+                                                          rowFields,
+                                                          outputDirectory));
                 }
             } catch (ExternalDataException e) {
                 externalErrorMsg = e.getMessage();

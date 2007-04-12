@@ -9,27 +9,28 @@ package org.janelia.it.ims.imagerenamer.config;
 
 import org.apache.commons.digester.Digester;
 import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
-import org.janelia.it.ims.imagerenamer.field.VerifiedTextModel;
-import org.janelia.it.ims.imagerenamer.field.ValidValue;
-import org.janelia.it.ims.imagerenamer.field.ValidValueModel;
-import org.janelia.it.ims.imagerenamer.field.SeparatorModel;
+import org.janelia.it.ims.imagerenamer.field.FileModificationTimeModel;
+import org.janelia.it.ims.imagerenamer.field.PluginDataModel;
 import org.janelia.it.ims.imagerenamer.field.RenameField;
 import org.janelia.it.ims.imagerenamer.field.RunTimeModel;
-import org.janelia.it.ims.imagerenamer.field.FileModificationTimeModel;
+import org.janelia.it.ims.imagerenamer.field.SeparatorModel;
+import org.janelia.it.ims.imagerenamer.field.ValidValue;
+import org.janelia.it.ims.imagerenamer.field.ValidValueModel;
 import org.janelia.it.ims.imagerenamer.field.VerifiedNumberModel;
-import org.janelia.it.ims.imagerenamer.plugin.CopyCompleteListener;
+import org.janelia.it.ims.imagerenamer.field.VerifiedTextModel;
+import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
+import org.xml.sax.SAXException;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.HashSet;
 
 /**
  * This class encapsulates all application configuration information
@@ -71,12 +72,12 @@ public class RenameConfiguration {
         return outputDirectory.isManuallyChosen();
     }
 
-    public Set<CopyCompleteListener> getCopyCompleteListeners() {
-        Set<CopyCompleteListener> listeners;
+    public Set<CopyListener> getCopyListeners() {
+        Set<CopyListener> listeners;
         if (pluginFactory != null) {
-            listeners = pluginFactory.getCopyCompleteListeners();
+            listeners = pluginFactory.getCopyListeners();
         } else {
-            listeners = new HashSet<CopyCompleteListener>();
+            listeners = new HashSet<CopyListener>();
         }
         return listeners;
     }
@@ -156,6 +157,12 @@ public class RenameConfiguration {
         digester.addSetNext("renameConfiguration/renamePattern/separator",
                             "add");
 
+        digester.addObjectCreate("renameConfiguration/renamePattern/pluginData",
+                                 PluginDataModel.class);
+        digester.addSetProperties("renameConfiguration/renamePattern/pluginData");
+        digester.addSetNext("renameConfiguration/renamePattern/pluginData",
+                            "add");
+
         digester.addObjectCreate("renameConfiguration/renamePattern/runTime",
                                  RunTimeModel.class);
         digester.addSetProperties("renameConfiguration/renamePattern/runTime");
@@ -181,13 +188,13 @@ public class RenameConfiguration {
 
         digester.addObjectCreate("renameConfiguration/plugins",
                                  PluginFactory.class);
-        digester.addSetProperties("renameConfiguration/plugins/copyCompleteListener");
+        digester.addSetProperties("renameConfiguration/plugins/copyListener");
 
-        digester.addObjectCreate("renameConfiguration/plugins/copyCompleteListener",
+        digester.addObjectCreate("renameConfiguration/plugins/copyListener",
                                  PluginConfiguration.class);
-        digester.addSetProperties("renameConfiguration/plugins/copyCompleteListener");
-        digester.addSetNext("renameConfiguration/plugins/copyCompleteListener",
-                            "addCopyCompleteListenerPlugin");
+        digester.addSetProperties("renameConfiguration/plugins/copyListener");
+        digester.addSetNext("renameConfiguration/plugins/copyListener",
+                            "addCopyListenerPlugin");
 
         digester.addObjectCreate("renameConfiguration/plugins/rowValidator",
                                  PluginConfiguration.class);

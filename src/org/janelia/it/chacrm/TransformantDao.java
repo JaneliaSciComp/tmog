@@ -7,20 +7,21 @@
 
 package org.janelia.it.chacrm;
 
-import static org.janelia.it.chacrm.Transformant.Status;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import static org.janelia.it.chacrm.Transformant.Status;
 import org.janelia.it.utils.db.DbConfigException;
 import org.janelia.it.utils.db.DbManager;
 import org.janelia.it.utils.security.StringEncrypter;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Properties;
 
 /**
@@ -36,16 +37,6 @@ public class TransformantDao {
     private static final Log LOG =
             LogFactory.getLog(TransformantDao.class);
 
-    /** SQL for retrieving the owner type identifier. */
-    private static final String SQL_SELECT_OWNER_TYPE_ID =
-            "SELECT cvterm_id FROM cvterm WHERE " +
-            "name = 'owner' AND is_obsolete = 0";
-
-    /** SQL for retrieving the image location type identifier. */
-    private static final String SQL_SELECT_IMAGE_LOCATION_TYPE_ID =
-            "SELECT cvterm_id FROM cvterm WHERE " +
-            "name = 'image_location' AND is_obsolete = 0";
-
     /**
      * SQL for retrieving transformant object data.
      *   Parameter 1 is transformant ID.
@@ -55,47 +46,32 @@ public class TransformantDao {
             "feature_id=(SELECT feature_id FROM feature WHERE name=?)";
 
     /**
-     * SQL for updating transformant status.
-     *   Parameter 1 is transformant status.
+     * SQL for inserting a new image location row and retrieving the
+     * corresponding rank.
+     *   Parameter 1 is the returned image location rank.
      *   Parameter 2 is transformant feature id.
      */
-    private static final String SQL_UPDATE_TRANSFORMANT_STATUS =
-            "UPDATE featureprop SET value=? WHERE " +
-            "feature_id=? AND type_id=(" + SQL_SELECT_OWNER_TYPE_ID + ")";
+    private static final String SQL_CALL_ADD_TRANSFORMANT_IMAGE_LOCATION =
+            "{ ? = call store_transformant_image_location(?) }";
 
     /**
-     * SQL for retrieving the feature id of a fragment associated with
-     * a transformant.
+     * SQL for updating transformant status and image location.
      *   Parameter 1 is transformant feature id.
+     *   Parameter 2 is transformant image location.
+     *   Parameter 3 is transformant image rank.
      */
-    private static final String SQL_SELECT_FRAGMENT_FEATURE_ID =
-            "SELECT value FROM featureprop WHERE " +
-            "feature_id=? AND " +
-            "type_id=(SELECT cvterm_id FROM cvterm WHERE " +
-                       "name='tiling_path_fragment_id' AND is_obsolete=0)";
+    private static final String SQL_CALL_IMAGE_TRANSFORMANT =
+            "{ call store_transformant_image_location(?, ?, ?) }";
 
     /**
-     * SQL for updating fragment status.
-     *   Parameter 1 is transformant status.
-     *   Parameter 2 is transformant feature id.
-     */
-    private static final String SQL_UPDATE_FRAGMENT_STATUS =
-            "UPDATE featureprop SET value=? WHERE " +
-            "feature_id=(" + SQL_SELECT_FRAGMENT_FEATURE_ID + ") AND " +
-            "type_id=(" + SQL_SELECT_OWNER_TYPE_ID + ")";
-
-    /**
-     * SQL for updating fragment status.
+     * SQL for updating transformant status and image location.
      *   Parameter 1 is transformant feature id.
-     *   Parameter 2 is image location.
-     *   Parameter 3 is transformant feature id.
+     *   Parameter 2 is transformant image rank.
      */
-    private static final String SQL_UPDATE_TRANSFORMANT_IMAGE_LOCATION =
-            "INSERT INTO featureprop(feature_id, type_id, value, rank) " +
-            "VALUES (?, (" + SQL_SELECT_IMAGE_LOCATION_TYPE_ID + "), ?, " +
-            "(SELECT (case when max(rank) is null then 0 else max(rank) + 1 end) " +
-            "FROM featureprop WHERE feature_id=? AND type_id=(" +
-            SQL_SELECT_IMAGE_LOCATION_TYPE_ID + ")))";
+    private static final String SQL_DELETE_TRANSFORMANT_IMAGE_LOCATION =
+            "DELETE from featureprop WHERE feature_id=? AND rank=? AND " +
+            "type_id=(SELECT cvterm_id FROM cvterm WHERE name = " +
+            "'image_location' AND is_obsolete = 0)";
 
     /**
      * The manager used to establish connections with the ChaCRM repository.
@@ -144,7 +120,11 @@ public class TransformantDao {
      * Retrieves a transformat from the repository based on the
      * specified identifier.
      *
-     * @param  transformantID  identifies the transformant to be retrieved.
+     * @param  transformantID            identifies the transformant
+     *                                   to be retrieved.
+     *
+     * @param  isNewImageLocationNeeded  if true, an new image location
+     *                                   will be allocated and returned.
      *
      * @return a populated transformant object.
      *
@@ -153,18 +133,21 @@ public class TransformantDao {
      * @throws SystemException
      *   if any other errors occur while retrieving the data.
      */
-    public Transformant getTransformant(String transformantID)
+    public Transformant getTransformant(String transformantID,
+                                        boolean isNewImageLocationNeeded)
             throws TransformantNotFoundException, SystemException {
 
         Transformant transformant = null;
         Connection connection = null;
         ResultSet resultSet = null;
-        PreparedStatement statement = null;
+        PreparedStatement pStatement = null;
+        CallableStatement cStatement = null;
+
         try {
             connection = dbManager.getConnection();
-            statement = connection.prepareStatement(SQL_SELECT_TRANSFORMANT);
-            statement.setString(1, transformantID);
-            resultSet = statement.executeQuery();
+            pStatement = connection.prepareStatement(SQL_SELECT_TRANSFORMANT);
+            pStatement.setString(1, transformantID);
+            resultSet = pStatement.executeQuery();
             if (resultSet.next()) {
                 String statusStr = resultSet.getString(1);
                 Status status = null;
@@ -185,6 +168,17 @@ public class TransformantDao {
                         TransformantNotFoundException.getStandardMessage(
                                 transformantID));
             }
+
+            if (isNewImageLocationNeeded) {
+                cStatement = connection.prepareCall(
+                        SQL_CALL_ADD_TRANSFORMANT_IMAGE_LOCATION);
+                cStatement.registerOutParameter(1, Types.INTEGER);
+                cStatement.setInt(2, transformant.getFeatureID());
+                cStatement.execute();
+                int rank = cStatement.getInt(1);
+                ImageLocation imageLocation = new ImageLocation("", rank);
+                transformant.setImageLocation(imageLocation);
+            }
         } catch (DbConfigException e) {
             throw new SystemException(e.getMessage(), e);
         } catch (SQLException e) {
@@ -192,92 +186,50 @@ public class TransformantDao {
                     "Failed to retrieve transformant from database with ID: " +
                     transformantID, e);
         } finally {
-            DbManager.closeResources(resultSet, statement, connection, LOG);
+            DbManager.closeResources(resultSet, pStatement, null, LOG);
+            DbManager.closeResources(null, cStatement, connection, LOG);
         }
 
         return transformant;
     }
 
     /**
-     * Updates the specified transformant's status in the repository.
+     * Updates the specified transformant's status and image location
+     * in the repository.
      *
-     * @param  transformant  transformat whose status should be persisted.
+     * @param  transformant  transformant to be updated.
      *
-     * @return the transformant object with any updates from the repository.
-     *
-     * @throws TransformantNotFoundException
-     *   if the specified transformat does not exist in the repository.
      * @throws SystemException
-     *   if any other errors occur while persiting the data.
+     *   if any errors occur while persiting the data.
      * @throws IllegalArgumentException
-     *   if a null transformant is specified.
+     *   if a null transformant or image location is specified.
      */
-    public Transformant setTransformantStatus(Transformant transformant)
-            throws TransformantNotFoundException, SystemException,
-                   IllegalArgumentException {
+    public void setTransformantStatusAndLocation(Transformant transformant)
+            throws SystemException, IllegalArgumentException {
 
         if (transformant == null) {
             throw new IllegalArgumentException(
-                    "Attempting to update a null transformant object.");
+                    "Transformant is null.");
+        }
+
+        ImageLocation imageLocation = transformant.getImageLocation();
+        if (imageLocation == null) {
+            throw new IllegalArgumentException(
+                    "Transformant image location is null.");
         }
 
         Connection connection = null;
         ResultSet resultSet = null;
-        PreparedStatement statement = null;
+        CallableStatement statement = null;
         try {
             connection = dbManager.getConnection();
-            statement =
-                    connection.prepareStatement(SQL_UPDATE_TRANSFORMANT_STATUS);
-            Status status = transformant.getStatus();
-            statement.setString(1, status.toString());
+            statement = connection.prepareCall(SQL_CALL_IMAGE_TRANSFORMANT);
             Integer featureID = transformant.getFeatureID();
-            statement.setInt(2, featureID);
-            int rowsUpdated = statement.executeUpdate();
+            statement.setInt(1, featureID);
+            statement.setString(2, imageLocation.getRelativePath());
+            statement.setInt(3, imageLocation.getRank());
 
-            if (rowsUpdated == 0) {
-                throw new TransformantNotFoundException(transformant);
-            } else if (rowsUpdated > 1) {
-                LOG.warn("Transformant status update for " + transformant +
-                         " caused " + rowsUpdated +
-                         " rows to be updated instead of just one.");
-            }
-
-            statement =
-                    connection.prepareStatement(SQL_UPDATE_FRAGMENT_STATUS);
-            statement.setString(1, status.toString());
-            statement.setInt(2, featureID);
-            rowsUpdated = statement.executeUpdate();
-
-            if (rowsUpdated == 0) {
-                throw new SystemException(
-                        "The fragment associated with " + transformant +
-                        " can not be found in the ChaCRM database.  " +
-                        "Status for the transformant has been updated.  " +
-                        "Please verify the integrity of the transformant " +
-                        "to fragment relationship.");
-            } else if (rowsUpdated > 1) {
-                LOG.warn("Fragment status update for " + transformant +
-                         " caused " + rowsUpdated +
-                         " rows to be updated instead of just one.");
-            }
-
-            String imageLocation = transformant.getImageLocation();
-
-            if ((imageLocation != null) && (imageLocation.length() > 0)) {
-                statement = connection.prepareStatement(
-                        SQL_UPDATE_TRANSFORMANT_IMAGE_LOCATION);
-                statement.setInt(1, featureID);
-                statement.setString(2, imageLocation);
-                statement.setInt(3, featureID);
-                rowsUpdated = statement.executeUpdate();
-
-                if (rowsUpdated == 0) {
-                    throw new SystemException(
-                            "The image location for " + transformant +
-                            " can not be set in the ChaCRM database.  " +
-                            "Status for the transformant has been updated.");
-                }
-            }
+            statement.executeUpdate();
 
             if (LOG.isInfoEnabled()) {
                 LOG.info("successfully set status for " + transformant);
@@ -287,13 +239,74 @@ public class TransformantDao {
             throw new SystemException(e.getMessage(), e);
         } catch (SQLException e) {
             throw new SystemException(
-                    "Failed to update status in database for transformant: " +
+                    "Failed to update status and image location " +
+                    "in database for transformant: " +
                     transformant, e);
         } finally {
             DbManager.closeResources(resultSet, statement, connection, LOG);
         }
+    }
 
-        return transformant;
+    /**
+     * Deletes the image location for the specified transformat
+     * from the repository.
+     *
+     * @param  transformant  transformant with location to be deleted.
+     *
+     * @throws TransformantNotFoundException
+     *   if the transformant image location cannot be found.
+     * @throws SystemException
+     *   if any other errors occur while deleting the data.
+     * @throws IllegalArgumentException
+     *   if a null transformant or image location is specified.
+     */
+    public void deleteImageLocation(Transformant transformant)
+            throws TransformantNotFoundException, SystemException,
+                   IllegalArgumentException {
+
+        if (transformant == null) {
+            throw new IllegalArgumentException(
+                    "Transformant is null.");
+        }
+
+        ImageLocation imageLocation = transformant.getImageLocation();
+        if (imageLocation == null) {
+            throw new IllegalArgumentException(
+                    "Transformant image location is null.");
+        }
+
+        Connection connection = null;
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+
+        try {
+            connection = dbManager.getConnection();
+            statement = connection.prepareStatement(
+                    SQL_DELETE_TRANSFORMANT_IMAGE_LOCATION);
+            statement.setInt(1, transformant.getFeatureID());
+            statement.setInt(2, imageLocation.getRank());
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated == 0) {
+                throw new TransformantNotFoundException(
+                        "Failed to delete image location for " + transformant);
+            } else if (rowsUpdated == 1) {
+                if (LOG.isInfoEnabled()) {
+                    LOG.info("deleted image location for " + transformant);
+                }
+            } else {
+                LOG.warn(rowsUpdated + " rows were deleted for " +
+                         transformant);
+            }
+
+        } catch (DbConfigException e) {
+            throw new SystemException(e.getMessage(), e);
+        } catch (SQLException e) {
+            throw new SystemException(
+                    "Failed to delete image location for " + transformant, e);
+        } finally {
+            DbManager.closeResources(resultSet, statement, connection, LOG);
+        }
     }
 
     /**
@@ -335,16 +348,5 @@ public class TransformantDao {
         }
 
         return props;
-    }
-
-    public static void main(String[] args) {
-        System.out.println("SQL_SELECT_TRANSFORMANT:\n  " +
-                SQL_SELECT_TRANSFORMANT);
-        System.out.println("\nSQL_UPDATE_TRANSFORMANT_STATUS:\n  " +
-                SQL_UPDATE_TRANSFORMANT_STATUS);
-        System.out.println("\nSQL_UPDATE_FRAGMENT_STATUS:\n  " +
-                SQL_UPDATE_FRAGMENT_STATUS);
-        System.out.println("\nSQL_UPDATE_TRANSFORMANT_IMAGE_LOCATION:\n  " +
-                SQL_UPDATE_TRANSFORMANT_IMAGE_LOCATION);
     }
 }

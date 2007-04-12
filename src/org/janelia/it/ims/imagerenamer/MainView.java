@@ -7,6 +7,7 @@
 
 package org.janelia.it.ims.imagerenamer;
 
+import org.apache.log4j.Logger;
 import org.janelia.it.ims.imagerenamer.config.OutputDirectory;
 import org.janelia.it.ims.imagerenamer.config.RenameConfiguration;
 import org.janelia.it.ims.imagerenamer.field.CopyButtonEditor;
@@ -20,8 +21,7 @@ import org.janelia.it.ims.imagerenamer.field.VerifiedFieldModel;
 import org.janelia.it.ims.imagerenamer.field.VerifiedFieldRenderer;
 import org.janelia.it.ims.imagerenamer.filefilter.DirectoryOnlyFilter;
 import org.janelia.it.ims.imagerenamer.filefilter.FileNameExtensionFilter;
-import org.janelia.it.ims.imagerenamer.plugin.CopyCompleteListener;
-import org.apache.log4j.Logger;
+import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -345,13 +345,14 @@ public class MainView {
                 } else if (tableModel.validateAllFields(
                                         fileTable,
                                         renameConfig.getRowValidators(),
-                                        appPanel)) {
+                                        appPanel,
+                                        outputDirectory)) {
                     setFileTableEnabled(false);
                     CopyAndRenameTask task =
                             new CopyAndRenameTask(thisMainView);
-                    for (CopyCompleteListener listener :
-                            renameConfig.getCopyCompleteListeners()) {
-                        task.addCopyCompleteListener(listener);
+                    for (CopyListener listener :
+                            renameConfig.getCopyListeners()) {
+                        task.addCopyListener(listener);
                     }
                     setRenameTaskInProgress(true);
                     task.execute();

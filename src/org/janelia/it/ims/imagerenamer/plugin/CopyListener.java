@@ -8,17 +8,22 @@
 package org.janelia.it.ims.imagerenamer.plugin;
 
 /**
- * This interface identifies the methods required for all copy completion
- * event listeners.
+ * This interface identifies the methods required for all copy event listeners.
  *
  * @author Eric Trautman
  */
-public interface CopyCompleteListener extends Plugin {
+public interface CopyListener extends Plugin {
+
+    public enum EventType { START, END_SUCCESS, END_FAIL }
 
     /**
-     * Notifies this listener that a copy event has completed successfully.
+     * Notifies this listener that a copy event has occurred.
      *
-     * @param  info  details about the event.
+     * @param  eventType  type of copy event.
+     * @param  row        details about the event.
+     *
+     * @return the rename field row for processing (with any
+     *         updates from this plugin).
      *
      * @throws ExternalDataException
      *   if a recoverable data error occurs during processing.
@@ -26,6 +31,7 @@ public interface CopyCompleteListener extends Plugin {
      * @throws ExternalSystemException
      *   if a non-recoverable system error occurs during processing.
      */
-    public void completedSuccessfulCopy(CopyCompleteInfo info)
+    public RenameFieldRow processEvent(EventType eventType,
+                                       RenameFieldRow row)
             throws ExternalDataException, ExternalSystemException;
 }

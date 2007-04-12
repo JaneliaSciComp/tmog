@@ -37,7 +37,7 @@ public class Transformant {
     private Integer featureID;
 
     /** The latest image location for this transformant. */
-    private String imageLocation;
+    private ImageLocation imageLocation;
 
     /**
      * Basic constructor.
@@ -79,16 +79,16 @@ public class Transformant {
     /**
      * @return the latest image location for this transformant.
      */
-    public String getImageLocation() {
+    public ImageLocation getImageLocation() {
         return imageLocation;
     }
 
     /**
      * Sets the latest image location for this transformant.
      *
-     * @param  imageLocation  the location name.
+     * @param  imageLocation  the latest image location.
      */
-    public void setImageLocation(String imageLocation) {
+    public void setImageLocation(ImageLocation imageLocation) {
         this.imageLocation = imageLocation;
     }
 
@@ -134,6 +134,7 @@ public class Transformant {
         sb.append("{transformantID='").append(transformantID).append('\'');
         sb.append(", status=").append(status);
         sb.append(", featureID=").append(featureID);
+        sb.append(", imageLocation=").append(imageLocation);
         sb.append('}');
         return sb.toString();
     }
