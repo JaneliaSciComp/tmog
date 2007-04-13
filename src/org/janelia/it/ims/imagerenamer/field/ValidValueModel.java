@@ -143,10 +143,12 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
         String displayName;
         for (ValidValue value : validValues) {
             displayName = value.getDisplayName();
-            length = displayName.length();
-            if (length > longestLength) {
-                longestName = displayName;
-                longestLength = length;
+            if (displayName != null) {
+                length = displayName.length();
+                if (length > longestLength) {
+                    longestName = displayName;
+                    longestLength = length;
+                }
             }
         }
         return longestName;
