@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute. 
+ * Copyright ï¿½ 2007 Howard Hughes Medical Institute. 
  * All rights reserved.  
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -18,6 +18,7 @@ import org.janelia.it.ims.imagerenamer.field.ValidValue;
 import org.janelia.it.ims.imagerenamer.field.ValidValueModel;
 import org.janelia.it.ims.imagerenamer.field.VerifiedNumberModel;
 import org.janelia.it.ims.imagerenamer.field.VerifiedTextModel;
+import org.janelia.it.ims.imagerenamer.field.VerifiedWellModel;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
 import org.xml.sax.SAXException;
@@ -149,6 +150,12 @@ public class RenameConfiguration {
                                  VerifiedTextModel.class);
         digester.addSetProperties("renameConfiguration/renamePattern/text");
         digester.addSetNext("renameConfiguration/renamePattern/text",
+                            "add");
+
+        digester.addObjectCreate("renameConfiguration/renamePattern/well",
+                                 VerifiedWellModel.class);
+        digester.addSetProperties("renameConfiguration/renamePattern/well");
+        digester.addSetNext("renameConfiguration/renamePattern/well",
                             "add");
 
         digester.addObjectCreate("renameConfiguration/renamePattern/separator",

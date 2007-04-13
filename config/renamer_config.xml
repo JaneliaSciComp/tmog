@@ -12,7 +12,7 @@
     <renamePattern>
         <separator value="GMR_" />
         <number displayName="Plate" required="true" minimumValue="1" maximumValue="999"/>
-        <text displayName="Well" required="true" pattern="[A-H](0[1-9]|1[0-2])" convertToUpperCase="true"/>
+        <well displayName="Well" required="true" formFactor="96"/>
         <separator value="_" />
         <validValueList displayName="Vector ID" required="true">
             <validValue displayName="AA: pBPGToyw" value="AA" />
