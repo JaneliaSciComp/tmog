@@ -63,6 +63,7 @@
             <validValue displayName="A06: Day 26-30" value="A06" />
         </validValueList>
         <validValueList displayName="Area" required="true">
+            <validValue displayName="s: Salivary Gland" value="s" />
             <validValue displayName="b: Brain" value="b" />
             <validValue displayName="v: Ventral Nerve Cord" value="v" />
         </validValueList>
