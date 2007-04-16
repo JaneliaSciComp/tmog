@@ -60,6 +60,7 @@ public class LNumberComparatorTest extends TestCase {
                 { "aaa_L1_bbb.lsm", "aaa_L10_bbb.lsm", -1 },
                 { "aaa_L10_bbb.lsm", "aaa_L1_bbb.lsm", 1 },
                 { "aaa_La_bbb.lsm", "aaa_L1_bbb.lsm", 1 },
+                { "aaa_L2_bbb.lsm", "aaa_L10_bbb.lsm", -1 }
         };
 
         LNumberComparator comparator = new LNumberComparator();
@@ -116,12 +117,11 @@ public class LNumberComparatorTest extends TestCase {
         };
 
         File[] files = new File[correctlySortedNames.length];
-        String[] reverseSortedNames = new String[correctlySortedNames.length];
 
         int index = 0;
         for (String name : correctlySortedNames) {
-            reverseSortedNames[(reverseSortedNames.length - 1 - index)] = name;
-            files[index] = new File(name);
+            int reverseOrder = files.length - 1 - index;
+            files[reverseOrder] = new File(name);
             index++;
         }
 
