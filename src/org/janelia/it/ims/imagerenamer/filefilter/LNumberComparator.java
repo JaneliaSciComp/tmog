@@ -20,7 +20,8 @@ import java.util.regex.Matcher;
  */
 public class LNumberComparator implements Comparator<File> {
 
-    Pattern PATTERN = Pattern.compile("(.*)_L(\\d++)_(.*)\\.lsm");
+    private static final Pattern PATTERN =
+            Pattern.compile("(.*)_L(\\d++)_(.*)\\.lsm");
 
     public int compare(File o1, File o2) {
 
