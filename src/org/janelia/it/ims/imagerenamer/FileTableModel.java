@@ -16,6 +16,7 @@ import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
+import org.janelia.it.ims.imagerenamer.filefilter.LNumberComparator;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -56,7 +57,8 @@ public class FileTableModel extends AbstractTableModel {
                           RenameConfiguration config) {
 
         this.files = files;
-        Arrays.sort(this.files); // file name order is not guaranteed, so sort
+        // sort files based on L-Numbers
+        Arrays.sort(this.files, new LNumberComparator());
         this.config = config;
         makeFields(files);
     }
