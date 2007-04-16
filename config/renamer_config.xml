@@ -34,6 +34,7 @@
             <validValue displayName="x: Not Defined" value="x" />
         </validValueList>
         <validValueList displayName="Age" required="true">
+            <validValue displayName="X00: undefined" value="X00" />
             <validValue displayName="E01: Embryonic Stage 1" value="E01" />
             <validValue displayName="E02: Embryonic Stage 2" value="E02" />
             <validValue displayName="E03: Embryonic Stage 3" value="E03" />
