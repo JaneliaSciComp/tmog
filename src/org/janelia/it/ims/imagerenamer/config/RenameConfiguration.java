@@ -23,9 +23,6 @@ import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
 import org.xml.sax.SAXException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -104,24 +101,9 @@ public class RenameConfiguration {
      */
     public void load(String resourceName) throws ConfigurationException {
 
-        InputStream stream = null;
-
-        File configFile = new File(resourceName);
-        if (! configFile.exists()) {
-            String cpName = "/" + resourceName;
-            stream = RenameConfiguration.class.getResourceAsStream(cpName);
-            LOG.warn("Loaded configuration from jar file: " + resourceName);
-        }
-
-        if (stream == null) {
-            try {
-                stream = new FileInputStream(configFile);
-            } catch (FileNotFoundException e) {
-                throw new ConfigurationException(
-                        "Unable to find configuration file: " +
-                                configFile.getAbsolutePath(), e);
-            }
-        }
+        String cpName = "/" + resourceName;
+        InputStream stream =
+                RenameConfiguration.class.getResourceAsStream(cpName);
 
         Digester digester = new Digester();
         digester.setValidating(false);
