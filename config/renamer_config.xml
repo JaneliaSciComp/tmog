@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<renameConfiguration>
+<renameConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="renamer_config.xsd">
 
     <outputDirectory basePath="\\smb.int.janelia.org\imaging\renamer\output" manuallyChosen="false" />
 

@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+    <xs:complexType name="outputDirectoryType">
+        <xs:attribute name="basePath" type="xs:string"/>
+        <xs:attribute name="manuallyChosen" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="classNameType">
+        <xs:attribute name="className" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="pluginsType">
+        <xs:sequence>
+            <xs:element name="rowValidator" type="classNameType"/>
+            <xs:element name="copyListener" type="classNameType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="separatorType">
+        <xs:attribute name="value" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="numberType">
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="required" type="xs:string"/>
+        <xs:attribute name="minimumValue" type="xs:integer"/>
+        <xs:attribute name="maximumValue" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="wellType">
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="required" type="xs:string"/>
+        <xs:attribute name="formFactor" type="xs:integer"/>
+    </xs:complexType>
+
+     <xs:complexType name="validValueType">
+         <xs:attribute name="displayName" type="xs:string"/>
+         <xs:attribute name="value" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="validValueListType">
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="validValue" type="validValueType"/>
+        </xs:sequence>
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="required" type="xs:string"/>
+     </xs:complexType>
+
+    <xs:complexType name="pluginDataType">
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="format" type="xs:string" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="fileModificationTimeType">
+        <xs:attribute name="datePattern" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="runTimeType">
+        <xs:attribute name="datePattern" type="xs:string"/>
+    </xs:complexType>
+
+
+    <xs:element name="renameConfiguration">
+        <xs:complexType>
+            <xs:sequence>
+
+                <xs:element name="outputDirectory" type="outputDirectoryType"/>
+
+                <xs:element name="plugins" type="pluginsType" minOccurs="0"/>
+
+                <xs:element name="renamePattern" maxOccurs="1">
+                    <xs:complexType>
+                            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                                <xs:element name="separator" type="separatorType"/>
+                                <xs:element name="number" type="numberType"/>
+                                <xs:element name="well" type="wellType"/>
+                                <xs:element name="validValueList" type="validValueListType"/>
+                                <xs:element name="pluginData" type="pluginDataType"/>
+                                <xs:element name="fileModificationTime" type="fileModificationTimeType"/>
+                                <xs:element name="runTime" type="runTimeType"/>
+                            </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
