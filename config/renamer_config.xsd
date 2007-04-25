@@ -30,6 +30,14 @@
         <xs:attribute name="maximumValue" type="xs:integer"/>
     </xs:complexType>
 
+    <xs:complexType name="textType">
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="required" type="xs:string"/>
+        <xs:attribute name="minimumLength" type="xs:integer"/>
+        <xs:attribute name="maximumLength" type="xs:integer"/>
+        <xs:attribute name="pattern" type="xs:string"/>
+    </xs:complexType>
+
     <xs:complexType name="wellType">
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:string"/>
@@ -62,29 +70,38 @@
         <xs:attribute name="datePattern" type="xs:string"/>
     </xs:complexType>
 
+    <xs:complexType name="projectType">
+        <xs:sequence>
+
+            <xs:element name="outputDirectory" type="outputDirectoryType"/>
+
+            <xs:element name="plugins" type="pluginsType" minOccurs="0"/>
+
+            <xs:element name="renamePattern" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:element name="separator" type="separatorType"/>
+                        <xs:element name="number" type="numberType"/>
+                        <xs:element name="text" type="textType"/>
+                        <xs:element name="well" type="wellType"/>
+                        <xs:element name="validValueList" type="validValueListType"/>
+                        <xs:element name="pluginData" type="pluginDataType"/>
+                        <xs:element name="fileModificationTime" type="fileModificationTimeType"/>
+                        <xs:element name="runTime" type="runTimeType"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="default" type="xs:boolean"/>
+    </xs:complexType>
+
 
     <xs:element name="renameConfiguration">
         <xs:complexType>
-            <xs:sequence>
-
-                <xs:element name="outputDirectory" type="outputDirectoryType"/>
-
-                <xs:element name="plugins" type="pluginsType" minOccurs="0"/>
-
-                <xs:element name="renamePattern" maxOccurs="1">
-                    <xs:complexType>
-                            <xs:choice minOccurs="0" maxOccurs="unbounded">
-                                <xs:element name="separator" type="separatorType"/>
-                                <xs:element name="number" type="numberType"/>
-                                <xs:element name="well" type="wellType"/>
-                                <xs:element name="validValueList" type="validValueListType"/>
-                                <xs:element name="pluginData" type="pluginDataType"/>
-                                <xs:element name="fileModificationTime" type="fileModificationTimeType"/>
-                                <xs:element name="runTime" type="runTimeType"/>
-                            </xs:choice>
-                    </xs:complexType>
-                </xs:element>
-
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                <xs:element name="project" type="projectType" minOccurs="1"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
