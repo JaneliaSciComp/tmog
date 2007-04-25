@@ -45,26 +45,29 @@ public class OutputDirectory {
         isManuallyChosen = manuallyChosen;
     }
 
-    public void verify() throws ConfigurationException {
+    public void verify(String projectName) throws ConfigurationException {
         if (! isManuallyChosen) {
             File baseDirectory = new File(basePath);
             if (! baseDirectory.exists()) {
                 throw new ConfigurationException(
                         "The output directory base path (" +
                         baseDirectory.getAbsolutePath() +
-                        ") does not exist.");
+                        ") for the " + projectName +
+                        " project does not exist.");
             }
             if (! baseDirectory.isDirectory()) {
                 throw new ConfigurationException(
                         "The output directory base path (" +
                         baseDirectory.getAbsolutePath() +
-                        ") is not a directory.");
+                        ") for the " + projectName +
+                        " project is not a directory.");
             }
             if (! baseDirectory.canWrite()) {
                 throw new ConfigurationException(
                         "The output directory base path (" +
                         baseDirectory.getAbsolutePath() +
-                        ") is not writable.");
+                        ") for the " + projectName +
+                        " project is not writable.");
             }
         }
     }

@@ -52,11 +52,12 @@ public class PluginFactory {
         return rowValidators;
     }
 
-    public void constructInstances() throws ConfigurationException {
+    public void constructInstances(String projectName)
+            throws ConfigurationException {
 
         for (PluginConfiguration pluginConfig : copyListenerPlugins) {
             String className = pluginConfig.getClassName();
-            Object newInstance = constructInstance(className);
+            Object newInstance = constructInstance(className, projectName);
             if (newInstance instanceof CopyListener) {
                 CopyListener plugin =
                         (CopyListener) newInstance;
@@ -68,15 +69,16 @@ public class PluginFactory {
                 copyListeners.add(plugin);
             } else {
                 throw new ConfigurationException(
-                        "configured copy complete listener class (" +
-                        className + ") does not implement " +
-                        CopyListener.class.getName());
+                        "The configured copy complete listener class (" +
+                        className + ") for the " + projectName +
+                        " project does not implement " +
+                        CopyListener.class.getName() + ".");
             }
         }
 
         for (PluginConfiguration pluginConfig : rowValidatorPlugins) {
             String className = pluginConfig.getClassName();
-            Object newInstance = constructInstance(className);
+            Object newInstance = constructInstance(className, projectName);
             if (newInstance instanceof RenameFieldRowValidator) {
                 RenameFieldRowValidator plugin =
                         (RenameFieldRowValidator) newInstance;
@@ -88,15 +90,17 @@ public class PluginFactory {
                 rowValidators.add(plugin);
             } else {
                 throw new ConfigurationException(
-                        "configured field row validator class (" +
-                        className + ") does not implement " +
-                        RenameFieldRowValidator.class.getName());
+                        "The configured field row validator class (" +
+                        className + ") for the " + projectName +
+                        " project does not implement " +
+                        RenameFieldRowValidator.class.getName() + ".");
             }
         }
 
     }
 
-    private static Object constructInstance(String className)
+    private static Object constructInstance(String className,
+                                            String projectName)
             throws ConfigurationException {
 
         Class clazz;
@@ -104,8 +108,9 @@ public class PluginFactory {
             clazz = Class.forName(className);
         } catch (ClassNotFoundException e) {
             throw new ConfigurationException(
-                    "configured plugin class (" + className +
-                    ") cannot be found", e);
+                    "The configured plugin class (" + className +
+                    ") for the " + projectName +
+                    " project cannot be found.", e);
         }
 
         final Class[] args = new Class[0];
@@ -114,8 +119,9 @@ public class PluginFactory {
             constructor = clazz.getConstructor(args);
         } catch (NoSuchMethodException e) {
             throw new ConfigurationException(
-                    "configured plugin class (" + className +
-                    ") does not have an empty constructor", e);
+                    "The configured plugin class (" + className +
+                    ") for the " + projectName +
+                    " project does not have an empty constructor.", e);
         }
 
         Object newInstance;
@@ -124,15 +130,18 @@ public class PluginFactory {
         } catch (InstantiationException e) {
             throw new ConfigurationException(
                     "configured plugin class (" + className +
-                    ") cannot be created", e);
+                    ") for the " + projectName +
+                    " project cannot be created.", e);
         } catch (IllegalAccessException e) {
             throw new ConfigurationException(
                     "configured plugin class (" + className +
-                    ") cannot be accessed", e);
+                    ") for the " + projectName +
+                    " project cannot be accessed.", e);
         } catch (InvocationTargetException e) {
             throw new ConfigurationException(
                     "configured plugin class (" + className +
-                    ") cannot be called", e);
+                    ") for the " + projectName +
+                    " project cannot be called.", e);
         }
 
         return newInstance;

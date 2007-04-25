@@ -8,25 +8,21 @@
 package org.janelia.it.ims.imagerenamer;
 
 import org.apache.log4j.Logger;
-import org.janelia.it.ims.imagerenamer.config.RenameConfiguration;
-import org.janelia.it.ims.imagerenamer.field.FileModificationTimeModel;
+import org.janelia.it.ims.imagerenamer.config.ProjectConfiguration;
 import org.janelia.it.ims.imagerenamer.field.RenameField;
 import org.janelia.it.ims.imagerenamer.field.ValidValueModel;
+import org.janelia.it.ims.imagerenamer.filefilter.LNumberComparator;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
-import org.janelia.it.ims.imagerenamer.filefilter.LNumberComparator;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import java.awt.Component;
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -45,62 +41,96 @@ public class FileTableModel extends AbstractTableModel {
     /** The logger for this class. */
     private static final Logger LOG = Logger.getLogger(FileTableModel.class);
 
-    private RenameConfiguration config;
-    private String[] columnNames = {};
-    private File[] files;
-    private JButton[] copyButtons;
-    private RenameField[][] fields;     //Row major order
+    public static final int FILE_COLUMN = 2;
+
+    private List<FileTableRow> rows;
+    private List<String> columnNames;
     private Map<Integer, Integer> columnToFieldIndexMap;
     private Map<Integer, Integer> fieldToColumnIndexMap;
 
     public FileTableModel(File[] files,
-                          RenameConfiguration config) {
+                          ProjectConfiguration config) {
 
-        this.files = files;
+        if (files == null) {
+           files = new File[0];
+        }
+
         // sort files based on L-Numbers
-        Arrays.sort(this.files, new LNumberComparator());
-        this.config = config;
-        makeFields(files);
+        Arrays.sort(files, new LNumberComparator());
+        List<RenameField> renameFieldConfigs = config.getFieldConfigurations();
+
+        // set up column names and field mappings
+        int numberOfColumns = config.getNumberOfEditableFields() + 3;
+        columnNames = new ArrayList<String>(numberOfColumns);
+        columnToFieldIndexMap = new HashMap<Integer, Integer>();
+        fieldToColumnIndexMap = new HashMap<Integer, Integer>();
+        columnNames.add(" "); // checkbox - 1 space needed for header row height
+        columnNames.add(" "); // copy button
+        columnNames.add("File Name");
+
+        int fieldIndex = 0;
+        for (RenameField fieldConfig : renameFieldConfigs) {
+            if (fieldConfig.isEditable()) {
+                int columnIndex = columnNames.size();
+                columnNames.add(fieldConfig.getDisplayName());
+                columnToFieldIndexMap.put(columnIndex, fieldIndex);
+                fieldToColumnIndexMap.put(fieldIndex, columnIndex);
+            }
+            fieldIndex++;
+        }
+
+        // create the model rows
+        this.rows = new ArrayList<FileTableRow>(files.length);
+        for (File file : files) {
+            this.rows.add(new FileTableRow(file, renameFieldConfigs));
+        }
     }
 
     public int getRowCount() {
-        return fields.length;
+        return rows.size();
     }
 
     public int getColumnCount() {
-        return columnNames.length;
+        return columnNames.size();
     }
 
     public String getColumnName(int index) {
-        return columnNames[index];
+        return columnNames.get(index);
     }
 
     public Class getColumnClass(int index) {
         Class columnClass = Object.class;
-        if (fields != null) {
-            Object firstRowObject = getValueAt(0, index);
-            if (firstRowObject != null) {
-                columnClass = firstRowObject.getClass();
-            }
+        if ((index < FILE_COLUMN)) {
+            columnClass = JButton.class;
+        } else if (index == FILE_COLUMN) {
+            columnClass = File.class;
+        } else if (rows.size() > 0) {
+            Object firstRowField = getValueAt(0, index);
+            columnClass = firstRowField.getClass();
         }
         return columnClass;
     }
 
     public boolean isCellEditable(int rowIndex,
                                   int columnIndex) {
-        return (columnIndex != 1);
+        return (columnIndex != FILE_COLUMN);
     }
 
     public Object getValueAt(int rowIndex,
                              int columnIndex) {
-        Object value;
+        Object value = null;
+        FileTableRow row = rows.get(rowIndex);
         if (columnIndex == 0) {
-            value = copyButtons[rowIndex];
+            value = row.getRemoveFileButton();
         } else if (columnIndex == 1) {
-            value = files[rowIndex];
+            if (rowIndex > 0) {
+                value = row.getCopyButton();
+            }
+        } else if (columnIndex == FILE_COLUMN) {
+            value = row.getFile();
         } else {
             int fieldIndex = columnToFieldIndexMap.get(columnIndex);
-            value = fields[rowIndex][fieldIndex];
+            value = row.getField(fieldIndex);
         }
         return value;
     }
@@ -108,18 +138,33 @@ public class FileTableModel extends AbstractTableModel {
     public void setValueAt(Object aValue,
                            int rowIndex,
                            int columnIndex) {
-        if (columnIndex > 0) {
+        FileTableRow row = rows.get(rowIndex);
+        if (columnIndex > FILE_COLUMN) {
             int fieldIndex = columnToFieldIndexMap.get(columnIndex);
-            fields[rowIndex][fieldIndex] = (RenameField) aValue;
+            RenameField field = (RenameField) aValue;
+            row.setField(fieldIndex, field);
         }
     }
 
-    public File[] getFiles() {
-        return files;
+    public List<FileTableRow> getRows() {
+        return rows;
     }
 
-    public RenameField[][] getFields() {
-        return fields;
+    public void removeRow(int rowIndex) {
+        rows.remove(rowIndex);
+        this.fireTableDataChanged();
+    }
+
+    public void copyRow(int fromRowIndex,
+                        int toRowIndex) {
+        FileTableRow fromRow = rows.get(fromRowIndex);
+        FileTableRow toRow = rows.get(toRowIndex);
+        int fieldCount = toRow.getFieldCount();
+        for (int fieldIndex = 0; fieldIndex < fieldCount; fieldIndex++) {
+            RenameField fromField = fromRow.getField(fieldIndex);
+            toRow.setField(fieldIndex, fromField.getNewInstance());
+        }
+        this.fireTableDataChanged();
     }
 
     public String getLongestValue(int columnIndex) {
@@ -127,7 +172,7 @@ public class FileTableModel extends AbstractTableModel {
         int longestLength = 0;
         String longestValue = "";
 
-        if (columnIndex == 1) {
+        if (columnIndex == FILE_COLUMN) {
             String displayValue;
             int length;
             for (int rowIndex = 0; rowIndex < numRows; rowIndex++) {
@@ -142,7 +187,7 @@ public class FileTableModel extends AbstractTableModel {
                     }
                 }
             }
-        } else if (columnIndex > 1) {
+        } else if (columnIndex > FILE_COLUMN) {
             Object model = this.getValueAt(0, columnIndex);
             if (model instanceof ValidValueModel) {
                 ValidValueModel vvModel = (ValidValueModel) model;
@@ -151,15 +196,23 @@ public class FileTableModel extends AbstractTableModel {
         }
         return longestValue;
     }
-    
+
+    public static int getFirstFieldColumn() {
+        return FILE_COLUMN + 1;
+    }
+
     public boolean validateAllFields(JTable fileTable,
                                      Set<RenameFieldRowValidator> externalValidators,
                                      Component dialogParent,
                                      File outputDirectory) {
         boolean isValid = true;
 
-        for (int rowIndex = 0; isValid && (rowIndex < fields.length); rowIndex++) {
-            RenameField[] rowFields = fields[rowIndex];
+        final int numberOfRows = rows.size();
+        for (int rowIndex = 0; isValid && (rowIndex < numberOfRows); rowIndex++) {
+
+            FileTableRow row = rows.get(rowIndex);
+            File rowFile = row.getFile();
+            RenameField[] rowFields = row.getFields();
 
             // validate syntax based on renamer configuration
             for (int fieldIndex = 0; fieldIndex < rowFields.length; fieldIndex++) {
@@ -167,7 +220,7 @@ public class FileTableModel extends AbstractTableModel {
                 if (! field.verify()) {
                     isValid = false;
                     String message = "The " + field.getDisplayName() +
-                            " value for the file " + files[rowIndex].getName() +
+                            " value for the file " + rowFile.getName() +
                             " is invalid.  " + field.getErrorMessage();
                     int columnIndex = fieldToColumnIndexMap.get(fieldIndex);
                     displayErrorDialog(dialogParent,
@@ -179,12 +232,12 @@ public class FileTableModel extends AbstractTableModel {
                 }
             }
             if (!isValid) return isValid; //Do not perform external validation if internal fails
-            
+
             // perform any configured external validation only if internal validation is correct
             String externalErrorMsg = null;
             try {
                 for (RenameFieldRowValidator validator : externalValidators) {
-                    validator.validate(new RenameFieldRow(files[rowIndex],
+                    validator.validate(new RenameFieldRow(rowFile,
                                                           rowFields,
                                                           outputDirectory));
                 }
@@ -204,6 +257,7 @@ public class FileTableModel extends AbstractTableModel {
                                    rowIndex,
                                    2);
             }
+
         }
         return isValid;
     }
@@ -229,69 +283,20 @@ public class FileTableModel extends AbstractTableModel {
         }
     }
 
-    public void removeSuccessfullyCopiedFiles(ArrayList<Integer> failedCopyRowIndices) {
-        final int numRowsAfterRemove = failedCopyRowIndices.size();
-        File[] failedFiles = new File[numRowsAfterRemove];
-        JButton[] failedCopyButtons = new JButton[numRowsAfterRemove];
-        RenameField[][] failedFields = new RenameField[numRowsAfterRemove][];
-        int rowIndex = 0;
-        for (Integer failedRowIndex : failedCopyRowIndices) {
-            failedFiles[rowIndex] = files[failedRowIndex];
-            failedCopyButtons[rowIndex] = copyButtons[failedRowIndex];
-            failedFields[rowIndex] = fields[failedRowIndex];
-            rowIndex++;
+    public void removeSuccessfullyCopiedFiles(List<Integer> failedCopyRowIndices) {
+
+        final int numberOfRows = rows.size();
+        ArrayList<Integer> rowsToDelete = new ArrayList<Integer>(numberOfRows);
+        for (int rowIndex = numberOfRows - 1; rowIndex >= 0; rowIndex--) {
+            if (! failedCopyRowIndices.contains(rowIndex)) {
+                rowsToDelete.add(rowIndex);
+            }
         }
-        files = failedFiles;
-        copyButtons = failedCopyButtons;
-        fields = failedFields;
+
+        for (int rowIndex : rowsToDelete) {
+            rows.remove(rowIndex);
+        }
+
         this.fireTableDataChanged();
-    }
-
-    private void makeFields(File[] files) {
-
-        if (files == null) {
-           files = new File[0];
-        }
-        
-        List<RenameField> renameFieldConfigs = config.getFieldConfigurations();
-        int numberOfColumns = config.getNumberOfEditableFields() + 2;
-        fields = new RenameField[files.length][renameFieldConfigs.size()];
-        columnNames = new String[numberOfColumns];
-        columnToFieldIndexMap = new HashMap<Integer, Integer>();
-        fieldToColumnIndexMap = new HashMap<Integer, Integer>();
-        columnNames[0] = " "; // one space needed for header row height
-        columnNames[1] = "File Name";
-        int columnIndex = 2;
-        int fieldIndex = 0;
-
-        for (RenameField fieldConfig : renameFieldConfigs) {
-            if (fieldConfig.isEditable()) {
-                columnNames[columnIndex] = fieldConfig.getDisplayName();
-                columnToFieldIndexMap.put(columnIndex, fieldIndex);
-                fieldToColumnIndexMap.put(fieldIndex, columnIndex);
-                columnIndex++;
-            }
-            fieldIndex++;
-        }
-
-        URL image = FileTableModel.class.getResource("/copyArrowSimple.png");
-        Icon icon = new ImageIcon(image);
-        String copyButtonTip = "copy values from previous row";
-        copyButtons = new JButton[files.length];
-
-        for (int i = 0; i < files.length; i++) {
-            copyButtons[i] = new JButton(icon);
-            copyButtons[i].setToolTipText(copyButtonTip);
-            fieldIndex = 0;
-            for (RenameField renameFieldConfig : renameFieldConfigs) {
-                fields[i][fieldIndex] = renameFieldConfig.getNewInstance();
-                if (renameFieldConfig instanceof FileModificationTimeModel) {
-                    FileModificationTimeModel model =
-                            (FileModificationTimeModel) fields[i][fieldIndex];
-                    model.setSourceFile(files[i]);
-                }
-                fieldIndex++;
-            }
-        }
     }
 }

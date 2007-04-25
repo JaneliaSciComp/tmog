@@ -9,7 +9,8 @@ package org.janelia.it.ims.imagerenamer;
 
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.imagerenamer.config.ConfigurationException;
-import org.janelia.it.ims.imagerenamer.config.RenameConfiguration;
+import org.janelia.it.ims.imagerenamer.config.ProjectConfiguration;
+import org.janelia.it.ims.imagerenamer.config.RenamerConfiguration;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -28,6 +29,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class manages the tabbed view of rename sessions.
@@ -42,10 +45,10 @@ public class TabbedView implements ActionListener {
     private JTabbedPane tabbedPane;
     private JMenuBar menuBar;
     private JPanel contentPanel;
-    private JMenuItem addRenamerItem;
+    private Map<JMenuItem, ProjectConfiguration> addRenamerItems;
     private JMenuItem removeRenamerItem;
     private JMenuItem exitItem;
-    private RenameConfiguration renameConfig;
+    private RenamerConfiguration renamerConfig;
 
     private HashMap<String, MainView> sessionList;
     private int sessionCount;
@@ -63,9 +66,9 @@ public class TabbedView implements ActionListener {
         LOG.info("starting renamer");
 
         String configFileName = "renamer_config.xml";
-        renameConfig = new RenameConfiguration();
+        renamerConfig = new RenamerConfiguration();
         try {
-            renameConfig.load(configFileName);
+            renamerConfig.load(configFileName);
         } catch (ConfigurationException e) {
             LOG.error("Configuration Error", e);
             JOptionPane.showMessageDialog(contentPanel,
@@ -76,7 +79,11 @@ public class TabbedView implements ActionListener {
         }
 
         createMenuBar();
-        addSession();
+        ProjectConfiguration defaultProject =
+                renamerConfig.getDefaultProjectConfiguration();
+        if (defaultProject != null) {
+            addSession(defaultProject);
+        }
     }
 
     public JPanel getContentPanel() {
@@ -140,9 +147,16 @@ public class TabbedView implements ActionListener {
         menu.setMnemonic(KeyEvent.VK_M);
         menuBar.add(menu);
 
-        addRenamerItem = new JMenuItem("Add Rename Session", KeyEvent.VK_A);
-        addRenamerItem.addActionListener(this);
-        menu.add(addRenamerItem);
+        List<ProjectConfiguration> projectList = renamerConfig.getProjectList();
+        addRenamerItems =
+                new HashMap<JMenuItem, ProjectConfiguration>(projectList.size());
+        for (ProjectConfiguration project : projectList) {
+            JMenuItem addRenamerItem = new JMenuItem(
+                    "Add '" + project.getName() + "' Rename Session");
+            addRenamerItem.addActionListener(this);
+            menu.add(addRenamerItem);
+            addRenamerItems.put(addRenamerItem, project);
+        }
 
         removeRenamerItem = new JMenuItem("Remove Current Rename Session",
                                           KeyEvent.VK_R);
@@ -158,16 +172,20 @@ public class TabbedView implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        if (source == addRenamerItem) {
-            addSession();
-        } else if (source == removeRenamerItem) {
+        if (source == removeRenamerItem) {
             removeSession();
         } else if (source == exitItem) {
             exitApplicationSafely();
+        } else {
+            JMenuItem addItem = (JMenuItem) source;
+            ProjectConfiguration pConfig = addRenamerItems.get(addItem);
+            if (pConfig != null) {
+                addSession(pConfig);
+            }
         }
     }
 
-    private void addSession() {
+    private void addSession(ProjectConfiguration projectConfig) {
         File lsmDirectory = null;
         int currentTab = tabbedPane.getSelectedIndex();
         if (currentTab > -1) {
@@ -175,7 +193,7 @@ public class TabbedView implements ActionListener {
             MainView currentView = sessionList.get(currentTitle);
             lsmDirectory = currentView.getLsmDirectory();
         }
-        MainView newView = new MainView(renameConfig, lsmDirectory);
+        MainView newView = new MainView(projectConfig, lsmDirectory);
         sessionCount++;
         String newTitle = "Session " + sessionCount;
         sessionList.put(newTitle, newView);

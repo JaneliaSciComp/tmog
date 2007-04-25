@@ -8,7 +8,6 @@
 package org.janelia.it.ims.imagerenamer;
 
 import org.apache.log4j.Logger;
-import org.janelia.it.ims.imagerenamer.field.RenameField;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener.EventType;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
@@ -85,11 +84,13 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
         this.renameSummary = new StringBuffer();
 
         FileTableModel model = mainView.getTableModel();
-        File[] files = model.getFiles();
+        List<FileTableRow> modelRows = model.getRows();
         String toDirectoryName = toDirectory.getAbsolutePath();
         String fromDirectoryName = null;
-        if (files.length > 0) {
-            File fromDirectory = files[0].getParentFile();
+        if (modelRows.size() > 0) {
+            FileTableRow firstModelRow = modelRows.get(0);
+            File firstFile = firstModelRow.getFile();
+            File fromDirectory = firstFile.getParentFile();
             fromDirectoryName = fromDirectory.getAbsolutePath();
         }
 
@@ -101,7 +102,8 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
 
         bytesInChunk = 1000000; // default to megabytes
         totalByteChunksToCopy = 1; // prevent rare but possible divide by zero
-        for (File file : files) {
+        for (FileTableRow modelRow : modelRows) {
+            File file = modelRow.getFile();
             totalByteChunksToCopy += (file.length() / bytesInChunk);
         }
         // reset to gigabytes if necessary
@@ -136,22 +138,22 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
 
         try {
             FileTableModel model = mainView.getTableModel();
-            File[] files = model.getFiles();
-            RenameField[][] fields = model.getFields();
+            List<FileTableRow> modelRows = model.getRows();
 
+            int rowIndex = 0;
             int chunksProcessed = 0;
             long pctComplete = 0;
-            final int numberOfRows = fields.length;
-            for (int rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
+            final int numberOfRows = modelRows.size();
+            for (FileTableRow modelRow : modelRows) {
 
-                File rowFile = files[rowIndex];
+                File rowFile = modelRow.getFile();
                 String originalFileName = rowFile.getName();
                 File renamedFile = null;
                 boolean isRenameSuccessful = false;
                 boolean isStartNotificationSuccessful = false;
 
                 RenameFieldRow fieldRow = new RenameFieldRow(rowFile,
-                                                             fields[rowIndex],
+                                                             modelRow.getFields(),
                                                              toDirectory);
                 try {
                     fieldRow = notifyCopyListeners(EventType.START, fieldRow);
@@ -239,6 +241,8 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
                     renameSummary.append(renamedFile.getName());
                 }
                 renameSummary.append("\n");
+
+                rowIndex++;
             }
 
             LOG.debug("finished copy");

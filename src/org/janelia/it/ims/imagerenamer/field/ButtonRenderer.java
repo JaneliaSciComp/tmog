@@ -13,12 +13,12 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.Component;
 
 /**
- * This class supports the rendering of a copy button cell
+ * This class supports the rendering of a button cells
  * within the file table.
  *
  * @author Eric Trautman
  */
-public class CopyButtonRenderer implements TableCellRenderer {
+public class ButtonRenderer implements TableCellRenderer {
 
     public Component getTableCellRendererComponent(JTable table,
                                                    Object value,
@@ -26,11 +26,7 @@ public class CopyButtonRenderer implements TableCellRenderer {
                                                    boolean hasFocus,
                                                    int row,
                                                    int column) {
-        Component component = null;
-        if (row > 0) {
-            component = (JButton) value;
-        }
-        return component;
+        return (JButton) value;
     }
 
 }

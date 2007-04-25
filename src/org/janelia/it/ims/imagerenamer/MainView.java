@@ -9,9 +9,9 @@ package org.janelia.it.ims.imagerenamer;
 
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.imagerenamer.config.OutputDirectory;
-import org.janelia.it.ims.imagerenamer.config.RenameConfiguration;
-import org.janelia.it.ims.imagerenamer.field.CopyButtonEditor;
-import org.janelia.it.ims.imagerenamer.field.CopyButtonRenderer;
+import org.janelia.it.ims.imagerenamer.config.ProjectConfiguration;
+import org.janelia.it.ims.imagerenamer.field.ButtonEditor;
+import org.janelia.it.ims.imagerenamer.field.ButtonRenderer;
 import org.janelia.it.ims.imagerenamer.field.FileRenderer;
 import org.janelia.it.ims.imagerenamer.field.ValidValueEditor;
 import org.janelia.it.ims.imagerenamer.field.ValidValueModel;
@@ -72,17 +72,19 @@ public class MainView {
     private JTable fileTable;
     private JProgressBar copyProgressBar;
     private JLabel copyProgressLabel;
+    private JLabel projectLabel;
     private FileTableModel tableModel;
-    private RenameConfiguration renameConfig;
+    private ProjectConfiguration projectConfig;
     private MainView thisMainView;
     private boolean isRenameTaskInProgress;
 
-    public MainView(RenameConfiguration renameConfig,
+    public MainView(ProjectConfiguration projectConfig,
                     File lsmDirectory) {
         thisMainView = this;
-        this.renameConfig = renameConfig;
+        this.projectConfig = projectConfig;
         this.lsmDirectory = lsmDirectory;
 
+        this.projectLabel.setText(projectConfig.getName());
         setupFileTable();
         setupInputDirectory();
         setupOutputDirectory();
@@ -131,14 +133,13 @@ public class MainView {
 
     private void setupFileTable() {
         fileTable.setDefaultRenderer(File.class, new FileRenderer());
-        fileTable.setDefaultRenderer(JButton.class, new CopyButtonRenderer());
+        fileTable.setDefaultRenderer(JButton.class, new ButtonRenderer());
         fileTable.setDefaultRenderer(ValidValueModel.class,
                                      new ValidValueRenderer());
         fileTable.setDefaultRenderer(VerifiedFieldModel.class,
                                      new VerifiedFieldRenderer());
 
-        fileTable.setDefaultEditor(JButton.class,
-                                   new CopyButtonEditor());
+        fileTable.setDefaultEditor(JButton.class, new ButtonEditor());
         fileTable.setDefaultEditor(ValidValueModel.class,
                                    new ValidValueEditor());
         fileTable.setDefaultEditor(VerifiedFieldModel.class,
@@ -168,13 +169,16 @@ public class MainView {
             editor.requestFocus();
         } else {
             int row = fileTable.getSelectedRow();
-            fileTable.changeSelection(row, 2, false, false);
+            fileTable.changeSelection(row,
+                                      FileTableModel.getFirstFieldColumn(),
+                                      false,
+                                      false);
         }
     }
 
     public void resetFileTable() {
         lsmDirectoryField.setText("");
-        if (! renameConfig.isOutputDirectoryManuallyChosen()) {
+        if (! projectConfig.isOutputDirectoryManuallyChosen()) {
             outputDirectoryField.setText("");
         }
         fileTable.setModel(new DefaultTableModel());
@@ -231,14 +235,14 @@ public class MainView {
         File[] files = lsmDirectory.listFiles(LSM_FILE_FILTER);
         boolean acceptSelectedFile = (files.length > 0);
         boolean isOutputDerived =
-                (! renameConfig.isOutputDirectoryManuallyChosen());
+                (! projectConfig.isOutputDirectoryManuallyChosen());
 
         StringBuilder reject = new StringBuilder();
         String outputPath = null;
         if (acceptSelectedFile) {
             if (isOutputDerived) {
                 OutputDirectory outputCfg =
-                        renameConfig.getOutputDirectory();
+                        projectConfig.getOutputDirectory();
                 outputPath =
                         outputCfg.getDerivedPath(lsmDirectory,
                                                  files);
@@ -280,7 +284,7 @@ public class MainView {
                 outputDirectoryField.setText(outputPath);
             }
             tableModel = new FileTableModel(files,
-                                            renameConfig);
+                                            projectConfig);
             fileTable.setModel(tableModel);
             sizeTable();
             copyAndRenameBtn.setEnabled(true);
@@ -295,7 +299,7 @@ public class MainView {
 
     private void setupOutputDirectory() {
         outputDirectoryBtn.setVisible(
-                renameConfig.isOutputDirectoryManuallyChosen());
+                projectConfig.isOutputDirectoryManuallyChosen());
         outputDirectoryBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
@@ -344,14 +348,14 @@ public class MainView {
 
                 } else if (tableModel.validateAllFields(
                                         fileTable,
-                                        renameConfig.getRowValidators(),
+                                        projectConfig.getRowValidators(),
                                         appPanel,
                                         outputDirectory)) {
                     setFileTableEnabled(false);
                     CopyAndRenameTask task =
                             new CopyAndRenameTask(thisMainView);
                     for (CopyListener listener :
-                            renameConfig.getCopyListeners()) {
+                            projectConfig.getCopyListeners()) {
                         task.addCopyListener(listener);
                     }
                     setRenameTaskInProgress(true);
@@ -369,25 +373,33 @@ public class MainView {
             final int cellMargin = 5;
             TableColumnModel colModel = fileTable.getColumnModel();
             colModel.setColumnMargin(cellMargin);
-
-            // strictly size the copy button column
-            TableColumn tableColumn = colModel.getColumn(0);
+            TableColumn tableColumn;
+            // strictly size the button columns
             final int copyButtonHeight = 20;
             final int copyButtonWidth = 20;
-            int preferredWidth = copyButtonWidth + (2 * cellMargin);
-            tableColumn.setMinWidth(preferredWidth);
-            tableColumn.setMaxWidth(preferredWidth);
-            tableColumn.setPreferredWidth(preferredWidth);
+            for (int columnIndex = 0;
+                 columnIndex < FileTableModel.FILE_COLUMN;
+                 columnIndex++) {
+
+                tableColumn = colModel.getColumn(columnIndex);
+                int preferredWidth = copyButtonWidth + (2 * cellMargin);
+                tableColumn.setMinWidth(preferredWidth);
+                tableColumn.setMaxWidth(preferredWidth);
+                tableColumn.setPreferredWidth(preferredWidth);
+            }
 
             // set preferred sizes for all other columns
-            for (int columnIndex = 1; columnIndex < numColumns; columnIndex++) {
+            for (int columnIndex = FileTableModel.FILE_COLUMN;
+                 columnIndex < numColumns;
+                 columnIndex++) {
+
                 tableColumn = colModel.getColumn(columnIndex);
                 String longestValue = tableModel.getLongestValue(columnIndex);
                 if (longestValue.length() > 0) {
                     JLabel text = new JLabel(longestValue);
                     text.setFont(fileTable.getFont());
                     Dimension dimension = text.getPreferredSize();
-                    preferredWidth = dimension.width + (2 * cellMargin);
+                    int preferredWidth = dimension.width + (2 * cellMargin);
                     tableColumn.setPreferredWidth(preferredWidth);
                 }
             }
@@ -397,6 +409,4 @@ public class MainView {
             fileTable.setRowMargin(cellMargin);
         }
     }
-
 }
-
