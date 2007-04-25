@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 
-<renameConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="renamer_config.xsd">
+<renameConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="renamer_config.xsd">
+
     <project name="Rubin Lab: ChaCRM" default="true">
 
         <outputDirectory basePath="\\smb.int.janelia.org\imaging\renamer\output" manuallyChosen="false" />
@@ -81,16 +83,16 @@
 
     <project name="Rubin Lab: Research and Development">
 
-        <outputDirectory basePath="\\smb.int.janelia.org\imaging\renamer\rdoutput" manuallyChosen="false" />
+        <outputDirectory basePath="\\smb.int.janelia.org\imaging\renamer\output" manuallyChosen="false" />
 
         <renamePattern>
-            <separator value="RND_" />
-            <text displayName="GAL4 Line" required="true"/>
+            <separator value="RD_" />
+            <text displayName="Promoter" required="true" pattern="[0-9A-Za-z\\-]++"/>
             <separator value="_" />
-            <text displayName="Upstream Activating Sequence" required="true"/>
+            <text displayName="Transcript" required="true" pattern="[0-9A-Za-z\\-]++"/>
             <separator value="_" />
-            <text displayName="Comment" required="true"/>
-            <separator value="-" />
+            <text displayName="Comment" required="true" pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_" />
             <runTime datePattern="yyyyMMddHHmmssSSS" />
             <separator value=".lsm" />
         </renamePattern>
