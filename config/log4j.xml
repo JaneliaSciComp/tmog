@@ -27,6 +27,9 @@
         </layout>
     </appender>
 
+    <!-- stub null appender used for testing -->
+    <appender name="SYSLOG_STUB" class="org.apache.log4j.varia.NullAppender" />
+
     <!-- ============================== -->
     <!-- Append messages to the console -->
     <!-- ============================== -->
@@ -54,7 +57,7 @@
     <root>
         <priority value="ERROR" />
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="SYSLOG"/>
+        <appender-ref ref="SYSLOG_STUB"/>
     </root>
 
 </log4j:configuration>
