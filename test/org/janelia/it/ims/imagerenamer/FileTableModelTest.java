@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Tests the FileTableModel class.
  *
- * @author Rob Svirskas
+ * @author Eric Trautman
  */
 public class FileTableModelTest extends TestCase {
 

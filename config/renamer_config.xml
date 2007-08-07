@@ -3,7 +3,7 @@
 <renameConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="renamer_config.xsd">
 
-    <project name="Rubin Lab: ChaCRM" default="true">
+    <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="true">
 
         <outputDirectory basePath="\\smb.int.janelia.org\imaging\renamer\output" manuallyChosen="false" />
 
@@ -38,6 +38,8 @@
             </validValueList>
             <validValueList displayName="Age" required="true">
                 <validValue displayName="X00: undefined" value="X00" />
+                <validValue displayName="P01: Prepupa" value="P01" />
+                <validValue displayName="P02: Pupa" value="P02" />
                 <validValue displayName="E01: Embryonic Stage 1" value="E01" />
                 <validValue displayName="E02: Embryonic Stage 2" value="E02" />
                 <validValue displayName="E03: Embryonic Stage 3" value="E03" />
@@ -81,6 +83,27 @@
 
     </project>
 
+    <project name="Rubin Lab: Research and Development (RD_*)">
+
+        <outputDirectory manuallyChosen="true" />
+
+        <renamePattern>
+            <separator value="RD_" />
+            <text displayName="Promoter" required="true" pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_" />
+            <text displayName="Transcript" required="true" pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_" />
+            <text displayName="Responder" required="true" pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_" />
+            <text displayName="Creator Initials" required="true" pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_" />
+            <text displayName="Comment" required="true" pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_" />
+            <runTime datePattern="yyyyMMddHHmmssSSS" />
+            <separator value=".lsm" />
+        </renamePattern>
+
+    </project>
     <project name="Rubin Lab: Research and Development">
 
         <outputDirectory basePath="\\smb.int.janelia.org\imaging\renamer\output" manuallyChosen="false" />
@@ -90,6 +113,28 @@
             <text displayName="Promoter" required="true" pattern="[0-9A-Za-z\\-]++"/>
             <separator value="_" />
             <text displayName="Transcript" required="true" pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_" />
+            <text displayName="Comment" required="true" pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_" />
+            <runTime datePattern="yyyyMMddHHmmssSSS" />
+            <separator value=".lsm" />
+        </renamePattern>
+
+    </project>
+
+    <project name="Simpson Lab: Phong's renamer (JHS_*)">
+
+        <outputDirectory manuallyChosen="true" />
+
+        <renamePattern>
+            <separator value="JHS_" />
+            <text displayName="Promoter" required="true" pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_" />
+            <text displayName="Transcript" required="true" pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_" />
+            <text displayName="Responder" required="true" pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_" />
+            <text displayName="Creator Initials" required="true" pattern="[0-9A-Za-z\\-]++"/>
             <separator value="_" />
             <text displayName="Comment" required="true" pattern="[0-9A-Za-z\\-]++"/>
             <separator value="_" />

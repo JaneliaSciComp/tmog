@@ -7,6 +7,8 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
+import java.util.Date;
+
 /**
  * This model supports inserting formatted run times (the time when
  * the copy/rename is performed) into a rename pattern.
@@ -15,13 +17,23 @@ package org.janelia.it.ims.imagerenamer.field;
  */
 public class RunTimeModel extends DatePatternModel {
 
+    private Date runTime;
+
     public RunTimeModel() {
     }
 
     public RunTimeModel getNewInstance() {
         RunTimeModel instance = new RunTimeModel();
         instance.setDatePattern(getDatePattern());
+        // do not copy runTime
         return instance;
+    }
+
+    public String getFileNameValue() {
+        if (runTime == null) {
+            runTime = new Date();
+        }
+        return getFileNameValue(runTime);
     }
 
 }

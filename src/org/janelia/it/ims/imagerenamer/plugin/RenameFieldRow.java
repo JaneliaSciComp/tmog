@@ -31,6 +31,9 @@ public class RenameFieldRow {
     /** The directory where the renamed file should be placed. */
     private File outputDirectory;
 
+    /** The renamed file. */
+    private File renamedFile;
+
     /** Map of rename field display names to rename field model objects. */
     private HashMap<String, RenameField> displayNameToFieldMap;
 
@@ -126,11 +129,10 @@ public class RenameFieldRow {
      * @return the renamed file based upon the field models for this row.
      */
     public File getRenamedFile() {
-        StringBuilder fileName = new StringBuilder();
-        for (RenameField field : renameFields) {
-            fileName.append(field.getFileNameValue());
+        if (renamedFile == null) {
+            setRenamedFile();
         }
-        return new File(outputDirectory, fileName.toString());
+        return renamedFile;
     }
 
     /**
@@ -154,6 +156,8 @@ public class RenameFieldRow {
                     "PluginDataModel instance with displayName '" +
                     fieldDisplayName + "' cannot be found in " + this);
         }
+        // unset renamedFile to ensure regeneration with new plugin data
+        renamedFile = null;
     }
 
     /**
@@ -168,5 +172,13 @@ public class RenameFieldRow {
         sb.append(", outputDirectory=").append(outputDirectory);
         sb.append('}');
         return sb.toString();
+    }
+
+    private void setRenamedFile() {
+        StringBuilder fileName = new StringBuilder();
+        for (RenameField field : renameFields) {
+            fileName.append(field.getFileNameValue());
+        }
+        renamedFile = new File(outputDirectory, fileName.toString());
     }
 }

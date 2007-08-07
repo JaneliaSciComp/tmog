@@ -7,8 +7,8 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * This class provides an abstract implementation for date based field models.
@@ -31,10 +31,7 @@ public abstract class DatePatternModel implements RenameField {
 
     public abstract DatePatternModel getNewInstance();
 
-    public String getFileNameValue() {
-        Date now = new Date();
-        return getFileNameValue(now);
-    }
+    public abstract String getFileNameValue();
 
     public String getFileNameValue(Date sourceDate) {
         String fileNameValue;
