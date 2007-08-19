@@ -14,6 +14,8 @@ import java.io.OutputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * This utility supports safe file transfers.
@@ -219,21 +221,108 @@ public class SafeFileTransfer {
         }
     }
 
+    /**
+     * Utility to calculate and return the digest value for the specified file.
+     *
+     * @param  forFile  file to read.
+     *
+     * @return the file's calculated digest value.
+     */
+    public static byte[] getDigest(File forFile) {
+        byte[] digestValue;
+        DigestInputStream dis = null;
+        try {
+            MessageDigest digest = MessageDigest.getInstance(DIGEST_ALGORITHM);
+            FileInputStream fis = new FileInputStream(forFile);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            dis = new DigestInputStream(bis, digest);
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int rtnBytes = BUFFER_SIZE;
+            while (rtnBytes > 0) {
+                rtnBytes = dis.read(buffer);
+            }
+            digestValue = digest.digest();
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException(
+                    "unable to find MessageDigest for " + DIGEST_ALGORITHM +
+                    " algorithm", e);
+        } catch (IOException e) {
+            throw new IllegalArgumentException(
+                    "unable to access file " + forFile.getAbsolutePath(), e);
+        } finally {
+            closeInputStream(dis);
+        }
+        return digestValue;
+    }
+
+    private static void closeInputStream(InputStream is) {
+        if (is != null) {
+            try {
+                is.close();
+            } catch (IOException e) {
+                LOG.error("failed to close input stream", e);
+            }
+        }
+    }
+
+    private static final SimpleDateFormat SDF =
+            new SimpleDateFormat("yyyy-MM-dd hh:mm:ss'.0'");
+
     public static void main(String[] args) {
-        if (args.length<3){
-            System.out.println ("Usage: java " + SafeFileTransfer.class.getName()
-                    +"<copy/move> <src file/directory> <destination> <true/false overwrite destination>");
+        boolean isValid = false;
+        boolean isCopy = false;
+        boolean isMove = false;
+        boolean isDigest = false;
+        File srcLocation = null;
+        File destLocation = null;
+        boolean overWrite = false;
+        if (args.length > 1) {
+            String action = args[0].toLowerCase();
+            isCopy = "copy".equals(action);
+            isMove = "move".equals(action);
+            isDigest = "digest".equals(action);
+            srcLocation = new File(args[1]);
+            if (isDigest) {
+                isValid = true;
+            } else if ((isCopy || isMove) && (args.length > 2)) {
+                destLocation = new File(args[2]);
+                if (args.length > 3) {
+                    overWrite = Boolean.valueOf(args[3]);
+                }
+                isValid = true;
+            }
+        }
+        if (! isValid){
+            System.out.println(
+                    "Usages:\n" +
+                    "(1) java " + SafeFileTransfer.class.getName() +
+                    "<copy|move> <src file|directory> <destination> " +
+                    "<true|false overwrite destination>\n" +
+                    "(2) java " + SafeFileTransfer.class.getName() +
+                    " digest <src file>");
             System.exit(1);
         }
-        boolean move=false;
-        if (args[0].toUpperCase().equals("MOVE")) move=true;
-        File srcLocation=new File(args[1]);
-        File destLocation=new File(args[2]);
-        boolean overWrite= Boolean.valueOf(args[3].toUpperCase());
         try {
             long t1=System.currentTimeMillis();
-            if (move) move(srcLocation,destLocation,overWrite);
-            else copy(srcLocation,destLocation,overWrite);
+            if (isMove) {
+                move(srcLocation, destLocation, overWrite);
+            }
+            else if (isCopy) {
+                copy(srcLocation, destLocation, overWrite);
+            } else if (isDigest) {
+                byte[] digestValue = getDigest(srcLocation);
+                StringBuilder sb = new StringBuilder(512);
+                sb.append(SDF.format(new Date()));
+                sb.append(" Recalculated ");
+                sb.append(DIGEST_ALGORITHM);
+                sb.append(" digest value for ");
+                sb.append(srcLocation.getAbsolutePath());
+                sb.append(" is ");
+                for (byte b : digestValue) {
+                    sb.append(b);
+                }
+                System.out.println(sb);
+            }
             System.out.println("Time: "+(System.currentTimeMillis()-t1));
         }
         catch (Exception ex){
