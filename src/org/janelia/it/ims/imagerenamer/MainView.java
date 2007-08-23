@@ -10,37 +10,17 @@ package org.janelia.it.ims.imagerenamer;
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.imagerenamer.config.OutputDirectory;
 import org.janelia.it.ims.imagerenamer.config.ProjectConfiguration;
-import org.janelia.it.ims.imagerenamer.field.ButtonEditor;
-import org.janelia.it.ims.imagerenamer.field.ButtonRenderer;
-import org.janelia.it.ims.imagerenamer.field.FileRenderer;
-import org.janelia.it.ims.imagerenamer.field.ValidValueEditor;
-import org.janelia.it.ims.imagerenamer.field.ValidValueModel;
-import org.janelia.it.ims.imagerenamer.field.ValidValueRenderer;
-import org.janelia.it.ims.imagerenamer.field.VerifiedFieldEditor;
-import org.janelia.it.ims.imagerenamer.field.VerifiedFieldModel;
-import org.janelia.it.ims.imagerenamer.field.VerifiedFieldRenderer;
+import org.janelia.it.ims.imagerenamer.field.*;
 import org.janelia.it.ims.imagerenamer.filefilter.DirectoryOnlyFilter;
 import org.janelia.it.ims.imagerenamer.filefilter.FileNameExtensionFilter;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.File;
 import java.io.FileFilter;
 
@@ -144,7 +124,7 @@ public class MainView {
                                    new ValidValueEditor());
         fileTable.setDefaultEditor(VerifiedFieldModel.class,
                                    new VerifiedFieldEditor(appPanel));
-
+        fileTable.getTableHeader().setReorderingAllowed(false);
         fileTable.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
                 int code = e.getKeyCode();
@@ -359,7 +339,7 @@ public class MainView {
                         task.addCopyListener(listener);
                     }
                     setRenameTaskInProgress(true);
-                    task.execute();
+                    task.execute(); //TODO Add Thread Pool around here?
                 }
             }
         });
