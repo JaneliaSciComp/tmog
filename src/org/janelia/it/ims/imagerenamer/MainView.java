@@ -33,7 +33,9 @@ import java.io.FileFilter;
  */
 public class MainView {
 
-    /** The logger for this class. */
+    /**
+     * The logger for this class.
+     */
     private static final Logger LOG = Logger.getLogger(MainView.class);
 
     public static final String LSM_EXTENSION = ".lsm";
@@ -115,15 +117,15 @@ public class MainView {
         fileTable.setDefaultRenderer(File.class, new FileRenderer());
         fileTable.setDefaultRenderer(JButton.class, new ButtonRenderer());
         fileTable.setDefaultRenderer(ValidValueModel.class,
-                                     new ValidValueRenderer());
+                new ValidValueRenderer());
         fileTable.setDefaultRenderer(VerifiedFieldModel.class,
-                                     new VerifiedFieldRenderer());
+                new VerifiedFieldRenderer());
 
         fileTable.setDefaultEditor(JButton.class, new ButtonEditor());
         fileTable.setDefaultEditor(ValidValueModel.class,
-                                   new ValidValueEditor());
+                new ValidValueEditor());
         fileTable.setDefaultEditor(VerifiedFieldModel.class,
-                                   new VerifiedFieldEditor(appPanel));
+                new VerifiedFieldEditor(appPanel));
         fileTable.getTableHeader().setReorderingAllowed(false);
         fileTable.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
@@ -150,15 +152,15 @@ public class MainView {
         } else {
             int row = fileTable.getSelectedRow();
             fileTable.changeSelection(row,
-                                      FileTableModel.getFirstFieldColumn(),
-                                      false,
-                                      false);
+                    FileTableModel.getFirstFieldColumn(),
+                    false,
+                    false);
         }
     }
 
     public void resetFileTable() {
         lsmDirectoryField.setText("");
-        if (! projectConfig.isOutputDirectoryManuallyChosen()) {
+        if (!projectConfig.isOutputDirectoryManuallyChosen()) {
             outputDirectoryField.setText("");
         }
         fileTable.setModel(new DefaultTableModel());
@@ -193,12 +195,12 @@ public class MainView {
                 fileChooser.setFileSelectionMode(
                         JFileChooser.FILES_AND_DIRECTORIES);
                 int choice = fileChooser.showDialog(parentPanel,
-                                                    "Select Source");
+                        "Select Source");
 
                 if (choice == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     if ((selectedFile != null) &&
-                            (! selectedFile.isDirectory())) {
+                            (!selectedFile.isDirectory())) {
                         selectedFile = selectedFile.getParentFile();
                     }
 
@@ -215,7 +217,7 @@ public class MainView {
         File[] files = lsmDirectory.listFiles(LSM_FILE_FILTER);
         boolean acceptSelectedFile = (files.length > 0);
         boolean isOutputDerived =
-                (! projectConfig.isOutputDirectoryManuallyChosen());
+                (!projectConfig.isOutputDirectoryManuallyChosen());
 
         StringBuilder reject = new StringBuilder();
         String outputPath = null;
@@ -225,7 +227,7 @@ public class MainView {
                         projectConfig.getOutputDirectory();
                 outputPath =
                         outputCfg.getDerivedPath(lsmDirectory,
-                                                 files);
+                                files);
                 File derivedOutputDir = new File(outputPath);
                 boolean outputDirExists = derivedOutputDir.exists();
                 if (outputDirExists) {
@@ -238,7 +240,7 @@ public class MainView {
                             (outputBaseDir != null) &&
                                     outputBaseDir.canWrite();
                 }
-                if (! acceptSelectedFile) {
+                if (!acceptSelectedFile) {
                     reject.append("The derived output directory for your selection (");
                     reject.append(outputPath);
                     if (outputDirExists) {
@@ -264,15 +266,15 @@ public class MainView {
                 outputDirectoryField.setText(outputPath);
             }
             tableModel = new FileTableModel(files,
-                                            projectConfig);
+                    projectConfig);
             fileTable.setModel(tableModel);
             sizeTable();
             copyAndRenameBtn.setEnabled(true);
         } else {
             JOptionPane.showMessageDialog(appPanel,
-                                          reject.toString(),
-                                          "LSM Directory Selection Error",
-                                          JOptionPane.ERROR_MESSAGE);
+                    reject.toString(),
+                    "LSM Directory Selection Error",
+                    JOptionPane.ERROR_MESSAGE);
             resetFileTable();
         }
     }
@@ -304,17 +306,17 @@ public class MainView {
                 String outputDirectoryName = outputDirectoryField.getText();
                 File outputDirectory = new File(outputDirectoryName);
                 String outputFailureMsg = null;
-                if (! outputDirectory.exists()) {
+                if (!outputDirectory.exists()) {
                     try {
                         outputDirectory.mkdir();
                     } catch (Exception e1) {
                         outputFailureMsg =
                                 "Failed to create output directory " +
-                                outputDirectory.getAbsolutePath() + ".";
+                                        outputDirectory.getAbsolutePath() + ".";
                         LOG.error(outputFailureMsg, e1);
                     }
                 }
-                if (! outputDirectory.isDirectory()) {
+                if (!outputDirectory.isDirectory()) {
                     outputFailureMsg =
                             "The output directory must be set to a valid directory.";
                 }
@@ -322,15 +324,15 @@ public class MainView {
                 if (outputFailureMsg != null) {
 
                     JOptionPane.showMessageDialog(appPanel,
-                                                  outputFailureMsg,
-                                                  "Error",
-                                                  JOptionPane.ERROR_MESSAGE);
+                            outputFailureMsg,
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
 
                 } else if (tableModel.validateAllFields(
-                                        fileTable,
-                                        projectConfig.getRowValidators(),
-                                        appPanel,
-                                        outputDirectory)) {
+                        fileTable,
+                        projectConfig.getRowValidators(),
+                        appPanel,
+                        outputDirectory)) {
                     setFileTableEnabled(false);
                     CopyAndRenameTask task =
                             new CopyAndRenameTask(thisMainView);
@@ -339,7 +341,8 @@ public class MainView {
                         task.addCopyListener(listener);
                     }
                     setRenameTaskInProgress(true);
-                    task.execute(); //TODO Add Thread Pool around here?
+                    ImageRenamer.getExecutorService().submit(task);
+                    //task.execute();
                 }
             }
         });
