@@ -41,6 +41,10 @@ public class MainView {
     public static final String LSM_EXTENSION = ".lsm";
     private static final FileFilter LSM_FILE_FILTER =
             new FileNameExtensionFilter(LSM_EXTENSION);
+    public final String COPY_BUTTON_TEXT = "Copy and Rename";
+    public final String CANCEL_BUTTON_TEXT = "Cancel Pending Task";
+    public final String COPY_BUTTON_TOOL_TIP_TEXT = "Copy and rename all files using specified information";
+    public final String CANCEL_BUTTON_TOOL_TIP_TEXT = "Cancel the pending task";
 
     private File lsmDirectory;
     private JLabel lsmDirectoryField;
@@ -71,6 +75,10 @@ public class MainView {
         setupInputDirectory();
         setupOutputDirectory();
         setupProcess();
+    }
+
+    public JButton getCopyAndRenameBtn() {
+        return copyAndRenameBtn;
     }
 
     public JPanel getPanel() {
@@ -299,7 +307,10 @@ public class MainView {
     }
 
     private void setupProcess() {
-        copyAndRenameBtn.setEnabled(false);
+        copyAndRenameBtn.setEnabled(true);
+        copyAndRenameBtn.setText(COPY_BUTTON_TEXT);
+        copyAndRenameBtn.setToolTipText(COPY_BUTTON_TOOL_TIP_TEXT);
+        removeListeners(copyAndRenameBtn);
         copyAndRenameBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 fileTable.editCellAt(-1, -1); // stop any current editor                
@@ -334,15 +345,27 @@ public class MainView {
                         appPanel,
                         outputDirectory)) {
                     setFileTableEnabled(false);
-                    CopyAndRenameTask task =
+                    final CopyAndRenameTask task =
                             new CopyAndRenameTask(thisMainView);
                     for (CopyListener listener :
                             projectConfig.getCopyListeners()) {
                         task.addCopyListener(listener);
                     }
                     setRenameTaskInProgress(true);
-                    ImageRenamer.getExecutorService().submit(task);
-                    //task.execute();
+                    ImageRenamer.getThreadPoolExecutor().submit(task);
+                    copyAndRenameBtn.setText(CANCEL_BUTTON_TEXT);
+                    copyAndRenameBtn.setToolTipText(CANCEL_BUTTON_TOOL_TIP_TEXT);
+                    copyAndRenameBtn.setEnabled(true);
+                    removeListeners(copyAndRenameBtn);
+                    copyAndRenameBtn.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            if (!task.cancel(true))
+                                LOG.error("TASK COULD NOT BE CANCELED");
+                            thisMainView.setFileTableEnabled(true);
+                            setRenameTaskInProgress(false);
+                            setupProcess();
+                        }
+                    });
                 }
             }
         });
@@ -391,5 +414,10 @@ public class MainView {
             fileTable.setRowHeight(preferredHeight);
             fileTable.setRowMargin(cellMargin);
         }
+    }
+
+    private void removeListeners(AbstractButton abstractButton) {
+        for (ActionListener actionListener : abstractButton.getActionListeners())
+            abstractButton.removeActionListener(actionListener);
     }
 }

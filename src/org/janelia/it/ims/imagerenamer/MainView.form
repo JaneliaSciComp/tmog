@@ -164,7 +164,7 @@
                 <properties>
                   <enabled value="false"/>
                   <text value="Copy and Rename" noi18n="true"/>
-                  <toolTipText value="copy and rename all files using specified information"/>
+                  <toolTipText value="Copy and rename all files using specified information"/>
                 </properties>
               </component>
               <hspacer id="65df5">

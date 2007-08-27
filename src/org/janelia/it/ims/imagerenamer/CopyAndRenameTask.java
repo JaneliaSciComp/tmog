@@ -17,12 +17,8 @@ import org.janelia.it.utils.filexfer.FileCopyFailedException;
 import org.janelia.it.utils.filexfer.SafeFileTransfer;
 import org.jdesktop.swingworker.SwingWorker;
 
-import javax.swing.DefaultBoundedRangeModel;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-import javax.swing.JTable;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,16 +35,24 @@ import java.util.List;
  */
 public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
 
-    /** The logger for this class. */
+    /**
+     * The logger for this class.
+     */
     private static final Logger LOG = Logger.getLogger(CopyAndRenameTask.class);
 
-    /** The main view for this rename session. */
+    /**
+     * The main view for this rename session.
+     */
     private MainView mainView;
 
-    /** The target directory for all copied files. */
+    /**
+     * The target directory for all copied files.
+     */
     private File toDirectory;
 
-    /** A text summary of what was copied/renamed. */
+    /**
+     * A text summary of what was copied/renamed.
+     */
     private StringBuffer renameSummary;
 
     /**
@@ -57,10 +61,14 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
      */
     private int bytesInChunk;
 
-    /** The total number of byte "chunks" that need to be copied. */
+    /**
+     * The total number of byte "chunks" that need to be copied.
+     */
     private long totalByteChunksToCopy;
 
-    /** List of index numbers for copy failures. */
+    /**
+     * List of index numbers for copy failures.
+     */
     private ArrayList<Integer> failedCopyRowIndices;
 
     /**
@@ -72,7 +80,7 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
     /**
      * Constructs a new task.
      *
-     * @param  mainView  the main view for this rename session.
+     * @param mainView the main view for this rename session.
      */
     public CopyAndRenameTask(MainView mainView) {
 
@@ -107,7 +115,7 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
             totalByteChunksToCopy += (file.length() / bytesInChunk);
         }
         // reset to gigabytes if necessary
-        if (totalByteChunksToCopy > (long)Integer.MAX_VALUE) {
+        if (totalByteChunksToCopy > (long) Integer.MAX_VALUE) {
             totalByteChunksToCopy = totalByteChunksToCopy / 1000;
             bytesInChunk = bytesInChunk * 1000;
         }
@@ -121,7 +129,7 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
      * Registers the specified listener for notifications during
      * the file copy process.
      *
-     * @param  listener  listener to be notified.
+     * @param listener listener to be notified.
      */
     public void addCopyListener(CopyListener listener) {
         copyListenerLists.add(listener);
@@ -137,6 +145,9 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
         LOG.debug("starting copy");
 
         try {
+            mainView.getCopyAndRenameBtn().setText(mainView.COPY_BUTTON_TEXT);
+            mainView.getCopyAndRenameBtn().setToolTipText(mainView.COPY_BUTTON_TOOL_TIP_TEXT);
+            mainView.getCopyAndRenameBtn().setEnabled(false);
             FileTableModel model = mainView.getTableModel();
             List<FileTableRow> modelRows = model.getRows();
 
@@ -153,14 +164,14 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
                 boolean isStartNotificationSuccessful = false;
 
                 RenameFieldRow fieldRow = new RenameFieldRow(rowFile,
-                                                             modelRow.getFields(),
-                                                             toDirectory);
+                        modelRow.getFields(),
+                        toDirectory);
                 try {
                     fieldRow = notifyCopyListeners(EventType.START, fieldRow);
                     isStartNotificationSuccessful = true;
                 } catch (Exception e) {
                     LOG.error("Failed external start processing for " +
-                              fieldRow, e);
+                            fieldRow, e);
                 }
 
                 if (isStartNotificationSuccessful) {
@@ -168,10 +179,10 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
 
                     // update progress information in the UI
                     publish(new CopyProgressInfo(rowFile,
-                                                 renamedFile,
-                                                 pctComplete,
-                                                 rowIndex,
-                                                 numberOfRows));
+                            renamedFile,
+                            pctComplete,
+                            rowIndex,
+                            numberOfRows));
 
                     // perform the actual copy and rename
                     try {
@@ -186,14 +197,14 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
                     try {
                         if (isRenameSuccessful) {
                             notifyCopyListeners(EventType.END_SUCCESS,
-                                                fieldRow);
+                                    fieldRow);
                         } else {
                             notifyCopyListeners(EventType.END_FAIL,
-                                                fieldRow);                            
+                                    fieldRow);
                         }
                     } catch (Exception e) {
                         LOG.error("Failed external completion processing for " +
-                                  fieldRow, e);
+                                fieldRow, e);
                         isRenameSuccessful = false;
                     }
                 }
@@ -211,8 +222,8 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
                         rowFile.delete();
                     } catch (Exception e) {
                         LOG.warn("Failed to remove " +
-                                 rowFile.getAbsolutePath() +
-                                 " after rename succeeded.", e);
+                                rowFile.getAbsolutePath() +
+                                " after rename succeeded.", e);
                     }
 
                 } else {
@@ -224,13 +235,13 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
                     // it isn't the same as the source file 
                     if ((renamedFile != null) &&
                             renamedFile.exists() &&
-                            (! renamedFile.equals(rowFile))) {
+                            (!renamedFile.equals(rowFile))) {
                         try {
                             renamedFile.delete();
                         } catch (Exception e) {
                             LOG.warn("Failed to remove " +
-                                     renamedFile.getAbsolutePath() +
-                                     " after rename failed.", e);
+                                    renamedFile.getAbsolutePath() +
+                                    " after rename failed.", e);
                         }
                     }
                 }
@@ -250,15 +261,15 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
             // ensure errors that occur in this thread are not lost
             LOG.error("unexpected exception in background task", t);
         }
-
         return null;
+
     }
 
     /**
      * Updates the copy progress information displayed in the UI.
      * This method runs in the event dispatcher thread.
      *
-     * @param  list  list of progress information objects for display.
+     * @param list list of progress information objects for display.
      */
     @Override
     protected void process(List<CopyProgressInfo> list) {
@@ -280,37 +291,41 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
      */
     @Override
     public void done() {
-        Toolkit.getDefaultToolkit().beep();
-        resetCopyProgressComponents(false);
-        String dialogTitle;
-        int numberOfCopyFailures = failedCopyRowIndices.size();
-        if (numberOfCopyFailures > 0) {
-            dialogTitle = "Rename Summary (" + numberOfCopyFailures;
-            if (numberOfCopyFailures > 1) {
-               dialogTitle = dialogTitle + " COPY FAILURES!)";
+        if (!isCancelled()) {
+            Toolkit.getDefaultToolkit().beep();
+            resetCopyProgressComponents(false);
+            String dialogTitle;
+            int numberOfCopyFailures = failedCopyRowIndices.size();
+            if (numberOfCopyFailures > 0) {
+                dialogTitle = "Rename Summary (" + numberOfCopyFailures;
+                if (numberOfCopyFailures > 1) {
+                    dialogTitle = dialogTitle + " COPY FAILURES!)";
+                } else {
+                    dialogTitle = dialogTitle + " COPY FAILURE!)";
+                }
             } else {
-               dialogTitle = dialogTitle + " COPY FAILURE!)";                
+                dialogTitle = "Rename Summary";
             }
-        } else {
-            dialogTitle = "Rename Summary";
-        }
-        
-        JOptionPane.showMessageDialog(mainView.getPanel(),
-                                      renameSummary.toString(),
-                                      dialogTitle,
-                                      JOptionPane.INFORMATION_MESSAGE);
+            /*JScrollPane jScrollPane = (new JScrollPane(mainView.getPanel()));
+            jScrollPane.setPreferredSize(new Dimension(300,400));
+            jScrollPane.setWheelScrollingEnabled(true);
+            jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);*/
+            JOptionPane.showMessageDialog(mainView.getPanel(),
+                    renameSummary.toString(),
+                    dialogTitle,
+                    JOptionPane.INFORMATION_MESSAGE);
 
-        if (numberOfCopyFailures == 0) {
-            // everything succeeded, so reset the main view
-            mainView.resetFileTable();
-        } else {
-            // we had errors, so remove the files copied successfully
-            // and restore the rest of the model
-            FileTableModel tableModel = mainView.getTableModel();
-            tableModel.removeSuccessfullyCopiedFiles(failedCopyRowIndices);
-            mainView.setFileTableEnabled(true);
+            if (numberOfCopyFailures == 0) {
+                // everything succeeded, so reset the main view
+                mainView.resetFileTable();
+            } else {
+                // we had errors, so remove the files copied successfully
+                // and restore the rest of the model
+                FileTableModel tableModel = mainView.getTableModel();
+                tableModel.removeSuccessfullyCopiedFiles(failedCopyRowIndices);
+                mainView.setFileTableEnabled(true);
+            }
         }
-
         mainView.setRenameTaskInProgress(false);
     }
 
@@ -318,7 +333,7 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
      * Utility method to enable or disable the copy progress components
      * in the UI.
      *
-     * @param  isVisible  identifies if the components should be made visible.
+     * @param isVisible identifies if the components should be made visible.
      */
     private void resetCopyProgressComponents(boolean isVisible) {
         JProgressBar copyProgressBar = mainView.getCopyProgressBar();
@@ -332,16 +347,11 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
     /**
      * Utility method to notify registered listeners about a copy event.
      *
-     * @param  eventType  the current event type.
-     * @param  row        the rename data associated with the event.
-     *
+     * @param eventType the current event type.
+     * @param row       the rename data associated with the event.
      * @return the (possibly) updated rename data.
-     *
-     * @throws ExternalDataException
-     *   if a listener detects a data error.
-     *
-     * @throws ExternalSystemException
-     *   if a system error occurs within a listener.
+     * @throws ExternalDataException   if a listener detects a data error.
+     * @throws ExternalSystemException if a system error occurs within a listener.
      */
     private RenameFieldRow notifyCopyListeners(EventType eventType,
                                                RenameFieldRow row)
@@ -351,5 +361,4 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
         }
         return row;
     }
-
 }

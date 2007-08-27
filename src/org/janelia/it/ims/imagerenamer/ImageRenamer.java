@@ -9,8 +9,8 @@ package org.janelia.it.ims.imagerenamer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * This class launches the renamer user interface.
@@ -18,8 +18,8 @@ import java.util.concurrent.Executors;
  * @author Peter Davies
  */
 public class ImageRenamer extends JFrame {
-    private int sizeOfThreadPool = 4;
-    private static ExecutorService executorService;
+    private static final int SIZE_OF_THREAD_POOL = 4;
+    private static ThreadPoolExecutor threadPoolExecutor;
 
     /**
      * Construct the application
@@ -31,11 +31,11 @@ public class ImageRenamer extends JFrame {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(tabbedView.getWindowListener());
         pack();
-        executorService = Executors.newFixedThreadPool(sizeOfThreadPool);
+        threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(SIZE_OF_THREAD_POOL);
     }
 
-    public static ExecutorService getExecutorService() {
-        return executorService;
+    public static ThreadPoolExecutor getThreadPoolExecutor() {
+        return threadPoolExecutor;
     }
 
     public static void main(String[] args) {
