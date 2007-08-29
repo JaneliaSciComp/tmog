@@ -8,12 +8,11 @@
 package org.janelia.it.ims.imagerenamer.field;
 
 import org.janelia.it.ims.imagerenamer.FileTableModel;
+import org.janelia.it.ims.imagerenamer.PreviewImageTask;
 
-import javax.swing.AbstractCellEditor;
-import javax.swing.JButton;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.TableCellEditor;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -30,6 +29,7 @@ public class ButtonEditor extends AbstractCellEditor
     private JButton button;
     private int row;
     private int column;
+    private static final int previewImageSize = 400;
 
     public ButtonEditor() {
     }
@@ -61,9 +61,14 @@ public class ButtonEditor extends AbstractCellEditor
         FileTableModel model = (FileTableModel) fileTable.getModel();
         final boolean isRemoveFileButton = (column == 0);
         final boolean isCopyButton = (column == 1);
+        final boolean isPreviewButton = (column == 2);
 
         fireEditingStopped(); //Make the renderer reappear.
 
+        if (isPreviewButton) {
+            PreviewImageTask previewImageTask = new PreviewImageTask(model.getRows().get(row).getFile().getPath(), previewImageSize);
+            previewImageTask.execute();
+        }
         if (isRemoveFileButton) {
             model.removeRow(row);
         } else if (isCopyButton) {

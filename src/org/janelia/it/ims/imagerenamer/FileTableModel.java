@@ -17,18 +17,12 @@ import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
 
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import java.awt.Component;
+import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * This class contains the data model for renaming a set of files.
@@ -38,10 +32,12 @@ import java.util.Set;
  */
 public class FileTableModel extends AbstractTableModel {
 
-    /** The logger for this class. */
+    /**
+     * The logger for this class.
+     */
     private static final Logger LOG = Logger.getLogger(FileTableModel.class);
 
-    public static final int FILE_COLUMN = 2;
+    public static final int FILE_COLUMN = 3;
 
     private List<FileTableRow> rows;
     private List<String> columnNames;
@@ -52,7 +48,7 @@ public class FileTableModel extends AbstractTableModel {
                           ProjectConfiguration config) {
 
         if (files == null) {
-           files = new File[0];
+            files = new File[0];
         }
 
         // sort files based on L-Numbers
@@ -60,12 +56,13 @@ public class FileTableModel extends AbstractTableModel {
         List<RenameField> renameFieldConfigs = config.getFieldConfigurations();
 
         // set up column names and field mappings
-        int numberOfColumns = config.getNumberOfEditableFields() + 3;
+        int numberOfColumns = config.getNumberOfEditableFields() + 4;
         columnNames = new ArrayList<String>(numberOfColumns);
         columnToFieldIndexMap = new HashMap<Integer, Integer>();
         fieldToColumnIndexMap = new HashMap<Integer, Integer>();
         columnNames.add(" "); // checkbox - 1 space needed for header row height
         columnNames.add(" "); // copy button
+        columnNames.add(" "); //Preview Button
         columnNames.add("File Name");
 
         int fieldIndex = 0;
@@ -126,6 +123,8 @@ public class FileTableModel extends AbstractTableModel {
             if (rowIndex > 0) {
                 value = row.getCopyButton();
             }
+        } else if (columnIndex == 2) {
+            value = row.getPreviewButton();
         } else if (columnIndex == FILE_COLUMN) {
             value = row.getFile();
         } else {
@@ -219,17 +218,17 @@ public class FileTableModel extends AbstractTableModel {
             // validate syntax based on renamer configuration
             for (int fieldIndex = 0; fieldIndex < rowFields.length; fieldIndex++) {
                 RenameField field = rowFields[fieldIndex];
-                if (! field.verify()) {
+                if (!field.verify()) {
                     isValid = false;
                     String message = "The " + field.getDisplayName() +
                             " value for the file " + rowFile.getName() +
                             " is invalid.  " + field.getErrorMessage();
                     int columnIndex = fieldToColumnIndexMap.get(fieldIndex);
                     displayErrorDialog(dialogParent,
-                                       message,
-                                       fileTable,
-                                       rowIndex,
-                                       columnIndex);
+                            message,
+                            fileTable,
+                            rowIndex,
+                            columnIndex);
                     break;
                 }
             }
@@ -240,8 +239,8 @@ public class FileTableModel extends AbstractTableModel {
             try {
                 for (RenameFieldRowValidator validator : externalValidators) {
                     validator.validate(new RenameFieldRow(rowFile,
-                                                          rowFields,
-                                                          outputDirectory));
+                            rowFields,
+                            outputDirectory));
                 }
             } catch (ExternalDataException e) {
                 externalErrorMsg = e.getMessage();
@@ -254,10 +253,10 @@ public class FileTableModel extends AbstractTableModel {
             if (externalErrorMsg != null) {
                 isValid = false;
                 displayErrorDialog(dialogParent,
-                                   externalErrorMsg,
-                                   fileTable,
-                                   rowIndex,
-                                   2);
+                        externalErrorMsg,
+                        fileTable,
+                        rowIndex,
+                        2);
             }
 
         }
@@ -273,9 +272,9 @@ public class FileTableModel extends AbstractTableModel {
         fileTable.changeSelection(rowIndex, columnIndex, false, false);
 
         JOptionPane.showMessageDialog(dialogParent,
-                                      message, // field to display
-                                      "Invalid Entry", // title
-                                      JOptionPane.ERROR_MESSAGE);
+                message, // field to display
+                "Invalid Entry", // title
+                JOptionPane.ERROR_MESSAGE);
 
         fileTable.requestFocus();
         fileTable.editCellAt(rowIndex, columnIndex);
@@ -290,7 +289,7 @@ public class FileTableModel extends AbstractTableModel {
         final int numberOfRows = rows.size();
         ArrayList<Integer> rowsToDelete = new ArrayList<Integer>(numberOfRows);
         for (int rowIndex = numberOfRows - 1; rowIndex >= 0; rowIndex--) {
-            if (! failedCopyRowIndices.contains(rowIndex)) {
+            if (!failedCopyRowIndices.contains(rowIndex)) {
                 rowsToDelete.add(rowIndex);
             }
         }

@@ -10,9 +10,7 @@ package org.janelia.it.ims.imagerenamer;
 import org.janelia.it.ims.imagerenamer.field.FileModificationTimeModel;
 import org.janelia.it.ims.imagerenamer.field.RenameField;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
+import javax.swing.*;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -34,8 +32,14 @@ public class FileTableRow {
     private static final Icon COPY_ICON = new ImageIcon(COPY_IMAGE);
     private static final String COPY_TIP = "copy values from previous row";
 
+    private static final URL PREVIEW_IMAGE =
+            FileTableRow.class.getResource("/preview.png");
+    private static final Icon PREVIEW_ICON = new ImageIcon(PREVIEW_IMAGE);
+    private static final String PREVIEW_TIP = "preview the image file";
+
     private JButton removeFileButton;
     private JButton copyButton;
+    private JButton previewButton;
     private File file;
     private RenameField[] fields;
 
@@ -48,6 +52,9 @@ public class FileTableRow {
         this.copyButton = new JButton(COPY_ICON);
         this.copyButton.setToolTipText(COPY_TIP);
 
+        this.previewButton = new JButton(PREVIEW_ICON);
+        this.previewButton.setToolTipText(PREVIEW_TIP);
+        this.previewButton.setSize(20, 20);
         this.file = file;
 
         this.fields = new RenameField[renameFieldConfigs.size()];
@@ -62,6 +69,14 @@ public class FileTableRow {
             }
             fieldIndex++;
         }
+    }
+
+    public JButton getPreviewButton() {
+        return previewButton;
+    }
+
+    public void setPreviewButton(JButton previewButton) {
+        this.previewButton = previewButton;
     }
 
     public JButton getRemoveFileButton() {

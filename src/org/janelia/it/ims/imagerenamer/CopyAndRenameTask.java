@@ -306,12 +306,17 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
             } else {
                 dialogTitle = "Rename Summary";
             }
-            /*JScrollPane jScrollPane = (new JScrollPane(mainView.getPanel()));
-            jScrollPane.setPreferredSize(new Dimension(300,400));
-            jScrollPane.setWheelScrollingEnabled(true);
-            jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);*/
+            JTextArea textArea = new JTextArea();
+            textArea.setLayout(new BorderLayout());
+            textArea.setEditable(false);
+            textArea.append(renameSummary.toString());
+            JScrollPane areaScrollPane = new JScrollPane(textArea);
+            areaScrollPane.setPreferredSize(new Dimension(600, 400));
+            areaScrollPane.setWheelScrollingEnabled(true);
+            areaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             JOptionPane.showMessageDialog(mainView.getPanel(),
-                    renameSummary.toString(),
+                    areaScrollPane,
                     dialogTitle,
                     JOptionPane.INFORMATION_MESSAGE);
 
