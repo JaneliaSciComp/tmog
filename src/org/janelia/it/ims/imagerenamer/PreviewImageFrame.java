@@ -1,5 +1,7 @@
 package org.janelia.it.ims.imagerenamer;
 
+import loci.formats.in.ZeissLSMReader;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -9,7 +11,8 @@ import java.io.File;
 
 public class PreviewImageFrame extends JFrame {
     private JLabel label;
-    private JSpinner spinner;
+    private JSlider slider;
+    private JLabel sliderLabel;
 
     public PreviewImageFrame(File file, int imageSize) {
         final String filename = file.getName();
@@ -30,19 +33,24 @@ public class PreviewImageFrame extends JFrame {
 
         JPanel subPanel = new JPanel();
 
-        SpinnerModel spinnerModel = new SpinnerNumberModel(0, 0, 1000, 1);
-        spinner = new JSpinner(spinnerModel);
-        JComponent editor = spinner.getEditor();
-        subPanel.add(spinner);
-        panel.add(subPanel, BorderLayout.SOUTH);
-        if (editor instanceof JSpinner.DefaultEditor) {
-            ((JSpinner.DefaultEditor) editor).getTextField().setColumns(3);
+        ZeissLSMReader zeissLSMReader;
+        try {
+            zeissLSMReader = new ZeissLSMReader();
+            zeissLSMReader.setId(filePath);
+            slider = new JSlider(JSlider.HORIZONTAL, 0, zeissLSMReader.getTiffDimensions()[2], 0);
+            sliderLabel = new JLabel("Layer: " + slider.getValue());
+            subPanel.add(sliderLabel);
+            subPanel.add(slider);
         }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error displaying preview.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        panel.add(subPanel, BorderLayout.SOUTH);
 
-
-        spinner.addChangeListener(new ChangeListener() {
+        slider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                PreviewImageTask previewImageTask = new PreviewImageTask(filePath, previewImageSize, (Integer) spinner.getValue(), label);
+                PreviewImageTask previewImageTask = new PreviewImageTask(filePath, previewImageSize, slider.getValue(), label);
+                sliderLabel.setText("Layer: " + slider.getValue());
                 previewImageTask.execute();
             }
         }
@@ -63,6 +71,6 @@ public class PreviewImageFrame extends JFrame {
         frame.setLocation((screenSize.width - frameSize.width) / 2,
                 (screenSize.height - frameSize.height) / 2);
         frame.setVisible(true);
-        frame.setResizable(false);
+        frame.setResizable(true);
     }
 }
