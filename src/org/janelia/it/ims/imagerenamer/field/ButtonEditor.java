@@ -8,7 +8,7 @@
 package org.janelia.it.ims.imagerenamer.field;
 
 import org.janelia.it.ims.imagerenamer.FileTableModel;
-import org.janelia.it.ims.imagerenamer.PreviewImageTask;
+import org.janelia.it.ims.imagerenamer.PreviewImageFrame;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
@@ -66,8 +66,8 @@ public class ButtonEditor extends AbstractCellEditor
         fireEditingStopped(); //Make the renderer reappear.
 
         if (isPreviewButton) {
-            PreviewImageTask previewImageTask = new PreviewImageTask(model.getRows().get(row).getFile().getPath(), previewImageSize);
-            previewImageTask.execute();
+            PreviewImageFrame previewImageFrame = new PreviewImageFrame(model.getRows().get(row).getFile(), previewImageSize);
+
         }
         if (isRemoveFileButton) {
             model.removeRow(row);
