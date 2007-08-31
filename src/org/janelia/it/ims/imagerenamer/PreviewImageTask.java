@@ -27,7 +27,7 @@ public class PreviewImageTask extends SwingWorker<Void, CopyProgressInfo> {
 
     public Void doInBackground() {
         try {
-            label.setText("Loading");
+            label.setText("Loading...");
             ZeissLSMReader zeissLSMReader = new ZeissLSMReader();
             zeissLSMReader.setId(filename);
             BufferedImage image;
