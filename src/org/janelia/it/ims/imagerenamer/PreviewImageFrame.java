@@ -13,6 +13,7 @@ public class PreviewImageFrame extends JFrame {
     private JLabel label;
     private JSlider slider;
     private JLabel sliderLabel;
+    private JLabel imageLabel = new JLabel();
 
     public PreviewImageFrame(File file, int imageSize) {
         final String filename = file.getName();
@@ -25,13 +26,16 @@ public class PreviewImageFrame extends JFrame {
 
         frame.add(panel);
         label = new JLabel(new ImageIcon());
-        label.setText("Loading Image");
-        panel.add(label, BorderLayout.CENTER);
+        label.setVerticalAlignment(SwingConstants.BOTTOM);
+        label.setText("");
+        panel.add(label, BorderLayout.NORTH);
 
-        PreviewImageTask previewImageTask = new PreviewImageTask(filePath, previewImageSize, 0, label);
+        imageLabel.setText(" ");
+
+        PreviewImageTask previewImageTask = new PreviewImageTask(filePath, previewImageSize, 0, label, imageLabel);
         previewImageTask.execute();
 
-        JPanel subPanel = new JPanel();
+        JPanel subPanel = new JPanel(new BorderLayout());
 
         ZeissLSMReader zeissLSMReader;
         try {
@@ -39,8 +43,9 @@ public class PreviewImageFrame extends JFrame {
             zeissLSMReader.setId(filePath);
             slider = new JSlider(JSlider.HORIZONTAL, 0, zeissLSMReader.getTiffDimensions()[2], 0);
             sliderLabel = new JLabel("Layer: " + slider.getValue());
-            subPanel.add(sliderLabel);
-            subPanel.add(slider);
+            subPanel.add(sliderLabel, BorderLayout.WEST);
+            subPanel.add(slider, BorderLayout.CENTER);
+            subPanel.add(imageLabel, BorderLayout.SOUTH);
         }
         catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error displaying preview.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -49,7 +54,7 @@ public class PreviewImageFrame extends JFrame {
 
         slider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                PreviewImageTask previewImageTask = new PreviewImageTask(filePath, previewImageSize, slider.getValue(), label);
+                PreviewImageTask previewImageTask = new PreviewImageTask(filePath, previewImageSize, slider.getValue(), label, imageLabel);
                 sliderLabel.setText("Layer: " + slider.getValue());
                 previewImageTask.execute();
             }
@@ -71,6 +76,6 @@ public class PreviewImageFrame extends JFrame {
         frame.setLocation((screenSize.width - frameSize.width) / 2,
                 (screenSize.height - frameSize.height) / 2);
         frame.setVisible(true);
-        frame.setResizable(true);
+        frame.setResizable(false);
     }
 }

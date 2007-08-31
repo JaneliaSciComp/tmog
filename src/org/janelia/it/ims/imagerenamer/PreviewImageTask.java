@@ -17,24 +17,28 @@ public class PreviewImageTask extends SwingWorker<Void, CopyProgressInfo> {
     private int imageSize;
     private int layer = 0;
     private JLabel label;
+    private JLabel imageLabel;
 
-    public PreviewImageTask(String filename, int imageSize, int layer, JLabel label) {
+    public PreviewImageTask(String filename, int imageSize, int layer, JLabel label, JLabel imageLabel) {
         this.filename = filename;
         this.imageSize = imageSize;
         this.layer = layer;
         this.label = label;
+        this.imageLabel = imageLabel;
     }
 
     public Void doInBackground() {
         try {
-            label.setText("Loading...");
+            label.setText("  ");//Strange hack to get image to display
+            label.setText("");
+            imageLabel.setText("Loading...");
             ZeissLSMReader zeissLSMReader = new ZeissLSMReader();
             zeissLSMReader.setId(filename);
             BufferedImage image;
             image = zeissLSMReader.openImage(layer);
             image = shrink(image, imageSize);
             ((ImageIcon) (label.getIcon())).setImage(image);
-            label.setText("");
+            imageLabel.setText(" ");
         }
         catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Could not display image", filename, JOptionPane.ERROR_MESSAGE);
