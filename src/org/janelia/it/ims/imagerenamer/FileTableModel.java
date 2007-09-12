@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute. 
+ * Copyright ï¿½ 2007 Howard Hughes Medical Institute. 
  * All rights reserved.  
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -21,8 +21,12 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class contains the data model for renaming a set of files.
@@ -37,7 +41,7 @@ public class FileTableModel extends AbstractTableModel {
      */
     private static final Logger LOG = Logger.getLogger(FileTableModel.class);
 
-    public static final int FILE_COLUMN = 3;
+    public static final int FILE_COLUMN = 2;
 
     private List<FileTableRow> rows;
     private List<String> columnNames;
@@ -56,13 +60,12 @@ public class FileTableModel extends AbstractTableModel {
         List<RenameField> renameFieldConfigs = config.getFieldConfigurations();
 
         // set up column names and field mappings
-        int numberOfColumns = config.getNumberOfEditableFields() + 4;
+        int numberOfColumns = config.getNumberOfEditableFields() + 3;
         columnNames = new ArrayList<String>(numberOfColumns);
         columnToFieldIndexMap = new HashMap<Integer, Integer>();
         fieldToColumnIndexMap = new HashMap<Integer, Integer>();
         columnNames.add(" "); // checkbox - 1 space needed for header row height
         columnNames.add(" "); // copy button
-        columnNames.add(" "); //Preview Button
         columnNames.add("File Name");
 
         int fieldIndex = 0;
@@ -123,8 +126,6 @@ public class FileTableModel extends AbstractTableModel {
             if (rowIndex > 0) {
                 value = row.getCopyButton();
             }
-        } else if (columnIndex == 2) {
-            value = row.getPreviewButton();
         } else if (columnIndex == FILE_COLUMN) {
             value = row.getFile();
         } else {
@@ -209,38 +210,41 @@ public class FileTableModel extends AbstractTableModel {
         boolean isValid = true;
 
         final int numberOfRows = rows.size();
-        for (int rowIndex = 0; isValid && (rowIndex < numberOfRows); rowIndex++) {
+        for (int rowIndex = 0; isValid && (rowIndex < numberOfRows); rowIndex++)
+        {
 
             FileTableRow row = rows.get(rowIndex);
             File rowFile = row.getFile();
             RenameField[] rowFields = row.getFields();
 
             // validate syntax based on renamer configuration
-            for (int fieldIndex = 0; fieldIndex < rowFields.length; fieldIndex++) {
+            for (int fieldIndex = 0; fieldIndex < rowFields.length; fieldIndex++)
+            {
                 RenameField field = rowFields[fieldIndex];
                 if (!field.verify()) {
                     isValid = false;
                     String message = "The " + field.getDisplayName() +
-                            " value for the file " + rowFile.getName() +
-                            " is invalid.  " + field.getErrorMessage();
+                                     " value for the file " + rowFile.getName() +
+                                     " is invalid.  " + field.getErrorMessage();
                     int columnIndex = fieldToColumnIndexMap.get(fieldIndex);
                     displayErrorDialog(dialogParent,
-                            message,
-                            fileTable,
-                            rowIndex,
-                            columnIndex);
+                                       message,
+                                       fileTable,
+                                       rowIndex,
+                                       columnIndex);
                     break;
                 }
             }
-            if (!isValid) return isValid; //Do not perform external validation if internal fails
+            if (!isValid)
+                return isValid; //Do not perform external validation if internal fails
 
             // perform any configured external validation only if internal validation is correct
             String externalErrorMsg = null;
             try {
                 for (RenameFieldRowValidator validator : externalValidators) {
                     validator.validate(new RenameFieldRow(rowFile,
-                            rowFields,
-                            outputDirectory));
+                                                          rowFields,
+                                                          outputDirectory));
                 }
             } catch (ExternalDataException e) {
                 externalErrorMsg = e.getMessage();
@@ -253,10 +257,10 @@ public class FileTableModel extends AbstractTableModel {
             if (externalErrorMsg != null) {
                 isValid = false;
                 displayErrorDialog(dialogParent,
-                        externalErrorMsg,
-                        fileTable,
-                        rowIndex,
-                        2);
+                                   externalErrorMsg,
+                                   fileTable,
+                                   rowIndex,
+                                   2);
             }
 
         }
@@ -272,9 +276,9 @@ public class FileTableModel extends AbstractTableModel {
         fileTable.changeSelection(rowIndex, columnIndex, false, false);
 
         JOptionPane.showMessageDialog(dialogParent,
-                message, // field to display
-                "Invalid Entry", // title
-                JOptionPane.ERROR_MESSAGE);
+                                      message, // field to display
+                                      "Invalid Entry", // title
+                                      JOptionPane.ERROR_MESSAGE);
 
         fileTable.requestFocus();
         fileTable.editCellAt(rowIndex, columnIndex);
