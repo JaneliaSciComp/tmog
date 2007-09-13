@@ -281,6 +281,20 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
                 rowIndex++;
 
                 if (isSessionCancelled) {
+                    if (rowIndex < numberOfRows) {
+                        LOG.warn("Rename session cancelled after copy of " +
+                                 renamedFile.getName() + ".");
+                        renameSummary.append("\nRename session cancelled.");
+                    
+                        // mark all remain rows as failed
+                        for (int i = rowIndex; i < numberOfRows; i++) {
+                            failedCopyRowIndices.add(i);
+                        }
+                    } else {
+                        // reset cancel flag since cancel occurred after
+                        // last file was already renamed
+                        isSessionCancelled = false;
+                    }
                     break;
                 }
             }

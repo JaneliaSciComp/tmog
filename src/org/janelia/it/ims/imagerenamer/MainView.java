@@ -335,8 +335,11 @@ public class MainView {
             public void actionPerformed(ActionEvent e) {
                 if (isRenameTaskInProgress) {
                     task.cancelSession();
-                    copyAndRenameBtn.setEnabled(false);
                     setRenameTaskInProgress(false);
+                    copyAndRenameBtn.setText(RENAME_CANCELLED_BUTTON_TEXT);
+                    copyAndRenameBtn.setToolTipText(
+                            RENAME_CANCELLED_TOOL_TIP_TEXT);
+                    copyAndRenameBtn.setEnabled(false);
                 } else {
                     fileTable.editCellAt(-1, -1); // stop any current editor
                     String outputDirectoryName = outputDirectoryField.getText();
@@ -439,4 +442,9 @@ public class MainView {
             "Cancel Rename In Progress";
     private static final String RENAME_CANCEL_TOOL_TIP_TEXT =
             "Cancel the renaming process that is currently running";
+    private static final String RENAME_CANCELLED_BUTTON_TEXT =
+            "Rename Session Cancelled";
+    private static final String RENAME_CANCELLED_TOOL_TIP_TEXT =
+            "Waiting for current file processing to complete";
+
 }
