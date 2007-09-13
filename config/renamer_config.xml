@@ -6,14 +6,19 @@
     <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)"
              default="true">
 
-        <outputDirectory basePath="\\smb.int.janelia.org\imaging\renamer\output"
+        <!-- DASH_FOR_PROD->
+        <outputDirectory basePath="\\smb.int.janelia.org\rubinlab\confocalStacks"
                          manuallyChosen="false"/>
+        <!-DASH_FOR_PROD -->
 
         <plugins>
-            <rowValidator
-                    className="org.janelia.it.chacrm.RenamerEventManager"/>
-            <copyListener
-                    className="org.janelia.it.chacrm.RenamerEventManager"/>
+            <!-- DASH_FOR_PROD->
+            <rowValidator className="org.janelia.it.chacrm.RenamerEventManager"/>
+            <copyListener className="org.janelia.it.chacrm.RenamerEventManager"/>
+            <sessionListener className="org.janelia.it.ims.imagerenamer.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\smb.int.janelia.org\rubinlab\renameSummaries"/>
+            </sessionListener>
+            <!-DASH_FOR_PROD -->
         </plugins>
 
         <renamePattern>
@@ -90,8 +95,6 @@
 
     <project name="Rubin Lab: Research and Development (RD_*)">
 
-        <outputDirectory manuallyChosen="true"/>
-
         <renamePattern>
             <separator value="RD_"/>
             <text displayName="Promoter" required="true"
@@ -116,8 +119,6 @@
     </project>
 
     <project name="Simpson Lab: Phong's renamer (JHS_*)">
-
-        <outputDirectory manuallyChosen="true"/>
 
         <renamePattern>
             <separator value="JHS_"/>

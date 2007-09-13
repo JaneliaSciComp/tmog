@@ -2,7 +2,6 @@
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-
     <xs:complexType name="outputDirectoryType">
         <xs:attribute name="basePath" type="xs:string"/>
         <xs:attribute name="manuallyChosen" type="xs:boolean"/>
@@ -82,7 +81,7 @@
     <xs:complexType name="projectType">
         <xs:sequence>
 
-            <xs:element name="outputDirectory" type="outputDirectoryType"/>
+            <xs:element name="outputDirectory" type="outputDirectoryType" minOccurs="0"/>
 
             <xs:element name="plugins" type="pluginsType" minOccurs="0"/>
 

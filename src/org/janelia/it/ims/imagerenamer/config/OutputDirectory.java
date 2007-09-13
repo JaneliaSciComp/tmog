@@ -27,6 +27,7 @@ public class OutputDirectory {
     private boolean isManuallyChosen;
 
     public OutputDirectory() {
+        this.isManuallyChosen = true;
     }
 
     public String getBasePath() {
