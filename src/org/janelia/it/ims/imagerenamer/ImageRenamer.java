@@ -18,8 +18,21 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @author Peter Davies
  */
 public class ImageRenamer extends JFrame {
-    private static final int SIZE_OF_THREAD_POOL = 4;
-    private static ThreadPoolExecutor threadPoolExecutor;
+
+    /**
+     * Set up a thread pool to limit the number of concurrent
+     * renaming session tasks running at any given time.
+     *
+     * This pool was introduced to work around issues with large
+     * numbers of concurrent transfers to Samba file shares.
+     * These transfers would timeout and litter the file system with
+     * partially transferred files.
+     * The thread pool allows a user to queue up as many sessions
+     * as they like, but will only execute 4 sessions at any given
+     * time. 
+     */
+    private static final ThreadPoolExecutor THREAD_POOL_EXECUTOR =
+            (ThreadPoolExecutor) Executors.newFixedThreadPool(4);
 
     /**
      * Construct the application
@@ -31,11 +44,15 @@ public class ImageRenamer extends JFrame {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(tabbedView.getWindowListener());
         pack();
-        threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(SIZE_OF_THREAD_POOL);
     }
 
-    public static ThreadPoolExecutor getThreadPoolExecutor() {
-        return threadPoolExecutor;
+    /**
+     * Submits the specified task to the application thread pool.
+     *
+     * @param  task  task to execute.
+     */
+    public static void submitTask(Runnable task) {
+        THREAD_POOL_EXECUTOR.submit(task);
     }
 
     public static void main(String[] args) {

@@ -411,7 +411,7 @@ public class MainView {
                     task.addSessionListener(listener);
                 }
                 setRenameTaskInProgress(true);
-                ImageRenamer.getThreadPoolExecutor().submit(task);
+                ImageRenamer.submitTask(task);
             }
         });
         
