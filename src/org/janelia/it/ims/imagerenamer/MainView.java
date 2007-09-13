@@ -47,9 +47,7 @@ import java.io.FileFilter;
  */
 public class MainView {
 
-    /**
-     * The logger for this class.
-     */
+    /** The logger for this class. */
     private static final Logger LOG = Logger.getLogger(MainView.class);
 
     public static final String LSM_EXTENSION = ".lsm";
@@ -332,62 +330,91 @@ public class MainView {
         setRenameTaskInProgress(false);
 
         copyAndRenameBtn.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 if (isRenameTaskInProgress) {
-                    task.cancelSession();
-                    setRenameTaskInProgress(false);
-                    copyAndRenameBtn.setText(RENAME_CANCELLED_BUTTON_TEXT);
-                    copyAndRenameBtn.setToolTipText(
-                            RENAME_CANCELLED_TOOL_TIP_TEXT);
-                    copyAndRenameBtn.setEnabled(false);
+                    cancelSession();
                 } else {
-                    fileTable.editCellAt(-1, -1); // stop any current editor
-                    String outputDirectoryName = outputDirectoryField.getText();
-                    File outputDirectory = new File(outputDirectoryName);
-                    String outputFailureMsg = null;
-                    if (!outputDirectory.exists()) {
-                        try {
-                            outputDirectory.mkdir();
-                        } catch (Exception e1) {
-                            outputFailureMsg =
-                                    "Failed to create output directory " +
-                                    outputDirectory.getAbsolutePath() + ".";
-                            LOG.error(outputFailureMsg, e1);
-                        }
-                    }
-                    if (!outputDirectory.isDirectory()) {
-                        outputFailureMsg =
-                                "The output directory must be set to a valid directory.";
-                    }
-
-                    if (outputFailureMsg != null) {
-
-                        JOptionPane.showMessageDialog(appPanel,
-                                                      outputFailureMsg,
-                                                      "Error",
-                                                      JOptionPane.ERROR_MESSAGE);
-
-                    } else if (tableModel.validateAllFields(
-                            fileTable,
-                            projectConfig.getRowValidators(),
-                            appPanel,
-                            outputDirectory)) {
-                        setFileTableEnabled(false, true);
-                        task = new CopyAndRenameTask(thisMainView);
-                        for (CopyListener listener :
-                                projectConfig.getCopyListeners()) {
-                            task.addCopyListener(listener);
-                        }
-                        for (SessionListener listener :
-                                projectConfig.getSessionListeners()) {
-                            task.addSessionListener(listener);
-                        }
-                        setRenameTaskInProgress(true);
-                        ImageRenamer.getThreadPoolExecutor().submit(task);
+                    if (isSessionReadyToStart()) {
+                        startSession();
                     }
                 }
             }
+
+            private void cancelSession() {
+                task.cancelSession();
+                setRenameTaskInProgress(false);
+                copyAndRenameBtn.setText(RENAME_CANCELLED_BUTTON_TEXT);
+                copyAndRenameBtn.setToolTipText(
+                        RENAME_CANCELLED_TOOL_TIP_TEXT);
+                copyAndRenameBtn.setEnabled(false);
+            }
+
+            private boolean isSessionReadyToStart() {
+                boolean isReady = false;
+
+                fileTable.editCellAt(-1, -1); // stop any current editor
+                String outputDirectoryName = outputDirectoryField.getText();
+                File outputDirectory = new File(outputDirectoryName);
+                String outputFailureMsg = null;
+
+                if (!outputDirectory.exists()) {
+                    try {
+                        outputDirectory.mkdir();
+                    } catch (Exception e1) {
+                        outputFailureMsg =
+                                "Failed to create output directory " +
+                                outputDirectory.getAbsolutePath() + ".";
+                        LOG.error(outputFailureMsg, e1);
+                    }
+                }
+
+                if (!outputDirectory.isDirectory()) {
+                    outputFailureMsg =
+                            "The output directory must be set to a valid directory.";
+                }
+
+                if (outputFailureMsg != null) {
+
+                    JOptionPane.showMessageDialog(appPanel,
+                                                  outputFailureMsg,
+                                                  "Error",
+                                                  JOptionPane.ERROR_MESSAGE);
+
+                } else if (tableModel.validateAllFields(
+                                        fileTable,
+                                        projectConfig.getRowValidators(),
+                                        appPanel,
+                                        outputDirectory)) {
+                    int choice =
+                            JOptionPane.showConfirmDialog(
+                                    appPanel,
+                                    "Your entries have been validated.  Do you wish to continue?",
+                                    "Continue with Rename?",
+                                    JOptionPane.YES_NO_OPTION);
+
+                    isReady = (choice == JOptionPane.YES_OPTION);
+                }
+
+                return isReady;
+            }
+
+            private void startSession() {
+                setFileTableEnabled(false, true);
+                task = new CopyAndRenameTask(thisMainView);
+                for (CopyListener listener :
+                        projectConfig.getCopyListeners()) {
+                    task.addCopyListener(listener);
+                }
+                for (SessionListener listener :
+                        projectConfig.getSessionListeners()) {
+                    task.addSessionListener(listener);
+                }
+                setRenameTaskInProgress(true);
+                ImageRenamer.getThreadPoolExecutor().submit(task);
+            }
         });
+        
         copyProgressBar.setVisible(false);
         copyProgressLabel.setVisible(false);
     }
