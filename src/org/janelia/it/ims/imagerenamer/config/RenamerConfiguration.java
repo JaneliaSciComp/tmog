@@ -1,5 +1,5 @@
 /*
- * Copyright ? 2007 Howard Hughes Medical Institute.
+ * Copyright © 2007 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -36,7 +36,9 @@ import java.util.List;
  */
 public class RenamerConfiguration {
 
-    /** The logger for this class. */
+    /**
+     * The logger for this class.
+     */
     private static final Logger LOG = Logger.getLogger(RenamerConfiguration.class);
 
     private List<ProjectConfiguration> projectList;
@@ -67,18 +69,17 @@ public class RenamerConfiguration {
     /**
      * Utility method to parse the specified config file.
      *
-     * @param   resourceName   name of resource (file) containing xml
-     *                         configuration.
-     *
+     * @param resourceName name of resource (file) containing xml
+     *                     configuration.
      * @throws org.janelia.it.ims.imagerenamer.config.ConfigurationException
-     *             if an error occurs parsing the event config file.
+     *          if an error occurs parsing the event config file.
      */
     public void load(String resourceName) throws ConfigurationException {
 
         InputStream stream = null;
 
         File configFile = new File(resourceName);
-        if (! configFile.exists()) {
+        if (!configFile.exists()) {
             String cpName = "/" + resourceName;
             stream = RenamerConfiguration.class.getResourceAsStream(cpName);
             LOG.warn("Loaded configuration from jar file: " + resourceName);
@@ -90,10 +91,24 @@ public class RenamerConfiguration {
             } catch (FileNotFoundException e) {
                 throw new ConfigurationException(
                         "Unable to find configuration file: " +
-                                configFile.getAbsolutePath(), e);
+                        configFile.getAbsolutePath(), e);
             }
         }
 
+        load(stream, resourceName);
+
+        LOG.info("loaded configuration file: " + resourceName);
+    }
+
+    /**
+     * Utility method to parse the specified configuration input stream.
+     *
+     * @param stream       input stream for configuration.
+     * @param resourceName name of the input stream source (for logging).
+     * @throws ConfigurationException if an error occurs while parsing the configuration data.
+     */
+    public void load(InputStream stream,
+                     String resourceName) throws ConfigurationException {
         Digester digester = new Digester();
         digester.setValidating(false);
 
@@ -174,17 +189,9 @@ public class RenamerConfiguration {
                                  PluginFactory.class);
         digester.addSetProperties("renameConfiguration/project/plugins");
 
-        digester.addObjectCreate("renameConfiguration/project/plugins/copyListener",
-                                 PluginConfiguration.class);
-        digester.addSetProperties("renameConfiguration/project/plugins/copyListener");
-        digester.addSetNext("renameConfiguration/project/plugins/copyListener",
-                            "addCopyListenerPlugin");
-
-        digester.addObjectCreate("renameConfiguration/project/plugins/rowValidator",
-                                 PluginConfiguration.class);
-        digester.addSetProperties("renameConfiguration/project/plugins/rowValidator");
-        digester.addSetNext("renameConfiguration/project/plugins/rowValidator",
-                            "addRowValidatorPlugin");
+        addPlugin("copyListener", digester);
+        addPlugin("rowValidator", digester);
+        addPlugin("sessionListener", digester);
 
         digester.addSetNext("renameConfiguration/project/plugins",
                             "setPluginFactory");
@@ -205,7 +212,29 @@ public class RenamerConfiguration {
             throw new ConfigurationException(
                     "Failed parsing configuration file: " + resourceName, e);
         }
+    }
 
-        LOG.info("loaded configuration file: " + resourceName);
+    private void addPlugin(String pluginName,
+                           Digester digester) {
+
+        final String pluginRoot =
+                "renameConfiguration/project/plugins/" + pluginName;
+        final String propertyRoot = pluginRoot + "/property";
+
+        digester.addObjectCreate(pluginRoot,
+                                 PluginConfiguration.class);
+        digester.addSetProperties(pluginRoot);
+
+        digester.addCallMethod(propertyRoot, "setProperty", 2);
+        digester.addCallParam(propertyRoot, 0, "name");
+        digester.addCallParam(propertyRoot, 1, "value");
+
+        StringBuilder addMethodName = new StringBuilder();
+        addMethodName.append("add");
+        addMethodName.append(Character.toUpperCase(pluginName.charAt(0)));
+        addMethodName.append(pluginName.substring(1));
+        addMethodName.append("Plugin");
+        digester.addSetNext(pluginRoot,
+                            addMethodName.toString());
     }
 }

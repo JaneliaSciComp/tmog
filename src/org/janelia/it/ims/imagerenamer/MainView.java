@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute. 
+ * Copyright Â© 2007 Howard Hughes Medical Institute. 
  * All rights reserved.  
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -10,17 +10,31 @@ package org.janelia.it.ims.imagerenamer;
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.imagerenamer.config.OutputDirectory;
 import org.janelia.it.ims.imagerenamer.config.ProjectConfiguration;
-import org.janelia.it.ims.imagerenamer.field.*;
+import org.janelia.it.ims.imagerenamer.field.ButtonEditor;
+import org.janelia.it.ims.imagerenamer.field.ButtonRenderer;
+import org.janelia.it.ims.imagerenamer.field.FileRenderer;
+import org.janelia.it.ims.imagerenamer.field.ValidValueEditor;
+import org.janelia.it.ims.imagerenamer.field.ValidValueModel;
+import org.janelia.it.ims.imagerenamer.field.ValidValueRenderer;
+import org.janelia.it.ims.imagerenamer.field.VerifiedFieldEditor;
+import org.janelia.it.ims.imagerenamer.field.VerifiedFieldModel;
+import org.janelia.it.ims.imagerenamer.field.VerifiedFieldRenderer;
 import org.janelia.it.ims.imagerenamer.filefilter.DirectoryOnlyFilter;
 import org.janelia.it.ims.imagerenamer.filefilter.FileNameExtensionFilter;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
+import org.janelia.it.ims.imagerenamer.plugin.SessionListener;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileFilter;
 
@@ -41,10 +55,6 @@ public class MainView {
     public static final String LSM_EXTENSION = ".lsm";
     private static final FileFilter LSM_FILE_FILTER =
             new FileNameExtensionFilter(LSM_EXTENSION);
-    public final String COPY_BUTTON_TEXT = "Copy and Rename";
-    public final String CANCEL_BUTTON_TEXT = "Cancel Pending Task";
-    public final String COPY_BUTTON_TOOL_TIP_TEXT = "Copy and rename all files using specified information";
-    public final String CANCEL_BUTTON_TOOL_TIP_TEXT = "Cancel the pending task";
 
     private File lsmDirectory;
     private JLabel lsmDirectoryField;
@@ -62,6 +72,7 @@ public class MainView {
     private FileTableModel tableModel;
     private ProjectConfiguration projectConfig;
     private MainView thisMainView;
+    private CopyAndRenameTask task;
     private boolean isRenameTaskInProgress;
 
     public MainView(ProjectConfiguration projectConfig,
@@ -75,10 +86,6 @@ public class MainView {
         setupInputDirectory();
         setupOutputDirectory();
         setupProcess();
-    }
-
-    public JButton getCopyAndRenameBtn() {
-        return copyAndRenameBtn;
     }
 
     public JPanel getPanel() {
@@ -118,29 +125,39 @@ public class MainView {
     }
 
     public void setRenameTaskInProgress(boolean renameTaskInProgress) {
-        isRenameTaskInProgress = renameTaskInProgress;
+        this.isRenameTaskInProgress = renameTaskInProgress;
+        if (isRenameTaskInProgress) {
+            copyAndRenameBtn.setText(RENAME_CANCEL_BUTTON_TEXT);
+            copyAndRenameBtn.setToolTipText(RENAME_CANCEL_TOOL_TIP_TEXT);
+        } else {
+            copyAndRenameBtn.setText(RENAME_START_BUTTON_TEXT);
+            copyAndRenameBtn.setToolTipText(RENAME_START_TOOL_TIP_TEXT);
+            task = null;
+        }
     }
 
     private void setupFileTable() {
         fileTable.setDefaultRenderer(File.class, new FileRenderer());
         fileTable.setDefaultRenderer(JButton.class, new ButtonRenderer());
         fileTable.setDefaultRenderer(ValidValueModel.class,
-                new ValidValueRenderer());
+                                     new ValidValueRenderer());
         fileTable.setDefaultRenderer(VerifiedFieldModel.class,
-                new VerifiedFieldRenderer());
+                                     new VerifiedFieldRenderer());
 
         fileTable.setDefaultEditor(JButton.class, new ButtonEditor());
         fileTable.setDefaultEditor(ValidValueModel.class,
-                new ValidValueEditor());
+                                   new ValidValueEditor());
         fileTable.setDefaultEditor(VerifiedFieldModel.class,
-                new VerifiedFieldEditor(appPanel));
+                                   new VerifiedFieldEditor(appPanel));
+
         fileTable.getTableHeader().setReorderingAllowed(false);
+
         fileTable.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
                 int code = e.getKeyCode();
                 if ((code == KeyEvent.VK_TAB) || code == KeyEvent.VK_RIGHT ||
-                        code == KeyEvent.VK_LEFT || code == KeyEvent.VK_UP ||
-                        code == KeyEvent.VK_DOWN) {
+                    code == KeyEvent.VK_LEFT || code == KeyEvent.VK_UP ||
+                    code == KeyEvent.VK_DOWN) {
                     requestFocusForFileTableEditor(
                             fileTable.getEditorComponent());
                 }
@@ -160,9 +177,9 @@ public class MainView {
         } else {
             int row = fileTable.getSelectedRow();
             fileTable.changeSelection(row,
-                    FileTableModel.getFirstFieldColumn(),
-                    false,
-                    false);
+                                      FileTableModel.getFirstFieldColumn(),
+                                      false,
+                                      false);
         }
     }
 
@@ -172,17 +189,21 @@ public class MainView {
             outputDirectoryField.setText("");
         }
         fileTable.setModel(new DefaultTableModel());
-        setFileTableEnabled(true);
-        copyAndRenameBtn.setEnabled(false);
+        setFileTableEnabled(true, false);
     }
 
-    public void setFileTableEnabled(boolean isEnabled) {
+    public void setFileTableEnabled(boolean isEnabled,
+                                    boolean isCopyButtonEnabled) {
         Component[] cList = {
-                lsmDirectoryBtn, outputDirectoryBtn, fileTable, copyAndRenameBtn};
+                lsmDirectoryBtn, outputDirectoryBtn, fileTable};
         for (Component c : cList) {
             if (isEnabled != c.isEnabled()) {
                 c.setEnabled(isEnabled);
             }
+        }
+
+        if (copyAndRenameBtn.isEnabled() != isCopyButtonEnabled) {
+            copyAndRenameBtn.setEnabled(isCopyButtonEnabled);
         }
     }
 
@@ -203,12 +224,12 @@ public class MainView {
                 fileChooser.setFileSelectionMode(
                         JFileChooser.FILES_AND_DIRECTORIES);
                 int choice = fileChooser.showDialog(parentPanel,
-                        "Select Source");
+                                                    "Select Source");
 
                 if (choice == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     if ((selectedFile != null) &&
-                            (!selectedFile.isDirectory())) {
+                        (!selectedFile.isDirectory())) {
                         selectedFile = selectedFile.getParentFile();
                     }
 
@@ -235,7 +256,7 @@ public class MainView {
                         projectConfig.getOutputDirectory();
                 outputPath =
                         outputCfg.getDerivedPath(lsmDirectory,
-                                files);
+                                                 files);
                 File derivedOutputDir = new File(outputPath);
                 boolean outputDirExists = derivedOutputDir.exists();
                 if (outputDirExists) {
@@ -246,7 +267,7 @@ public class MainView {
                             derivedOutputDir.getParentFile();
                     acceptSelectedFile =
                             (outputBaseDir != null) &&
-                                    outputBaseDir.canWrite();
+                            outputBaseDir.canWrite();
                 }
                 if (!acceptSelectedFile) {
                     reject.append("The derived output directory for your selection (");
@@ -274,15 +295,15 @@ public class MainView {
                 outputDirectoryField.setText(outputPath);
             }
             tableModel = new FileTableModel(files,
-                    projectConfig);
+                                            projectConfig);
             fileTable.setModel(tableModel);
             sizeTable();
             copyAndRenameBtn.setEnabled(true);
         } else {
             JOptionPane.showMessageDialog(appPanel,
-                    reject.toString(),
-                    "LSM Directory Selection Error",
-                    JOptionPane.ERROR_MESSAGE);
+                                          reject.toString(),
+                                          "LSM Directory Selection Error",
+                                          JOptionPane.ERROR_MESSAGE);
             resetFileTable();
         }
     }
@@ -307,65 +328,60 @@ public class MainView {
     }
 
     private void setupProcess() {
-        copyAndRenameBtn.setEnabled(true);
-        copyAndRenameBtn.setText(COPY_BUTTON_TEXT);
-        copyAndRenameBtn.setToolTipText(COPY_BUTTON_TOOL_TIP_TEXT);
-        removeListeners(copyAndRenameBtn);
+        copyAndRenameBtn.setEnabled(false);
+        setRenameTaskInProgress(false);
+
         copyAndRenameBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                fileTable.editCellAt(-1, -1); // stop any current editor                
-                String outputDirectoryName = outputDirectoryField.getText();
-                File outputDirectory = new File(outputDirectoryName);
-                String outputFailureMsg = null;
-                if (!outputDirectory.exists()) {
-                    try {
-                        outputDirectory.mkdir();
-                    } catch (Exception e1) {
-                        outputFailureMsg =
-                                "Failed to create output directory " +
-                                        outputDirectory.getAbsolutePath() + ".";
-                        LOG.error(outputFailureMsg, e1);
-                    }
-                }
-                if (!outputDirectory.isDirectory()) {
-                    outputFailureMsg =
-                            "The output directory must be set to a valid directory.";
-                }
-
-                if (outputFailureMsg != null) {
-
-                    JOptionPane.showMessageDialog(appPanel,
-                            outputFailureMsg,
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
-
-                } else if (tableModel.validateAllFields(
-                        fileTable,
-                        projectConfig.getRowValidators(),
-                        appPanel,
-                        outputDirectory)) {
-                    setFileTableEnabled(false);
-                    final CopyAndRenameTask task =
-                            new CopyAndRenameTask(thisMainView);
-                    for (CopyListener listener :
-                            projectConfig.getCopyListeners()) {
-                        task.addCopyListener(listener);
-                    }
-                    setRenameTaskInProgress(true);
-                    ImageRenamer.getThreadPoolExecutor().submit(task);
-                    copyAndRenameBtn.setText(CANCEL_BUTTON_TEXT);
-                    copyAndRenameBtn.setToolTipText(CANCEL_BUTTON_TOOL_TIP_TEXT);
-                    copyAndRenameBtn.setEnabled(true);
-                    removeListeners(copyAndRenameBtn);
-                    copyAndRenameBtn.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                            if (!task.cancel(true))
-                                LOG.error("TASK COULD NOT BE CANCELED");
-                            thisMainView.setFileTableEnabled(true);
-                            setRenameTaskInProgress(false);
-                            setupProcess();
+                if (isRenameTaskInProgress) {
+                    task.cancelSession();
+                    copyAndRenameBtn.setEnabled(false);
+                    setRenameTaskInProgress(false);
+                } else {
+                    fileTable.editCellAt(-1, -1); // stop any current editor
+                    String outputDirectoryName = outputDirectoryField.getText();
+                    File outputDirectory = new File(outputDirectoryName);
+                    String outputFailureMsg = null;
+                    if (!outputDirectory.exists()) {
+                        try {
+                            outputDirectory.mkdir();
+                        } catch (Exception e1) {
+                            outputFailureMsg =
+                                    "Failed to create output directory " +
+                                    outputDirectory.getAbsolutePath() + ".";
+                            LOG.error(outputFailureMsg, e1);
                         }
-                    });
+                    }
+                    if (!outputDirectory.isDirectory()) {
+                        outputFailureMsg =
+                                "The output directory must be set to a valid directory.";
+                    }
+
+                    if (outputFailureMsg != null) {
+
+                        JOptionPane.showMessageDialog(appPanel,
+                                                      outputFailureMsg,
+                                                      "Error",
+                                                      JOptionPane.ERROR_MESSAGE);
+
+                    } else if (tableModel.validateAllFields(
+                            fileTable,
+                            projectConfig.getRowValidators(),
+                            appPanel,
+                            outputDirectory)) {
+                        setFileTableEnabled(false, true);
+                        task = new CopyAndRenameTask(thisMainView);
+                        for (CopyListener listener :
+                                projectConfig.getCopyListeners()) {
+                            task.addCopyListener(listener);
+                        }
+                        for (SessionListener listener :
+                                projectConfig.getSessionListeners()) {
+                            task.addSessionListener(listener);
+                        }
+                        setRenameTaskInProgress(true);
+                        ImageRenamer.getThreadPoolExecutor().submit(task);
+                    }
                 }
             }
         });
@@ -416,8 +432,11 @@ public class MainView {
         }
     }
 
-    private void removeListeners(AbstractButton abstractButton) {
-        for (ActionListener actionListener : abstractButton.getActionListeners())
-            abstractButton.removeActionListener(actionListener);
-    }
+    private static final String RENAME_START_BUTTON_TEXT = "Copy and Rename";
+    private static final String RENAME_START_TOOL_TIP_TEXT =
+            "Copy and rename all files using specified information";
+    private static final String RENAME_CANCEL_BUTTON_TEXT =
+            "Cancel Rename In Progress";
+    private static final String RENAME_CANCEL_TOOL_TIP_TEXT =
+            "Cancel the renaming process that is currently running";
 }

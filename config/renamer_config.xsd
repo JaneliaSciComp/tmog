@@ -8,14 +8,23 @@
         <xs:attribute name="manuallyChosen" type="xs:boolean"/>
     </xs:complexType>
 
-    <xs:complexType name="classNameType">
+    <xs:complexType name="propertyType">
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="value" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="pluginType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="property" type="propertyType"/>
+        </xs:sequence>
         <xs:attribute name="className" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="pluginsType">
         <xs:sequence>
-            <xs:element name="rowValidator" type="classNameType"/>
-            <xs:element name="copyListener" type="classNameType"/>
+            <xs:element name="rowValidator" type="pluginType" minOccurs="0"/>
+            <xs:element name="copyListener" type="pluginType" minOccurs="0"/>
+            <xs:element name="sessionListener" type="pluginType" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -44,9 +53,9 @@
         <xs:attribute name="formFactor" type="xs:integer"/>
     </xs:complexType>
 
-     <xs:complexType name="validValueType">
-         <xs:attribute name="displayName" type="xs:string"/>
-         <xs:attribute name="value" type="xs:string"/>
+    <xs:complexType name="validValueType">
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="value" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="validValueListType">
@@ -55,7 +64,7 @@
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:string"/>
-     </xs:complexType>
+    </xs:complexType>
 
     <xs:complexType name="pluginDataType">
         <xs:attribute name="displayName" type="xs:string"/>
@@ -84,9 +93,11 @@
                         <xs:element name="number" type="numberType"/>
                         <xs:element name="text" type="textType"/>
                         <xs:element name="well" type="wellType"/>
-                        <xs:element name="validValueList" type="validValueListType"/>
+                        <xs:element name="validValueList"
+                                    type="validValueListType"/>
                         <xs:element name="pluginData" type="pluginDataType"/>
-                        <xs:element name="fileModificationTime" type="fileModificationTimeType"/>
+                        <xs:element name="fileModificationTime"
+                                    type="fileModificationTimeType"/>
                         <xs:element name="runTime" type="runTimeType"/>
                     </xs:choice>
                 </xs:complexType>

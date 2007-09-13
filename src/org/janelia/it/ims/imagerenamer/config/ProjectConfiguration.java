@@ -1,5 +1,5 @@
 /*
- * Copyright � 2007 Howard Hughes Medical Institute. 
+ * Copyright © 2007 Howard Hughes Medical Institute.
  * All rights reserved.  
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -10,10 +10,10 @@ package org.janelia.it.ims.imagerenamer.config;
 import org.janelia.it.ims.imagerenamer.field.RenameField;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
+import org.janelia.it.ims.imagerenamer.plugin.SessionListener;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * This class encapsulates all application configuration information
@@ -55,24 +55,34 @@ public class ProjectConfiguration {
         return outputDirectory.isManuallyChosen();
     }
 
-    public Set<CopyListener> getCopyListeners() {
-        Set<CopyListener> listeners;
+    public List<CopyListener> getCopyListeners() {
+        List<CopyListener> listeners;
         if (pluginFactory != null) {
             listeners = pluginFactory.getCopyListeners();
         } else {
-            listeners = new HashSet<CopyListener>();
+            listeners = new ArrayList<CopyListener>();
         }
         return listeners;
     }
 
-    public Set<RenameFieldRowValidator> getRowValidators() {
-        Set<RenameFieldRowValidator> validators;
+    public List<RenameFieldRowValidator> getRowValidators() {
+        List<RenameFieldRowValidator> validators;
         if (pluginFactory != null) {
             validators = pluginFactory.getRowValidators();
         } else {
-            validators = new HashSet<RenameFieldRowValidator>();
+            validators = new ArrayList<RenameFieldRowValidator>();
         }
         return validators;
+    }
+
+    public List<SessionListener> getSessionListeners() {
+        List<SessionListener> listeners;
+        if (pluginFactory != null) {
+            listeners = pluginFactory.getSessionListeners();
+        } else {
+            listeners = new ArrayList<SessionListener>();
+        }
+        return listeners;
     }
 
     public void setName(String name) {
@@ -99,8 +109,7 @@ public class ProjectConfiguration {
     /**
      * Initializes and verifies the configured project.
      *
-     * @throws ConfigurationException
-     *   if any errors occur.
+     * @throws ConfigurationException if any errors occur.
      */
     public void initializeAndVerify() throws ConfigurationException {
         if (outputDirectory == null) {

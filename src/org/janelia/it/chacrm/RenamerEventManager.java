@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute.
+ * Copyright Â© 2007 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -8,6 +8,7 @@
 package org.janelia.it.chacrm;
 
 import static org.janelia.it.chacrm.Transformant.Status;
+import org.janelia.it.ims.imagerenamer.config.PluginConfiguration;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
@@ -24,16 +25,22 @@ import java.io.File;
 public class RenamerEventManager implements RenameFieldRowValidator,
                                             CopyListener {
 
-    /** The plugin data name for image location rank information. */
+    /**
+     * The plugin data name for image location rank information.
+     */
     private static final String IMAGE_LOCATION_RANK = "imageLocationRank";
 
-    /** Standard message to verify components of transformant identifier. */
+    /**
+     * Standard message to verify components of transformant identifier.
+     */
     private static final String MSG_VERIFY_TRANSFORMANT_COMPONENTS =
             "Please verify your Plate, Well, Vector ID, and " +
             "Landing Site settings for the file ";
 
 
-    /** The data access object for retrieving and updating transformant data. */
+    /**
+     * The data access object for retrieving and updating transformant data.
+     */
     private TransformantDao dao;
 
     /**
@@ -47,10 +54,10 @@ public class RenamerEventManager implements RenameFieldRowValidator,
      * Verifies that the plugin is ready for use by checking external
      * dependencies.
      *
-     * @throws ExternalSystemException
-     *   if the plugin or any of its dependencies are not available.
+     * @param config the plugin configuration.
+     * @throws ExternalSystemException if the plugin can not be initialized.
      */
-    public void init() throws ExternalSystemException {
+    public void init(PluginConfiguration config) throws ExternalSystemException {
         try {
             setDao();
             dao.checkConnection();
@@ -73,13 +80,9 @@ public class RenamerEventManager implements RenameFieldRowValidator,
      * <li> the transformant currently has a valid status </li>
      * </ul>
      *
-     * @param  row  the user supplied rename information to be validated.
-     *
-     * @throws ExternalDataException
-     *   if the data is not valid.
-     *
-     * @throws ExternalSystemException
-     *   if any error occurs while validating the data.
+     * @param row the user supplied rename information to be validated.
+     * @throws ExternalDataException   if the data is not valid.
+     * @throws ExternalSystemException if any error occurs while validating the data.
      */
     public void validate(RenameFieldRow row)
             throws ExternalDataException, ExternalSystemException {
@@ -99,7 +102,7 @@ public class RenamerEventManager implements RenameFieldRowValidator,
         } catch (SystemException e) {
             throw new ExternalSystemException(
                     "Failed to retrieve ChaCRM status for transformant ID '" +
-                     transformantID + "' because of a system error.", e);
+                    transformantID + "' because of a system error.", e);
         }
 
         try {
@@ -118,16 +121,12 @@ public class RenamerEventManager implements RenameFieldRowValidator,
     /**
      * Processes the specified copy event.
      *
-     * @param  eventType  type of copy event.
-     * @param  row        details about the event.
-     *
+     * @param eventType type of copy event.
+     * @param row       details about the event.
      * @return the rename field row for processing (with any
      *         updates from this plugin).
-     *
-     * @throws ExternalDataException
-     *   if a recoverable data error occurs during processing.
-     * @throws ExternalSystemException
-     *   if a non-recoverable system error occurs during processing.
+     * @throws ExternalDataException   if a recoverable data error occurs during processing.
+     * @throws ExternalSystemException if a non-recoverable system error occurs during processing.
      */
     public RenameFieldRow processEvent(EventType eventType,
                                        RenameFieldRow row)
@@ -149,14 +148,10 @@ public class RenamerEventManager implements RenameFieldRowValidator,
     /**
      * Processes start copy event.
      *
-     * @param  row  the row information for the event.
-     *
+     * @param row the row information for the event.
      * @return row information with updated rank.
-     *
-     * @throws ExternalDataException
-     *   if a recoverable data error occurs during processing.
-     * @throws ExternalSystemException
-     *   if a non-recoverable system error occurs during processing.
+     * @throws ExternalDataException   if a recoverable data error occurs during processing.
+     * @throws ExternalSystemException if a non-recoverable system error occurs during processing.
      */
     private RenameFieldRow startingCopy(RenameFieldRow row)
             throws ExternalDataException, ExternalSystemException {
@@ -188,12 +183,9 @@ public class RenamerEventManager implements RenameFieldRowValidator,
     /**
      * Processes completed copy successfully event.
      *
-     * @param  row  the row information for the event.
-     *
-     * @throws ExternalDataException
-     *   if a recoverable data error occurs during processing.
-     * @throws ExternalSystemException
-     *   if a non-recoverable system error occurs during processing.
+     * @param row the row information for the event.
+     * @throws ExternalDataException   if a recoverable data error occurs during processing.
+     * @throws ExternalSystemException if a non-recoverable system error occurs during processing.
      */
     private void completedSuccessfulCopy(RenameFieldRow row)
             throws ExternalDataException, ExternalSystemException {
@@ -233,19 +225,16 @@ public class RenamerEventManager implements RenameFieldRowValidator,
         } catch (Exception e) {
             throw new ExternalSystemException(
                     "Failed to update ChaCRM status for transformant ID " +
-                     transformantID + ".  Detailed data is: " + row, e);
+                    transformantID + ".  Detailed data is: " + row, e);
         }
     }
 
     /**
      * Processes completed copy failure event.
      *
-     * @param  row  the row information for the event.
-     *
-     * @throws ExternalDataException
-     *   if a recoverable data error occurs during processing.
-     * @throws ExternalSystemException
-     *   if a non-recoverable system error occurs during processing.
+     * @param row the row information for the event.
+     * @throws ExternalDataException   if a recoverable data error occurs during processing.
+     * @throws ExternalSystemException if a non-recoverable system error occurs during processing.
      */
     private void failedCopy(RenameFieldRow row)
             throws ExternalDataException, ExternalSystemException {
@@ -273,8 +262,7 @@ public class RenamerEventManager implements RenameFieldRowValidator,
     /**
      * Create the dao for this manager if it does not already exist.
      *
-     * @throws SystemException
-     *   if any error occurs during creation.
+     * @throws SystemException if any error occurs during creation.
      */
     private synchronized void setDao() throws SystemException {
         if (dao == null) {
@@ -286,8 +274,7 @@ public class RenamerEventManager implements RenameFieldRowValidator,
      * Utility to translate renamer tool data fields into a
      * transformant identifier.
      *
-     * @param  row  the set of renamer tool data fields.
-     *
+     * @param row the set of renamer tool data fields.
      * @return the corresponding transformant identifier.
      */
     private static String getTransformantID(RenameFieldRow row) {

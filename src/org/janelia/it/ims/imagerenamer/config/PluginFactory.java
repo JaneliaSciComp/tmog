@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute.
+ * Copyright Â© 2007 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -9,12 +9,14 @@ package org.janelia.it.ims.imagerenamer.config;
 
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
+import org.janelia.it.ims.imagerenamer.plugin.Plugin;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
+import org.janelia.it.ims.imagerenamer.plugin.SessionListener;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class constructs configured CopyListener instances.
@@ -23,17 +25,22 @@ import java.util.Set;
  */
 public class PluginFactory {
 
-    private Set<PluginConfiguration> copyListenerPlugins;
-    private Set<CopyListener> copyListeners;
+    private List<PluginConfiguration> copyListenerPlugins;
+    private List<CopyListener> copyListeners;
 
-    private Set<PluginConfiguration> rowValidatorPlugins;
-    private Set<RenameFieldRowValidator> rowValidators;
+    private List<PluginConfiguration> rowValidatorPlugins;
+    private List<RenameFieldRowValidator> rowValidators;
+
+    private List<PluginConfiguration> sessionListenerPlugins;
+    private List<SessionListener> sessionListeners;
 
     public PluginFactory() {
-        copyListenerPlugins = new HashSet<PluginConfiguration>();
-        copyListeners = new HashSet<CopyListener>();
-        rowValidatorPlugins = new HashSet<PluginConfiguration>();
-        rowValidators = new HashSet<RenameFieldRowValidator>();
+        copyListenerPlugins = new ArrayList<PluginConfiguration>();
+        copyListeners = new ArrayList<CopyListener>();
+        rowValidatorPlugins = new ArrayList<PluginConfiguration>();
+        rowValidators = new ArrayList<RenameFieldRowValidator>();
+        sessionListenerPlugins = new ArrayList<PluginConfiguration>();
+        sessionListeners = new ArrayList<SessionListener>();
     }
 
     public void addCopyListenerPlugin(PluginConfiguration plugin) {
@@ -44,59 +51,67 @@ public class PluginFactory {
         rowValidatorPlugins.add(plugin);
     }
 
-    public Set<CopyListener> getCopyListeners() {
+    public void addSessionListenerPlugin(PluginConfiguration plugin) {
+        sessionListenerPlugins.add(plugin);
+    }
+
+    public List<CopyListener> getCopyListeners() {
         return copyListeners;
     }
 
-    public Set<RenameFieldRowValidator> getRowValidators() {
+    public List<RenameFieldRowValidator> getRowValidators() {
         return rowValidators;
+    }
+
+    public List<SessionListener> getSessionListeners() {
+        return sessionListeners;
     }
 
     public void constructInstances(String projectName)
             throws ConfigurationException {
 
-        for (PluginConfiguration pluginConfig : copyListenerPlugins) {
+        constructInstancesForClass(projectName,
+                                   copyListenerPlugins,
+                                   CopyListener.class,
+                                   copyListeners);
+
+        constructInstancesForClass(projectName,
+                                   rowValidatorPlugins,
+                                   RenameFieldRowValidator.class,
+                                   rowValidators);
+
+        constructInstancesForClass(projectName,
+                                   sessionListenerPlugins,
+                                   SessionListener.class,
+                                   sessionListeners);
+    }
+
+    private void constructInstancesForClass(String projectName,
+                                            List<PluginConfiguration> pluginConfigurations,
+                                            Class basePluginClass,
+                                            List pluginInstances)
+            throws ConfigurationException {
+
+        for (PluginConfiguration pluginConfig : pluginConfigurations) {
             String className = pluginConfig.getClassName();
             Object newInstance = constructInstance(className, projectName);
-            if (newInstance instanceof CopyListener) {
-                CopyListener plugin =
-                        (CopyListener) newInstance;
+            if (basePluginClass.isInstance(newInstance)) {
+                Plugin plugin = (Plugin) newInstance;
                 try {
-                    plugin.init();
+                    plugin.init(pluginConfig);
                 } catch (ExternalSystemException e) {
                     throw new ConfigurationException(e.getMessage(), e);
                 }
-                copyListeners.add(plugin);
+                //noinspection unchecked
+                pluginInstances.add(plugin);
             } else {
                 throw new ConfigurationException(
-                        "The configured copy complete listener class (" +
+                        "The configured plugin class (" +
                         className + ") for the " + projectName +
                         " project does not implement " +
-                        CopyListener.class.getName() + ".");
+                        basePluginClass.getName() + ".");
             }
         }
-
-        for (PluginConfiguration pluginConfig : rowValidatorPlugins) {
-            String className = pluginConfig.getClassName();
-            Object newInstance = constructInstance(className, projectName);
-            if (newInstance instanceof RenameFieldRowValidator) {
-                RenameFieldRowValidator plugin =
-                        (RenameFieldRowValidator) newInstance;
-                try {
-                    plugin.init();
-                } catch (ExternalSystemException e) {
-                    throw new ConfigurationException(e.getMessage(), e);
-                }
-                rowValidators.add(plugin);
-            } else {
-                throw new ConfigurationException(
-                        "The configured field row validator class (" +
-                        className + ") for the " + projectName +
-                        " project does not implement " +
-                        RenameFieldRowValidator.class.getName() + ".");
-            }
-        }
-
     }
 
     private static Object constructInstance(String className,

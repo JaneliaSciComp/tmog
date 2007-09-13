@@ -1,5 +1,5 @@
 /*
- * Copyright � 2007 Howard Hughes Medical Institute. 
+ * Copyright © 2007 Howard Hughes Medical Institute. 
  * All rights reserved.  
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * This class contains the data model for renaming a set of files.
@@ -204,7 +203,7 @@ public class FileTableModel extends AbstractTableModel {
     }
 
     public boolean validateAllFields(JTable fileTable,
-                                     Set<RenameFieldRowValidator> externalValidators,
+                                     List<RenameFieldRowValidator> externalValidators,
                                      Component dialogParent,
                                      File outputDirectory) {
         boolean isValid = true;
