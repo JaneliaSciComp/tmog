@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute.
+ * Copyright Â© 2007 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -9,8 +9,8 @@ package org.janelia.it.ims.imagerenamer.filefilter;
 
 import java.io.File;
 import java.util.Comparator;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This comparator will sort file names that contain L-numbers using

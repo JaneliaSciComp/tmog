@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute.
+ * Copyright Â© 2007 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -7,11 +7,10 @@
 
 package org.janelia.it.chacrm;
 
-import static org.janelia.it.chacrm.Transformant.Status;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import static org.janelia.it.chacrm.Transformant.Status;
 
 /**
  * Tests the Transformant class.

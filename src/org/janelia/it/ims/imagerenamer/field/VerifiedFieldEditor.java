@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute. 
+ * Copyright Â© 2007 Howard Hughes Medical Institute.
  * All rights reserved.  
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -7,19 +7,15 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
-import javax.swing.AbstractCellEditor;
-import javax.swing.JTextField;
-import javax.swing.JTable;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.TableCellEditor;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.awt.Component;
-import java.awt.Color;
 import java.util.EventObject;
 
 /**

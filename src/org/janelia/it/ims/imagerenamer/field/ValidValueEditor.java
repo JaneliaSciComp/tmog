@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute. 
+ * Copyright Â© 2007 Howard Hughes Medical Institute.
  * All rights reserved.  
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -8,9 +8,8 @@
 package org.janelia.it.ims.imagerenamer.field;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.FocusEvent;
-import java.awt.KeyboardFocusManager;
-import java.awt.Component;
 
 /**
  * This class supports the editing of a valid value cell
