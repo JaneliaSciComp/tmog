@@ -7,6 +7,8 @@
 
 package org.janelia.it.chacrm;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import static org.janelia.it.chacrm.Transformant.Status;
 import org.janelia.it.ims.imagerenamer.config.PluginConfiguration;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
@@ -16,6 +18,9 @@ import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
 
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * This class handles events "published" by the image renamer tool.
@@ -24,6 +29,10 @@ import java.io.File;
  */
 public class RenamerEventManager implements RenameFieldRowValidator,
                                             CopyListener {
+
+    /** The logger for this class. */
+    private static final Log LOG =
+            LogFactory.getLog(RenamerEventManager.class);
 
     /**
      * The plugin data name for image location rank information.
@@ -44,6 +53,15 @@ public class RenamerEventManager implements RenameFieldRowValidator,
     private TransformantDao dao;
 
     /**
+     * The configured pattern value used to identify when files are being
+     * renamed from one area of the lab image file share to another.
+     */
+    private String labImageSharePatternValue;
+
+    /** The compiled pattern for the labImageSharePatternValue. */
+    private Pattern labImageSharePattern;
+
+    /**
      * Empty constructor required by
      * {@link org.janelia.it.ims.imagerenamer.config.PluginFactory}.
      */
@@ -61,6 +79,17 @@ public class RenamerEventManager implements RenameFieldRowValidator,
         try {
             setDao();
             dao.checkConnection();
+            labImageSharePatternValue =
+                    config.getProperty("labImageSharePattern");
+            if (labImageSharePatternValue != null) {
+                labImageSharePattern =
+                        Pattern.compile(labImageSharePatternValue);
+            }
+        } catch (PatternSyntaxException pse) {
+            throw new ExternalSystemException(
+                    "Failed to initialize ChaCRM plugin because of invalid " +
+                    "labImageSharePattern '" + labImageSharePatternValue +
+                    "'.  " + pse.getMessage(), pse);
         } catch (SystemException e) {
             throw new ExternalSystemException(
                     "Failed to initialize ChaCRM plugin.  " + e.getMessage(),
@@ -146,6 +175,34 @@ public class RenamerEventManager implements RenameFieldRowValidator,
     }
 
     /**
+     * Utility to extract an image location from the specified file name
+     * based on the specified base directory pattern.
+     *
+     * @param  fileName              file name to check.
+     *
+     * @param  baseDirectoryPattern  pattern of the base directory to be
+     *                               excluded from the relative image location.
+     *
+     * @return a relative image location if the base pattern is matched;
+     *         otherwise null.
+     */
+    public static ImageLocation getImageLocation(String fileName,
+                                                 Pattern baseDirectoryPattern) {
+        ImageLocation imageLocation = null;
+
+        if (baseDirectoryPattern != null) {
+            Matcher m = baseDirectoryPattern.matcher(fileName);
+            if (m.find()) {
+                int relativePathStart = m.end();
+                String relativePath = fileName.substring(relativePathStart);
+                imageLocation = new ImageLocation(relativePath, null);
+            }
+        }
+
+        return imageLocation;
+    }
+
+    /**
      * Processes start copy event.
      *
      * @param row the row information for the event.
@@ -211,6 +268,23 @@ public class RenamerEventManager implements RenameFieldRowValidator,
             ImageLocation imageLocation = new ImageLocation(relativePath, rank);
             transformant.setImageLocation(imageLocation);
             dao.setTransformantStatusAndLocation(transformant);
+
+            File fromFile = row.getFromFile();
+            String fromFileName = fromFile.getAbsolutePath();
+            ImageLocation fromFileImageLocation =
+                    getImageLocation(fromFileName,
+                                     labImageSharePattern);
+            if (fromFileImageLocation != null) {
+                try {
+                    dao.deleteImageLocationAndRollbackStatus(fromFileImageLocation);
+                } catch (Exception e) {
+                    // log this error, but allow transaction to complete
+                    LOG.error("failed to remove " + fromFileImageLocation +
+                              " for file " + fromFileName +
+                              " from ChaCRM database", e);
+                }
+            }
+
         } catch (TransformantNotFoundException e) {
             throw new ExternalDataException(
                     "Failed to update ChaCRM status because transformant ID " +

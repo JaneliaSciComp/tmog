@@ -39,7 +39,7 @@ public class TransformantDao {
 
     /**
      * SQL for retrieving transformant object data.
-     *   Parameter 1 is transformant ID.
+     *   Parameter 1 is transformant name.
      */
     private static final String SQL_SELECT_TRANSFORMANT =
             "SELECT owner, feature_id FROM feature_owner WHERE " +
@@ -64,7 +64,16 @@ public class TransformantDao {
             "{ call store_transformant_image_location(?, ?, ?) }";
 
     /**
-     * SQL for updating transformant status and image location.
+     * SQL for removing an image location and updating any associated
+     * transformant and fragment status if necessary.
+     *   Parameter 1 is transformant image location.
+     */
+    private static final String SQL_CALL_REMOVE_IMAGE_LOCATION =
+            "{ call remove_transformant_image_location(?) }";
+
+    /**
+     * SQL for deleting a transformant image location without changing
+     * the associated transformant or fragment status.
      *   Parameter 1 is transformant feature id.
      *   Parameter 2 is transformant image rank.
      */
@@ -208,8 +217,7 @@ public class TransformantDao {
             throws SystemException, IllegalArgumentException {
 
         if (transformant == null) {
-            throw new IllegalArgumentException(
-                    "Transformant is null.");
+            throw new IllegalArgumentException("Transformant is null.");
         }
 
         ImageLocation imageLocation = transformant.getImageLocation();
@@ -249,7 +257,8 @@ public class TransformantDao {
 
     /**
      * Deletes the image location for the specified transformat
-     * from the repository.
+     * from the repository without changing the associated transformant
+     * or fragment status values.
      *
      * @param  transformant  transformant with location to be deleted.
      *
@@ -304,6 +313,50 @@ public class TransformantDao {
         } catch (SQLException e) {
             throw new SystemException(
                     "Failed to delete image location for " + transformant, e);
+        } finally {
+            DbManager.closeResources(resultSet, statement, connection, LOG);
+        }
+    }
+
+    /**
+     * Deletes the specified image location from the repository and
+     * updates the associated transformant and fragment status values
+     * if necessary.
+     *
+     * @param  imageLocation  image location to be removed.
+     *
+     * @throws SystemException
+     *   if any errors occur while removing the data.
+     * @throws IllegalArgumentException
+     *   if a image location is specified.
+     */
+    public void deleteImageLocationAndRollbackStatus(ImageLocation imageLocation)
+            throws SystemException, IllegalArgumentException {
+
+        if (imageLocation == null) {
+            throw new IllegalArgumentException("Image location is null.");
+        }
+
+        Connection connection = null;
+        ResultSet resultSet = null;
+        CallableStatement statement = null;
+        try {
+            connection = dbManager.getConnection();
+            statement = connection.prepareCall(SQL_CALL_REMOVE_IMAGE_LOCATION);
+            statement.setString(1, imageLocation.getRelativePath());
+
+            statement.executeUpdate();
+
+            if (LOG.isInfoEnabled()) {
+                LOG.info("successfully removed " + imageLocation);
+            }
+
+        } catch (DbConfigException e) {
+            throw new SystemException(e.getMessage(), e);
+        } catch (SQLException e) {
+            throw new SystemException(
+                    "Failed to remove image location: " +
+                    imageLocation, e);
         } finally {
             DbManager.closeResources(resultSet, statement, connection, LOG);
         }

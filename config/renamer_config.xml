@@ -3,27 +3,6 @@
 <renameConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="renamer_config.xsd">
 
-    <project name="Test" default="true">
-
-        <plugins>
-            <copyListener className="org.janelia.it.ims.imagerenamer.plugin.SleepingCopyListener">
-                <property name="seconds" value="10"/>
-            </copyListener>
-            <sessionListener className="org.janelia.it.ims.imagerenamer.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="renameSummaries"/>
-            </sessionListener>
-        </plugins>
-
-        <renamePattern>
-            <separator value="RenamerTest-"/>
-            <text displayName="Promoter" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <runTime datePattern="'-'yyyyMMddHHmmssSSS"/>
-            <separator value=".lsm"/>
-        </renamePattern>
-
-    </project>
-
     <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)">
 
         <!-- DASH_FOR_PROD->
