@@ -15,11 +15,9 @@ import org.apache.commons.logging.LogFactory;
 import static org.janelia.it.chacrm.Transformant.Status;
 import org.janelia.it.utils.db.DbManager;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,8 +43,14 @@ public class TransformantDaoTest extends TestCase {
     private DbManager dbManager;
     private TransformantDao dao;
     private Integer testFragmentFeatureId;
-    private Transformant existingTransformant;
+    private Transformant transformant;
+    private String transformantName;
     private int locationPathSequence = 0;
+
+    /**
+     * This flag can be used to stop database cleanup in each test's
+     * tearDown method when you need to debug problems in the database.
+     */
     private boolean isCleanupNeeded = true;
 
     /**
@@ -77,8 +81,9 @@ public class TransformantDaoTest extends TestCase {
         dao = new TransformantDao();
 
         creatTestFragment(Transformant.Status.transformant);
-        existingTransformant =
-                createTransformant(Transformant.Status.transformant);
+        transformant = createTransformant(Transformant.Status.transformant);
+        transformantName = transformant.getTransformantID();
+        transformant = getTransformant(transformantName, true);
     }
 
     protected void tearDown() throws Exception {
@@ -95,12 +100,10 @@ public class TransformantDaoTest extends TestCase {
      */
     public void testGetTransformant() throws Exception {
 
-        // test retrieval without rank
-        String transformantName = existingTransformant.getTransformantID();
-        getExistingTransformant(transformantName, false);
+        // setup tests retrieval with rank
 
-        // test retrieval with rank
-        getExistingTransformant(transformantName, true);
+        // test retrieval without rank
+        getTransformant(transformantName, false);
 
         try {
             Transformant transformant =
@@ -108,16 +111,16 @@ public class TransformantDaoTest extends TestCase {
             fail("inavalid transformant ID should have caused exception " +
                  "but returned this instead: " + transformant);
         } catch (TransformantNotFoundException e) {
-            assertTrue(true); // test passed
+            LOG.info("expected exception thrown", e); // test passed
         }
 
         dao = new TransformantDao(EMPTY_DB_MANAGER);
         try {
-            dao.getTransformant(existingTransformant.getTransformantID(),
+            dao.getTransformant(transformantName,
                                 false);
             fail("inavalid dbManager should have caused exception");
         } catch (SystemException e) {
-            assertTrue(true); // test passed
+            LOG.info("expected exception thrown", e); // test passed
         }
     }
 
@@ -129,13 +132,8 @@ public class TransformantDaoTest extends TestCase {
      */
     public void testSetTransformantStatusAndLocation() throws Exception {
 
-        String transformantName = existingTransformant.getTransformantID();
-        Transformant transformant = getExistingTransformant(transformantName,
-                                                            true);
-
-        String transformantID = transformant.getTransformantID();
         Integer featureID = transformant.getFeatureID();
-        Transformant newTransformant = new Transformant(transformantID,
+        Transformant newTransformant = new Transformant(transformantName,
                                                         Status.imaged,
                                                         featureID);
         ImageLocation existingImageLocation =
@@ -148,11 +146,11 @@ public class TransformantDaoTest extends TestCase {
         dao.setTransformantStatusAndLocation(newTransformant);
 
         Transformant retrievedTransformant =
-                dao.getTransformant(transformantID, false);
+                dao.getTransformant(transformantName, false);
         assertNotNull("null transformant returned from database",
                       retrievedTransformant);
         assertEquals("invalid transformant ID returned from database",
-                     transformantID,
+                     transformantName,
                      retrievedTransformant.getTransformantID());
         assertEquals("invalid status returned from database",
                      Status.imaged,
@@ -162,7 +160,7 @@ public class TransformantDaoTest extends TestCase {
             dao.setTransformantStatusAndLocation(null);
             fail("set with null transformant should have caused exception");
         } catch (IllegalArgumentException e) {
-            assertTrue(true); // test passed
+            LOG.info("expected exception thrown", e); // test passed
         }
 
         try {
@@ -172,7 +170,7 @@ public class TransformantDaoTest extends TestCase {
             dao.setTransformantStatusAndLocation(badTransformant);
             fail("set with null image location should have caused exception");
         } catch (IllegalArgumentException e) {
-            assertTrue(true); // test passed
+            LOG.info("expected exception thrown", e); // test passed
         }
 
         try {
@@ -184,7 +182,7 @@ public class TransformantDaoTest extends TestCase {
             dao.setTransformantStatusAndLocation(badTransformant);
             fail("set with bad feature ID should have caused exception");
         } catch (SystemException e) {
-            assertTrue(true); // test passed
+            LOG.info("expected exception thrown", e); // test passed
         }
 
         dao = new TransformantDao(EMPTY_DB_MANAGER);
@@ -192,7 +190,7 @@ public class TransformantDaoTest extends TestCase {
             dao.setTransformantStatusAndLocation(newTransformant);
             fail("inavalid dbManager should have caused exception");
         } catch (SystemException e) {
-            assertTrue(true); // test passed
+            LOG.info("expected exception thrown", e); // test passed
         }
     }
 
@@ -204,18 +202,13 @@ public class TransformantDaoTest extends TestCase {
      */
     public void testDeleteImageLocation() throws Exception {
 
-        String transformantName = existingTransformant.getTransformantID();
-        Transformant transformant = getExistingTransformant(transformantName,
-                                                            true);
-
         ImageLocation imageLocation = transformant.getImageLocation();
         Integer rank = imageLocation.getRank();
 
         dao.deleteImageLocation(transformant);
 
-        Transformant updatedTransformant =
-                getExistingTransformant(transformantName,
-                                        true);
+        Transformant updatedTransformant = getTransformant(transformantName,
+                                                           true);
         imageLocation = updatedTransformant.getImageLocation();
 
         assertEquals("invalid rank returned after delete",
@@ -266,9 +259,6 @@ public class TransformantDaoTest extends TestCase {
      */
     public void testDeleteImageLocationAndRollbackStatus1() throws Exception {
 
-        String transformantName = existingTransformant.getTransformantID();
-        Transformant transformant =
-                getExistingTransformant(transformantName, true);
         ImageLocation location1 = transformant.getImageLocation();
         String location1Path = getUniqueLocationPath();
         location1 = new ImageLocation(location1Path,
@@ -277,21 +267,14 @@ public class TransformantDaoTest extends TestCase {
 
         dao.setTransformantStatusAndLocation(transformant);
 
-        validateFeatureStatus("after first location add",
-                              testFragmentFeatureId,
-                              Transformant.Status.imaged,
-                              true);
+        validateFragmentElements("after first location add",
+                                 Transformant.Status.imaged,
+                                 transformant.getFeatureID(),
+                                 Transformant.Status.imaged,
+                                 transformantName,
+                                 Arrays.asList(location1Path));
 
-        validateFeatureStatus("after first location add",
-                              transformant.getFeatureID(),
-                              Transformant.Status.imaged,
-                              false);
-
-        validateLocations("after first location add",
-                          transformantName,
-                          Arrays.asList(location1Path));
-
-        transformant = getExistingTransformant(transformantName, true);
+        transformant = getTransformant(transformantName, true);
         ImageLocation location2 = transformant.getImageLocation();
         String location2Path = getUniqueLocationPath();
         location2 = new ImageLocation(location2Path,
@@ -300,35 +283,21 @@ public class TransformantDaoTest extends TestCase {
 
         dao.setTransformantStatusAndLocation(transformant);
 
-        validateFeatureStatus("after second location add",
-                              testFragmentFeatureId,
-                              Transformant.Status.imaged,
-                              true);
-
-        validateFeatureStatus("after second location add",
-                              transformant.getFeatureID(),
-                              Transformant.Status.imaged,
-                              false);
-
-        validateLocations("after second location add",
-                          transformantName,
-                          Arrays.asList(location1Path, location2Path));
+        validateFragmentElements("after second location add",
+                                 Transformant.Status.imaged,
+                                 transformant.getFeatureID(),
+                                 Transformant.Status.imaged,
+                                 transformantName,
+                                 Arrays.asList(location1Path, location2Path));
 
         dao.deleteImageLocationAndRollbackStatus(location1);
 
-        validateFeatureStatus("after delete",
-                              testFragmentFeatureId,
-                              Transformant.Status.imaged,
-                              true);
-
-        validateFeatureStatus("after delete",
-                              transformant.getFeatureID(),
-                              Transformant.Status.imaged,
-                              false);
-
-        validateLocations("after delete",
-                          transformantName,
-                          Arrays.asList(location2Path));
+        validateFragmentElements("after delete",
+                                 Transformant.Status.imaged,
+                                 transformant.getFeatureID(),
+                                 Transformant.Status.imaged,
+                                 transformantName,
+                                 Arrays.asList(location2Path));
     }
 
     /**
@@ -347,9 +316,6 @@ public class TransformantDaoTest extends TestCase {
      */
     public void testDeleteImageLocationAndRollbackStatus2() throws Exception {
 
-        String transformantName = existingTransformant.getTransformantID();
-        Transformant transformant =
-                getExistingTransformant(transformantName, true);
         ImageLocation location1 = transformant.getImageLocation();
         String location1Path = getUniqueLocationPath();
         location1 = new ImageLocation(location1Path,
@@ -358,35 +324,21 @@ public class TransformantDaoTest extends TestCase {
 
         dao.setTransformantStatusAndLocation(transformant);
 
-        validateFeatureStatus("after first location add",
-                              testFragmentFeatureId,
-                              Transformant.Status.imaged,
-                              true);
-
-        validateFeatureStatus("after first location add",
-                              transformant.getFeatureID(),
-                              Transformant.Status.imaged,
-                              false);
-
-        validateLocations("after first location add",
-                          transformantName,
-                          Arrays.asList(location1Path));
+        validateFragmentElements("after first location add",
+                                 Transformant.Status.imaged,
+                                 transformant.getFeatureID(),
+                                 Transformant.Status.imaged,
+                                 transformantName,
+                                 Arrays.asList(location1Path));
 
         dao.deleteImageLocationAndRollbackStatus(location1);
 
-        validateFeatureStatus("after delete",
-                              testFragmentFeatureId,
-                              Transformant.Status.transformant,
-                              true);
-
-        validateFeatureStatus("after delete",
-                              transformant.getFeatureID(),
-                              Transformant.Status.transformant,
-                              false);
-
-        validateLocations("after delete",
-                          transformantName,
-                          new ArrayList<String>());
+        validateFragmentElements("after delete",
+                                 Transformant.Status.transformant,
+                                 transformant.getFeatureID(),
+                                 Transformant.Status.transformant,
+                                 transformantName,
+                                 new ArrayList<String>());
     }
 
     /**
@@ -407,11 +359,6 @@ public class TransformantDaoTest extends TestCase {
      */
     public void testDeleteImageLocationAndRollbackStatus3() throws Exception {
 
-        //isCleanupNeeded = false;
-        
-        String transformantName = existingTransformant.getTransformantID();
-        Transformant transformant =
-                getExistingTransformant(transformantName, true);
         ImageLocation location1 = transformant.getImageLocation();
         String location1Path = getUniqueLocationPath();
         location1 = new ImageLocation(location1Path,
@@ -420,40 +367,25 @@ public class TransformantDaoTest extends TestCase {
 
         dao.setTransformantStatusAndLocation(transformant);
 
-        validateFeatureStatus("after first location add",
-                              testFragmentFeatureId,
-                              Transformant.Status.imaged,
-                              true);
-
-        validateFeatureStatus("after first location add",
-                              transformant.getFeatureID(),
-                              Transformant.Status.imaged,
-                              false);
-
-        validateLocations("after first location add",
-                          transformantName,
-                          Arrays.asList(location1Path));
+        validateFragmentElements("after first location add",
+                                 Transformant.Status.imaged,
+                                 transformant.getFeatureID(),
+                                 Transformant.Status.imaged,
+                                 transformantName,
+                                 Arrays.asList(location1Path));
 
         // add second transformant to prevent fragment status rollback
         createTransformant(Transformant.Status.imaged);
 
         dao.deleteImageLocationAndRollbackStatus(location1);
 
-        validateFeatureStatus("after delete",
-                              testFragmentFeatureId,
-                              Transformant.Status.imaged,
-                              true);
-
-        validateFeatureStatus("after delete",
-                              transformant.getFeatureID(),
-                              Transformant.Status.transformant,
-                              false);
-
-        validateLocations("after delete",
-                          transformantName,
-                          new ArrayList<String>());
+        validateFragmentElements("after delete",
+                                 Transformant.Status.imaged,
+                                 transformant.getFeatureID(),
+                                 Transformant.Status.transformant,
+                                 transformantName,
+                                 new ArrayList<String>());
     }
-
 
     /**
      * Tests the deleteImageLocationAndRollbackStatus method.
@@ -462,20 +394,16 @@ public class TransformantDaoTest extends TestCase {
      *                     transformant status is gsi_failed,
      *                     transformant has 1 image location</p>
      *
-     * <p>Post-conditions: image location is removed,
-     *                     transformant status remains as gsi_failed,
-     *                     fragment status remains as imaged</p>
+     * <p>Post-conditions: transaction should fail since
+     *                     transformant is expected to have imaged status,
+     *                     fragment, transformant, and image location
+     *                     should remain unchanged</p>
      *
      * @throws Exception
      *   if any unexpected errors occur.
      */
     public void testDeleteImageLocationAndRollbackStatus4() throws Exception {
 
-        isCleanupNeeded = false;
-
-        String transformantName = existingTransformant.getTransformantID();
-        Transformant transformant =
-                getExistingTransformant(transformantName, true);
         ImageLocation location1 = transformant.getImageLocation();
         String location1Path = getUniqueLocationPath();
         location1 = new ImageLocation(location1Path,
@@ -489,102 +417,145 @@ public class TransformantDaoTest extends TestCase {
         setFeatureStatus(transformant.getFeatureID(),
                          Transformant.Status.gsi_failed);
 
-        validateFeatureStatus("after first location add",
-                              testFragmentFeatureId,
-                              Transformant.Status.imaged,
-                              true);
+        validateFragmentElements("after first location add",
+                                 Transformant.Status.imaged,
+                                 transformant.getFeatureID(),
+                                 Transformant.Status.gsi_failed,
+                                 transformantName,
+                                 Arrays.asList(location1Path));
 
-        validateFeatureStatus("after first location add",
-                              transformant.getFeatureID(),
-                              Transformant.Status.gsi_failed,
-                              false);
+        try {
+            dao.deleteImageLocationAndRollbackStatus(location1);
+            fail("transformant without imaged status should cause exception");
+        } catch (SystemException e) {
+            LOG.info("expected exception was thrown", e);  // test passed
+        }
 
-        validateLocations("after first location add",
-                          transformantName,
-                          Arrays.asList(location1Path));
-
-        dao.deleteImageLocationAndRollbackStatus(location1);
-
-        validateFeatureStatus("after delete",
-                              testFragmentFeatureId,
-                              Transformant.Status.imaged,
-                              true);
-
-        validateFeatureStatus("after delete",
-                              transformant.getFeatureID(),
-                              Transformant.Status.gsi_failed,
-                              false);
-
-        validateLocations("after delete",
-                          transformantName,
-                          new ArrayList<String>());
+        // after failure, everything should remain the same
+        validateFragmentElements("after failure",
+                                 Transformant.Status.imaged,
+                                 transformant.getFeatureID(),
+                                 Transformant.Status.gsi_failed,
+                                 transformantName,
+                                 Arrays.asList(location1Path));
     }
 
     /**
      * Tests the deleteImageLocationAndRollbackStatus method.
      *
-     * <p>Pre-conditions:  fragment status is gsi_ready,
+     * <p>Pre-conditions:  fragment status is imaged,
      *                     transformant status is imaged,
      *                     transformant has 1 image location</p>
      *
-     * <p>Post-conditions: image location is removed,
-     *                     fragment status remains as gsi_ready,
-     *                     transformant status is
-     *                     reverted to transformant</p>
+     * <p>Attempt to delete a non-existent location.</p>
+     *
+     * <p>Post-conditions: transaction should fail,
+     *                     fragment, transformant, and image location
+     *                     should remain unchanged</p>
      *
      * @throws Exception
      *   if any unexpected errors occur.
      */
-//    public void testDeleteImageLocationAndRollbackStatus5() throws Exception {
-//
-//        String transformantName = existingTransformant.getTransformantID();
-//        Transformant transformant =
-//                getExistingTransformant(transformantName, true);
-//        ImageLocation location1 = transformant.getImageLocation();
-//        String location1Path = getUniqueLocationPath();
-//        location1 = new ImageLocation(location1Path,
-//                                      location1.getRank());
-//        transformant.setImageLocation(location1);
-//
-//        dao.setTransformantStatusAndLocation(transformant);
-//
-//        // set fragment status to gsi_ready after adding location since
-//        // adding location automatically updates fragment status to imaged
-//        setFeatureStatus(testFragmentFeatureId, Transformant.Status.gsi_ready);
-//
-//        validateFeatureStatus("after first location add",
-//                              testFragmentFeatureId,
-//                              Transformant.Status.gsi_ready,
-//                              true);
-//
-//        validateFeatureStatus("after first location add",
-//                              transformant.getFeatureID(),
-//                              Transformant.Status.imaged,
-//                              false);
-//
-//        validateLocations("after first location add",
-//                          transformantName,
-//                          Arrays.asList(location1Path));
-//
-//        dao.deleteImageLocationAndRollbackStatus(location1);
-//
-//        validateFeatureStatus("after delete",
-//                              testFragmentFeatureId,
-//                              Transformant.Status.gsi_ready,
-//                              true);
-//
-//        validateFeatureStatus("after delete",
-//                              transformant.getFeatureID(),
-//                              Transformant.Status.transformant,
-//                              false);
-//
-//        validateLocations("after delete",
-//                          transformantName,
-//                          new ArrayList<String>());
-//    }
+    public void testDeleteImageLocationAndRollbackStatus5() throws Exception {
 
-    private Transformant getExistingTransformant(String transformantName,
-                                                 boolean isNewImageLocationNeeded)
+        ImageLocation location1 = transformant.getImageLocation();
+        String location1Path = getUniqueLocationPath();
+        location1 = new ImageLocation(location1Path,
+                                      location1.getRank());
+        transformant.setImageLocation(location1);
+
+        dao.setTransformantStatusAndLocation(transformant);
+
+        validateFragmentElements("after first location add",
+                                 Transformant.Status.imaged,
+                                 transformant.getFeatureID(),
+                                 Transformant.Status.imaged,
+                                 transformantName,
+                                 Arrays.asList(location1Path));
+
+        ImageLocation badLocation =
+                new ImageLocation(location1.getRelativePath() + "bad",
+                                  location1.getRank());
+        try {
+            dao.deleteImageLocationAndRollbackStatus(badLocation);
+            fail("bad image location should cause exception");
+        } catch (SystemException e) {
+            LOG.info("expected exception was thrown", e);  // test passed
+        }
+
+        // after failure, everything should remain the same
+        validateFragmentElements("after failure",
+                                 Transformant.Status.imaged,
+                                 transformant.getFeatureID(),
+                                 Transformant.Status.imaged,
+                                 transformantName,
+                                 Arrays.asList(location1Path));
+    }
+
+    /**
+     * Tests the deleteImageLocationAndRollbackStatus method.
+     *
+     * <p>Pre-conditions:  fragment status is imaged,
+     *                     transformant status is imaged,
+     *                     transformant has 2 image locations with same path</p>
+     *
+     * <p>Post-conditions: transaction should fail,
+     *                     fragment, transformant, and image locations
+     *                     should remain unchanged</p>
+     *
+     * @throws Exception
+     *   if any unexpected errors occur.
+     */
+    public void testDeleteImageLocationAndRollbackStatus6() throws Exception {
+
+        ImageLocation location1 = transformant.getImageLocation();
+        String location1Path = getUniqueLocationPath();
+        location1 = new ImageLocation(location1Path,
+                                      location1.getRank());
+        transformant.setImageLocation(location1);
+
+        dao.setTransformantStatusAndLocation(transformant);
+
+        validateFragmentElements("after first location add",
+                                 Transformant.Status.imaged,
+                                 transformant.getFeatureID(),
+                                 Transformant.Status.imaged,
+                                 transformantName,
+                                 Arrays.asList(location1Path));
+
+        transformant = getTransformant(transformantName, true);
+        ImageLocation location2 = transformant.getImageLocation();
+        location2 = new ImageLocation(location1Path,
+                                      location2.getRank());
+        transformant.setImageLocation(location2);
+
+        dao.setTransformantStatusAndLocation(transformant);
+
+        validateFragmentElements("after second location add",
+                                 Transformant.Status.imaged,
+                                 transformant.getFeatureID(),
+                                 Transformant.Status.imaged,
+                                 transformantName,
+                                 Arrays.asList(location1Path, location1Path));
+
+        try {
+            dao.deleteImageLocationAndRollbackStatus(location1);
+            fail("duplicate image location should cause exception");
+        } catch (SystemException e) {
+            LOG.info("expected exception was thrown", e);  // test passed
+        }
+
+        // after failure, everything should remain the same
+        validateFragmentElements("after failure",
+                                 Transformant.Status.imaged,
+                                 transformant.getFeatureID(),
+                                 Transformant.Status.imaged,
+                                 transformantName,
+                                 Arrays.asList(location1Path, location1Path));
+    }
+
+    private Transformant getTransformant(String transformantName,
+                                         boolean isNewImageLocationNeeded)
             throws TransformantNotFoundException, SystemException {
         Transformant transformant =
                 dao.getTransformant(transformantName,
@@ -605,20 +576,40 @@ public class TransformantDaoTest extends TestCase {
         return transformant;
     }
 
-    private void creatTestFragment(Transformant.Status fragmentStatus)
+    private void creatTestFragment(Transformant.Status status)
             throws Exception {
 
+        String fragmentName = FRAGMENT_NAME.format(new Date());
         Connection connection = null;
         ResultSet resultSet = null;
-        CallableStatement statement = null;
+        PreparedStatement statement = null;
         try {
             connection = dbManager.getConnection();
-            statement = connection.prepareCall(SQL_CALL_CREATE_FRAGMENT);
-            statement.registerOutParameter(1, Types.INTEGER);
-            statement.setString(2, fragmentStatus.toString());
+            statement = connection.prepareStatement(SQL_INSERT_FEATURE);
+            statement.setString(1, fragmentName);
+            statement.setString(2, fragmentName);
+            statement.setInt(3, FRAGMENT_TYPE_ID);
 
             statement.executeUpdate();
-            testFragmentFeatureId = statement.getInt(1);
+
+            statement =
+                    connection.prepareStatement(SQL_SELECT_FEATURE_ID);
+            statement.setString(1, fragmentName);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                testFragmentFeatureId = resultSet.getInt(1);
+            } else {
+                throw new IllegalStateException("fragment not found: " +
+                                                fragmentName);
+            }
+
+            statement =
+                    connection.prepareStatement(SQL_INSERT_FEATURE_PROPERTY);
+            statement.setInt(1, testFragmentFeatureId);
+            statement.setInt(2, STATUS_TYPE_ID);
+            statement.setString(3, status.toString());
+
+            statement.executeUpdate();
         } finally {
             DbManager.closeResources(resultSet, statement, connection, LOG);
         }
@@ -635,13 +626,39 @@ public class TransformantDaoTest extends TestCase {
 
         Connection connection = null;
         ResultSet resultSet = null;
-        CallableStatement statement = null;
+        PreparedStatement statement = null;
         try {
             connection = dbManager.getConnection();
-            statement = connection.prepareCall(SQL_CALL_CREATE_TRANSFORMANT);
-            statement.setInt(1, testFragmentFeatureId);
-            statement.setString(2, transformant.getTransformantID());
-            statement.setString(3, transformant.getStatus().toString());
+            statement = connection.prepareStatement(SQL_INSERT_FEATURE);
+            statement.setString(1, transformantName);
+            statement.setString(2, transformantName);
+            statement.setInt(3, TRANSFORMANT_TYPE_ID);
+
+            statement.executeUpdate();
+
+            Integer transformantFeatureId;
+            statement =
+                    connection.prepareStatement(SQL_SELECT_FEATURE_ID);
+            statement.setString(1, transformantName);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                transformantFeatureId = resultSet.getInt(1);
+            } else {
+                throw new IllegalStateException("transformant not found: " +
+                                                transformantName);
+            }
+
+            statement =
+                    connection.prepareStatement(SQL_INSERT_FEATURE_PROPERTY);
+            statement.setInt(1, transformantFeatureId);
+            statement.setInt(2, STATUS_TYPE_ID);
+            statement.setString(3, status.toString());
+
+            statement.executeUpdate();
+
+            statement.setInt(1, transformantFeatureId);
+            statement.setInt(2, FRAGMENT_TYPE_ID);
+            statement.setString(3, testFragmentFeatureId.toString());
 
             statement.executeUpdate();
         } finally {
@@ -660,9 +677,11 @@ public class TransformantDaoTest extends TestCase {
         PreparedStatement statement = null;
         try {
             connection = dbManager.getConnection();
-            statement = connection.prepareStatement(SQL_UPDATE_FEATURE_STATUS);
+            statement =
+                    connection.prepareStatement(SQL_UPDATE_FEATURE_PROPERTY);
             statement.setString(1, status.toString());
             statement.setInt(2, featureId);
+            statement.setInt(3, STATUS_TYPE_ID);
 
             statement.executeUpdate();
         } finally {
@@ -673,13 +692,27 @@ public class TransformantDaoTest extends TestCase {
     private void deleteTestFragment() throws Exception {
         Connection connection = null;
         ResultSet resultSet = null;
-        CallableStatement statement = null;
+        PreparedStatement statement = null;
         try {
             connection = dbManager.getConnection();
-            statement = connection.prepareCall(SQL_CALL_DELETE_FRAGMENT);
-            statement.setInt(1, testFragmentFeatureId);
+            statement = connection.prepareStatement(
+                    SQL_SELECT_TRANSFORMANTS_FOR_FRAGMENT);
+            statement.setString(1, testFragmentFeatureId.toString());
+            resultSet = statement.executeQuery();
+            StringBuilder sqlDeleteFeature = new StringBuilder(128);
+            sqlDeleteFeature.append(SQL_DELETE_FEATURE);
+            sqlDeleteFeature.append(testFragmentFeatureId);
+            while (resultSet.next()) {
+                sqlDeleteFeature.append(",");
+                sqlDeleteFeature.append(resultSet.getString(1));
+            }
+            sqlDeleteFeature.append(")");
 
+            statement =
+                    connection.prepareStatement(sqlDeleteFeature.toString());
             statement.executeUpdate();
+
+            LOG.info("deleteTestFragment: completed " + sqlDeleteFeature);
         } finally {
             DbManager.closeResources(resultSet, statement, connection, LOG);
         }
@@ -688,6 +721,29 @@ public class TransformantDaoTest extends TestCase {
     private synchronized String getUniqueLocationPath() {
         locationPathSequence++;
         return RELATIVE_PATH.format(new Date()) + locationPathSequence;
+    }
+
+    private void validateFragmentElements(String message,
+                                          Transformant.Status fragmentStatus,
+                                          Integer transformantFeatureId,
+                                          Transformant.Status transformantStatus,
+                                          String transformantName,
+                                          List<String> locationPaths)
+            throws Exception {
+
+        validateFeatureStatus(message,
+                              testFragmentFeatureId,
+                              fragmentStatus,
+                              true);
+
+        validateFeatureStatus(message,
+                              transformantFeatureId,
+                              transformantStatus,
+                              false);
+
+        validateLocations(message,
+                          transformantName,
+                          locationPaths);
     }
 
     private void validateFeatureStatus(String message,
@@ -699,18 +755,20 @@ public class TransformantDaoTest extends TestCase {
         List<String> statusString = new ArrayList<String>();
         Connection connection = null;
         ResultSet resultSet = null;
-        PreparedStatement pStatement = null;
+        PreparedStatement statement = null;
 
         try {
             connection = dbManager.getConnection();
-            pStatement = connection.prepareStatement(SQL_SELECT_FEATURE_STATUS);
-            pStatement.setInt(1, featureId);
-            resultSet = pStatement.executeQuery();
+            statement =
+                    connection.prepareStatement(SQL_SELECT_FEATURE_PROPERTY);
+            statement.setInt(1, featureId);
+            statement.setInt(2, STATUS_TYPE_ID);
+            resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 statusString.add(resultSet.getString(1));
             }
         } finally {
-            DbManager.closeResources(resultSet, pStatement, connection, LOG);
+            DbManager.closeResources(resultSet, statement, connection, LOG);
         }
 
         String featureType = "transformant";
@@ -768,60 +826,106 @@ public class TransformantDaoTest extends TestCase {
     }
 
     /**
-     * SQL for creating a test fragment.
-     *   Parameter 1 is the returned fragment feature id.
-     *   Parameter 2 is fragment status.
+     * The type id for "status" properties in the featureprop table.
+     *
+     * SELECT cvterm_id FROM cvterm WHERE name='ownwer' AND is_obsolete=0
      */
-    private static final String SQL_CALL_CREATE_FRAGMENT =
-            "{ ? = call store_test_fragment(?) }";
+    private static final Integer STATUS_TYPE_ID = 60662;
 
     /**
-     * SQL for creating a test transformant.
-     *   Parameter 1 is fragment feature id.
-     *   Parameter 2 is transformant name.
-     *   Parameter 3 is transformant status.
+     * The type id for "transformant" features in the feature table.
+     *
+     * SELECT cvterm_id FROM cvterm WHERE name='transformant' AND is_obsolete=0 
      */
-    private static final String SQL_CALL_CREATE_TRANSFORMANT =
-            "{ call store_test_transformant(?,?,?) }";
+    private static final Integer TRANSFORMANT_TYPE_ID = 60707;
 
     /**
-     * SQL for deleting a test fragment and all its associated data.
-     *   Parameter 1 is fragment feature id.
+     * The type id for "fragment" features in the feature table.
+     *
+     * SELECT cvterm_id FROM cvterm WHERE name='tiling_path_fragment_id' AND is_obsolete=0 
      */
-    private static final String SQL_CALL_DELETE_FRAGMENT =
-            "{ call remove_test_fragment(?) }";
+    private static final Integer FRAGMENT_TYPE_ID = 60709;
 
     /**
-     * SQL for retrieving fragment status.
-     *   Parameter 1 is feature id.
+     * The type id for "image location" properties in the featureprop table.
+     *
+     * SELECT cvterm_id FROM cvterm WHERE name='image_location' AND is_obsolete=0 
      */
-    private static final String SQL_SELECT_FEATURE_STATUS =
-            "SELECT value FROM featureprop " +
-            "WHERE feature_id=? AND type_id=60662";
-            // type_id sub select:
-            //   (SELECT cvterm_id FROM cvterm
-            //    WHERE name='ownwer' AND is_obsolete=0)";
+    private static final Integer LOCATION_TYPE_ID = 60710;
 
     /**
-     * SQL for setting feature status.
-     *   Parameter 1 is the status value.
-     *   Parameter 2 is feature id.
+     * SQL for retrieving a feature id.
+     *   Parameter 1 is the feature name.
      */
-    private static final String SQL_UPDATE_FEATURE_STATUS =
-            "UPDATE featureprop SET value=? " +
-            "WHERE feature_id=? AND type_id=60662";
-            // type_id sub select:
-            //   (SELECT cvterm_id FROM cvterm
-            //    WHERE name='ownwer' AND is_obsolete=0)";
+    private static final String SQL_SELECT_FEATURE_ID =
+           "SELECT feature_id FROM feature WHERE name=?";
+
+    /**
+     * SQL for inserting a feature.
+     *   Parameter 1 is the feature name.
+     *   Parameter 2 is the feature name.
+     *   Parameter 3 is the feature type id.
+     */
+    private static final String SQL_INSERT_FEATURE =
+            "INSERT INTO feature " +
+            "(organism_id, name, uniquename, type_id, is_analysis) " +
+            "VALUES (1, ?, ?, ?, false)";
+
+    /**
+     * SQL for deleting a feature.
+     *   NOTE: deleting a feature will also delete all of its properties.
+     */
+    private static final String SQL_DELETE_FEATURE =
+            "DELETE FROM feature WHERE feature_id IN (";
 
     /**
      * SQL for retrieving all image locations for a transformant.
-     *   Parameter 1 is transformant name.
+     *   Parameter 1 is the transformant name.
      */
     private static final String SQL_SELECT_TRANSFORMANT_IMAGE_LOCATIONS =
            "SELECT value FROM featureprop WHERE feature_id=" +
-           "(SELECT feature_id FROM feature WHERE name=?) AND type_id=60710";
+           "(SELECT feature_id FROM feature WHERE name=?) AND type_id=" +
+           LOCATION_TYPE_ID;
 
+    /**
+     * SQL for retrieving a the transformant feature ids for a fragment.
+     *   Parameter 1 is the fragment feature id.
+     */
+    private static final String SQL_SELECT_TRANSFORMANTS_FOR_FRAGMENT =
+            "SELECT feature_id FROM featureprop " +
+            "WHERE type_id=" + FRAGMENT_TYPE_ID + " AND value=?";
+
+    /**
+     * SQL for retrieving a feature property value.
+     *   Parameter 1 is the feature id.
+     *   Parameter 2 is the property type id.
+     */
+    private static final String SQL_SELECT_FEATURE_PROPERTY =
+            "SELECT value FROM featureprop " +
+            "WHERE feature_id=? AND type_id=?";
+
+    /**
+     * SQL for inserting a feature property value.
+     *   Parameter 1 is the feature id.
+     *   Parameter 2 is the property type id.
+     *   Parameter 3 is the property value.
+     */
+    private static final String SQL_INSERT_FEATURE_PROPERTY =
+            "INSERT INTO featureprop (feature_id, type_id, value) " +
+            "VALUES (?, ?, ?)";
+
+    /**
+     * SQL for updating a feature property value.
+     *   Parameter 1 is the status value.
+     *   Parameter 2 is the feature id.
+     *   Parameter 3 is the property type id.
+     */
+    private static final String SQL_UPDATE_FEATURE_PROPERTY =
+            "UPDATE featureprop SET value=? " +
+            "WHERE feature_id=? AND type_id=?";
+
+    private static final SimpleDateFormat FRAGMENT_NAME =
+            new SimpleDateFormat("'testDaoFragment'yyyyMMddHHmmssSSS");
     private static final SimpleDateFormat TRANSFORMANT_NAME =
             new SimpleDateFormat("'testDaoTransformant'yyyyMMddHHmmssSSS");
     private static final SimpleDateFormat RELATIVE_PATH =
