@@ -70,28 +70,37 @@ public class PluginFactory {
     public void constructInstances(String projectName)
             throws ConfigurationException {
 
-        constructInstancesForClass(projectName,
-                                   copyListenerPlugins,
-                                   CopyListener.class,
-                                   copyListeners);
+        List<Object> pluginInstances =
+                constructInstancesForClass(projectName,
+                                           copyListenerPlugins,
+                                           CopyListener.class);
+        for (Object instance : pluginInstances) {
+            copyListeners.add((CopyListener) instance);
+        }
 
-        constructInstancesForClass(projectName,
-                                   rowValidatorPlugins,
-                                   RenameFieldRowValidator.class,
-                                   rowValidators);
+        pluginInstances =
+                constructInstancesForClass(projectName,
+                                           rowValidatorPlugins,
+                                           RenameFieldRowValidator.class);
+        for (Object instance : pluginInstances) {
+            rowValidators.add((RenameFieldRowValidator) instance);
+        }
 
-        constructInstancesForClass(projectName,
-                                   sessionListenerPlugins,
-                                   SessionListener.class,
-                                   sessionListeners);
+        pluginInstances =
+                constructInstancesForClass(projectName,
+                                           sessionListenerPlugins,
+                                           SessionListener.class);
+        for (Object instance : pluginInstances) {
+            sessionListeners.add((SessionListener) instance);
+        }
     }
 
-    private void constructInstancesForClass(String projectName,
-                                            List<PluginConfiguration> pluginConfigurations,
-                                            Class basePluginClass,
-                                            List pluginInstances)
+    private List<Object> constructInstancesForClass(String projectName,
+                                                    List<PluginConfiguration> pluginConfigurations,
+                                                    Class basePluginClass)
             throws ConfigurationException {
 
+        ArrayList<Object> pluginInstances = new ArrayList<Object>();
         for (PluginConfiguration pluginConfig : pluginConfigurations) {
             String className = pluginConfig.getClassName();
             Object newInstance = constructInstance(className, projectName);
@@ -102,7 +111,6 @@ public class PluginFactory {
                 } catch (ExternalSystemException e) {
                     throw new ConfigurationException(e.getMessage(), e);
                 }
-                //noinspection unchecked
                 pluginInstances.add(plugin);
             } else {
                 throw new ConfigurationException(
@@ -112,6 +120,8 @@ public class PluginFactory {
                         basePluginClass.getName() + ".");
             }
         }
+
+        return pluginInstances;
     }
 
     private static Object constructInstance(String className,
