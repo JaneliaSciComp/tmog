@@ -9,6 +9,7 @@ package org.janelia.it.ims.imagerenamer.plugin;
 
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.imagerenamer.config.PluginConfiguration;
+import org.janelia.it.utils.PathUtil;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -52,7 +53,9 @@ public class SessionSummaryFileWriter implements SessionListener {
      */
     public void init(PluginConfiguration config) throws ExternalSystemException {
         try {
-            directory = new File(config.getProperty("directory"));
+            String directoryName = config.getProperty("directory");
+            directoryName = PathUtil.convertPath(directoryName);
+            directory = new File(directoryName);
             if (directory.exists()) {
                 if (directory.isDirectory()) {
                     if (!directory.canWrite()) {

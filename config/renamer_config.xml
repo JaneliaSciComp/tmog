@@ -3,10 +3,10 @@
 <renameConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="renamer_config.xsd">
 
-    <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)">
+    <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="true">
 
         <!-- DASH_FOR_PROD->
-        <outputDirectory basePath="\\smb.int.janelia.org\rubinlab\confocalStacks"
+        <outputDirectory basePath="\\dm6.int.janelia.org\rubinlab\confocalStacks"
                          manuallyChosen="false"/>
         <!-DASH_FOR_PROD -->
 
@@ -17,7 +17,7 @@
                 <property name="labImageSharePattern" value="[/\\]++rubinlab[/\\]++confocalStacks[/\\]++"/>
             </copyListener>
             <sessionListener className="org.janelia.it.ims.imagerenamer.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\smb.int.janelia.org\rubinlab\renameSummaries"/>
+                <property name="directory" value="\\dm6.int.janelia.org\rubinlab\renamer\summaries"/>
             </sessionListener>
             <!-DASH_FOR_PROD -->
         </plugins>

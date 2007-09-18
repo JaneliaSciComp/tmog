@@ -7,6 +7,8 @@
 
 package org.janelia.it.ims.imagerenamer.config;
 
+import org.janelia.it.utils.PathUtil;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,7 +41,7 @@ public class OutputDirectory {
     }
 
     public void setBasePath(String basePath) {
-        this.basePath = basePath;
+        this.basePath = PathUtil.convertPath(basePath);
     }
 
     public void setManuallyChosen(boolean manuallyChosen) {
