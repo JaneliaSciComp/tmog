@@ -24,8 +24,8 @@
 
         <renamePattern>
             <separator value="GMR_"/>
-            <number displayName="Plate" required="true" minimumValue="1"
-                    maximumValue="999"/>
+            <number displayName="Plate" required="true"
+                    minimumValue="1" maximumValue="999"/>
             <well displayName="Well" required="true" formFactor="96"/>
             <separator value="_"/>
             <validValueList displayName="Vector ID" required="true">
@@ -96,6 +96,11 @@
 
     <project name="Rubin Lab: Research and Development (RD_*)">
 
+        <!-- DASH_FOR_PROD->
+        <outputDirectory basePath="\\dm6.int.janelia.org\rubinlab\RDconfocalStacks"
+                         manuallyChosen="false"/>
+        <!-DASH_FOR_PROD -->
+
         <renamePattern>
             <separator value="RD_"/>
             <text displayName="Promoter" required="true"
@@ -119,6 +124,7 @@
 
     </project>
 
+    <!--
     <project name="Simpson Lab: Phong's renamer (JHS_*)">
 
         <renamePattern>
@@ -143,5 +149,6 @@
         </renamePattern>
 
     </project>
+    -->
 
 </renameConfiguration>
