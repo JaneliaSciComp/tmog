@@ -191,7 +191,9 @@ public class TabbedView implements ActionListener {
         sessionCount++;
         String newTitle = "Session " + sessionCount;
         sessionList.put(newTitle, newView);
-        tabbedPane.addTab(newTitle, newView.getPanel());
+        tabbedPane.addTab(newTitle,
+                          newView.getViewIcon(),
+                          newView.getPanel());
         int newSelectedIndex = tabbedPane.getTabCount() - 1;
         tabbedPane.setSelectedIndex(newSelectedIndex);
     }

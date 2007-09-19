@@ -37,6 +37,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileFilter;
+import java.net.URL;
 
 /**
  * This class manages the main or overall view for renaming a set of
@@ -72,6 +73,7 @@ public class MainView {
     private MainView thisMainView;
     private CopyAndRenameTask task;
     private boolean isRenameTaskInProgress;
+    private ImageIcon viewIcon;
 
     public MainView(ProjectConfiguration projectConfig,
                     File lsmDirectory) {
@@ -80,6 +82,8 @@ public class MainView {
         this.lsmDirectory = lsmDirectory;
 
         this.projectLabel.setText(projectConfig.getName());
+        this.viewIcon = new ImageIcon();
+        setViewIconToEnterValues();
         setupFileTable();
         setupInputDirectory();
         setupOutputDirectory();
@@ -127,11 +131,28 @@ public class MainView {
         if (isRenameTaskInProgress) {
             copyAndRenameBtn.setText(RENAME_CANCEL_BUTTON_TEXT);
             copyAndRenameBtn.setToolTipText(RENAME_CANCEL_TOOL_TIP_TEXT);
+            setViewIconToWait();
         } else {
             copyAndRenameBtn.setText(RENAME_START_BUTTON_TEXT);
             copyAndRenameBtn.setToolTipText(RENAME_START_TOOL_TIP_TEXT);
             task = null;
+            setViewIconToEnterValues();
         }
+    }
+
+    public ImageIcon getViewIcon() {
+        return viewIcon;
+    }
+
+    public void setViewIconToWait() {
+        viewIcon.setImage(WAIT_ICON.getImage());
+    }
+    public void setViewIconToProcessing() {
+        viewIcon.setImage(PROCESSING_ICON.getImage());
+    }
+
+    public void setViewIconToEnterValues() {
+        viewIcon.setImage(ENTER_VALUES_ICON.getImage());
     }
 
     private void setupFileTable() {
@@ -474,4 +495,18 @@ public class MainView {
     private static final String RENAME_CANCELLED_TOOL_TIP_TEXT =
             "Waiting for current file processing to complete";
 
+    private static final URL ENTER_VALUES_IMAGE_URL =
+            MainView.class.getResource("/16-em-pencil.png");
+    private static final ImageIcon ENTER_VALUES_ICON =
+            new ImageIcon(ENTER_VALUES_IMAGE_URL);
+
+    private static final URL WAIT_IMAGE_URL =
+            MainView.class.getResource("/16-clock.png");
+    private static final ImageIcon WAIT_ICON =
+            new ImageIcon(WAIT_IMAGE_URL);
+
+    private static final URL PROCESSING_IMAGE_URL =
+            MainView.class.getResource("/16-spinner.gif");
+    private static final ImageIcon PROCESSING_ICON =
+            new ImageIcon(PROCESSING_IMAGE_URL);
 }
