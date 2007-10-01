@@ -6,7 +6,7 @@
     <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="true">
 
         <!-- DASH_FOR_PROD->
-        <outputDirectory basePath="\\dm6.int.janelia.org\rubinlab\confocalStacks"
+        <outputDirectory basePath="\\dm7.int.janelia.org\rubinlab\confocalStacks"
                          manuallyChosen="false"/>
         <!-DASH_FOR_PROD -->
 
@@ -17,7 +17,7 @@
                 <property name="labImageSharePattern" value="[/\\]++rubinlab[/\\]++confocalStacks[/\\]++"/>
             </copyListener>
             <sessionListener className="org.janelia.it.ims.imagerenamer.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm6.int.janelia.org\rubinlab\renamer\summaries"/>
+                <property name="directory" value="\\dm7.int.janelia.org\rubinlab\renamer\summaries"/>
             </sessionListener>
             <!-DASH_FOR_PROD -->
         </plugins>
@@ -97,7 +97,7 @@
     <project name="Rubin Lab: Research and Development (RD_*)">
 
         <!-- DASH_FOR_PROD->
-        <outputDirectory basePath="\\dm6.int.janelia.org\rubinlab\RDconfocalStacks"
+        <outputDirectory basePath="\\dm7.int.janelia.org\rubinlab\RDconfocalStacks"
                          manuallyChosen="false"/>
         <!-DASH_FOR_PROD -->
 
