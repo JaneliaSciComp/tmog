@@ -17,9 +17,11 @@ import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
-import java.awt.*;
+import java.awt.Component;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,7 +122,9 @@ public class FileTableModel extends AbstractTableModel {
         Object value = null;
         FileTableRow row = rows.get(rowIndex);
         if (columnIndex == 0) {
-            value = row.getRemoveFileButton();
+            if (rows.size() > 1) {
+                value = row.getRemoveFileButton();
+            }
         } else if (columnIndex == 1) {
             if (rowIndex > 0) {
                 value = row.getCopyButton();
