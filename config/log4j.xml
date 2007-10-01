@@ -27,8 +27,13 @@
         </layout>
     </appender>
 
-    <!-- stub null appender used for testing -->
-    <appender name="SYSLOG_STUB" class="org.apache.log4j.varia.NullAppender" />
+    <!-- stub appender used for testing -->
+    <appender name="SYSLOG_STUB" class="org.apache.log4j.FileAppender">
+        <param name="File" value="renamerSyslog.log"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%c] %m%n"/>
+        </layout>
+    </appender>
 
     <!-- ============================== -->
     <!-- Append messages to the console -->
