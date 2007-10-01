@@ -17,8 +17,17 @@ import org.janelia.it.utils.filexfer.FileCopyFailedException;
 import org.janelia.it.utils.filexfer.SafeFileTransfer;
 import org.jdesktop.swingworker.SwingWorker;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.DefaultBoundedRangeModel;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -170,8 +179,6 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
         LOG.debug("starting copy");
 
         try {
-            mainView.setViewIconToProcessing();
-
             if (isSessionCancelled) {
                 LOG.warn("Rename session cancelled before start.");
                 renameSummary.append("Rename session cancelled before start.");
@@ -201,9 +208,6 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
             // ensure errors that occur in this thread are not lost
             LOG.error("unexpected exception in background task", t);
         }
-
-        mainView.setViewIconToEnterValues();
-
         return null;
     }
 
@@ -218,6 +222,10 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
         JProgressBar copyProgressBar = mainView.getCopyProgressBar();
         JLabel copyProgressLabel = mainView.getCopyProgressLabel();
         for (CopyProgressInfo info : list) {
+            if (info.getFileNumber() == 0) {
+                // once the first copy has started, change tab icon
+                mainView.setViewIconToProcessing();
+            }
             copyProgressBar.setValue(info.getProgress());
             copyProgressLabel.setText(info.toString());
             JTable fileTable = mainView.getFileTable();
@@ -233,9 +241,28 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
      */
     @Override
     public void done() {
+        mainView.setViewIconToEnterValues(); // reset tab icon after completion
         resetCopyProgressComponents(false);
-        String dialogTitle;
         int numberOfCopyFailures = failedCopyRowIndices.size();
+
+        displaySummaryDialog(numberOfCopyFailures);
+
+        if ((numberOfCopyFailures == 0) && (!isSessionCancelled)) {
+            // everything succeeded, so reset the main view
+            mainView.resetFileTable();
+        } else {
+            // we had errors, so remove the files copied successfully
+            // and restore the rest of the model
+            FileTableModel tableModel = mainView.getTableModel();
+            tableModel.removeSuccessfullyCopiedFiles(failedCopyRowIndices);
+            mainView.setFileTableEnabled(true, true);
+        }
+
+        mainView.setRenameTaskInProgress(false, true);
+    }
+
+    private void displaySummaryDialog(int numberOfCopyFailures) {
+        String dialogTitle;
         if (numberOfCopyFailures > 0) {
             dialogTitle = "Rename Summary (" + numberOfCopyFailures;
             if (numberOfCopyFailures > 1) {
@@ -254,25 +281,23 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
         JScrollPane areaScrollPane = new JScrollPane(textArea);
         areaScrollPane.setPreferredSize(new Dimension(600, 400));
         areaScrollPane.setWheelScrollingEnabled(true);
-        areaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        JOptionPane.showMessageDialog(mainView.getPanel(),
-                                      areaScrollPane,
-                                      dialogTitle,
-                                      JOptionPane.INFORMATION_MESSAGE);
+        areaScrollPane.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        areaScrollPane.setHorizontalScrollBarPolicy(
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        if ((numberOfCopyFailures == 0) && (!isSessionCancelled)) {
-            // everything succeeded, so reset the main view
-            mainView.resetFileTable();
-        } else {
-            // we had errors, so remove the files copied successfully
-            // and restore the rest of the model
-            FileTableModel tableModel = mainView.getTableModel();
-            tableModel.removeSuccessfullyCopiedFiles(failedCopyRowIndices);
-            mainView.setFileTableEnabled(true, true);
-        }
+        JPanel appPanel = mainView.getPanel();
+        Dimension appPanelSize = appPanel.getSize();
+        int dialogWidth = (int) (appPanelSize.getWidth() * 0.8);
+        int dialogHeight = (int) (appPanelSize.getHeight() * 0.8);
+        Dimension dialogSize = new Dimension(dialogWidth, dialogHeight);
 
-        mainView.setRenameTaskInProgress(false);
+        JOptionPane jop = new JOptionPane(areaScrollPane,
+                                          JOptionPane.INFORMATION_MESSAGE);
+        jop.setPreferredSize(dialogSize);
+        JDialog jd = jop.createDialog(appPanel, dialogTitle);
+        jd.setModal(false);
+        jd.setVisible(true);
     }
 
     /**

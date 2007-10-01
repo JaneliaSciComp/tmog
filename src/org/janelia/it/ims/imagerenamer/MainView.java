@@ -24,11 +24,21 @@ import org.janelia.it.ims.imagerenamer.filefilter.FileNameExtensionFilter;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.SessionListener;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -74,16 +84,18 @@ public class MainView {
     private CopyAndRenameTask task;
     private boolean isRenameTaskInProgress;
     private ImageIcon viewIcon;
+    private JTabbedPane parentTabbedPane;
 
     public MainView(ProjectConfiguration projectConfig,
-                    File lsmDirectory) {
+                    File lsmDirectory,
+                    JTabbedPane parentTabbedPane) {
         thisMainView = this;
         this.projectConfig = projectConfig;
         this.lsmDirectory = lsmDirectory;
+        this.parentTabbedPane = parentTabbedPane;
+        this.viewIcon = new ImageIcon(ENTER_VALUES_ICON.getImage());
 
         this.projectLabel.setText(projectConfig.getName());
-        this.viewIcon = new ImageIcon();
-        setViewIconToEnterValues();
         setupFileTable();
         setupInputDirectory();
         setupOutputDirectory();
@@ -126,17 +138,22 @@ public class MainView {
         return isRenameTaskInProgress;
     }
 
-    public void setRenameTaskInProgress(boolean renameTaskInProgress) {
+    public void setRenameTaskInProgress(boolean renameTaskInProgress,
+                                        boolean updateIcon) {
         this.isRenameTaskInProgress = renameTaskInProgress;
         if (isRenameTaskInProgress) {
             copyAndRenameBtn.setText(RENAME_CANCEL_BUTTON_TEXT);
             copyAndRenameBtn.setToolTipText(RENAME_CANCEL_TOOL_TIP_TEXT);
-            setViewIconToWait();
+            if (updateIcon) {
+                setViewIconToWait();
+            }
         } else {
             copyAndRenameBtn.setText(RENAME_START_BUTTON_TEXT);
             copyAndRenameBtn.setToolTipText(RENAME_START_TOOL_TIP_TEXT);
             task = null;
-            setViewIconToEnterValues();
+            if (updateIcon) {
+                setViewIconToEnterValues();
+            }
         }
     }
 
@@ -145,14 +162,21 @@ public class MainView {
     }
 
     public void setViewIconToWait() {
-        viewIcon.setImage(WAIT_ICON.getImage());
+        setViewLabelIcon(WAIT_ICON);
     }
     public void setViewIconToProcessing() {
-        viewIcon.setImage(PROCESSING_ICON.getImage());
+        setViewLabelIcon(PROCESSING_ICON);
     }
-
     public void setViewIconToEnterValues() {
-        viewIcon.setImage(ENTER_VALUES_ICON.getImage());
+        setViewLabelIcon(ENTER_VALUES_ICON);
+    }
+    private void setViewLabelIcon(ImageIcon imageIcon) {
+        viewIcon.setImage(imageIcon.getImage());
+        viewIcon.setDescription(imageIcon.getDescription());
+        Graphics g = parentTabbedPane.getGraphics();
+        if (g != null) { // only repaint if the icon has already been rendered
+            parentTabbedPane.repaint();
+        }
     }
 
     private void setupFileTable() {
@@ -348,7 +372,7 @@ public class MainView {
 
     private void setupProcess() {
         copyAndRenameBtn.setEnabled(false);
-        setRenameTaskInProgress(false);
+        setRenameTaskInProgress(false, true);
 
         copyAndRenameBtn.addActionListener(new ActionListener() {
 
@@ -364,7 +388,7 @@ public class MainView {
 
             private void cancelSession() {
                 task.cancelSession();
-                setRenameTaskInProgress(false);
+                setRenameTaskInProgress(false, false);
                 copyAndRenameBtn.setText(RENAME_CANCELLED_BUTTON_TEXT);
                 copyAndRenameBtn.setToolTipText(
                         RENAME_CANCELLED_TOOL_TIP_TEXT);
@@ -431,7 +455,7 @@ public class MainView {
                         projectConfig.getSessionListeners()) {
                     task.addSessionListener(listener);
                 }
-                setRenameTaskInProgress(true);
+                setRenameTaskInProgress(true, true);
                 ImageRenamer.submitTask(task);
             }
         });
@@ -498,15 +522,15 @@ public class MainView {
     private static final URL ENTER_VALUES_IMAGE_URL =
             MainView.class.getResource("/16-em-pencil.png");
     private static final ImageIcon ENTER_VALUES_ICON =
-            new ImageIcon(ENTER_VALUES_IMAGE_URL);
+            new ImageIcon(ENTER_VALUES_IMAGE_URL, "Entering Values");
 
     private static final URL WAIT_IMAGE_URL =
             MainView.class.getResource("/16-clock.png");
     private static final ImageIcon WAIT_ICON =
-            new ImageIcon(WAIT_IMAGE_URL);
+            new ImageIcon(WAIT_IMAGE_URL, "Waiting to Begin Processing");
 
     private static final URL PROCESSING_IMAGE_URL =
             MainView.class.getResource("/16-spinner.gif");
     private static final ImageIcon PROCESSING_ICON =
-            new ImageIcon(PROCESSING_IMAGE_URL);
+            new ImageIcon(PROCESSING_IMAGE_URL, "Processing Files");
 }
