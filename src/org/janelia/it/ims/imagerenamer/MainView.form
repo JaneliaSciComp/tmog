@@ -22,7 +22,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value="LSM Directory:"/>
+              <text value="Source File Directory:"/>
             </properties>
           </component>
           <component id="ba681" class="javax.swing.JLabel" binding="lsmDirectoryField">

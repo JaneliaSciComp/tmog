@@ -26,12 +26,14 @@ public class ProjectConfiguration {
     private String name;
     private boolean isDefault;
     private RenamePattern renamePattern;
+    private InputFileFilter inputFileFilter;
     private OutputDirectory outputDirectory;
     private PluginFactory pluginFactory;
 
     public ProjectConfiguration() {
         this.isDefault = false;
         this.renamePattern = new RenamePattern();
+        this.inputFileFilter = new InputFileFilter();
         this.outputDirectory = new OutputDirectory();
     }
 
@@ -45,6 +47,10 @@ public class ProjectConfiguration {
 
     public List<RenameField> getFieldConfigurations() {
         return renamePattern.getFields();
+    }
+
+    public InputFileFilter getInputFileFilter() {
+        return inputFileFilter;
     }
 
     public OutputDirectory getOutputDirectory() {
@@ -96,6 +102,10 @@ public class ProjectConfiguration {
 
     public void setRenamePattern(RenamePattern renamePattern) {
         this.renamePattern = renamePattern;
+    }
+
+    public void setInputFileFilter(InputFileFilter inputFileFilter) {
+        this.inputFileFilter = inputFileFilter;
     }
 
     public void setOutputDirectory(OutputDirectory outputDirectory) {

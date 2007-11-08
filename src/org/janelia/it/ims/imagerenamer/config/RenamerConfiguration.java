@@ -121,6 +121,12 @@ public class RenamerConfiguration {
         digester.addSetNext("renameConfiguration/project",
                             "add");
 
+        digester.addObjectCreate("renameConfiguration/project/inputFileFilter",
+                                 InputFileFilter.class);
+        digester.addSetProperties("renameConfiguration/project/inputFileFilter");
+        digester.addSetNext("renameConfiguration/project/inputFileFilter",
+                            "setInputFileFilter");
+
         digester.addObjectCreate("renameConfiguration/project/outputDirectory",
                                  OutputDirectory.class);
         digester.addSetProperties("renameConfiguration/project/outputDirectory");

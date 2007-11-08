@@ -8,6 +8,7 @@
 package org.janelia.it.ims.imagerenamer;
 
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.imagerenamer.config.InputFileFilter;
 import org.janelia.it.ims.imagerenamer.config.OutputDirectory;
 import org.janelia.it.ims.imagerenamer.config.ProjectConfiguration;
 import org.janelia.it.ims.imagerenamer.field.ButtonEditor;
@@ -20,25 +21,14 @@ import org.janelia.it.ims.imagerenamer.field.VerifiedFieldEditor;
 import org.janelia.it.ims.imagerenamer.field.VerifiedFieldModel;
 import org.janelia.it.ims.imagerenamer.field.VerifiedFieldRenderer;
 import org.janelia.it.ims.imagerenamer.filefilter.DirectoryOnlyFilter;
-import org.janelia.it.ims.imagerenamer.filefilter.FileNameExtensionFilter;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.SessionListener;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -60,10 +50,6 @@ public class MainView {
 
     /** The logger for this class. */
     private static final Logger LOG = Logger.getLogger(MainView.class);
-
-    public static final String LSM_EXTENSION = ".lsm";
-    private static final FileFilter LSM_FILE_FILTER =
-            new FileNameExtensionFilter(LSM_EXTENSION);
 
     private File lsmDirectory;
     private JLabel lsmDirectoryField;
@@ -286,7 +272,10 @@ public class MainView {
 
     private void validateLsmDirectorySelection(File selectedFile) {
         lsmDirectory = selectedFile;
-        File[] files = lsmDirectory.listFiles(LSM_FILE_FILTER);
+
+        InputFileFilter inputFilter = projectConfig.getInputFileFilter();
+        FileFilter fileFilter = inputFilter.getFilter();
+        File[] files = lsmDirectory.listFiles(fileFilter);
         boolean acceptSelectedFile = (files.length > 0);
         boolean isOutputDerived =
                 (!projectConfig.isOutputDirectoryManuallyChosen());
@@ -327,8 +316,9 @@ public class MainView {
         } else {
             reject.append("The selected directory (");
             reject.append(lsmDirectory.getAbsolutePath());
-            reject.append(") does not contain any LSM files.  ");
-            reject.append("Please choose another directory.");
+            reject.append(") does not contain any files with names that match the pattern '");
+            reject.append(inputFilter.getPatternString());
+            reject.append("'.  Please choose another directory.");
         }
 
         if (acceptSelectedFile) {
@@ -345,7 +335,7 @@ public class MainView {
         } else {
             JOptionPane.showMessageDialog(appPanel,
                                           reject.toString(),
-                                          "LSM Directory Selection Error",
+                                          "Source File Directory Selection Error",
                                           JOptionPane.ERROR_MESSAGE);
             resetFileTable();
         }
