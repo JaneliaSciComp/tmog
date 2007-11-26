@@ -7,8 +7,8 @@
 
 package org.janelia.it.ims.imagerenamer;
 
-import org.janelia.it.ims.imagerenamer.field.FileModificationTimeModel;
 import org.janelia.it.ims.imagerenamer.field.RenameField;
+import org.janelia.it.ims.imagerenamer.field.SourceFileField;
 
 import javax.swing.*;
 import java.io.File;
@@ -53,10 +53,10 @@ public class FileTableRow {
         for (RenameField renameFieldConfig : renameFieldConfigs) {
             RenameField newFieldInstance = renameFieldConfig.getNewInstance();
             this.fields[fieldIndex] = newFieldInstance;
-            if (newFieldInstance instanceof FileModificationTimeModel) {
-                FileModificationTimeModel model =
-                        (FileModificationTimeModel) newFieldInstance;
-                model.setSourceFile(file);
+            if (newFieldInstance instanceof SourceFileField) {
+                SourceFileField sourceFileField =
+                        (SourceFileField) newFieldInstance;
+                sourceFileField.deriveSourceFileValues(file);
             }
             fieldIndex++;
         }

@@ -82,6 +82,9 @@
         <xs:attribute name="datePattern" type="xs:string"/>
     </xs:complexType>
 
+    <xs:complexType name="fileExtensionType">
+    </xs:complexType>
+
     <xs:complexType name="projectType">
         <xs:sequence>
 
@@ -104,6 +107,8 @@
                         <xs:element name="fileModificationTime"
                                     type="fileModificationTimeType"/>
                         <xs:element name="runTime" type="runTimeType"/>
+                        <xs:element name="fileExtension"
+                                    type="fileExtensionType"/>
                     </xs:choice>
                 </xs:complexType>
             </xs:element>

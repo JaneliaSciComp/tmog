@@ -16,9 +16,10 @@ import java.util.Date;
  *
  * @author Eric Trautman
  */
-public class FileModificationTimeModel extends DatePatternModel {
+public class FileModificationTimeModel
+        extends DatePatternModel implements SourceFileField {
 
-    private File sourceFile;
+    private Date sourceDate;
 
     public FileModificationTimeModel() {
     }
@@ -26,24 +27,24 @@ public class FileModificationTimeModel extends DatePatternModel {
     public FileModificationTimeModel getNewInstance() {
         FileModificationTimeModel instance = new FileModificationTimeModel();
         instance.setDatePattern(getDatePattern());
-        // do not copy sourceFile
+        // do not copy sourceDate (must be derived when rename occurs)
         return instance;
     }
 
     public String getFileNameValue() {
-        Date sourceDate = null;
-        if (sourceFile != null) {
-            long modTime = sourceFile.lastModified();
-            sourceDate = new Date(modTime);
-        }
         return getFileNameValue(sourceDate);
     }
 
-    public File getSourceFile() {
-        return sourceFile;
+    public Date getSourceDate() {
+        return sourceDate;
     }
 
-    public void setSourceFile(File sourceFile) {
-        this.sourceFile = sourceFile;
+    public void deriveSourceFileValues(File sourceFile) {
+        if (sourceFile != null) {
+            long modTime = sourceFile.lastModified();
+            sourceDate = new Date(modTime);
+        } else {
+            sourceDate = null;
+        }
     }
 }

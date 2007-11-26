@@ -12,6 +12,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.janelia.it.ims.imagerenamer.config.ProjectConfiguration;
 import org.janelia.it.ims.imagerenamer.config.RenamePattern;
+import org.janelia.it.ims.imagerenamer.field.FileExtensionModel;
 import org.janelia.it.ims.imagerenamer.field.FileModificationTimeModel;
 import org.janelia.it.ims.imagerenamer.field.RenameField;
 import org.janelia.it.ims.imagerenamer.field.VerifiedNumberModel;
@@ -88,8 +89,10 @@ public class FileTableModelTest extends TestCase {
         // setup
         // -----------------------
 
-        File fileA = new File("sortedFileNameA");
-        File fileB = new File("sortedFileNameB");
+        String fileAExtension = ".lsm";
+        File fileA = new File("sortedFileNameA" + fileAExtension);
+        String fileBExtension = ".tif";
+        File fileB = new File("sortedFileNameB" + fileBExtension);
         File[] files = {fileA, fileB};
 
         RenamePattern renamePattern = new RenamePattern();
@@ -110,6 +113,9 @@ public class FileTableModelTest extends TestCase {
         FileModificationTimeModel fModField = new FileModificationTimeModel();
         fModField.setDatePattern("YYYYmmdd");
         renamePattern.add(fModField);
+
+        FileExtensionModel extensionField = new FileExtensionModel();
+        renamePattern.add(extensionField);
 
         ProjectConfiguration config = new ProjectConfiguration();
         config.setRenamePattern(renamePattern);
@@ -134,7 +140,7 @@ public class FileTableModelTest extends TestCase {
                      files.length, rows.size());
 
         FileTableRow row0 = rows.get(0);
-        checkFileTableRow(row0, "0", textValue, numberValue, fileA.getName());
+        checkFileTableRow(row0, "0", textValue, numberValue, fileAExtension);
 
         // -----------------------
         // finally, test copy
@@ -144,23 +150,23 @@ public class FileTableModelTest extends TestCase {
 
         rows = model.getRows();
         row0 = rows.get(0);
-        checkFileTableRow(row0, "0", textValue, numberValue, fileA.getName());
+        checkFileTableRow(row0, "0", textValue, numberValue, fileAExtension);
         FileTableRow row1 = rows.get(1);
-        checkFileTableRow(row1, "1", textValue, numberValue, fileB.getName());                
+        checkFileTableRow(row1, "1", textValue, numberValue, fileBExtension);
     }
 
     private void checkFileTableRow(FileTableRow row,
                                    String rowName,
                                    String expectedTextValue,
                                    String expectedNumberValue,
-                                   String expectedFileName) {
+                                   String expectedExtensionValue) {
 
         assertNotNull("row " + rowName + " is missing", row);
 
         RenameField[] row0fields = row.getFields();
         assertNotNull("row " + rowName + " fields are missing", row0fields);
         assertEquals("row " + rowName + " has incorrect number of fields",
-                     3, row0fields.length);
+                     4, row0fields.length);
 
         assertEquals("row " + rowName + " text field value is incorrect",
                      expectedTextValue, row0fields[0].getFileNameValue());
@@ -171,18 +177,29 @@ public class FileTableModelTest extends TestCase {
         if (row0field2 instanceof FileModificationTimeModel) {
             FileModificationTimeModel fileField =
                     (FileModificationTimeModel) row0field2;
-            File sourceFile = fileField.getSourceFile();
             assertNotNull("row " + rowName +
-                          " file mod field source file is missing",
-                          sourceFile);
-            assertEquals("row " + rowName +
-                         " file mod source file name is incorrect",
-                         expectedFileName,
-                         sourceFile.getName());
+                          " file modification time is null",
+                          fileField.getSourceDate());
 
         } else {
-            fail("row " + rowName + " file mod field has incorrect type: " +
-                    row0field2.getClass().getName());
+            fail("row " + rowName +
+                 " file modification field has incorrect type: " +
+                 row0field2.getClass().getName());
+        }
+
+        RenameField row0field3 = row0fields[3];
+        if (row0field3 instanceof FileExtensionModel) {
+            FileExtensionModel extField =
+                    (FileExtensionModel) row0field3;
+            assertEquals("row " + rowName +
+                         " file extension is incorrect",
+                         expectedExtensionValue,
+                         extField.getExtension());
+
+        } else {
+            fail("row " + rowName +
+                 " file extension field has incorrect type: " +
+                 row0field3.getClass().getName());
         }
     }
 }

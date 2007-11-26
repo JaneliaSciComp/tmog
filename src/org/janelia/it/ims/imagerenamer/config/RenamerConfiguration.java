@@ -9,6 +9,7 @@ package org.janelia.it.ims.imagerenamer.config;
 
 import org.apache.commons.digester.Digester;
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.imagerenamer.field.FileExtensionModel;
 import org.janelia.it.ims.imagerenamer.field.FileModificationTimeModel;
 import org.janelia.it.ims.imagerenamer.field.PluginDataModel;
 import org.janelia.it.ims.imagerenamer.field.RunTimeModel;
@@ -178,6 +179,11 @@ public class RenamerConfiguration {
                                  FileModificationTimeModel.class);
         digester.addSetProperties("renameConfiguration/project/renamePattern/fileModificationTime");
         digester.addSetNext("renameConfiguration/project/renamePattern/fileModificationTime",
+                            "add");
+
+        digester.addObjectCreate("renameConfiguration/project/renamePattern/fileExtension",
+                                 FileExtensionModel.class);
+        digester.addSetNext("renameConfiguration/project/renamePattern/fileExtension",
                             "add");
 
         digester.addObjectCreate("renameConfiguration/project/renamePattern/validValueList",
