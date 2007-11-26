@@ -17,17 +17,8 @@ import org.janelia.it.utils.filexfer.FileCopyFailedException;
 import org.janelia.it.utils.filexfer.SafeFileTransfer;
 import org.jdesktop.swingworker.SwingWorker;
 
-import javax.swing.DefaultBoundedRangeModel;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +113,7 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
             fromDirectoryName = fromDirectory.getAbsolutePath();
         }
 
-        renameSummary.append("Copied and renamed the following files from\n     ");
+        renameSummary.append("Moved and renamed the following files from\n     ");
         renameSummary.append(fromDirectoryName);
         renameSummary.append(" to\n     ");
         renameSummary.append(toDirectoryName);
