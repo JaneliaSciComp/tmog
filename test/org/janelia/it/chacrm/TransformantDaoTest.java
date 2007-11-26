@@ -80,8 +80,8 @@ public class TransformantDaoTest extends TestCase {
 
         dao = new TransformantDao();
 
-        creatTestFragment(Transformant.Status.transformant);
-        transformant = createTransformant(Transformant.Status.transformant);
+        creatTestFragment(Transformant.Status.crossed);
+        transformant = createTransformant(Transformant.Status.crossed);
         transformantName = transformant.getTransformantID();
         transformant = getTransformant(transformantName, true);
     }
@@ -334,9 +334,9 @@ public class TransformantDaoTest extends TestCase {
         dao.deleteImageLocationAndRollbackStatus(location1);
 
         validateFragmentElements("after delete",
-                                 Transformant.Status.transformant,
+                                 Transformant.Status.crossed,
                                  transformant.getFeatureID(),
-                                 Transformant.Status.transformant,
+                                 Transformant.Status.crossed,
                                  transformantName,
                                  new ArrayList<String>());
     }
@@ -382,7 +382,7 @@ public class TransformantDaoTest extends TestCase {
         validateFragmentElements("after delete",
                                  Transformant.Status.imaged,
                                  transformant.getFeatureID(),
-                                 Transformant.Status.transformant,
+                                 Transformant.Status.crossed,
                                  transformantName,
                                  new ArrayList<String>());
     }

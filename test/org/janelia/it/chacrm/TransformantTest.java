@@ -51,7 +51,7 @@ public class TransformantTest extends TestCase {
         Transformant transformant;
 
         Status[][] successfulTransitions = {
-                { Status.transformant, Status.imaged },
+                { Status.crossed, Status.imaged },
                 { Status.imaged, Status.imaged }
         };
 
@@ -70,6 +70,8 @@ public class TransformantTest extends TestCase {
 
         Status[][] failedTransitions = {
                 { null, Status.imaged },
+                { Status.transformant, Status.imaged },
+                { Status.imaged, Status.crossed },
                 { Status.imaged, Status.transformant },
                 { Status.imaged, null },
         };

@@ -24,7 +24,7 @@ public class Transformant {
      * a string in the following set:
      */
     public enum Status {
-        Rearrayed, gsi_ready, transformant, imaged, gsi_failed
+        Rearrayed, gsi_ready, transformant, crossed, imaged, gsi_failed
     }
 
     /** The identifier for this transformant. */
@@ -108,7 +108,7 @@ public class Transformant {
             switch (status) {
                 case imaged:
                     isValidStatusTransition =
-                            ((this.status == Status.transformant) ||
+                            ((this.status == Status.crossed) ||
                                     (this.status == Status.imaged));
                     break;
             }

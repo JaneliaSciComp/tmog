@@ -61,7 +61,7 @@ public class TransformantDao {
      *   Parameter 3 is transformant image rank.
      */
     private static final String SQL_CALL_IMAGE_TRANSFORMANT =
-            "{ call store_transformant_image_location(?, ?, ?) }";
+            "{ call store_transformant_image_location(?, ?, ?, ?) }";
 
     /**
      * SQL for removing an image location and updating any associated
@@ -69,7 +69,7 @@ public class TransformantDao {
      *   Parameter 1 is transformant image location.
      */
     private static final String SQL_CALL_REMOVE_IMAGE_LOCATION =
-            "{ call remove_transformant_image_location(?) }";
+            "{ call remove_transformant_image_location(?, ?) }";
 
     /**
      * SQL for deleting a transformant image location without changing
@@ -236,6 +236,7 @@ public class TransformantDao {
             statement.setInt(1, featureID);
             statement.setString(2, imageLocation.getRelativePath());
             statement.setInt(3, imageLocation.getRank());
+            statement.setString(4, getUserName());
 
             statement.executeUpdate();
 
@@ -344,6 +345,7 @@ public class TransformantDao {
             connection = dbManager.getConnection();
             statement = connection.prepareCall(SQL_CALL_REMOVE_IMAGE_LOCATION);
             statement.setString(1, imageLocation.getRelativePath());
+            statement.setString(2, getUserName());
 
             statement.executeUpdate();
 
@@ -401,5 +403,9 @@ public class TransformantDao {
         }
 
         return props;
+    }
+
+    private String getUserName() {
+        return System.getProperty("user.name");
     }
 }
