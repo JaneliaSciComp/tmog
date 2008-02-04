@@ -124,31 +124,25 @@
 
     </project>
 
-    <!--
-    <project name="Simpson Lab: Phong's renamer (JHS_*)">
+    <project name="Simpson Lab: GAL4 Lines (JHS_*)">
 
         <renamePattern>
             <separator value="JHS_"/>
-            <text displayName="Promoter" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <text displayName="Transcript" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <text displayName="Responder" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <text displayName="Creator Initials" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <text displayName="Comment" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+            <text displayName="Line" required="true"
+                  pattern="[0-9A-Za-z]++"/>
+            <text displayName="Insertion Number" required="false"
+                  pattern="[0-9A-Za-z\\-]++" prefix="_"/>
+            <separator value="-GAL4"/>
+            <fileModificationTime datePattern="'_'MMddyyyy'_'"/>
+            <validValueList displayName="Organ" required="true">
+                <validValue displayName="B: Brain" value="B"/>
+                <validValue displayName="T: Thorax" value="T"/>
+            </validValueList>
+            <!--<pluginData displayName="specimenNumber" format="%02d"/>-->
+            <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
         </renamePattern>
 
     </project>
-    -->
 
 </renameConfiguration>

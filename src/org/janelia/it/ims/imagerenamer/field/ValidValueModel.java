@@ -23,6 +23,8 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
     private ArrayList<ValidValue> validValues;
     private ValidValue selectedValue;
     private String errorMessage;
+    private String prefix;
+    private String suffix;
   
     public ValidValueModel() {
         this.validValues = new ArrayList<ValidValue>();
@@ -46,13 +48,23 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
         instance.isRequired = isRequired;
         instance.validValues = validValues; // shallow copy should be safe
         instance.selectedValue = selectedValue;
+        instance.prefix = prefix;
+        instance.suffix = suffix;
         return instance;
     }
 
     public String getFileNameValue() {
         String fileNameValue;
         if (selectedValue != null) {
-            fileNameValue = selectedValue.getValue();
+            StringBuilder sb = new StringBuilder(64);
+            if (prefix != null) {
+                sb.append(prefix);
+            }
+            sb.append(selectedValue.getValue());
+            if (suffix != null) {
+                sb.append(suffix);
+            }
+            fileNameValue = sb.toString();
         } else {
             fileNameValue = "";
         }
@@ -75,6 +87,22 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
 
     public boolean isRequired() {
         return isRequired;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
     }
 
     public ValidValue getSelectedValue() {

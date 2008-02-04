@@ -65,9 +65,7 @@ public class VerifiedWellModel extends VerifiedFieldModel {
 
     public VerifiedWellModel getNewInstance() {
         VerifiedWellModel instance = new VerifiedWellModel();
-        instance.setText(getFullText());
-        instance.setDisplayName(getDisplayName());
-        instance.setRequired(isRequired());
+        cloneValuesForNewInstance(instance);
         instance.setFormFactor(formFactor);
         return instance;
     }

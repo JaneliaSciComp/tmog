@@ -21,6 +21,8 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
     private String displayName;
     private boolean isRequired;
     private String errorMessage;
+    private String prefix;
+    private String suffix;
 
     public VerifiedFieldModel() {
         super();
@@ -38,9 +40,29 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
 
     public abstract VerifiedFieldModel getNewInstance();
 
+    public void cloneValuesForNewInstance(VerifiedFieldModel instance) {
+        instance.setText(getFullText());
+        instance.displayName = displayName;
+        instance.isRequired = isRequired;
+        instance.prefix = prefix;
+        instance.suffix = suffix;
+    }
+
     public String getFileNameValue() {
         String fileNameValue = getFullText();
-        if (fileNameValue == null) {
+        if ((fileNameValue != null) && (fileNameValue.length() > 0)) {
+            if ((prefix != null) || (suffix != null)) {
+                StringBuilder sb = new StringBuilder(64);
+                if (prefix != null) {
+                    sb.append(prefix);
+                }
+                sb.append(fileNameValue);
+                if (suffix != null) {
+                    sb.append(suffix);
+                }
+                fileNameValue = sb.toString();
+            }
+        } else {
             fileNameValue = "";
         }
         return fileNameValue;
@@ -48,6 +70,22 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
 
     public boolean isRequired() {
         return isRequired;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
     }
 
     public String getErrorMessage() {

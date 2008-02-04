@@ -40,6 +40,8 @@
         <xs:attribute name="required" type="xs:string"/>
         <xs:attribute name="minimumValue" type="xs:integer"/>
         <xs:attribute name="maximumValue" type="xs:integer"/>
+        <xs:attribute name="prefix" type="xs:string"/>
+        <xs:attribute name="suffix" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="textType">
@@ -48,12 +50,16 @@
         <xs:attribute name="minimumLength" type="xs:integer"/>
         <xs:attribute name="maximumLength" type="xs:integer"/>
         <xs:attribute name="pattern" type="xs:string"/>
+        <xs:attribute name="prefix" type="xs:string"/>
+        <xs:attribute name="suffix" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="wellType">
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:string"/>
         <xs:attribute name="formFactor" type="xs:integer"/>
+        <xs:attribute name="prefix" type="xs:string"/>
+        <xs:attribute name="suffix" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="validValueType">
@@ -67,6 +73,8 @@
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:string"/>
+        <xs:attribute name="prefix" type="xs:string"/>
+        <xs:attribute name="suffix" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="pluginDataType">

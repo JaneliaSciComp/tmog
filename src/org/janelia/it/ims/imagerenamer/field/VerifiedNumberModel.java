@@ -52,9 +52,7 @@ public class VerifiedNumberModel extends VerifiedFieldModel {
 
     public VerifiedNumberModel getNewInstance() {
         VerifiedNumberModel instance = new VerifiedNumberModel();
-        instance.setText(getFullText());
-        instance.setDisplayName(getDisplayName());
-        instance.setRequired(isRequired());
+        cloneValuesForNewInstance(instance);
         instance.minimumValue = minimumValue;
         instance.maximumValue = maximumValue;
         return instance;

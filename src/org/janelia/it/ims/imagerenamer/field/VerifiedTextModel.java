@@ -62,9 +62,7 @@ public class VerifiedTextModel extends VerifiedFieldModel {
 
     public VerifiedTextModel getNewInstance() {
         VerifiedTextModel instance = new VerifiedTextModel();
-        instance.setText(getFullText());
-        instance.setDisplayName(getDisplayName());
-        instance.setRequired(isRequired());
+        cloneValuesForNewInstance(instance);
         instance.minimumLength = minimumLength;
         instance.maximumLength = maximumLength;
         instance.pattern = pattern;
