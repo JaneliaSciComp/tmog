@@ -58,6 +58,18 @@
         <xs:attribute name="suffix" type="xs:string"/>
     </xs:complexType>
 
+    <xs:complexType name="dateType">
+        <xs:sequence>
+            <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="required" type="xs:string"/>
+        <xs:attribute name="datePattern" type="xs:string"/>
+        <xs:attribute name="prefix" type="xs:string"/>
+        <xs:attribute name="suffix" type="xs:string"/>
+    </xs:complexType>
+
     <xs:complexType name="wellType">
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:string"/>
@@ -124,6 +136,7 @@
                         <xs:element name="separator" type="separatorType"/>
                         <xs:element name="number" type="numberType"/>
                         <xs:element name="text" type="textType"/>
+                        <xs:element name="date" type="dateType"/>
                         <xs:element name="well" type="wellType"/>
                         <xs:element name="validValueList"
                                     type="validValueListType"/>

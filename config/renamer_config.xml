@@ -137,8 +137,10 @@
                 <sourceFileDefault pattern=".*mdb/.*Gal4-(.*)-UAS.*mdb/.*\.lsm"
                                    matchType="path"/>
             </text>
-            <separator value="-GAL4"/>
-            <fileModificationTime datePattern="'_'MMddyyyy'_'"/>
+            <separator value="-GAL4_"/>
+            <!--<fileModificationTime datePattern="MMddyyyy'_'"/>-->
+            <date displayName="Creation Date" required="true" 
+                  datePattern="MMddyyyy" suffix="_"/>
             <validValueList displayName="Organ" required="true">
                 <validValue displayName="B: Brain" value="B"/>
                 <validValue displayName="T: Thorax" value="T"/>
