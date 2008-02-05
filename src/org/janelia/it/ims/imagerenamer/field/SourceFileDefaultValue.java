@@ -53,8 +53,8 @@ public class SourceFileDefaultValue implements DefaultValue {
         }
     }
 
-    public MatchType getMatchType() {
-        return matchType;
+    public String getMatchType() {
+        return matchType.name();
     }
 
     public void setMatchType(String matchTypeName) {

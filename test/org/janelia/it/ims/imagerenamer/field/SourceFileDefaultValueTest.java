@@ -51,8 +51,9 @@ public class SourceFileDefaultValueTest extends TestCase {
      */
     public void testGetValue() throws Exception {
 
-        File file = new File(
-                "./a1-Gal4-UAS-MCD8-GFP-nc82-GFP-10-20-06.mdb/a1-Gal4-UAS-MCD8-GFP-nc82-GFP-10-20-06-1a0.lsm");
+        File file = new File("./" +
+                "a1-Gal4-UAS-MCD8-GFP-nc82-GFP-10-20-06.mdb/" +
+                "a1-Gal4-UAS-MCD8-GFP-nc82-GFP-10-20-06-1a0.lsm");
         SourceFileDefaultValue defaultValue =
                 new SourceFileDefaultValue(
                         "a1.*nc82-GFP-(\\d\\d?-\\d\\d?-\\d\\d?){1}.*\\.lsm",
@@ -76,5 +77,18 @@ public class SourceFileDefaultValueTest extends TestCase {
         assertEquals("invalid value for " + defaultValue + " and file " +
                      file.getAbsolutePath(),
                      "mdb", value);
+
+        file = new File ("./" +
+                "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb/" +
+                "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb/" +
+                "CG9887-Gal4-8-22-07_L6_Sum.lsm");
+
+        defaultValue = new SourceFileDefaultValue(".*mdb/.*Gal4-(.*)-UAS.*mdb/.*\\.lsm",
+                                                  MatchType.path);
+        value = defaultValue.getValue(file);
+        assertEquals("invalid value for " + defaultValue + " and file " +
+                     file.getAbsolutePath(),
+                     "2-1-CYO", value);
+
     }
 }

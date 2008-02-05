@@ -134,6 +134,8 @@
             <text displayName="Insertion Number" required="false"
                   pattern="[0-9A-Za-z\\-]++" prefix="_">
                 <sourceFileDefault pattern="[0-9A-Za-z]++-(.*)-Gal4-.*\.lsm"/>
+                <sourceFileDefault pattern=".*mdb/.*Gal4-(.*)-UAS.*mdb/.*\.lsm"
+                                   matchType="path"/>
             </text>
             <separator value="-GAL4"/>
             <fileModificationTime datePattern="'_'MMddyyyy'_'"/>
