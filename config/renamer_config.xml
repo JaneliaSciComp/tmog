@@ -128,10 +128,13 @@
 
         <renamePattern>
             <separator value="JHS_"/>
-            <text displayName="Line" required="true"
-                  pattern="[0-9A-Za-z]++"/>
+            <text displayName="Line" required="true" pattern="[0-9A-Za-z]++">
+                <sourceFileDefault pattern="([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"/>
+            </text>
             <text displayName="Insertion Number" required="false"
-                  pattern="[0-9A-Za-z\\-]++" prefix="_"/>
+                  pattern="[0-9A-Za-z\\-]++" prefix="_">
+                <sourceFileDefault pattern="[0-9A-Za-z]++-(.*)-Gal4-.*\.lsm"/>
+            </text>
             <separator value="-GAL4"/>
             <fileModificationTime datePattern="'_'MMddyyyy'_'"/>
             <validValueList displayName="Organ" required="true">

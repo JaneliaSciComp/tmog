@@ -24,9 +24,11 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
     private String errorMessage;
     private String prefix;
     private String suffix;
+    private DefaultValueList defaultValueList;
 
     public VerifiedFieldModel() {
         super();
+        this.defaultValueList = new DefaultValueList();
     }
 
     public abstract boolean verify();
@@ -47,6 +49,7 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
         instance.isRequired = isRequired;
         instance.prefix = prefix;
         instance.suffix = suffix;
+        instance.defaultValueList = defaultValueList;  // shallow copy is ok
     }
 
     public String getFileNameValue() {
@@ -89,6 +92,10 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
         this.suffix = suffix;
     }
 
+    public void addDefaultValue(DefaultValue defaultValue) {
+        defaultValueList.add(defaultValue);
+    }
+    
     public String getErrorMessage() {
         return errorMessage;
     }
@@ -99,7 +106,10 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
      * @param sourceFile the source file being renamed.
      */
     public void initializeValue(File sourceFile) {
-        // nothing to initialize
+        String defaultValue = defaultValueList.getValue(sourceFile);
+        if (defaultValue != null) {
+            setText(defaultValue);
+        }
     }
     
     public void setDisplayName(String displayName) {

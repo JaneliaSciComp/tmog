@@ -14,6 +14,7 @@ import org.janelia.it.ims.imagerenamer.field.FileModificationTimeModel;
 import org.janelia.it.ims.imagerenamer.field.PluginDataModel;
 import org.janelia.it.ims.imagerenamer.field.RunTimeModel;
 import org.janelia.it.ims.imagerenamer.field.SeparatorModel;
+import org.janelia.it.ims.imagerenamer.field.SourceFileDefaultValue;
 import org.janelia.it.ims.imagerenamer.field.ValidValue;
 import org.janelia.it.ims.imagerenamer.field.ValidValueModel;
 import org.janelia.it.ims.imagerenamer.field.VerifiedNumberModel;
@@ -150,6 +151,12 @@ public class RenamerConfiguration {
         digester.addSetProperties("renameConfiguration/project/renamePattern/text");
         digester.addSetNext("renameConfiguration/project/renamePattern/text",
                             "add");
+
+        digester.addObjectCreate("renameConfiguration/project/renamePattern/text/sourceFileDefault",
+                                 SourceFileDefaultValue.class);
+        digester.addSetProperties("renameConfiguration/project/renamePattern/text/sourceFileDefault");
+        digester.addSetNext("renameConfiguration/project/renamePattern/text/sourceFileDefault",
+                            "addDefaultValue");
 
         digester.addObjectCreate("renameConfiguration/project/renamePattern/well",
                                  VerifiedWellModel.class);

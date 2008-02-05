@@ -45,6 +45,10 @@
     </xs:complexType>
 
     <xs:complexType name="textType">
+        <xs:sequence>
+            <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:string"/>
         <xs:attribute name="minimumLength" type="xs:integer"/>
@@ -91,6 +95,18 @@
     </xs:complexType>
 
     <xs:complexType name="fileExtensionType">
+    </xs:complexType>
+
+    <xs:simpleType name="matchType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="name"/>
+            <xs:enumeration value="path"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="sourceFileDefaultType">
+        <xs:attribute name="pattern" type="xs:string"/>
+        <xs:attribute name="matchType" type="matchType"/>
     </xs:complexType>
 
     <xs:complexType name="projectType">
