@@ -130,6 +130,8 @@
             <separator value="JHS_"/>
             <text displayName="Line" required="true" pattern="[0-9A-Za-z]++">
                 <sourceFileDefault pattern="([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"/>
+                <sourceFileDefault pattern=".*/([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"
+                                   matchType="path"/>
             </text>
             <text displayName="Insertion Number" required="false"
                   pattern="[0-9A-Za-z\\-]++" prefix="_">
@@ -140,7 +142,12 @@
             <separator value="-GAL4_"/>
             <!--<fileModificationTime datePattern="MMddyyyy'_'"/>-->
             <date displayName="Creation Date" required="true" 
-                  datePattern="MMddyyyy" suffix="_"/>
+                  datePattern="MMddyyyy" suffix="_">
+                <sourceFileDateDefault pattern=".*[-/](\d\d?-\d\d?-\d\d){1}.*\.lsm"
+                                       fromDatePattern="MM-dd-yy"
+                                       toDatePattern="MMddyyyy"
+                                       matchType="path"/>
+            </date>
             <validValueList displayName="Organ" required="true">
                 <validValue displayName="B: Brain" value="B"/>
                 <validValue displayName="T: Thorax" value="T"/>

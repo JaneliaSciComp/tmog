@@ -60,7 +60,7 @@
 
     <xs:complexType name="dateType">
         <xs:sequence>
-            <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
+            <xs:element name="sourceFileDateDefault" type="sourceFileDateDefaultType"
                         minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
@@ -119,6 +119,13 @@
     <xs:complexType name="sourceFileDefaultType">
         <xs:attribute name="pattern" type="xs:string"/>
         <xs:attribute name="matchType" type="matchType"/>
+    </xs:complexType>
+
+    <xs:complexType name="sourceFileDateDefaultType">
+        <xs:attribute name="pattern" type="xs:string"/>
+        <xs:attribute name="matchType" type="matchType"/>
+        <xs:attribute name="fromDatePattern" type="xs:string"/>
+        <xs:attribute name="toDatePattern" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="projectType">

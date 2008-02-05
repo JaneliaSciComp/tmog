@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat;
  */
 public class VerifiedDateModel extends VerifiedFieldModel {
 
-    private String datePattern;
     private SimpleDateFormat formatter;
 
     public VerifiedDateModel() {
@@ -54,7 +53,6 @@ public class VerifiedDateModel extends VerifiedFieldModel {
     public VerifiedDateModel getNewInstance() {
         VerifiedDateModel instance = new VerifiedDateModel();
         cloneValuesForNewInstance(instance);
-        instance.datePattern = datePattern;
         instance.formatter = formatter;
         return instance;
     }
@@ -64,7 +62,6 @@ public class VerifiedDateModel extends VerifiedFieldModel {
     }
 
     public void setDatePattern(String datePattern) {
-        this.datePattern = datePattern;
         this.formatter = new SimpleDateFormat(datePattern);
         this.formatter.setLenient(false);
     }

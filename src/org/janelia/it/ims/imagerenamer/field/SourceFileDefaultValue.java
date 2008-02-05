@@ -89,6 +89,7 @@ public class SourceFileDefaultValue implements DefaultValue {
         final StringBuilder sb = new StringBuilder();
         sb.append("SourceFileDefaultValue");
         sb.append("{pattern='").append(pattern).append('\'');
+        sb.append(", matchType=").append(matchType);
         sb.append('}');
         return sb.toString();
     }
