@@ -8,7 +8,7 @@ import java.io.File;
  *
  * @author Eric Trautman
  */
-public class FileExtensionModel implements RenameField, SourceFileField {
+public class FileExtensionModel implements RenameField {
 
     private String extension;
 
@@ -44,20 +44,25 @@ public class FileExtensionModel implements RenameField, SourceFileField {
         return null;
     }
 
+    /**
+     * Initializes this field's value if necessary.
+     *
+     * @param sourceFile the source file being renamed.
+     */
+    public void initializeValue(File sourceFile) {
+        String fileName = sourceFile.getName();
+        int extStart = fileName.lastIndexOf('.');
+        if ((extStart > -1) && (extStart < (fileName.length() - 1))) {
+            extension = fileName.substring(extStart);
+        }
+    }
+
     public String getExtension() {
         return extension;
     }
 
     public void setExtension(String extension) {
         this.extension = extension;
-    }
-
-    public void deriveSourceFileValues(File sourceFile) {
-        String fileName = sourceFile.getName();
-        int extStart = fileName.lastIndexOf('.');
-        if ((extStart > -1) && (extStart < (fileName.length() - 1))) {
-            extension = fileName.substring(extStart);
-        }
     }
 
     @Override

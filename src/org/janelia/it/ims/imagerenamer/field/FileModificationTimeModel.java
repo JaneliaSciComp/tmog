@@ -16,8 +16,7 @@ import java.util.Date;
  *
  * @author Eric Trautman
  */
-public class FileModificationTimeModel
-        extends DatePatternModel implements SourceFileField {
+public class FileModificationTimeModel extends DatePatternModel {
 
     private Date sourceDate;
 
@@ -35,16 +34,21 @@ public class FileModificationTimeModel
         return getFileNameValue(sourceDate);
     }
 
-    public Date getSourceDate() {
-        return sourceDate;
-    }
-
-    public void deriveSourceFileValues(File sourceFile) {
+    /**
+     * Initializes this field's value if necessary.
+     *
+     * @param sourceFile the source file being renamed.
+     */
+    public void initializeValue(File sourceFile) {
         if (sourceFile != null) {
             long modTime = sourceFile.lastModified();
             sourceDate = new Date(modTime);
         } else {
             sourceDate = null;
         }
+    }
+
+    public Date getSourceDate() {
+        return sourceDate;
     }
 }

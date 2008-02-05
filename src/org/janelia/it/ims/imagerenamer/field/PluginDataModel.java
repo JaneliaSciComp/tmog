@@ -7,6 +7,7 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
+import java.io.File;
 import java.util.Formatter;
 
 /**
@@ -62,6 +63,15 @@ public class PluginDataModel implements RenameField {
 
     public String getErrorMessage() {
         return null;
+    }
+
+    /**
+     * Initializes this field's value if necessary.
+     *
+     * @param sourceFile the source file being renamed.
+     */
+    public void initializeValue(File sourceFile) {
+        // nothing to initialize
     }
 
     public Object getValue() {

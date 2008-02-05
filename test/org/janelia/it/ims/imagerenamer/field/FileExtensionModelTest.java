@@ -56,7 +56,7 @@ public class FileExtensionModelTest extends TestCase {
             String name = data[0];
             String expectedExtension = data[1];
             File file = new File(name);
-            model.deriveSourceFileValues(file);
+            model.initializeValue(file);
             assertEquals("invalid extension returned for file with name '" +
                          name + "'",
                          expectedExtension, model.getFileNameValue());

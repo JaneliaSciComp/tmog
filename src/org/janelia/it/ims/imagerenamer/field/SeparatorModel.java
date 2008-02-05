@@ -7,6 +7,8 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
+import java.io.File;
+
 /**
  * This model supports inserting static text into a rename pattern.
  *
@@ -48,6 +50,15 @@ public class SeparatorModel implements RenameField {
         return null;
     }
 
+    /**
+     * Initializes this field's value if necessary.
+     *
+     * @param sourceFile the source file being renamed.
+     */
+    public void initializeValue(File sourceFile) {
+        // nothing to initialize
+    }
+    
     public String getValue() {
         return value;
     }

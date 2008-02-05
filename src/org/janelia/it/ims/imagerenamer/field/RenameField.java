@@ -7,6 +7,8 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
+import java.io.File;
+
 /**
  * This interface specifies the methods required for all rename fields.
  *
@@ -54,4 +56,10 @@ public interface RenameField {
     public String getErrorMessage();
 
 
+    /**
+     * Initializes this field's value if necessary.
+     *
+     * @param  sourceFile  the source file being renamed.
+     */
+    public void initializeValue(File sourceFile);
 }

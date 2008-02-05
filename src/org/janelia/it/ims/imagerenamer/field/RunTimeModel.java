@@ -7,6 +7,7 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
+import java.io.File;
 import java.util.Date;
 
 /**
@@ -34,6 +35,15 @@ public class RunTimeModel extends DatePatternModel {
             runTime = new Date();
         }
         return getFileNameValue(runTime);
+    }
+
+    /**
+     * Initializes this field's value if necessary.
+     *
+     * @param sourceFile the source file being renamed.
+     */
+    public void initializeValue(File sourceFile) {
+        // nothing to initialize
     }
 
 }

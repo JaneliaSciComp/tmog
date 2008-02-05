@@ -9,6 +9,7 @@ package org.janelia.it.ims.imagerenamer.field;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
+import java.io.File;
 
 /**
  * This class provides an abstract implementation for text fields that
@@ -92,6 +93,15 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
         return errorMessage;
     }
 
+    /**
+     * Initializes this field's value if necessary.
+     *
+     * @param sourceFile the source file being renamed.
+     */
+    public void initializeValue(File sourceFile) {
+        // nothing to initialize
+    }
+    
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }

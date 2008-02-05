@@ -8,6 +8,7 @@
 package org.janelia.it.ims.imagerenamer.field;
 
 import javax.swing.*;
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -85,6 +86,15 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
         return errorMessage;
     }
 
+    /**
+     * Initializes this field's value if necessary.
+     *
+     * @param sourceFile the source file being renamed.
+     */
+    public void initializeValue(File sourceFile) {
+        // nothing to initialize
+    }
+    
     public boolean isRequired() {
         return isRequired;
     }
