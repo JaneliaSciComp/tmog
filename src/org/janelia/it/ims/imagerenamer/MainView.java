@@ -7,10 +7,9 @@
 
 package org.janelia.it.ims.imagerenamer;
 
-import org.apache.log4j.Logger;
 import org.janelia.it.ims.imagerenamer.config.InputFileFilter;
-import org.janelia.it.ims.imagerenamer.config.OutputDirectory;
 import org.janelia.it.ims.imagerenamer.config.ProjectConfiguration;
+import org.janelia.it.ims.imagerenamer.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.imagerenamer.field.ButtonEditor;
 import org.janelia.it.ims.imagerenamer.field.ButtonRenderer;
 import org.janelia.it.ims.imagerenamer.field.FileRenderer;
@@ -47,9 +46,6 @@ import java.net.URL;
  * @author Eric Trautman
  */
 public class MainView {
-
-    /** The logger for this class. */
-    private static final Logger LOG = Logger.getLogger(MainView.class);
 
     private File lsmDirectory;
     private JLabel lsmDirectoryField;
@@ -214,7 +210,9 @@ public class MainView {
 
     public void resetFileTable() {
         lsmDirectoryField.setText("");
-        if (!projectConfig.isOutputDirectoryManuallyChosen()) {
+        OutputDirectoryConfiguration odConfig =
+                projectConfig.getOutputDirectory();
+        if (! odConfig.isManuallyChosen()) {
             outputDirectoryField.setText("");
         }
         fileTable.setModel(new DefaultTableModel());
@@ -277,18 +275,16 @@ public class MainView {
         FileFilter fileFilter = inputFilter.getFilter();
         File[] files = lsmDirectory.listFiles(fileFilter);
         boolean acceptSelectedFile = (files.length > 0);
-        boolean isOutputDerived =
-                (!projectConfig.isOutputDirectoryManuallyChosen());
+        OutputDirectoryConfiguration odConfig = projectConfig.getOutputDirectory();
+        boolean isOutputDerivedFromSelection =
+                odConfig.isDerivedFromEarliestModifiedFile();
 
         StringBuilder reject = new StringBuilder();
         String outputPath = null;
         if (acceptSelectedFile) {
-            if (isOutputDerived) {
-                OutputDirectory outputCfg =
-                        projectConfig.getOutputDirectory();
-                outputPath =
-                        outputCfg.getDerivedPath(lsmDirectory,
-                                                 files);
+            if (isOutputDerivedFromSelection) {
+                outputPath = odConfig.getDerivedPathForEarliestFile(
+                        lsmDirectory, files);
                 File derivedOutputDir = new File(outputPath);
                 boolean outputDirExists = derivedOutputDir.exists();
                 if (outputDirExists) {
@@ -324,7 +320,7 @@ public class MainView {
         if (acceptSelectedFile) {
             lsmDirectoryField.setText(
                     lsmDirectory.getAbsolutePath());
-            if (isOutputDerived) {
+            if (isOutputDerivedFromSelection) {
                 outputDirectoryField.setText(outputPath);
             }
             tableModel = new FileTableModel(files,
@@ -342,22 +338,29 @@ public class MainView {
     }
 
     private void setupOutputDirectory() {
-        outputDirectoryBtn.setVisible(
-                projectConfig.isOutputDirectoryManuallyChosen());
-        outputDirectoryBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.addChoosableFileFilter(
-                        new DirectoryOnlyFilter(
-                                lsmDirectoryField.getText()));
-                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                fileChooser.showDialog(getPanel(), "Select Output Directory");
-                File selectedDirectory = fileChooser.getSelectedFile();
-                if (selectedDirectory != null) {
-                    outputDirectoryField.setText(selectedDirectory.getPath());
+        OutputDirectoryConfiguration odCfg = projectConfig.getOutputDirectory();
+        boolean isManuallyChosen = odCfg.isManuallyChosen();
+        outputDirectoryBtn.setVisible(isManuallyChosen);
+
+        if (isManuallyChosen) {
+            outputDirectoryBtn.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.addChoosableFileFilter(
+                            new DirectoryOnlyFilter(
+                                    lsmDirectoryField.getText()));
+                    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                    fileChooser.showDialog(getPanel(), "Select Output Directory");
+                    File selectedDirectory = fileChooser.getSelectedFile();
+                    if (selectedDirectory != null) {
+                        outputDirectoryField.setText(selectedDirectory.getPath());
+                    }
                 }
-            }
-        });
+            });
+        } else if (! odCfg.isDerivedFromEarliestModifiedFile()) {
+            outputDirectoryField.setText(odCfg.getDescription());
+        }
+
     }
 
     private void setupProcess() {
@@ -387,40 +390,32 @@ public class MainView {
 
             private boolean isSessionReadyToStart() {
                 boolean isReady = false;
+                boolean isOutputDirectoryValid = true;
 
                 fileTable.editCellAt(-1, -1); // stop any current editor
-                String outputDirectoryName = outputDirectoryField.getText();
-                File outputDirectory = new File(outputDirectoryName);
-                String outputFailureMsg = null;
+                OutputDirectoryConfiguration odCfg =
+                        projectConfig.getOutputDirectory();
+                File outputDirectory = null;
+                if (odCfg.isDerivedForSession()) {
+                    outputDirectory = new File(outputDirectoryField.getText());
+                    String outputFailureMsg =
+                            OutputDirectoryConfiguration.createAndValidateDirectory(
+                                    outputDirectory);
 
-                if (!outputDirectory.exists()) {
-                    try {
-                        outputDirectory.mkdir();
-                    } catch (Exception e1) {
-                        outputFailureMsg =
-                                "Failed to create output directory " +
-                                outputDirectory.getAbsolutePath() + ".";
-                        LOG.error(outputFailureMsg, e1);
+                    if (outputFailureMsg != null) {
+                        isOutputDirectoryValid = false;
+                        JOptionPane.showMessageDialog(appPanel,
+                                                      outputFailureMsg,
+                                                      "Error",
+                                                      JOptionPane.ERROR_MESSAGE);
                     }
                 }
 
-                if (!outputDirectory.isDirectory()) {
-                    outputFailureMsg =
-                            "The output directory must be set to a valid directory.";
-                }
-
-                if (outputFailureMsg != null) {
-
-                    JOptionPane.showMessageDialog(appPanel,
-                                                  outputFailureMsg,
-                                                  "Error",
-                                                  JOptionPane.ERROR_MESSAGE);
-
-                } else if (tableModel.validateAllFields(
-                                        fileTable,
-                                        projectConfig.getRowValidators(),
-                                        appPanel,
-                                        outputDirectory)) {
+                if (isOutputDirectoryValid &&
+                    tableModel.validateAllFields(fileTable,
+                                                 projectConfig.getRowValidators(),
+                                                 appPanel,
+                                                 outputDirectory)) {
                     int choice =
                             JOptionPane.showConfirmDialog(
                                     appPanel,
@@ -436,7 +431,9 @@ public class MainView {
 
             private void startSession() {
                 setFileTableEnabled(false, true);
-                task = new CopyAndRenameTask(thisMainView);
+                task = new CopyAndRenameTask(thisMainView,
+                                             projectConfig.getOutputDirectory(),
+                                             outputDirectoryField.getText());
                 for (CopyListener listener :
                         projectConfig.getCopyListeners()) {
                     task.addCopyListener(listener);

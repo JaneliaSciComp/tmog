@@ -7,8 +7,28 @@
     </xs:complexType>
 
     <xs:complexType name="outputDirectoryType">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="path" type="pathType"/>
+            <xs:element name="renameFieldValue" type="renameFieldValueType"/>
+            <xs:element name="sourceFileModificationTime"
+                        type="sourceFileModificationTimeType"/>
+        </xs:choice>
         <xs:attribute name="basePath" type="xs:string"/>
-        <xs:attribute name="manuallyChosen" type="xs:boolean"/>
+        <xs:attribute name="derivedFromEarliestModifiedFile" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="pathType">
+        <xs:attribute name="path" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="renameFieldValueType">
+        <xs:attribute name="fieldDisplayName" type="xs:string"/>
+        <xs:attribute name="prefix" type="xs:string"/>
+        <xs:attribute name="suffix" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="sourceFileModificationTimeType">
+        <xs:attribute name="datePattern" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="propertyType">

@@ -54,6 +54,16 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
         return instance;
     }
 
+    public String getCoreValue() {
+        String coreValue;
+        if (selectedValue != null) {
+            coreValue = selectedValue.getValue();
+        } else {
+            coreValue = "";
+        }
+        return coreValue;
+    }
+
     public String getFileNameValue() {
         String fileNameValue;
         if (selectedValue != null) {

@@ -7,6 +7,7 @@
 
 package org.janelia.it.ims.imagerenamer.config;
 
+import org.janelia.it.ims.imagerenamer.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.imagerenamer.field.RenameField;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
@@ -27,14 +28,14 @@ public class ProjectConfiguration {
     private boolean isDefault;
     private RenamePattern renamePattern;
     private InputFileFilter inputFileFilter;
-    private OutputDirectory outputDirectory;
+    private OutputDirectoryConfiguration outputDirectoryConfiguration;
     private PluginFactory pluginFactory;
 
     public ProjectConfiguration() {
         this.isDefault = false;
         this.renamePattern = new RenamePattern();
         this.inputFileFilter = new InputFileFilter();
-        this.outputDirectory = new OutputDirectory();
+        this.outputDirectoryConfiguration = new OutputDirectoryConfiguration();
     }
 
     public String getName() {
@@ -53,12 +54,8 @@ public class ProjectConfiguration {
         return inputFileFilter;
     }
 
-    public OutputDirectory getOutputDirectory() {
-        return outputDirectory;
-    }
-
-    public boolean isOutputDirectoryManuallyChosen() {
-        return outputDirectory.isManuallyChosen();
+    public OutputDirectoryConfiguration getOutputDirectory() {
+        return outputDirectoryConfiguration;
     }
 
     public List<CopyListener> getCopyListeners() {
@@ -108,8 +105,8 @@ public class ProjectConfiguration {
         this.inputFileFilter = inputFileFilter;
     }
 
-    public void setOutputDirectory(OutputDirectory outputDirectory) {
-        this.outputDirectory = outputDirectory;
+    public void setOutputDirectory(OutputDirectoryConfiguration outputDirectoryConfiguration) {
+        this.outputDirectoryConfiguration = outputDirectoryConfiguration;
     }
 
     public void setPluginFactory(PluginFactory pluginFactory) {
@@ -122,12 +119,12 @@ public class ProjectConfiguration {
      * @throws ConfigurationException if any errors occur.
      */
     public void initializeAndVerify() throws ConfigurationException {
-        if (outputDirectory == null) {
+        if (outputDirectoryConfiguration == null) {
             throw new ConfigurationException(
                     "The output directory is not defined for the " +
                     name + " project.");
         }
-        outputDirectory.verify(name);
+        outputDirectoryConfiguration.verify(name, renamePattern.getFields());
         if (pluginFactory != null) {
             pluginFactory.constructInstances(name);
         }

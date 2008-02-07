@@ -40,6 +40,10 @@ public class PluginDataModel implements RenameField {
         return instance;
     }
 
+    public String getCoreValue() {
+        return getFileNameValue();
+    }
+
     public String getFileNameValue() {
         String fileNameValue;
         if (value == null) {

@@ -7,7 +7,7 @@
 
         <!-- DASH_FOR_PROD->
         <outputDirectory basePath="\\dm7.int.janelia.org\rubinlab\confocalStacks"
-                         manuallyChosen="false"/>
+                         derivedFromEarliestModifiedFile="true"/>
         <!-DASH_FOR_PROD -->
 
         <plugins>
@@ -125,6 +125,12 @@
     </project>
 
     <project name="Simpson Lab: GAL4 Lines (JHS_*)">
+        <outputDirectory>
+            <!--<path path="\\dm8\simpsonmicro\GAL4_confocal_stacks\" />-->
+            <renameFieldValue fieldDisplayName="Line" />
+            <renameFieldValue fieldDisplayName="Insertion Number" prefix="_" />
+            <path path="-GAL4" />
+        </outputDirectory>
 
         <renamePattern>
             <separator value="JHS_"/>

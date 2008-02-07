@@ -52,6 +52,14 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
         instance.defaultValueList = defaultValueList;  // shallow copy is ok
     }
 
+    public String getCoreValue() {
+        String coreValue = getFullText();
+        if (coreValue == null) {
+            coreValue = "";
+        }
+        return coreValue;
+    }
+
     public String getFileNameValue() {
         String fileNameValue = getFullText();
         if ((fileNameValue != null) && (fileNameValue.length() > 0)) {

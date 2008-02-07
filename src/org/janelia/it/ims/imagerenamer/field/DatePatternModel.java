@@ -33,6 +33,10 @@ public abstract class DatePatternModel implements RenameField {
 
     public abstract String getFileNameValue();
 
+    public String getCoreValue() {
+        return getFileNameValue();
+    }
+
     public String getFileNameValue(Date sourceDate) {
         String fileNameValue;
         if (datePattern != null)  {

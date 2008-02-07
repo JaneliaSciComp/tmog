@@ -33,6 +33,11 @@ public interface RenameField {
     public RenameField getNewInstance();
 
     /**
+     * @return the core value for this field (as entered).
+     */
+    public String getCoreValue();
+
+    /**
      * @return the value to be used when renaming a file
      *         (may differ from what is displayed in the user interface).
      */

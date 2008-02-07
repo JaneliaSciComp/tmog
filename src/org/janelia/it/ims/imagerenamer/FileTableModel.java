@@ -9,6 +9,7 @@ package org.janelia.it.ims.imagerenamer;
 
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.imagerenamer.config.ProjectConfiguration;
+import org.janelia.it.ims.imagerenamer.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.imagerenamer.field.RenameField;
 import org.janelia.it.ims.imagerenamer.field.ValidValueModel;
 import org.janelia.it.ims.imagerenamer.filefilter.LNumberComparator;
@@ -17,11 +18,9 @@ import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
 
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import java.awt.Component;
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,6 +47,7 @@ public class FileTableModel extends AbstractTableModel {
     private List<String> columnNames;
     private Map<Integer, Integer> columnToFieldIndexMap;
     private Map<Integer, Integer> fieldToColumnIndexMap;
+    private ProjectConfiguration projectConfig;
 
     public FileTableModel(File[] files,
                           ProjectConfiguration config) {
@@ -55,6 +55,7 @@ public class FileTableModel extends AbstractTableModel {
         if (files == null) {
             files = new File[0];
         }
+        this.projectConfig = config;
 
         // sort files based on L-Numbers
         Arrays.sort(files, new LNumberComparator());
@@ -209,12 +210,17 @@ public class FileTableModel extends AbstractTableModel {
     public boolean validateAllFields(JTable fileTable,
                                      List<RenameFieldRowValidator> externalValidators,
                                      Component dialogParent,
-                                     File outputDirectory) {
+                                     File baseOutputDirectory) {
         boolean isValid = true;
 
+        OutputDirectoryConfiguration odCfg = projectConfig.getOutputDirectory();
+        boolean isOutputDirectoryAlreadyValidated = odCfg.isDerivedForSession();
+        File outputDirectory = null;
+        String outputDirectoryPath;
         final int numberOfRows = rows.size();
-        for (int rowIndex = 0; isValid && (rowIndex < numberOfRows); rowIndex++)
-        {
+        for (int rowIndex = 0;
+             isValid && (rowIndex < numberOfRows);
+             rowIndex++) {
 
             FileTableRow row = rows.get(rowIndex);
             File rowFile = row.getFile();
@@ -238,32 +244,55 @@ public class FileTableModel extends AbstractTableModel {
                     break;
                 }
             }
-            if (!isValid)
-                return isValid; //Do not perform external validation if internal fails
 
-            // perform any configured external validation only if internal validation is correct
-            String externalErrorMsg = null;
-            try {
-                for (RenameFieldRowValidator validator : externalValidators) {
-                    validator.validate(new RenameFieldRow(rowFile,
-                                                          rowFields,
-                                                          outputDirectory));
+            // only perform output directory validation if field validation
+            if (isValid) {
+                if (isOutputDirectoryAlreadyValidated) {
+                    outputDirectory = baseOutputDirectory;
+                } else {
+                    // setup and validate the directories for each file
+                    outputDirectoryPath = odCfg.getDerivedPath(rowFile,
+                                                               rowFields);
+                    outputDirectory = new File(outputDirectoryPath);
+                    String outputFailureMsg =
+                            OutputDirectoryConfiguration.createAndValidateDirectory(
+                                    outputDirectory);
+                    if (outputFailureMsg != null) {
+                        isValid = false;
+                        displayErrorDialog(dialogParent,
+                                           outputFailureMsg,
+                                           fileTable,
+                                           rowIndex,
+                                           2);
+                    }
                 }
-            } catch (ExternalDataException e) {
-                externalErrorMsg = e.getMessage();
-                LOG.info("external validation failed", e);
-            } catch (ExternalSystemException e) {
-                externalErrorMsg = e.getMessage();
-                LOG.error(e.getMessage(), e);
             }
 
-            if (externalErrorMsg != null) {
-                isValid = false;
-                displayErrorDialog(dialogParent,
-                                   externalErrorMsg,
-                                   fileTable,
-                                   rowIndex,
-                                   2);
+            // only perform external validation if internal validation succeeds
+            if (isValid) {
+                String externalErrorMsg = null;
+                try {
+                    for (RenameFieldRowValidator validator : externalValidators) {
+                        validator.validate(new RenameFieldRow(rowFile,
+                                                              rowFields,
+                                                              outputDirectory));
+                    }
+                } catch (ExternalDataException e) {
+                    externalErrorMsg = e.getMessage();
+                    LOG.info("external validation failed", e);
+                } catch (ExternalSystemException e) {
+                    externalErrorMsg = e.getMessage();
+                    LOG.error(e.getMessage(), e);
+                }
+
+                if (externalErrorMsg != null) {
+                    isValid = false;
+                    displayErrorDialog(dialogParent,
+                                       externalErrorMsg,
+                                       fileTable,
+                                       rowIndex,
+                                       2);
+                }
             }
 
         }

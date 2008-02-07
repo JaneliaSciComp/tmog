@@ -8,6 +8,8 @@
 package org.janelia.it.ims.imagerenamer;
 
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.imagerenamer.config.output.OutputDirectoryConfiguration;
+import org.janelia.it.ims.imagerenamer.field.RenameField;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
@@ -46,9 +48,16 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
     private MainView mainView;
 
     /**
-     * The target directory for all copied files.
+     * The output directory configuration information for the project.
      */
-    private File toDirectory;
+    private OutputDirectoryConfiguration outputDirConfig;
+
+    /**
+     * The target directory for all copied files when the output configuration
+     * indicates that the same directory should be used for all files
+     * in a session.
+     */
+    private File sessionOutputDirectory;
 
     /**
      * A text summary of what was copied/renamed.
@@ -89,13 +98,18 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
     /**
      * Constructs a new task.
      *
-     * @param mainView the main view for this rename session.
+     * @param mainView                    the main view for this rename session.
+     * @param outputDirConfig             the output directory configuration.
+     * @param sessionOutputDirectoryName  the session output directory name
+     *                                    (for session derived configurations).
      */
-    public CopyAndRenameTask(MainView mainView) {
+    public CopyAndRenameTask(MainView mainView,
+                             OutputDirectoryConfiguration outputDirConfig,
+                             String sessionOutputDirectoryName) {
 
         this.mainView = mainView;
-        JLabel outputDirLabel = mainView.getOutputDirectoryField();
-        this.toDirectory = new File(outputDirLabel.getText());
+        this.outputDirConfig = outputDirConfig;
+        this.sessionOutputDirectory = new File(sessionOutputDirectoryName);
         this.failedCopyRowIndices = new ArrayList<Integer>();
         this.copyListenerList = new ArrayList<CopyListener>();
         this.sessionListenerList = new ArrayList<SessionListener>();
@@ -104,7 +118,6 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
 
         FileTableModel model = mainView.getTableModel();
         List<FileTableRow> modelRows = model.getRows();
-        String toDirectoryName = toDirectory.getAbsolutePath();
         String fromDirectoryName = null;
         if (modelRows.size() > 0) {
             FileTableRow firstModelRow = modelRows.get(0);
@@ -113,10 +126,8 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
             fromDirectoryName = fromDirectory.getAbsolutePath();
         }
 
-        renameSummary.append("Moved and renamed the following files from\n     ");
+        renameSummary.append("Moved and renamed the following files from ");
         renameSummary.append(fromDirectoryName);
-        renameSummary.append(" to\n     ");
-        renameSummary.append(toDirectoryName);
         renameSummary.append(":\n\n");
 
         bytesInChunk = 1000000; // default to megabytes
@@ -302,18 +313,32 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
         int chunksProcessed = 0;
         long pctComplete = 0;
         final int numberOfRows = modelRows.size();
+        boolean isDerivedForSession = outputDirConfig.isDerivedForSession();
+        File toDirectory = sessionOutputDirectory;
+
+        File rowFile;
+        File renamedFile;
+        boolean isRenameSuccessful;
+        boolean isStartNotificationSuccessful;
+        RenameField[] fields;
+        String toDirectoryPath;
+        RenameFieldRow fieldRow;
 
         for (FileTableRow modelRow : modelRows) {
 
-            File rowFile = modelRow.getFile();
-            String originalFileName = rowFile.getName();
-            File renamedFile = null;
-            boolean isRenameSuccessful = false;
-            boolean isStartNotificationSuccessful = false;
+            rowFile = modelRow.getFile();
+            renamedFile = null;
+            isRenameSuccessful = false;
+            isStartNotificationSuccessful = false;
+            fields = modelRow.getFields();
 
-            RenameFieldRow fieldRow = new RenameFieldRow(rowFile,
-                                                         modelRow.getFields(),
-                                                         toDirectory);
+            if (! isDerivedForSession) {
+                toDirectoryPath =
+                        outputDirConfig.getDerivedPath(rowFile, fields);
+                toDirectory = new File(toDirectoryPath);
+            }
+
+            fieldRow = new RenameFieldRow(rowFile, fields, toDirectory);
             try {
                 fieldRow = notifyCopyListeners(CopyListener.EventType.START,
                                                fieldRow);
@@ -325,7 +350,6 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
 
             if (isStartNotificationSuccessful) {
                 renamedFile = fieldRow.getRenamedFile();
-
                 // update progress information in the UI
                 publish(new CopyProgressInfo(rowFile,
                                              renamedFile,
@@ -333,96 +357,150 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
                                              rowIndex,
                                              numberOfRows));
 
-                // perform the actual copy and rename
-                try {
-                    SafeFileTransfer.copy(rowFile, renamedFile, false);
-                    isRenameSuccessful = true;
-                } catch (FileCopyFailedException e) {
-                    LOG.error("Failed to copy " + rowFile.getAbsolutePath() +
-                              " to " + renamedFile.getAbsolutePath(), e);
-                }
-
-                // notify any listeners
-                try {
-                    if (isRenameSuccessful) {
-                        notifyCopyListeners(
-                                CopyListener.EventType.END_SUCCESS,
-                                fieldRow);
-                    } else {
-                        notifyCopyListeners(
-                                CopyListener.EventType.END_FAIL,
-                                fieldRow);
-                    }
-                } catch (Exception e) {
-                    LOG.error("Failed external completion processing for " +
-                              fieldRow, e);
-                    isRenameSuccessful = false;
-                }
+                isRenameSuccessful = copyFile(rowFile,
+                                              renamedFile,
+                                              fieldRow);
             }
 
             // calculate progress before we delete the file
             chunksProcessed += (int) (rowFile.length() / bytesInChunk);
             pctComplete = (100 * chunksProcessed) / totalByteChunksToCopy;
 
-            if (isRenameSuccessful) {
-
-                renameSummary.append("Renamed ");
-
-                // clean up the original file
-                try {
-                    rowFile.delete();
-                } catch (Exception e) {
-                    LOG.warn("Failed to remove " +
-                             rowFile.getAbsolutePath() +
-                             " after rename succeeded.", e);
-                }
-
-            } else {
-
-                renameSummary.append("ERROR: failed to rename ");
-                failedCopyRowIndices.add(rowIndex);
-
-                // clean up the copied file if it exists and
-                // it isn't the same as the source file
-                if ((renamedFile != null) &&
-                    renamedFile.exists() &&
-                    (!renamedFile.equals(rowFile))) {
-                    try {
-                        renamedFile.delete();
-                    } catch (Exception e) {
-                        LOG.warn("Failed to remove " +
-                                 renamedFile.getAbsolutePath() +
-                                 " after rename failed.", e);
-                    }
-                }
-            }
-
-            renameSummary.append(originalFileName);
-            if (renamedFile != null) {
-                renameSummary.append(" to ");
-                renameSummary.append(renamedFile.getName());
-            }
-            renameSummary.append("\n");
+            cleanupAfterRename(rowIndex,
+                               rowFile,
+                               renamedFile,
+                               isRenameSuccessful);
 
             rowIndex++;
 
             if (isSessionCancelled) {
-                if (rowIndex < numberOfRows) {
-                    LOG.warn("Rename session cancelled after copy of " +
-                             renamedFile.getName() + ".");
-                    renameSummary.append("\nRename session cancelled.");
-
-                    // mark all remain rows as failed
-                    for (int i = rowIndex; i < numberOfRows; i++) {
-                        failedCopyRowIndices.add(i);
-                    }
-                } else {
-                    // reset cancel flag since cancel occurred after
-                    // last file was already renamed
-                    isSessionCancelled = false;
-                }
+                handleCancelOfSession(rowIndex, numberOfRows, renamedFile);
                 break;
             }
+        }
+    }
+
+    /**
+     * Copies the specified file.
+     *
+     * @param  rowFile      the file to be copied and renamed.
+     * @param  renamedFile  the target path for the renamed file.
+     * @param  fieldRow     the captured field data for this file.
+     *
+     * @return true if the copy and rename was successful; otherwise false.
+     */
+    private boolean copyFile(File rowFile,
+                             File renamedFile,
+                             RenameFieldRow fieldRow) {
+
+        boolean renameSuccessful = false;
+
+        // perform the actual copy and rename
+        try {
+            SafeFileTransfer.copy(rowFile, renamedFile, false);
+            renameSuccessful = true;
+        } catch (FileCopyFailedException e) {
+            LOG.error("Failed to copy " + rowFile.getAbsolutePath() +
+                      " to " + renamedFile.getAbsolutePath(), e);
+        }
+
+        // notify any listeners
+        try {
+            if (renameSuccessful) {
+                notifyCopyListeners(
+                        CopyListener.EventType.END_SUCCESS,
+                        fieldRow);
+            } else {
+                notifyCopyListeners(
+                        CopyListener.EventType.END_FAIL,
+                        fieldRow);
+            }
+        } catch (Exception e) {
+            LOG.error("Failed external completion processing for " +
+                      fieldRow, e);
+            renameSuccessful = false;
+        }
+        return renameSuccessful;
+    }
+
+    /**
+     * Clean up either the source file or the renamed file depending
+     * upon whether the rename process succeeded.
+     *
+     * @param  rowIndex          the row index for the renamed file.
+     * @param  rowFile           the source file.
+     * @param  renamedFile       the renamed file.
+     * @param  renameSuccessful  flag indicating if the rename was successful.
+     */
+    private void cleanupAfterRename(int rowIndex,
+                                    File rowFile,
+                                    File renamedFile,
+                                    boolean renameSuccessful) {
+        if (renameSuccessful) {
+
+            renameSummary.append("renamed ");
+
+            // clean up the original file
+            try {
+                rowFile.delete();
+            } catch (Exception e) {
+                LOG.warn("Failed to remove " +
+                         rowFile.getAbsolutePath() +
+                         " after rename succeeded.", e);
+            }
+
+        } else {
+
+            renameSummary.append("ERROR: failed to rename ");
+            failedCopyRowIndices.add(rowIndex);
+
+            // clean up the copied file if it exists and
+            // it isn't the same as the source file
+            if ((renamedFile != null) &&
+                renamedFile.exists() &&
+                (!renamedFile.equals(rowFile))) {
+                try {
+                    renamedFile.delete();
+                } catch (Exception e) {
+                    LOG.warn("Failed to remove " +
+                             renamedFile.getAbsolutePath() +
+                             " after rename failed.", e);
+                }
+            }
+        }
+
+        renameSummary.append(rowFile.getName());
+        if (renamedFile != null) {
+            renameSummary.append(" to ");
+            renameSummary.append(renamedFile.getAbsolutePath());
+        }
+        renameSummary.append("\n");
+    }
+
+    /**
+     * Handles clean up needed if the session is cancelled while files
+     * are being renamed.
+     *
+     * @param  rowIndex      the row index for the last renamed file.
+     * @param  numberOfRows  the total number files being renamed.
+     * @param  renamedFile   the last renamed file.
+     */
+    private void handleCancelOfSession(int rowIndex,
+                                       int numberOfRows,
+                                       File renamedFile) {
+        if (rowIndex < numberOfRows) {
+            LOG.warn("Rename session cancelled after copy of " +
+                     renamedFile.getName() + ".");
+            renameSummary.append("\nRename session cancelled.");
+
+            // mark all remaining rows as failed
+            for (int i = rowIndex; i < numberOfRows; i++) {
+                failedCopyRowIndices.add(i);
+            }
+        } else {
+            // reset cancel flag since cancel occurred after
+            // last file was already renamed
+            isSessionCancelled = false;
         }
     }
 

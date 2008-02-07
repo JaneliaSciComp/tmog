@@ -9,6 +9,10 @@ package org.janelia.it.ims.imagerenamer.config;
 
 import org.apache.commons.digester.Digester;
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.imagerenamer.config.output.OutputDirectoryConfiguration;
+import org.janelia.it.ims.imagerenamer.config.output.Path;
+import org.janelia.it.ims.imagerenamer.config.output.RenameFieldValue;
+import org.janelia.it.ims.imagerenamer.config.output.SourceFileModificationTime;
 import org.janelia.it.ims.imagerenamer.field.FileExtensionModel;
 import org.janelia.it.ims.imagerenamer.field.FileModificationTimeModel;
 import org.janelia.it.ims.imagerenamer.field.PluginDataModel;
@@ -132,10 +136,28 @@ public class RenamerConfiguration {
                             "setInputFileFilter");
 
         digester.addObjectCreate("renameConfiguration/project/outputDirectory",
-                                 OutputDirectory.class);
+                                 OutputDirectoryConfiguration.class);
         digester.addSetProperties("renameConfiguration/project/outputDirectory");
         digester.addSetNext("renameConfiguration/project/outputDirectory",
                             "setOutputDirectory");
+
+        digester.addObjectCreate("renameConfiguration/project/outputDirectory/path",
+                                 Path.class);
+        digester.addSetProperties("renameConfiguration/project/outputDirectory/path");
+        digester.addSetNext("renameConfiguration/project/outputDirectory/path",
+                            "addComponent");
+
+        digester.addObjectCreate("renameConfiguration/project/outputDirectory/renameFieldValue",
+                                 RenameFieldValue.class);
+        digester.addSetProperties("renameConfiguration/project/outputDirectory/renameFieldValue");
+        digester.addSetNext("renameConfiguration/project/outputDirectory/renameFieldValue",
+                            "addComponent");
+
+        digester.addObjectCreate("renameConfiguration/project/outputDirectory/sourceFileModificationTime",
+                                 SourceFileModificationTime.class);
+        digester.addSetProperties("renameConfiguration/project/outputDirectory/sourceFileModificationTime");
+        digester.addSetNext("renameConfiguration/project/outputDirectory/sourceFileModificationTime",
+                            "addComponent");
 
         digester.addObjectCreate("renameConfiguration/project/renamePattern",
                                  RenamePattern.class);

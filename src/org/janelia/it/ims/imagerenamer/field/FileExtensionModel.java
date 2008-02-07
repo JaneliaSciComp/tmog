@@ -28,6 +28,10 @@ public class FileExtensionModel implements RenameField {
         return new FileExtensionModel();
     }
 
+    public String getCoreValue() {
+        return getFileNameValue();
+    }
+
     public String getFileNameValue() {
         String value = getExtension();
         if (value == null) {
