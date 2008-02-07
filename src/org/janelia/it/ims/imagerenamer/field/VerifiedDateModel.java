@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
  *
  * @author Eric Trautman
  */
-public class VerifiedDateModel extends VerifiedFieldModel {
+public class VerifiedDateModel extends VerifiedFieldModel implements DatePatternField {
 
     private SimpleDateFormat formatter;
 

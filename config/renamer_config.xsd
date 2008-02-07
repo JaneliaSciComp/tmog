@@ -119,6 +119,7 @@
     </xs:complexType>
 
     <xs:complexType name="fileModificationTimeType">
+        <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="datePattern" type="xs:string"/>
     </xs:complexType>
 

@@ -90,13 +90,25 @@ public class RenameFieldRow {
      *
      * @return the associated field model value or null.
      */
-    public String getFileNameValue(String fieldDisplayName) {
+    public String getCoreValue(String fieldDisplayName) {
         String value = null;
         RenameField field = displayNameToFieldMap.get(fieldDisplayName);
         if (field != null) {
-            value = field.getFileNameValue();
+            value = field.getCoreValue();
         }
         return value;
+    }
+
+    /**
+     * Returns the field model associated with the specified
+     * display name or null if no associated model exists.
+     *
+     * @param  fieldDisplayName  display name of desired field model.
+     *
+     * @return the associated field model or null.
+     */
+    public RenameField getRenameField(String fieldDisplayName) {
+        return displayNameToFieldMap.get(fieldDisplayName);
     }
 
     /**
@@ -158,6 +170,21 @@ public class RenameFieldRow {
         }
         // unset renamedFile to ensure regeneration with new plugin data
         renamedFile = null;
+    }
+
+    /**
+     * @return the relative path (parent directory + file name) for the
+     *         renamed file.
+     */
+    public String getRelativePath() {
+        File renameDir = renamedFile.getParentFile();
+        String relativePath;
+        if (renameDir == null) {
+            relativePath = renamedFile.getName();
+        } else {
+            relativePath = renameDir.getName() + "/" + renamedFile.getName();
+        }
+        return relativePath;
     }
 
     /**

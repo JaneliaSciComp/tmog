@@ -255,14 +255,7 @@ public class RenamerEventManager implements RenameFieldRowValidator,
                                                             false);
             currentStatus = transformant.getStatus();
             transformant.setStatus(Status.imaged);
-            File renameFile = row.getRenamedFile();
-            File renameDir = renameFile.getParentFile();
-            String relativePath;
-            if (renameDir == null) {
-                relativePath = renameFile.getName();
-            } else {
-                relativePath = renameDir.getName() + "/" + renameFile.getName();
-            }
+            String relativePath = row.getRelativePath();
             Integer rank = (Integer)
                     row.getPluginDataValue(IMAGE_LOCATION_RANK);
             ImageLocation imageLocation = new ImageLocation(relativePath, rank);
@@ -353,10 +346,10 @@ public class RenamerEventManager implements RenameFieldRowValidator,
      */
     private static String getTransformantID(RenameFieldRow row) {
         String transformantID;
-        String plate = row.getFileNameValue("Plate");
-        String well = row.getFileNameValue("Well");
-        String vector = row.getFileNameValue("Vector ID");
-        String insertionSite = row.getFileNameValue("Landing Site");
+        String plate = row.getCoreValue("Plate");
+        String well = row.getCoreValue("Well");
+        String vector = row.getCoreValue("Vector ID");
+        String insertionSite = row.getCoreValue("Landing Site");
         transformantID =
                 Transformant.constructTransformantID(plate,
                                                      well,

@@ -132,6 +132,13 @@
             <path path="-GAL4" />
         </outputDirectory>
 
+        <plugins>
+            <copyListener className="org.janelia.it.simpsonlab.SimpsonImageManager" />
+            <!--<sessionListener className="org.janelia.it.ims.imagerenamer.plugin.SessionSummaryFileWriter">-->
+                <!--<property name="directory" value="\\dm7.int.janelia.org\rubinlab\renamer\summaries"/>-->
+            <!--</sessionListener>-->
+        </plugins>
+
         <renamePattern>
             <separator value="JHS_"/>
             <text displayName="Line" required="true" pattern="[0-9A-Za-z]++">
@@ -146,19 +153,19 @@
                                    matchType="path"/>
             </text>
             <separator value="-GAL4_"/>
-            <!--<fileModificationTime datePattern="MMddyyyy'_'"/>-->
-            <date displayName="Creation Date" required="true" 
-                  datePattern="MMddyyyy" suffix="_">
+            <!--<fileModificationTime displayName="Capture Date" datePattern="MMddyyyy'_'"/>-->
+            <date displayName="Capture Date" required="true" 
+                  datePattern="yyyyMMdd" suffix="_">
                 <sourceFileDateDefault pattern=".*[-/](\d\d?-\d\d?-\d\d){1}.*\.lsm"
                                        fromDatePattern="MM-dd-yy"
-                                       toDatePattern="MMddyyyy"
+                                       toDatePattern="yyyyMMdd"
                                        matchType="path"/>
             </date>
             <validValueList displayName="Organ" required="true">
                 <validValue displayName="B: Brain" value="B"/>
                 <validValue displayName="T: Thorax" value="T"/>
             </validValueList>
-            <!--<pluginData displayName="specimenNumber" format="%02d"/>-->
+            <pluginData displayName="Specimen Number" format="%02d"/>
             <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
         </renamePattern>

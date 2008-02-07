@@ -15,14 +15,19 @@ import java.util.Date;
  *
  * @author Eric Trautman
  */
-public abstract class DatePatternModel implements RenameField {
+public abstract class DatePatternModel implements RenameField, DatePatternField {
+    private String displayName;
     private String datePattern;
 
     public DatePatternModel() {
     }
 
     public String getDisplayName() {
-        return null;
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public boolean isEditable() {
