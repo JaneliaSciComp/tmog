@@ -131,7 +131,15 @@ public class OutputDirectoryConfiguration {
             // ensure output directory will be absolute - fully qualified
             if (! baseDirectory.isAbsolute()) {
                 baseDirectory = baseDirectory.getAbsoluteFile();
-                Path absolutePath = new Path(baseDirectory.getAbsolutePath());
+
+                String absolutePathName;
+                if (basePath.endsWith(FILE_SEP)) {
+                    absolutePathName = baseDirectory.getAbsolutePath() +
+                                       FILE_SEP;
+                } else {
+                    absolutePathName = baseDirectory.getAbsolutePath();
+                }
+                Path absolutePath = new Path(absolutePathName);
 
                 // ! manuallyChosen == components.size() > 0
                 OutputDirectoryComponent firstComponent =
@@ -139,7 +147,6 @@ public class OutputDirectoryConfiguration {
                 if (firstComponent instanceof Path) {
                     components.set(0, absolutePath);
                 } else {
-                    absolutePath.setPath(absolutePath.getPath() + FILE_SEP);
                     components.add(0, absolutePath);
                 }
             }

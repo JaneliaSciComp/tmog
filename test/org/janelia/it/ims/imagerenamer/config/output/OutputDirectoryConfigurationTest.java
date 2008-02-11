@@ -6,6 +6,7 @@ import junit.framework.TestSuite;
 import org.janelia.it.ims.imagerenamer.config.ConfigurationException;
 import org.janelia.it.ims.imagerenamer.field.RenameField;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -43,10 +44,8 @@ public class OutputDirectoryConfigurationTest extends TestCase {
      *   if any unexpected errors occur.
      */
     public void testVerify() throws Exception {
-        // absolute path
-        // relative path
-        // no path
 
+       // absolute path for missing directory
         OutputDirectoryConfiguration config =
                 new OutputDirectoryConfiguration();
         String fileNameSeparator = System.getProperty("file.separator");
@@ -64,6 +63,7 @@ public class OutputDirectoryConfigurationTest extends TestCase {
                          baseDirectoryName, config.getBasePath());
         }
 
+        // relative path for missing directory
         config = new OutputDirectoryConfiguration();
         baseDirectoryName = "missingTestDirectory";
         path = new Path(baseDirectoryName);
@@ -84,6 +84,7 @@ public class OutputDirectoryConfigurationTest extends TestCase {
                     basePath.endsWith(baseDirectoryName));
         }
 
+        // no path
         config = new OutputDirectoryConfiguration();
         SourceFileModificationTime sfmt = new SourceFileModificationTime();
         config.addComponent(sfmt);
@@ -93,6 +94,51 @@ public class OutputDirectoryConfigurationTest extends TestCase {
                 "absolute directory not created for component list, " +
                 "basePath is " + basePath,
                 basePath.startsWith(fileNameSeparator));
+
+        // absolute path without trailing spearator for existing directory
+        File directory = new File("");
+        String absolutePathName = directory.getAbsolutePath();
+        path = new Path(absolutePathName);
+        config = new OutputDirectoryConfiguration();
+        config.addComponent(path);
+
+        config.verify("testProject", fieldList);
+        assertEquals("absolute path without trailing separator is incorrect",
+                     absolutePathName, config.getBasePath());
+
+        // absolute path without trailing spearator for existing directory
+        absolutePathName = directory.getAbsolutePath() + "/";
+        path = new Path(absolutePathName);
+        config = new OutputDirectoryConfiguration();
+        config.addComponent(path);
+
+        config.verify("testProject", fieldList);
+        assertEquals("absolute path with trailing separator is incorrect", 
+                     absolutePathName, config.getBasePath());
+
+        // relative path without trailing spearator for existing directory
+        String relativePathName = "..";
+        directory = new File(relativePathName);
+        absolutePathName = directory.getAbsolutePath();
+        path = new Path(relativePathName);
+        config = new OutputDirectoryConfiguration();
+        config.addComponent(path);
+
+        config.verify("testProject", fieldList);
+        assertEquals("relative path without trailing separator is incorrect",
+                     absolutePathName, config.getBasePath());
+
+        // relative path without trailing spearator for existing directory
+        relativePathName = "../";
+        directory = new File(relativePathName);
+        absolutePathName = directory.getAbsolutePath() + "/";
+        path = new Path(relativePathName);
+        config = new OutputDirectoryConfiguration();
+        config.addComponent(path);
+
+        config.verify("testProject", fieldList);
+        assertEquals("absolute path with trailing separator is incorrect",
+                     absolutePathName, config.getBasePath());
 
     }
 }
