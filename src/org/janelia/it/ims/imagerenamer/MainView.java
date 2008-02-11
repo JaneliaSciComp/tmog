@@ -212,7 +212,7 @@ public class MainView {
         lsmDirectoryField.setText("");
         OutputDirectoryConfiguration odConfig =
                 projectConfig.getOutputDirectory();
-        if (! odConfig.isManuallyChosen()) {
+        if (odConfig.isDerivedFromEarliestModifiedFile()) {
             outputDirectoryField.setText("");
         }
         fileTable.setModel(new DefaultTableModel());
