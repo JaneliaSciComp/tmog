@@ -90,5 +90,17 @@ public class SourceFileDefaultValueTest extends TestCase {
                      file.getAbsolutePath(),
                      "2-1-CYO", value);
 
+        file = new File (".\\" +
+                "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb\\" +
+                "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb\\" +
+                "CG9887-Gal4-8-22-07_L6_Sum.lsm");
+
+        defaultValue = new SourceFileDefaultValue(".*mdb[/\\\\].*Gal4-(.*)-UAS.*mdb[/\\\\].*\\.lsm",
+                                                  MatchType.path);
+        value = defaultValue.getValue(file);
+        assertEquals("invalid value for " + defaultValue + " and file " +
+                     file.getAbsolutePath(),
+                     "2-1-CYO", value);
+
     }
 }
