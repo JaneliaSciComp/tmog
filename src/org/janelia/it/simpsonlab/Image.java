@@ -37,11 +37,12 @@ public class Image {
         this.relativePath = row.getRelativePath();
         this.setCaptureDate(row.getRenameField(CAPTURE_DATE_NAME));
         init();
+        String value;
         for (String propertyName : ImageProperty.NAMES) {
-            this.properties.add(
-                    new ImageProperty(propertyName,
-                                      row.getCoreValue(propertyName)));
-
+            value = row.getCoreValue(propertyName);
+            if ((value != null) && (value.length() > 0)) {
+                this.properties.add(new ImageProperty(propertyName, value));
+            }
         }
     }
 
@@ -70,17 +71,20 @@ public class Image {
     }
 
     public void setCaptureDate(RenameField field) {
-        if (field instanceof DatePatternField) {
-            String pattern = ((DatePatternField) field).getDatePattern();
-            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-            try {
-                captureDate = sdf.parse(field.getFileNameValue());
-            } catch (ParseException e) {
-                LOG.warn("Unable to parse capture date for '" +
-                         relativePath +
-                         "'.  Continuing processing without the date.", e);
+        String value = field.getCoreValue();
+        if ((value != null) && (value.length() > 0)) {
+            if (field instanceof DatePatternField) {
+                String pattern = ((DatePatternField) field).getDatePattern();
+                SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+                try {
+                    captureDate = sdf.parse(value);
+                } catch (ParseException e) {
+                    LOG.warn("Unable to parse capture date for '" +
+                             relativePath +
+                             "'.  Continuing processing without the date.", e);
+                }
             }
-        }                
+        }
     }
 
     public List<ImageProperty> getProperties() {
