@@ -15,13 +15,14 @@ import java.util.List;
  */
 public class ImageProperty {
 
+    public static final String IMAGERY_NAME = "Imagery";
     public static final String LINE_NAME = "Line";
     public static final String INSERTION_NUMBER_NAME = "Insertion Number";
     public static final String ORGAN_NAME = "Organ";
     public static final String SPECIMEN_NUMBER_NAME = "Specimen Number";
 
     public static final List<String> NAMES = 
-            Arrays.asList(LINE_NAME, INSERTION_NUMBER_NAME,
+            Arrays.asList(IMAGERY_NAME, LINE_NAME, INSERTION_NUMBER_NAME,
                           ORGAN_NAME, SPECIMEN_NUMBER_NAME);
 
     private String name;
@@ -40,7 +41,6 @@ public class ImageProperty {
     public String getValue() {
         return value;
     }
-
 
     @Override
     public String toString() {

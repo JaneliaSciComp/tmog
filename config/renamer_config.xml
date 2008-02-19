@@ -156,7 +156,9 @@
                 <sourceFileDefault pattern=".*mdb[/\\\\].*Gal4-(.*)-UAS.*mdb[/\\\\].*\.lsm"
                                    matchType="path"/>
             </text>
-            <separator value="-GAL4_"/>
+            <separator value="-"/>
+            <separator name="Imagery" value="GAL4"/>
+            <separator value="_"/>
             <!--<fileModificationTime displayName="Capture Date" datePattern="yyyyMMdd'_'"/>-->
             <date displayName="Capture Date" required="true" 
                   datePattern="yyyyMMdd" suffix="_">

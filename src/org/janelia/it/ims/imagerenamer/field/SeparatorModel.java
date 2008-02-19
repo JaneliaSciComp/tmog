@@ -15,13 +15,22 @@ import java.io.File;
  * @author Eric Trautman
  */
 public class SeparatorModel implements RenameField {
+    private String name;
     private String value;
 
     public SeparatorModel() {
     }
 
     public String getDisplayName() {
-        return null;
+        return name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean isEditable() {
@@ -30,6 +39,7 @@ public class SeparatorModel implements RenameField {
 
     public SeparatorModel getNewInstance() {
         SeparatorModel instance = new SeparatorModel();
+        instance.setName(name);
         instance.setValue(value);
         return instance;
     }
