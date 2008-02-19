@@ -6,7 +6,7 @@
     <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="false">
 
         <!-- DASH_FOR_PROD->
-        <outputDirectory basePath="\\dm7.int.janelia.org\rubinlab\confocalStacks"
+        <outputDirectory basePath="\\dm6.int.janelia.org\rubindata\confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
         <!-DASH_FOR_PROD -->
 
@@ -14,10 +14,10 @@
             <!-- DASH_FOR_PROD->
             <rowValidator className="org.janelia.it.chacrm.RenamerEventManager"/>
             <copyListener className="org.janelia.it.chacrm.RenamerEventManager">
-                <property name="labImageSharePattern" value="[/\\]++rubinlab[/\\]++confocalStacks[/\\]++"/>
+                <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
             </copyListener>
             <sessionListener className="org.janelia.it.ims.imagerenamer.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm7.int.janelia.org\rubinlab\renamer\summaries"/>
+                <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\GMR"/>
             </sessionListener>
             <!-DASH_FOR_PROD -->
         </plugins>
@@ -97,9 +97,17 @@
     <project name="Rubin Lab: Research and Development (RD_*)">
 
         <!-- DASH_FOR_PROD->
-        <outputDirectory basePath="\\dm7.int.janelia.org\rubinlab\RDconfocalStacks"
-                         manuallyChosen="false"/>
+        <outputDirectory basePath="\\dm6.int.janelia.org\rubindata\RDconfocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
         <!-DASH_FOR_PROD -->
+
+        <plugins>
+            <!-- DASH_FOR_PROD->
+            <sessionListener className="org.janelia.it.ims.imagerenamer.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\RD"/>
+            </sessionListener>
+            <!-DASH_FOR_PROD -->
+        </plugins>
 
         <renamePattern>
             <separator value="RD_"/>
@@ -138,7 +146,7 @@
         <!-- DASH_FOR_PROD->
             <copyListener className="org.janelia.it.simpsonlab.SimpsonImageManager" />
             <sessionListener className="org.janelia.it.ims.imagerenamer.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm8.int.janelia.org\simpsonmicro\renamer\summaries"/>
+                <property name="directory" value="\\dm8.int.janelia.org\simpsonmicro\renamer\summaries\RD"/>
             </sessionListener>
         <!-DASH_FOR_PROD -->
         </plugins>
