@@ -103,17 +103,16 @@ public class SimpsonImageManager implements CopyListener {
     private RenameFieldRow startingCopy(RenameFieldRow row)
             throws ExternalDataException, ExternalSystemException {
 
-        String lineName = null;
+        Line line = null;
         try {
-            lineName = row.getCoreValue(ImageProperty.LINE_NAME);
-            Line line = new Line(lineName);
+            line = new Line(row);
             int specimenNumber = dao.getNextSpecimenNumber(line);
             row.setPluginDataValue(ImageProperty.SPECIMEN_NUMBER_NAME,
                                    specimenNumber);
         } catch (SystemException e) {
             throw new ExternalSystemException(
                     "Failed to retrieve specimen for number for line '" +
-                    lineName + ".  Detailed data is: " + row, e);
+                    line + ".  Detailed data is: " + row, e);
         }
 
         return row;
@@ -139,7 +138,8 @@ public class SimpsonImageManager implements CopyListener {
             fileName = renamedFile.getAbsolutePath();
         }
         try {
-            image = new Image(row);
+            Line line = new Line(row);
+            image = new Image(line, row);
             image = dao.addImage(image);
             if (LOG.isInfoEnabled()) {
                 LOG.info("successfully persisted image metadata (" + image +

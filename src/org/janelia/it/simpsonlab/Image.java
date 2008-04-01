@@ -33,10 +33,14 @@ public class Image {
         init();
     }
 
-    public Image(RenameFieldRow row) {
+    public Image(Line line,
+                 RenameFieldRow row) {
         this.relativePath = row.getRelativePath();
         this.setCaptureDate(row.getRenameField(CAPTURE_DATE_NAME));
         init();
+
+        this.properties.add(new ImageProperty(ImageProperty.LINE_NAME,
+                                              line.getFullName()));
         String value;
         for (String propertyName : ImageProperty.NAMES) {
             value = row.getCoreValue(propertyName);

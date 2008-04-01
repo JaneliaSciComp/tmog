@@ -48,8 +48,9 @@ public class OutputDirectoryConfigurationTest extends TestCase {
        // absolute path for missing directory
         OutputDirectoryConfiguration config =
                 new OutputDirectoryConfiguration();
-        String fileNameSeparator = System.getProperty("file.separator");
-        String baseDirectoryName = fileNameSeparator +
+        File baseDirectory = new File("/");
+        String absolutePathPrefix = baseDirectory.getAbsolutePath();
+        String baseDirectoryName = absolutePathPrefix +
                                    "missingTestDirectory";
         Path path = new Path(baseDirectoryName);
         config.addComponent(path);
@@ -59,7 +60,7 @@ public class OutputDirectoryConfigurationTest extends TestCase {
             config.verify("testProject", fieldList);
             fail("missing absolute directory should have caused exception");
         } catch (ConfigurationException e) {
-            assertEquals("absolute base directory does not match", 
+            assertEquals("absolute base directory does not match",
                          baseDirectoryName, config.getBasePath());
         }
 
@@ -78,7 +79,7 @@ public class OutputDirectoryConfigurationTest extends TestCase {
             assertTrue(
                     "relative directory was not made absolute, basePath is " +
                     basePath,
-                    basePath.startsWith(fileNameSeparator));
+                    basePath.startsWith(absolutePathPrefix));
             assertTrue(
                     "invalid conversion of relative directory to " + basePath, 
                     basePath.endsWith(baseDirectoryName));
@@ -93,9 +94,9 @@ public class OutputDirectoryConfigurationTest extends TestCase {
         assertTrue(
                 "absolute directory not created for component list, " +
                 "basePath is " + basePath,
-                basePath.startsWith(fileNameSeparator));
+                basePath.startsWith(absolutePathPrefix));
 
-        // absolute path without trailing spearator for existing directory
+        // absolute path without trailing separator for existing directory
         File directory = new File("");
         String absolutePathName = directory.getAbsolutePath();
         path = new Path(absolutePathName);
@@ -107,7 +108,8 @@ public class OutputDirectoryConfigurationTest extends TestCase {
                      absolutePathName, config.getBasePath());
 
         // absolute path without trailing spearator for existing directory
-        absolutePathName = directory.getAbsolutePath() + "/";
+        String fileSeparator = System.getProperty("file.separator");
+        absolutePathName = directory.getAbsolutePath() + fileSeparator;
         path = new Path(absolutePathName);
         config = new OutputDirectoryConfiguration();
         config.addComponent(path);
@@ -131,7 +133,7 @@ public class OutputDirectoryConfigurationTest extends TestCase {
         // relative path without trailing spearator for existing directory
         relativePathName = "../";
         directory = new File(relativePathName);
-        absolutePathName = directory.getAbsolutePath() + "/";
+        absolutePathName = directory.getAbsolutePath() + fileSeparator;
         path = new Path(relativePathName);
         config = new OutputDirectoryConfiguration();
         config.addComponent(path);

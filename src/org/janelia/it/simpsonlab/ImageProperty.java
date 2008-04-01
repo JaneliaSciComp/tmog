@@ -22,7 +22,7 @@ public class ImageProperty {
     public static final String SPECIMEN_NUMBER_NAME = "Specimen Number";
 
     public static final List<String> NAMES = 
-            Arrays.asList(IMAGERY_NAME, LINE_NAME, INSERTION_NUMBER_NAME,
+            Arrays.asList(IMAGERY_NAME, INSERTION_NUMBER_NAME,
                           ORGAN_NAME, SPECIMEN_NUMBER_NAME);
 
     private String name;

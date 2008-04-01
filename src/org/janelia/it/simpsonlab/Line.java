@@ -7,22 +7,43 @@
 
 package org.janelia.it.simpsonlab;
 
+import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
+
 /**
  * This class encapsulates information for Simpson Lab fly lines.
  */
 public class Line {
     private String name;
+    private String insertionNumber;
 
-    public Line(String name) {
-        this.name = name;
+    public Line(RenameFieldRow row) {
+        this(row.getCoreValue(ImageProperty.LINE_NAME),
+             row.getCoreValue(ImageProperty.INSERTION_NUMBER_NAME));
     }
 
-    public String getName() {
-        return name;
+    public Line(String name,
+                String insertionNumber) {
+        this.name = name;
+        this.insertionNumber = insertionNumber;
+    }
+
+    public String getFullName() {
+        String fullName = name;
+        if ((insertionNumber != null) && (insertionNumber.length() > 0)) {
+            fullName = name + "_" + insertionNumber;
+        }
+        return fullName;
+    }
+
+    /**
+     * @return a string representation of this object.
+     */
+    public String toString() {
+        return getFullName();
     }
 
     public String getSpecimenNamespace() {
-        return SPECIMEN_LSID + name;
+        return SPECIMEN_LSID + getFullName();
     }
 
     private static final String SPECIMEN_LSID =

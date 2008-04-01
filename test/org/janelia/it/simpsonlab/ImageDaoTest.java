@@ -67,7 +67,7 @@ public class ImageDaoTest extends TestCase {
         Properties props = ImageDao.loadDatabaseProperties();
         dbManager = new DbManager("simpsonlab", props);
         dao = new ImageDao();
-        testLine = new Line(LINE_NAME.format(new Date()));
+        testLine = new Line(LINE_NAME.format(new Date()), null);
         testImage = new Image();
     }
 
