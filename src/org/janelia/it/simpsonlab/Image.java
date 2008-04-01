@@ -75,7 +75,11 @@ public class Image {
     }
 
     public void setCaptureDate(RenameField field) {
-        String value = field.getCoreValue();
+        String value = null;
+        if (field != null) {
+            value = field.getCoreValue();
+        }
+        
         if ((value != null) && (value.length() > 0)) {
             if (field instanceof DatePatternField) {
                 String pattern = ((DatePatternField) field).getDatePattern();
