@@ -122,8 +122,16 @@
             <separator value="_"/>
             <text displayName="Creator Initials" required="true"
                   pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <text displayName="Comment" required="true"
+            <fileModificationTime datePattern="'_'yyyyMMdd"/>
+            <validValueList displayName="Area" required="false" prefix="-">
+                <validValue displayName="br: Brain" value="br"/>
+                <validValue displayName="vnc: Ventral Nerve Cord" value="vnc"/>
+            </validValueList>
+            <text displayName="L-Number" required="false" prefix="-L"
+                  pattern="[0-9]++">
+                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>                
+            </text>
+            <text displayName="Comment" required="false" prefix="-"
                   pattern="[0-9A-Za-z\\-]++"/>
             <separator value="_"/>
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
