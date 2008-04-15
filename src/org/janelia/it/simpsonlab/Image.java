@@ -27,6 +27,7 @@ public class Image {
     private Integer id;
     private String relativePath;
     private Date captureDate;
+    private String family;
     private ArrayList<ImageProperty> properties;
 
     public Image() {
@@ -37,6 +38,8 @@ public class Image {
                  RenameFieldRow row) {
         this.relativePath = row.getRelativePath();
         this.setCaptureDate(row.getRenameField(CAPTURE_DATE_NAME));
+        this.setFamily(row.getRenameField(FAMILY_NAME));
+
         init();
 
         this.properties.add(new ImageProperty(ImageProperty.LINE_NAME,
@@ -95,6 +98,25 @@ public class Image {
         }
     }
 
+    public String getFamily() {
+        return family;
+    }
+
+    public void setFamily(String family) {
+        this.family = family;
+    }
+
+    public void setFamily(RenameField field) {
+        String value = null;
+        if (field != null) {
+            value = field.getCoreValue();
+        }
+
+        if ((value != null) && (value.length() > 0)) {
+            setFamily(value);
+        }
+    }
+
     public List<ImageProperty> getProperties() {
         return properties;
     }
@@ -111,6 +133,7 @@ public class Image {
         sb.append("{captureDate=").append(captureDate);
         sb.append(", id=").append(id);
         sb.append(", relativePath='").append(relativePath).append('\'');
+        sb.append(", family='").append(family).append('\'');
         sb.append(", properties=").append(properties);
         sb.append('}');
         return sb.toString();
@@ -120,7 +143,8 @@ public class Image {
         this.id = null;
         this.properties =
                 new ArrayList<ImageProperty>(ImageProperty.NAMES.size());
-        this.properties.add(new ImageProperty("Created By", getUserName()));
+        this.properties.add(new ImageProperty(ImageProperty.CREATED_BY_NAME,
+                                              getUserName()));
     }
 
     private String getUserName() {
@@ -131,5 +155,6 @@ public class Image {
     private static final Log LOG = LogFactory.getLog(Image.class);
 
     private static final String CAPTURE_DATE_NAME = "Capture Date";
+    private static final String FAMILY_NAME = "Family";
 
 }

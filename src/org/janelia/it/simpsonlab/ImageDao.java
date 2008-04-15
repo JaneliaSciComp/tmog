@@ -168,6 +168,8 @@ public class ImageDao {
             } else {
                 insertImage.setDate(2, null);                
             }
+            insertImage.setString(3, image.getFamily());
+            
             int rowsUpdated = insertImage.executeUpdate();
             if (rowsUpdated != 1) {
                 throw new SystemException(
@@ -195,7 +197,7 @@ public class ImageDao {
                 value = property.getValue();
                 if ((value != null) && (value.length() > 0)) {
                     insertProperty.setInt(1, imageId);
-                    insertProperty.setString(2, property.getName());
+                    insertProperty.setString(2, property.getColumnName());
                     insertProperty.setString(3, value);
                     insertProperty.addBatch();
                     numberOfPropertiesToAdd++;
@@ -316,7 +318,7 @@ public class ImageDao {
      *   Parameter 2 is the image's capture date.
      */
     private static final String SQL_INSERT_IMAGE =
-            "INSERT INTO image (name, capture_date) VALUES (?,?)";
+            "INSERT INTO image (name, capture_date, family) VALUES (?,?,?)";
 
     /**
      * SQL for retrieving an image id.

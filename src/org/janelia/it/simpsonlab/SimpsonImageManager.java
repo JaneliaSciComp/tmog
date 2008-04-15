@@ -109,10 +109,14 @@ public class SimpsonImageManager implements CopyListener {
             int specimenNumber = dao.getNextSpecimenNumber(line);
             row.setPluginDataValue(ImageProperty.SPECIMEN_NUMBER_NAME,
                                    specimenNumber);
+            if (LOG.isInfoEnabled()) {
+                LOG.info("Retrieved specimen number " + specimenNumber +
+                         " for line '" + line + "'.  Row data is now: " + row);
+            }
         } catch (SystemException e) {
             throw new ExternalSystemException(
                     "Failed to retrieve specimen for number for line '" +
-                    line + ".  Detailed data is: " + row, e);
+                    line + "'.  Detailed data is: " + row, e);
         }
 
         return row;
