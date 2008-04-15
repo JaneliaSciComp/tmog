@@ -82,7 +82,11 @@ public class SimpsonImageManager implements CopyListener {
                 row = startingCopy(row);
                 break;
             case END_SUCCESS:
-                completedSuccessfulCopy(row);
+// Removed successful copy processing because this will now be handled by
+// the secondary data generation process.
+// Leaving the code intact, just in case we need to quickly restore it
+// in the future.
+//                completedSuccessfulCopy(row);
                 break;
         }
         return row;
