@@ -37,6 +37,10 @@ public class SeparatorModel implements RenameField {
         return false;
     }
 
+    public boolean isCopyable() {
+        return false;
+    }
+
     public SeparatorModel getNewInstance() {
         SeparatorModel instance = new SeparatorModel();
         instance.setName(name);

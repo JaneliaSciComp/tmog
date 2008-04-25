@@ -28,6 +28,12 @@ public interface RenameField {
     public boolean isEditable();
 
     /**
+     * @return true if the field should be copied when its row is
+     *         copied in the file table; otherwise false.
+     */
+    public boolean isCopyable();
+
+    /**
      * @return a new instance of this field (similar to clone - deep copy).
      */
     public RenameField getNewInstance();

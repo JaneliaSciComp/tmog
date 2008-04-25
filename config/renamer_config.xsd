@@ -58,11 +58,12 @@
 
     <xs:complexType name="numberType">
         <xs:attribute name="displayName" type="xs:string"/>
-        <xs:attribute name="required" type="xs:string"/>
+        <xs:attribute name="required" type="xs:boolean"/>
         <xs:attribute name="minimumValue" type="xs:integer"/>
         <xs:attribute name="maximumValue" type="xs:integer"/>
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
+        <xs:attribute name="copyable" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="textType">
@@ -71,12 +72,13 @@
                         minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
-        <xs:attribute name="required" type="xs:string"/>
+        <xs:attribute name="required" type="xs:boolean"/>
         <xs:attribute name="minimumLength" type="xs:integer"/>
         <xs:attribute name="maximumLength" type="xs:integer"/>
         <xs:attribute name="pattern" type="xs:string"/>
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
+        <xs:attribute name="copyable" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="dateType">
@@ -85,18 +87,20 @@
                         minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
-        <xs:attribute name="required" type="xs:string"/>
+        <xs:attribute name="required" type="xs:boolean"/>
         <xs:attribute name="datePattern" type="xs:string"/>
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
+        <xs:attribute name="copyable" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="wellType">
         <xs:attribute name="displayName" type="xs:string"/>
-        <xs:attribute name="required" type="xs:string"/>
+        <xs:attribute name="required" type="xs:boolean"/>
         <xs:attribute name="formFactor" type="xs:integer"/>
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
+        <xs:attribute name="copyable" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="validValueType">
@@ -109,9 +113,10 @@
             <xs:element name="validValue" type="validValueType"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
-        <xs:attribute name="required" type="xs:string"/>
+        <xs:attribute name="required" type="xs:boolean"/>
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
+        <xs:attribute name="copyable" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="pluginDataType">

@@ -23,6 +23,10 @@ public class FileExtensionModel implements RenameField {
         return false;
     }
 
+    public boolean isCopyable() {
+        return false;
+    }
+
     public FileExtensionModel getNewInstance() {
         // do not copy extension (must be derived when rename occurs)
         return new FileExtensionModel();

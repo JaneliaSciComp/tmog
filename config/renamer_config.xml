@@ -122,13 +122,18 @@
             <separator value="_"/>
             <text displayName="Creator Initials" required="true"
                   pattern="[0-9A-Za-z\\-]++"/>
-            <fileModificationTime datePattern="'_'yyyyMMdd"/>
+            <date displayName="Capture Date" required="true"
+                  datePattern="yyMMdd" prefix="_" copyable="false">
+                <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d)_L[0-9]++_Sum\.lsm"
+                                       fromDatePattern="yyMMdd"
+                                       toDatePattern="yyMMdd"/>
+            </date>
             <validValueList displayName="Area" required="false" prefix="-">
                 <validValue displayName="br: Brain" value="br"/>
                 <validValue displayName="vnc: Ventral Nerve Cord" value="vnc"/>
             </validValueList>
             <text displayName="L-Number" required="false" prefix="-L"
-                  pattern="[0-9]++">
+                  pattern="[0-9]++" copyable="false">
                 <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>                
             </text>
             <text displayName="Comment" required="false" prefix="-"

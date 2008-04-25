@@ -32,6 +32,10 @@ public class PluginDataModel implements RenameField {
         return false;
     }
 
+    public boolean isCopyable() {
+        return false;
+    }
+
     public PluginDataModel getNewInstance() {
         PluginDataModel instance = new PluginDataModel();
         instance.setDisplayName(displayName);

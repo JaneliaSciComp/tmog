@@ -166,7 +166,7 @@ public class FileTableModel extends AbstractTableModel {
         int fieldCount = toRow.getFieldCount();
         for (int fieldIndex = 0; fieldIndex < fieldCount; fieldIndex++) {
             RenameField fromField = fromRow.getField(fieldIndex);
-            if (fromField.isEditable()) {
+            if (fromField.isCopyable()) {
                 toRow.setField(fieldIndex, fromField.getNewInstance());
             }
         }

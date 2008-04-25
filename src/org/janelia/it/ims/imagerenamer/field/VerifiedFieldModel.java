@@ -24,11 +24,13 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
     private String errorMessage;
     private String prefix;
     private String suffix;
+    private boolean isCopyable;
     private DefaultValueList defaultValueList;
 
     public VerifiedFieldModel() {
         super();
         this.defaultValueList = new DefaultValueList();
+        this.isCopyable = true;
     }
 
     public abstract boolean verify();
@@ -41,6 +43,10 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
         return true;
     }
 
+    public boolean isCopyable() {
+        return isCopyable;
+    }
+
     public abstract VerifiedFieldModel getNewInstance();
 
     public void cloneValuesForNewInstance(VerifiedFieldModel instance) {
@@ -49,6 +55,7 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
         instance.isRequired = isRequired;
         instance.prefix = prefix;
         instance.suffix = suffix;
+        instance.isCopyable = isCopyable;
         instance.defaultValueList = defaultValueList;  // shallow copy is ok
     }
 
@@ -126,6 +133,10 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
 
     public void setRequired(boolean required) {
         isRequired = required;
+    }
+
+    public void setCopyable(boolean copyable) {
+        isCopyable = copyable;
     }
 
     public void setErrorMessage(String errorMessage) {

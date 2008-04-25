@@ -26,9 +26,11 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
     private String errorMessage;
     private String prefix;
     private String suffix;
+    private boolean isCopyable;
   
     public ValidValueModel() {
         this.validValues = new ArrayList<ValidValue>();
+        this.isCopyable = true;
     }
 
     public void addValidValue(ValidValue validValue) {
@@ -43,6 +45,10 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
         return true;
     }
 
+    public boolean isCopyable() {
+        return isCopyable;
+    }
+
     public ValidValueModel getNewInstance() {
         ValidValueModel instance = new ValidValueModel();
         instance.displayName = displayName;
@@ -51,6 +57,7 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
         instance.selectedValue = selectedValue;
         instance.prefix = prefix;
         instance.suffix = suffix;
+        instance.isCopyable = isCopyable;
         return instance;
     }
 
@@ -139,6 +146,10 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
 
     public void setRequired(boolean required) {
         isRequired = required;
+    }
+
+    public void setCopyable(boolean copyable) {
+        isCopyable = copyable;
     }
 
     public void setSelectedValue(ValidValue newValue) {

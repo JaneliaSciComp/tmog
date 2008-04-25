@@ -34,6 +34,10 @@ public abstract class DatePatternModel implements RenameField, DatePatternField 
         return false;
     }
 
+    public boolean isCopyable() {
+        return false;
+    }
+
     public abstract DatePatternModel getNewInstance();
 
     public abstract String getFileNameValue();
