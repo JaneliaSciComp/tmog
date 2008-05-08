@@ -8,6 +8,7 @@
 package org.janelia.it.ims.imagerenamer.field;
 
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.imagerenamer.Target;
 
 import java.io.File;
 import java.util.regex.Matcher;
@@ -65,8 +66,13 @@ public class SourceFileDefaultValue implements DefaultValue {
         }
     }
 
-    public String getValue(File sourceFile) {
+    public String getValue(Target target) {
         String value = null;
+        File sourceFile = null;
+        Object sourceValue = target.getInstance();
+        if (sourceValue instanceof File) {
+            sourceFile = (File) sourceValue;
+        }
         if (sourceFile != null) {
             String textToMatch;
             if (MatchType.path.equals(matchType)) {

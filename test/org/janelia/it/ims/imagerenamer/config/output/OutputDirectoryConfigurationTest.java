@@ -4,7 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.janelia.it.ims.imagerenamer.config.ConfigurationException;
-import org.janelia.it.ims.imagerenamer.field.RenameField;
+import org.janelia.it.ims.imagerenamer.field.DataField;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class OutputDirectoryConfigurationTest extends TestCase {
                                    "missingTestDirectory";
         Path path = new Path(baseDirectoryName);
         config.addComponent(path);
-        ArrayList<RenameField> fieldList = new ArrayList<RenameField>();
+        ArrayList<DataField> fieldList = new ArrayList<DataField>();
 
         try {
             config.verify("testProject", fieldList);

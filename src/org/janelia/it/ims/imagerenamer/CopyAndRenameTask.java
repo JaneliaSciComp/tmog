@@ -9,11 +9,11 @@ package org.janelia.it.ims.imagerenamer;
 
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.imagerenamer.config.output.OutputDirectoryConfiguration;
-import org.janelia.it.ims.imagerenamer.field.RenameField;
+import org.janelia.it.ims.imagerenamer.field.DataField;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
-import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
+import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
 import org.janelia.it.ims.imagerenamer.plugin.SessionListener;
 import org.janelia.it.utils.filexfer.FileCopyFailedException;
 import org.janelia.it.utils.filexfer.SafeFileTransfer;
@@ -28,9 +28,9 @@ import java.util.List;
 /**
  * This class supports the execution of the copy and rename process as
  * a background thread.  It is tightly coupled with the
- * {@link MainView} and {@link FileTableModel} classes because
+ * {@link MainView} and {@link DataTableModel} classes because
  * it updates progress using {@link MainView} components and
- * it is dependent upon {@link FileTableModel} data to derive new
+ * it is dependent upon {@link DataTableModel} data to derive new
  * file names.
  *
  * @author Eric Trautman
@@ -116,12 +116,12 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
         this.isSessionCancelled = false;
         this.renameSummary = new StringBuffer();
 
-        FileTableModel model = mainView.getTableModel();
-        List<FileTableRow> modelRows = model.getRows();
+        DataTableModel model = mainView.getTableModel();
+        List<DataTableRow> modelRows = model.getRows();
         String fromDirectoryName = null;
         if (modelRows.size() > 0) {
-            FileTableRow firstModelRow = modelRows.get(0);
-            File firstFile = firstModelRow.getFile();
+            DataTableRow firstModelRow = modelRows.get(0);
+            File firstFile = getTargetFile(firstModelRow);
             File fromDirectory = firstFile.getParentFile();
             fromDirectoryName = fromDirectory.getAbsolutePath();
         }
@@ -132,8 +132,8 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
 
         bytesInChunk = 1000000; // default to megabytes
         totalByteChunksToCopy = 1; // prevent rare but possible divide by zero
-        for (FileTableRow modelRow : modelRows) {
-            File file = modelRow.getFile();
+        for (DataTableRow modelRow : modelRows) {
+            File file = getTargetFile(modelRow);
             totalByteChunksToCopy += (file.length() / bytesInChunk);
         }
         // reset to gigabytes if necessary
@@ -186,8 +186,8 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
                 renameSummary.append("Rename session cancelled before start.");
 
                 // mark all rows as failed
-                FileTableModel model = mainView.getTableModel();
-                List<FileTableRow> modelRows = model.getRows();
+                DataTableModel model = mainView.getTableModel();
+                List<DataTableRow> modelRows = model.getRows();
                 int numberOfRows = modelRows.size();
                 for (int i = 0; i < numberOfRows; i++) {
                     failedCopyRowIndices.add(i);
@@ -255,7 +255,7 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
         } else {
             // we had errors, so remove the files copied successfully
             // and restore the rest of the model
-            FileTableModel tableModel = mainView.getTableModel();
+            DataTableModel tableModel = mainView.getTableModel();
             tableModel.removeSuccessfullyCopiedFiles(failedCopyRowIndices);
             mainView.setFileTableEnabled(true, true);
         }
@@ -306,8 +306,8 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
      * Renames all files in the main view table model.
      */
     private void renameFiles() {
-        FileTableModel model = mainView.getTableModel();
-        List<FileTableRow> modelRows = model.getRows();
+        DataTableModel model = mainView.getTableModel();
+        List<DataTableRow> modelRows = model.getRows();
 
         int rowIndex = 0;
         int chunksProcessed = 0;
@@ -320,13 +320,13 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
         File renamedFile;
         boolean isRenameSuccessful;
         boolean isStartNotificationSuccessful;
-        RenameField[] fields;
+        List<DataField> fields;
         String toDirectoryPath;
-        RenameFieldRow fieldRow;
+        RenamePluginDataRow fieldRow;
 
-        for (FileTableRow modelRow : modelRows) {
+        for (DataTableRow modelRow : modelRows) {
 
-            rowFile = modelRow.getFile();
+            rowFile = getTargetFile(modelRow);
             renamedFile = null;
             isRenameSuccessful = false;
             isStartNotificationSuccessful = false;
@@ -338,7 +338,9 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
                 toDirectory = new File(toDirectoryPath);
             }
 
-            fieldRow = new RenameFieldRow(rowFile, fields, toDirectory);
+            fieldRow = new RenamePluginDataRow(rowFile,
+                                               modelRow.getDataRow(),
+                                               toDirectory);
             try {
                 fieldRow = notifyCopyListeners(CopyListener.EventType.START,
                                                fieldRow);
@@ -391,7 +393,7 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
      */
     private boolean copyFile(File rowFile,
                              File renamedFile,
-                             RenameFieldRow fieldRow) {
+                             RenamePluginDataRow fieldRow) {
 
         boolean renameSuccessful = false;
 
@@ -528,8 +530,8 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
      * @throws ExternalDataException   if a listener detects a data error.
      * @throws ExternalSystemException if a system error occurs within a listener.
      */
-    private RenameFieldRow notifyCopyListeners(CopyListener.EventType eventType,
-                                               RenameFieldRow row)
+    private RenamePluginDataRow notifyCopyListeners(CopyListener.EventType eventType,
+                                               RenamePluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
         for (CopyListener listener : copyListenerList) {
             row = listener.processEvent(eventType, row);
@@ -551,6 +553,11 @@ public class CopyAndRenameTask extends SwingWorker<Void, CopyProgressInfo> {
         for (SessionListener listener : sessionListenerList) {
             listener.processEvent(eventType, message);
         }
+    }
+
+    private File getTargetFile(DataTableRow row) {
+        Target target = row.getTarget();
+        return (File) target.getInstance();
     }
 
 }

@@ -14,8 +14,8 @@ import org.janelia.it.ims.imagerenamer.config.PluginConfiguration;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
-import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
+import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
 
 import java.io.File;
 import java.util.regex.Matcher;
@@ -113,7 +113,7 @@ public class RenamerEventManager implements RenameFieldRowValidator,
      * @throws ExternalDataException   if the data is not valid.
      * @throws ExternalSystemException if any error occurs while validating the data.
      */
-    public void validate(RenameFieldRow row)
+    public void validate(RenamePluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
         String transformantID = null;
@@ -157,8 +157,8 @@ public class RenamerEventManager implements RenameFieldRowValidator,
      * @throws ExternalDataException   if a recoverable data error occurs during processing.
      * @throws ExternalSystemException if a non-recoverable system error occurs during processing.
      */
-    public RenameFieldRow processEvent(EventType eventType,
-                                       RenameFieldRow row)
+    public RenamePluginDataRow processEvent(EventType eventType,
+                                       RenamePluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
         switch (eventType) {
             case END_FAIL:
@@ -210,7 +210,7 @@ public class RenamerEventManager implements RenameFieldRowValidator,
      * @throws ExternalDataException   if a recoverable data error occurs during processing.
      * @throws ExternalSystemException if a non-recoverable system error occurs during processing.
      */
-    private RenameFieldRow startingCopy(RenameFieldRow row)
+    private RenamePluginDataRow startingCopy(RenamePluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
         String transformantID = null;
@@ -244,7 +244,7 @@ public class RenamerEventManager implements RenameFieldRowValidator,
      * @throws ExternalDataException   if a recoverable data error occurs during processing.
      * @throws ExternalSystemException if a non-recoverable system error occurs during processing.
      */
-    private void completedSuccessfulCopy(RenameFieldRow row)
+    private void completedSuccessfulCopy(RenamePluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
         String transformantID = null;
@@ -303,7 +303,7 @@ public class RenamerEventManager implements RenameFieldRowValidator,
      * @throws ExternalDataException   if a recoverable data error occurs during processing.
      * @throws ExternalSystemException if a non-recoverable system error occurs during processing.
      */
-    private void failedCopy(RenameFieldRow row)
+    private void failedCopy(RenamePluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
         try {
             String transformantID = getTransformantID(row);
@@ -344,7 +344,7 @@ public class RenamerEventManager implements RenameFieldRowValidator,
      * @param row the set of renamer tool data fields.
      * @return the corresponding transformant identifier.
      */
-    private static String getTransformantID(RenameFieldRow row) {
+    private static String getTransformantID(RenamePluginDataRow row) {
         String transformantID;
         String plate = row.getCoreValue("Plate");
         String well = row.getCoreValue("Well");

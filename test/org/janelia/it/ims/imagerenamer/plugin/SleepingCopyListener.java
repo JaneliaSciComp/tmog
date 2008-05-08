@@ -51,8 +51,8 @@ public class SleepingCopyListener implements CopyListener {
         }
     }
 
-    public RenameFieldRow processEvent(EventType eventType,
-                                       RenameFieldRow row)
+    public RenamePluginDataRow processEvent(EventType eventType,
+                                       RenamePluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
         switch (eventType) {
             case END_FAIL:

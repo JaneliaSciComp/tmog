@@ -7,9 +7,10 @@
 
 package org.janelia.it.ims.imagerenamer.config.output;
 
-import org.janelia.it.ims.imagerenamer.field.RenameField;
+import org.janelia.it.ims.imagerenamer.field.DataField;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * This interface describes the methods supported by all configured output
@@ -24,12 +25,12 @@ public interface OutputDirectoryComponent {
      * path fragment.
      *
      * @param  sourceFile    the source file being renamed.
-     * @param  renameFields  the validated rename fields supplied by the user.
+     * @param  dataFields  the validated rename fields supplied by the user.
      *
      * @return the path fragment derived from the specified source data.
      */
     public String getValue(File sourceFile,
-                           RenameField[] renameFields);
+                           List<DataField> dataFields);
 
     /**
      * @return a description of this output directory path fragment for display.

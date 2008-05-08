@@ -27,6 +27,6 @@ public interface RenameFieldRowValidator extends Plugin {
      * @throws ExternalSystemException
      *   if any error occurs while validating the data.
      */
-    public void validate(RenameFieldRow row)
+    public void validate(RenamePluginDataRow row)
             throws ExternalDataException, ExternalSystemException;
 }

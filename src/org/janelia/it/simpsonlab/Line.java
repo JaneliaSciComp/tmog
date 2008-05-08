@@ -7,7 +7,7 @@
 
 package org.janelia.it.simpsonlab;
 
-import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
+import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
 
 /**
  * This class encapsulates information for Simpson Lab fly lines.
@@ -16,7 +16,7 @@ public class Line {
     private String name;
     private String insertionNumber;
 
-    public Line(RenameFieldRow row) {
+    public Line(RenamePluginDataRow row) {
         this(row.getCoreValue(ImageProperty.LINE_NAME),
              row.getCoreValue(ImageProperty.INSERTION_NUMBER_NAME));
     }

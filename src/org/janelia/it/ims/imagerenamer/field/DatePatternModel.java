@@ -15,7 +15,7 @@ import java.util.Date;
  *
  * @author Eric Trautman
  */
-public abstract class DatePatternModel implements RenameField, DatePatternField {
+public abstract class DatePatternModel implements DataField, DatePatternField {
     private String displayName;
     private String datePattern;
 

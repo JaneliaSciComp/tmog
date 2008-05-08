@@ -7,9 +7,10 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
+import org.janelia.it.ims.imagerenamer.Target;
+
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-import java.io.File;
 
 /**
  * This class provides an abstract implementation for text fields that
@@ -17,7 +18,7 @@ import java.io.File;
  *
  * @author Eric Trautman
  */
-public abstract class VerifiedFieldModel extends PlainDocument implements RenameField {
+public abstract class VerifiedFieldModel extends PlainDocument implements DataField {
 
     private String displayName;
     private boolean isRequired;
@@ -116,12 +117,12 @@ public abstract class VerifiedFieldModel extends PlainDocument implements Rename
     }
 
     /**
-     * Initializes this field's value if necessary.
+     * Initializes this field's value based upon the specified target.
      *
-     * @param sourceFile the source file being renamed.
+     * @param  target  the target being processed.
      */
-    public void initializeValue(File sourceFile) {
-        String defaultValue = defaultValueList.getValue(sourceFile);
+    public void initializeValue(Target target) {
+        String defaultValue = defaultValueList.getValue(target);
         if (defaultValue != null) {
             setText(defaultValue);
         }

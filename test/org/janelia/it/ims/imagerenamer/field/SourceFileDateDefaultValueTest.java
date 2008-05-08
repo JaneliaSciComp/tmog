@@ -11,6 +11,7 @@ package org.janelia.it.ims.imagerenamer.field;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.janelia.it.ims.imagerenamer.FileTarget;
 import org.janelia.it.ims.imagerenamer.field.SourceFileDefaultValue.MatchType;
 
 import java.io.File;
@@ -58,19 +59,19 @@ public class SourceFileDateDefaultValueTest extends TestCase {
                         MatchType.name);
         defaultValue.setFromDatePattern("MM-dd-yy");
         defaultValue.setToDatePattern("MMddyyyy");
-        String value = defaultValue.getValue(file);
+        String value = defaultValue.getValue(new FileTarget(file));
         assertEquals("invalid value for " + defaultValue + " and file " +
                      file.getAbsolutePath(),
                      "10202006", value);
 
         file = new File("a1-Gal4-UAS-MCD8-GFP-nc82-GFP-10-200-06-1a0.lsm");
-        value = defaultValue.getValue(file);
+        value = defaultValue.getValue(new FileTarget(file));
         assertNull("invalid value '" + value + "' for " + defaultValue +
                    " and file " + file.getAbsolutePath(),
                    value);
 
         file = new File("MZ739-4-Gal4-11-5-07_L12_Sum.lsm");
-        value = defaultValue.getValue(file);
+        value = defaultValue.getValue(new FileTarget(file));
         assertEquals("invalid value for " + defaultValue + " and file " +
                      file.getAbsolutePath(),
                      "11052007", value);

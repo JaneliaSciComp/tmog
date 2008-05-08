@@ -7,7 +7,7 @@
 
 package org.janelia.it.ims.imagerenamer.config;
 
-import org.janelia.it.ims.imagerenamer.field.RenameField;
+import org.janelia.it.ims.imagerenamer.field.DataField;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,23 +19,23 @@ import java.util.List;
  * @author Eric Trautman
  */
 public class RenamePattern {
-    private ArrayList<RenameField> fields;
+    private ArrayList<DataField> fields;
 
     public RenamePattern() {
-        fields = new ArrayList<RenameField>();
+        fields = new ArrayList<DataField>();
     }
 
-    public List<RenameField> getFields() {
+    public List<DataField> getFields() {
         return fields;
     }
 
-    public boolean add(RenameField field) {
+    public boolean add(DataField field) {
         return fields.add(field);
     }
 
     public int getNumberOfEditableFields() {
         int count = 0;
-        for (RenameField field : fields) {
+        for (DataField field : fields) {
             if (field.isEditable()) {
                 count++;
             }

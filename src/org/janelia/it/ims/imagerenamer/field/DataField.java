@@ -7,14 +7,14 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
-import java.io.File;
+import org.janelia.it.ims.imagerenamer.Target;
 
 /**
- * This interface specifies the methods required for all rename fields.
+ * This interface specifies the methods required for all data fields.
  *
  * @author Eric Trautman
  */
-public interface RenameField {
+public interface DataField {
 
     /**
      * @return the display name (column header) for this field.
@@ -36,7 +36,7 @@ public interface RenameField {
     /**
      * @return a new instance of this field (similar to clone - deep copy).
      */
-    public RenameField getNewInstance();
+    public DataField getNewInstance();
 
     /**
      * @return the core value for this field (as entered).
@@ -68,9 +68,9 @@ public interface RenameField {
 
 
     /**
-     * Initializes this field's value if necessary.
+     * Initializes this field's value based upon the specified target.
      *
-     * @param  sourceFile  the source file being renamed.
+     * @param  target  the target being processed.
      */
-    public void initializeValue(File sourceFile);
+    public void initializeValue(Target target);
 }

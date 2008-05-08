@@ -7,7 +7,7 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
-import org.janelia.it.ims.imagerenamer.FileTableModel;
+import org.janelia.it.ims.imagerenamer.DataTableModel;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
@@ -56,7 +56,7 @@ public class ButtonEditor extends AbstractCellEditor
 
     public void actionPerformed(ActionEvent e) {
 
-        FileTableModel model = (FileTableModel) fileTable.getModel();
+        DataTableModel model = (DataTableModel) fileTable.getModel();
         final boolean isRemoveFileButton = (column == 0);
         final boolean isCopyButton = (column == 1);
 
@@ -69,7 +69,7 @@ public class ButtonEditor extends AbstractCellEditor
         }
 
         if (isCopyButton) {
-            final int firstFieldCol = FileTableModel.getFirstFieldColumn();
+            final int firstFieldCol = DataTableModel.getFirstFieldColumn();
             fileTable.changeSelection(row, firstFieldCol, false, false);
             fileTable.editCellAt(row, firstFieldCol);
         }

@@ -8,7 +8,7 @@
 package org.janelia.it.ims.imagerenamer.config;
 
 import org.janelia.it.ims.imagerenamer.config.output.OutputDirectoryConfiguration;
-import org.janelia.it.ims.imagerenamer.field.RenameField;
+import org.janelia.it.ims.imagerenamer.field.DataField;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
 import org.janelia.it.ims.imagerenamer.plugin.SessionListener;
@@ -46,7 +46,7 @@ public class ProjectConfiguration {
         return isDefault;
     }
 
-    public List<RenameField> getFieldConfigurations() {
+    public List<DataField> getFieldConfigurations() {
         return renamePattern.getFields();
     }
 

@@ -3,6 +3,7 @@ package org.janelia.it.ims.imagerenamer.field;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.janelia.it.ims.imagerenamer.FileTarget;
 
 import java.io.File;
 
@@ -56,7 +57,7 @@ public class FileExtensionModelTest extends TestCase {
             String name = data[0];
             String expectedExtension = data[1];
             File file = new File(name);
-            model.initializeValue(file);
+            model.initializeValue(new FileTarget(file));
             assertEquals("invalid extension returned for file with name '" +
                          name + "'",
                          expectedExtension, model.getFileNameValue());

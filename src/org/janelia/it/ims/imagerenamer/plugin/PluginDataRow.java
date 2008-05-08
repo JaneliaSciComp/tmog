@@ -7,53 +7,35 @@
 
 package org.janelia.it.ims.imagerenamer.plugin;
 
+import org.janelia.it.ims.imagerenamer.DataRow;
+import org.janelia.it.ims.imagerenamer.field.DataField;
 import org.janelia.it.ims.imagerenamer.field.PluginDataModel;
-import org.janelia.it.ims.imagerenamer.field.RenameField;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * This class encapsulates the set of rename information collected for
- * a specific file (row).
+ * This class wraps the data collected for a specific target (row) and
+ * provides simplified access to that data for plug-in components.
  *
  * @author Eric Trautman
  */
-public class RenameFieldRow {
+public class PluginDataRow {
 
-    /** The original file being copied and renamed. */
-    private File fromFile;
+    /** The row of collected data fields. */
+    private DataRow dataRow;
 
-    /** The rename field model objects. */
-    private RenameField[] renameFields;
-
-    /** The directory where the renamed file should be placed. */
-    private File outputDirectory;
-
-    /** The renamed file. */
-    private File renamedFile;
-
-    /** Map of rename field display names to rename field model objects. */
-    private HashMap<String, RenameField> displayNameToFieldMap;
+    /** Map of field display names to model objects. */
+    private HashMap<String, DataField> displayNameToFieldMap;
 
     /**
      * Constructs a copy complete information object.
      *
-     * @param  fromFile         the original file being copied and renamed.
-     * @param  renameFields     the list of rename field model objects
-     *                          referenced during processing.
-     * @param  outputDirectory  directory where the renamed file should
-     *                          be placed.
+     * @param  dataRow     the row of collected data fields.
      */
-    public RenameFieldRow(File fromFile,
-                          RenameField[] renameFields,
-                          File outputDirectory) {
-        this.fromFile = fromFile;
-        this.renameFields = renameFields;
-        this.outputDirectory = outputDirectory;
-        this.displayNameToFieldMap = new HashMap<String, RenameField>();
-        for (RenameField field : renameFields) {
+    public PluginDataRow(DataRow dataRow) {
+        this.dataRow = dataRow;
+        this.displayNameToFieldMap = new HashMap<String, DataField>();
+        for (DataField field : dataRow.getFields()) {
             String displayName = field.getDisplayName();
             if (displayName != null) {
                 this.displayNameToFieldMap.put(displayName, field);
@@ -62,24 +44,10 @@ public class RenameFieldRow {
     }
 
     /**
-     * @return the original file being copied and renamed.
+     * @return the row of collected data fields.
      */
-    public File getFromFile() {
-        return fromFile;
-    }
-
-    /**
-     * @return the rename field model objects.
-     */
-    public RenameField[] getRenameFields() {
-        return renameFields;
-    }
-
-    /**
-     * @return the directory where the renamed file should be placed.
-     */
-    public File getOutputDirectory() {
-        return outputDirectory;
+    public DataRow getDataRow() {
+        return dataRow;
     }
 
     /**
@@ -92,7 +60,7 @@ public class RenameFieldRow {
      */
     public String getCoreValue(String fieldDisplayName) {
         String value = null;
-        RenameField field = displayNameToFieldMap.get(fieldDisplayName);
+        DataField field = displayNameToFieldMap.get(fieldDisplayName);
         if (field != null) {
             value = field.getCoreValue();
         }
@@ -107,7 +75,7 @@ public class RenameFieldRow {
      *
      * @return the associated field model or null.
      */
-    public RenameField getRenameField(String fieldDisplayName) {
+    public DataField getRenameField(String fieldDisplayName) {
         return displayNameToFieldMap.get(fieldDisplayName);
     }
 
@@ -126,7 +94,7 @@ public class RenameFieldRow {
             throws IllegalArgumentException {
 
         Object value;
-        RenameField field = displayNameToFieldMap.get(fieldDisplayName);
+        DataField field = displayNameToFieldMap.get(fieldDisplayName);
         if (field instanceof PluginDataModel) {
             value = ((PluginDataModel) field).getValue();
         } else {
@@ -135,16 +103,6 @@ public class RenameFieldRow {
                     fieldDisplayName + "' cannot be found in " + this);
         }
         return value;
-    }
-
-    /**
-     * @return the renamed file based upon the field models for this row.
-     */
-    public File getRenamedFile() {
-        if (renamedFile == null) {
-            setRenamedFile();
-        }
-        return renamedFile;
     }
 
     /**
@@ -160,7 +118,7 @@ public class RenameFieldRow {
                                    Object value)
             throws IllegalArgumentException {
 
-        RenameField field = displayNameToFieldMap.get(fieldDisplayName);
+        DataField field = displayNameToFieldMap.get(fieldDisplayName);
         if (field instanceof PluginDataModel) {
             ((PluginDataModel) field).setValue(value);
         } else {
@@ -168,23 +126,6 @@ public class RenameFieldRow {
                     "PluginDataModel instance with displayName '" +
                     fieldDisplayName + "' cannot be found in " + this);
         }
-        // unset renamedFile to ensure regeneration with new plugin data
-        renamedFile = null;
-    }
-
-    /**
-     * @return the relative path (parent directory + file name) for the
-     *         renamed file.
-     */
-    public String getRelativePath() {
-        File renameDir = renamedFile.getParentFile();
-        String relativePath;
-        if (renameDir == null) {
-            relativePath = renamedFile.getName();
-        } else {
-            relativePath = renameDir.getName() + "/" + renamedFile.getName();
-        }
-        return relativePath;
     }
 
     /**
@@ -193,19 +134,10 @@ public class RenameFieldRow {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("RenameFieldRow");
-        sb.append("{fromFile=").append(fromFile);
-        sb.append(", renameFields=").append(renameFields == null ? "null" : Arrays.asList(renameFields).toString());
-        sb.append(", outputDirectory=").append(outputDirectory);
+        sb.append("Plugin2DataRow");
+        sb.append("{dataRow=").append(dataRow);
         sb.append('}');
         return sb.toString();
     }
 
-    private void setRenamedFile() {
-        StringBuilder fileName = new StringBuilder();
-        for (RenameField field : renameFields) {
-            fileName.append(field.getFileNameValue());
-        }
-        renamedFile = new File(outputDirectory, fileName.toString());
-    }
 }

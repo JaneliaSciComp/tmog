@@ -10,12 +10,16 @@ package org.janelia.it.chacrm;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.janelia.it.ims.imagerenamer.DataRow;
+import org.janelia.it.ims.imagerenamer.FileTarget;
+import org.janelia.it.ims.imagerenamer.field.DataField;
 import org.janelia.it.ims.imagerenamer.field.PluginDataModel;
-import org.janelia.it.ims.imagerenamer.field.RenameField;
 import org.janelia.it.ims.imagerenamer.field.RunTimeModel;
-import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
+import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Tests the RenameFieldRow class.
@@ -60,9 +64,13 @@ public class RenameFieldRowTest extends TestCase {
         fieldTwo.setDisplayName(fieldTwoDisplayName);
         fieldTwo.setFormat("%02d");
         fieldTwo.setValue(2);
-        RenameField[] fields = new RenameField[] { fieldOne, fieldTwo };
+        List<DataField> fields = Arrays.asList(fieldOne, fieldTwo);
+        DataRow dataRow = new DataRow(new FileTarget(fromFile));
+        dataRow.addAllFields(fields);
         File outputDir = new File("/home/outputDir");
-        RenameFieldRow row = new RenameFieldRow(fromFile, fields, outputDir);
+        RenamePluginDataRow row = new RenamePluginDataRow(fromFile, 
+                                                          dataRow,
+                                                          outputDir);
 
         File renamedFileBeforeSleep = row.getRenamedFile();
         String fileNameBeforeSleep = renamedFileBeforeSleep.getAbsolutePath();

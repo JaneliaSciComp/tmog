@@ -12,9 +12,9 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.janelia.it.ims.imagerenamer.config.ProjectConfiguration;
 import org.janelia.it.ims.imagerenamer.config.RenamePattern;
+import org.janelia.it.ims.imagerenamer.field.DataField;
 import org.janelia.it.ims.imagerenamer.field.FileExtensionModel;
 import org.janelia.it.ims.imagerenamer.field.FileModificationTimeModel;
-import org.janelia.it.ims.imagerenamer.field.RenameField;
 import org.janelia.it.ims.imagerenamer.field.VerifiedNumberModel;
 import org.janelia.it.ims.imagerenamer.field.VerifiedTextModel;
 
@@ -62,8 +62,9 @@ public class FileTableModelTest extends TestCase {
         File[] files = { new File("sortedFileNameA"),
                          savedFile,
                          new File("sortedFileNameC") };
+        List<Target> targets = getFileTargets(files);
         ProjectConfiguration config = new ProjectConfiguration();
-        FileTableModel model = new FileTableModel(files, config);
+        DataTableModel model = new DataTableModel("File Name", targets, config);
         assertEquals("incorrect row count after creation",
                      files.length, model.getRowCount());
         ArrayList<Integer> failedList = new ArrayList<Integer>();
@@ -72,13 +73,13 @@ public class FileTableModelTest extends TestCase {
         assertEquals("all files should be removed when failed list is empty",
                      failedList.size(), model.getRowCount());
 
-        model = new FileTableModel(files, config);
+        model = new DataTableModel("File Name", targets, config);
         failedList.add(1);
         model.removeSuccessfullyCopiedFiles(failedList);
         assertEquals("row count should be the same as failed list size",
                      failedList.size(), model.getRowCount());
 
-        File lastFile = (File) model.getValueAt(0, FileTableModel.FILE_COLUMN);
+        File lastFile = (File) model.getValueAt(0, DataTableModel.TARGET_COLUMN);
         assertEquals("incorrect file saved",
                      savedFile.getName(), lastFile.getName());                        
     }
@@ -94,6 +95,7 @@ public class FileTableModelTest extends TestCase {
         String fileBExtension = ".tif";
         File fileB = new File("sortedFileNameB" + fileBExtension);
         File[] files = {fileA, fileB};
+        List<Target> targets = getFileTargets(files);
 
         RenamePattern renamePattern = new RenamePattern();
 
@@ -120,7 +122,7 @@ public class FileTableModelTest extends TestCase {
         ProjectConfiguration config = new ProjectConfiguration();
         config.setRenamePattern(renamePattern);
 
-        FileTableModel model = new FileTableModel(files, config);
+        DataTableModel model = new DataTableModel("File Name", targets, config);
 
         // -----------------------
         // verify setup
@@ -128,18 +130,18 @@ public class FileTableModelTest extends TestCase {
 
         String textValue = "a1";
         textField.setText(textValue);
-        model.setValueAt(textField, 0, FileTableModel.FILE_COLUMN + 1);
+        model.setValueAt(textField, 0, DataTableModel.TARGET_COLUMN + 1);
 
         String numberValue = "5";
         numberField.setText(numberValue);
-        model.setValueAt(numberField, 0, FileTableModel.FILE_COLUMN + 2);
+        model.setValueAt(numberField, 0, DataTableModel.TARGET_COLUMN + 2);
 
-        List<FileTableRow> rows = model.getRows();
+        List<DataTableRow> rows = model.getRows();
         assertNotNull("rows are missing from model", rows);
         assertEquals("model has incorrect number of rows",
                      files.length, rows.size());
 
-        FileTableRow row0 = rows.get(0);
+        DataTableRow row0 = rows.get(0);
         checkFileTableRow(row0, "0", textValue, numberValue, fileAExtension);
 
         // -----------------------
@@ -151,11 +153,11 @@ public class FileTableModelTest extends TestCase {
         rows = model.getRows();
         row0 = rows.get(0);
         checkFileTableRow(row0, "0", textValue, numberValue, fileAExtension);
-        FileTableRow row1 = rows.get(1);
+        DataTableRow row1 = rows.get(1);
         checkFileTableRow(row1, "1", textValue, numberValue, fileBExtension);
     }
 
-    private void checkFileTableRow(FileTableRow row,
+    private void checkFileTableRow(DataTableRow row,
                                    String rowName,
                                    String expectedTextValue,
                                    String expectedNumberValue,
@@ -163,17 +165,20 @@ public class FileTableModelTest extends TestCase {
 
         assertNotNull("row " + rowName + " is missing", row);
 
-        RenameField[] row0fields = row.getFields();
+        List<DataField> row0fields = row.getFields();
         assertNotNull("row " + rowName + " fields are missing", row0fields);
         assertEquals("row " + rowName + " has incorrect number of fields",
-                     4, row0fields.length);
+                     4, row0fields.size());
 
+        DataField row0field0 = row0fields.get(0);
         assertEquals("row " + rowName + " text field value is incorrect",
-                     expectedTextValue, row0fields[0].getFileNameValue());
-        assertEquals("row " + rowName + " number field value is incorrect",
-                     expectedNumberValue, row0fields[1].getFileNameValue());
+                     expectedTextValue, row0field0.getFileNameValue());
 
-        RenameField row0field2 = row0fields[2];
+        DataField row0field1 = row0fields.get(1);
+        assertEquals("row " + rowName + " number field value is incorrect",
+                     expectedNumberValue, row0field1.getFileNameValue());
+
+        DataField row0field2 = row0fields.get(2);
         if (row0field2 instanceof FileModificationTimeModel) {
             FileModificationTimeModel fileField =
                     (FileModificationTimeModel) row0field2;
@@ -187,7 +192,7 @@ public class FileTableModelTest extends TestCase {
                  row0field2.getClass().getName());
         }
 
-        RenameField row0field3 = row0fields[3];
+        DataField row0field3 = row0fields.get(3);
         if (row0field3 instanceof FileExtensionModel) {
             FileExtensionModel extField =
                     (FileExtensionModel) row0field3;
@@ -201,5 +206,13 @@ public class FileTableModelTest extends TestCase {
                  " file extension field has incorrect type: " +
                  row0field3.getClass().getName());
         }
+    }
+
+    private List<Target> getFileTargets(File[] files) {
+        ArrayList<Target> targets = new ArrayList<Target>();
+        for (File file : files) {
+            targets.add(new FileTarget(file));
+        }
+        return targets;
     }
 }

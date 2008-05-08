@@ -7,7 +7,8 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
-import java.io.File;
+import org.janelia.it.ims.imagerenamer.Target;
+
 import java.util.Formatter;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Formatter;
  *
  * @author Eric Trautman
  */
-public class PluginDataModel implements RenameField {
+public class PluginDataModel implements DataField {
 
     private String displayName;
     private Object value;
@@ -74,11 +75,11 @@ public class PluginDataModel implements RenameField {
     }
 
     /**
-     * Initializes this field's value if necessary.
+     * Initializes this field's value based upon the specified target.
      *
-     * @param sourceFile the source file being renamed.
+     * @param  target  the target being processed.
      */
-    public void initializeValue(File sourceFile) {
+    public void initializeValue(Target target) {
         // nothing to initialize
     }
 

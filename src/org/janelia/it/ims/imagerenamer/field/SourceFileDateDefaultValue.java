@@ -8,8 +8,8 @@
 package org.janelia.it.ims.imagerenamer.field;
 
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.imagerenamer.Target;
 
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,8 +55,8 @@ public class SourceFileDateDefaultValue extends SourceFileDefaultValue {
         this.toDateFormatter = new SimpleDateFormat(toDatePattern);
     }
 
-    public String getValue(File sourceFile) {
-        String value = super.getValue(sourceFile);
+    public String getValue(Target target) {
+        String value = super.getValue(target);
         if (value != null) {
             try {
                 Date date = fromDateFormatter.parse(value);

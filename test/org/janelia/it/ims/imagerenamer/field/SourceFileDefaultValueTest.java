@@ -11,6 +11,7 @@ package org.janelia.it.ims.imagerenamer.field;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.janelia.it.ims.imagerenamer.FileTarget;
 import org.janelia.it.ims.imagerenamer.field.SourceFileDefaultValue.MatchType;
 
 import java.io.File;
@@ -58,8 +59,7 @@ public class SourceFileDefaultValueTest extends TestCase {
                 new SourceFileDefaultValue(
                         "a1.*nc82-GFP-(\\d\\d?-\\d\\d?-\\d\\d?){1}.*\\.lsm",
                         MatchType.name);
-
-        String value = defaultValue.getValue(file);
+        String value = defaultValue.getValue(new FileTarget(file));
         assertEquals("invalid value for " + defaultValue + " and file " +
                      file.getAbsolutePath(),
                      "10-20-06", value);
@@ -67,13 +67,13 @@ public class SourceFileDefaultValueTest extends TestCase {
         defaultValue = new SourceFileDefaultValue(".*\\.(mdb).*",
                                                   MatchType.name);
 
-        value = defaultValue.getValue(file);
+        value = defaultValue.getValue(new FileTarget(file));
         assertNull("invalid value '" + value + "' for " + defaultValue +
                    " and file " + file.getAbsolutePath(),
                    value);
 
         defaultValue.setMatchType(MatchType.path.name());
-        value = defaultValue.getValue(file);
+        value = defaultValue.getValue(new FileTarget(file));
         assertEquals("invalid value for " + defaultValue + " and file " +
                      file.getAbsolutePath(),
                      "mdb", value);
@@ -82,10 +82,9 @@ public class SourceFileDefaultValueTest extends TestCase {
                 "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb/" +
                 "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb/" +
                 "CG9887-Gal4-8-22-07_L6_Sum.lsm");
-
         defaultValue = new SourceFileDefaultValue(".*mdb[/\\\\].*Gal4-(.*)-UAS.*mdb[/\\\\].*\\.lsm",
                                                   MatchType.path);
-        value = defaultValue.getValue(file);
+        value = defaultValue.getValue(new FileTarget(file));
         assertEquals("invalid value for " + defaultValue + " and file " +
                      file.getAbsolutePath(),
                      "2-1-CYO", value);
@@ -94,10 +93,9 @@ public class SourceFileDefaultValueTest extends TestCase {
                 "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb\\" +
                 "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb\\" +
                 "CG9887-Gal4-8-22-07_L6_Sum.lsm");
-
         defaultValue = new SourceFileDefaultValue(".*mdb[/\\\\].*Gal4-(.*)-UAS.*mdb[/\\\\].*\\.lsm",
                                                   MatchType.path);
-        value = defaultValue.getValue(file);
+        value = defaultValue.getValue(new FileTarget(file));
         assertEquals("invalid value for " + defaultValue + " and file " +
                      file.getAbsolutePath(),
                      "2-1-CYO", value);

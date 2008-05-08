@@ -13,7 +13,7 @@ import org.janelia.it.ims.imagerenamer.config.PluginConfiguration;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
-import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
+import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
 
 import java.io.File;
 import java.util.regex.Pattern;
@@ -98,8 +98,8 @@ public class CleanupChacrmManager implements CopyListener {
      * @throws ExternalSystemException
      *   if a non-recoverable system error occurs during processing.
      */
-    public RenameFieldRow processEvent(EventType eventType,
-                                       RenameFieldRow row)
+    public RenamePluginDataRow processEvent(EventType eventType,
+                                       RenamePluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
         if (EventType.END_SUCCESS.equals(eventType)) {
             File fromFile = row.getFromFile();

@@ -9,7 +9,7 @@ package org.janelia.it.ims.imagerenamer.config.output;
 
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.imagerenamer.config.ConfigurationException;
-import org.janelia.it.ims.imagerenamer.field.RenameField;
+import org.janelia.it.ims.imagerenamer.field.DataField;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -114,14 +114,14 @@ public class OutputDirectoryConfiguration {
      *
      * @param  projectName   the name of the current project
      *                       (for error messages).
-     * @param  renameFields  the rename field configuration
+     * @param  dataFields  the rename field configuration
      *                       (to check references).
      *
      * @throws ConfigurationException
      *   if the output directory configuration is not valid.
      */
     public void verify(String projectName,
-                       List<RenameField> renameFields)
+                       List<DataField> dataFields)
             throws ConfigurationException {
 
         if (! isManuallyChosen()) {
@@ -152,7 +152,7 @@ public class OutputDirectoryConfiguration {
             }
 
             validateBaseDirectory(projectName, baseDirectory);
-            validateRenameFieldValues(projectName, renameFields);
+            validateRenameFieldValues(projectName, dataFields);
         }
     }
 
@@ -161,16 +161,16 @@ public class OutputDirectoryConfiguration {
      * specified data.
      *
      * @param  sourceFile    the source file being renamed.
-     * @param  renameFields  the rename fields supplied by the user.
+     * @param  dataFields  the rename fields supplied by the user.
      *
      * @return the derived output directory path.
      */
     public String getDerivedPath(File sourceFile,
-                                 RenameField[] renameFields) {
+                                 List<DataField> dataFields) {
         StringBuilder derivedPath = new StringBuilder(128);
         String componentValue;
         for (OutputDirectoryComponent component : components) {
-            componentValue = component.getValue(sourceFile, renameFields);
+            componentValue = component.getValue(sourceFile, dataFields);
             if (componentValue != null) {
                 derivedPath.append(componentValue);
             }
@@ -203,7 +203,7 @@ public class OutputDirectoryConfiguration {
             }
         }
 
-        return getDerivedPath(earliestFile, new RenameField[0]);
+        return getDerivedPath(earliestFile, new ArrayList<DataField>(0));
     }
 
     /**
@@ -283,13 +283,13 @@ public class OutputDirectoryConfiguration {
     }
 
     private void validateRenameFieldValues(String projectName,
-                                           List<RenameField> renameFields)
+                                           List<DataField> dataFields)
             throws ConfigurationException {
 
         HashSet<String> fieldDisplayNames =
-                new HashSet<String>(renameFields.size());
+                new HashSet<String>(dataFields.size());
         String availableDisplayName;
-        for (RenameField field : renameFields) {
+        for (DataField field : dataFields) {
             availableDisplayName = field.getDisplayName();
             if (availableDisplayName != null) {
                 fieldDisplayNames.add(availableDisplayName);

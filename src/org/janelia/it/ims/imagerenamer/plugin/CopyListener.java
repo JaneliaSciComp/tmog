@@ -31,7 +31,7 @@ public interface CopyListener extends Plugin {
      * @throws ExternalSystemException
      *   if a non-recoverable system error occurs during processing.
      */
-    public RenameFieldRow processEvent(EventType eventType,
-                                       RenameFieldRow row)
+    public RenamePluginDataRow processEvent(EventType eventType,
+                                       RenamePluginDataRow row)
             throws ExternalDataException, ExternalSystemException;
 }

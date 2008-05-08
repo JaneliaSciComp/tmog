@@ -7,11 +7,12 @@
 
 package org.janelia.it.ims.imagerenamer.config.output;
 
-import org.janelia.it.ims.imagerenamer.field.RenameField;
+import org.janelia.it.ims.imagerenamer.field.DataField;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * This class encapsulates an output directory path fragment that is derived
@@ -59,12 +60,12 @@ public class SourceFileModificationTime implements OutputDirectoryComponent {
      * path fragment.
      *
      * @param  sourceFile    the source file being renamed.
-     * @param  renameFields  the validated rename fields supplied by the user.
+     * @param  dataFields  the validated rename fields supplied by the user.
      *
      * @return the path fragment derived from the specified source data.
      */
     public String getValue(File sourceFile,
-                           RenameField[] renameFields) {
+                           List<DataField> dataFields) {
         String value = null;
 
         if ((sourceFile != null) && (formatter != null)) {

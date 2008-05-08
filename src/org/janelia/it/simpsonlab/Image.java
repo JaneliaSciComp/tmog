@@ -9,9 +9,9 @@ package org.janelia.it.simpsonlab;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.janelia.it.ims.imagerenamer.field.DataField;
 import org.janelia.it.ims.imagerenamer.field.DatePatternField;
-import org.janelia.it.ims.imagerenamer.field.RenameField;
-import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
+import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +35,7 @@ public class Image {
     }
 
     public Image(Line line,
-                 RenameFieldRow row) {
+                 RenamePluginDataRow row) {
         this.relativePath = row.getRelativePath();
         this.setCaptureDate(row.getRenameField(CAPTURE_DATE_NAME));
         this.setFamily(row.getRenameField(FAMILY_NAME));
@@ -77,7 +77,7 @@ public class Image {
         this.captureDate = captureDate;
     }
 
-    public void setCaptureDate(RenameField field) {
+    public void setCaptureDate(DataField field) {
         String value = null;
         if (field != null) {
             value = field.getCoreValue();
@@ -106,7 +106,7 @@ public class Image {
         this.family = family;
     }
 
-    public void setFamily(RenameField field) {
+    public void setFamily(DataField field) {
         String value = null;
         if (field != null) {
             value = field.getCoreValue();

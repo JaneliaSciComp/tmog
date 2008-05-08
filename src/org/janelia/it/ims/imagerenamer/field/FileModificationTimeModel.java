@@ -7,6 +7,8 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
+import org.janelia.it.ims.imagerenamer.Target;
+
 import java.io.File;
 import java.util.Date;
 
@@ -36,11 +38,17 @@ public class FileModificationTimeModel extends DatePatternModel {
     }
 
     /**
-     * Initializes this field's value if necessary.
+     * Initializes this field's value based upon the specified target.
      *
-     * @param sourceFile the source file being renamed.
+     * @param  target  the target being processed.
      */
-    public void initializeValue(File sourceFile) {
+    public void initializeValue(Target target) {
+        File sourceFile = null;
+        Object sourceValue = target.getInstance();
+        if (sourceValue instanceof File) {
+            sourceFile = (File) sourceValue;
+        }
+
         if (sourceFile != null) {
             long modTime = sourceFile.lastModified();
             sourceDate = new Date(modTime);

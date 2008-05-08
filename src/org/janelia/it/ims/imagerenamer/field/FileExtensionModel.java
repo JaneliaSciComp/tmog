@@ -1,6 +1,6 @@
 package org.janelia.it.ims.imagerenamer.field;
 
-import java.io.File;
+import org.janelia.it.ims.imagerenamer.Target;
 
 /**
  * This model supports inserting the source file extension
@@ -8,7 +8,7 @@ import java.io.File;
  *
  * @author Eric Trautman
  */
-public class FileExtensionModel implements RenameField {
+public class FileExtensionModel implements DataField {
 
     private String extension;
 
@@ -53,15 +53,17 @@ public class FileExtensionModel implements RenameField {
     }
 
     /**
-     * Initializes this field's value if necessary.
+     * Initializes this field's value based upon the specified target.
      *
-     * @param sourceFile the source file being renamed.
+     * @param  target  the target being processed.
      */
-    public void initializeValue(File sourceFile) {
-        String fileName = sourceFile.getName();
-        int extStart = fileName.lastIndexOf('.');
-        if ((extStart > -1) && (extStart < (fileName.length() - 1))) {
-            extension = fileName.substring(extStart);
+    public void initializeValue(Target target) {
+        if (target != null) {
+            String fileName = target.getName();
+            int extStart = fileName.lastIndexOf('.');
+            if ((extStart > -1) && (extStart < (fileName.length() - 1))) {
+                extension = fileName.substring(extStart);
+            }
         }
     }
 

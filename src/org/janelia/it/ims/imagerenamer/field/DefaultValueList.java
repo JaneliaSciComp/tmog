@@ -7,7 +7,8 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
-import java.io.File;
+import org.janelia.it.ims.imagerenamer.Target;
+
 import java.util.ArrayList;
 
 /**
@@ -24,10 +25,10 @@ public class DefaultValueList extends ArrayList<DefaultValue> {
         super();
     }
 
-    public String getValue(File sourceFile) {
+    public String getValue(Target target) {
         String value = null;
         for (DefaultValue defaultValue : this) {
-            value = defaultValue.getValue(sourceFile);
+            value = defaultValue.getValue(target);
             if (value != null) {
                 break;
             }

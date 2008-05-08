@@ -107,9 +107,12 @@ public class ImageDaoTest extends TestCase {
         testImage.setRelativePath(relativePath);
         testImage.setCaptureDate(new Date());
         testImage.setFamily("testFamily");
-        ImageProperty property1 = new ImageProperty("testName1", "testValue1");
+        ImageProperty property1 = new ImageProperty(ImageProperty.LINE_NAME,
+                                                    "testValue1");
         testImage.addProperty(property1);
-        ImageProperty property2 = new ImageProperty("testName2", "testValue2");
+        ImageProperty property2 =
+                new ImageProperty(ImageProperty.INSERTION_NUMBER_NAME,
+                                  "testValue2");
         testImage.addProperty(property2);
 
         Image updateImage = dao.addImage(testImage);

@@ -7,7 +7,7 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
-import java.io.File;
+import org.janelia.it.ims.imagerenamer.Target;
 
 /**
  * This interface specifies the methods required for all default values.
@@ -15,5 +15,5 @@ import java.io.File;
  * @author Eric Trautman
  */
 public interface DefaultValue {
-    public String getValue(File sourceFile);
+    public String getValue(Target target);
 }

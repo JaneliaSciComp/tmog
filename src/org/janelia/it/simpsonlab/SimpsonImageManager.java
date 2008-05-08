@@ -13,7 +13,7 @@ import org.janelia.it.ims.imagerenamer.config.PluginConfiguration;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
-import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRow;
+import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
 
 import java.io.File;
 
@@ -74,8 +74,8 @@ public class SimpsonImageManager implements CopyListener {
      * @throws ExternalSystemException
      *   if a non-recoverable system error occurs during processing.
      */
-    public RenameFieldRow processEvent(EventType eventType,
-                                       RenameFieldRow row)
+    public RenamePluginDataRow processEvent(EventType eventType,
+                                       RenamePluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
         switch (eventType) {
             case START:
@@ -104,7 +104,7 @@ public class SimpsonImageManager implements CopyListener {
      * @throws ExternalSystemException
      *   if a non-recoverable system error occurs during processing.
      */
-    private RenameFieldRow startingCopy(RenameFieldRow row)
+    private RenamePluginDataRow startingCopy(RenamePluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
         Line line = null;
@@ -136,7 +136,7 @@ public class SimpsonImageManager implements CopyListener {
      * @throws ExternalSystemException
      *   if a non-recoverable system error occurs during processing.
      */
-    private void completedSuccessfulCopy(RenameFieldRow row)
+    private void completedSuccessfulCopy(RenamePluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
         Image image;

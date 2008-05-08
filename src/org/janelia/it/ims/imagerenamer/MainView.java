@@ -7,11 +7,13 @@
 
 package org.janelia.it.ims.imagerenamer;
 
+import org.apache.log4j.Logger;
 import org.janelia.it.ims.imagerenamer.config.InputFileFilter;
 import org.janelia.it.ims.imagerenamer.config.ProjectConfiguration;
 import org.janelia.it.ims.imagerenamer.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.imagerenamer.field.ButtonEditor;
 import org.janelia.it.ims.imagerenamer.field.ButtonRenderer;
+import org.janelia.it.ims.imagerenamer.field.DataField;
 import org.janelia.it.ims.imagerenamer.field.FileRenderer;
 import org.janelia.it.ims.imagerenamer.field.ValidValueEditor;
 import org.janelia.it.ims.imagerenamer.field.ValidValueModel;
@@ -20,7 +22,12 @@ import org.janelia.it.ims.imagerenamer.field.VerifiedFieldEditor;
 import org.janelia.it.ims.imagerenamer.field.VerifiedFieldModel;
 import org.janelia.it.ims.imagerenamer.field.VerifiedFieldRenderer;
 import org.janelia.it.ims.imagerenamer.filefilter.DirectoryOnlyFilter;
+import org.janelia.it.ims.imagerenamer.filefilter.LNumberComparator;
 import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
+import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
+import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
+import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
+import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
 import org.janelia.it.ims.imagerenamer.plugin.SessionListener;
 
 import javax.swing.*;
@@ -37,6 +44,9 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileFilter;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class manages the main or overall view for renaming a set of
@@ -60,7 +70,7 @@ public class MainView {
     private JProgressBar copyProgressBar;
     private JLabel copyProgressLabel;
     private JLabel projectLabel;
-    private FileTableModel tableModel;
+    private DataTableModel tableModel;
     private ProjectConfiguration projectConfig;
     private MainView thisMainView;
     private CopyAndRenameTask task;
@@ -112,7 +122,7 @@ public class MainView {
         return copyProgressLabel;
     }
 
-    public FileTableModel getTableModel() {
+    public DataTableModel getTableModel() {
         return tableModel;
     }
 
@@ -202,7 +212,7 @@ public class MainView {
         } else {
             int row = fileTable.getSelectedRow();
             fileTable.changeSelection(row,
-                                      FileTableModel.getFirstFieldColumn(),
+                                      DataTableModel.getFirstFieldColumn(),
                                       false,
                                       false);
         }
@@ -323,7 +333,16 @@ public class MainView {
             if (isOutputDerivedFromSelection) {
                 outputDirectoryField.setText(outputPath);
             }
-            tableModel = new FileTableModel(files,
+
+            // sort files based on L-Numbers
+            Arrays.sort(files, new LNumberComparator());
+            ArrayList<Target> targets = new ArrayList<Target>(files.length);
+            for (File file : files) {
+                targets.add(new FileTarget(file));
+            }
+            
+            tableModel = new DataTableModel("File Name",
+                                            targets,
                                             projectConfig);
             fileTable.setModel(tableModel);
             sizeTable();
@@ -412,10 +431,7 @@ public class MainView {
                 }
 
                 if (isOutputDirectoryValid &&
-                    tableModel.validateAllFields(fileTable,
-                                                 projectConfig.getRowValidators(),
-                                                 appPanel,
-                                                 outputDirectory)) {
+                    validateAllFields(outputDirectory)) {
                     int choice =
                             JOptionPane.showConfirmDialog(
                                     appPanel,
@@ -451,6 +467,116 @@ public class MainView {
         copyProgressLabel.setVisible(false);
     }
 
+    public boolean validateAllFields(File baseOutputDirectory) {
+        boolean isValid = true;
+
+        OutputDirectoryConfiguration odCfg = projectConfig.getOutputDirectory();
+        boolean isOutputDirectoryAlreadyValidated = odCfg.isDerivedForSession();
+        File outputDirectory = null;
+        String outputDirectoryPath;
+        List<DataTableRow> rows = tableModel.getRows();
+        int rowIndex = 0;
+        for (DataTableRow row : rows) {
+            Target rowTarget= row.getTarget();
+            File rowFile = (File) rowTarget.getInstance();
+            List<DataField> rowFields = row.getFields();
+
+            // validate syntax based on renamer configuration
+            for (int fieldIndex = 0; fieldIndex < rowFields.size(); fieldIndex++) {
+                DataField field = rowFields.get(fieldIndex);
+                if (!field.verify()) {
+                    isValid = false;
+                    String message = "The " + field.getDisplayName() +
+                                     " value for " + rowTarget.getName() +
+                                     " is invalid.  " + field.getErrorMessage();
+                    int columnIndex =
+                            tableModel.getColumnIndexForField(fieldIndex);
+                    displayErrorDialog(message,
+                                       fileTable,
+                                       rowIndex,
+                                       columnIndex);
+                    break;
+                }
+            }
+
+            // only perform output directory validation if field validation
+            if (isValid) {
+                if (isOutputDirectoryAlreadyValidated) {
+                    outputDirectory = baseOutputDirectory;
+                } else {
+                    // setup and validate the directories for each file
+                    outputDirectoryPath = odCfg.getDerivedPath(rowFile,
+                                                               rowFields);
+                    outputDirectory = new File(outputDirectoryPath);
+                    String outputFailureMsg =
+                            OutputDirectoryConfiguration.createAndValidateDirectory(
+                                    outputDirectory);
+                    if (outputFailureMsg != null) {
+                        isValid = false;
+                        displayErrorDialog(outputFailureMsg,
+                                           fileTable,
+                                           rowIndex,
+                                           2);
+                    }
+                }
+            }
+
+            // only perform external validation if internal validation succeeds
+            if (isValid) {
+                String externalErrorMsg = null;
+                try {
+                    for (RenameFieldRowValidator validator : projectConfig.getRowValidators()) {
+                        validator.validate(
+                                new RenamePluginDataRow(rowFile,
+                                                        row.getDataRow(),
+                                                        outputDirectory));
+                    }
+                } catch (ExternalDataException e) {
+                    externalErrorMsg = e.getMessage();
+                    LOG.info("external validation failed", e);
+                } catch (ExternalSystemException e) {
+                    externalErrorMsg = e.getMessage();
+                    LOG.error(e.getMessage(), e);
+                }
+
+                if (externalErrorMsg != null) {
+                    isValid = false;
+                    displayErrorDialog(externalErrorMsg,
+                                       fileTable,
+                                       rowIndex,
+                                       2);
+                }
+            }
+
+            if (! isValid) {
+                break;
+            }
+
+            rowIndex++;
+        }
+        return isValid;
+    }
+
+    private void displayErrorDialog(String message,
+                                    JTable fileTable,
+                                    int rowIndex,
+                                    int columnIndex) {
+
+        fileTable.changeSelection(rowIndex, columnIndex, false, false);
+
+        JOptionPane.showMessageDialog(appPanel,
+                                      message, // field to display
+                                      "Invalid Entry", // title
+                                      JOptionPane.ERROR_MESSAGE);
+
+        fileTable.requestFocus();
+        fileTable.editCellAt(rowIndex, columnIndex);
+        Component editor = fileTable.getEditorComponent();
+        if (editor != null) {
+            editor.requestFocus();
+        }
+    }
+
     private void sizeTable() {
         final int numColumns = tableModel.getColumnCount();
         if (numColumns > 0) {
@@ -462,7 +588,7 @@ public class MainView {
             final int copyButtonHeight = 20;
             final int copyButtonWidth = 20;
             for (int columnIndex = 0;
-                 columnIndex < FileTableModel.FILE_COLUMN;
+                 columnIndex < DataTableModel.TARGET_COLUMN;
                  columnIndex++) {
 
                 tableColumn = colModel.getColumn(columnIndex);
@@ -473,7 +599,7 @@ public class MainView {
             }
 
             // set preferred sizes for all other columns
-            for (int columnIndex = FileTableModel.FILE_COLUMN;
+            for (int columnIndex = DataTableModel.TARGET_COLUMN;
                  columnIndex < numColumns;
                  columnIndex++) {
 
@@ -493,6 +619,11 @@ public class MainView {
             fileTable.setRowMargin(cellMargin);
         }
     }
+
+    /**
+     * The logger for this class.
+     */
+    private static final Logger LOG = Logger.getLogger(MainView.class);
 
     private static final String RENAME_START_BUTTON_TEXT = "Copy and Rename";
     private static final String RENAME_START_TOOL_TIP_TEXT =
