@@ -6,6 +6,10 @@
         <xs:attribute name="patternString" type="xs:string"/>
     </xs:complexType>
 
+    <xs:complexType name="inputFileSorterType">
+        <xs:attribute name="sortAlgorithm" type="xs:string"/>
+    </xs:complexType>
+
     <xs:complexType name="outputDirectoryType">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element name="path" type="pathType"/>
@@ -159,6 +163,8 @@
         <xs:sequence>
 
             <xs:element name="inputFileFilter" type="inputFileFilterType" minOccurs="0"/>
+
+            <xs:element name="inputFileSorter" type="inputFileSorterType" minOccurs="0"/>
 
             <xs:element name="outputDirectory" type="outputDirectoryType" minOccurs="0"/>
 

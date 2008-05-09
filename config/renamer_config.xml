@@ -5,6 +5,8 @@
 
     <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="false">
 
+        <inputFileSorter sortAlgorithm="LNumber" />
+
         <!-- DASH_FOR_PROD->
         <outputDirectory basePath="\\dm6.int.janelia.org\rubindata\confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
@@ -96,6 +98,8 @@
 
     <project name="Rubin Lab: Research and Development (RD_*)">
 
+        <inputFileSorter sortAlgorithm="LNumber" />
+
         <!-- DASH_FOR_PROD->
         <outputDirectory basePath="\\dm6.int.janelia.org\rubindata\RDconfocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
@@ -146,6 +150,9 @@
     </project>
 
     <project name="Simpson Lab: GAL4 Lines (JHS_*)" default="true">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
         <!-- DASH_FOR_PROD->
         <outputDirectory>
             <path path="\\dm8.int.janelia.org\simpsonmicro\GAL4_confocal_stacks\" />
@@ -195,6 +202,35 @@
             <pluginData displayName="Specimen Number" format="%02d"/>
             <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
+        </renamePattern>
+
+    </project>
+
+    <project name="Kerr Lab: Worm Experiments">
+
+        <plugins>
+        <!-- DASH_FOR_PROD->
+            <copyListener className="org.janelia.it.simpsonlab.SimpsonImageManager" />
+        <!-DASH_FOR_PROD -->
+        </plugins>
+
+        <renamePattern>
+            <text displayName="Line" required="true" pattern="[0-9A-Za-z]++">
+                <sourceFileDefault pattern="([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"/>
+                <sourceFileDefault pattern=".*[/\\\\]([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"
+                                   matchType="path"/>
+            </text>
+            <date displayName="Capture Date" required="true" 
+                  datePattern="yyyyMMdd" suffix="_">
+                <sourceFileDateDefault pattern=".*[-/\\\\](\d\d?-\d\d?-\d\d){1}.*\.lsm"
+                                       fromDatePattern="MM-dd-yy"
+                                       toDatePattern="yyyyMMdd"
+                                       matchType="path"/>
+            </date>
+            <validValueList displayName="Organ" required="true">
+                <validValue displayName="B: Brain" value="B"/>
+                <validValue displayName="T: Thorax" value="T"/>
+            </validValueList>
         </renamePattern>
 
     </project>

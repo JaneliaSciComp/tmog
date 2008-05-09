@@ -28,6 +28,7 @@ public class ProjectConfiguration {
     private boolean isDefault;
     private RenamePattern renamePattern;
     private InputFileFilter inputFileFilter;
+    private InputFileSorter inputFileSorter;
     private OutputDirectoryConfiguration outputDirectoryConfiguration;
     private PluginFactory pluginFactory;
 
@@ -35,6 +36,7 @@ public class ProjectConfiguration {
         this.isDefault = false;
         this.renamePattern = new RenamePattern();
         this.inputFileFilter = new InputFileFilter();
+        this.inputFileSorter = new InputFileSorter();
         this.outputDirectoryConfiguration = new OutputDirectoryConfiguration();
     }
 
@@ -52,6 +54,10 @@ public class ProjectConfiguration {
 
     public InputFileFilter getInputFileFilter() {
         return inputFileFilter;
+    }
+
+    public InputFileSorter getInputFileSorter() {
+        return inputFileSorter;
     }
 
     public OutputDirectoryConfiguration getOutputDirectory() {
@@ -103,6 +109,10 @@ public class ProjectConfiguration {
 
     public void setInputFileFilter(InputFileFilter inputFileFilter) {
         this.inputFileFilter = inputFileFilter;
+    }
+
+    public void setInputFileSorter(InputFileSorter inputFileSorter) {
+        this.inputFileSorter = inputFileSorter;
     }
 
     public void setOutputDirectory(OutputDirectoryConfiguration outputDirectoryConfiguration) {
