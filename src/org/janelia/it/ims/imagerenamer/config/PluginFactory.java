@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute.
+ * Copyright 2007 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -7,10 +7,10 @@
 
 package org.janelia.it.ims.imagerenamer.config;
 
-import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
 import org.janelia.it.ims.imagerenamer.plugin.Plugin;
-import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
+import org.janelia.it.ims.imagerenamer.plugin.RowListener;
+import org.janelia.it.ims.imagerenamer.plugin.RowValidator;
 import org.janelia.it.ims.imagerenamer.plugin.SessionListener;
 
 import java.lang.reflect.Constructor;
@@ -25,26 +25,26 @@ import java.util.List;
  */
 public class PluginFactory {
 
-    private List<PluginConfiguration> copyListenerPlugins;
-    private List<CopyListener> copyListeners;
+    private List<PluginConfiguration> rowListenerPlugins;
+    private List<RowListener> rowListeners;
 
     private List<PluginConfiguration> rowValidatorPlugins;
-    private List<RenameFieldRowValidator> rowValidators;
+    private List<RowValidator> rowValidators;
 
     private List<PluginConfiguration> sessionListenerPlugins;
     private List<SessionListener> sessionListeners;
 
     public PluginFactory() {
-        copyListenerPlugins = new ArrayList<PluginConfiguration>();
-        copyListeners = new ArrayList<CopyListener>();
+        rowListenerPlugins = new ArrayList<PluginConfiguration>();
+        rowListeners = new ArrayList<RowListener>();
         rowValidatorPlugins = new ArrayList<PluginConfiguration>();
-        rowValidators = new ArrayList<RenameFieldRowValidator>();
+        rowValidators = new ArrayList<RowValidator>();
         sessionListenerPlugins = new ArrayList<PluginConfiguration>();
         sessionListeners = new ArrayList<SessionListener>();
     }
 
-    public void addCopyListenerPlugin(PluginConfiguration plugin) {
-        copyListenerPlugins.add(plugin);
+    public void addRowListenerPlugin(PluginConfiguration plugin) {
+        rowListenerPlugins.add(plugin);
     }
 
     public void addRowValidatorPlugin(PluginConfiguration plugin) {
@@ -55,11 +55,11 @@ public class PluginFactory {
         sessionListenerPlugins.add(plugin);
     }
 
-    public List<CopyListener> getCopyListeners() {
-        return copyListeners;
+    public List<RowListener> getRowListeners() {
+        return rowListeners;
     }
 
-    public List<RenameFieldRowValidator> getRowValidators() {
+    public List<RowValidator> getRowValidators() {
         return rowValidators;
     }
 
@@ -72,18 +72,18 @@ public class PluginFactory {
 
         List<Object> pluginInstances =
                 constructInstancesForClass(projectName,
-                                           copyListenerPlugins,
-                                           CopyListener.class);
+                                           rowListenerPlugins,
+                                           RowListener.class);
         for (Object instance : pluginInstances) {
-            copyListeners.add((CopyListener) instance);
+            rowListeners.add((RowListener) instance);
         }
 
         pluginInstances =
                 constructInstancesForClass(projectName,
                                            rowValidatorPlugins,
-                                           RenameFieldRowValidator.class);
+                                           RowValidator.class);
         for (Object instance : pluginInstances) {
-            rowValidators.add((RenameFieldRowValidator) instance);
+            rowValidators.add((RowValidator) instance);
         }
 
         pluginInstances =

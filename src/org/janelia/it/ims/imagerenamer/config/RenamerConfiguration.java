@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute.
+ * Copyright 2007 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -250,7 +250,7 @@ public class RenamerConfiguration {
                                  PluginFactory.class);
         digester.addSetProperties("renameConfiguration/project/plugins");
 
-        addPlugin("copyListener", digester);
+        addPlugin("rowListener", digester);
         addPlugin("rowValidator", digester);
         addPlugin("sessionListener", digester);
 

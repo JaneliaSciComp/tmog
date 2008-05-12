@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute.
+ * Copyright 2007 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -11,11 +11,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import static org.janelia.it.chacrm.Transformant.Status;
 import org.janelia.it.ims.imagerenamer.config.PluginConfiguration;
-import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
-import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
+import org.janelia.it.ims.imagerenamer.plugin.PluginDataRow;
+import org.janelia.it.ims.imagerenamer.plugin.PluginUtil;
 import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
+import org.janelia.it.ims.imagerenamer.plugin.RowListener;
+import org.janelia.it.ims.imagerenamer.plugin.RowValidator;
 
 import java.io.File;
 import java.util.regex.Matcher;
@@ -27,8 +29,7 @@ import java.util.regex.PatternSyntaxException;
  *
  * @author Eric Trautman
  */
-public class RenamerEventManager implements RenameFieldRowValidator,
-                                            CopyListener {
+public class RenamerEventManager implements RowValidator, RowListener {
 
     /** The logger for this class. */
     private static final Log LOG =
@@ -45,7 +46,6 @@ public class RenamerEventManager implements RenameFieldRowValidator,
     private static final String MSG_VERIFY_TRANSFORMANT_COMPONENTS =
             "Please verify your Plate, Well, Vector ID, and " +
             "Landing Site settings for the file ";
-
 
     /**
      * The data access object for retrieving and updating transformant data.
@@ -113,16 +113,17 @@ public class RenamerEventManager implements RenameFieldRowValidator,
      * @throws ExternalDataException   if the data is not valid.
      * @throws ExternalSystemException if any error occurs while validating the data.
      */
-    public void validate(RenamePluginDataRow row)
+    public void validate(PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
+        RenamePluginDataRow dataRow = PluginUtil.castRenameRow(row, this);
         String transformantID = null;
         Transformant transformant;
         try {
-            transformantID = getTransformantID(row);
+            transformantID = getTransformantID(dataRow);
             transformant = dao.getTransformant(transformantID, false);
         } catch (TransformantNotFoundException e) {
-            File fromFile = row.getFromFile();
+            File fromFile = dataRow.getFromFile();
             String fileName = fromFile.getName();
             throw new ExternalDataException(
                     "Transformant ID '" + transformantID +
@@ -137,7 +138,7 @@ public class RenamerEventManager implements RenameFieldRowValidator,
         try {
             transformant.setStatus(Status.imaged);
         } catch (IllegalStateException e) {
-            File fromFile = row.getFromFile();
+            File fromFile = dataRow.getFromFile();
             String fileName = fromFile.getName();
             throw new ExternalDataException(
                     "The ChaCRM status for transformant ID '" + transformantID +
@@ -150,28 +151,34 @@ public class RenamerEventManager implements RenameFieldRowValidator,
     /**
      * Processes the specified copy event.
      *
-     * @param eventType type of copy event.
-     * @param row       details about the event.
+     * @param  eventType  type of copy event.
+     * @param  row        details about the event.
+     *
      * @return the rename field row for processing (with any
      *         updates from this plugin).
-     * @throws ExternalDataException   if a recoverable data error occurs during processing.
-     * @throws ExternalSystemException if a non-recoverable system error occurs during processing.
+     *
+     * @throws ExternalDataException
+     *   if a recoverable data error occurs during processing.
+     * @throws ExternalSystemException
+     *   if a non-recoverable system error occurs during processing.
      */
     public RenamePluginDataRow processEvent(EventType eventType,
-                                       RenamePluginDataRow row)
+                                            PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
+
+        RenamePluginDataRow dataRow = PluginUtil.castRenameRow(row, this);
         switch (eventType) {
             case END_FAIL:
-                failedCopy(row);
+                failedCopy(dataRow);
                 break;
             case END_SUCCESS:
-                completedSuccessfulCopy(row);
+                completedSuccessfulCopy(dataRow);
                 break;
             case START:
-                row = startingCopy(row);
+                dataRow = startingCopy(dataRow);
                 break;
         }
-        return row;
+        return dataRow;
     }
 
     /**

@@ -7,6 +7,8 @@
 
 package org.janelia.it.ims.imagerenamer;
 
+import org.janelia.it.ims.imagerenamer.view.TabbedView;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.Executors;

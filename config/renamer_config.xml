@@ -15,9 +15,9 @@
         <plugins>
             <!-- DASH_FOR_PROD->
             <rowValidator className="org.janelia.it.chacrm.RenamerEventManager"/>
-            <copyListener className="org.janelia.it.chacrm.RenamerEventManager">
+            <rowListener className="org.janelia.it.chacrm.RenamerEventManager">
                 <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
-            </copyListener>
+            </rowListener>
             <sessionListener className="org.janelia.it.ims.imagerenamer.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\GMR"/>
             </sessionListener>
@@ -163,8 +163,12 @@
         <!-DASH_FOR_PROD -->
 
         <plugins>
+               <rowListener className="org.janelia.it.ims.imagerenamer.plugin.SRL">
+                 <property name="seconds" value="5"/>
+               </rowListener>
+
         <!-- DASH_FOR_PROD->
-            <copyListener className="org.janelia.it.simpsonlab.SimpsonImageManager" />
+            <rowListener className="org.janelia.it.simpsonlab.SimpsonImageManager" />
             <sessionListener className="org.janelia.it.ims.imagerenamer.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm8.int.janelia.org\simpsonmicro\renamer\summaries\RD"/>
             </sessionListener>
@@ -209,8 +213,11 @@
     <project name="Kerr Lab: Worm Experiments">
 
         <plugins>
+            <rowListener className="org.janelia.it.ims.imagerenamer.plugin.SRL">
+              <property name="seconds" value="2"/>
+            </rowListener>
         <!-- DASH_FOR_PROD->
-            <copyListener className="org.janelia.it.simpsonlab.SimpsonImageManager" />
+            <rowListener className="org.janelia.it.simpsonlab.SimpsonImageManager" />
         <!-DASH_FOR_PROD -->
         </plugins>
 

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute.
+ * Copyright 2007 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -10,19 +10,19 @@ package org.janelia.it.simpsonlab;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.janelia.it.ims.imagerenamer.config.PluginConfiguration;
-import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
+import org.janelia.it.ims.imagerenamer.plugin.PluginDataRow;
+import org.janelia.it.ims.imagerenamer.plugin.PluginUtil;
 import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
-
-import java.io.File;
+import org.janelia.it.ims.imagerenamer.plugin.RowListener;
 
 /**
  * This class handles events "published" by the image renamer tool.
  *
  * @author Eric Trautman
  */
-public class SimpsonImageManager implements CopyListener {
+public class SimpsonImageManager implements RowListener {
 
     /** The logger for this class. */
     private static final Log LOG = LogFactory.getLog(SimpsonImageManager.class);
@@ -75,11 +75,12 @@ public class SimpsonImageManager implements CopyListener {
      *   if a non-recoverable system error occurs during processing.
      */
     public RenamePluginDataRow processEvent(EventType eventType,
-                                       RenamePluginDataRow row)
+                                            PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
+        RenamePluginDataRow dataRow = PluginUtil.castRenameRow(row, this);
         switch (eventType) {
             case START:
-                row = startingCopy(row);
+                dataRow = startingCopy(dataRow);
                 break;
             case END_SUCCESS:
 // Removed successful copy processing because this will now be handled by
@@ -89,7 +90,7 @@ public class SimpsonImageManager implements CopyListener {
 //                completedSuccessfulCopy(row);
                 break;
         }
-        return row;
+        return dataRow;
     }
 
     /**
@@ -136,29 +137,29 @@ public class SimpsonImageManager implements CopyListener {
      * @throws ExternalSystemException
      *   if a non-recoverable system error occurs during processing.
      */
-    private void completedSuccessfulCopy(RenamePluginDataRow row)
-            throws ExternalDataException, ExternalSystemException {
-
-        Image image;
-        String fileName = null;
-        File renamedFile = row.getRenamedFile();
-        if (renamedFile != null) {
-            fileName = renamedFile.getAbsolutePath();
-        }
-        try {
-            Line line = new Line(row);
-            image = new Image(line, row);
-            image = dao.addImage(image);
-            if (LOG.isInfoEnabled()) {
-                LOG.info("successfully persisted image metadata (" + image +
-                         ") for " + fileName);
-            }
-        } catch (Exception e) {
-            throw new ExternalSystemException(
-                    "Failed to save image data for " + fileName +
-                    ".  Detailed data is: " + row, e);
-        }
-    }
+//    private void completedSuccessfulCopy(RenamePluginDataRow row)
+//            throws ExternalDataException, ExternalSystemException {
+//
+//        Image image;
+//        String fileName = null;
+//        File renamedFile = row.getRenamedFile();
+//        if (renamedFile != null) {
+//            fileName = renamedFile.getAbsolutePath();
+//        }
+//        try {
+//            Line line = new Line(row);
+//            image = new Image(line, row);
+//            image = dao.addImage(image);
+//            if (LOG.isInfoEnabled()) {
+//                LOG.info("successfully persisted image metadata (" + image +
+//                         ") for " + fileName);
+//            }
+//        } catch (Exception e) {
+//            throw new ExternalSystemException(
+//                    "Failed to save image data for " + fileName +
+//                    ".  Detailed data is: " + row, e);
+//        }
+//    }
 
     /**
      * Create the dao for this manager if it does not already exist.

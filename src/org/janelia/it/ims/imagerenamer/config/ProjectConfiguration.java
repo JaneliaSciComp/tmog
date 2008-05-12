@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute.
+ * Copyright 2007 Howard Hughes Medical Institute.
  * All rights reserved.  
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -9,8 +9,8 @@ package org.janelia.it.ims.imagerenamer.config;
 
 import org.janelia.it.ims.imagerenamer.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.imagerenamer.field.DataField;
-import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
-import org.janelia.it.ims.imagerenamer.plugin.RenameFieldRowValidator;
+import org.janelia.it.ims.imagerenamer.plugin.RowListener;
+import org.janelia.it.ims.imagerenamer.plugin.RowValidator;
 import org.janelia.it.ims.imagerenamer.plugin.SessionListener;
 
 import java.util.ArrayList;
@@ -64,22 +64,22 @@ public class ProjectConfiguration {
         return outputDirectoryConfiguration;
     }
 
-    public List<CopyListener> getCopyListeners() {
-        List<CopyListener> listeners;
+    public List<RowListener> getRowListeners() {
+        List<RowListener> listeners;
         if (pluginFactory != null) {
-            listeners = pluginFactory.getCopyListeners();
+            listeners = pluginFactory.getRowListeners();
         } else {
-            listeners = new ArrayList<CopyListener>();
+            listeners = new ArrayList<RowListener>();
         }
         return listeners;
     }
 
-    public List<RenameFieldRowValidator> getRowValidators() {
-        List<RenameFieldRowValidator> validators;
+    public List<RowValidator> getRowValidators() {
+        List<RowValidator> validators;
         if (pluginFactory != null) {
             validators = pluginFactory.getRowValidators();
         } else {
-            validators = new ArrayList<RenameFieldRowValidator>();
+            validators = new ArrayList<RowValidator>();
         }
         return validators;
     }

@@ -50,7 +50,7 @@
     <xs:complexType name="pluginsType">
         <xs:sequence>
             <xs:element name="rowValidator" type="pluginType" minOccurs="0"/>
-            <xs:element name="copyListener" type="pluginType" minOccurs="0"/>
+            <xs:element name="rowListener" type="pluginType" minOccurs="0"/>
             <xs:element name="sessionListener" type="pluginType" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute.
+ * Copyright 2007 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -10,10 +10,12 @@ package org.janelia.it.chacrm;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.janelia.it.ims.imagerenamer.config.PluginConfiguration;
-import org.janelia.it.ims.imagerenamer.plugin.CopyListener;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
+import org.janelia.it.ims.imagerenamer.plugin.PluginDataRow;
+import org.janelia.it.ims.imagerenamer.plugin.PluginUtil;
 import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
+import org.janelia.it.ims.imagerenamer.plugin.RowListener;
 
 import java.io.File;
 import java.util.regex.Pattern;
@@ -26,7 +28,7 @@ import java.util.regex.PatternSyntaxException;
  *
  * @author Eric Trautman
  */
-public class CleanupChacrmManager implements CopyListener {
+public class CleanupChacrmManager implements RowListener {
 
     /** The logger for this class. */
     private static final Log LOG =
@@ -98,11 +100,13 @@ public class CleanupChacrmManager implements CopyListener {
      * @throws ExternalSystemException
      *   if a non-recoverable system error occurs during processing.
      */
-    public RenamePluginDataRow processEvent(EventType eventType,
-                                       RenamePluginDataRow row)
+    public PluginDataRow processEvent(EventType eventType,
+                                      PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
+
+        RenamePluginDataRow dataRow = PluginUtil.castRenameRow(row, this);
         if (EventType.END_SUCCESS.equals(eventType)) {
-            File fromFile = row.getFromFile();
+            File fromFile = dataRow.getFromFile();
             String fromFileName = fromFile.getAbsolutePath();
             ImageLocation fromFileImageLocation =
                     RenamerEventManager.getImageLocation(fromFileName,
@@ -119,7 +123,7 @@ public class CleanupChacrmManager implements CopyListener {
                 }
             }
         }
-        return row;
+        return dataRow;
     }
 
     /**

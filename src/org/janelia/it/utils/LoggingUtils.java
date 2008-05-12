@@ -5,7 +5,7 @@
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
  */
 
-package org.janelia.it.ims.imagerenamer;
+package org.janelia.it.utils;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
