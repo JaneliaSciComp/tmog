@@ -216,9 +216,6 @@
             <rowListener className="org.janelia.it.ims.imagerenamer.plugin.SRL">
               <property name="seconds" value="2"/>
             </rowListener>
-        <!-- DASH_FOR_PROD->
-            <rowListener className="org.janelia.it.simpsonlab.SimpsonImageManager" />
-        <!-DASH_FOR_PROD -->
         </plugins>
 
         <renamePattern>

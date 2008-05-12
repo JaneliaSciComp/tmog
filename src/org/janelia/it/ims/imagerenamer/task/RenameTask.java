@@ -12,9 +12,8 @@ import org.janelia.it.ims.imagerenamer.DataTableModel;
 import org.janelia.it.ims.imagerenamer.DataTableRow;
 import org.janelia.it.ims.imagerenamer.Target;
 import org.janelia.it.ims.imagerenamer.config.output.OutputDirectoryConfiguration;
-import org.janelia.it.ims.imagerenamer.field.DataField;
+import org.janelia.it.ims.imagerenamer.plugin.PluginDataRow;
 import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
-import org.janelia.it.ims.imagerenamer.plugin.RowListener;
 import org.janelia.it.utils.filexfer.FileCopyFailedException;
 import org.janelia.it.utils.filexfer.SafeFileTransfer;
 
@@ -22,8 +21,7 @@ import java.io.File;
 import java.util.List;
 
 /**
- * This class supports the execution of the copy and rename process as
- * a background thread.
+ * This class supports the execution of the copy and rename process.
  *
  * @author Eric Trautman
  */
@@ -52,10 +50,14 @@ public class RenameTask extends SimpleTask {
      */
     private int bytesInChunk;
 
-    /**
-     * The total number of byte "chunks" that need to be copied.
-     */
+    /** The total number of byte "chunks" that need to be copied. */
     private long totalByteChunksToCopy;
+
+    /** The number of "chunks" that have already been processed. */
+    private long chunksProcessed;
+
+    /** The current plugin data row being processed. */
+    private RenamePluginDataRow currentRow;
 
     /**
      * Constructs a new task.
@@ -86,120 +88,90 @@ public class RenameTask extends SimpleTask {
         appendToSummary(fromDirectoryName);
         appendToSummary(":\n\n");
 
-        bytesInChunk = 1000000; // default to megabytes
-        totalByteChunksToCopy = 1; // prevent rare but possible divide by zero
+        this.bytesInChunk = 1000000; // default to megabytes
+        this.totalByteChunksToCopy = 1; // prevent rare but possible divide by zero
         for (DataTableRow modelRow : modelRows) {
             File file = getTargetFile(modelRow);
-            totalByteChunksToCopy += (file.length() / bytesInChunk);
+            this.totalByteChunksToCopy += (file.length() / this.bytesInChunk);
         }
         // reset to gigabytes if necessary
-        if (totalByteChunksToCopy > (long) Integer.MAX_VALUE) {
-            totalByteChunksToCopy = totalByteChunksToCopy / 1000;
-            bytesInChunk = bytesInChunk * 1000;
+        if (this.totalByteChunksToCopy > (long) Integer.MAX_VALUE) {
+            this.totalByteChunksToCopy = this.totalByteChunksToCopy / 1000;
+            this.bytesInChunk = this.bytesInChunk * 1000;
         }
+
+        this.chunksProcessed = 0;
+        this.currentRow = null;
     }
 
     /**
-     * Renames all files in the main view table model.
+     * @param  modelRow  the current row being processed.
+     *
+     * @return a plug-in data row for the current model row.
      */
-    protected void doTask() {
-        DataTableModel model = getModel();
-        List<DataTableRow> modelRows = model.getRows();
-
-        int rowIndex = 0;
-        int chunksProcessed = 0;
-        long pctComplete = 0;
-        final int numberOfRows = modelRows.size();
-        boolean isDerivedForSession = outputDirConfig.isDerivedForSession();
+    @Override
+    protected PluginDataRow getPluginDataRow(DataTableRow modelRow) {
+        File rowFile = getTargetFile(modelRow);
         File toDirectory = sessionOutputDirectory;
 
-        File rowFile;
-        File renamedFile;
-        boolean isRenameSuccessful;
-        boolean isStartNotificationSuccessful;
-        List<DataField> fields;
-        String toDirectoryPath;
-        RenamePluginDataRow fieldRow;
-        String progressMsg;
-
-        for (DataTableRow modelRow : modelRows) {
-
-            rowFile = getTargetFile(modelRow);
-            renamedFile = null;
-            isRenameSuccessful = false;
-            isStartNotificationSuccessful = false;
-            fields = modelRow.getFields();
-
-            if (! isDerivedForSession) {
-                toDirectoryPath =
-                        outputDirConfig.getDerivedPath(rowFile, fields);
-                toDirectory = new File(toDirectoryPath);
-            }
-
-            fieldRow = new RenamePluginDataRow(rowFile,
-                                               modelRow.getDataRow(),
-                                               toDirectory);
-            try {
-                fieldRow = (RenamePluginDataRow)
-                        notifyRowListeners(RowListener.EventType.START,
-                                            fieldRow);
-                isStartNotificationSuccessful = true;
-            } catch (Exception e) {
-                LOG.error("Failed external start processing for " +
-                          fieldRow, e);
-            }
-
-            if (isStartNotificationSuccessful) {
-                renamedFile = fieldRow.getRenamedFile();
-                // update progress information in the UI
-                progressMsg = getProgressMessage(rowIndex,
-                                                 numberOfRows,
-                                                 rowFile,
-                                                 renamedFile);
-                publish(new TaskProgressInfo(rowIndex,
-                                             numberOfRows,
-                                             (int) pctComplete,
-                                             progressMsg));
-
-                isRenameSuccessful = copyFile(rowFile,
-                                              renamedFile,
-                                              fieldRow);
-            }
-
-            // calculate progress before we delete the file
-            chunksProcessed += (int) (rowFile.length() / bytesInChunk);
-            pctComplete = (100 * chunksProcessed) / totalByteChunksToCopy;
-
-            cleanupAfterRename(rowIndex,
-                               rowFile,
-                               renamedFile,
-                               isRenameSuccessful);
-
-            rowIndex++;
-
-            if (isSessionCancelled()) {
-                handleCancelOfSession(rowIndex,
-                                      numberOfRows, 
-                                      modelRow.getTarget());
-                break;
-            }
+        if (! outputDirConfig.isDerivedForSession()) {
+            toDirectory = new File(
+                    outputDirConfig.getDerivedPath(rowFile,
+                                                   modelRow.getFields()));
         }
+
+        currentRow =  new RenamePluginDataRow(rowFile,
+                                              modelRow.getDataRow(),
+                                              toDirectory);
+        return currentRow;
     }
 
     /**
-     * Copies the specified file.
+     * @param  lastRowProcessed    index of last proceessed row (zero based).
+     * @param  totalRowsToProcess  total number of rows being processed.
+     * @param  modelRow            the current row being processed.
      *
-     * @param  rowFile      the file to be copied and renamed.
-     * @param  renamedFile  the target path for the renamed file.
-     * @param  fieldRow     the captured field data for this file.
-     *
-     * @return true if the copy and rename was successful; otherwise false.
+     * @return a task progress object for the specified row.
      */
-    private boolean copyFile(File rowFile,
-                             File renamedFile,
-                             RenamePluginDataRow fieldRow) {
+    @Override
+    protected TaskProgressInfo getProgressInfo(int lastRowProcessed,
+                                               int totalRowsToProcess,
+                                               DataTableRow modelRow) {
+
+        File fromFile = currentRow.getFromFile();
+        File toFile = currentRow.getRenamedFile();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("copying file ");
+        sb.append((lastRowProcessed + 1));
+        sb.append(" of ");
+        sb.append(totalRowsToProcess);
+        sb.append(": ");
+        sb.append(fromFile.getName());
+        sb.append(" -> ");
+        sb.append(toFile.getName());
+        int pctComplete = (int)
+                (100 * (chunksProcessed / totalByteChunksToCopy));
+
+        return new TaskProgressInfo(lastRowProcessed,
+                                    totalRowsToProcess,
+                                    pctComplete,
+                                    sb.toString());
+    }
+
+    /**
+     * This method renames all files in the main view table model.
+     *
+     * @param  modelRow            the current row being processed.
+     *
+     * @return true if the processing completes successfully; otherwise false.
+     */
+    @Override
+    protected boolean processRow(DataTableRow modelRow) {
 
         boolean renameSuccessful = false;
+        File rowFile = currentRow.getFromFile();
+        File renamedFile = currentRow.getRenamedFile();
 
         // perform the actual copy and rename
         try {
@@ -210,39 +182,30 @@ public class RenameTask extends SimpleTask {
                       " to " + renamedFile.getAbsolutePath(), e);
         }
 
-        // notify any listeners
-        try {
-            if (renameSuccessful) {
-                notifyRowListeners(
-                        RowListener.EventType.END_SUCCESS,
-                        fieldRow);
-            } else {
-                notifyRowListeners(
-                        RowListener.EventType.END_FAIL,
-                        fieldRow);
-            }
-        } catch (Exception e) {
-            LOG.error("Failed external completion processing for " +
-                      fieldRow, e);
-            renameSuccessful = false;
-        }
         return renameSuccessful;
     }
 
     /**
-     * Clean up either the source file or the renamed file depending
-     * upon whether the rename process succeeded.
+     * This method adds summary information for the processed row
+     * and updates progress information.  It also deletes the
+     * source file being renamed if it was renamed successfully.
      *
-     * @param  rowIndex          the row index for the renamed file.
-     * @param  rowFile           the source file.
-     * @param  renamedFile       the renamed file.
-     * @param  renameSuccessful  flag indicating if the rename was successful.
+     * @param  modelRow            the current row being processed.
+     *
+     * @param  isSuccessful        true if the row was processed successfully
+     *                             and all listeners completed their processing
+     *                             successfully; otherwise false.
      */
-    private void cleanupAfterRename(int rowIndex,
-                                    File rowFile,
-                                    File renamedFile,
-                                    boolean renameSuccessful) {
-        if (renameSuccessful) {
+    @Override
+    protected void cleanupRow(DataTableRow modelRow,
+                              boolean isSuccessful) {
+
+        File rowFile = currentRow.getFromFile();
+        File renamedFile = currentRow.getRenamedFile();
+
+        chunksProcessed += (int) (rowFile.length() / bytesInChunk);
+
+        if (isSuccessful) {
 
             appendToSummary("renamed ");
 
@@ -258,7 +221,6 @@ public class RenameTask extends SimpleTask {
         } else {
 
             appendToSummary("ERROR: failed to rename ");
-            addFailedRowIndex(rowIndex);
 
             // clean up the copied file if it exists and
             // it isn't the same as the source file
@@ -281,27 +243,12 @@ public class RenameTask extends SimpleTask {
             appendToSummary(renamedFile.getAbsolutePath());
         }
         appendToSummary("\n");
+
+        currentRow = null;
     }
 
     private File getTargetFile(DataTableRow row) {
         Target target = row.getTarget();
         return (File) target.getInstance();
     }
-
-    private String getProgressMessage(int lastRowProcessed,
-                                      int totalRowsToProcess,
-                                      File fromFile,
-                                      File toFile) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("copying file ");
-        sb.append((lastRowProcessed + 1));
-        sb.append(" of ");
-        sb.append(totalRowsToProcess);
-        sb.append(": ");
-        sb.append(fromFile.getName());
-        sb.append(" -> ");
-        sb.append(toFile.getName());
-        return sb.toString();
-    }
-
 }

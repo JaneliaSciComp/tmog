@@ -101,15 +101,6 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> {
     }
 
     /**
-     * Adds the specified index to the list of failed rows for this task.
-     *
-     * @param  index  index to add.
-     */
-    protected void addFailedRowIndex(Integer index) {
-        failedRowIndices.add(index);
-    }
-
-    /**
      * Registers the specified listener for row processing event
      * notifications during task processing.
      *
@@ -145,8 +136,8 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> {
     }
 
     /**
-     * Executes the task process in a background thread so that long
-     * processes do not block the event dispatching thread.
+     * Executes the task process (and plug-in processes) in a background
+     * thread so that long processes do not block the event dispatching thread.
      */
     @Override
     public Void doInBackground() {
@@ -165,7 +156,7 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> {
                     failedRowIndices.add(i);
                 }
             } else {
-                doTask();
+                processRows();
             }
 
             // notify any session listeners
@@ -186,11 +177,83 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> {
     }
 
     /**
-     * Perform this task's core processing (in a background thread).
-     * Implementations of this
+     * This method returns a plug-in data row for the current model row.
+     * It can be overriden to support extended plug-in data models.
+     *
+     * @param  modelRow  the current row being processed.
+     *
+     * @return a plug-in data row for the current model row.
      */
-    protected void doTask() {
-        // TODO: add standard notifications for row listeners
+    protected PluginDataRow getPluginDataRow(DataTableRow modelRow) {
+        return new PluginDataRow(modelRow.getDataRow());
+    }
+
+    /**
+     * This method returns a task progress object for the specified row.
+     * It can be overriden to customize reported progress information.
+     *
+     * @param  lastRowProcessed    index of last proceessed row (zero based).
+     * @param  totalRowsToProcess  total number of rows being processed.
+     * @param  modelRow            the current row being processed.
+     *
+     * @return a task progress object for the specified row.
+     */
+    protected TaskProgressInfo getProgressInfo(int lastRowProcessed,
+                                               int totalRowsToProcess,
+                                               DataTableRow modelRow) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("processing ");
+        sb.append((lastRowProcessed + 1));
+        sb.append(" of ");
+        sb.append(totalRowsToProcess);
+        sb.append(": ");
+        sb.append(modelRow.getTarget().getName());
+        int pctComplete = lastRowProcessed / totalRowsToProcess;
+
+        return new TaskProgressInfo(lastRowProcessed,
+                                    totalRowsToProcess,
+                                    pctComplete,
+                                    sb.toString());
+    }
+
+    /**
+     * This method performs the core task process for the specified row.
+     * It's default implementation here does nothing, but can be overriden
+     * as needed.
+     *
+     * @param  modelRow            the current row being processed.
+     *
+     * @return true if the processing completes successfully; otherwise false.
+     */
+    protected boolean processRow(DataTableRow modelRow) {
+        return true;
+    }
+
+    /**
+     * This method performs any "clean-up" operations that are required
+     * after core processing (see {@link #processRow}) has completed and
+     * all row listeners have been notified.  It can be overriden as needed.
+     *
+     * @param  modelRow            the current row being processed.
+     *
+     * @param  isSuccessful        true if the row was processed successfully
+     *                             and all listeners completed their processing
+     *                             successfully; otherwise false.
+     */
+    protected void cleanupRow(DataTableRow modelRow,
+                              boolean isSuccessful) {
+        if (isSuccessful) {
+            appendToSummary("saved data for ");
+        } else {
+            appendToSummary("ERROR: failed to save data for ");
+        }
+
+        Target target = modelRow.getTarget();
+        if (target != null) {
+            appendToSummary(target.getName());
+        }
+        appendToSummary("\n");
     }
 
     /**
@@ -221,26 +284,81 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> {
         firePropertyChange(COMPLETION_PROPERTY, null, this);
     }
 
-
     /**
-     * Handles clean up needed if the session is cancelled while files
-     * are being renamed.
-     *
-     * @param  rowIndex      the row index for the last renamed file.
-     * @param  numberOfRows  the total number files being renamed.
-     * @param  target        the last target processed.
+     * Processes each data row, handling the common functions of notifying
+     * various listeners of progress and of updating failure information.
+     * <p>
+     * The {@link #getPluginDataRow}, {@link #getProgressInfo},
+     * {@link #processRow}, and {@link #cleanupRow} methods can be
+     * overriden by sub-classes to support customized task behavior
+     * within this method's basic processing flow.
+     * </p>
      */
-    protected void handleCancelOfSession(int rowIndex,
-                                         int numberOfRows,
-                                         Target target) {
-        if (rowIndex < numberOfRows) {
-            LOG.warn("Session cancelled after processing " +
-                     target.getName() + ".");
-            taskSummary.append("\nSession cancelled.");
+    private void processRows() {
 
-            // mark all remaining rows as failed
-            for (int i = rowIndex; i < numberOfRows; i++) {
-                failedRowIndices.add(i);
+        DataTableModel model = getModel();
+        List<DataTableRow> modelRows = model.getRows();
+
+        int rowIndex = 0;
+        final int numberOfRows = modelRows.size();
+
+        boolean isStartNotificationSuccessful;
+        boolean isRowProcessingSuccessful;
+        PluginDataRow pluginDataRow;
+        TaskProgressInfo progressInfo;
+
+        for (DataTableRow modelRow : modelRows) {
+
+            isStartNotificationSuccessful = false;
+            isRowProcessingSuccessful = false;
+
+            pluginDataRow = getPluginDataRow(modelRow);
+            try {
+                pluginDataRow =
+                        notifyRowListeners(RowListener.EventType.START,
+                                           pluginDataRow);
+                isStartNotificationSuccessful = true;
+            } catch (Exception e) {
+                LOG.error("Failed external start processing for " +
+                          pluginDataRow, e);
+            }
+
+            if (isStartNotificationSuccessful) {
+                progressInfo = getProgressInfo(rowIndex,
+                                               numberOfRows,
+                                               modelRow);
+                publish(progressInfo);
+                isRowProcessingSuccessful = processRow(modelRow);
+
+                // notify any listeners
+                try {
+                    if (isRowProcessingSuccessful) {
+                        notifyRowListeners(
+                                RowListener.EventType.END_SUCCESS,
+                                pluginDataRow);
+                    } else {
+                        addFailedRowIndex(rowIndex);
+                        notifyRowListeners(
+                                RowListener.EventType.END_FAIL,
+                                pluginDataRow);
+                    }
+                } catch (Exception e) {
+                    LOG.error("Failed external completion processing for " +
+                              pluginDataRow, e);
+                    isRowProcessingSuccessful = false;
+                }
+
+            }
+
+            cleanupRow(modelRow, isRowProcessingSuccessful);
+
+            rowIndex++;
+
+            if (isSessionCancelled()) {
+                handleCancelOfSession(rowIndex,
+                                      numberOfRows,
+                                      modelRow.getTarget());
+                break;
             }
         }
     }
@@ -258,8 +376,8 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> {
      * @throws ExternalSystemException
      *   if a system error occurs within a listener.
      */
-    protected PluginDataRow notifyRowListeners(RowListener.EventType eventType,
-                                               PluginDataRow row)
+    private PluginDataRow notifyRowListeners(RowListener.EventType eventType,
+                                             PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
         for (RowListener listener : rowListenerList) {
             row = listener.processEvent(eventType, row);
@@ -284,6 +402,38 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> {
             throws ExternalDataException, ExternalSystemException {
         for (SessionListener listener : sessionListenerList) {
             listener.processEvent(eventType, message);
+        }
+    }
+
+    /**
+     * Adds the specified index to the list of failed rows for this task.
+     *
+     * @param  index  index to add.
+     */
+    private void addFailedRowIndex(Integer index) {
+        failedRowIndices.add(index);
+    }
+
+    /**
+     * Handles clean up needed if the session is cancelled while files
+     * are being renamed.
+     *
+     * @param  rowIndex      the row index for the last renamed file.
+     * @param  numberOfRows  the total number files being renamed.
+     * @param  target        the last target processed.
+     */
+    private void handleCancelOfSession(int rowIndex,
+                                         int numberOfRows,
+                                         Target target) {
+        if (rowIndex < numberOfRows) {
+            LOG.warn("Session cancelled after processing " +
+                     target.getName() + ".");
+            taskSummary.append("\nSession cancelled.");
+
+            // mark all remaining rows as failed
+            for (int i = rowIndex; i < numberOfRows; i++) {
+                failedRowIndices.add(i);
+            }
         }
     }
 }
