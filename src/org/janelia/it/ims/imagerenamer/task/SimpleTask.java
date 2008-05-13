@@ -28,13 +28,7 @@ import java.util.List;
  *
  * @author Eric Trautman
  */
-public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> {
-
-    /** The name for the task progress property. */
-    public static final String PROGRESS_PROPERTY = "TaskProgressUpdate";
-
-    /** The name for the task progress property. */
-    public static final String COMPLETION_PROPERTY = "TaskComplete";
+public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements Task {
 
     /** The logger for this class. */
     private static final Logger LOG = Logger.getLogger(SimpleTask.class);
@@ -244,9 +238,9 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> {
     protected void cleanupRow(DataTableRow modelRow,
                               boolean isSuccessful) {
         if (isSuccessful) {
-            appendToSummary("saved data for ");
+            appendToSummary("Saved data for ");
         } else {
-            appendToSummary("ERROR: failed to save data for ");
+            appendToSummary("ERROR: Failed to save data for ");
         }
 
         Target target = modelRow.getTarget();

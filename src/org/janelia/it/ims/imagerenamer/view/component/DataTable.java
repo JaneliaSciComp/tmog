@@ -163,28 +163,9 @@ public class DataTable extends JTable {
      * based upon the specified task progress information.
      *
      * @param  info               the latest task progress information.
-     * @param  taskProgressBar    progress bar to update (or null).
-     * @param  taskProgressLabel  progress label to update (or null).
-     * @param  sessionIcon        session icon to update (or null).
      */
-    public void updateProgress(TaskProgressInfo info,
-                               JProgressBar taskProgressBar,
-                               JLabel taskProgressLabel,
-                               SessionIcon sessionIcon) {
-
-        int lastRowProcessed = info.getLastRowProcessed();
-        changeSelection(lastRowProcessed, 1, false, false);
-
-        if ((sessionIcon != null) && (lastRowProcessed == 0)) {
-            // once the first copy has started, change tab icon
-            sessionIcon.setToProcessing();
-        }
-        if (taskProgressBar != null) {
-            taskProgressBar.setValue(info.getPercentOfTaskCompleted());
-        }
-        if (taskProgressLabel != null) {
-            taskProgressLabel.setText(info.getMessage());
-        }
+    public void updateProgress(TaskProgressInfo info) {
+        changeSelection(info.getLastRowProcessed(), 1, false, false);
     }
 
     private void requestFocusForFileTableEditor(Component editor) {

@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import org.janelia.it.ims.imagerenamer.DataTableModel;
 import org.janelia.it.ims.imagerenamer.DataTableRow;
 import org.janelia.it.ims.imagerenamer.FileTarget;
-import org.janelia.it.ims.imagerenamer.ImageRenamer;
 import org.janelia.it.ims.imagerenamer.Target;
 import org.janelia.it.ims.imagerenamer.config.InputFileFilter;
 import org.janelia.it.ims.imagerenamer.config.InputFileSorter;
@@ -22,21 +21,19 @@ import org.janelia.it.ims.imagerenamer.filefilter.DirectoryOnlyFilter;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
 import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
-import org.janelia.it.ims.imagerenamer.plugin.RowListener;
 import org.janelia.it.ims.imagerenamer.plugin.RowValidator;
-import org.janelia.it.ims.imagerenamer.plugin.SessionListener;
 import org.janelia.it.ims.imagerenamer.task.RenameTask;
-import org.janelia.it.ims.imagerenamer.task.TaskProgressInfo;
+import org.janelia.it.ims.imagerenamer.task.Task;
 import org.janelia.it.ims.imagerenamer.view.component.DataTable;
 import org.janelia.it.ims.imagerenamer.view.component.SessionIcon;
+import org.janelia.it.ims.imagerenamer.view.component.TaskButtonText;
+import org.janelia.it.ims.imagerenamer.view.component.TaskComponents;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
@@ -50,7 +47,7 @@ import java.util.List;
  * @author Peter Davies
  * @author Eric Trautman
  */
-public class RenameView implements SessionView, PropertyChangeListener {
+public class RenameView implements SessionView {
 
     private File lsmDirectory;
     private JLabel lsmDirectoryField;
@@ -68,20 +65,17 @@ public class RenameView implements SessionView, PropertyChangeListener {
     private DataTableModel tableModel;
     private ProjectConfiguration projectConfig;
     private RenameTask task;
-    private boolean isRenameTaskInProgress;
-    private SessionIcon sessionIcon;
+    private TaskComponents taskComponents;
 
     public RenameView(ProjectConfiguration projectConfig,
                       File lsmDirectory,
                       JTabbedPane parentTabbedPane) {
         this.projectConfig = projectConfig;
         this.lsmDirectory = lsmDirectory;
-        this.sessionIcon = new SessionIcon(parentTabbedPane);
-
         this.projectLabel.setText(projectConfig.getName());
         setupInputDirectory();
         setupOutputDirectory();
-        setupProcess();
+        setupTaskComponents(parentTabbedPane);
     }
 
     public JPanel getPanel() {
@@ -92,124 +86,12 @@ public class RenameView implements SessionView, PropertyChangeListener {
         return lsmDirectory;
     }
 
-    public JLabel getLsmDirectoryField() {
-        return lsmDirectoryField;
-    }
-
-    public JLabel getOutputDirectoryField() {
-        return outputDirectoryField;
-    }
-
-    public JTable getDataTable() {
-        return dataTable;
-    }
-
-    public JProgressBar getCopyProgressBar() {
-        return copyProgressBar;
-    }
-
-    public JLabel getCopyProgressLabel() {
-        return copyProgressLabel;
-    }
-
-    public DataTableModel getTableModel() {
-        return tableModel;
-    }
-
     public boolean isTaskInProgress() {
-        return isRenameTaskInProgress;
-    }
-
-    public void setRenameTaskInProgress(boolean renameTaskInProgress,
-                                        boolean updateIcon) {
-        this.isRenameTaskInProgress = renameTaskInProgress;
-        if (isRenameTaskInProgress) {
-            copyAndRenameBtn.setText(RENAME_CANCEL_BUTTON_TEXT);
-            copyAndRenameBtn.setToolTipText(RENAME_CANCEL_TOOL_TIP_TEXT);
-            if (updateIcon) {
-                sessionIcon.setToWait();
-            }
-            copyProgressBar.setModel(new DefaultBoundedRangeModel());
-            copyProgressBar.setVisible(true);
-            copyProgressLabel.setText("");
-            copyProgressLabel.setVisible(true);
-        } else {
-            copyAndRenameBtn.setText(RENAME_START_BUTTON_TEXT);
-            copyAndRenameBtn.setToolTipText(RENAME_START_TOOL_TIP_TEXT);
-            task = null;
-            if (updateIcon) {
-                sessionIcon.setToEnterValues();
-            }
-            copyProgressBar.setModel(new DefaultBoundedRangeModel());
-            copyProgressBar.setVisible(false);
-            copyProgressLabel.setText("");
-            copyProgressLabel.setVisible(false);
-        }
+        return taskComponents.isTaskInProgress();
     }
 
     public SessionIcon getSessionIcon() {
-        return sessionIcon;
-    }
-
-    public void resetFileTable() {
-        lsmDirectoryField.setText("");
-        OutputDirectoryConfiguration odConfig =
-                projectConfig.getOutputDirectory();
-        if (odConfig.isDerivedFromEarliestModifiedFile()) {
-            outputDirectoryField.setText("");
-        }
-        dataTable.setModel(new DefaultTableModel());
-        setFileTableEnabled(true, false);
-    }
-
-    public void setFileTableEnabled(boolean isEnabled,
-                                    boolean isCopyButtonEnabled) {
-        Component[] cList = {
-                lsmDirectoryBtn, outputDirectoryBtn, dataTable};
-        for (Component c : cList) {
-            if (isEnabled != c.isEnabled()) {
-                c.setEnabled(isEnabled);
-            }
-        }
-
-        if (copyAndRenameBtn.isEnabled() != isCopyButtonEnabled) {
-            copyAndRenameBtn.setEnabled(isCopyButtonEnabled);
-        }
-    }
-
-    /**
-     * This method gets called when a bound property is changed.
-     *
-     * @param evt A PropertyChangeEvent object describing the event source
-     *            and the property that has changed.
-     */
-
-    public void propertyChange(PropertyChangeEvent evt) {
-        String propertyName = evt.getPropertyName();
-        Object newValue = evt.getNewValue();
-        if (RenameTask.PROGRESS_PROPERTY.equals(propertyName)) {
-            if (newValue instanceof List) {
-                List list = (List) newValue;
-                int size = list.size();
-                if (size > 0) {
-                    Object lastElement = list.get(size - 1);
-                    if (lastElement instanceof TaskProgressInfo) {
-                        dataTable.updateProgress(
-                                (TaskProgressInfo) lastElement,
-                                copyProgressBar,
-                                copyProgressLabel,
-                                sessionIcon);
-                    }
-                }
-            }
-
-        } else if (RenameTask.COMPLETION_PROPERTY.equals(propertyName)) {
-            if (newValue instanceof RenameTask) {
-                setRenameTaskInProgress(false, true);
-                processTaskCompletion((RenameTask) newValue);
-            }
-        }
-
+        return taskComponents.getSessionIcon();
     }
 
     private void setupInputDirectory() {
@@ -324,6 +206,32 @@ public class RenameView implements SessionView, PropertyChangeListener {
         }
     }
 
+    private void resetFileTable() {
+        lsmDirectoryField.setText("");
+        OutputDirectoryConfiguration odConfig =
+                projectConfig.getOutputDirectory();
+        if (odConfig.isDerivedFromEarliestModifiedFile()) {
+            outputDirectoryField.setText("");
+        }
+        dataTable.setModel(new DefaultTableModel());
+        setFileTableEnabled(true, false);
+    }
+
+    private void setFileTableEnabled(boolean isEnabled,
+                                     boolean isCopyButtonEnabled) {
+        Component[] cList = {
+                lsmDirectoryBtn, outputDirectoryBtn, dataTable};
+        for (Component c : cList) {
+            if (isEnabled != c.isEnabled()) {
+                c.setEnabled(isEnabled);
+            }
+        }
+
+        if (copyAndRenameBtn.isEnabled() != isCopyButtonEnabled) {
+            copyAndRenameBtn.setEnabled(isCopyButtonEnabled);
+        }
+    }
+
     private void setupOutputDirectory() {
         OutputDirectoryConfiguration odCfg = projectConfig.getOutputDirectory();
         boolean isManuallyChosen = odCfg.isManuallyChosen();
@@ -350,40 +258,35 @@ public class RenameView implements SessionView, PropertyChangeListener {
 
     }
 
-    private void setupProcess() {
-        copyAndRenameBtn.setEnabled(false);
-        setRenameTaskInProgress(false, true);
-
-        copyAndRenameBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                copyAndRename();
-            }
-        });
-        
-        copyProgressBar.setVisible(false);
-        copyProgressLabel.setVisible(false);
+    private void setupTaskComponents(Component iconParent) {
+        this.taskComponents =
+                new TaskComponents(dataTable,
+                                            copyAndRenameBtn,
+                                            copyProgressBar,
+                                            copyProgressLabel,
+                                            iconParent,
+                                            projectConfig,
+                                            TaskButtonText.RENAME) {
+                    protected Task getNewTask() {
+                        return getNewTaskForView();
+                    }
+                    protected boolean isTaskReadyToStart() {
+                        return isSessionReadyToStartForView();
+                    }
+                    protected void processTaskCompletion() {
+                        processTaskCompletionForView();
+                    }
+        };
     }
 
-    private void copyAndRename() {
-        if (isRenameTaskInProgress) {
-            cancelSession();
-        } else {
-            if (isSessionReadyToStart()) {
-                startSession();
-            }
-        }
+    private Task getNewTaskForView() {
+        task = new RenameTask(tableModel,
+                              projectConfig.getOutputDirectory(),
+                              outputDirectoryField.getText());
+        return task;
     }
 
-    public void cancelSession() {
-        task.cancelSession();
-        setRenameTaskInProgress(false, false);
-        copyAndRenameBtn.setText(RENAME_CANCELLED_BUTTON_TEXT);
-        copyAndRenameBtn.setToolTipText(
-                RENAME_CANCELLED_TOOL_TIP_TEXT);
-        copyAndRenameBtn.setEnabled(false);
-    }
-
-    private boolean isSessionReadyToStart() {
+    private boolean isSessionReadyToStartForView() {
         boolean isReady = false;
         boolean isOutputDirectoryValid = true;
 
@@ -508,29 +411,14 @@ public class RenameView implements SessionView, PropertyChangeListener {
         return isValid;
     }
 
-    private void startSession() {
-        setFileTableEnabled(false, true);
-        task = new RenameTask(tableModel,
-                              projectConfig.getOutputDirectory(),
-                              outputDirectoryField.getText());
-        task.addPropertyChangeListener(this);
-        for (RowListener listener :
-                projectConfig.getRowListeners()) {
-            task.addRowListener(listener);
-        }
-        for (SessionListener listener :
-                projectConfig.getSessionListeners()) {
-            task.addSessionListener(listener);
-        }
-        setRenameTaskInProgress(true, true);
-        ImageRenamer.submitTask(task);
-    }
-
-    private void processTaskCompletion(RenameTask task) {
+    private void processTaskCompletionForView() {
         List<Integer> failedRowIndices = task.getFailedRowIndices();
         int numberOfCopyFailures = failedRowIndices.size();
 
-        displaySummaryDialog(numberOfCopyFailures, task.getTaskSummary());
+        TaskComponents.displaySummaryDialog("Rename",
+                                            numberOfCopyFailures,
+                                            task.getTaskSummary(),
+                                            appPanel);
 
         if (numberOfCopyFailures == 0) {
             // everything succeeded, so reset the main view
@@ -543,57 +431,7 @@ public class RenameView implements SessionView, PropertyChangeListener {
         }
     }
 
-    private void displaySummaryDialog(int numberOfCopyFailures,
-                                      String renameSummary) {
-        String dialogTitle;
-        if (numberOfCopyFailures > 0) {
-            dialogTitle = "Rename Summary (" + numberOfCopyFailures;
-            if (numberOfCopyFailures > 1) {
-                dialogTitle = dialogTitle + " COPY FAILURES!)";
-            } else {
-                dialogTitle = dialogTitle + " COPY FAILURE!)";
-            }
-        } else {
-            dialogTitle = "Rename Summary";
-        }
-
-        JTextArea textArea = new JTextArea();
-        textArea.setLayout(new BorderLayout());
-        textArea.setEditable(false);
-        textArea.append(renameSummary);
-        JScrollPane areaScrollPane = new JScrollPane(textArea);
-        areaScrollPane.setPreferredSize(new Dimension(600, 400));
-        areaScrollPane.setWheelScrollingEnabled(true);
-        areaScrollPane.setVerticalScrollBarPolicy(
-                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        areaScrollPane.setHorizontalScrollBarPolicy(
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-        Dimension appPanelSize = appPanel.getSize();
-        int dialogWidth = (int) (appPanelSize.getWidth() * 0.8);
-        int dialogHeight = (int) (appPanelSize.getHeight() * 0.8);
-        Dimension dialogSize = new Dimension(dialogWidth, dialogHeight);
-
-        JOptionPane jop = new JOptionPane(areaScrollPane,
-                                          JOptionPane.INFORMATION_MESSAGE);
-        jop.setPreferredSize(dialogSize);
-        JDialog jd = jop.createDialog(appPanel, dialogTitle);
-        jd.setModal(false);
-        jd.setVisible(true);
-    }
-
     /** The logger for this class. */
     private static final Logger LOG = Logger.getLogger(RenameView.class);
 
-    private static final String RENAME_START_BUTTON_TEXT = "Copy and Rename";
-    private static final String RENAME_START_TOOL_TIP_TEXT =
-            "Copy and rename all files using specified information";
-    private static final String RENAME_CANCEL_BUTTON_TEXT =
-            "Cancel Rename In Progress";
-    private static final String RENAME_CANCEL_TOOL_TIP_TEXT =
-            "Cancel the renaming process that is currently running";
-    private static final String RENAME_CANCELLED_BUTTON_TEXT =
-            "Rename Session Cancelled";
-    private static final String RENAME_CANCELLED_TOOL_TIP_TEXT =
-            "Waiting for current file processing to complete";
 }

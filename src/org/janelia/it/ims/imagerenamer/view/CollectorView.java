@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import org.janelia.it.ims.imagerenamer.DataTableModel;
 import org.janelia.it.ims.imagerenamer.DataTableRow;
 import org.janelia.it.ims.imagerenamer.FileTarget;
-import org.janelia.it.ims.imagerenamer.ImageRenamer;
 import org.janelia.it.ims.imagerenamer.Target;
 import org.janelia.it.ims.imagerenamer.config.InputFileSorter;
 import org.janelia.it.ims.imagerenamer.config.ProjectConfiguration;
@@ -19,21 +18,19 @@ import org.janelia.it.ims.imagerenamer.field.DataField;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
 import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
 import org.janelia.it.ims.imagerenamer.plugin.PluginDataRow;
-import org.janelia.it.ims.imagerenamer.plugin.RowListener;
 import org.janelia.it.ims.imagerenamer.plugin.RowValidator;
-import org.janelia.it.ims.imagerenamer.plugin.SessionListener;
 import org.janelia.it.ims.imagerenamer.task.SimpleTask;
-import org.janelia.it.ims.imagerenamer.task.TaskProgressInfo;
+import org.janelia.it.ims.imagerenamer.task.Task;
 import org.janelia.it.ims.imagerenamer.view.component.DataTable;
 import org.janelia.it.ims.imagerenamer.view.component.SessionIcon;
+import org.janelia.it.ims.imagerenamer.view.component.TaskButtonText;
+import org.janelia.it.ims.imagerenamer.view.component.TaskComponents;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +42,7 @@ import java.util.List;
  *
  * @author Eric Trautman
  */
-public class CollectorView implements SessionView, PropertyChangeListener {
+public class CollectorView implements SessionView {
     private JPanel appPanel;
     @SuppressWarnings({"UnusedDeclaration"})
     private JPanel directoryPanel;
@@ -59,21 +56,18 @@ public class CollectorView implements SessionView, PropertyChangeListener {
 
     private ProjectConfiguration projectConfig;
     private File defaultDirectory;
-    private SessionIcon sessionIcon;
     private DataTableModel tableModel;
     private SimpleTask task;
-    private boolean isTaskInProgress;
+    private TaskComponents taskComponents;
 
     public CollectorView(ProjectConfiguration projectConfig,
                          File defaultDirectory,
                          JTabbedPane parentTabbedPane) {
         this.projectConfig = projectConfig;
         this.defaultDirectory = defaultDirectory;
-        this.sessionIcon = new SessionIcon(parentTabbedPane);
-
         this.projectLabel.setText(projectConfig.getName());
         setupInputDirectory();
-        setupProcess();
+        setupTaskComponents(parentTabbedPane);
     }
 
     /**
@@ -95,70 +89,16 @@ public class CollectorView implements SessionView, PropertyChangeListener {
      * @return true if the session's task is in progress; otherwise false.
      */
     public boolean isTaskInProgress() {
-        return false;
+        return taskComponents.isTaskInProgress();
     }
 
     /**
      * @return the session's processing icon.
      */
     public SessionIcon getSessionIcon() {
-        return sessionIcon;
+        return taskComponents.getSessionIcon();
     }
 
-    public void resetData() {
-        rootDirectoryField.setText("");
-        dataTable.setModel(new DefaultTableModel());
-        setEnabled(true, false);
-    }
-
-    public void setEnabled(boolean isEnabled,
-                           boolean isTaskButtonEnabled) {
-        Component[] cList = { rootDirectoryBtn, dataTable};
-        for (Component c : cList) {
-            if (isEnabled != c.isEnabled()) {
-                c.setEnabled(isEnabled);
-            }
-        }
-
-        if (saveBtn.isEnabled() != isTaskButtonEnabled) {
-            saveBtn.setEnabled(isTaskButtonEnabled);
-        }
-    }
-
-    /**
-     * This method gets called when a bound property is changed.
-     *
-     * @param evt A PropertyChangeEvent object describing the event source
-     *            and the property that has changed.
-     */
-
-    public void propertyChange(PropertyChangeEvent evt) {
-        String propertyName = evt.getPropertyName();
-        Object newValue = evt.getNewValue();
-        if (SimpleTask.PROGRESS_PROPERTY.equals(propertyName)) {
-            if (newValue instanceof java.util.List) {
-                java.util.List list = (java.util.List) newValue;
-                int size = list.size();
-                if (size > 0) {
-                    Object lastElement = list.get(size - 1);
-                    if (lastElement instanceof TaskProgressInfo) {
-                        dataTable.updateProgress(
-                                (TaskProgressInfo) lastElement,
-                                taskProgressBar,
-                                taskProgressLabel,
-                                sessionIcon);
-                    }
-                }
-            }
-
-        } else if (SimpleTask.COMPLETION_PROPERTY.equals(propertyName)) {
-            if (newValue instanceof SimpleTask) {
-                setTaskInProgress(false, true);
-                processTaskCompletion((SimpleTask) newValue);
-            }
-        }
-
-    }
 
     private void setupInputDirectory() {
         rootDirectoryBtn.addActionListener(new ActionListener() {
@@ -229,55 +169,51 @@ public class CollectorView implements SessionView, PropertyChangeListener {
         }
     }
 
-    private void setupProcess() {
-        saveBtn.setEnabled(false);
-        setTaskInProgress(false, true);
-
-        saveBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (isTaskInProgress) {
-                    cancelSession();
-                } else {
-                    if (isSessionReadyToStart()) {
-                        startSession();
-                    }
-                }
-            }
-
-        });
-
-        taskProgressBar.setVisible(false);
-        taskProgressLabel.setVisible(false);
+    private void resetData() {
+        rootDirectoryField.setText("");
+        dataTable.setModel(new DefaultTableModel());
+        setEnabled(true, false);
     }
 
-    private void setTaskInProgress(boolean taskInProgress,
-                                   boolean updateIcon) {
-        this.isTaskInProgress = taskInProgress;
-        if (isTaskInProgress) {
-            saveBtn.setText(CANCEL_BUTTON_TEXT);
-            saveBtn.setToolTipText(CANCEL_TOOL_TIP_TEXT);
-            if (updateIcon) {
-                sessionIcon.setToWait();
-            }
-        } else {
-            saveBtn.setText(START_BUTTON_TEXT);
-            saveBtn.setToolTipText(START_TOOL_TIP_TEXT);
-            task = null;
-            if (updateIcon) {
-                sessionIcon.setToEnterValues();
+    private void setEnabled(boolean isEnabled,
+                            boolean isTaskButtonEnabled) {
+        Component[] cList = { rootDirectoryBtn, dataTable};
+        for (Component c : cList) {
+            if (isEnabled != c.isEnabled()) {
+                c.setEnabled(isEnabled);
             }
         }
+
+        saveBtn.setEnabled(isTaskButtonEnabled);
     }
 
-    private void cancelSession() {
-        task.cancelSession();
-        setTaskInProgress(false, false);
-        saveBtn.setText(CANCELLED_BUTTON_TEXT);
-        saveBtn.setToolTipText(CANCELLED_TOOL_TIP_TEXT);
-        saveBtn.setEnabled(false);
+    private void setupTaskComponents(Component iconParent) {
+        this.taskComponents =
+                new TaskComponents(dataTable,
+                                            saveBtn,
+                                            taskProgressBar,
+                                            taskProgressLabel,
+                                            iconParent,
+                                            projectConfig,
+                                            TaskButtonText.DEFAULT) {
+                    protected Task getNewTask() {
+                        return getNewTaskForView();
+                    }
+                    protected boolean isTaskReadyToStart() {
+                        return isSessionReadyToStartForView();
+                    }
+                    protected void processTaskCompletion() {
+                        processTaskCompletionForView();
+                    }
+        };
     }
 
-    private boolean isSessionReadyToStart() {
+    private Task getNewTaskForView() {
+        task = new SimpleTask(tableModel);
+        return task;
+    }
+
+    protected boolean isSessionReadyToStartForView() {
         boolean isReady = false;
 
         dataTable.editCellAt(-1, -1); // stop any current editor
@@ -286,7 +222,7 @@ public class CollectorView implements SessionView, PropertyChangeListener {
                     JOptionPane.showConfirmDialog(
                             appPanel,
                             "Your entries have been validated.  Do you wish to continue?",
-                            "Continue with Rename?",
+                            "Continue with Processing?",
                             JOptionPane.YES_NO_OPTION);
 
             isReady = (choice == JOptionPane.YES_OPTION);
@@ -354,29 +290,16 @@ public class CollectorView implements SessionView, PropertyChangeListener {
         return isValid;
     }
 
-
-    private void startSession() {
-        dataTable.setEnabled(false);
-        task = new SimpleTask(tableModel);
-        task.addPropertyChangeListener(this);
-        for (RowListener listener : projectConfig.getRowListeners()) {
-            task.addRowListener(listener);
-        }
-        for (SessionListener listener :
-                projectConfig.getSessionListeners()) {
-            task.addSessionListener(listener);
-        }
-        setTaskInProgress(true, true);
-        ImageRenamer.submitTask(task);
-    }
-
-    private void processTaskCompletion(SimpleTask task) {
+    private void processTaskCompletionForView() {
         List<Integer> failedRowIndices = task.getFailedRowIndices();
-        int numberOfCopyFailures = failedRowIndices.size();
+        int numberOfFailures = failedRowIndices.size();
 
-        displaySummaryDialog(numberOfCopyFailures, task.getTaskSummary());
+        TaskComponents.displaySummaryDialog("Task",
+                                            numberOfFailures,
+                                            task.getTaskSummary(),
+                                            appPanel);
 
-        if (numberOfCopyFailures == 0) {
+        if (numberOfFailures == 0) {
             // everything succeeded, so reset the main view
             resetData();
         } else {
@@ -387,57 +310,6 @@ public class CollectorView implements SessionView, PropertyChangeListener {
         }
     }
 
-    private void displaySummaryDialog(int numberOfFailures,
-                                      String renameSummary) {
-        String dialogTitle;
-        if (numberOfFailures > 0) {
-            dialogTitle = "Task Summary (" + numberOfFailures;
-            if (numberOfFailures > 1) {
-                dialogTitle = dialogTitle + " FAILURES!)";
-            } else {
-                dialogTitle = dialogTitle + " FAILURE!)";
-            }
-        } else {
-            dialogTitle = "Task Summary";
-        }
-
-        JTextArea textArea = new JTextArea();
-        textArea.setLayout(new BorderLayout());
-        textArea.setEditable(false);
-        textArea.append(renameSummary);
-        JScrollPane areaScrollPane = new JScrollPane(textArea);
-        areaScrollPane.setPreferredSize(new Dimension(600, 400));
-        areaScrollPane.setWheelScrollingEnabled(true);
-        areaScrollPane.setVerticalScrollBarPolicy(
-                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        areaScrollPane.setHorizontalScrollBarPolicy(
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-        Dimension appPanelSize = appPanel.getSize();
-        int dialogWidth = (int) (appPanelSize.getWidth() * 0.8);
-        int dialogHeight = (int) (appPanelSize.getHeight() * 0.8);
-        Dimension dialogSize = new Dimension(dialogWidth, dialogHeight);
-
-        JOptionPane jop = new JOptionPane(areaScrollPane,
-                                          JOptionPane.INFORMATION_MESSAGE);
-        jop.setPreferredSize(dialogSize);
-        JDialog jd = jop.createDialog(appPanel, dialogTitle);
-        jd.setModal(false);
-        jd.setVisible(true);
-    }
-    
     /** The logger for this class. */
     private static final Logger LOG = Logger.getLogger(RenameView.class);
-
-    private static final String START_BUTTON_TEXT = "Save";
-    private static final String START_TOOL_TIP_TEXT =
-            "Save specified information.";
-    private static final String CANCEL_BUTTON_TEXT =
-            "Cancel Task In Progress";
-    private static final String CANCEL_TOOL_TIP_TEXT =
-            "Cancel the task that is currently running.";
-    private static final String CANCELLED_BUTTON_TEXT =
-            "Task Cancelled";
-    private static final String CANCELLED_TOOL_TIP_TEXT =
-            "Waiting for current target processing to complete.";
 }
