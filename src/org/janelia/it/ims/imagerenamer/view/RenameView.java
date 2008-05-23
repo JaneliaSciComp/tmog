@@ -25,6 +25,7 @@ import org.janelia.it.ims.imagerenamer.plugin.RowValidator;
 import org.janelia.it.ims.imagerenamer.task.RenameTask;
 import org.janelia.it.ims.imagerenamer.task.Task;
 import org.janelia.it.ims.imagerenamer.view.component.DataTable;
+import org.janelia.it.ims.imagerenamer.view.component.NarrowOptionPane;
 import org.janelia.it.ims.imagerenamer.view.component.SessionIcon;
 import org.janelia.it.ims.imagerenamer.view.component.TaskButtonText;
 import org.janelia.it.ims.imagerenamer.view.component.TaskComponents;
@@ -198,10 +199,11 @@ public class RenameView implements SessionView {
             dataTable.sizeTable();
             copyAndRenameBtn.setEnabled(true);
         } else {
-            JOptionPane.showMessageDialog(appPanel,
-                                          reject.toString(),
-                                          "Source File Directory Selection Error",
-                                          JOptionPane.ERROR_MESSAGE);
+            NarrowOptionPane.showMessageDialog(
+                    appPanel,
+                    reject.toString(),
+                    "Source File Directory Selection Error",
+                    JOptionPane.ERROR_MESSAGE);
             resetFileTable();
         }
     }
@@ -302,17 +304,17 @@ public class RenameView implements SessionView {
 
             if (outputFailureMsg != null) {
                 isOutputDirectoryValid = false;
-                JOptionPane.showMessageDialog(appPanel,
-                                              outputFailureMsg,
-                                              "Error",
-                                              JOptionPane.ERROR_MESSAGE);
+                NarrowOptionPane.showMessageDialog(appPanel,
+                                                   outputFailureMsg,
+                                                   "Error",
+                                                   JOptionPane.ERROR_MESSAGE);
             }
         }
 
         if (isOutputDirectoryValid &&
             validateAllFields(outputDirectory)) {
             int choice =
-                    JOptionPane.showConfirmDialog(
+                    NarrowOptionPane.showConfirmDialog(
                             appPanel,
                             "Your entries have been validated.  Do you wish to continue?",
                             "Continue with Rename?",

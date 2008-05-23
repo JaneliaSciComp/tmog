@@ -145,10 +145,10 @@ public class DataTable extends JTable {
 
         changeSelection(rowIndex, columnIndex, false, false);
 
-        JOptionPane.showMessageDialog(this,
-                                      message, // field to display
-                                      "Invalid Entry", // title
-                                      JOptionPane.ERROR_MESSAGE);
+        NarrowOptionPane.showMessageDialog(this,
+                                           message, // field to display
+                                           "Invalid Entry", // title
+                                           JOptionPane.ERROR_MESSAGE);
 
         requestFocus();
         editCellAt(rowIndex, columnIndex);

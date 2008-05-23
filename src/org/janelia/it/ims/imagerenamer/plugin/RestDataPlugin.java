@@ -9,6 +9,7 @@ package org.janelia.it.ims.imagerenamer.plugin;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.logging.Log;
@@ -140,10 +141,12 @@ public class RestDataPlugin implements RowListener {
             throws ExternalSystemException {
 
         int responseCode;
+        URI requestUri = null;
         try {
             StringBuilder sb = new StringBuilder();
             sb.append("sendRequest: uri=");
-            sb.append(method.getURI());
+            requestUri = method.getURI();
+            sb.append(requestUri);
             sb.append(", method=");
             sb.append(method.getName());
             if (method instanceof PostMethod) {
@@ -157,7 +160,7 @@ public class RestDataPlugin implements RowListener {
             
         } catch (IOException e) {
             throw new ExternalSystemException(
-                    "The request for '" + method.getPath() +
+                    "The request for '" + requestUri +
                     "' failed.  The detailed error was: " + e.getMessage() +
                     ".");
         } finally {
@@ -166,7 +169,7 @@ public class RestDataPlugin implements RowListener {
 
         if (responseCode != HttpURLConnection.HTTP_OK) {
             throw new ExternalSystemException(
-                    "The request for '" + method.getPath() +
+                    "The request for '" + requestUri +
                     "' failed with response code " + responseCode + ".");
         }
     }

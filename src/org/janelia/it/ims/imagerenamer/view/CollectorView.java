@@ -23,6 +23,7 @@ import org.janelia.it.ims.imagerenamer.plugin.RowValidator;
 import org.janelia.it.ims.imagerenamer.task.SimpleTask;
 import org.janelia.it.ims.imagerenamer.task.Task;
 import org.janelia.it.ims.imagerenamer.view.component.DataTable;
+import org.janelia.it.ims.imagerenamer.view.component.NarrowOptionPane;
 import org.janelia.it.ims.imagerenamer.view.component.SessionIcon;
 import org.janelia.it.ims.imagerenamer.view.component.TaskButtonText;
 import org.janelia.it.ims.imagerenamer.view.component.TaskComponents;
@@ -171,10 +172,10 @@ public class CollectorView implements SessionView {
             reject.append(") does not contain any files or directories that ");
             reject.append("match this project's configured filter criteria.  ");
             reject.append("Please choose another directory.");
-            JOptionPane.showMessageDialog(appPanel,
-                                          reject.toString(),
-                                          "Root Directory Selection Error",
-                                          JOptionPane.ERROR_MESSAGE);
+            NarrowOptionPane.showMessageDialog(appPanel,
+                                               reject.toString(),
+                                               "Root Directory Selection Error",
+                                               JOptionPane.ERROR_MESSAGE);
             resetData();
         }
     }
@@ -229,7 +230,7 @@ public class CollectorView implements SessionView {
         dataTable.editCellAt(-1, -1); // stop any current editor
         if (validateAllFields()) {
             int choice =
-                    JOptionPane.showConfirmDialog(
+                    NarrowOptionPane.showConfirmDialog(
                             appPanel,
                             "Your entries have been validated.  Do you wish to continue?",
                             "Continue with Processing?",

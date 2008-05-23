@@ -7,6 +7,8 @@
 
 package org.janelia.it.ims.imagerenamer.field;
 
+import org.janelia.it.ims.imagerenamer.view.component.NarrowOptionPane;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.TableCellEditor;
@@ -71,7 +73,7 @@ public class VerifiedFieldEditor extends AbstractCellEditor
                 String dialogMsg = verifiedFieldModel.getErrorMessage() +
                         "  Would you like to correct the field now?";
 
-                int selection = JOptionPane.showConfirmDialog(
+                int selection = NarrowOptionPane.showConfirmDialog(
                         dialogParent,
                         dialogMsg,
                         "Invalid Entry", // title

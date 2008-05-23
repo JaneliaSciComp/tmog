@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.janelia.it.ims.imagerenamer.config.ConfigurationException;
 import org.janelia.it.ims.imagerenamer.config.ProjectConfiguration;
 import org.janelia.it.ims.imagerenamer.config.RenamerConfiguration;
+import org.janelia.it.ims.imagerenamer.view.component.NarrowOptionPane;
 import org.janelia.it.utils.LoggingUtils;
 
 import javax.swing.*;
@@ -66,10 +67,10 @@ public class TabbedView implements ActionListener {
             renamerConfig.load(configFileName);
         } catch (ConfigurationException e) {
             LOG.error("Configuration Error", e);
-            JOptionPane.showMessageDialog(contentPanel,
-                                          e.getMessage(),
-                                          "Configuration Error",
-                                          JOptionPane.ERROR_MESSAGE);
+            NarrowOptionPane.showMessageDialog(contentPanel,
+                                               e.getMessage(),
+                                               "Configuration Error",
+                                               JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
 
@@ -128,10 +129,10 @@ public class TabbedView implements ActionListener {
                 }
             }
             
-            JOptionPane.showMessageDialog(contentPanel,
-                                          msg.toString(),
-                                          title.toString(),
-                                          JOptionPane.WARNING_MESSAGE);
+            NarrowOptionPane.showMessageDialog(contentPanel,
+                                               msg.toString(),
+                                               title.toString(),
+                                               JOptionPane.WARNING_MESSAGE);
         }
 
         return (numberOfRenameTasksInProgress > 0);
