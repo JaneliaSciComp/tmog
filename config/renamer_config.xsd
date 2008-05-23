@@ -4,6 +4,8 @@
 
     <xs:complexType name="inputFileFilterType">
         <xs:attribute name="patternString" type="xs:string"/>
+        <xs:attribute name="excludeQueryUrl" type="xs:anyURI"/>
+        <xs:attribute name="includeQueryUrl" type="xs:anyURI"/>
     </xs:complexType>
 
     <xs:complexType name="inputFileSorterType">
@@ -193,6 +195,7 @@
         </xs:sequence>
         <xs:attribute name="name" type="xs:string"/>
         <xs:attribute name="default" type="xs:boolean"/>
+        <xs:attribute name="taskName" type="xs:string"/>
     </xs:complexType>
 
 

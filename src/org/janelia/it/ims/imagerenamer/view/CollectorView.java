@@ -12,6 +12,7 @@ import org.janelia.it.ims.imagerenamer.DataTableModel;
 import org.janelia.it.ims.imagerenamer.DataTableRow;
 import org.janelia.it.ims.imagerenamer.FileTarget;
 import org.janelia.it.ims.imagerenamer.Target;
+import org.janelia.it.ims.imagerenamer.config.InputFileFilter;
 import org.janelia.it.ims.imagerenamer.config.InputFileSorter;
 import org.janelia.it.ims.imagerenamer.config.ProjectConfiguration;
 import org.janelia.it.ims.imagerenamer.field.DataField;
@@ -32,6 +33,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +45,10 @@ import java.util.List;
  * @author Eric Trautman
  */
 public class CollectorView implements SessionView {
+
+    /** The name of the task supported by this view. */
+    public static final String TASK_NAME = "collector";
+
     private JPanel appPanel;
     @SuppressWarnings({"UnusedDeclaration"})
     private JPanel directoryPanel;
@@ -107,9 +113,9 @@ public class CollectorView implements SessionView {
                 JPanel parentPanel = getPanel();
                 JFileChooser fileChooser = new JFileChooser();
                 if (defaultDirectory != null) {
-                    File parentLsmDirectory = defaultDirectory.getParentFile();
-                    if (parentLsmDirectory != null) {
-                        fileChooser.setCurrentDirectory(parentLsmDirectory);
+                    File parentDirectory = defaultDirectory.getParentFile();
+                    if (parentDirectory != null) {
+                        fileChooser.setCurrentDirectory(parentDirectory);
                     } else {
                         fileChooser.setCurrentDirectory(defaultDirectory);
                     }
@@ -117,7 +123,7 @@ public class CollectorView implements SessionView {
                 fileChooser.setFileSelectionMode(
                         JFileChooser.FILES_AND_DIRECTORIES);
                 int choice = fileChooser.showDialog(parentPanel,
-                                                    "Select Root");
+                                                    "Select Root Directory");
 
                 if (choice == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
@@ -137,7 +143,9 @@ public class CollectorView implements SessionView {
     private void validateDirectorySelection(File selectedFile) {
         defaultDirectory = selectedFile;
 
-        File[] files = defaultDirectory.listFiles();
+        InputFileFilter inputFilter = projectConfig.getInputFileFilter();
+        FileFilter fileFilter = inputFilter.getFilter();
+        File[] files = defaultDirectory.listFiles(fileFilter);
 
         StringBuilder reject = new StringBuilder();
         if (files.length > 0) {
@@ -160,7 +168,9 @@ public class CollectorView implements SessionView {
         } else {
             reject.append("The selected directory (");
             reject.append(defaultDirectory.getAbsolutePath());
-            reject.append(") is empty.  Please choose another directory.");
+            reject.append(") does not contain any files or directories that ");
+            reject.append("match this project's configured filter criteria.  ");
+            reject.append("Please choose another directory.");
             JOptionPane.showMessageDialog(appPanel,
                                           reject.toString(),
                                           "Root Directory Selection Error",

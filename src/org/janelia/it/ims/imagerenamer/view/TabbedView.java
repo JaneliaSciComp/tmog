@@ -58,7 +58,7 @@ public class TabbedView implements ActionListener {
         };
         SwingUtilities.invokeLater(setContextInDispatchThread);
 
-        LOG.info("starting renamer");
+        LOG.info("starting transmogrifier");
 
         String configFileName = "renamer_config.xml";
         renamerConfig = new RenamerConfiguration();
@@ -216,14 +216,15 @@ public class TabbedView implements ActionListener {
     private SessionView buildViewForProject(ProjectConfiguration projectConfig,
                                             File defaultDirectory) {
         SessionView newView;
-        if (projectConfig.isDefault()) {
+        if (CollectorView.TASK_NAME.equals(projectConfig.getTaskName())) {
+            newView = new CollectorView(projectConfig,
+                                        defaultDirectory,
+                                        tabbedPane);
+        } else {
+            // default to rename task and view
             newView = new RenameView(projectConfig,
                             defaultDirectory,
                             tabbedPane);
-        } else {
-            newView = new CollectorView(projectConfig,
-                                        defaultDirectory,
-                                        tabbedPane);            
         }
         return newView;
     }

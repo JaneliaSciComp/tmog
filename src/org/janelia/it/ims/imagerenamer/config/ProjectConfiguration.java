@@ -26,6 +26,7 @@ public class ProjectConfiguration {
 
     private String name;
     private boolean isDefault;
+    private String taskName;
     private RenamePattern renamePattern;
     private InputFileFilter inputFileFilter;
     private InputFileSorter inputFileSorter;
@@ -46,6 +47,10 @@ public class ProjectConfiguration {
 
     public boolean isDefault() {
         return isDefault;
+    }
+
+    public String getTaskName() {
+        return taskName;
     }
 
     public List<DataField> getFieldConfigurations() {
@@ -102,6 +107,9 @@ public class ProjectConfiguration {
         isDefault = aDefault;
     }
 
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
 
     public void setRenamePattern(RenamePattern renamePattern) {
         this.renamePattern = renamePattern;

@@ -149,7 +149,7 @@
 
     </project>
 
-    <project name="Simpson Lab: GAL4 Lines (JHS_*)" default="true">
+    <project name="Simpson Lab: GAL4 Lines (JHS_*)">
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
@@ -210,31 +210,33 @@
 
     </project>
 
-    <project name="Kerr Lab: Worm Experiments">
+    <project name="Kerr Lab: Multi-Worm Tracker" taskName="collector" default="true">
 
+        <inputFileFilter excludeQueryUrl="http://localhost:8080/wormTracker/experiment" />
+        
         <plugins>
-            <rowListener className="org.janelia.it.ims.imagerenamer.plugin.SRL">
-              <property name="seconds" value="2"/>
+            <rowListener className="org.janelia.it.ims.imagerenamer.plugin.RestDataPlugin">
+                <property name="dataServerUrl" value="http://localhost:8080/wormTracker/experiment"/>
+                <property name="resourceField" value="Experiment Timestamp"/>
             </rowListener>
         </plugins>
 
         <renamePattern>
-            <text displayName="Line" required="true" pattern="[0-9A-Za-z]++">
-                <sourceFileDefault pattern="([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"/>
-                <sourceFileDefault pattern=".*[/\\\\]([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"
-                                   matchType="path"/>
-            </text>
-            <date displayName="Capture Date" required="true" 
-                  datePattern="yyyyMMdd" suffix="_">
-                <sourceFileDateDefault pattern=".*[-/\\\\](\d\d?-\d\d?-\d\d){1}.*\.lsm"
-                                       fromDatePattern="MM-dd-yy"
-                                       toDatePattern="yyyyMMdd"
-                                       matchType="path"/>
-            </date>
-            <validValueList displayName="Organ" required="true">
-                <validValue displayName="B: Brain" value="B"/>
-                <validValue displayName="T: Thorax" value="T"/>
+            <text displayName="Worm Strain" required="true" pattern="[0-9A-Za-z]++"/>
+            <text displayName="RNAI" required="true" pattern="[0-9A-Za-z]++"/>
+            <validValueList displayName="Stimulus Protocol" required="true">
+                <validValue displayName="A: Protocol A" value="A"/>
+                <validValue displayName="B: Protocol B" value="B"/>
             </validValueList>
+            <date displayName="Experiment Timestamp" required="true"
+                  datePattern="yyyyMMddhhmmss">
+                <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d\d\d\d\d\d\d\d\d){1}.*"
+                                       fromDatePattern="yyyyMMddhhmmss"
+                                       toDatePattern="yyyyMMddhhmmss"
+                                       matchType="name"/>
+            </date>
+            <text displayName="Tracker Tag" required="true" pattern="[0-9A-Za-z]++"/>
+            <text displayName="Notes" required="false" />
         </renamePattern>
 
     </project>

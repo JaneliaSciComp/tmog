@@ -1,5 +1,5 @@
 /*
- * Copyright © 2007 Howard Hughes Medical Institute.
+ * Copyright 2007 Howard Hughes Medical Institute.
  * All rights reserved.  
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -17,13 +17,14 @@ import java.util.concurrent.ThreadPoolExecutor;
 /**
  * This class launches the renamer user interface.
  *
+ * @author Eric Trautman
  * @author Peter Davies
  */
 public class ImageRenamer extends JFrame {
 
     /**
      * Set up a thread pool to limit the number of concurrent
-     * renaming session tasks running at any given time.
+     * session tasks running at any given time.
      *
      * This pool was introduced to work around issues with large
      * numbers of concurrent transfers to Samba file shares.
@@ -40,7 +41,7 @@ public class ImageRenamer extends JFrame {
      * Construct the application
      */
     public ImageRenamer() {
-        super("Janelia Farm LSM Image Renamer");
+        super("Janelia Transmogrifier");
         TabbedView tabbedView = new TabbedView();
         setContentPane(tabbedView.getContentPanel());
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
