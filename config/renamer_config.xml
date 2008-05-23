@@ -222,20 +222,24 @@
         </plugins>
 
         <renamePattern>
-            <text displayName="Worm Strain" required="true" pattern="[0-9A-Za-z]++"/>
-            <text displayName="RNAI" required="true" pattern="[0-9A-Za-z]++"/>
+            <text displayName="Worm Strain" required="true" pattern="[0-9A-Za-z\s]++"/>
+            <text displayName="RNAI" required="true" pattern="[0-9A-Za-z\s]++"/>
             <validValueList displayName="Stimulus Protocol" required="true">
                 <validValue displayName="A: Protocol A" value="A"/>
                 <validValue displayName="B: Protocol B" value="B"/>
             </validValueList>
+            <text displayName="Path" required="true" copyable="false">
+                <sourceFileDefault pattern=".*[/\\\\]([^/\\\\]++)[/\\\\]\d\d\d\d\d\d\d\d_\d\d\d\d\d\d"
+                                   matchType="path"/>
+            </text>
             <date displayName="Experiment Timestamp" required="true"
-                  datePattern="yyyyMMddhhmmss" copyable="false">
-                <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d\d\d\d\d\d\d\d\d){1}.*"
-                                       fromDatePattern="yyyyMMddhhmmss"
-                                       toDatePattern="yyyyMMddhhmmss"
+                  datePattern="yyyyMMdd_HHmmss" copyable="false">
+                <sourceFileDateDefault pattern="(\d\d\d\d\d\d\d\d_\d\d\d\d\d\d){1}"
+                                       fromDatePattern="yyyyMMdd_HHmmss"
+                                       toDatePattern="yyyyMMdd_HHmmss"
                                        matchType="name"/>
             </date>
-            <text displayName="Tracker Tag" required="true" pattern="[0-9A-Za-z]++"/>
+            <text displayName="Tracker Tag" required="true" pattern="[0-9A-Za-z\s]++"/>
             <text displayName="Notes" required="false" />
         </renamePattern>
 
