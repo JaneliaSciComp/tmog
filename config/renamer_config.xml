@@ -229,7 +229,7 @@
                 <validValue displayName="B: Protocol B" value="B"/>
             </validValueList>
             <date displayName="Experiment Timestamp" required="true"
-                  datePattern="yyyyMMddhhmmss">
+                  datePattern="yyyyMMddhhmmss" copyable="false">
                 <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d\d\d\d\d\d\d\d\d){1}.*"
                                        fromDatePattern="yyyyMMddhhmmss"
                                        toDatePattern="yyyyMMddhhmmss"

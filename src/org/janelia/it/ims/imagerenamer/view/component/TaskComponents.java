@@ -7,7 +7,7 @@
 
 package org.janelia.it.ims.imagerenamer.view.component;
 
-import org.janelia.it.ims.imagerenamer.ImageRenamer;
+import org.janelia.it.ims.imagerenamer.JaneliaTransmogrifier;
 import org.janelia.it.ims.imagerenamer.config.ProjectConfiguration;
 import org.janelia.it.ims.imagerenamer.plugin.RowListener;
 import org.janelia.it.ims.imagerenamer.plugin.SessionListener;
@@ -162,7 +162,7 @@ public abstract class TaskComponents implements PropertyChangeListener {
             task.addSessionListener(listener);
         }
         setTaskInProgress(true, true);
-        ImageRenamer.submitTask(task);
+        JaneliaTransmogrifier.submitTask(task);
     }
 
     private void cancelTask() {
