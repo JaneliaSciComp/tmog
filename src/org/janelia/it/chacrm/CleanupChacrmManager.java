@@ -9,13 +9,13 @@ package org.janelia.it.chacrm;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.janelia.it.ims.imagerenamer.config.PluginConfiguration;
-import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
-import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
-import org.janelia.it.ims.imagerenamer.plugin.PluginDataRow;
-import org.janelia.it.ims.imagerenamer.plugin.PluginUtil;
-import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
-import org.janelia.it.ims.imagerenamer.plugin.RowListener;
+import org.janelia.it.ims.tmog.config.PluginConfiguration;
+import org.janelia.it.ims.tmog.plugin.ExternalDataException;
+import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
+import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.plugin.PluginUtil;
+import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
+import org.janelia.it.ims.tmog.plugin.RowListener;
 
 import java.io.File;
 import java.util.regex.Pattern;
@@ -50,7 +50,7 @@ public class CleanupChacrmManager implements RowListener {
 
     /**
      * Empty constructor required by
-     * {@link org.janelia.it.ims.imagerenamer.config.PluginFactory}.
+     * {@link org.janelia.it.ims.tmog.config.PluginFactory}.
      */
     public CleanupChacrmManager() {
     }
@@ -109,7 +109,7 @@ public class CleanupChacrmManager implements RowListener {
             File fromFile = dataRow.getFromFile();
             String fromFileName = fromFile.getAbsolutePath();
             ImageLocation fromFileImageLocation =
-                    RenamerEventManager.getImageLocation(fromFileName,
+                    ChacrmEventManager.getImageLocation(fromFileName,
                                      labImageSharePattern);
             if (fromFileImageLocation != null) {
                 try {

@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:complexType name="inputFileFilterType">
+        <xs:attribute name="patternString" type="xs:string"/>
+        <xs:attribute name="excludeQueryUrl" type="xs:anyURI"/>
+        <xs:attribute name="includeQueryUrl" type="xs:anyURI"/>
+    </xs:complexType>
+
+    <xs:complexType name="inputFileSorterType">
+        <xs:attribute name="sortAlgorithm" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="outputDirectoryType">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="path" type="pathType"/>
+            <xs:element name="transmogrifierFieldValue" type="transmogrifierFieldValueType"/>
+            <xs:element name="sourceFileModificationTime"
+                        type="sourceFileModificationTimeType"/>
+        </xs:choice>
+        <xs:attribute name="basePath" type="xs:string"/>
+        <xs:attribute name="derivedFromEarliestModifiedFile" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="pathType">
+        <xs:attribute name="path" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="transmogrifierFieldValueType">
+        <xs:attribute name="fieldDisplayName" type="xs:string"/>
+        <xs:attribute name="prefix" type="xs:string"/>
+        <xs:attribute name="suffix" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="sourceFileModificationTimeType">
+        <xs:attribute name="datePattern" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="propertyType">
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="value" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="pluginType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="property" type="propertyType"/>
+        </xs:sequence>
+        <xs:attribute name="className" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="pluginsType">
+        <xs:sequence>
+            <xs:element name="rowValidator" type="pluginType" minOccurs="0"/>
+            <xs:element name="rowListener" type="pluginType" minOccurs="0"/>
+            <xs:element name="sessionListener" type="pluginType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="separatorType">
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="value" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="numberType">
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="required" type="xs:boolean"/>
+        <xs:attribute name="minimumValue" type="xs:integer"/>
+        <xs:attribute name="maximumValue" type="xs:integer"/>
+        <xs:attribute name="prefix" type="xs:string"/>
+        <xs:attribute name="suffix" type="xs:string"/>
+        <xs:attribute name="copyable" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="textType">
+        <xs:sequence>
+            <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="required" type="xs:boolean"/>
+        <xs:attribute name="minimumLength" type="xs:integer"/>
+        <xs:attribute name="maximumLength" type="xs:integer"/>
+        <xs:attribute name="pattern" type="xs:string"/>
+        <xs:attribute name="prefix" type="xs:string"/>
+        <xs:attribute name="suffix" type="xs:string"/>
+        <xs:attribute name="copyable" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="dateType">
+        <xs:sequence>
+            <xs:element name="sourceFileDateDefault" type="sourceFileDateDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="required" type="xs:boolean"/>
+        <xs:attribute name="datePattern" type="xs:string"/>
+        <xs:attribute name="prefix" type="xs:string"/>
+        <xs:attribute name="suffix" type="xs:string"/>
+        <xs:attribute name="copyable" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="wellType">
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="required" type="xs:boolean"/>
+        <xs:attribute name="formFactor" type="xs:integer"/>
+        <xs:attribute name="prefix" type="xs:string"/>
+        <xs:attribute name="suffix" type="xs:string"/>
+        <xs:attribute name="copyable" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="validValueType">
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="value" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="validValueListType">
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="validValue" type="validValueType"/>
+        </xs:sequence>
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="required" type="xs:boolean"/>
+        <xs:attribute name="prefix" type="xs:string"/>
+        <xs:attribute name="suffix" type="xs:string"/>
+        <xs:attribute name="copyable" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="pluginDataType">
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="format" type="xs:string" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="fileModificationTimeType">
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="datePattern" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="runTimeType">
+        <xs:attribute name="datePattern" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="fileExtensionType">
+    </xs:complexType>
+
+    <xs:simpleType name="matchType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="name"/>
+            <xs:enumeration value="path"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="sourceFileDefaultType">
+        <xs:attribute name="pattern" type="xs:string"/>
+        <xs:attribute name="matchType" type="matchType"/>
+    </xs:complexType>
+
+    <xs:complexType name="sourceFileDateDefaultType">
+        <xs:attribute name="pattern" type="xs:string"/>
+        <xs:attribute name="matchType" type="matchType"/>
+        <xs:attribute name="fromDatePattern" type="xs:string"/>
+        <xs:attribute name="toDatePattern" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="projectType">
+        <xs:sequence>
+
+            <xs:element name="inputFileFilter" type="inputFileFilterType" minOccurs="0"/>
+
+            <xs:element name="inputFileSorter" type="inputFileSorterType" minOccurs="0"/>
+
+            <xs:element name="outputDirectory" type="outputDirectoryType" minOccurs="0"/>
+
+            <xs:element name="plugins" type="pluginsType" minOccurs="0"/>
+
+            <xs:element name="renamePattern" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:element name="separator" type="separatorType"/>
+                        <xs:element name="number" type="numberType"/>
+                        <xs:element name="text" type="textType"/>
+                        <xs:element name="date" type="dateType"/>
+                        <xs:element name="well" type="wellType"/>
+                        <xs:element name="validValueList"
+                                    type="validValueListType"/>
+                        <xs:element name="pluginData" type="pluginDataType"/>
+                        <xs:element name="fileModificationTime"
+                                    type="fileModificationTimeType"/>
+                        <xs:element name="runTime" type="runTimeType"/>
+                        <xs:element name="fileExtension"
+                                    type="fileExtensionType"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="default" type="xs:boolean"/>
+        <xs:attribute name="taskName" type="xs:string"/>
+    </xs:complexType>
+
+
+    <xs:element name="transmogrifierConfiguration">
+        <xs:complexType>
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                <xs:element name="project" type="projectType" minOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

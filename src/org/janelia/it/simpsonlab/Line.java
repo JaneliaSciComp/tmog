@@ -1,5 +1,5 @@
 /*
- * Copyright © 2008 Howard Hughes Medical Institute.
+ * Copyright 2008 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -7,7 +7,7 @@
 
 package org.janelia.it.simpsonlab;
 
-import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
+import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 
 /**
  * This class encapsulates information for Simpson Lab fly lines.

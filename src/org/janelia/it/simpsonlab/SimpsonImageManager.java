@@ -9,16 +9,16 @@ package org.janelia.it.simpsonlab;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.janelia.it.ims.imagerenamer.config.PluginConfiguration;
-import org.janelia.it.ims.imagerenamer.plugin.ExternalDataException;
-import org.janelia.it.ims.imagerenamer.plugin.ExternalSystemException;
-import org.janelia.it.ims.imagerenamer.plugin.PluginDataRow;
-import org.janelia.it.ims.imagerenamer.plugin.PluginUtil;
-import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
-import org.janelia.it.ims.imagerenamer.plugin.RowListener;
+import org.janelia.it.ims.tmog.config.PluginConfiguration;
+import org.janelia.it.ims.tmog.plugin.ExternalDataException;
+import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
+import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.plugin.PluginUtil;
+import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
+import org.janelia.it.ims.tmog.plugin.RowListener;
 
 /**
- * This class handles events "published" by the image renamer tool.
+ * This class handles events "published" by the transmogrifier tool.
  *
  * @author Eric Trautman
  */
@@ -34,7 +34,7 @@ public class SimpsonImageManager implements RowListener {
 
     /**
      * Empty constructor required by
-     * {@link org.janelia.it.ims.imagerenamer.config.PluginFactory}.
+     * {@link org.janelia.it.ims.tmog.config.PluginFactory}.
      */
     public SimpsonImageManager() {
     }

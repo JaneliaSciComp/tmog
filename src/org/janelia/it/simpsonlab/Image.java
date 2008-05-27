@@ -1,5 +1,5 @@
 /*
- * Copyright © 2008 Howard Hughes Medical Institute.
+ * Copyright 2008 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -9,9 +9,9 @@ package org.janelia.it.simpsonlab;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.janelia.it.ims.imagerenamer.field.DataField;
-import org.janelia.it.ims.imagerenamer.field.DatePatternField;
-import org.janelia.it.ims.imagerenamer.plugin.RenamePluginDataRow;
+import org.janelia.it.ims.tmog.field.DataField;
+import org.janelia.it.ims.tmog.field.DatePatternField;
+import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,8 +37,8 @@ public class Image {
     public Image(Line line,
                  RenamePluginDataRow row) {
         this.relativePath = row.getRelativePath();
-        this.setCaptureDate(row.getRenameField(CAPTURE_DATE_NAME));
-        this.setFamily(row.getRenameField(FAMILY_NAME));
+        this.setCaptureDate(row.getDataField(CAPTURE_DATE_NAME));
+        this.setFamily(row.getDataField(FAMILY_NAME));
 
         init();
 

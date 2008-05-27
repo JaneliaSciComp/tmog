@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="true">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <!-- DASH_FOR_PROD->
+        <outputDirectory basePath="\\dm6.int.janelia.org\rubindata\confocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+        <!-DASH_FOR_PROD -->
+
+        <plugins>
+            <!-- DASH_FOR_PROD->
+            <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager/>
+            <rowListener className="org.janelia.it.chacrm.ChacrmEventManager>
+                <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
+            </rowListener>
+            <sessionListener className="org.janelia.it.ims.tmogSessionSummaryFileWriter">
+                <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\GMR"/>
+            </sessionListener>
+            <!-DASH_FOR_PROD -->
+        </plugins>
+
+        <renamePattern>
+            <separator value="GMR_"/>
+            <number displayName="Plate" required="true"
+                    minimumValue="1" maximumValue="999"/>
+            <well displayName="Well" required="true" formFactor="96"/>
+            <separator value="_"/>
+            <validValueList displayName="Vector ID" required="true">
+                <validValue displayName="AA: pBPGToyw" value="AA"/>
+                <validValue displayName="AB: pBPGEarw" value="AB"/>
+                <validValue displayName="AC: pBPGDacw" value="AC"/>
+                <validValue displayName="AD: pBPGw" value="AD"/>
+                <validValue displayName="AE: pBPGUw" value="AE"/>
+            </validValueList>
+            <separator value="_"/>
+            <validValueList displayName="Landing Site" required="true">
+                <validValue displayName="01: attP2" value="01"/>
+            </validValueList>
+            <separator value="_"/>
+            <pluginData displayName="imageLocationRank" format="%02d"/>
+            <separator value="-"/>
+            <validValueList displayName="Gender" required="true">
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+            <validValueList displayName="Age" required="true">
+                <validValue displayName="X00: undefined" value="X00"/>
+                <validValue displayName="P01: Prepupa" value="P01"/>
+                <validValue displayName="P02: Pupa" value="P02"/>
+                <validValue displayName="E01: Embryonic Stage 1" value="E01"/>
+                <validValue displayName="E02: Embryonic Stage 2" value="E02"/>
+                <validValue displayName="E03: Embryonic Stage 3" value="E03"/>
+                <validValue displayName="E04: Embryonic Stage 4" value="E04"/>
+                <validValue displayName="E05: Embryonic Stage 5" value="E05"/>
+                <validValue displayName="E06: Embryonic Stage 6" value="E06"/>
+                <validValue displayName="E07: Embryonic Stage 7" value="E07"/>
+                <validValue displayName="E08: Embryonic Stage 8" value="E08"/>
+                <validValue displayName="E09: Embryonic Stage 9" value="E09"/>
+                <validValue displayName="E10: Embryonic Stage 10" value="E10"/>
+                <validValue displayName="E11: Embryonic Stage 11" value="E11"/>
+                <validValue displayName="E12: Embryonic Stage 12" value="E12"/>
+                <validValue displayName="E13: Embryonic Stage 13" value="E13"/>
+                <validValue displayName="E14: Embryonic Stage 14" value="E14"/>
+                <validValue displayName="E15: Embryonic Stage 15" value="E15"/>
+                <validValue displayName="E16: Embryonic Stage 16" value="E16"/>
+                <validValue displayName="E17: Embryonic Stage 17" value="E17"/>
+                <validValue displayName="L01: First Instar" value="L01"/>
+                <validValue displayName="L02: Second Instar" value="L02"/>
+                <validValue displayName="L03: Third Instar" value="L03"/>
+                <validValue displayName="A01: Day 1-5" value="A01"/>
+                <validValue displayName="A02: Day 6-10" value="A02"/>
+                <validValue displayName="A03: Day 11-15" value="A03"/>
+                <validValue displayName="A04: Day 16-20" value="A04"/>
+                <validValue displayName="A05: Day 21-25" value="A05"/>
+                <validValue displayName="A06: Day 26-30" value="A06"/>
+            </validValueList>
+            <validValueList displayName="Area" required="true">
+                <validValue displayName="s: Salivary Gland" value="s"/>
+                <validValue displayName="b: Brain" value="b"/>
+                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
+            </validValueList>
+            <!--
+            See http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html
+            for datePattern options.
+            -->
+            <fileModificationTime datePattern="'_C'yyMMdd'_'"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+        </renamePattern>
+
+    </project>
+
+    <project name="Rubin Lab: Research and Development (RD_*)">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <!-- DASH_FOR_PROD->
+        <outputDirectory basePath="\\dm6.int.janelia.org\rubindata\RDconfocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+        <!-DASH_FOR_PROD -->
+
+        <plugins>
+            <!-- DASH_FOR_PROD->
+            <sessionListener className="org.janelia.it.ims.tmogSessionSummaryFileWriter">
+                <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\RD"/>
+            </sessionListener>
+            <!-DASH_FOR_PROD -->
+        </plugins>
+
+        <renamePattern>
+            <separator value="RD_"/>
+            <text displayName="Promoter" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Transcript" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Responder" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Creator Initials" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <date displayName="Capture Date" required="true"
+                  datePattern="yyMMdd" prefix="_" copyable="false">
+                <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d)_L[0-9]++_Sum\.lsm"
+                                       fromDatePattern="yyMMdd"
+                                       toDatePattern="yyMMdd"/>
+            </date>
+            <validValueList displayName="Area" required="false" prefix="-">
+                <validValue displayName="br: Brain" value="br"/>
+                <validValue displayName="vnc: Ventral Nerve Cord" value="vnc"/>
+            </validValueList>
+            <text displayName="L-Number" required="false" prefix="-L"
+                  pattern="[0-9]++" copyable="false">
+                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>                
+            </text>
+            <text displayName="Comment" required="false" prefix="-"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+        </renamePattern>
+
+    </project>
+
+    <project name="Simpson Lab: GAL4 Lines (JHS_*)">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <!-- DASH_FOR_PROD->
+        <outputDirectory>
+            <path path="\\dm8.int.janelia.org\simpsonmicro\GAL4_confocal_stacks\" />
+            <renameFieldValue fieldDisplayName="Line" />
+            <renameFieldValue fieldDisplayName="Insertion Number" prefix="_" />
+            <path path="-GAL4" />
+        </outputDirectory>
+        <!-DASH_FOR_PROD -->
+
+        <plugins>
+               <rowListener className="org.janelia.it.ims.tmog.plugin.SRL">
+                 <property name="seconds" value="5"/>
+               </rowListener>
+
+        <!-- DASH_FOR_PROD->
+            <rowListener className="org.janelia.it.simpsonlab.SimpsonImageManager" />
+            <sessionListener className="org.janelia.it.ims.tmogSessionSummaryFileWriter">
+                <property name="directory" value="\\dm8.int.janelia.org\simpsonmicro\renamer\summaries\RD"/>
+            </sessionListener>
+        <!-DASH_FOR_PROD -->
+        </plugins>
+
+        <renamePattern>
+            <separator value="JHS_"/>
+            <text displayName="Line" required="true" pattern="[0-9A-Za-z]++">
+                <sourceFileDefault pattern="([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"/>
+                <sourceFileDefault pattern=".*[/\\\\]([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"
+                                   matchType="path"/>
+            </text>
+            <text displayName="Insertion Number" required="false"
+                  pattern="[0-9A-Za-z\\-]++" prefix="_">
+                <sourceFileDefault pattern="[0-9A-Za-z]++-(.*)-Gal4-.*\.lsm"/>
+                <sourceFileDefault pattern=".*mdb[/\\\\].*Gal4-(.*)-UAS.*mdb[/\\\\].*\.lsm"
+                                   matchType="path"/>
+            </text>
+            <separator value="-"/>
+            <separator name="Family" value="GAL4"/>
+            <separator value="_"/>
+            <!--<fileModificationTime displayName="Capture Date" datePattern="yyyyMMdd'_'"/>-->
+            <date displayName="Capture Date" required="true" 
+                  datePattern="yyyyMMdd" suffix="_">
+                <sourceFileDateDefault pattern=".*[-/\\\\](\d\d?-\d\d?-\d\d){1}.*\.lsm"
+                                       fromDatePattern="MM-dd-yy"
+                                       toDatePattern="yyyyMMdd"
+                                       matchType="path"/>
+            </date>
+            <validValueList displayName="Organ" required="true">
+                <validValue displayName="B: Brain" value="B"/>
+                <validValue displayName="T: Thorax" value="T"/>
+            </validValueList>
+            <pluginData displayName="Specimen Number" format="%02d"/>
+            <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+        </renamePattern>
+
+    </project>
+
+    <project name="Kerr Lab: Multi-Worm Tracker" taskName="collector">
+
+        <inputFileFilter excludeQueryUrl="http://localhost:8080/wormTracker/experiment" />
+        
+        <plugins>
+        <!-- DASH_FOR_PROD->
+            <rowListener className="org.janelia.it.ims.tmog.plugin.RestDataPlugin">
+                <property name="dataServerUrl" value="http://localhost:8080/wormTracker/experiment"/>
+                <property name="resourceField" value="Experiment Timestamp"/>
+            </rowListener>
+        <!-DASH_FOR_PROD -->
+        </plugins>
+
+        <renamePattern>
+            <text displayName="Worm Strain" required="true" pattern="[0-9A-Za-z\s]++"/>
+            <text displayName="RNAI" required="true" pattern="[0-9A-Za-z\s]++"/>
+            <validValueList displayName="Stimulus Protocol" required="true">
+                <validValue displayName="A: Protocol A" value="A"/>
+                <validValue displayName="B: Protocol B" value="B"/>
+            </validValueList>
+            <text displayName="Path" required="true" copyable="false">
+                <sourceFileDefault pattern=".*[/\\\\]([^/\\\\]++)[/\\\\]\d\d\d\d\d\d\d\d_\d\d\d\d\d\d"
+                                   matchType="path"/>
+            </text>
+            <date displayName="Experiment Timestamp" required="true"
+                  datePattern="yyyyMMdd_HHmmss" copyable="false">
+                <sourceFileDateDefault pattern="(\d\d\d\d\d\d\d\d_\d\d\d\d\d\d){1}"
+                                       fromDatePattern="yyyyMMdd_HHmmss"
+                                       toDatePattern="yyyyMMdd_HHmmss"
+                                       matchType="name"/>
+            </date>
+            <text displayName="Tracker Tag" required="true" pattern="[0-9A-Za-z\s]++"/>
+            <text displayName="Notes" required="false" />
+        </renamePattern>
+
+    </project>
+
+</transmogrifierConfiguration>
