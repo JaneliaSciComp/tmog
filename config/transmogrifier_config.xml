@@ -46,7 +46,7 @@
             </validValueList>
             <separator value="_"/>
             <validValueList displayName="Landing Site" required="true">
-                <validValue displayName="01: attP2" value="01"/>
+                <validValue displayName="01: attP2" value="01" default="true"/>
             </validValueList>
             <separator value="_"/>
             <pluginData displayName="imageLocationRank" format="%02d"/>
@@ -93,7 +93,7 @@
                 <validValue displayName="v: Ventral Nerve Cord" value="v"/>
             </validValueList>
             <validValueList displayName="UAS Reporter" required="true">
-                <validValue displayName="mcd8GFP" value="mcd8GFP"/>
+                <validValue displayName="mcd8GFP" value="mcd8GFP" default="true"/>
                 <validValue displayName="JFRC-IVS-A1" value="JFRC-IVS-A1"/>
             </validValueList>
             <separator name="family" value="rubin-chacrm"/>

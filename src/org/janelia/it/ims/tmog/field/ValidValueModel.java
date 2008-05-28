@@ -36,6 +36,9 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
 
     public void addValidValue(ValidValue validValue) {
         validValues.add(validValue);
+        if (validValue.isDefault() && (selectedValue == null)) {
+            selectedValue = validValue;
+        }
     }
 
     public String getDisplayName() {
@@ -134,10 +137,6 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
     }
 
     public ValidValue getSelectedValue() {
-        if (isRequired && (selectedValue == null) &&
-                (validValues.size() == 1)) {
-            selectedValue = validValues.get(0);        
-        }
         return selectedValue;
     }
 

@@ -15,19 +15,21 @@ package org.janelia.it.ims.tmog.field;
 public class ValidValue {
     private String displayName;
     private String value;
+    private boolean isDefault;
 
     public ValidValue() {
+        this(null, null);
     }
 
     public ValidValue(String displayName) {
-        this.displayName = displayName;
-        this.value = displayName;
+        this(displayName, displayName);
     }
 
     public ValidValue(String displayName,
                       String value) {
         this.displayName = displayName;
         this.value = value;
+        this.isDefault = false;
     }
 
     public String getDisplayName() {
@@ -44,6 +46,14 @@ public class ValidValue {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 
     @Override
