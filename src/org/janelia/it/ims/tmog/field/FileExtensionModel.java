@@ -11,8 +11,10 @@ import org.janelia.it.ims.tmog.Target;
 public class FileExtensionModel implements DataField {
 
     private String extension;
+    private boolean markedForTask;
 
     public FileExtensionModel() {
+        this.markedForTask = true;
     }
 
     public String getDisplayName() {
@@ -27,9 +29,19 @@ public class FileExtensionModel implements DataField {
         return false;
     }
 
+    public boolean isMarkedForTask() {
+        return markedForTask;
+    }
+
+    public void setMarkedForTask(boolean markedForTask) {
+        this.markedForTask = markedForTask;
+    }
+
     public FileExtensionModel getNewInstance() {
+        FileExtensionModel instance = new FileExtensionModel();
+        instance.setMarkedForTask(markedForTask);
         // do not copy extension (must be derived when rename occurs)
-        return new FileExtensionModel();
+        return instance;
     }
 
     public String getCoreValue() {

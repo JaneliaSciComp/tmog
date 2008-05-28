@@ -165,85 +165,85 @@ public class TransmogrifierConfiguration {
         digester.addSetNext("transmogrifierConfiguration/project/outputDirectory/sourceFileModificationTime",
                             "addComponent");
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/renamePattern",
-                                 RenamePattern.class);
-        digester.addSetNext("transmogrifierConfiguration/project/renamePattern",
-                            "setRenamePattern");
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields",
+                                 DataFields.class);
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields",
+                            "setDataFields");
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/renamePattern/number",
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/number",
                                  VerifiedNumberModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/renamePattern/number");
-        digester.addSetNext("transmogrifierConfiguration/project/renamePattern/number",
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/number");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/number",
                             "add");
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/renamePattern/text",
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/text",
                                  VerifiedTextModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/renamePattern/text");
-        digester.addSetNext("transmogrifierConfiguration/project/renamePattern/text",
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/text");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/text",
                             "add");
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/renamePattern/text/sourceFileDefault",
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/text/sourceFileDefault",
                                  SourceFileDefaultValue.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/renamePattern/text/sourceFileDefault");
-        digester.addSetNext("transmogrifierConfiguration/project/renamePattern/text/sourceFileDefault",
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/text/sourceFileDefault");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/text/sourceFileDefault",
                             "addDefaultValue");
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/renamePattern/date",
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/date",
                                  VerifiedDateModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/renamePattern/date");
-        digester.addSetNext("transmogrifierConfiguration/project/renamePattern/date",
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/date");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/date",
                             "add");
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/renamePattern/date/sourceFileDateDefault",
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/date/sourceFileDateDefault",
                                  SourceFileDateDefaultValue.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/renamePattern/date/sourceFileDateDefault");
-        digester.addSetNext("transmogrifierConfiguration/project/renamePattern/date/sourceFileDateDefault",
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/date/sourceFileDateDefault");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/date/sourceFileDateDefault",
                             "addDefaultValue");
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/renamePattern/well",
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/well",
                                  VerifiedWellModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/renamePattern/well");
-        digester.addSetNext("transmogrifierConfiguration/project/renamePattern/well",
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/well");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/well",
                             "add");
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/renamePattern/separator",
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/separator",
                                  SeparatorModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/renamePattern/separator");
-        digester.addSetNext("transmogrifierConfiguration/project/renamePattern/separator",
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/separator");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/separator",
                             "add");
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/renamePattern/pluginData",
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/pluginData",
                                  PluginDataModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/renamePattern/pluginData");
-        digester.addSetNext("transmogrifierConfiguration/project/renamePattern/pluginData",
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/pluginData");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/pluginData",
                             "add");
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/renamePattern/runTime",
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/runTime",
                                  RunTimeModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/renamePattern/runTime");
-        digester.addSetNext("transmogrifierConfiguration/project/renamePattern/runTime",
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/runTime");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/runTime",
                             "add");
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/renamePattern/fileModificationTime",
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/fileModificationTime",
                                  FileModificationTimeModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/renamePattern/fileModificationTime");
-        digester.addSetNext("transmogrifierConfiguration/project/renamePattern/fileModificationTime",
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/fileModificationTime");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/fileModificationTime",
                             "add");
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/renamePattern/fileExtension",
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/fileExtension",
                                  FileExtensionModel.class);
-        digester.addSetNext("transmogrifierConfiguration/project/renamePattern/fileExtension",
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/fileExtension",
                             "add");
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/renamePattern/validValueList",
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/validValueList",
                                  ValidValueModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/renamePattern/validValueList");
-        digester.addObjectCreate("transmogrifierConfiguration/project/renamePattern/validValueList/validValue",
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/validValueList");
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/validValueList/validValue",
                                  ValidValue.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/renamePattern/validValueList/validValue");
-        digester.addSetNext("transmogrifierConfiguration/project/renamePattern/validValueList/validValue",
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/validValueList/validValue");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/validValueList/validValue",
                             "addValidValue");
-        digester.addSetNext("transmogrifierConfiguration/project/renamePattern/validValueList",
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/validValueList",
                             "add");
 
         digester.addObjectCreate("transmogrifierConfiguration/project/plugins",

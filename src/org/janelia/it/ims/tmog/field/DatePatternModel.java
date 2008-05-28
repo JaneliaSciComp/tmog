@@ -18,8 +18,10 @@ import java.util.Date;
 public abstract class DatePatternModel implements DataField, DatePatternField {
     private String displayName;
     private String datePattern;
+    private boolean markedForTask;
 
     public DatePatternModel() {
+        this.markedForTask = true;
     }
 
     public String getDisplayName() {
@@ -36,6 +38,14 @@ public abstract class DatePatternModel implements DataField, DatePatternField {
 
     public boolean isCopyable() {
         return false;
+    }
+
+    public boolean isMarkedForTask() {
+        return markedForTask;
+    }
+
+    public void setMarkedForTask(boolean markedForTask) {
+        this.markedForTask = markedForTask;
     }
 
     public abstract DatePatternModel getNewInstance();
@@ -77,4 +87,11 @@ public abstract class DatePatternModel implements DataField, DatePatternField {
     public String toString() {
         return getFileNameValue();
     }
+
+    protected void initNewInstance(DatePatternModel instance) {
+        instance.setDisplayName(displayName);
+        instance.setDatePattern(datePattern);
+        instance.setMarkedForTask(markedForTask);
+    }
+
 }

@@ -23,7 +23,7 @@ public interface DataField {
 
     /**
      * @return true if the field should be editable (and displayed) in
-     *         within the file table; otherwise false.
+     *         within the data field table; otherwise false.
      */
     public boolean isEditable();
 
@@ -32,6 +32,12 @@ public interface DataField {
      *         copied in the file table; otherwise false.
      */
     public boolean isCopyable();
+
+    /**
+     * @return true if the field should be utilized for task processing;
+     *         false if it should be ignored by the task.
+     */
+    public boolean isMarkedForTask();
 
     /**
      * @return a new instance of this field (similar to clone - deep copy).

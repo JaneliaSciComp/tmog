@@ -26,12 +26,14 @@ public abstract class VerifiedFieldModel extends PlainDocument implements DataFi
     private String prefix;
     private String suffix;
     private boolean isCopyable;
+    private boolean markedForTask;
     private DefaultValueList defaultValueList;
 
     public VerifiedFieldModel() {
         super();
         this.defaultValueList = new DefaultValueList();
         this.isCopyable = true;
+        this.markedForTask = true;
     }
 
     public abstract boolean verify();
@@ -48,6 +50,14 @@ public abstract class VerifiedFieldModel extends PlainDocument implements DataFi
         return isCopyable;
     }
 
+    public boolean isMarkedForTask() {
+        return markedForTask;
+    }
+
+    public void setMarkedForTask(boolean markedForTask) {
+        this.markedForTask = markedForTask;
+    }
+
     public abstract VerifiedFieldModel getNewInstance();
 
     public void cloneValuesForNewInstance(VerifiedFieldModel instance) {
@@ -57,6 +67,7 @@ public abstract class VerifiedFieldModel extends PlainDocument implements DataFi
         instance.prefix = prefix;
         instance.suffix = suffix;
         instance.isCopyable = isCopyable;
+        instance.markedForTask = markedForTask;
         instance.defaultValueList = defaultValueList;  // shallow copy is ok
     }
 

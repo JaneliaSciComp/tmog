@@ -31,7 +31,7 @@
             <!-DASH_FOR_PROD -->
         </plugins>
 
-        <renamePattern>
+        <dataFields>
             <separator value="GMR_"/>
             <number displayName="Plate" required="true"
                     minimumValue="1" maximumValue="999"/>
@@ -92,7 +92,8 @@
                 <validValue displayName="b: Brain" value="b"/>
                 <validValue displayName="v: Ventral Nerve Cord" value="v"/>
             </validValueList>
-            <validValueList displayName="UAS Reporter" required="true">
+            <validValueList displayName="UAS Reporter" required="true"
+                            markedForTask="false">
                 <validValue displayName="mcd8GFP" value="mcd8GFP" default="true"/>
                 <validValue displayName="JFRC-IVS-A1" value="JFRC-IVS-A1"/>
             </validValueList>
@@ -104,7 +105,7 @@
             <fileModificationTime datePattern="'_C'yyMMdd'_'"/>
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
-        </renamePattern>
+        </dataFields>
 
     </project>
 
@@ -125,7 +126,7 @@
             <!-DASH_FOR_PROD -->
         </plugins>
 
-        <renamePattern>
+        <dataFields>
             <separator value="RD_"/>
             <text displayName="Promoter" required="true"
                   pattern="[0-9A-Za-z\\-]++"/>
@@ -157,7 +158,7 @@
             <separator value="_"/>
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
-        </renamePattern>
+        </dataFields>
 
     </project>
 
@@ -187,7 +188,7 @@
         <!-DASH_FOR_PROD -->
         </plugins>
 
-        <renamePattern>
+        <dataFields>
             <separator value="JHS_"/>
             <text displayName="Line" required="true" pattern="[0-9A-Za-z]++">
                 <sourceFileDefault pattern="([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"/>
@@ -218,7 +219,7 @@
             <pluginData displayName="Specimen Number" format="%02d"/>
             <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
-        </renamePattern>
+        </dataFields>
 
     </project>
 
@@ -235,7 +236,7 @@
         <!-DASH_FOR_PROD -->
         </plugins>
 
-        <renamePattern>
+        <dataFields>
             <text displayName="Worm Strain" required="true" pattern="[0-9A-Za-z\s]++"/>
             <text displayName="RNAI" required="true" pattern="[0-9A-Za-z\s]++"/>
             <validValueList displayName="Stimulus Protocol" required="true">
@@ -255,7 +256,7 @@
             </date>
             <text displayName="Tracker Tag" required="true" pattern="[0-9A-Za-z\s]++"/>
             <text displayName="Notes" required="false" />
-        </renamePattern>
+        </dataFields>
 
     </project>
 

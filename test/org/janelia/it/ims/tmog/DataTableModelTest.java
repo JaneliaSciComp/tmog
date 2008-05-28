@@ -10,8 +10,8 @@ package org.janelia.it.ims.tmog;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.janelia.it.ims.tmog.config.DataFields;
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
-import org.janelia.it.ims.tmog.config.RenamePattern;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.FileExtensionModel;
 import org.janelia.it.ims.tmog.field.FileModificationTimeModel;
@@ -97,30 +97,30 @@ public class DataTableModelTest extends TestCase {
         File[] files = {fileA, fileB};
         List<Target> targets = getFileTargets(files);
 
-        RenamePattern renamePattern = new RenamePattern();
+        DataFields dataFields = new DataFields();
 
         VerifiedTextModel textField = new VerifiedTextModel();
         textField.setMinimumLength(1);
         textField.setMaximumLength(2);
         textField.setPattern("[a-z][0-9]");
         textField.setRequired(true);
-        renamePattern.add(textField);
+        dataFields.add(textField);
 
         VerifiedNumberModel numberField = new VerifiedNumberModel();
         numberField.setMinimumValue(0);
         numberField.setMaximumValue(9);
         numberField.setRequired(false);
-        renamePattern.add(numberField);
+        dataFields.add(numberField);
 
         FileModificationTimeModel fModField = new FileModificationTimeModel();
         fModField.setDatePattern("YYYYmmdd");
-        renamePattern.add(fModField);
+        dataFields.add(fModField);
 
         FileExtensionModel extensionField = new FileExtensionModel();
-        renamePattern.add(extensionField);
+        dataFields.add(extensionField);
 
         ProjectConfiguration config = new ProjectConfiguration();
-        config.setRenamePattern(renamePattern);
+        config.setDataFields(dataFields);
 
         DataTableModel model = new DataTableModel("File Name", targets, config);
 

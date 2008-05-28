@@ -28,10 +28,12 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
     private String prefix;
     private String suffix;
     private boolean isCopyable;
+    private boolean markedForTask;
   
     public ValidValueModel() {
         this.validValues = new ArrayList<ValidValue>();
         this.isCopyable = true;
+        this.markedForTask = true;
     }
 
     public void addValidValue(ValidValue validValue) {
@@ -53,6 +55,14 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
         return isCopyable;
     }
 
+    public boolean isMarkedForTask() {
+        return markedForTask;
+    }
+
+    public void setMarkedForTask(boolean markedForTask) {
+        this.markedForTask = markedForTask;
+    }
+
     public ValidValueModel getNewInstance() {
         ValidValueModel instance = new ValidValueModel();
         instance.displayName = displayName;
@@ -62,6 +72,7 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
         instance.prefix = prefix;
         instance.suffix = suffix;
         instance.isCopyable = isCopyable;
+        instance.markedForTask = markedForTask;
         return instance;
     }
 

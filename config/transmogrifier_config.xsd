@@ -70,6 +70,7 @@
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
         <xs:attribute name="copyable" type="xs:boolean"/>
+        <xs:attribute name="markedForTask" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="textType">
@@ -85,6 +86,7 @@
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
         <xs:attribute name="copyable" type="xs:boolean"/>
+        <xs:attribute name="markedForTask" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="dateType">
@@ -98,6 +100,7 @@
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
         <xs:attribute name="copyable" type="xs:boolean"/>
+        <xs:attribute name="markedForTask" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="wellType">
@@ -107,6 +110,7 @@
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
         <xs:attribute name="copyable" type="xs:boolean"/>
+        <xs:attribute name="markedForTask" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="validValueType">
@@ -124,6 +128,7 @@
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
         <xs:attribute name="copyable" type="xs:boolean"/>
+        <xs:attribute name="markedForTask" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="pluginDataType">
@@ -173,7 +178,7 @@
 
             <xs:element name="plugins" type="pluginsType" minOccurs="0"/>
 
-            <xs:element name="renamePattern" maxOccurs="1">
+            <xs:element name="dataFields" maxOccurs="1">
                 <xs:complexType>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
                         <xs:element name="separator" type="separatorType"/>

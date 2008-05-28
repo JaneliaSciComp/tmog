@@ -21,8 +21,10 @@ public class PluginDataModel implements DataField {
     private String displayName;
     private Object value;
     private String format;
+    private boolean markedForTask;
 
     public PluginDataModel() {
+        this.markedForTask = true;
     }
 
     public String getDisplayName() {
@@ -37,11 +39,20 @@ public class PluginDataModel implements DataField {
         return false;
     }
 
+    public boolean isMarkedForTask() {
+        return markedForTask;
+    }
+
+    public void setMarkedForTask(boolean markedForTask) {
+        this.markedForTask = markedForTask;
+    }
+
     public PluginDataModel getNewInstance() {
         PluginDataModel instance = new PluginDataModel();
         instance.setDisplayName(displayName);
         instance.setValue(value);
         instance.setFormat(format);
+        instance.setMarkedForTask(markedForTask);
         return instance;
     }
 

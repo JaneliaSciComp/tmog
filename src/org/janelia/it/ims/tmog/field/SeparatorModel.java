@@ -17,8 +17,10 @@ import org.janelia.it.ims.tmog.Target;
 public class SeparatorModel implements DataField {
     private String name;
     private String value;
+    private boolean markedForTask;
 
     public SeparatorModel() {
+        this.markedForTask = true;
     }
 
     public String getDisplayName() {
@@ -41,10 +43,19 @@ public class SeparatorModel implements DataField {
         return false;
     }
 
+    public boolean isMarkedForTask() {
+        return markedForTask;
+    }
+
+    public void setMarkedForTask(boolean markedForTask) {
+        this.markedForTask = markedForTask;
+    }
+
     public SeparatorModel getNewInstance() {
         SeparatorModel instance = new SeparatorModel();
         instance.setName(name);
         instance.setValue(value);
+        instance.setMarkedForTask(markedForTask);
         return instance;
     }
 

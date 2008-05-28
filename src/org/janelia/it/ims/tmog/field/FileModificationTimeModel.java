@@ -27,8 +27,7 @@ public class FileModificationTimeModel extends DatePatternModel {
 
     public FileModificationTimeModel getNewInstance() {
         FileModificationTimeModel instance = new FileModificationTimeModel();
-        instance.setDisplayName(getDisplayName());
-        instance.setDatePattern(getDatePattern());
+        initNewInstance(instance);
         // do not copy sourceDate (must be derived when rename occurs)
         return instance;
     }

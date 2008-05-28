@@ -121,7 +121,9 @@ public class RenamePluginDataRow extends PluginDataRow {
         DataRow dataRow = getDataRow();
         List<DataField> dataFields = dataRow.getFields();
         for (DataField field : dataFields) {
-            fileName.append(field.getFileNameValue());
+            if (field.isMarkedForTask()) {
+                fileName.append(field.getFileNameValue());
+            }
         }
         renamedFile = new File(outputDirectory, fileName.toString());
     }

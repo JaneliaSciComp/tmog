@@ -27,7 +27,7 @@ public class ProjectConfiguration {
     private String name;
     private boolean isDefault;
     private String taskName;
-    private RenamePattern renamePattern;
+    private DataFields dataFields;
     private InputFileFilter inputFileFilter;
     private InputFileSorter inputFileSorter;
     private OutputDirectoryConfiguration outputDirectoryConfiguration;
@@ -35,7 +35,7 @@ public class ProjectConfiguration {
 
     public ProjectConfiguration() {
         this.isDefault = false;
-        this.renamePattern = new RenamePattern();
+        this.dataFields = new DataFields();
         this.inputFileFilter = new InputFileFilter();
         this.inputFileSorter = new InputFileSorter();
         this.outputDirectoryConfiguration = new OutputDirectoryConfiguration();
@@ -54,7 +54,7 @@ public class ProjectConfiguration {
     }
 
     public List<DataField> getFieldConfigurations() {
-        return renamePattern.getFields();
+        return dataFields.getFields();
     }
 
     public InputFileFilter getInputFileFilter() {
@@ -111,8 +111,8 @@ public class ProjectConfiguration {
         this.taskName = taskName;
     }
 
-    public void setRenamePattern(RenamePattern renamePattern) {
-        this.renamePattern = renamePattern;
+    public void setDataFields(DataFields dataFields) {
+        this.dataFields = dataFields;
     }
 
     public void setInputFileFilter(InputFileFilter inputFileFilter) {
@@ -142,13 +142,13 @@ public class ProjectConfiguration {
                     "The output directory is not defined for the " +
                     name + " project.");
         }
-        outputDirectoryConfiguration.verify(name, renamePattern.getFields());
+        outputDirectoryConfiguration.verify(name, dataFields.getFields());
         if (pluginFactory != null) {
             pluginFactory.constructInstances(name);
         }
     }
 
     public int getNumberOfEditableFields() {
-        return renamePattern.getNumberOfEditableFields();
+        return dataFields.getNumberOfEditableFields();
     }
 }

@@ -26,8 +26,7 @@ public class RunTimeModel extends DatePatternModel {
 
     public RunTimeModel getNewInstance() {
         RunTimeModel instance = new RunTimeModel();
-        instance.setDisplayName(getDisplayName());
-        instance.setDatePattern(getDatePattern());
+        initNewInstance(instance);
         // do not copy runTime
         return instance;
     }
