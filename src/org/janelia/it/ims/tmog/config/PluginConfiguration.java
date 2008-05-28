@@ -51,6 +51,13 @@ public class PluginConfiguration {
     }
 
     /**
+     * @return the full set of properties configured for this plug-in.
+     */
+    public Map<String, String> getProperties() {
+        return properties;
+    }
+
+    /**
      * @param name the name of the property to lookup.
      * @return the value for the specified property name.
      */

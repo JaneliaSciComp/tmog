@@ -13,12 +13,19 @@
         <!-DASH_FOR_PROD -->
 
         <plugins>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="simpsonlab"/>
+                <property name="created_by" value="created_by"/>
+                <property name="family" value="family"/>
+                <property name="UAS Reporter" value="uas_reporter"/>
+            </rowListener>
+            
             <!-- DASH_FOR_PROD->
             <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager/>
             <rowListener className="org.janelia.it.chacrm.ChacrmEventManager>
                 <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
             </rowListener>
-            <sessionListener className="org.janelia.it.ims.tmogSessionSummaryFileWriter">
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\GMR"/>
             </sessionListener>
             <!-DASH_FOR_PROD -->
@@ -85,6 +92,11 @@
                 <validValue displayName="b: Brain" value="b"/>
                 <validValue displayName="v: Ventral Nerve Cord" value="v"/>
             </validValueList>
+            <validValueList displayName="UAS Reporter" required="true">
+                <validValue displayName="mcd8GFP" value="mcd8GFP"/>
+                <validValue displayName="JFRC-IVS-A1" value="JFRC-IVS-A1"/>
+            </validValueList>
+            <separator name="family" value="rubin-chacrm"/>
             <!--
             See http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html
             for datePattern options.
@@ -107,7 +119,7 @@
 
         <plugins>
             <!-- DASH_FOR_PROD->
-            <sessionListener className="org.janelia.it.ims.tmogSessionSummaryFileWriter">
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\RD"/>
             </sessionListener>
             <!-DASH_FOR_PROD -->
@@ -169,7 +181,7 @@
 
         <!-- DASH_FOR_PROD->
             <rowListener className="org.janelia.it.simpsonlab.SimpsonImageManager" />
-            <sessionListener className="org.janelia.it.ims.tmogSessionSummaryFileWriter">
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm8.int.janelia.org\simpsonmicro\renamer\summaries\RD"/>
             </sessionListener>
         <!-DASH_FOR_PROD -->
