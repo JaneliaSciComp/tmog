@@ -50,16 +50,17 @@
     </xs:complexType>
 
     <xs:complexType name="pluginsType">
-        <xs:sequence>
-            <xs:element name="rowValidator" type="pluginType" minOccurs="0"/>
-            <xs:element name="rowListener" type="pluginType" minOccurs="0"/>
-            <xs:element name="sessionListener" type="pluginType" minOccurs="0"/>
-        </xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="rowValidator" type="pluginType" />
+            <xs:element name="rowListener" type="pluginType" />
+            <xs:element name="sessionListener" type="pluginType" />
+        </xs:choice>
     </xs:complexType>
 
-    <xs:complexType name="separatorType">
+    <xs:complexType name="staticType">
         <xs:attribute name="name" type="xs:string"/>
         <xs:attribute name="value" type="xs:string"/>
+        <xs:attribute name="markedForTask" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="numberType">
@@ -181,7 +182,8 @@
             <xs:element name="dataFields" maxOccurs="1">
                 <xs:complexType>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
-                        <xs:element name="separator" type="separatorType"/>
+                        <xs:element name="separator" type="staticType"/>
+                        <xs:element name="static" type="staticType"/>
                         <xs:element name="number" type="numberType"/>
                         <xs:element name="text" type="textType"/>
                         <xs:element name="date" type="dateType"/>

@@ -17,9 +17,9 @@ import org.janelia.it.ims.tmog.field.FileExtensionModel;
 import org.janelia.it.ims.tmog.field.FileModificationTimeModel;
 import org.janelia.it.ims.tmog.field.PluginDataModel;
 import org.janelia.it.ims.tmog.field.RunTimeModel;
-import org.janelia.it.ims.tmog.field.SeparatorModel;
 import org.janelia.it.ims.tmog.field.SourceFileDateDefaultValue;
 import org.janelia.it.ims.tmog.field.SourceFileDefaultValue;
+import org.janelia.it.ims.tmog.field.StaticDataModel;
 import org.janelia.it.ims.tmog.field.ValidValue;
 import org.janelia.it.ims.tmog.field.ValidValueModel;
 import org.janelia.it.ims.tmog.field.VerifiedDateModel;
@@ -207,9 +207,15 @@ public class TransmogrifierConfiguration {
                             "add");
 
         digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/separator",
-                                 SeparatorModel.class);
+                                 StaticDataModel.class);
         digester.addSetProperties("transmogrifierConfiguration/project/dataFields/separator");
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/separator",
+                            "add");
+
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/static",
+                                 StaticDataModel.class);
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/static");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/static",
                             "add");
 
         digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/pluginData",

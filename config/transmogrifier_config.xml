@@ -13,17 +13,16 @@
         <!-DASH_FOR_PROD -->
 
         <plugins>
+            <!-- DASH_FOR_PROD->
+            <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
+            <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
+                <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
+            </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="simpsonlab"/>
+                <property name="db.config.key" value="rubinlab"/>
                 <property name="created_by" value="created_by"/>
                 <property name="family" value="family"/>
                 <property name="UAS Reporter" value="uas_reporter"/>
-            </rowListener>
-            
-            <!-- DASH_FOR_PROD->
-            <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager/>
-            <rowListener className="org.janelia.it.chacrm.ChacrmEventManager>
-                <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
             </rowListener>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\GMR"/>
@@ -97,7 +96,7 @@
                 <validValue displayName="mcd8GFP" value="mcd8GFP" default="true"/>
                 <validValue displayName="JFRC-IVS-A1" value="JFRC-IVS-A1"/>
             </validValueList>
-            <separator name="family" value="rubin-chacrm"/>
+            <static name="family" value="rubin-chacrm" markedForTask="false"/>
             <!--
             See http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html
             for datePattern options.
