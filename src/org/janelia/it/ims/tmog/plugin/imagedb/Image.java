@@ -17,10 +17,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * This class encapsulates information collected for images.
+ *
+ * @author Eric Trautman
  */
 public class Image {
 
@@ -36,25 +39,11 @@ public class Image {
     }
 
     public Image(RenamePluginDataRow row,
-                 Map<String, String> nameToTypeMap) {
+                 List<ImagePropertySetter> propertySetters) {
         this();
-
         this.relativePath = row.getRelativePath();
-
-        String type;
-        for (String name : nameToTypeMap.keySet()) {
-            type = nameToTypeMap.get(name);
-            if ((type != null) && (type.length() > 0)) {
-                if (CAPTURE_DATE_TYPE.equals(type)) {
-                    setCaptureDate(row.getDataField(name));
-                } else if (FAMILY_TYPE.equals(type)) {
-                    setFamily(row.getDataField(name));
-                } else if (CREATED_BY_TYPE.equals(type)) {
-                    setCreatedBy();
-                } else {
-                    addProperty(type, row.getCoreValue(name));
-                }
-            }
+        for (ImagePropertySetter propertySetter : propertySetters) {
+            propertySetter.setProperty(row, this);
         }
     }
 
@@ -82,12 +71,44 @@ public class Image {
         this.captureDate = captureDate;
     }
 
+    public void setCaptureDate(DataField field) {
+        String value = null;
+        if (field != null) {
+            value = field.getCoreValue();
+        }
+
+        if ((value != null) && (value.length() > 0)) {
+            if (field instanceof DatePatternField) {
+                String pattern = ((DatePatternField) field).getDatePattern();
+                SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+                try {
+                    captureDate = sdf.parse(value);
+                } catch (ParseException e) {
+                    LOG.warn("Unable to parse capture date for '" +
+                             relativePath +
+                             "'.  Continuing processing without the date.", e);
+                }
+            }
+        }
+    }
+
     public String getFamily() {
         return family;
     }
 
     public void setFamily(String family) {
         this.family = family;
+    }
+
+    public void setFamily(DataField field) {
+        String value = null;
+        if (field != null) {
+            value = field.getCoreValue();
+        }
+
+        if ((value != null) && (value.length() > 0)) {
+            setFamily(value);
+        }
     }
 
     public Map<String, String> getPropertyTypeToValueMap() {
@@ -114,47 +135,7 @@ public class Image {
         return sb.toString();
     }
 
-    private void setCaptureDate(DataField field) {
-        String value = null;
-        if (field != null) {
-            value = field.getCoreValue();
-        }
-
-        if ((value != null) && (value.length() > 0)) {
-            if (field instanceof DatePatternField) {
-                String pattern = ((DatePatternField) field).getDatePattern();
-                SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-                try {
-                    captureDate = sdf.parse(value);
-                } catch (ParseException e) {
-                    LOG.warn("Unable to parse capture date for '" +
-                             relativePath +
-                             "'.  Continuing processing without the date.", e);
-                }
-            }
-        }
-    }
-
-    private void setFamily(DataField field) {
-        String value = null;
-        if (field != null) {
-            value = field.getCoreValue();
-        }
-
-        if ((value != null) && (value.length() > 0)) {
-            setFamily(value);
-        }
-    }
-
-    private void setCreatedBy() {
-        this.propertyTypeToValueMap.put(CREATED_BY_TYPE,
-                                        System.getProperty("user.name"));
-    }
-
     /** The logger for this class. */
     private static final Log LOG = LogFactory.getLog(Image.class);
 
-    private static final String CAPTURE_DATE_TYPE = "capture_date";
-    private static final String FAMILY_TYPE = "family";
-    private static final String CREATED_BY_TYPE = "created_by";
 }

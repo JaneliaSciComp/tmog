@@ -14,7 +14,6 @@ import org.janelia.it.utils.db.DbConfigException;
 import org.janelia.it.utils.db.DbManager;
 import org.janelia.it.utils.security.StringEncrypter;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -193,7 +192,7 @@ public class ImageDao {
         InputStream dbIn = ImageDao.class.getResourceAsStream(propFileName);
         try {
             props.load(dbIn);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new ExternalSystemException(
                     "Failed to load " + dbConfigurationKey +
                     " configuration properties.",

@@ -13,17 +13,18 @@
         <!-DASH_FOR_PROD -->
 
         <plugins>
-            <!-- DASH_FOR_PROD->
-            <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
-            <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
-                <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
-            </rowListener>
+            <!--<rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />-->
+            <!--<rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >-->
+                <!--<property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>-->
+            <!--</rowListener>-->
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="rubinlab"/>
+                <property name="db.config.key" value="simpsonlab"/>
                 <property name="created_by" value="created_by"/>
                 <property name="family" value="family"/>
-                <property name="UAS Reporter" value="uas_reporter"/>
+                <property name="uas_reporter" value="UAS Reporter"/>
+                <property name="line" value="${Plate}${Well}_${Vector ID}_${Landing Site}"/>
             </rowListener>
+            <!-- DASH_FOR_PROD->
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\GMR"/>
             </sessionListener>
@@ -47,8 +48,7 @@
             <validValueList displayName="Landing Site" required="true">
                 <validValue displayName="01: attP2" value="01" default="true"/>
             </validValueList>
-            <separator value="_"/>
-            <pluginData displayName="imageLocationRank" format="%02d"/>
+            <pluginData displayName="imageLocationRank" format="_%02d" />
             <separator value="-"/>
             <validValueList displayName="Gender" required="true">
                 <validValue displayName="m: Male" value="m"/>
@@ -91,12 +91,6 @@
                 <validValue displayName="b: Brain" value="b"/>
                 <validValue displayName="v: Ventral Nerve Cord" value="v"/>
             </validValueList>
-            <validValueList displayName="UAS Reporter" required="true"
-                            markedForTask="false">
-                <validValue displayName="mcd8GFP" value="mcd8GFP" default="true"/>
-                <validValue displayName="JFRC-IVS-A1" value="JFRC-IVS-A1"/>
-            </validValueList>
-            <static name="family" value="rubin-chacrm" markedForTask="false"/>
             <!--
             See http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html
             for datePattern options.
@@ -104,6 +98,16 @@
             <fileModificationTime datePattern="'_C'yyMMdd'_'"/>
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
+            <!--
+             These values are collected for the image database but are not
+             included as components of the file name (markedForTask="false").
+             -->
+            <validValueList displayName="UAS Reporter" required="true"
+                            markedForTask="false">
+                <validValue displayName="mcd8GFP" value="mcd8GFP" default="true"/>
+                <validValue displayName="JFRC-IVS-A1" value="JFRC-IVS-A1"/>
+            </validValueList>
+            <static name="family" value="rubin-chacrm" markedForTask="false"/>
         </dataFields>
 
     </project>

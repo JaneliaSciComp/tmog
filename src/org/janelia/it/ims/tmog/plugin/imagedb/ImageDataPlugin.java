@@ -18,7 +18,8 @@ import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RowListener;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,10 +35,10 @@ public class ImageDataPlugin implements RowListener {
     private String dbConfigurationKey;
 
     /**
-     * Maps display names to property types for the set of data fields
+     * List of property setter instances for the data fields
      * configured to be persisted by this plug-in.
      */
-    private Map<String, String> displayNameToPropertyTypeMap;
+    List<ImagePropertySetter> propertySetters;
 
     /**
      * Empty constructor required by
@@ -56,15 +57,22 @@ public class ImageDataPlugin implements RowListener {
      *   if the plugin can not be initialized.
      */
     public void init(PluginConfiguration config) throws ExternalSystemException {
-        this.displayNameToPropertyTypeMap = new HashMap<String, String>();
+        this.propertySetters = new ArrayList<ImagePropertySetter>();
         Map<String, String> props = config.getProperties();
         String value;
+        ImagePropertySetter propertySetter;
         for (String key : props.keySet()) {
             value = props.get(key);
             if ("db.config.key".equals(key)) {
                 this.dbConfigurationKey = value;
             } else {
-                this.displayNameToPropertyTypeMap.put(key, value);
+                try {
+                    propertySetter = getPropertySetter(key, value);
+                } catch (IllegalArgumentException e) {
+                    throw new ExternalSystemException(
+                            INIT_FAILURE_MSG + e.getMessage());
+                }
+                this.propertySetters.add(propertySetter);
             }
         }
 
@@ -76,7 +84,7 @@ public class ImageDataPlugin implements RowListener {
                     "plug-in property.");
         }
 
-        if (this.displayNameToPropertyTypeMap.size() < 1) {
+        if (this.propertySetters.size() < 1) {
             throw new ExternalSystemException(
                     INIT_FAILURE_MSG +
                     "Please configure at least one data field to " +
@@ -139,7 +147,7 @@ public class ImageDataPlugin implements RowListener {
             fileName = renamedFile.getAbsolutePath();
         }
         try {
-            image = new Image(row, displayNameToPropertyTypeMap);
+            image = new Image(row, propertySetters);
             image = dao.addImage(image);
             if (LOG.isInfoEnabled()) {
                 LOG.info("successfully persisted image metadata (" + image +
@@ -161,6 +169,26 @@ public class ImageDataPlugin implements RowListener {
         if (dao == null) {
             dao = new ImageDao(dbConfigurationKey);
         }
+    }
+
+    private static ImagePropertySetter getPropertySetter(String propertyType,
+                                                         String fieldName)
+            throws IllegalArgumentException {
+
+        ImagePropertySetter propertySetter;
+        if (CaptureDateSetter.TYPE.equals(propertyType)) {
+            propertySetter = new CaptureDateSetter(fieldName);
+        } else if (FamilySetter.TYPE.equals(propertyType)) {
+            propertySetter = new FamilySetter(fieldName);
+        } else if (CreatedBySetter.TYPE.equals(propertyType)) {
+            propertySetter = new CreatedBySetter();
+        } else if (fieldName.contains(CompositeSetter.TOKEN_ID)) {
+            propertySetter = new CompositeSetter(propertyType, fieldName);
+        } else {
+            propertySetter = new SimpleSetter(propertyType, fieldName);
+        }
+
+        return propertySetter;
     }
 
     /** The logger for this class. */
