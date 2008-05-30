@@ -24,13 +24,10 @@ import org.janelia.it.ims.tmog.plugin.RowListener;
  */
 public class SimpsonImageManager implements RowListener {
 
-    /** The logger for this class. */
-    private static final Log LOG = LogFactory.getLog(SimpsonImageManager.class);
-
     /**
      * The data access object for retrieving and updating image data.
      */
-    private ImageDao dao;
+    private SpecimenDao dao;
 
     /**
      * Empty constructor required by
@@ -52,7 +49,7 @@ public class SimpsonImageManager implements RowListener {
         try {
             setDao();
             dao.checkConnection();
-        } catch (SystemException e) {
+        } catch (ExternalSystemException e) {
             throw new ExternalSystemException(
                     "Failed to initialize Simpson Lab Image plugin.  " +
                     e.getMessage(),
@@ -78,17 +75,8 @@ public class SimpsonImageManager implements RowListener {
                                             PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
         RenamePluginDataRow dataRow = PluginUtil.castRenameRow(row, this);
-        switch (eventType) {
-            case START:
-                dataRow = startingCopy(dataRow);
-                break;
-            case END_SUCCESS:
-// Removed successful copy processing because this will now be handled by
-// the secondary data generation process.
-// Leaving the code intact, just in case we need to quickly restore it
-// in the future.
-//                completedSuccessfulCopy(row);
-                break;
+        if (EventType.START.equals(eventType)) {
+            dataRow = startingCopy(dataRow);
         }
         return dataRow;
     }
@@ -112,13 +100,13 @@ public class SimpsonImageManager implements RowListener {
         try {
             line = new Line(row);
             int specimenNumber = dao.getNextSpecimenNumber(line);
-            row.setPluginDataValue(ImageProperty.SPECIMEN_NUMBER_NAME,
+            row.setPluginDataValue(SPECIMEN_NUMBER_NAME,
                                    specimenNumber);
             if (LOG.isInfoEnabled()) {
                 LOG.info("Retrieved specimen number " + specimenNumber +
                          " for line '" + line + "'.  Row data is now: " + row);
             }
-        } catch (SystemException e) {
+        } catch (ExternalSystemException e) {
             throw new ExternalSystemException(
                     "Failed to retrieve specimen for number for line '" +
                     line + "'.  Detailed data is: " + row, e);
@@ -128,47 +116,19 @@ public class SimpsonImageManager implements RowListener {
     }
 
     /**
-     * Processes completed copy successfully event.
-     *
-     * @param  row  the row information for the event.
-     *
-     * @throws ExternalDataException
-     *   if a recoverable data error occurs during processing.
-     * @throws ExternalSystemException
-     *   if a non-recoverable system error occurs during processing.
-     */
-//    private void completedSuccessfulCopy(RenamePluginDataRow row)
-//            throws ExternalDataException, ExternalSystemException {
-//
-//        Image image;
-//        String fileName = null;
-//        File renamedFile = row.getRenamedFile();
-//        if (renamedFile != null) {
-//            fileName = renamedFile.getAbsolutePath();
-//        }
-//        try {
-//            Line line = new Line(row);
-//            image = new Image(line, row);
-//            image = dao.addImage(image);
-//            if (LOG.isInfoEnabled()) {
-//                LOG.info("successfully persisted image metadata (" + image +
-//                         ") for " + fileName);
-//            }
-//        } catch (Exception e) {
-//            throw new ExternalSystemException(
-//                    "Failed to save image data for " + fileName +
-//                    ".  Detailed data is: " + row, e);
-//        }
-//    }
-
-    /**
      * Create the dao for this manager if it does not already exist.
      *
-     * @throws SystemException if any error occurs during creation.
+     * @throws ExternalSystemException
+     *   if any error occurs during creation.
      */
-    private synchronized void setDao() throws SystemException {
+    private synchronized void setDao() throws ExternalSystemException {
         if (dao == null) {
-            dao = new ImageDao();
+            dao = new SpecimenDao();
         }
     }
+
+    /** The logger for this class. */
+    private static final Log LOG = LogFactory.getLog(SimpsonImageManager.class);
+
+    private static final String SPECIMEN_NUMBER_NAME = "Specimen Number";    
 }

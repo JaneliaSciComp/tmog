@@ -13,12 +13,16 @@ import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
  * This class encapsulates information for Simpson Lab fly lines.
  */
 public class Line {
+
+    public static final String LINE_NAME = "Line";
+    public static final String INSERTION_NUMBER_NAME = "Insertion Number";
+
     private String name;
     private String insertionNumber;
 
     public Line(RenamePluginDataRow row) {
-        this(row.getCoreValue(ImageProperty.LINE_NAME),
-             row.getCoreValue(ImageProperty.INSERTION_NUMBER_NAME));
+        this(row.getCoreValue(LINE_NAME),
+             row.getCoreValue(INSERTION_NUMBER_NAME));
     }
 
     public Line(String name,

@@ -49,14 +49,8 @@ public class ImageDao {
         dbManager = new DbManager(dbConfigurationKey, props);
     }
 
-    /**
-     * Value constructor.
-     *
-     * @param  dbManager  manager used to establish connections
-     *                    with the database.
-     */
-    public ImageDao(DbManager dbManager) {
-        this.dbManager = dbManager;
+    public DbManager getDbManager() {
+        return dbManager;
     }
 
     /**
@@ -185,7 +179,7 @@ public class ImageDao {
      * @throws ExternalSystemException
      *   if the load fails.
      */
-    public static Properties loadDatabaseProperties(String dbConfigurationKey)
+    private static Properties loadDatabaseProperties(String dbConfigurationKey)
             throws ExternalSystemException {
         Properties props = new Properties();
         final String propFileName = "/" + dbConfigurationKey + ".properties";

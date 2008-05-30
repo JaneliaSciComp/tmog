@@ -19,7 +19,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
 
 /**
  * Tests the ImageDao class.
@@ -31,7 +30,6 @@ public class ImageDaoTest extends TestCase {
     /** The logger for this class. */
     private static final Log LOG = LogFactory.getLog(ImageDaoTest.class);
 
-    private DbManager dbManager;
     private ImageDao dao;
     private Image testImage;
 
@@ -63,10 +61,7 @@ public class ImageDaoTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        final String configurationKey = "simpsonlab";
-        Properties props = ImageDao.loadDatabaseProperties(configurationKey);
-        dbManager = new DbManager(configurationKey, props);
-        dao = new ImageDao(configurationKey);
+        dao = new ImageDao("rubin_nighthawk");
         testImage = new Image();
     }
 
@@ -103,6 +98,7 @@ public class ImageDaoTest extends TestCase {
             ResultSet resultSet = null;
             PreparedStatement statement = null;
             try {
+                DbManager dbManager = dao.getDbManager();
                 connection = dbManager.getConnection();
                 statement = connection.prepareStatement(
                         SQL_DELETE_IMAGE_PROPERTIES);
