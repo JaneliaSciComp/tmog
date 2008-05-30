@@ -18,7 +18,7 @@
                 <!--<property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>-->
             <!--</rowListener>-->
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="simpsonlab"/>
+                <property name="db.config.key" value="rubin_nighthawk"/>
                 <property name="created_by" value="created_by"/>
                 <property name="family" value="family"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
