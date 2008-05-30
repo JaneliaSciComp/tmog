@@ -13,10 +13,11 @@
         <!-DASH_FOR_PROD -->
 
         <plugins>
-            <!--<rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />-->
-            <!--<rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >-->
-                <!--<property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>-->
-            <!--</rowListener>-->
+            <!-- DASH_FOR_PROD->
+            <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
+            <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
+                <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
+            </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="rubin_nighthawk"/>
                 <property name="created_by" value="created_by"/>
@@ -24,7 +25,6 @@
                 <property name="uas_reporter" value="UAS Reporter"/>
                 <property name="line" value="${Plate}${Well}_${Vector ID}_${Landing Site}"/>
             </rowListener>
-            <!-- DASH_FOR_PROD->
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\GMR"/>
             </sessionListener>
@@ -43,10 +43,36 @@
                 <validValue displayName="AC: pBPGDacw" value="AC"/>
                 <validValue displayName="AD: pBPGw" value="AD"/>
                 <validValue displayName="AE: pBPGUw" value="AE"/>
+                <validValue displayName="AF: pBPGUv" value="AF"/>
+                <validValue displayName="AG: pBPLxVUw-1" value="AG"/>
+                <validValue displayName="AH: pBPLxVw-1" value="AH"/>
+                <validValue displayName="AI: pBPLxVUw-2" value="AI"/>
+                <validValue displayName="AJ: pBPLxVw-2" value="AJ"/>
+                <validValue displayName="AK: pBPLxGUw" value="AK"/>
+                <validValue displayName="AL: pBPLxGw" value="AL"/>
+                <validValue displayName="AM: pBPLxPUw" value="AM"/>
+                <validValue displayName="AN: pBPLxPw" value="AN"/>
+                <validValue displayName="AO: pBPGfpUw" value="AO"/>
+                <validValue displayName="AP: pBPGfpw" value="AP"/>
+                <validValue displayName="AQ: pBPGhERUw" value="AQ"/>
+                <validValue displayName="AR: pBPGhERw" value="AR"/>
+                <validValue displayName="AS: pBPSwitchUw" value="AS"/>
+                <validValue displayName="AT: pBPSwitchw" value="AT"/>
             </validValueList>
             <separator value="_"/>
             <validValueList displayName="Landing Site" required="true">
                 <validValue displayName="01: attP2" value="01" default="true"/>
+                <validValue displayName="02: attP40-2nd" value="02"/>
+                <validValue displayName="03: attP16-2R" value="03"/>
+                <validValue displayName="04: attP3-X" value="04"/>
+                <validValue displayName="05: attP83-CyO" value="05"/>
+                <validValue displayName="06: su(Hw)attP1-3rd " value="06"/>
+                <validValue displayName="07: su(Hw)attP2-3rd " value="07"/>
+                <validValue displayName="08: su(Hw)attP4-3rd " value="08"/>
+                <validValue displayName="09: su(Hw)attP5-2nd " value="09"/>
+                <validValue displayName="10: su(Hw)attP6-2nd " value="10"/>
+                <validValue displayName="11: su(Hw)attP7-3rd " value="11"/>
+                <validValue displayName="12: su(Hw)attP8-X" value="12"/>
             </validValueList>
             <pluginData displayName="imageLocationRank" format="_%02d" />
             <separator value="-"/>
@@ -98,8 +124,9 @@
             <fileModificationTime datePattern="'_C'yyMMdd'_'"/>
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
+
             <!--
-             These values are collected for the image database but are not
+             These values are collected for the nighthawk database but are not
              included as components of the file name (markedForTask="false").
              -->
             <validValueList displayName="UAS Reporter" required="true"
@@ -112,12 +139,65 @@
 
     </project>
 
-    <project name="Rubin Lab: Research and Development (RD_*)">
+    <project name="Rubin Lab: Research and Development (RD_*: MMddyy)">
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
         <!-- DASH_FOR_PROD->
-        <outputDirectory basePath="\\dm6.int.janelia.org\rubindata\RDconfocalStacks"
+        <outputDirectory basePath="\\dm6.int.janelia.org\rubinimg\RDconfocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+        <!-DASH_FOR_PROD -->
+
+        <plugins>
+            <!-- DASH_FOR_PROD->
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\RD"/>
+            </sessionListener>
+            <!-DASH_FOR_PROD -->
+        </plugins>
+
+        <dataFields>
+            <separator value="RD_"/>
+            <text displayName="Promoter" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Transcript" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Responder" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Creator Initials" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <date displayName="Capture Date" required="true"
+                  datePattern="yyMMdd" prefix="_" copyable="false">
+                <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d)_L[0-9]++_Sum\.lsm"
+                                       fromDatePattern="MMddyy"
+                                       toDatePattern="yyMMdd"/>
+            </date>
+            <validValueList displayName="Area" required="false" prefix="-">
+                <validValue displayName="br: Brain" value="br"/>
+                <validValue displayName="vnc: Ventral Nerve Cord" value="vnc"/>
+            </validValueList>
+            <text displayName="L-Number" required="false" prefix="-L"
+                  pattern="[0-9]++" copyable="false">
+                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>                
+            </text>
+            <text displayName="Comment" required="false" prefix="-"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+        </dataFields>
+
+    </project>
+
+    <project name="Rubin Lab: Research and Development (RD_*: yyMMdd)">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <!-- DASH_FOR_PROD->
+        <outputDirectory basePath="\\dm6.int.janelia.org\rubinimg\RDconfocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
         <!-DASH_FOR_PROD -->
 
@@ -154,7 +234,7 @@
             </validValueList>
             <text displayName="L-Number" required="false" prefix="-L"
                   pattern="[0-9]++" copyable="false">
-                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>                
+                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>
             </text>
             <text displayName="Comment" required="false" prefix="-"
                   pattern="[0-9A-Za-z\\-]++"/>
@@ -165,6 +245,55 @@
 
     </project>
 
+    <project name="Rubin Lab: Research and Development (RD_*: manual date)">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <!-- DASH_FOR_PROD->
+        <outputDirectory basePath="\\dm6.int.janelia.org\rubinimg\RDconfocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+        <!-DASH_FOR_PROD -->
+
+        <plugins>
+            <!-- DASH_FOR_PROD->
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\RD"/>
+            </sessionListener>
+            <!-DASH_FOR_PROD -->
+        </plugins>
+
+        <dataFields>
+            <separator value="RD_"/>
+            <text displayName="Promoter" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Transcript" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Responder" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Creator Initials" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <date displayName="Capture Date" required="true"
+                  datePattern="yyMMdd" prefix="_" />
+            <validValueList displayName="Area" required="false" prefix="-">
+                <validValue displayName="br: Brain" value="br"/>
+                <validValue displayName="vnc: Ventral Nerve Cord" value="vnc"/>
+            </validValueList>
+            <text displayName="L-Number" required="false" prefix="-L"
+                  pattern="[0-9]++" copyable="false">
+                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>
+            </text>
+            <text displayName="Comment" required="false" prefix="-"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+        </dataFields>
+
+    </project>
+    
     <project name="Simpson Lab: GAL4 Lines (JHS_*)">
 
         <inputFileSorter sortAlgorithm="LNumber" />
@@ -179,10 +308,6 @@
         <!-DASH_FOR_PROD -->
 
         <plugins>
-               <rowListener className="org.janelia.it.ims.tmog.plugin.SRL">
-                 <property name="seconds" value="5"/>
-               </rowListener>
-
         <!-- DASH_FOR_PROD->
             <rowListener className="org.janelia.it.simpsonlab.SimpsonImageManager" />
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
