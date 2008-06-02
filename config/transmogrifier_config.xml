@@ -131,8 +131,8 @@
              -->
             <validValueList displayName="UAS Reporter" required="true"
                             markedForTask="false">
-                <validValue displayName="mcd8GFP" value="mcd8GFP" default="true"/>
-                <validValue displayName="JFRC-IVS-A1" value="JFRC-IVS-A1"/>
+                <validValue displayName="JFRC-IVS-A1" value="JFRC-IVS-A1" default="true"/>
+                <validValue displayName="mcd8GFP" value="mcd8GFP"/>
             </validValueList>
             <static name="family" value="rubin-chacrm" markedForTask="false"/>
         </dataFields>

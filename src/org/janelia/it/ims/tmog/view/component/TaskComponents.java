@@ -182,12 +182,16 @@ public abstract class TaskComponents implements PropertyChangeListener {
             if (updateIcon) {
                 sessionIcon.setToWait();
             }
+            progressBar.setVisible(true);
+            progressLabel.setVisible(true);        
         } else {
             executeButton.setText(buttonText.getStartText());
             executeButton.setToolTipText(buttonText.getStartToolTipText());
             if (updateIcon) {
                 sessionIcon.setToEnterValues();
             }
+            progressBar.setVisible(false);
+            progressLabel.setVisible(false);
         }
     }
 
