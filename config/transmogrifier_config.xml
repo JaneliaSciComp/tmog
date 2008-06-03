@@ -20,7 +20,7 @@
             </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="rubin_nighthawk"/>
-                <property name="created_by" value="created_by"/>
+                <property name="capture_date" value="Capture Date"/>
                 <property name="family" value="family"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
                 <property name="line" value="${Plate}${Well}_${Vector ID}_${Landing Site}"/>
@@ -121,7 +121,9 @@
             See http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html
             for datePattern options.
             -->
-            <fileModificationTime datePattern="'_C'yyMMdd'_'"/>
+            <separator value="_C"/>
+            <fileModificationTime displayName="Capture Date" datePattern="yyMMdd" />
+            <separator value="_"/>
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
 
