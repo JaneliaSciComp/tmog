@@ -176,6 +176,9 @@
                 <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d)_L[0-9]++_Sum\.lsm"
                                        fromDatePattern="MMddyy"
                                        toDatePattern="yyMMdd"/>
+                <sourceFileDateDefault pattern=".*_(\d\d\d\d\d\d)_R.*\.lsm"
+                                       fromDatePattern="MMddyy"
+                                       toDatePattern="yyMMdd"/>
             </date>
             <validValueList displayName="Area" required="false" prefix="-">
                 <validValue displayName="br: Brain" value="br"/>
@@ -184,6 +187,7 @@
             <text displayName="L-Number" required="false" prefix="-L"
                   pattern="[0-9]++" copyable="false">
                 <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>                
+                <sourceFileDefault pattern=".*_L([0-9]++)\.lsm"/>
             </text>
             <text displayName="Comment" required="false" prefix="-"
                   pattern="[0-9A-Za-z\\-]++"/>
