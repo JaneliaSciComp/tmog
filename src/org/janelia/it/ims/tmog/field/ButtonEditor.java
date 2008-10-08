@@ -45,11 +45,13 @@ public class ButtonEditor extends AbstractCellEditor
         this.row = row;
         this.column = column;
         button = (JButton) value;
-        ActionListener[] listeners = this.button.getActionListeners();
-        for (ActionListener listener : listeners) {
-            button.removeActionListener(listener);
+        if (button != null) {
+            ActionListener[] listeners = this.button.getActionListeners();
+            for (ActionListener listener : listeners) {
+                button.removeActionListener(listener);
+            }
+            button.addActionListener(this);
         }
-        button.addActionListener(this);
 
         return button;
     }
