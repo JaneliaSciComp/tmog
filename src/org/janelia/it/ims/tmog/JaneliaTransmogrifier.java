@@ -7,9 +7,11 @@
 
 package org.janelia.it.ims.tmog;
 
+import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.view.TabbedView;
 
 import javax.swing.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.awt.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -21,6 +23,10 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @author Peter Davies
  */
 public class JaneliaTransmogrifier extends JFrame {
+
+    /** The logger for this class. */
+    private static final Logger LOG =
+            Logger.getLogger(JaneliaTransmogrifier.class);
 
     /**
      * Set up a thread pool to limit the number of concurrent
@@ -60,7 +66,26 @@ public class JaneliaTransmogrifier extends JFrame {
 
     public static void main(String[] args) {
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            String lookAndFeelClassName =
+                    UIManager.getSystemLookAndFeelClassName();
+
+            // work around Mac Leopard bug with combo boxes
+            // see http://www.randelshofer.ch/quaqua/ for another option
+            String javaVersion = System.getProperty("java.runtime.version");
+            if ((javaVersion != null) && (javaVersion.startsWith("1.5"))) {
+                String osName = System.getProperty("os.name");
+                if ((osName != null) && osName.startsWith("Mac")) {
+                    String osVersion = System.getProperty("os.version");
+                    if ((osVersion != null) && osVersion.startsWith("10")) {
+                        LOG.info("use Metal look and feel for java " + 
+                                 javaVersion + " on " + osName +
+                                 " (" + osVersion + ")");
+                        lookAndFeelClassName = MetalLookAndFeel.class.getName();
+                    }
+                }
+            }
+
+            UIManager.setLookAndFeel(lookAndFeelClassName);
         }
         catch (Exception ex) {
             ex.printStackTrace();
