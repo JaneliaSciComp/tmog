@@ -23,7 +23,8 @@ import org.janelia.it.ims.tmog.field.StaticDataModel;
 import org.janelia.it.ims.tmog.field.ValidValue;
 import org.janelia.it.ims.tmog.field.ValidValueModel;
 import org.janelia.it.ims.tmog.field.VerifiedDateModel;
-import org.janelia.it.ims.tmog.field.VerifiedNumberModel;
+import org.janelia.it.ims.tmog.field.VerifiedDecimalModel;
+import org.janelia.it.ims.tmog.field.VerifiedIntegerModel;
 import org.janelia.it.ims.tmog.field.VerifiedTextModel;
 import org.janelia.it.ims.tmog.field.VerifiedWellModel;
 import org.xml.sax.SAXException;
@@ -171,9 +172,15 @@ public class TransmogrifierConfiguration {
                             "setDataFields");
 
         digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/number",
-                                 VerifiedNumberModel.class);
+                                 VerifiedIntegerModel.class);
         digester.addSetProperties("transmogrifierConfiguration/project/dataFields/number");
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/number",
+                            "add");
+
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/decimal",
+                                 VerifiedDecimalModel.class);
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/decimal");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/decimal",
                             "add");
 
         digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/text",

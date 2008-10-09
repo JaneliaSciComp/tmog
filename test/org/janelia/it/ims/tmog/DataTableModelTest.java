@@ -15,7 +15,7 @@ import org.janelia.it.ims.tmog.config.ProjectConfiguration;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.FileExtensionModel;
 import org.janelia.it.ims.tmog.field.FileModificationTimeModel;
-import org.janelia.it.ims.tmog.field.VerifiedNumberModel;
+import org.janelia.it.ims.tmog.field.VerifiedIntegerModel;
 import org.janelia.it.ims.tmog.field.VerifiedTextModel;
 
 import java.io.File;
@@ -106,7 +106,7 @@ public class DataTableModelTest extends TestCase {
         textField.setRequired(true);
         dataFields.add(textField);
 
-        VerifiedNumberModel numberField = new VerifiedNumberModel();
+        VerifiedIntegerModel numberField = new VerifiedIntegerModel();
         numberField.setMinimumValue(0);
         numberField.setMaximumValue(9);
         numberField.setRequired(false);

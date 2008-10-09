@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="true">
+    <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="false">
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
@@ -390,6 +390,75 @@
             </date>
             <text displayName="Tracker Tag" required="true" pattern="[0-9A-Za-z\s]++"/>
             <text displayName="Notes" required="false" />
+        </dataFields>
+
+    </project>
+
+    <project name="Baker Lab: project name here (BSB_*)" default="true">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <outputDirectory>
+            <path path="baker_public_stacks\" />
+            <renameFieldValue fieldDisplayName="Line" />
+        </outputDirectory>
+
+        <plugins>
+            <!-- DASH_FOR_PROD->
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="nighthawk"/>
+                <property name="family" value="family"/>
+                <property name="line" value="Line"/>
+                <property name="heat_shock_stage" value="Heat Shock Stage"/>
+                <property name="heat_shock_hour" value="Heat Shock Hour"/>
+                <property name="heat_shock_interval" value="Heat Shock Interval"/>
+            </rowListener>
+            <!-DASH_FOR_PROD -->
+        </plugins>
+
+        <dataFields>
+            <separator value="BSB_"/>
+            <text displayName="Line" required="true"
+                  pattern="[0-9A-Za-z\-\_]++" />
+            <text displayName="Genotype" required="true" />
+            <separator value="-"/>
+            <validValueList displayName="Gender" required="true">
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+            <validValueList displayName="Tissue" required="true">
+                <validValue displayName="h: Head" value="h"/>
+                <validValue displayName="l: Leg" value="l"/>
+                <validValue displayName="n: Notum" value="n"/>
+            </validValueList>
+            <separator value="-"/>
+            <validValueList displayName="Chron Stage" required="true">
+                <validValue displayName="P01: Prepupa" value="P01"/>
+                <validValue displayName="L02: Second Instar" value="L02"/>
+                <validValue displayName="L03: Third Instar" value="L03"/>
+                <validValue displayName="A01: Day 1-5" value="A01"/>
+            </validValueList>
+            <number displayName="Chron Hour" required="true"
+                    minimumValue="0" />
+            <number displayName="Chron Interval" required="true"
+                    minimumValue="0" />
+            <validValueList displayName="Heat Shock Stage" required="true"
+                            markedForTask="false">
+                <validValue displayName="P01: Prepupa" value="P01"/>
+                <validValue displayName="L02: Second Instar" value="L02"/>
+                <validValue displayName="L03: Third Instar" value="L03"/>
+                <validValue displayName="A01: Day 1-5" value="A01"/>
+            </validValueList>
+            <decimal displayName="Heat Shock Hour" required="true"
+                     minimumValue="0" markedForTask="false" />
+            <decimal displayName="Heat Shock Interval" required="true"
+                     minimumValue="0" markedForTask="false" />
+            <pluginData displayName="Specimen Number" format="%02d"/>
+            <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+
+            <static name="family" value="baker" markedForTask="false"/>
         </dataFields>
 
     </project>

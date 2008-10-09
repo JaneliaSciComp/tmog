@@ -15,7 +15,7 @@
     <xs:complexType name="outputDirectoryType">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element name="path" type="pathType"/>
-            <xs:element name="transmogrifierFieldValue" type="transmogrifierFieldValueType"/>
+            <xs:element name="renameFieldValue" type="renameFieldValueType"/>
             <xs:element name="sourceFileModificationTime"
                         type="sourceFileModificationTimeType"/>
         </xs:choice>
@@ -27,7 +27,7 @@
         <xs:attribute name="path" type="xs:string"/>
     </xs:complexType>
 
-    <xs:complexType name="transmogrifierFieldValueType">
+    <xs:complexType name="renameFieldValueType">
         <xs:attribute name="fieldDisplayName" type="xs:string"/>
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
@@ -64,6 +64,17 @@
     </xs:complexType>
 
     <xs:complexType name="numberType">
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="required" type="xs:boolean"/>
+        <xs:attribute name="minimumValue" type="xs:integer"/>
+        <xs:attribute name="maximumValue" type="xs:integer"/>
+        <xs:attribute name="prefix" type="xs:string"/>
+        <xs:attribute name="suffix" type="xs:string"/>
+        <xs:attribute name="copyable" type="xs:boolean"/>
+        <xs:attribute name="markedForTask" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="decimalType">
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:boolean"/>
         <xs:attribute name="minimumValue" type="xs:integer"/>
@@ -185,6 +196,7 @@
                         <xs:element name="separator" type="staticType"/>
                         <xs:element name="static" type="staticType"/>
                         <xs:element name="number" type="numberType"/>
+                        <xs:element name="decimal" type="decimalType"/>
                         <xs:element name="text" type="textType"/>
                         <xs:element name="date" type="dateType"/>
                         <xs:element name="well" type="wellType"/>
