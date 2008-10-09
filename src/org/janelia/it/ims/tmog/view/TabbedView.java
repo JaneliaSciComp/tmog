@@ -86,6 +86,10 @@ public class TabbedView implements ActionListener {
         return contentPanel;
     }
 
+    public JMenuBar getMenuBar() {
+        return menuBar;
+    }
+
     public WindowListener getWindowListener() {
         return new WindowAdapter() {
             public void windowClosing(WindowEvent ev) {

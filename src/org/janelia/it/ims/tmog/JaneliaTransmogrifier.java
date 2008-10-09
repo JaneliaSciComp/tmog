@@ -52,6 +52,9 @@ public class JaneliaTransmogrifier extends JFrame {
         setContentPane(tabbedView.getContentPanel());
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(tabbedView.getWindowListener());
+        JMenuBar menuBar = tabbedView.getMenuBar();
+        this.setJMenuBar(menuBar);
+
         pack();
     }
 
