@@ -63,7 +63,7 @@ public class ImageDaoTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        dao = new ImageDao("rubin_nighthawk");
+        dao = new ImageDao("nighthawk");
         testImage = new Image();
         SimpleDateFormat namespaceTemplate =
             new SimpleDateFormat("'testLine'yyyyMMddHHmmssSSS");

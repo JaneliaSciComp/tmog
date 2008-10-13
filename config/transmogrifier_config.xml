@@ -19,7 +19,7 @@
                 <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
             </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="rubin_nighthawk"/>
+                <property name="db.config.key" value="nighthawk"/>
                 <property name="capture_date" value="Capture Date"/>
                 <property name="family" value="family"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
@@ -316,7 +316,7 @@
         <plugins>
         <!-- DASH_FOR_PROD->
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
-                <property name="db.config.key" value="simpson_nighthawk" />
+                <property name="db.config.key" value="nighthawk" />
                 <property name="Specimen Number" value="urn:lsid:janelia.org:simpson_lab_line_specimen:${Line}${'_'Insertion Number}" />
             </rowListener>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
