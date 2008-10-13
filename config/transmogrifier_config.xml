@@ -315,7 +315,10 @@
 
         <plugins>
         <!-- DASH_FOR_PROD->
-            <rowListener className="org.janelia.it.simpsonlab.SimpsonImageManager" />
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="simpson_nighthawk" />
+                <property name="Specimen Number" value="urn:lsid:janelia.org:simpson_lab_line_specimen:${Line}${'_'Insertion Number}" />
+            </rowListener>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm8.int.janelia.org\simpsonmicro\renamer\summaries\RD"/>
             </sessionListener>

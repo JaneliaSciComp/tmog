@@ -169,6 +169,75 @@ public class ImageDao {
     }
 
     /**
+     * @param  namespace  identifies the sequence's namespace.
+     *
+     * @return the next sequence number for the specified namespace.
+     *
+     * @throws ExternalSystemException
+     *   if errors occur while retrieving the data.
+     */
+    public int getNextSequenceNumber(String namespace)
+            throws ExternalSystemException {
+
+        int nextNumber = 1;
+        int rowsUpdated;
+
+        Connection connection = null;
+        ResultSet selectResultSet = null;
+        PreparedStatement select = null;
+        PreparedStatement increment = null;
+
+        try {
+            DbManager dbManager = getDbManager();
+            connection = dbManager.getConnection();
+            connection.setAutoCommit(false);
+            select = connection.prepareStatement(SQL_SELECT_SEQUENCE_NUMBER);
+            select.setString(1, namespace);
+            selectResultSet = select.executeQuery();
+            if (selectResultSet.next()) {
+                Integer currentNumber = selectResultSet.getInt(1);
+                nextNumber = currentNumber + 1;
+                increment =
+                        connection.prepareStatement(SQL_UPDATE_SEQUENCE_NUMBER);
+                increment.setInt(1, nextNumber);
+                increment.setString(2, namespace);
+                rowsUpdated = increment.executeUpdate();
+                if (rowsUpdated != 1) {
+                    throw new ExternalSystemException(
+                            "Failed to update next sequence number for " +
+                            namespace + ".  Attempted to update " +
+                            rowsUpdated + " rows.");
+                }
+            } else {
+                increment =
+                        connection.prepareStatement(SQL_INSERT_SEQUENCE_NUMBER);
+                increment.setString(1, namespace);
+                rowsUpdated = increment.executeUpdate();
+                if (rowsUpdated != 1) {
+                    throw new ExternalSystemException(
+                            "Failed to create sequence number for " +
+                            namespace + ".  Attempted to create " +
+                            rowsUpdated + " rows.");
+                }
+            }
+
+            connection.commit();
+
+        } catch (DbConfigException e) {
+            throw new ExternalSystemException(e.getMessage(), e);
+        } catch (SQLException e) {
+            throw new ExternalSystemException(
+                    "Failed to determine next sequence number for " +
+                    namespace, e);
+        } finally {
+            DbManager.closeResources(selectResultSet, select, null, LOG);
+            DbManager.closeResources(null, increment, connection, LOG);
+        }
+
+        return nextNumber;
+    }
+
+    /**
      * Utility to load database properties from classpath.
      *
      * @param  dbConfigurationKey  the key for loading database
@@ -239,5 +308,30 @@ public class ImageDao {
      */
     private static final String SQL_INSERT_IMAGE_PROPERTY =
             "INSERT INTO image_property (image_id, type, value) VALUES (?,?,?)";
+
+    /**
+     * SQL for retrieving the current (max) sequence number for a namespace.
+     *   Parameter 1 is the namespace.
+     */
+    private static final String SQL_SELECT_SEQUENCE_NUMBER =
+            "SELECT sequence_number FROM namespace_sequence_number " +
+            "WHERE namespace=? FOR UPDATE";
+
+    /**
+     * SQL for inserting the first sequence number for a namespace.
+     *   Parameter 1 is the namespace.
+     */
+    private static final String SQL_INSERT_SEQUENCE_NUMBER =
+            "INSERT INTO namespace_sequence_number " +
+            "(namespace, sequence_number) VALUES (?, 1)";
+
+    /**
+     * SQL for updating the max sequence number for a namespace.
+     *   Parameter 1 is the new sequence number.
+     *   Parameter 2 is the namespace.
+     */
+    private static final String SQL_UPDATE_SEQUENCE_NUMBER =
+            "UPDATE namespace_sequence_number SET sequence_number=? " +
+            "WHERE namespace=?";
 
 }

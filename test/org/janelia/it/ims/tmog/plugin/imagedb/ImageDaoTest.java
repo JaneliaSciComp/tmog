@@ -32,12 +32,14 @@ public class ImageDaoTest extends TestCase {
 
     private ImageDao dao;
     private Image testImage;
+    private String sequenceNamespace;
 
     /**
-     * This flag can be used to stop database cleanup in each test's
+     * This flag can be used to stop database cleanup in the image test's
      * tearDown method when you need to debug problems in the database.
      */
-    private boolean isCleanupNeeded = true;
+    private boolean isImageCleanupNeeded = true;
+    private boolean isSequenceCleanupNeeded = false;
 
     /**
      * Constructs a test case with the given name.
@@ -63,13 +65,19 @@ public class ImageDaoTest extends TestCase {
     protected void setUp() throws Exception {
         dao = new ImageDao("rubin_nighthawk");
         testImage = new Image();
+        SimpleDateFormat namespaceTemplate =
+            new SimpleDateFormat("'testLine'yyyyMMddHHmmssSSS");
+        sequenceNamespace = namespaceTemplate.format(new Date());
     }
 
     protected void tearDown() throws Exception {
-        if (isCleanupNeeded) {
+        if (isImageCleanupNeeded) {
             if (testImage != null) {
                 deleteImage(testImage.getId());
             }
+        }
+        if (isSequenceCleanupNeeded) {
+            deleteTestSequenceNumber();
         }
     }
 
@@ -90,6 +98,23 @@ public class ImageDaoTest extends TestCase {
         Image updateImage = dao.addImage(testImage);
 
         assertNotNull("id not set after add", updateImage.getId());
+    }
+
+    /**
+     * Tests the getNextSpecimenNumber method.
+     *
+     * @throws Exception
+     *   if any unexpected errors occur.
+     */
+    public void testGetNextSequenceNumber() throws Exception {
+        isSequenceCleanupNeeded = true;
+        
+        int specimenNumber = dao.getNextSequenceNumber(sequenceNamespace);
+
+        assertEquals("invalid initial number", 1, specimenNumber);
+
+        specimenNumber = dao.getNextSequenceNumber(sequenceNamespace);
+        assertEquals("invalid update number", 2, specimenNumber);
     }
 
     private void deleteImage(Integer imageId) throws Exception {
@@ -118,6 +143,24 @@ public class ImageDaoTest extends TestCase {
         }
     }
 
+    private void deleteTestSequenceNumber() throws Exception {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+        try {
+            DbManager dbManager = dao.getDbManager();
+            connection = dbManager.getConnection();
+            statement = connection.prepareStatement(
+                    SQL_DELETE_NAMESPACE_SEQUENCE_NUMBER);
+            statement.setString(1, sequenceNamespace);
+            int rowsUpdated = statement.executeUpdate();
+            LOG.info("deleteTestSequenceNumber: completed, " + rowsUpdated +
+                     " row(s) updated");
+        } finally {
+            DbManager.closeResources(resultSet, statement, connection, LOG);
+        }
+    }
+
     /**
      * SQL for deleting all properties for an image.
      *   Parameter 1 is the image id.
@@ -134,4 +177,12 @@ public class ImageDaoTest extends TestCase {
 
     private static final SimpleDateFormat IMAGE_PATH =
             new SimpleDateFormat("'test/file'yyyyMMddHHmmssSSS");
+
+    /**
+     * SQL for deleting a namespace sequence number.
+     *   Parameter 1 is the sequence namespace.
+     */
+    private static final String SQL_DELETE_NAMESPACE_SEQUENCE_NUMBER =
+            "DELETE FROM namespace_sequence_number WHERE namespace=?";
+
 }

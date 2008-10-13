@@ -15,7 +15,8 @@ import java.util.Scanner;
 
 /**
  * This class sets the image property using a composite of text and
- * field names.
+ * field names.  It can also be used as a simple parser for tokenized
+ * configuration values.
  *
  * @author Eric Trautman
  */
@@ -34,14 +35,19 @@ public class CompositeSetter implements ImagePropertySetter {
         this.tokens = parseTokens(compositeFieldString);
     }
 
-    public void setProperty(PluginDataRow row,
-                            Image image) {
+    public String getValue(PluginDataRow row) {
         StringBuilder sb = new StringBuilder();
         for (Token token : tokens) {
             sb.append(token.getValue(row));
         }
-        if (sb.length() > 0) {
-            image.addProperty(propertyType, sb.toString());
+        return sb.toString();
+    }
+
+    public void setProperty(PluginDataRow row,
+                            Image image) {
+        String value = getValue(row);
+        if (value.length() > 0) {
+            image.addProperty(propertyType, value);
         }
     }
 
@@ -112,11 +118,62 @@ public class CompositeSetter implements ImagePropertySetter {
     public class Token {
         private boolean isLiteral = false;
         private String value;
+        private String prefix;
+        private String suffix;
 
         private Token(boolean literal,
                       String value) {
             isLiteral = literal;
-            this.value = value;
+            if (isLiteral) {
+                this.value = value;
+                this.prefix = null;
+                this.suffix = null;
+            } else {
+
+                int valueStart = 0;
+                int valueStop = value.length();
+
+                if (value.startsWith("'")) {
+                    int prefixStop = value.indexOf('\'', 1);
+                    if (prefixStop > 0) {
+                        this.prefix = value.substring(1, prefixStop);
+                        valueStart = prefixStop + 1;
+                    } else {
+                        throw new IllegalArgumentException(
+                                INVALID_SYNTAX +
+                                "Token prefix is missing closing quote for ${" +
+                                value + "}.");
+                    }
+                }
+
+                if (valueStart == valueStop) {
+                    throw new IllegalArgumentException(
+                            INVALID_SYNTAX +
+                            "Token is missing in ${" + value + "}.");
+                }
+
+                if (value.endsWith("'")) {
+                    int suffixStart = value.indexOf('\'', valueStart) + 1;
+                    if ((suffixStart > 0) && (suffixStart < valueStop)) {
+                        this.suffix = value.substring(suffixStart,
+                                                      (valueStop - 1));
+                        valueStop = suffixStart - 1;
+                    } else {
+                        throw new IllegalArgumentException(
+                                INVALID_SYNTAX +
+                                "Token suffix is missing opening quote for ${" +
+                                value + "}.");
+                    }
+                }
+
+                if (valueStop <= valueStart) {
+                    throw new IllegalArgumentException(
+                            INVALID_SYNTAX +
+                            "Token is missing in ${" + value + "}.");
+                }
+                
+                this.value = value.substring(valueStart, valueStop);
+            }
         }
 
         public boolean isLiteral() {
@@ -127,12 +184,28 @@ public class CompositeSetter implements ImagePropertySetter {
             return value;
         }
 
+        public String getPrefix() {
+            return prefix;
+        }
+
+        public String getSuffix() {
+            return suffix;
+        }
+
         public String getValue(PluginDataRow row) {
             String derivedValue;
             if (isLiteral) {
                 derivedValue = value;
             } else {
                 derivedValue = row.getCoreValue(value);
+                if ((derivedValue != null) && (derivedValue.length() > 0)) {
+                    if (prefix != null) {
+                        derivedValue = prefix + derivedValue;
+                    }
+                    if (suffix != null) {
+                        derivedValue = derivedValue + suffix;
+                    }
+                }
             }
             return derivedValue;
         }
