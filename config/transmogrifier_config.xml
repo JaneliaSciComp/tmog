@@ -351,6 +351,7 @@
             </date>
             <validValueList displayName="Organ" required="true">
                 <validValue displayName="B: Brain" value="B"/>
+                <validValue displayName="L: Larva" value="L"/>
                 <validValue displayName="T: Thorax" value="T"/>
             </validValueList>
             <pluginData displayName="Specimen Number" format="%02d"/>
@@ -402,12 +403,17 @@
         <inputFileSorter sortAlgorithm="LNumber" />
 
         <outputDirectory>
+            <!-- TODO: determine output path spepcifics -->
             <path path="baker_public_stacks\" />
             <renameFieldValue fieldDisplayName="Line" />
         </outputDirectory>
 
         <plugins>
             <!-- DASH_FOR_PROD->
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="nighthawk" />
+                <property name="Specimen Number" value="urn:lsid:janelia.org:baker_lab_line_specimen:${Line}" />
+            </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
                 <property name="family" value="family"/>
@@ -423,7 +429,11 @@
             <separator value="BSB_"/>
             <text displayName="Line" required="true"
                   pattern="[0-9A-Za-z\-\_]++" />
-            <text displayName="Genotype" required="true" />
+            <text displayName="Genotype" required="true"
+                  markedForTask="false"/>
+            <text displayName="Short Genotype" required="false" 
+                              pattern="[0-9A-Za-z\-\_]++" />
+
             <separator value="-"/>
             <validValueList displayName="Gender" required="true">
                 <validValue displayName="m: Male" value="m"/>
@@ -431,27 +441,34 @@
                 <validValue displayName="x: Not Defined" value="x"/>
             </validValueList>
             <validValueList displayName="Tissue" required="true">
-                <validValue displayName="h: Head" value="h"/>
-                <validValue displayName="l: Leg" value="l"/>
-                <validValue displayName="n: Notum" value="n"/>
+                <validValue displayName="b: Brain" value="b"/>
+                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
+                <validValue displayName="a: Antenna" value="a"/>
+                <validValue displayName="pm: Proboscis/Maxillary Palp" value="p"/>
+                <validValue displayName="l1: Leg 1" value="l1"/>
+                <validValue displayName="l2: Leg 2" value="l2"/>
+                <validValue displayName="l3: Leg 3" value="l3"/>
+                <validValue displayName="g: Genitalia" value="g"/>
+                <validValue displayName="w: Wing/Joint" value="w"/>
             </validValueList>
             <separator value="-"/>
             <validValueList displayName="Chron Stage" required="true">
-                <validValue displayName="P01: Prepupa" value="P01"/>
-                <validValue displayName="L02: Second Instar" value="L02"/>
-                <validValue displayName="L03: Third Instar" value="L03"/>
-                <validValue displayName="A01: Day 1-5" value="A01"/>
+                <validValue displayName="E: Embryo" value="E"/>
+                <validValue displayName="L1: First Instar Larva" value="L1"/>
+                <validValue displayName="L2: Second Instar Larva" value="L2"/>
+                <validValue displayName="L3: Third Instar Larva" value="L3"/>
+                <validValue displayName="P: Pupa" value="P"/>
+                <validValue displayName="A: Adult" value="A"/>
             </validValueList>
             <number displayName="Chron Hour" required="true"
                     minimumValue="0" />
             <number displayName="Chron Interval" required="true"
                     minimumValue="0" />
-            <validValueList displayName="Heat Shock Stage" required="true"
-                            markedForTask="false">
-                <validValue displayName="P01: Prepupa" value="P01"/>
-                <validValue displayName="L02: Second Instar" value="L02"/>
-                <validValue displayName="L03: Third Instar" value="L03"/>
-                <validValue displayName="A01: Day 1-5" value="A01"/>
+            <validValueList displayName="Heat Shock Landmark" required="false"
+							markedForTask="false" >
+                <validValue displayName="l: After Egg Laying" value="y"/>
+                <validValue displayName="p: After Puparium Formation" value="t"/>
+                <validValue displayName="e: After Eclosion" value="o"/>
             </validValueList>
             <decimal displayName="Heat Shock Hour" required="true"
                      minimumValue="0" markedForTask="false" />

@@ -86,12 +86,16 @@ public class TransmogrifierConfiguration {
     public void load(String resourceName) throws ConfigurationException {
 
         InputStream stream = null;
+        String loadMessage;
 
         File configFile = new File(resourceName);
         if (!configFile.exists()) {
             String cpName = "/" + resourceName;
             stream = TransmogrifierConfiguration.class.getResourceAsStream(cpName);
-            LOG.warn("Loaded configuration from jar file: " + resourceName);
+            loadMessage = "Loaded configuration from jar file: " + resourceName;
+        } else {
+            loadMessage = "Loaded configuration from " + 
+                          configFile.getAbsolutePath();
         }
 
         if (stream == null) {
@@ -106,7 +110,7 @@ public class TransmogrifierConfiguration {
 
         load(stream, resourceName);
 
-        LOG.info("loaded configuration file: " + resourceName);
+        LOG.info(loadMessage);
     }
 
     /**
