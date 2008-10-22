@@ -17,8 +17,8 @@ package org.janelia.it.ims.tmog.field;
 public abstract class VerifiedRangeModel<T extends Comparable<T>>
         extends VerifiedFieldModel {
 
-    private T minimumValue;
-    private T maximumValue;
+    private T minimum;
+    private T maximum;
 
     public VerifiedRangeModel() {
         super();
@@ -32,12 +32,12 @@ public abstract class VerifiedRangeModel<T extends Comparable<T>>
             T value = getValueOf(valueStr);
 
             if (value != null) {
-                if ((minimumValue != null) &&
-                    (value.compareTo(minimumValue) < 0)) {
+                if ((minimum != null) &&
+                    (value.compareTo(minimum) < 0)) {
                     isValid = false;
                     setMinMaxErrorMessage();
-                } else if ((maximumValue != null) &&
-                           (value.compareTo(maximumValue) > 0)) {
+                } else if ((maximum != null) &&
+                           (value.compareTo(maximum) > 0)) {
                     isValid = false;
                     setMinMaxErrorMessage();
                 }
@@ -79,24 +79,24 @@ public abstract class VerifiedRangeModel<T extends Comparable<T>>
 
     public void cloneValuesForNewInstance(VerifiedRangeModel<T> instance) {
         super.cloneValuesForNewInstance(instance);
-        instance.minimumValue = minimumValue;
-        instance.maximumValue = maximumValue;
+        instance.minimum = minimum;
+        instance.maximum = maximum;
     }
 
-    public T getMinimumValue() {
-        return minimumValue;
+    public T getMinimum() {
+        return minimum;
     }
 
-    public T getMaximumValue() {
-        return maximumValue;
+    public T getMaximum() {
+        return maximum;
     }
 
-    public void setMinimumValue(T minimumValue) {
-        this.minimumValue = minimumValue;
+    public void setMinimum(T minimum) {
+        this.minimum = minimum;
     }
 
-    public void setMaximumValue(T maximumValue) {
-        this.maximumValue = maximumValue;
+    public void setMaximum(T maximum) {
+        this.maximum = maximum;
     }
 
 // TODO: consider numeric padding support
@@ -118,18 +118,18 @@ public abstract class VerifiedRangeModel<T extends Comparable<T>>
     private void setMinMaxErrorMessage() {
         String msg = null;
         
-        if (minimumValue != null) {
-            if (maximumValue != null) {
+        if (minimum != null) {
+            if (maximum != null) {
                 msg = "This field should contain " + getValueName() +
-                      " that is between " + minimumValue + " and " +
-                      maximumValue + ".";
+                      " that is between " + minimum + " and " +
+                                                              maximum + ".";
             } else {
                 msg = "This field should contain " + getValueName() +
-                      " that is greater than or equal to " + minimumValue + ".";
+                      " that is greater than or equal to " + minimum + ".";
             }
-        } else if (maximumValue != null) {
+        } else if (maximum != null) {
             msg = "This field should contain " + getValueName() +
-                  " that is less than or equal to " + maximumValue + ".";
+                  " that is less than or equal to " + maximum + ".";
         }
 
         setErrorMessage(msg);

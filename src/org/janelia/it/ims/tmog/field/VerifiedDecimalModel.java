@@ -27,19 +27,19 @@ public class VerifiedDecimalModel extends VerifiedRangeModel<BigDecimal> {
     }
 
     public BigDecimal getMinimumValue() {
-        return super.getMinimumValue();
+        return getMinimum();
     }
 
     public BigDecimal getMaximumValue() {
-        return super.getMaximumValue();
+        return getMaximum();
     }
 
     public void setMinimumValue(BigDecimal minimumValue) {
-        super.setMinimumValue(minimumValue);
+        setMinimum(minimumValue);
     }
 
     public void setMaximumValue(BigDecimal maximumValue) {
-        super.setMaximumValue(maximumValue);
+        setMaximum(maximumValue);
     }
 
     public BigDecimal getValueOf(String valueStr) throws NumberFormatException {

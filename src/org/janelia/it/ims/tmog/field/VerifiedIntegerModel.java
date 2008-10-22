@@ -26,19 +26,19 @@ public class VerifiedIntegerModel
     }
 
     public Integer getMinimumValue() {
-        return super.getMinimumValue();
+        return getMinimum();
     }
 
     public Integer getMaximumValue() {
-        return super.getMaximumValue();
+        return getMaximum();
     }
 
     public void setMinimumValue(Integer minimumValue) {
-        super.setMinimumValue(minimumValue);
+        setMinimum(minimumValue);
     }
 
     public void setMaximumValue(Integer maximumValue) {
-        super.setMaximumValue(maximumValue);
+        setMaximum(maximumValue);
     }
 
     public Integer getValueOf(String valueStr) throws NumberFormatException {
