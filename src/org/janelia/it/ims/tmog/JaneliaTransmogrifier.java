@@ -45,9 +45,11 @@ public class JaneliaTransmogrifier extends JFrame {
 
     /**
      * Construct the application
+     *
+     * @param  version  the application version number to be used in the title. 
      */
-    public JaneliaTransmogrifier() {
-        super("Janelia Transmogrifier");
+    public JaneliaTransmogrifier(String version) {
+        super("Janelia Transmogrifier " + version);
         TabbedView tabbedView = new TabbedView();
         setContentPane(tabbedView.getContentPanel());
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -93,7 +95,14 @@ public class JaneliaTransmogrifier extends JFrame {
         catch (Exception ex) {
             ex.printStackTrace();
         }
-        JFrame frame = new JaneliaTransmogrifier();
+
+        Package pkg = JaneliaTransmogrifier.class.getPackage();
+        String version = pkg.getSpecificationVersion();
+        String revision = pkg.getImplementationVersion();
+        LOG.info("starting Janelia Transmogrifier version " + version +
+                 ", revision " + revision);
+
+        JFrame frame = new JaneliaTransmogrifier(version);
 
         //Center the window
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

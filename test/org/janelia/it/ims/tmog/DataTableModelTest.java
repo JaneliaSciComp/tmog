@@ -107,8 +107,8 @@ public class DataTableModelTest extends TestCase {
         dataFields.add(textField);
 
         VerifiedIntegerModel numberField = new VerifiedIntegerModel();
-        numberField.setMinimumValue(0);
-        numberField.setMaximumValue(9);
+        numberField.setMinimum(0);
+        numberField.setMaximum(9);
         numberField.setRequired(false);
         dataFields.add(numberField);
 

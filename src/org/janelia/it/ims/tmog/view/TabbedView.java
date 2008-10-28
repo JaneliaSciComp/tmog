@@ -59,12 +59,9 @@ public class TabbedView implements ActionListener {
         };
         SwingUtilities.invokeLater(setContextInDispatchThread);
 
-        LOG.info("starting transmogrifier");
-
-        String configFileName = "transmogrifier_config.xml";
         tmogConfig = new TransmogrifierConfiguration();
         try {
-            tmogConfig.load(configFileName);
+            tmogConfig.load();
         } catch (ConfigurationException e) {
             LOG.error("Configuration Error", e);
             NarrowOptionPane.showMessageDialog(contentPanel,

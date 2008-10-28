@@ -27,6 +27,7 @@ import org.janelia.it.ims.tmog.field.VerifiedDecimalModel;
 import org.janelia.it.ims.tmog.field.VerifiedIntegerModel;
 import org.janelia.it.ims.tmog.field.VerifiedTextModel;
 import org.janelia.it.ims.tmog.field.VerifiedWellModel;
+import org.janelia.it.utils.PathUtil;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -76,52 +77,57 @@ public class TransmogrifierConfiguration {
     }
 
     /**
-     * Utility method to parse the specified config file.
+     * Populates the configuration object model from the file identified
+     * by the 'configFile' system property.
      *
-     * @param resourceName name of resource (file) containing xml
-     *                     configuration.
-     * @throws org.janelia.it.ims.tmog.config.ConfigurationException
-     *          if an error occurs parsing the event config file.
+     * @throws ConfigurationException
+     *   if an error occurs locating or parsing the configuration file.
      */
-    public void load(String resourceName) throws ConfigurationException {
+    public void load() throws ConfigurationException {
 
-        InputStream stream = null;
-        String loadMessage;
-
-        File configFile = new File(resourceName);
-        if (!configFile.exists()) {
-            String cpName = "/" + resourceName;
-            stream = TransmogrifierConfiguration.class.getResourceAsStream(cpName);
-            loadMessage = "Loaded configuration from jar file: " + resourceName;
-        } else {
-            loadMessage = "Loaded configuration from " + 
-                          configFile.getAbsolutePath();
-        }
-
-        if (stream == null) {
+        String fileName = System.getProperty("configFile");
+        if (fileName != null) {
+            String convertedFileName = PathUtil.convertPath(fileName);
+            File configFile = new File(convertedFileName);
+            InputStream stream;
             try {
                 stream = new FileInputStream(configFile);
             } catch (FileNotFoundException e) {
                 throw new ConfigurationException(
-                        "Unable to find configuration file: " +
-                        configFile.getAbsolutePath(), e);
+                        "Configuration file " + configFile.getAbsolutePath() +
+                        " does not exist.  Please verify the configFile " +
+                        "property which was specified as '" + fileName + "'.",
+                        e);
             }
+            String absoluteFileName = configFile.getAbsolutePath();
+            LOG.info("attempting to load configuration from " +
+                     absoluteFileName);
+            try {
+                load(stream);
+            } catch (ConfigurationException e) {
+                throw new ConfigurationException(
+                        e.getMessage() +
+                        "  Configuration information was read from " +
+                        absoluteFileName + ".", e);
+            }
+        } else {
+            throw new ConfigurationException(
+                    "The configFile property has not been specified.  " +
+                    "Please use the '-DconfigFile=<path_to_file>' " +
+                    "command line option to identify the configuration " +
+                    "file location.");
         }
-
-        load(stream, resourceName);
-
-        LOG.info(loadMessage);
     }
 
     /**
      * Utility method to parse the specified configuration input stream.
      *
      * @param stream       input stream for configuration.
-     * @param resourceName name of the input stream source (for logging).
-     * @throws ConfigurationException if an error occurs while parsing the configuration data.
+     * 
+     * @throws ConfigurationException
+     *   if an error occurs while parsing the configuration data.
      */
-    public void load(InputStream stream,
-                     String resourceName) throws ConfigurationException {
+    public void load(InputStream stream) throws ConfigurationException {
         Digester digester = new Digester();
         digester.setValidating(false);
 
@@ -285,10 +291,10 @@ public class TransmogrifierConfiguration {
             }
         } catch (IOException e) {
             throw new ConfigurationException(
-                    "Failed to access configuration file: " + resourceName, e);
+                    "Failed to access configuration information.", e);
         } catch (SAXException e) {
             throw new ConfigurationException(
-                    "Failed parsing configuration file: " + resourceName, e);
+                    "Failed to parse configuration information.", e);
         }
     }
 

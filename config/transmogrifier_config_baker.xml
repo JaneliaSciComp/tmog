@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <project name="Baker Lab: Private GAL4 Lines (BSBx_*)" default="true">
+
+        <dataFields>
+            <separator value="BSBx_"/>
+
+            <text displayName="Line" required="true" pattern="[0-9A-Za-z\-\_]++" />
+
+            <text displayName="Short Genotype" required="false" pattern="[0-9A-Za-z\-\_]++" prefix="__"/>
+
+            <separator value="__"/>
+
+            <validValueList displayName="Gender" required="true">
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+            <validValueList displayName="Tissue" required="true">
+                <validValue displayName="b: Brain" value="b"/>
+                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
+                <validValue displayName="a: Antenna" value="a"/>
+                <validValue displayName="p: Proboscis/Maxillary Palp" value="p"/>
+                <validValue displayName="l1: Leg 1" value="l1"/>
+                <validValue displayName="l2: Leg 2" value="l2"/>
+                <validValue displayName="l3: Leg 3" value="l3"/>
+                <validValue displayName="g: Genitalia" value="g"/>
+                <validValue displayName="w: Wing/Joint" value="w"/>
+            </validValueList>
+
+            <separator value="-"/>
+
+            <validValueList displayName="Chron Stage" required="true">
+                <validValue displayName="E: Embryo" value="E"/>
+                <validValue displayName="L01: First Instar Larva" value="L01"/>
+                <validValue displayName="L02: Second Instar Larva" value="L02"/>
+                <validValue displayName="L03: Third Instar Larva" value="L03"/>
+                <validValue displayName="P02: Pupa" value="P02"/>
+                <validValue displayName="A: Adult" value="A"/>
+            </validValueList>
+
+            <separator value="-"/>
+
+            <number displayName="Chron Hour" required="true" minimumValue="0"/>
+            <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+        </dataFields>
+
+    </project>
+
+    <project name="Baker Lab: Public GAL4 Lines (BSB_*)">
+
+        <outputDirectory>
+            <!--<path path="\\dm3.int.janelia.org\bakerlab\GAL4_confocal_stacks\" />-->
+            <!--<renameFieldValue fieldDisplayName="Line" />-->
+        </outputDirectory>
+
+        <plugins>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="nighthawk" />
+                <property name="Specimen Number" value="urn:lsid:janelia.org:baker_lab_line_specimen:${Line}" />
+            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="nighthawk"/>
+                <property name="family" value="family"/>
+                <property name="line" value="Line"/>
+                <property name="genotype" value="Genotype"/>
+                <property name="short_genotype" value="Short Genotype"/>
+                <property name="gender" value="Gender"/>
+                <property name="tissue" value="Tissue"/>
+                <property name="chron_stage" value="Chron Stage"/>
+                <property name="chron_hour" value="Chron Hour"/>
+                <property name="chron_interval" value="Chron Interval"/>
+                <property name="heat_shock_landmark" value="Heat Shock Landmark"/>
+                <property name="heat_shock_hour" value="Heat Shock Hour"/>
+                <property name="heat_shock_interval" value="Heat Shock Interval"/>
+            </rowListener>
+        </plugins>
+
+        <dataFields>
+            <separator value="BSB_"/>
+
+            <text displayName="Line" required="true" pattern="[0-9A-Za-z\-\_]++">
+                <sourceFileDefault pattern=".*[/\\\\]([0-9A-Za-z\-\_]++)[/\\\\]BSBx_.*\.lsm"
+                                   matchType="path"/>
+            </text>
+            <text displayName="Genotype" required="true" markedForTask="false"/>
+            <text displayName="Short Genotype" required="false" pattern="[0-9A-Za-z\-\_]++" prefix="__">
+                <sourceFileDefault pattern="BSBx_.*?__([0-9A-Za-z\-\_]+?)__.*\.lsm"/>
+            </text>
+
+            <separator value="__"/>
+
+            <validValueList displayName="Gender" required="true">
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+            <validValueList displayName="Tissue" required="true">
+                <validValue displayName="b: Brain" value="b"/>
+                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
+                <validValue displayName="a: Antenna" value="a"/>
+                <validValue displayName="p: Proboscis/Maxillary Palp" value="p"/>
+                <validValue displayName="l1: Leg 1" value="l1"/>
+                <validValue displayName="l2: Leg 2" value="l2"/>
+                <validValue displayName="l3: Leg 3" value="l3"/>
+                <validValue displayName="g: Genitalia" value="g"/>
+                <validValue displayName="w: Wing/Joint" value="w"/>
+            </validValueList>
+
+            <separator value="-"/>
+
+            <validValueList displayName="Chron Stage" required="true">
+                <validValue displayName="E: Embryo" value="E"/>
+                <validValue displayName="L01: First Instar Larva" value="L01"/>
+                <validValue displayName="L02: Second Instar Larva" value="L02"/>
+                <validValue displayName="L03: Third Instar Larva" value="L03"/>
+                <validValue displayName="P02: Pupa" value="P02"/>
+                <validValue displayName="A: Adult" value="A"/>
+            </validValueList>
+            <number displayName="Chron Hour" required="true" minimumValue="0" />
+            <number displayName="Chron Interval" required="true" minimumValue="0" markedForTask="false"/>
+            <validValueList displayName="Heat Shock Landmark" required="false" markedForTask="false" >
+                <validValue displayName="l: After Egg Laying" value="l"/>
+                <validValue displayName="p: After Puparium Formation" value="p"/>
+                <validValue displayName="e: After Eclosion" value="e"/>
+            </validValueList>
+            <decimal displayName="Heat Shock Hour" required="true" minimumValue="0" markedForTask="false" />
+            <decimal displayName="Heat Shock Interval" required="true" minimumValue="0" markedForTask="false" />
+            <pluginData displayName="Specimen Number" format="%02d"/>
+            <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+
+            <static name="family" value="baker-lab" markedForTask="false"/>
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
