@@ -61,8 +61,8 @@
     <project name="Baker Lab: Public GAL4 Lines (BSB_*)">
 
         <outputDirectory>
-            <!--<path path="\\dm3.int.janelia.org\bakerlab\GAL4_confocal_stacks\" />-->
-            <!--<renameFieldValue fieldDisplayName="Line" />-->
+            <path path="\\dm3.int.janelia.org\bakerlab\GAL4_confocal_stacks\" />
+            <renameFieldValue fieldDisplayName="Line" />
         </outputDirectory>
 
         <plugins>
