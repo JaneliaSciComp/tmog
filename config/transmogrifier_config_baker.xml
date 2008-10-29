@@ -45,6 +45,13 @@
             <separator value="-"/>
 
             <number displayName="Chron Hour" required="true" minimumValue="0"/>
+
+            <validValueList displayName="Heat Shock Landmark" required="false" prefix="-h">
+                <validValue displayName="l: After Egg Laying" value="l"/>
+                <validValue displayName="p: After Puparium Formation" value="p"/>
+                <validValue displayName="e: After Eclosion" value="e"/>
+            </validValueList>
+
             <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
         </dataFields>
@@ -123,17 +130,25 @@
                 <validValue displayName="P02: Pupa" value="P02"/>
                 <validValue displayName="A: Adult" value="A"/>
             </validValueList>
+
+            <separator value="-"/>
+
             <number displayName="Chron Hour" required="true" minimumValue="0">
-                <sourceFileDefault pattern="BSBx_.*__.*?-.*?-(\d*)_.*\.lsm"/>
+                <sourceFileDefault pattern="BSBx_.*__.*?-.*?-(\d++)[-_].*\.lsm"/>
             </number>
             <number displayName="Chron Interval" required="true" minimumValue="0" markedForTask="false"/>
-            <validValueList displayName="Heat Shock Landmark" required="false" markedForTask="false" >
+
+            <validValueList displayName="Heat Shock Landmark" required="false" prefix="-h">
+                <sourceFileDefault pattern="BSBx_.*__.*?-.*?-\d++-h(.)-.*\.lsm"/>
                 <validValue displayName="l: After Egg Laying" value="l"/>
                 <validValue displayName="p: After Puparium Formation" value="p"/>
                 <validValue displayName="e: After Eclosion" value="e"/>
             </validValueList>
             <decimal displayName="Heat Shock Hour" required="true" minimumValue="0" markedForTask="false" />
             <decimal displayName="Heat Shock Interval" required="true" minimumValue="0" markedForTask="false" />
+
+            <separator value="-"/>
+
             <pluginData displayName="Specimen Number" format="%02d"/>
             <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>

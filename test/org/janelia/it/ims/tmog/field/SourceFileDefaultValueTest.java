@@ -92,58 +92,70 @@ public class SourceFileDefaultValueTest extends TestCase {
                           "2-1-CYO");
 
         checkDefaultValue(
-                "BSBx_line_without_genotype__mp-P02-4_20081028164856563.lsm",
+                "BSBx_line_without_genotype__mp-P02-4-05_20081028164856563.lsm",
                 "BSBx_(.*?)__.*\\.lsm",
                 MatchType.name,
                 "line_without_genotype");
 
         checkDefaultValue(
-                "BSBx_line_with_genotype__gt_with_bars__mp-P02-4_20081028164856563.lsm",
+                "BSBx_line_with_genotype__gt_with_bars__mp-P02-4-05_20081028164856563.lsm",
                 "BSBx_(.*?)__.*\\.lsm",
                 MatchType.name,
                 "line_with_genotype");
 
         checkDefaultValue(
-                "BSBx_line_with_bars__gt_with_bars__mp-P02-4_20081028164856563.lsm",
+                "BSBx_line_with_bars__gt_with_bars__mp-P02-4-05_20081028164856563.lsm",
                 "BSBx_.*?__(.*?)__.*\\.lsm",
                 MatchType.name,
                 "gt_with_bars");
 
         checkDefaultValue(
-                "BSBx_line_with_bars__simplegt__mp-P02-4_20081028164856563.lsm",
+                "BSBx_line_with_bars__simplegt__mp-P02-4-05_20081028164856563.lsm",
                 "BSBx_.*__(.).*\\.lsm",
                 MatchType.name,
                 "m");
 
         checkDefaultValue(
-                "BSBx_line_with_bars__gt_with_bars__ml1-P02-4_20081028164856563.lsm",
+                "BSBx_line_with_bars__gt_with_bars__ml1-P02-4-05_20081028164856563.lsm",
                 "BSBx_.*__.(.*?)-.*\\.lsm",
                 MatchType.name,
                 "l1");
 
         checkDefaultValue(
-                "BSBx_line-with-dashes__gt-with-dashes__ml1-P02-4_20081028164856563.lsm",
+                "BSBx_line-with-dashes__gt-with-dashes__ml1-P02-4-05_20081028164856563.lsm",
                 "BSBx_.*__.*?-(.*?)-.*\\.lsm",
                 MatchType.name,
                 "P02");        
 
         checkDefaultValue(
-                "BSBx_line-with-dashes__ml1-P02-4_20081028164856563.lsm",
+                "BSBx_line-with-dashes__ml1-P02-4-05_20081028164856563.lsm",
                 "BSBx_.*__.*?-(.*?)-.*\\.lsm",
                 MatchType.name,
                 "P02");
 
         checkDefaultValue(
-                "BSBx_line-with-dashes__gt-with-dashes__ml1-P02-4_20081028164856563.lsm",
-                "BSBx_.*__.*?-.*?-(\\d*)_.*\\.lsm",
+                "BSBx_line-with-dashes__gt-with-dashes__ml1-P02-4-05_20081028164856563.lsm",
+                "BSBx_.*__.*?-.*?-(\\d++)[-_].*\\.lsm",
                 MatchType.name,
                 "4");
 
         checkDefaultValue(
-                "BSBx_line-with-dashes__ml1-P02-432_20081028164856563.lsm",
-                "BSBx_.*__.*?-.*?-(\\d*)_.*\\.lsm",
+                "BSBx_line-with-dashes__ml1-P02-23-05_20081028164856563.lsm",
+                "BSBx_.*__.*?-.*?-(\\d++)[-_].*\\.lsm",
                 MatchType.name,
-                "432");
+                "23");
+
+        checkDefaultValue(
+                "BSBx_line-with-dashes__ml1-P02-12-hp-05_20081028164856563.lsm",
+                "BSBx_.*__.*?-.*?-(\\d++)[-_].*\\.lsm",
+                MatchType.name,
+                "12");
+
+        checkDefaultValue(
+                "BSBx_line-with-dashes__ml1-P02-12-hp-05_20081028164856563.lsm",
+                "BSBx_.*__.*?-.*?-\\d++-h(.)-.*\\.lsm",
+                MatchType.name,
+                "p");
     }
 
     private void checkDefaultValue(String fileName,
