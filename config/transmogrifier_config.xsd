@@ -64,6 +64,10 @@
     </xs:complexType>
 
     <xs:complexType name="numberType">
+        <xs:sequence>
+            <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:boolean"/>
         <xs:attribute name="minimumValue" type="xs:integer"/>
@@ -75,6 +79,10 @@
     </xs:complexType>
 
     <xs:complexType name="decimalType">
+        <xs:sequence>
+            <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:boolean"/>
         <xs:attribute name="minimumValue" type="xs:integer"/>
@@ -132,8 +140,10 @@
     </xs:complexType>
 
     <xs:complexType name="validValueListType">
-        <xs:sequence minOccurs="1" maxOccurs="unbounded">
-            <xs:element name="validValue" type="validValueType"/>
+        <xs:sequence>
+            <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="validValue" type="validValueType" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:boolean"/>

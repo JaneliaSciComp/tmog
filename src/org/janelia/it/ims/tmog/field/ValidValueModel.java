@@ -29,11 +29,13 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
     private String suffix;
     private boolean isCopyable;
     private boolean markedForTask;
-  
+    private DefaultValueList defaultValueList;
+
     public ValidValueModel() {
         this.validValues = new ArrayList<ValidValue>();
         this.isCopyable = true;
         this.markedForTask = true;
+        this.defaultValueList = new DefaultValueList();
     }
 
     public void addValidValue(ValidValue validValue) {
@@ -63,6 +65,10 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
         this.markedForTask = markedForTask;
     }
 
+    public void addDefaultValue(DefaultValue defaultValue) {
+        defaultValueList.add(defaultValue);
+    }
+
     public ValidValueModel getNewInstance() {
         ValidValueModel instance = new ValidValueModel();
         instance.displayName = displayName;
@@ -73,6 +79,7 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
         instance.suffix = suffix;
         instance.isCopyable = isCopyable;
         instance.markedForTask = markedForTask;
+        instance.defaultValueList = defaultValueList;  // shallow copy is ok
         return instance;
     }
 
@@ -124,7 +131,15 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
      * @param  target  the target being processed.
      */
     public void initializeValue(Target target) {
-        // nothing to initialize
+        String defaultValue = defaultValueList.getValue(target);
+        if (defaultValue != null) {
+            for (ValidValue validValue : validValues) {
+                if (defaultValue.equals(validValue.getValue())) {
+                    setSelectedValue(validValue);
+                    break;
+                }
+            }
+        }
     }
     
     public boolean isRequired() {

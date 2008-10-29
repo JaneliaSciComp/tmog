@@ -84,22 +84,23 @@
             <separator value="BSB_"/>
 
             <text displayName="Line" required="true" pattern="[0-9A-Za-z\-\_]++">
-                <sourceFileDefault pattern=".*[/\\\\]([0-9A-Za-z\-\_]++)[/\\\\]BSBx_.*\.lsm"
-                                   matchType="path"/>
+                <sourceFileDefault pattern="BSBx_(.*?)__.*\.lsm"/>
             </text>
             <text displayName="Genotype" required="true" markedForTask="false"/>
             <text displayName="Short Genotype" required="false" pattern="[0-9A-Za-z\-\_]++" prefix="__">
-                <sourceFileDefault pattern="BSBx_.*?__([0-9A-Za-z\-\_]+?)__.*\.lsm"/>
+                <sourceFileDefault pattern="BSBx_.*?__(.*?)__.*\.lsm"/>
             </text>
 
             <separator value="__"/>
 
             <validValueList displayName="Gender" required="true">
+                <sourceFileDefault pattern="BSBx_.*__(.).*\.lsm"/>
                 <validValue displayName="m: Male" value="m"/>
                 <validValue displayName="f: Female" value="f"/>
                 <validValue displayName="x: Not Defined" value="x"/>
             </validValueList>
             <validValueList displayName="Tissue" required="true">
+                <sourceFileDefault pattern="BSBx_.*__.(.*?)-.*\.lsm"/>
                 <validValue displayName="b: Brain" value="b"/>
                 <validValue displayName="v: Ventral Nerve Cord" value="v"/>
                 <validValue displayName="a: Antenna" value="a"/>
@@ -114,6 +115,7 @@
             <separator value="-"/>
 
             <validValueList displayName="Chron Stage" required="true">
+                <sourceFileDefault pattern="BSBx_.*__.*?-(.*?)-.*\.lsm"/>
                 <validValue displayName="E: Embryo" value="E"/>
                 <validValue displayName="L01: First Instar Larva" value="L01"/>
                 <validValue displayName="L02: Second Instar Larva" value="L02"/>
@@ -121,7 +123,9 @@
                 <validValue displayName="P02: Pupa" value="P02"/>
                 <validValue displayName="A: Adult" value="A"/>
             </validValueList>
-            <number displayName="Chron Hour" required="true" minimumValue="0" />
+            <number displayName="Chron Hour" required="true" minimumValue="0">
+                <sourceFileDefault pattern="BSBx_.*__.*?-.*?-(\d*)_.*\.lsm"/>
+            </number>
             <number displayName="Chron Interval" required="true" minimumValue="0" markedForTask="false"/>
             <validValueList displayName="Heat Shock Landmark" required="false" markedForTask="false" >
                 <validValue displayName="l: After Egg Laying" value="l"/>

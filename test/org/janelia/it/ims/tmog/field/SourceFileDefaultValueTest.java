@@ -52,53 +52,116 @@ public class SourceFileDefaultValueTest extends TestCase {
      */
     public void testGetValue() throws Exception {
 
-        File file = new File("./" +
-                "a1-Gal4-UAS-MCD8-GFP-nc82-GFP-10-20-06.mdb/" +
-                "a1-Gal4-UAS-MCD8-GFP-nc82-GFP-10-20-06-1a0.lsm");
+        String fileName = "./" +
+                          "a1-Gal4-UAS-MCD8-GFP-nc82-GFP-10-20-06.mdb/" +
+                          "a1-Gal4-UAS-MCD8-GFP-nc82-GFP-10-20-06-1a0.lsm";
+
+        checkDefaultValue(fileName,
+                          "a1.*nc82-GFP-(\\d\\d?-\\d\\d?-\\d\\d?){1}.*\\.lsm",
+                          MatchType.name,
+                          "10-20-06");
+
+        checkDefaultValue(fileName,
+                          ".*\\.(mdb).*",
+                          MatchType.name,
+                          null);
+
+        checkDefaultValue(fileName,
+                          ".*\\.(mdb).*",
+                          MatchType.path,
+                          "mdb");
+
+        fileName = "./" +
+                   "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb/" +
+                   "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb/" +
+                   "CG9887-Gal4-8-22-07_L6_Sum.lsm";
+
+        checkDefaultValue(fileName,
+                          ".*mdb[/\\\\].*Gal4-(.*)-UAS.*mdb[/\\\\].*\\.lsm",
+                          MatchType.path,
+                          "2-1-CYO");
+
+        fileName = ".\\" +
+                   "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb\\" +
+                   "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb\\" +
+                   "CG9887-Gal4-8-22-07_L6_Sum.lsm";
+
+        checkDefaultValue(fileName,
+                          ".*mdb[/\\\\].*Gal4-(.*)-UAS.*mdb[/\\\\].*\\.lsm",
+                          MatchType.path,
+                          "2-1-CYO");
+
+        checkDefaultValue(
+                "BSBx_line_without_genotype__mp-P02-4_20081028164856563.lsm",
+                "BSBx_(.*?)__.*\\.lsm",
+                MatchType.name,
+                "line_without_genotype");
+
+        checkDefaultValue(
+                "BSBx_line_with_genotype__gt_with_bars__mp-P02-4_20081028164856563.lsm",
+                "BSBx_(.*?)__.*\\.lsm",
+                MatchType.name,
+                "line_with_genotype");
+
+        checkDefaultValue(
+                "BSBx_line_with_bars__gt_with_bars__mp-P02-4_20081028164856563.lsm",
+                "BSBx_.*?__(.*?)__.*\\.lsm",
+                MatchType.name,
+                "gt_with_bars");
+
+        checkDefaultValue(
+                "BSBx_line_with_bars__simplegt__mp-P02-4_20081028164856563.lsm",
+                "BSBx_.*__(.).*\\.lsm",
+                MatchType.name,
+                "m");
+
+        checkDefaultValue(
+                "BSBx_line_with_bars__gt_with_bars__ml1-P02-4_20081028164856563.lsm",
+                "BSBx_.*__.(.*?)-.*\\.lsm",
+                MatchType.name,
+                "l1");
+
+        checkDefaultValue(
+                "BSBx_line-with-dashes__gt-with-dashes__ml1-P02-4_20081028164856563.lsm",
+                "BSBx_.*__.*?-(.*?)-.*\\.lsm",
+                MatchType.name,
+                "P02");        
+
+        checkDefaultValue(
+                "BSBx_line-with-dashes__ml1-P02-4_20081028164856563.lsm",
+                "BSBx_.*__.*?-(.*?)-.*\\.lsm",
+                MatchType.name,
+                "P02");
+
+        checkDefaultValue(
+                "BSBx_line-with-dashes__gt-with-dashes__ml1-P02-4_20081028164856563.lsm",
+                "BSBx_.*__.*?-.*?-(\\d*)_.*\\.lsm",
+                MatchType.name,
+                "4");
+
+        checkDefaultValue(
+                "BSBx_line-with-dashes__ml1-P02-432_20081028164856563.lsm",
+                "BSBx_.*__.*?-.*?-(\\d*)_.*\\.lsm",
+                MatchType.name,
+                "432");
+    }
+
+    private void checkDefaultValue(String fileName,
+                                   String pattern,
+                                   MatchType matchType,
+                                   String expectedValue) {
+
+        File file = new File(fileName);
         SourceFileDefaultValue defaultValue =
-                new SourceFileDefaultValue(
-                        "a1.*nc82-GFP-(\\d\\d?-\\d\\d?-\\d\\d?){1}.*\\.lsm",
-                        MatchType.name);
-        String value = defaultValue.getValue(new FileTarget(file));
-        assertEquals("invalid value for " + defaultValue + " and file " +
-                     file.getAbsolutePath(),
-                     "10-20-06", value);
-
-        defaultValue = new SourceFileDefaultValue(".*\\.(mdb).*",
-                                                  MatchType.name);
-
-        value = defaultValue.getValue(new FileTarget(file));
-        assertNull("invalid value '" + value + "' for " + defaultValue +
-                   " and file " + file.getAbsolutePath(),
-                   value);
-
-        defaultValue.setMatchType(MatchType.path.name());
-        value = defaultValue.getValue(new FileTarget(file));
-        assertEquals("invalid value for " + defaultValue + " and file " +
-                     file.getAbsolutePath(),
-                     "mdb", value);
-
-        file = new File ("./" +
-                "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb/" +
-                "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb/" +
-                "CG9887-Gal4-8-22-07_L6_Sum.lsm");
-        defaultValue = new SourceFileDefaultValue(".*mdb[/\\\\].*Gal4-(.*)-UAS.*mdb[/\\\\].*\\.lsm",
-                                                  MatchType.path);
-        value = defaultValue.getValue(new FileTarget(file));
-        assertEquals("invalid value for " + defaultValue + " and file " +
-                     file.getAbsolutePath(),
-                     "2-1-CYO", value);
-
-        file = new File (".\\" +
-                "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb\\" +
-                "CG9887-Gal4-2-1-CYO-UAS-MCD8-GFP-nc82-GFP-8-22-07.mdb\\" +
-                "CG9887-Gal4-8-22-07_L6_Sum.lsm");
-        defaultValue = new SourceFileDefaultValue(".*mdb[/\\\\].*Gal4-(.*)-UAS.*mdb[/\\\\].*\\.lsm",
-                                                  MatchType.path);
-        value = defaultValue.getValue(new FileTarget(file));
-        assertEquals("invalid value for " + defaultValue + " and file " +
-                     file.getAbsolutePath(),
-                     "2-1-CYO", value);
-
+                new SourceFileDefaultValue(pattern, matchType);
+        String actualValue = defaultValue.getValue(new FileTarget(file));
+        if (expectedValue != null) {
+            assertEquals("invalid value for " + defaultValue +
+                         " and file " + fileName,
+                         expectedValue, actualValue);
+        } else {
+            assertNull("invalid value '" + actualValue + "' for " +
+                       defaultValue + " and file " + fileName, actualValue);
+        }
     }
 }
