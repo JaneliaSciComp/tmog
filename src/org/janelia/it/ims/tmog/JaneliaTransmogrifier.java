@@ -13,6 +13,7 @@ import org.janelia.it.ims.tmog.view.TabbedView;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.awt.*;
+import java.net.URL;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -42,6 +43,11 @@ public class JaneliaTransmogrifier extends JFrame {
      */
     private static final ThreadPoolExecutor THREAD_POOL_EXECUTOR =
             (ThreadPoolExecutor) Executors.newFixedThreadPool(4);
+
+    private static final URL APP_IMAGE_URL =
+            JaneliaTransmogrifier.class.getResource("/transmogrifier_icon.png");
+    private static final ImageIcon APP_ICON =
+            new ImageIcon(APP_IMAGE_URL, "Janelia Transmogrifier");
 
     /**
      * Construct the application
@@ -98,11 +104,18 @@ public class JaneliaTransmogrifier extends JFrame {
 
         Package pkg = JaneliaTransmogrifier.class.getPackage();
         String version = pkg.getSpecificationVersion();
+        if (version == null) {
+            version = "?";
+        }
         String revision = pkg.getImplementationVersion();
+        if (revision == null) {
+            revision = "?";
+        }
         LOG.info("starting Janelia Transmogrifier version " + version +
                  ", revision " + revision);
 
         JFrame frame = new JaneliaTransmogrifier(version);
+        frame.setIconImage(APP_ICON.getImage());
 
         //Center the window
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
