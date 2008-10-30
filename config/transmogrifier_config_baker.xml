@@ -139,7 +139,7 @@
             <number displayName="Chron Interval" required="true" minimumValue="0" markedForTask="false"/>
 
             <validValueList displayName="Heat Shock Landmark" required="false" prefix="-h">
-                <sourceFileDefault pattern="BSBx_.*__.*?-.*?-\d++-h(.)-.*\.lsm"/>
+                <sourceFileDefault pattern="BSBx_.*__.*?-.*?-\d++-h(.)_.*\.lsm"/>
                 <validValue displayName="l: After Egg Laying" value="l"/>
                 <validValue displayName="p: After Puparium Formation" value="p"/>
                 <validValue displayName="e: After Eclosion" value="e"/>
