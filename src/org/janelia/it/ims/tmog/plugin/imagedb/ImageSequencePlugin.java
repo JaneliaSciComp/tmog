@@ -80,7 +80,7 @@ public class ImageSequencePlugin implements RowListener {
 
         try {
             setDao();
-            dao.checkConnection();
+            dao.checkAvailability();
         } catch (ExternalSystemException e) {
             throw new ExternalSystemException(
                     INIT_FAILURE_MSG +

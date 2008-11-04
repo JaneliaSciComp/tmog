@@ -28,7 +28,7 @@ import java.util.Properties;
  *
  * @author Eric Trautman
  */
-public class ImageDao {
+public class ImageDao implements ImagePropertyWriter {
 
     /**
      * The manager used to establish connections with the database.
@@ -59,7 +59,7 @@ public class ImageDao {
      * @throws ExternalSystemException
      *   if a connection to the database can not be established.
      */
-    public void checkConnection() throws ExternalSystemException {
+    public void checkAvailability() throws ExternalSystemException {
         Connection connection = null;
         try {
             connection = dbManager.getConnection();
@@ -70,7 +70,17 @@ public class ImageDao {
         }
     }
 
-    public Image addImage(Image image) throws ExternalSystemException {
+    /**
+     * Writes (saves) the specified image properties to the image database.
+     *
+     * @param  image  image to be persisted.
+     *
+     * @return the specified image with its database id updated.
+     *
+     * @throws ExternalSystemException
+     *   if the save fails.
+     */
+    public Image saveProperties(Image image) throws ExternalSystemException {
         String relativePath = image.getRelativePath();
 
         int imageId ;

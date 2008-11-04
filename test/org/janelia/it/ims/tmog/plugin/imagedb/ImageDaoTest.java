@@ -95,7 +95,7 @@ public class ImageDaoTest extends TestCase {
         testImage.addProperty("testPropertyA", "valueA");
         testImage.addProperty("testPropertyB", "valueB");
 
-        Image updateImage = dao.addImage(testImage);
+        Image updateImage = dao.saveProperties(testImage);
 
         assertNotNull("id not set after add", updateImage.getId());
     }

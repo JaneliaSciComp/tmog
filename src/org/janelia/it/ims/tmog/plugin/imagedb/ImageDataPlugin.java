@@ -16,6 +16,7 @@ import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.PluginUtil;
 import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RowListener;
+import org.janelia.it.utils.StringUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,10 +30,8 @@ import java.util.Map;
  */
 public class ImageDataPlugin implements RowListener {
 
-    /** The data access object for retrieving and updating image data. */
-    private ImageDao dao;
-
-    private String dbConfigurationKey;
+    /** The writer used to persist image property data. */
+    private ImagePropertyWriter propertyWriter;
 
     /**
      * List of property setter instances for the data fields
@@ -59,12 +58,16 @@ public class ImageDataPlugin implements RowListener {
     public void init(PluginConfiguration config) throws ExternalSystemException {
         this.propertySetters = new ArrayList<ImagePropertySetter>();
         Map<String, String> props = config.getProperties();
+        String dbConfigurationKey = null;
+        String xmlBaseDirectoryName = null;
         String value;
         ImagePropertySetter propertySetter;
         for (String key : props.keySet()) {
             value = props.get(key);
             if ("db.config.key".equals(key)) {
-                this.dbConfigurationKey = value;
+                dbConfigurationKey = value;
+            } else if ("xml.base.directory".equals(key)) {
+                xmlBaseDirectoryName = value;
             } else {
                 try {
                     propertySetter = getPropertySetter(key, value);
@@ -76,12 +79,43 @@ public class ImageDataPlugin implements RowListener {
             }
         }
 
-        if ((this.dbConfigurationKey == null) ||
-            (this.dbConfigurationKey.length() < 1)) {
+        if (StringUtil.isDefined(dbConfigurationKey)) {
+
+            if (StringUtil.isDefined(xmlBaseDirectoryName)) {
+                throw new ExternalSystemException(
+                        INIT_FAILURE_MSG +
+                        "Please specify either a 'db.config.key' or " +
+                        "an 'xml.base.directory' plug-in property, " +
+                        "but not both for the same instance.");
+            }
+
+            try {
+                propertyWriter = new ImageDao(dbConfigurationKey);
+                propertyWriter.checkAvailability();
+            } catch (ExternalSystemException e) {
+                throw new ExternalSystemException(
+                        INIT_FAILURE_MSG +
+                        e.getMessage(),
+                        e);
+            }
+        } else if (StringUtil.isDefined(xmlBaseDirectoryName)) {
+
+            try {
+                propertyWriter =
+                        new ImagePropertyFileWriter(xmlBaseDirectoryName);
+                propertyWriter.checkAvailability();
+            } catch (ExternalSystemException e) {
+                throw new ExternalSystemException(
+                        INIT_FAILURE_MSG +
+                        e.getMessage(),
+                        e);
+            }
+
+        } else {
             throw new ExternalSystemException(
                     INIT_FAILURE_MSG +
-                    "Please specify a value for the db.config.key " +
-                    "plug-in property.");
+                    "Please specify a value for the 'db.config.key' " +
+                    "or 'xml.base.directory' plug-in property.");                   
         }
 
         if (this.propertySetters.size() < 1) {
@@ -92,15 +126,6 @@ public class ImageDataPlugin implements RowListener {
                     "and type name as a property for this plug-in.");
         }
 
-        try {
-            setDao();
-            dao.checkConnection();
-        } catch (ExternalSystemException e) {
-            throw new ExternalSystemException(
-                    INIT_FAILURE_MSG +
-                    e.getMessage(),
-                    e);
-        }        
     }
 
     /**
@@ -148,7 +173,7 @@ public class ImageDataPlugin implements RowListener {
         }
         try {
             image = new Image(row, propertySetters);
-            image = dao.addImage(image);
+            image = propertyWriter.saveProperties(image);
             if (LOG.isInfoEnabled()) {
                 LOG.info("successfully persisted image metadata (" + image +
                          ") for " + fileName);
@@ -157,17 +182,6 @@ public class ImageDataPlugin implements RowListener {
             throw new ExternalSystemException(
                     "Failed to save image data for " + fileName +
                     ".  Detailed data is: " + row, e);
-        }
-    }
-
-    /**
-     * Create the dao for this manager if it does not already exist.
-     *
-     * @throws ExternalSystemException if any error occurs during creation.
-     */
-    private synchronized void setDao() throws ExternalSystemException {
-        if (dao == null) {
-            dao = new ImageDao(dbConfigurationKey);
         }
     }
 
