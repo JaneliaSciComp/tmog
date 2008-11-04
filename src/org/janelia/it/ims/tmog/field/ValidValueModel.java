@@ -32,7 +32,9 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
     private DefaultValueList defaultValueList;
 
     public ValidValueModel() {
+        this.isRequired = false;
         this.validValues = new ArrayList<ValidValue>();
+        this.validValues.add(ValidValue.NONE);
         this.isCopyable = true;
         this.markedForTask = true;
         this.defaultValueList = new DefaultValueList();
@@ -171,7 +173,14 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
     }
 
     public void setRequired(boolean required) {
-        isRequired = required;
+        if (isRequired != required) {
+            isRequired = required;
+            if (isRequired) {
+                validValues.remove(ValidValue.NONE);
+            } else {
+                validValues.add(ValidValue.NONE);
+            }
+        }
     }
 
     public void setCopyable(boolean copyable) {
