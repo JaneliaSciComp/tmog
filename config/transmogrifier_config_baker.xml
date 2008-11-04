@@ -144,8 +144,8 @@
                 <validValue displayName="p: After Puparium Formation" value="p"/>
                 <validValue displayName="e: After Eclosion" value="e"/>
             </validValueList>
-            <decimal displayName="Heat Shock Hour" required="true" minimumValue="0" markedForTask="false" />
-            <decimal displayName="Heat Shock Interval" required="true" minimumValue="0" markedForTask="false" />
+            <decimal displayName="Heat Shock Hour" required="false" minimumValue="0" markedForTask="false" />
+            <decimal displayName="Heat Shock Interval" required="false" minimumValue="0" markedForTask="false" />
 
             <separator value="-"/>
 
