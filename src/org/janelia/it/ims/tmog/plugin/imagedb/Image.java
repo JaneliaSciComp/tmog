@@ -11,12 +11,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.DatePatternField;
-import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
+import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,14 +31,16 @@ public class Image {
     private String relativePath;
     private Date captureDate;
     private String family;
+    private boolean display;
     private Map<String, String> propertyTypeToValueMap;
 
     public Image() {
         this.id = null;
-        this.propertyTypeToValueMap = new HashMap<String, String>();
+        this.propertyTypeToValueMap = new LinkedHashMap<String, String>();
+        this.display = true;
     }
 
-    public Image(RenamePluginDataRow row,
+    public Image(PluginDataRow row,
                  List<ImagePropertySetter> propertySetters) {
         this();
         this.relativePath = row.getRelativePath();
@@ -111,6 +113,14 @@ public class Image {
         }
     }
 
+    public boolean isDisplay() {
+        return display;
+    }
+
+    public void setDisplay(boolean display) {
+        this.display = display;
+    }
+
     public Map<String, String> getPropertyTypeToValueMap() {
         return propertyTypeToValueMap;
     }
@@ -130,6 +140,7 @@ public class Image {
         sb.append(", id=").append(id);
         sb.append(", relativePath='").append(relativePath).append('\'');
         sb.append(", family='").append(family).append('\'');
+        sb.append(", display=").append(display);
         sb.append(", properties=").append(propertyTypeToValueMap);
         sb.append('}');
         return sb.toString();

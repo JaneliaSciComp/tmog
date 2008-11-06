@@ -82,12 +82,12 @@ public class ImageDaoTest extends TestCase {
     }
 
     /**
-     * Tests the addImage method.
+     * Tests the saveProperties and getImageId methods.
      *
      * @throws Exception
      *   if any unexpected errors occur.
      */
-    public void testAddImage() throws Exception {
+    public void testSaveProperties() throws Exception {
         String relativePath = IMAGE_PATH.format(new Date());
         testImage.setRelativePath(relativePath);
         testImage.setCaptureDate(new Date());
@@ -95,9 +95,58 @@ public class ImageDaoTest extends TestCase {
         testImage.addProperty("testPropertyA", "valueA");
         testImage.addProperty("testPropertyB", "valueB");
 
-        Image updateImage = dao.saveProperties(testImage);
+        testImage = dao.saveProperties(testImage);
+        Integer testImageId = testImage.getId();
 
-        assertNotNull("id not set after add", updateImage.getId());
+        assertNotNull("id not set after add", testImage.getId());
+
+        testImage = new Image();
+        testImage.setId(testImageId);
+        testImage.setRelativePath(relativePath);
+        testImage.setCaptureDate((Date) null);
+        testImage.setFamily("updatedTestFamily");
+        testImage.addProperty("testPropertyA", "updatedValueA");
+        testImage.addProperty("testPropertyB", "updatedValueB");
+        testImage.addProperty("testPropertyC", "valueC");
+
+        testImage = dao.saveProperties(testImage);
+
+        assertEquals("id changed after update", testImageId, testImage.getId());
+
+        Integer imageId = dao.getImageId(relativePath);
+        assertEquals("invalid id returned for " + relativePath,
+                     testImageId, imageId);
+
+        relativePath = "missing-relative-path";
+        imageId = dao.getImageId(relativePath);
+        assertNull("id returned for invalid path: " + relativePath, imageId);
+    }
+
+    /**
+     * Tests the saveProperties method for an image that has no properties.
+     *
+     * @throws Exception
+     *   if any unexpected errors occur.
+     */
+    public void testSaveImageOnly() throws Exception {
+        String relativePath = IMAGE_PATH.format(new Date());
+        testImage.setRelativePath(relativePath);
+        testImage.setCaptureDate(new Date());
+        testImage.setFamily("testFamily");
+
+        testImage = dao.saveProperties(testImage);
+        Integer testImageId = testImage.getId();
+
+        assertNotNull("id not set after add", testImage.getId());
+
+        testImage = new Image();
+        testImage.setId(testImageId);
+        testImage.setRelativePath(relativePath);
+        testImage.setCaptureDate(new Date());
+
+        testImage = dao.saveProperties(testImage);
+
+        assertEquals("id changed after update", testImageId, testImage.getId());
     }
 
     /**

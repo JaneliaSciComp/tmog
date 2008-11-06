@@ -8,9 +8,12 @@
 package org.janelia.it.ims.tmog.plugin;
 
 import org.janelia.it.ims.tmog.DataRow;
+import org.janelia.it.ims.tmog.FileTarget;
+import org.janelia.it.ims.tmog.Target;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.PluginDataModel;
 
+import java.io.File;
 import java.util.HashMap;
 
 /**
@@ -129,15 +132,39 @@ public class PluginDataRow {
     }
 
     /**
+     * @return the relative path (parent directory + file name) for the
+     *         target file or "" if this row's target is not a file.
+     */
+    public String getRelativePath() {
+        String relativePath = "";
+        Target target = dataRow.getTarget();
+        if (target instanceof FileTarget) {
+            File targetFile = ((FileTarget) target).getFile();
+            relativePath = getRelativePath(targetFile);
+        }
+        return relativePath;
+    }
+
+    /**
      * @return a string representation of this object.
      */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("Plugin2DataRow");
+        sb.append("PluginDataRow");
         sb.append("{dataRow=").append(dataRow);
         sb.append('}');
         return sb.toString();
     }
 
+    public static String getRelativePath(File file) {
+        String relativePath;
+        File fileDir = file.getParentFile();
+        if (fileDir == null) {
+            relativePath = file.getName();
+        } else {
+            relativePath = fileDir.getName() + "/" + file.getName();
+        }
+        return relativePath;
+    }
 }

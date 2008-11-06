@@ -7,18 +7,13 @@
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
-import org.janelia.it.ims.tmog.plugin.PluginUtil;
-import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RowListener;
 import org.janelia.it.utils.StringUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -142,14 +137,13 @@ public class ImageDataPlugin implements RowListener {
      * @throws ExternalSystemException
      *   if a non-recoverable system error occurs during processing.
      */
-    public RenamePluginDataRow processEvent(EventType eventType,
-                                            PluginDataRow row)
+    public PluginDataRow processEvent(EventType eventType,
+                                      PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
-        RenamePluginDataRow dataRow = PluginUtil.castRenameRow(row, this);
         if (EventType.END_SUCCESS.equals(eventType)) {
-            completedSuccessfulCopy(dataRow);
+            saveImageProperties(row);
         }
-        return dataRow;
+        return row;
     }
 
     /**
@@ -162,26 +156,16 @@ public class ImageDataPlugin implements RowListener {
      * @throws ExternalSystemException
      *   if a non-recoverable system error occurs during processing.
      */
-    private void completedSuccessfulCopy(RenamePluginDataRow row)
+    private void saveImageProperties(PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
-        Image image;
-        String fileName = null;
-        File renamedFile = row.getRenamedFile();
-        if (renamedFile != null) {
-            fileName = renamedFile.getAbsolutePath();
-        }
         try {
-            image = new Image(row, propertySetters);
-            image = propertyWriter.saveProperties(image);
-            if (LOG.isInfoEnabled()) {
-                LOG.info("successfully persisted image metadata (" + image +
-                         ") for " + fileName);
-            }
+            Image image = new Image(row, propertySetters);
+            propertyWriter.saveProperties(image);
         } catch (Exception e) {
             throw new ExternalSystemException(
-                    "Failed to save image data for " + fileName +
-                    ".  Detailed data is: " + row, e);
+                    "Failed to save image properties for " +
+                    row.getRelativePath() + ".  Detailed data is: " + row, e);
         }
     }
 
@@ -196,6 +180,8 @@ public class ImageDataPlugin implements RowListener {
             propertySetter = new FamilySetter(fieldName);
         } else if (CreatedBySetter.TYPE.equals(propertyType)) {
             propertySetter = new CreatedBySetter();
+        } else if (DisplaySetter.TYPE.equals(propertyType)) {
+            propertySetter = new DisplaySetter(fieldName);
         } else if (fieldName.contains(CompositeSetter.TOKEN_ID)) {
             propertySetter = new CompositeSetter(propertyType, fieldName);
         } else {
@@ -204,9 +190,6 @@ public class ImageDataPlugin implements RowListener {
 
         return propertySetter;
     }
-
-    /** The logger for this class. */
-    private static final Log LOG = LogFactory.getLog(ImageDataPlugin.class);
 
     private static final String INIT_FAILURE_MSG =
             "Failed to initialize Image Data plug-in.  ";

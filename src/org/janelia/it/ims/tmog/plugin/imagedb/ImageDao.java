@@ -10,6 +10,7 @@ package org.janelia.it.ims.tmog.plugin.imagedb;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
+import org.janelia.it.utils.StringUtil;
 import org.janelia.it.utils.db.DbConfigException;
 import org.janelia.it.utils.db.DbManager;
 import org.janelia.it.utils.security.StringEncrypter;
@@ -19,9 +20,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * This class supports management of image data within an image database.
@@ -35,6 +40,8 @@ public class ImageDao implements ImagePropertyWriter {
      */
     private DbManager dbManager;
 
+    private String dbConfigurationKey;
+
     /**
      * Constructs a dao using the default manager and configuration.
      *
@@ -46,7 +53,8 @@ public class ImageDao implements ImagePropertyWriter {
      */
     public ImageDao(String dbConfigurationKey) throws ExternalSystemException {
         Properties props = loadDatabaseProperties(dbConfigurationKey);
-        dbManager = new DbManager(dbConfigurationKey, props);
+        this.dbManager = new DbManager(dbConfigurationKey, props);
+        this.dbConfigurationKey = dbConfigurationKey;
     }
 
     public DbManager getDbManager() {
@@ -71,7 +79,8 @@ public class ImageDao implements ImagePropertyWriter {
     }
 
     /**
-     * Writes (saves) the specified image properties to the image database.
+     * Writes (inserts or updates) the specified image properties
+     * to the image database.
      *
      * @param  image  image to be persisted.
      *
@@ -83,85 +92,49 @@ public class ImageDao implements ImagePropertyWriter {
     public Image saveProperties(Image image) throws ExternalSystemException {
         String relativePath = image.getRelativePath();
 
-        int imageId ;
         Connection connection = null;
-        ResultSet selectResultSet = null;
-        PreparedStatement insertImage = null;
+        ResultSet resultSet = null;
         PreparedStatement select = null;
-        PreparedStatement insertProperty = null;
 
         try {
             connection = dbManager.getConnection();
             connection.setAutoCommit(false);
 
-            insertImage = connection.prepareStatement(SQL_INSERT_IMAGE);
-            insertImage.setString(1, relativePath);
-            Date captureDate = image.getCaptureDate();
-            if (captureDate != null) {
-                insertImage.setDate(2,
-                                    new java.sql.Date(captureDate.getTime()));
-            } else {
-                insertImage.setDate(2, null);
-            }
-            insertImage.setString(3, image.getFamily());
-
-            int rowsUpdated = insertImage.executeUpdate();
-            if (rowsUpdated != 1) {
-                throw new ExternalSystemException(
-                        "Failed to create image '" + relativePath +
-                        "'.  Attempted to create " + rowsUpdated + " rows.");
-            }
-
-            select = connection.prepareStatement(SQL_SELECT_IMAGE_ID);
+            select = connection.prepareStatement(SQL_SELECT_IMAGE_PROPERTY_TYPES);
             select.setString(1, relativePath);
-            selectResultSet = select.executeQuery();
-            if (selectResultSet.next()) {
-                imageId = selectResultSet.getInt(1);
-            } else {
-                throw new ExternalSystemException(
-                        "Failed to retrieve id for image '" + relativePath +
-                        "'.");
-            }
+            resultSet = select.executeQuery();
 
-            insertProperty =
-                    connection.prepareStatement(SQL_INSERT_IMAGE_PROPERTY);
-            Map<String, String> properties = image.getPropertyTypeToValueMap();
-            int numberOfPropertiesToAdd = 0;
-            String value;
-            for (String type : properties.keySet()) {
-                value = properties.get(type);
-                if ((value != null) && (value.length() > 0)) {
-                    insertProperty.setInt(1, imageId);
-                    insertProperty.setString(2, type);
-                    insertProperty.setString(3, value);
-                    insertProperty.addBatch();
-                    numberOfPropertiesToAdd++;
-                }
-            }
-
-            if (numberOfPropertiesToAdd > 0) {
-                int[] numUpdates = insertProperty.executeBatch();
-                if (numUpdates.length != numberOfPropertiesToAdd) {
+            Integer imageId = null;
+            Integer lastImageId = null;
+            List<String> existingPropertyNames = new ArrayList<String>();
+            String propertyName;
+            while (resultSet.next()) {
+                imageId = resultSet.getInt(1);
+                if ((lastImageId != null) && (! lastImageId.equals(imageId))) {
                     throw new ExternalSystemException(
-                            "Failed to add image properties for '" +
-                            relativePath + "'.  Executed " +
-                            numUpdates.length + " instead of " +
-                            numberOfPropertiesToAdd + " statement(s).");
-                } else {
-                    for (int i = 0; i < numUpdates.length; i++) {
-                        if (numUpdates[i] != 1) {
-                            throw new ExternalSystemException(
-                                    "Failed to add image properties for '" +
-                                    relativePath + "'.  Attempted to create " +
-                                    numUpdates[i] + " row(s) for property " +
-                                    i + ".");
-                        }
-                    }
+                            "Database contains multiple images with the " +
+                            "same relative path: '"  + relativePath + "'.");
+                }
+                propertyName = resultSet.getString(2);
+                if (StringUtil.isDefined(propertyName)) {
+                    existingPropertyNames.add(propertyName);
+                }
+                lastImageId = imageId;
+            }
+
+            if (imageId == null) {
+                image = addImage(image, connection);
+            } else {
+                image.setId(imageId);
+                updateImage(image, connection);
+                if (existingPropertyNames.size() > 0) {
+                    updateImageProperties(image,
+                                          connection,
+                                          existingPropertyNames);
                 }
             }
 
             connection.commit();
-            image.setId(imageId);
 
         } catch (DbConfigException e) {
             throw new ExternalSystemException(e.getMessage(), e);
@@ -170,9 +143,12 @@ public class ImageDao implements ImagePropertyWriter {
                     "Failed to store image properties for '" +
                     relativePath + "'.", e);
         } finally {
-            DbManager.closeResources(null, insertImage, null, LOG);
-            DbManager.closeResources(selectResultSet, select, null, LOG);
-            DbManager.closeResources(null, insertProperty, connection, LOG);
+            DbManager.closeResources(resultSet, select, connection, LOG);
+        }
+
+        if (LOG.isInfoEnabled()) {
+            LOG.info("successfully persisted image properties to the '" +
+                     dbConfigurationKey + "' database: " + image);
         }
 
         return image;
@@ -248,6 +224,258 @@ public class ImageDao implements ImagePropertyWriter {
     }
 
     /**
+     * @param  relativePath  the relative path for the desired image.
+     *
+     * @return the image identifier for the specified path
+     *         (or null if the path is not found).
+     *
+     * @throws ExternalSystemException
+     *   if the retrieval fails.
+     */
+    public Integer getImageId(String relativePath) throws ExternalSystemException {
+
+        Integer imageId = null;
+        Connection connection = null;
+
+        try {
+            connection = dbManager.getConnection();
+            imageId = getImageId(relativePath, connection);
+        } catch (DbConfigException e) {
+            throw new ExternalSystemException(e.getMessage(), e);
+        } catch (SQLException e) {
+            throw new ExternalSystemException(
+                    "Failed to retrieve image id for '" +
+                    relativePath + "'.", e);
+        } finally {
+            DbManager.closeResources(null, null, connection, LOG);
+        }
+
+        LOG.info("getImageId: returning " + imageId + " for " + relativePath);
+        
+        return imageId;
+    }
+
+    private Integer getImageId(String relativePath,
+                               Connection connection)
+            throws SQLException, ExternalSystemException {
+
+        Integer imageId = null;
+        PreparedStatement select = null;
+        ResultSet resultSet = null;
+
+        try {
+            select = connection.prepareStatement(SQL_SELECT_IMAGE_ID);
+            select.setString(1, relativePath);
+            resultSet = select.executeQuery();
+            if (resultSet.next()) {
+                imageId = resultSet.getInt(1);
+            }
+        } finally {
+            DbManager.closeResources(resultSet, select, null, LOG);
+        }
+
+        return imageId;
+    }
+
+    private Image addImage(Image image,
+                          Connection connection)
+            throws SQLException, ExternalSystemException {
+
+        String relativePath = image.getRelativePath();
+
+        PreparedStatement insertImage = null;
+        try {
+            insertImage = connection.prepareStatement(SQL_INSERT_IMAGE);
+            insertImage.setString(1, relativePath);
+            Date captureDate = image.getCaptureDate();
+            if (captureDate != null) {
+                insertImage.setDate(2,
+                                    new java.sql.Date(captureDate.getTime()));
+            } else {
+                insertImage.setDate(2, null);
+            }
+            insertImage.setString(3, image.getFamily());
+            insertImage.setBoolean(4, image.isDisplay());
+
+            int rowsUpdated = insertImage.executeUpdate();
+            if (rowsUpdated != 1) {
+                throw new ExternalSystemException(
+                        "Failed to create image '" + relativePath +
+                        "'.  Attempted to create " + rowsUpdated + " rows.");
+            }
+
+            Integer imageId = getImageId(relativePath, connection);
+            if (imageId == null) {
+                throw new ExternalSystemException(
+                        "Failed to retrieve id for image '" + relativePath +
+                        "'.");
+            }
+            image.setId(imageId);
+            updateImageProperties(image, connection, new ArrayList<String>());
+
+        } finally {
+            DbManager.closeResources(null, insertImage, null, LOG);
+        }
+
+        return image;
+    }
+
+    private void updateImage(Image image,
+                             Connection connection)
+            throws SQLException, ExternalSystemException {
+
+        String relativePath = image.getRelativePath();
+
+        PreparedStatement updateImage = null;
+        try {
+            StringBuilder sql = new StringBuilder();
+            sql.append("UPDATE image SET ");
+
+            Date captureDate = image.getCaptureDate();
+            if (captureDate != null) {
+                sql.append("capture_date=?, ");
+            }
+
+            String family = image.getFamily();
+            if (family != null) {
+                sql.append("family=?, ");
+            }
+
+            sql.append("display=? WHERE id=?");
+
+            int columnIndex = 1;
+            updateImage = connection.prepareStatement(sql.toString());
+            if (captureDate != null) {
+                updateImage.setDate(columnIndex,
+                                    new java.sql.Date(captureDate.getTime()));
+                columnIndex++;
+            }
+            if (family != null) {
+                updateImage.setString(columnIndex, image.getFamily());
+                columnIndex++;
+            }
+            updateImage.setBoolean(columnIndex, image.isDisplay());
+            columnIndex++;
+            updateImage.setInt(columnIndex, image.getId());
+
+            int rowsUpdated = updateImage.executeUpdate();
+            if (rowsUpdated != 1) {
+                throw new ExternalSystemException(
+                        "Failed to update image '" + relativePath +
+                        "'.  Attempted to update " + rowsUpdated + " rows.");
+            }
+
+            LOG.info("updateImage: successfully executed " + sql.toString());
+
+        } finally {
+            DbManager.closeResources(null, updateImage, null, LOG);
+        }
+    }
+
+    private void updateImageProperties(Image image,
+                                       Connection connection,
+                                       List<String> existingPropertyNames)
+            throws SQLException, ExternalSystemException {
+
+        int imageId = image.getId();
+        String relativePath = image.getRelativePath();
+
+        Set<String> insertPropertyNames = new LinkedHashSet<String>();
+        Set<String> updatePropertyNames = new LinkedHashSet<String>();
+
+        Map<String, String> properties = image.getPropertyTypeToValueMap();
+        for (String type : properties.keySet()) {
+            if (StringUtil.isDefined(type)) {
+                if (existingPropertyNames.contains(type)) {
+                    updatePropertyNames.add(type);
+                } else {
+                    insertPropertyNames.add(type);
+                }
+            }
+        }
+
+        int numberOfPropertiesToAdd = insertPropertyNames.size();
+        if (numberOfPropertiesToAdd > 0) {
+            PreparedStatement insertProperty = null;
+
+            try {
+
+                insertProperty =
+                        connection.prepareStatement(SQL_INSERT_IMAGE_PROPERTY);
+                for (String type : insertPropertyNames) {
+                    insertProperty.setInt(1, imageId);
+                    insertProperty.setString(2, type);
+                    insertProperty.setString(3, properties.get(type));
+                    insertProperty.addBatch();
+                }
+
+                int[] numUpdates = insertProperty.executeBatch();
+                validateUpdateCounts("Failed to add image properties for '" +
+                                     relativePath + "'.",
+                                     numberOfPropertiesToAdd,
+                                     numUpdates);
+
+                LOG.info("updateImageProperties: successfully added " +
+                         insertPropertyNames);
+
+            } finally {
+                DbManager.closeResources(null, insertProperty, null, LOG);
+            }
+        }
+
+        int numberOfPropertiesToUpdate = updatePropertyNames.size();
+        if (numberOfPropertiesToUpdate > 0) {
+            PreparedStatement updateProperty = null;
+
+            try {
+
+                updateProperty =
+                        connection.prepareStatement(SQL_UPDATE_IMAGE_PROPERTY);
+                for (String type : updatePropertyNames) {
+                    updateProperty.setString(1, properties.get(type));
+                    updateProperty.setInt(2, imageId);
+                    updateProperty.setString(3, type);
+                    updateProperty.addBatch();
+                }
+
+                int[] numUpdates = updateProperty.executeBatch();
+                validateUpdateCounts("Failed to update image properties for '" +
+                                     relativePath + "'.",
+                                     numberOfPropertiesToUpdate,
+                                     numUpdates);
+
+                LOG.info("updateImageProperties: successfully updated " +
+                         updatePropertyNames);
+
+            } finally {
+                DbManager.closeResources(null, updateProperty, null, LOG);
+            }
+        }
+
+    }
+
+    private void validateUpdateCounts(String failureContext,
+                                      int expectedNumberOfUpdates,
+                                      int[] numUpdates)
+            throws ExternalSystemException {
+        if (numUpdates.length != expectedNumberOfUpdates) {
+            throw new ExternalSystemException(
+                    failureContext + "  Executed " +
+                    numUpdates.length + " instead of " +
+                    expectedNumberOfUpdates + " statement(s).");
+        } else {
+            for (int i = 0; i < numUpdates.length; i++) {
+                if (numUpdates[i] != 1) {
+                    throw new ExternalSystemException(
+                            failureContext + "  Attempted to update " +
+                            numUpdates[i] + " row(s) for property " +
+                            i + ".");
+                }
+            }
+        }
+    }
+    
+    /**
      * Utility to load database properties from classpath.
      *
      * @param  dbConfigurationKey  the key for loading database
@@ -299,9 +527,12 @@ public class ImageDao implements ImagePropertyWriter {
      * SQL for inserting an image record.
      *   Parameter 1 is the image's relative path.
      *   Parameter 2 is the image's capture date.
+     *   Parameter 3 is the image's family.
+     *   Parameter 4 is the image's display flag.
      */
     private static final String SQL_INSERT_IMAGE =
-            "INSERT INTO image (name, capture_date, family) VALUES (?,?,?)";
+            "INSERT INTO image (name, capture_date, family, display) " +
+            "VALUES (?,?,?,?)";
 
     /**
      * SQL for retrieving an image id.
@@ -318,6 +549,24 @@ public class ImageDao implements ImagePropertyWriter {
      */
     private static final String SQL_INSERT_IMAGE_PROPERTY =
             "INSERT INTO image_property (image_id, type, value) VALUES (?,?,?)";
+
+    /**
+     * SQL for inserting an image property record.
+     *   Parameter 1 is the property value.
+     *   Parameter 2 is the image's id.
+     *   Parameter 3 is the property type (name).
+     */
+    private static final String SQL_UPDATE_IMAGE_PROPERTY =
+            "UPDATE image_property SET value=? WHERE image_id=? AND type=?";
+
+    /**
+     * SQL for retrieving an image's property types.
+     *   Parameter 1 is the image's relative path.
+     */
+    private static final String SQL_SELECT_IMAGE_PROPERTY_TYPES =
+            "SELECT i.id, ip.type FROM image i " +
+            "LEFT OUTER JOIN image_property ip ON i.id=ip.image_id " +
+            "WHERE i.name=?"; 
 
     /**
      * SQL for retrieving the current (max) sequence number for a namespace.

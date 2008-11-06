@@ -104,6 +104,11 @@ public class ImagePropertyFileWriter implements ImagePropertyWriter {
             }
         }
 
+        if (LOG.isInfoEnabled()) {
+            LOG.info("successfully persisted image properties to " +
+                     dataFile.getAbsolutePath());
+        }
+
         return image;
     }
 

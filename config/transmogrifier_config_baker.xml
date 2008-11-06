@@ -3,13 +3,41 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <project name="Baker Lab: Private GAL4 Lines (BSBx_*)" default="true">
+    <project name="Baker Lab: GAL4 Lines (BSB_*)" default="true">
+
+        <outputDirectory>
+            <path path="\\dm3.int.janelia.org\bakerlab\GAL4_confocal_stacks\" />
+            <renameFieldValue fieldDisplayName="Line" />
+        </outputDirectory>
+
+        <plugins>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="nighthawk" />
+                <property name="Specimen Number" value="urn:lsid:janelia.org:baker_lab_line_specimen:${Line}" />
+            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="nighthawk"/>
+                <property name="family" value="family"/>
+                <property name="display" value="display"/>
+                <property name="line" value="Line"/>
+                <property name="genotype" value="Genotype"/>
+                <property name="short_genotype" value="Short Genotype"/>
+                <property name="gender" value="Gender"/>
+                <property name="tissue" value="Tissue"/>
+                <property name="chron_stage" value="Chron Stage"/>
+                <property name="chron_hour" value="Chron Hour"/>
+                <property name="chron_interval" value="Chron Interval"/>
+                <property name="heat_shock_landmark" value="Heat Shock Landmark"/>
+                <property name="heat_shock_hour" value="Heat Shock Hour"/>
+                <property name="heat_shock_interval" value="Heat Shock Interval"/>
+            </rowListener>
+        </plugins>
 
         <dataFields>
-            <separator value="BSBx_"/>
+            <separator value="BSB_"/>
 
-            <text displayName="Line" required="true" pattern="[0-9A-Za-z\-\_]++" />
-
+            <text displayName="Line" required="true" pattern="[0-9A-Za-z\-\_]++"/>
+            <text displayName="Genotype" required="true" markedForTask="false"/>
             <text displayName="Short Genotype" required="false" pattern="[0-9A-Za-z\-\_]++" prefix="__"/>
 
             <separator value="__"/>
@@ -45,101 +73,9 @@
             <separator value="-"/>
 
             <number displayName="Chron Hour" required="true" minimumValue="0"/>
-
-            <validValueList displayName="Heat Shock Landmark" required="false" prefix="-h">
-                <validValue displayName="l: After Egg Laying" value="l"/>
-                <validValue displayName="p: After Puparium Formation" value="p"/>
-                <validValue displayName="e: After Eclosion" value="e"/>
-            </validValueList>
-
-            <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
-            <separator value=".lsm"/>
-        </dataFields>
-
-    </project>
-
-    <project name="Baker Lab: Public GAL4 Lines (BSB_*)">
-
-        <outputDirectory>
-            <path path="\\dm3.int.janelia.org\bakerlab\GAL4_confocal_stacks\" />
-            <renameFieldValue fieldDisplayName="Line" />
-        </outputDirectory>
-
-        <plugins>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
-                <property name="db.config.key" value="nighthawk" />
-                <property name="Specimen Number" value="urn:lsid:janelia.org:baker_lab_line_specimen:${Line}" />
-            </rowListener>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="nighthawk"/>
-                <property name="family" value="family"/>
-                <property name="line" value="Line"/>
-                <property name="genotype" value="Genotype"/>
-                <property name="short_genotype" value="Short Genotype"/>
-                <property name="gender" value="Gender"/>
-                <property name="tissue" value="Tissue"/>
-                <property name="chron_stage" value="Chron Stage"/>
-                <property name="chron_hour" value="Chron Hour"/>
-                <property name="chron_interval" value="Chron Interval"/>
-                <property name="heat_shock_landmark" value="Heat Shock Landmark"/>
-                <property name="heat_shock_hour" value="Heat Shock Hour"/>
-                <property name="heat_shock_interval" value="Heat Shock Interval"/>
-            </rowListener>
-        </plugins>
-
-        <dataFields>
-            <separator value="BSB_"/>
-
-            <text displayName="Line" required="true" pattern="[0-9A-Za-z\-\_]++">
-                <sourceFileDefault pattern="BSBx_(.*?)__.*\.lsm"/>
-            </text>
-            <text displayName="Genotype" required="true" markedForTask="false"/>
-            <text displayName="Short Genotype" required="false" pattern="[0-9A-Za-z\-\_]++" prefix="__">
-                <sourceFileDefault pattern="BSBx_.*?__(.*?)__.*\.lsm"/>
-            </text>
-
-            <separator value="__"/>
-
-            <validValueList displayName="Gender" required="true">
-                <sourceFileDefault pattern="BSBx_.*__(.).*\.lsm"/>
-                <validValue displayName="m: Male" value="m"/>
-                <validValue displayName="f: Female" value="f"/>
-                <validValue displayName="x: Not Defined" value="x"/>
-            </validValueList>
-            <validValueList displayName="Tissue" required="true">
-                <sourceFileDefault pattern="BSBx_.*__.(.*?)-.*\.lsm"/>
-                <validValue displayName="b: Brain" value="b"/>
-                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
-                <validValue displayName="a: Antenna" value="a"/>
-                <validValue displayName="p: Proboscis/Maxillary Palp" value="p"/>
-                <validValue displayName="l1: Leg 1" value="l1"/>
-                <validValue displayName="l2: Leg 2" value="l2"/>
-                <validValue displayName="l3: Leg 3" value="l3"/>
-                <validValue displayName="g: Genitalia" value="g"/>
-                <validValue displayName="w: Wing/Joint" value="w"/>
-            </validValueList>
-
-            <separator value="-"/>
-
-            <validValueList displayName="Chron Stage" required="true">
-                <sourceFileDefault pattern="BSBx_.*__.*?-(.*?)-.*\.lsm"/>
-                <validValue displayName="E: Embryo" value="E"/>
-                <validValue displayName="L01: First Instar Larva" value="L01"/>
-                <validValue displayName="L02: Second Instar Larva" value="L02"/>
-                <validValue displayName="L03: Third Instar Larva" value="L03"/>
-                <validValue displayName="P02: Pupa" value="P02"/>
-                <validValue displayName="A: Adult" value="A"/>
-            </validValueList>
-
-            <separator value="-"/>
-
-            <number displayName="Chron Hour" required="true" minimumValue="0">
-                <sourceFileDefault pattern="BSBx_.*__.*?-.*?-(\d++)[-_].*\.lsm"/>
-            </number>
             <number displayName="Chron Interval" required="true" minimumValue="0" markedForTask="false"/>
 
             <validValueList displayName="Heat Shock Landmark" required="false" prefix="-h">
-                <sourceFileDefault pattern="BSBx_.*__.*?-.*?-\d++-h(.)_.*\.lsm"/>
                 <validValue displayName="l: After Egg Laying" value="l"/>
                 <validValue displayName="p: After Puparium Formation" value="p"/>
                 <validValue displayName="e: After Eclosion" value="e"/>
@@ -154,8 +90,30 @@
             <separator value=".lsm"/>
 
             <static name="family" value="baker-lab" markedForTask="false"/>
+            <static name="display" value="false" markedForTask="false"/>
         </dataFields>
 
     </project>
 
+    <project name="Baker Lab: mark GAL4 line images for display" taskName="collector">
+
+        <plugins>
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="nighthawk"/>
+            </rowValidator>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="nighthawk"/>
+                <property name="display" value="display"/>
+            </rowListener>
+        </plugins>
+
+        <dataFields>
+            <validValueList displayName="display" required="true">
+                <validValue displayName="Yes" value="true" default="true"/>
+                <validValue displayName="No" value="false"/>
+            </validValueList>
+        </dataFields>
+
+    </project>
+    
 </transmogrifierConfiguration>

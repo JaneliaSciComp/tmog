@@ -92,14 +92,7 @@ public class RenamePluginDataRow extends PluginDataRow {
      *         renamed file.
      */
     public String getRelativePath() {
-        File renameDir = renamedFile.getParentFile();
-        String relativePath;
-        if (renameDir == null) {
-            relativePath = renamedFile.getName();
-        } else {
-            relativePath = renameDir.getName() + "/" + renamedFile.getName();
-        }
-        return relativePath;
+        return getRelativePath(renamedFile);
     }
 
     /**
