@@ -17,17 +17,11 @@
             </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
+                <property name="line" value="Line"/>
                 <property name="family" value="family"/>
                 <property name="display" value="display"/>
-                <property name="line" value="Line"/>
                 <property name="genotype" value="Genotype"/>
-                <property name="short_genotype" value="Short Genotype"/>
-                <property name="gender" value="Gender"/>
-                <property name="tissue" value="Tissue"/>
-                <property name="chron_stage" value="Chron Stage"/>
-                <property name="chron_hour" value="Chron Hour"/>
                 <property name="chron_interval" value="Chron Interval"/>
-                <property name="heat_shock_landmark" value="Heat Shock Landmark"/>
                 <property name="heat_shock_hour" value="Heat Shock Hour"/>
                 <property name="heat_shock_interval" value="Heat Shock Interval"/>
             </rowListener>
@@ -89,8 +83,12 @@
             <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
 
+            <validValueList displayName="display" required="true" markedForTask="false">
+                <validValue displayName="Yes" value="true"/>
+                <validValue displayName="No" value="false" default="true"/>
+            </validValueList>
+
             <static name="family" value="baker-lab" markedForTask="false"/>
-            <static name="display" value="false" markedForTask="false"/>
         </dataFields>
 
     </project>
@@ -113,7 +111,6 @@
                 <validValue displayName="No" value="false"/>
             </validValueList>
         </dataFields>
-
     </project>
     
 </transmogrifierConfiguration>
