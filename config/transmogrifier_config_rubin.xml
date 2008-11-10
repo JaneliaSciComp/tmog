@@ -7,7 +7,7 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="\\dm6.int.janelia.org\rubindata\confocalStacks"
+        <outputDirectory basePath="\\dm10.isln.janelia.org\rubindata\confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -23,7 +23,7 @@
                 <property name="line" value="${Plate}${Well}_${Vector ID}_${Landing Site}"/>
             </rowListener>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\GMR"/>
+                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\renamer\summaries\GMR"/>
             </sessionListener>
         </plugins>
 
@@ -146,7 +146,7 @@
 
         <plugins>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\RD"/>
+                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\renamer\summaries\RD"/>
             </sessionListener>
         </plugins>
 
@@ -199,7 +199,7 @@
 
         <plugins>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\RD"/>
+                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\renamer\summaries\RD"/>
             </sessionListener>
         </plugins>
 
@@ -248,7 +248,7 @@
 
         <plugins>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm6.int.janelia.org\rubindata\renamer\summaries\RD"/>
+                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\renamer\summaries\RD"/>
             </sessionListener>
         </plugins>
 
