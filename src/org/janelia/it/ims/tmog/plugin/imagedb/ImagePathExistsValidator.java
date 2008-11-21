@@ -27,12 +27,14 @@ import java.util.Map;
 public class ImagePathExistsValidator implements RowValidator {
 
     private ImageDao dao;
+    private boolean shouldExist;
 
     /**
      * Empty constructor required by
      * {@link org.janelia.it.ims.tmog.config.PluginFactory}.
      */
     public ImagePathExistsValidator() {
+        this.shouldExist = true;
     }
 
     /**
@@ -60,6 +62,10 @@ public class ImagePathExistsValidator implements RowValidator {
                         e);
             }
 
+            String shouldExistValue = props.get("shouldExist");
+            if ("false".equalsIgnoreCase(shouldExistValue)) {
+                shouldExist = false;
+            }
         } else {
             throw new ExternalSystemException(
                     INIT_FAILURE_MSG +
@@ -93,12 +99,22 @@ public class ImagePathExistsValidator implements RowValidator {
 
         try {
             Integer imageId = dao.getImageId(relativePath);
-            if (imageId == null) {
-                throw new ExternalDataException(
-                        "The path '" + relativePath +
-                        "' does not exist in the Image database.  " +
-                        "Please only select images whose properties have " +
-                        "previously been saved in the database.");
+            if (shouldExist) {
+                if (imageId == null) {
+                    throw new ExternalDataException(
+                            "The path '" + relativePath +
+                            "' does not exist in the Image database.  " +
+                            "Please only select images whose properties have " +
+                            "previously been saved in the database.");
+                }
+            } else {
+                if (imageId != null) {
+                    throw new ExternalDataException(
+                            "The path '" + relativePath +
+                            "' already exists in the Image database.  " +
+                            "Please only select images whose properties have " +
+                            "not yet been saved in the database.");
+                }
             }
         } catch (ExternalSystemException e) {
             throw new ExternalSystemException(
