@@ -6,7 +6,7 @@
     <project name="Baker Lab: GAL4 Lines (BSB_*)" default="true">
 
         <outputDirectory>
-            <path path="\\dm3.int.janelia.org\bakerlab\GAL4_confocal_stacks\" />
+            <path path="\\dm3.int.janelia.org\bakerlab\MicroscopeData\Baker_Confocal_Stacks\" />
             <renameFieldValue fieldDisplayName="Line" />
         </outputDirectory>
 
@@ -30,18 +30,24 @@
         <dataFields>
             <separator value="BSB_"/>
 
-            <text displayName="Line" required="true" pattern="[0-9A-Za-z\-\_]++"/>
+            <text displayName="Line" required="true" pattern="[0-9A-Za-z\-\_]++">
+                <sourceFileDefault pattern="BSB_(.*?)__.*\.lsm"/>
+            </text>
             <text displayName="Genotype" required="true" markedForTask="false"/>
-            <text displayName="Short Genotype" required="false" pattern="[0-9A-Za-z\-\_]++" prefix="__"/>
+            <text displayName="Short Genotype" required="false" pattern="[0-9A-Za-z\-\_]++" prefix="__">
+                <sourceFileDefault pattern="BSB_.*?__(.*?)__.*\.lsm"/>
+            </text>
 
             <separator value="__"/>
 
             <validValueList displayName="Gender" required="true">
+                <sourceFileDefault pattern="BSB_.*__(.).*\.lsm"/>
                 <validValue displayName="m: Male" value="m"/>
                 <validValue displayName="f: Female" value="f"/>
                 <validValue displayName="x: Not Defined" value="x"/>
             </validValueList>
             <validValueList displayName="Tissue" required="true">
+                <sourceFileDefault pattern="BSB_.*__.(.*?)-.*\.lsm"/>
                 <validValue displayName="b: Brain" value="b"/>
                 <validValue displayName="v: Ventral Nerve Cord" value="v"/>
                 <validValue displayName="a: Antenna" value="a"/>
@@ -56,6 +62,7 @@
             <separator value="-"/>
 
             <validValueList displayName="Chron Stage" required="true">
+                <sourceFileDefault pattern="BSB_.*__.*?-(.*?)-.*\.lsm"/>
                 <validValue displayName="E: Embryo" value="E"/>
                 <validValue displayName="L01: First Instar Larva" value="L01"/>
                 <validValue displayName="L02: Second Instar Larva" value="L02"/>
@@ -66,10 +73,13 @@
 
             <separator value="-"/>
 
-            <number displayName="Chron Hour" required="true" minimumValue="0"/>
+            <number displayName="Chron Hour" required="true" minimumValue="0">
+                <sourceFileDefault pattern="BSB_.*__.*?-.*?-(\d++)[-_].*\.lsm"/>
+            </number>
             <number displayName="Chron Interval" required="true" minimumValue="0" markedForTask="false"/>
 
             <validValueList displayName="Heat Shock Landmark" required="false" prefix="-h">
+                <sourceFileDefault pattern="BSB_.*__.*?-.*?-\d++-h(.)_.*\.lsm"/>
                 <validValue displayName="l: After Egg Laying" value="l"/>
                 <validValue displayName="p: After Puparium Formation" value="p"/>
                 <validValue displayName="e: After Eclosion" value="e"/>
@@ -79,7 +89,7 @@
 
             <separator value="-"/>
 
-            <pluginData displayName="Specimen Number" format="%02d"/>
+            <pluginData displayName="Specimen Number"/>
             <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
 
@@ -112,5 +122,105 @@
             </validValueList>
         </dataFields>
     </project>
-    
+
+    <project name="Baker Lab: Fix Data for Existing GAL4 Lines (BSB_*)">
+
+        <outputDirectory>
+            <path path="\\dm3.int.janelia.org\bakerlab\MicroscopeData\Baker_Confocal_Stacks\" />
+            <renameFieldValue fieldDisplayName="Line" />
+        </outputDirectory>
+
+        <plugins>
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="nighthawk"/>
+            </rowValidator>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="nighthawk"/>
+                <property name="line" value="Line"/>
+                <property name="display" value="display"/>
+                <property name="genotype" value="Genotype"/>
+                <property name="chron_interval" value="Chron Interval"/>
+                <property name="heat_shock_hour" value="Heat Shock Hour"/>
+                <property name="heat_shock_interval" value="Heat Shock Interval"/>
+            </rowListener>
+        </plugins>
+
+        <dataFields>
+            <separator value="BSB_"/>
+
+            <text displayName="Line" required="true" pattern="[0-9A-Za-z\-\_]++">
+                <sourceFileDefault pattern="BSB_(.*?)__.*\.lsm"/>
+            </text>
+            <text displayName="Genotype" required="false" markedForTask="false"/>
+            <text displayName="Short Genotype" required="false" pattern="[0-9A-Za-z\-\_]++" prefix="__">
+                <sourceFileDefault pattern="BSB_.*?__(.*?)__.*\.lsm"/>
+            </text>
+
+            <separator value="__"/>
+
+            <validValueList displayName="Gender" required="true">
+                <sourceFileDefault pattern="BSB_.*__(.).*\.lsm"/>
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+            <validValueList displayName="Tissue" required="true">
+                <sourceFileDefault pattern="BSB_.*__.(.*?)-.*\.lsm"/>
+                <validValue displayName="b: Brain" value="b"/>
+                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
+                <validValue displayName="a: Antenna" value="a"/>
+                <validValue displayName="p: Proboscis/Maxillary Palp" value="p"/>
+                <validValue displayName="l1: Leg 1" value="l1"/>
+                <validValue displayName="l2: Leg 2" value="l2"/>
+                <validValue displayName="l3: Leg 3" value="l3"/>
+                <validValue displayName="g: Genitalia" value="g"/>
+                <validValue displayName="w: Wing/Joint" value="w"/>
+            </validValueList>
+
+            <separator value="-"/>
+
+            <validValueList displayName="Chron Stage" required="true">
+                <sourceFileDefault pattern="BSB_.*__.*?-(.*?)-.*\.lsm"/>
+                <validValue displayName="E: Embryo" value="E"/>
+                <validValue displayName="L01: First Instar Larva" value="L01"/>
+                <validValue displayName="L02: Second Instar Larva" value="L02"/>
+                <validValue displayName="L03: Third Instar Larva" value="L03"/>
+                <validValue displayName="P02: Pupa" value="P02"/>
+                <validValue displayName="A: Adult" value="A"/>
+            </validValueList>
+
+            <separator value="-"/>
+
+            <number displayName="Chron Hour" required="true" minimumValue="0">
+                <sourceFileDefault pattern="BSB_.*__.*?-.*?-(\d++)[-_].*\.lsm"/>
+            </number>
+            <number displayName="Chron Interval" required="false" minimumValue="0" markedForTask="false"/>
+
+            <validValueList displayName="Heat Shock Landmark" required="false" prefix="-h">
+                <sourceFileDefault pattern="BSB_.*__.*?-.*?-\d++-h(.)_.*\.lsm"/>
+                <validValue displayName="l: After Egg Laying" value="l"/>
+                <validValue displayName="p: After Puparium Formation" value="p"/>
+                <validValue displayName="e: After Eclosion" value="e"/>
+            </validValueList>
+            <decimal displayName="Heat Shock Hour" required="false" minimumValue="0" markedForTask="false" />
+            <decimal displayName="Heat Shock Interval" required="false" minimumValue="0" markedForTask="false" />
+
+            <separator value="-"/>
+
+            <text displayName="Specimen Number" required="true" pattern="[\d]++">
+                <sourceFileDefault pattern="BSB_.*-(\d++)_\d{17}\.lsm"/>
+            </text>
+
+            <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+
+            <validValueList displayName="display" required="true" markedForTask="false">
+                <validValue displayName="Yes" value="true"/>
+                <validValue displayName="No" value="false" default="true"/>
+            </validValueList>
+
+        </dataFields>
+
+    </project>
+
 </transmogrifierConfiguration>

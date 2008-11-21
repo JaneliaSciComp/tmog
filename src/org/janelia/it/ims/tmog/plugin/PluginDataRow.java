@@ -158,12 +158,14 @@ public class PluginDataRow {
     }
 
     public static String getRelativePath(File file) {
-        String relativePath;
-        File fileDir = file.getParentFile();
-        if (fileDir == null) {
-            relativePath = file.getName();
-        } else {
-            relativePath = fileDir.getName() + "/" + file.getName();
+        String relativePath = null;
+        if (file != null) {
+            File fileDir = file.getParentFile();
+            if (fileDir == null) {
+                relativePath = file.getName();
+            } else {
+                relativePath = fileDir.getName() + "/" + file.getName();
+            }
         }
         return relativePath;
     }

@@ -12,8 +12,13 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.janelia.it.ims.tmog.DataRow;
+import org.janelia.it.ims.tmog.FileTarget;
+import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 import org.janelia.it.utils.db.DbManager;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -147,6 +152,48 @@ public class ImageDaoTest extends TestCase {
         testImage = dao.saveProperties(testImage);
 
         assertEquals("id changed after update", testImageId, testImage.getId());
+    }
+
+    /**
+     * Tests the saveProperties method for an existing image whose
+     * relative path has changed.
+     *
+     * @throws Exception
+     *   if any unexpected errors occur.
+     */
+    public void testSaveForChangedRelativePath() throws Exception {
+        String relativePath = IMAGE_PATH.format(new Date());
+        testImage.setRelativePath(relativePath);
+        testImage.setCaptureDate(new Date());
+        testImage.setFamily("testFamily");
+
+        testImage = dao.saveProperties(testImage);
+        Integer testImageId = testImage.getId();
+
+        assertNotNull("id not set after add", testImage.getId());
+
+        String previousRelativePath = relativePath;
+        relativePath = previousRelativePath + "_changed";
+        testImage = new Image();
+        testImage.setId(testImageId);
+        testImage.setRelativePath(relativePath);
+        testImage.setCaptureDate(new Date());
+
+        File fromFile = new File(previousRelativePath);
+        FileTarget target = new FileTarget(new File(relativePath));
+        DataRow dataRow = new DataRow(target);
+        File outputDirectory = new File(".");
+        PluginDataRow pluginRow =
+                new RenamePluginDataRow(fromFile, dataRow, outputDirectory);
+        testImage.setRow(pluginRow);
+
+        testImage = dao.saveProperties(testImage);
+
+        assertEquals("id changed after update", testImageId, testImage.getId());
+
+        Integer previousImageId = dao.getImageId(previousRelativePath);
+        assertNull("id incorrectly returned for previous relative path " +
+                   previousRelativePath, previousImageId);
     }
 
     /**

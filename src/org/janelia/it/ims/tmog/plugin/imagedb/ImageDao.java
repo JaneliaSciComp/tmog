@@ -100,11 +100,22 @@ public class ImageDao implements ImagePropertyWriter {
             connection = dbManager.getConnection();
             connection.setAutoCommit(false);
 
+            Integer imageId = null;
+            String previousRelativePath = image.getPreviousRelativePath();
+            if (previousRelativePath != null) {
+                imageId = getImageId(previousRelativePath, connection);
+                if (imageId != null) {
+                    LOG.info("saveProperties: using image id " + imageId +
+                             " found for previous relative path " +
+                             previousRelativePath);
+                    relativePath = previousRelativePath;
+                }
+            }
+
             select = connection.prepareStatement(SQL_SELECT_IMAGE_PROPERTY_TYPES);
             select.setString(1, relativePath);
             resultSet = select.executeQuery();
 
-            Integer imageId = null;
             Integer lastImageId = null;
             List<String> existingPropertyNames = new ArrayList<String>();
             String propertyName;
@@ -341,7 +352,7 @@ public class ImageDao implements ImagePropertyWriter {
                 sql.append("family=?, ");
             }
 
-            sql.append("display=? WHERE id=?");
+            sql.append("name=?, display=? WHERE id=?");
 
             int columnIndex = 1;
             updateImage = connection.prepareStatement(sql.toString());
@@ -354,6 +365,8 @@ public class ImageDao implements ImagePropertyWriter {
                 updateImage.setString(columnIndex, image.getFamily());
                 columnIndex++;
             }
+            updateImage.setString(columnIndex, relativePath);
+            columnIndex++;
             updateImage.setBoolean(columnIndex, image.isDisplay());
             columnIndex++;
             updateImage.setInt(columnIndex, image.getId());

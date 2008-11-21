@@ -11,9 +11,11 @@ import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RowValidator;
 import org.janelia.it.utils.StringUtil;
 
+import java.io.File;
 import java.util.Map;
 
 /**
@@ -67,7 +69,7 @@ public class ImagePathExistsValidator implements RowValidator {
     }
 
     /**
-     * Validates that the speicifed row's relative path can be found in
+     * Validates that the specified row's relative path can be found in
      * the image database.
      *
      * @param  row  the user supplied information to be validated.
@@ -81,7 +83,14 @@ public class ImagePathExistsValidator implements RowValidator {
     public void validate(PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
-        String relativePath = row.getRelativePath();
+        String relativePath;
+        if (row instanceof RenamePluginDataRow) {
+            File fromFile = ((RenamePluginDataRow) row).getFromFile();
+            relativePath = PluginDataRow.getRelativePath(fromFile);
+        } else {
+            relativePath = row.getRelativePath();
+        }
+
         try {
             Integer imageId = dao.getImageId(relativePath);
             if (imageId == null) {

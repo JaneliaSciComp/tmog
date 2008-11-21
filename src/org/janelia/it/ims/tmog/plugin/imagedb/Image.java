@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.DatePatternField;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,16 +34,19 @@ public class Image {
     private String family;
     private boolean display;
     private Map<String, String> propertyTypeToValueMap;
+    private PluginDataRow row;
 
     public Image() {
         this.id = null;
         this.propertyTypeToValueMap = new LinkedHashMap<String, String>();
         this.display = true;
+        this.row = null;
     }
 
     public Image(PluginDataRow row,
                  List<ImagePropertySetter> propertySetters) {
         this();
+        this.row = row;
         this.relativePath = row.getRelativePath();
         for (ImagePropertySetter propertySetter : propertySetters) {
             propertySetter.setProperty(row, this);
@@ -132,6 +136,19 @@ public class Image {
         }
     }
 
+    public String getPreviousRelativePath() {
+        String previousPath = null;
+        if (row instanceof RenamePluginDataRow) {
+            previousPath =
+                    PluginDataRow.getRelativePath(
+                            ((RenamePluginDataRow)row).getFromFile());
+        }
+        return previousPath;
+    }
+
+    protected void setRow(PluginDataRow row) {
+        this.row = row;
+    }
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
