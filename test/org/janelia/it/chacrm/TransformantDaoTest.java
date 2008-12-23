@@ -828,30 +828,30 @@ public class TransformantDaoTest extends TestCase {
     /**
      * The type id for "status" properties in the featureprop table.
      *
-     * SELECT cvterm_id FROM cvterm WHERE name='ownwer' AND is_obsolete=0
+     * SELECT cvterm_id FROM cvterm WHERE name='owner' AND is_obsolete=0
      */
-    private static final Integer STATUS_TYPE_ID = 60662;
+    private static final Integer STATUS_TYPE_ID = 100814;
 
     /**
      * The type id for "transformant" features in the feature table.
      *
      * SELECT cvterm_id FROM cvterm WHERE name='transformant' AND is_obsolete=0 
      */
-    private static final Integer TRANSFORMANT_TYPE_ID = 60707;
+    private static final Integer TRANSFORMANT_TYPE_ID = 107809;
 
     /**
      * The type id for "fragment" features in the feature table.
      *
      * SELECT cvterm_id FROM cvterm WHERE name='tiling_path_fragment_id' AND is_obsolete=0 
      */
-    private static final Integer FRAGMENT_TYPE_ID = 60709;
+    private static final Integer FRAGMENT_TYPE_ID = 107808;
 
     /**
      * The type id for "image location" properties in the featureprop table.
      *
      * SELECT cvterm_id FROM cvterm WHERE name='image_location' AND is_obsolete=0 
      */
-    private static final Integer LOCATION_TYPE_ID = 60710;
+    private static final Integer LOCATION_TYPE_ID = 107810;
 
     /**
      * SQL for retrieving a feature id.
