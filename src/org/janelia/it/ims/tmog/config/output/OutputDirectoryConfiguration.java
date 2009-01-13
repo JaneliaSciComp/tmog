@@ -26,6 +26,7 @@ public class OutputDirectoryConfiguration {
 
     private ArrayList<OutputDirectoryComponent> components;
     private boolean derivedFromEarliestModifiedFile;
+    private boolean fileModeReadOnly;
 
     /**
      * Empty constructor.
@@ -33,6 +34,7 @@ public class OutputDirectoryConfiguration {
     public OutputDirectoryConfiguration() {
         this.components = new ArrayList<OutputDirectoryComponent>();
         this.derivedFromEarliestModifiedFile = false;
+        this.fileModeReadOnly = true;
     }
 
     /**
@@ -55,6 +57,24 @@ public class OutputDirectoryConfiguration {
         SourceFileModificationTime modTime = new SourceFileModificationTime();
         modTime.setDatePattern("'" + FILE_SEP + "'yyyyMMdd");
         this.components.add(modTime);
+    }
+
+    /**
+     * @return true if all files placed in the output directory should
+     *         be made read only; otherwise false.
+     */
+    public boolean isFileModeReadOnly() {
+        return fileModeReadOnly;
+    }
+
+    /**
+     * Sets whether all files placed in the output directory should
+     * be made read only.
+     *
+     * @param  fileModeReadOnly  flag value.
+     */
+    public void setFileModeReadOnly(boolean fileModeReadOnly) {
+        this.fileModeReadOnly = fileModeReadOnly;
     }
 
     /**

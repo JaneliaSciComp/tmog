@@ -21,6 +21,7 @@
         </xs:choice>
         <xs:attribute name="basePath" type="xs:string"/>
         <xs:attribute name="derivedFromEarliestModifiedFile" type="xs:boolean"/>
+        <xs:attribute name="fileModeReadOnly" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="pathType">

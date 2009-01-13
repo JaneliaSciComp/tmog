@@ -176,6 +176,9 @@ public class RenameTask extends SimpleTask {
         // perform the actual copy and rename
         try {
             SafeFileTransfer.copy(rowFile, renamedFile, false);
+            if (outputDirConfig.isFileModeReadOnly()) {
+                renamedFile.setReadOnly();
+            }
             renameSuccessful = true;
         } catch (FileCopyFailedException e) {
             LOG.error("Failed to copy " + rowFile.getAbsolutePath() +
