@@ -37,7 +37,7 @@ public class FileExtensionModel implements DataField {
         this.markedForTask = markedForTask;
     }
 
-    public FileExtensionModel getNewInstance() {
+    public FileExtensionModel getNewInstance(boolean isCloneRequired) {
         FileExtensionModel instance = new FileExtensionModel();
         instance.setMarkedForTask(markedForTask);
         // do not copy extension (must be derived when rename occurs)

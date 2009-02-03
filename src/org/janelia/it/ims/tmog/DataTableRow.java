@@ -45,7 +45,8 @@ public class DataTableRow {
 
         this.dataRow = new DataRow(target);
         for (DataField dataFieldConfig : dataFieldConfigs) {
-            DataField newFieldInstance = dataFieldConfig.getNewInstance();
+            DataField newFieldInstance =
+                    dataFieldConfig.getNewInstance(false);
             this.dataRow.addField(newFieldInstance);
             newFieldInstance.initializeValue(target);
         }

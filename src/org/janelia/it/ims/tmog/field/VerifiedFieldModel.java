@@ -27,6 +27,7 @@ public abstract class VerifiedFieldModel extends PlainDocument implements DataFi
     private String suffix;
     private boolean isCopyable;
     private boolean markedForTask;
+    private boolean sharedForAllSessionFiles;
     private DefaultValueList defaultValueList;
 
     public VerifiedFieldModel() {
@@ -54,11 +55,19 @@ public abstract class VerifiedFieldModel extends PlainDocument implements DataFi
         return markedForTask;
     }
 
+    public boolean isSharedForAllSessionFiles() {
+        return sharedForAllSessionFiles;
+    }
+
+    public void setSharedForAllSessionFiles(boolean sharedForAllSessionFiles) {
+        this.sharedForAllSessionFiles = sharedForAllSessionFiles;
+    }
+
     public void setMarkedForTask(boolean markedForTask) {
         this.markedForTask = markedForTask;
     }
 
-    public abstract VerifiedFieldModel getNewInstance();
+    public abstract VerifiedFieldModel getNewInstance(boolean isCloneRequired);
 
     public void cloneValuesForNewInstance(VerifiedFieldModel instance) {
         instance.setText(getFullText());
@@ -68,6 +77,7 @@ public abstract class VerifiedFieldModel extends PlainDocument implements DataFi
         instance.suffix = suffix;
         instance.isCopyable = isCopyable;
         instance.markedForTask = markedForTask;
+        instance.sharedForAllSessionFiles = sharedForAllSessionFiles;
         instance.defaultValueList = defaultValueList;  // shallow copy is ok
     }
 

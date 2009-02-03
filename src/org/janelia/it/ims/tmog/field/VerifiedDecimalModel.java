@@ -54,9 +54,12 @@ public class VerifiedDecimalModel extends VerifiedRangeModel<BigDecimal> {
         return "a decimal value";
     }
 
-    public VerifiedDecimalModel getNewInstance() {
-        VerifiedDecimalModel instance = new VerifiedDecimalModel();
-        cloneValuesForNewInstance(instance);
+    public VerifiedDecimalModel getNewInstance(boolean isCloneRequired) {
+        VerifiedDecimalModel instance = this;
+        if (isCloneRequired || (! isSharedForAllSessionFiles())) {
+            instance = new VerifiedDecimalModel();
+            cloneValuesForNewInstance(instance);
+        }
         return instance;
     }
 

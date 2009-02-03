@@ -51,7 +51,7 @@ public class StaticDataModel implements DataField {
         this.markedForTask = markedForTask;
     }
 
-    public StaticDataModel getNewInstance() {
+    public StaticDataModel getNewInstance(boolean isCloneRequired) {
         StaticDataModel instance = new StaticDataModel();
         instance.setName(name);
         instance.setValue(value);

@@ -53,8 +53,17 @@ public class ProjectConfiguration {
         return taskName;
     }
 
+    /**
+     * @return a cloned (deep) copy of this project's field configurations.
+     */
     public List<DataField> getFieldConfigurations() {
-        return dataFields.getFields();
+        List<DataField> fields = dataFields.getFields();
+        List<DataField> fieldConfigurations =
+                new ArrayList<DataField>(fields.size());
+        for (DataField field : fields) {
+            fieldConfigurations.add(field.getNewInstance(true));
+        }
+        return fieldConfigurations;
     }
 
     public InputFileFilter getInputFileFilter() {

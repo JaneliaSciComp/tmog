@@ -53,9 +53,12 @@ public class VerifiedIntegerModel
         return "an integer value";
     }
 
-    public VerifiedIntegerModel getNewInstance() {
-        VerifiedIntegerModel instance = new VerifiedIntegerModel();
-        cloneValuesForNewInstance(instance);
+    public VerifiedIntegerModel getNewInstance(boolean isCloneRequired) {
+        VerifiedIntegerModel instance = this;
+        if (isCloneRequired || (! isSharedForAllSessionFiles())) {
+            instance = new VerifiedIntegerModel();
+            cloneValuesForNewInstance(instance);
+        }
         return instance;
     }
 

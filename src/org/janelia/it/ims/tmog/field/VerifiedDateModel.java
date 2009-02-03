@@ -50,10 +50,13 @@ public class VerifiedDateModel extends VerifiedFieldModel implements DatePattern
         return isValid;
     }
 
-    public VerifiedDateModel getNewInstance() {
-        VerifiedDateModel instance = new VerifiedDateModel();
-        cloneValuesForNewInstance(instance);
-        instance.formatter = formatter;
+    public VerifiedDateModel getNewInstance(boolean isCloneRequired) {
+        VerifiedDateModel instance = this;
+        if (isCloneRequired || (! isSharedForAllSessionFiles())) {
+            instance = new VerifiedDateModel();
+            cloneValuesForNewInstance(instance);
+            instance.formatter = formatter;
+        }
         return instance;
     }
 

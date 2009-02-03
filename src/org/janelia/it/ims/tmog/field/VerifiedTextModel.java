@@ -60,13 +60,16 @@ public class VerifiedTextModel extends VerifiedFieldModel {
         return isValid;
     }
 
-    public VerifiedTextModel getNewInstance() {
-        VerifiedTextModel instance = new VerifiedTextModel();
-        cloneValuesForNewInstance(instance);
-        instance.minimumLength = minimumLength;
-        instance.maximumLength = maximumLength;
-        instance.pattern = pattern;
-        instance.convertToUpperCase = convertToUpperCase;
+    public VerifiedTextModel getNewInstance(boolean isCloneRequired) {
+        VerifiedTextModel instance = this;
+        if (isCloneRequired || (! isSharedForAllSessionFiles())) {
+            instance = new VerifiedTextModel();
+            cloneValuesForNewInstance(instance);
+            instance.minimumLength = minimumLength;
+            instance.maximumLength = maximumLength;
+            instance.pattern = pattern;
+            instance.convertToUpperCase = convertToUpperCase;
+        }
         return instance;
     }
 

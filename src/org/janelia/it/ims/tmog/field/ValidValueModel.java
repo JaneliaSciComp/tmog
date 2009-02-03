@@ -29,6 +29,7 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
     private String suffix;
     private boolean isCopyable;
     private boolean markedForTask;
+    private boolean sharedForAllSessionFiles;
     private DefaultValueList defaultValueList;
 
     public ValidValueModel() {
@@ -37,6 +38,7 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
         this.validValues.add(ValidValue.NONE);
         this.isCopyable = true;
         this.markedForTask = true;
+        this.sharedForAllSessionFiles = false;
         this.defaultValueList = new DefaultValueList();
     }
 
@@ -67,21 +69,33 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
         this.markedForTask = markedForTask;
     }
 
+    public boolean isSharedForAllSessionFiles() {
+        return sharedForAllSessionFiles;
+    }
+
+    public void setSharedForAllSessionFiles(boolean sharedForAllSessionFiles) {
+        this.sharedForAllSessionFiles = sharedForAllSessionFiles;
+    }
+
     public void addDefaultValue(DefaultValue defaultValue) {
         defaultValueList.add(defaultValue);
     }
 
-    public ValidValueModel getNewInstance() {
-        ValidValueModel instance = new ValidValueModel();
-        instance.displayName = displayName;
-        instance.isRequired = isRequired;
-        instance.validValues = validValues; // shallow copy should be safe
-        instance.selectedValue = selectedValue;
-        instance.prefix = prefix;
-        instance.suffix = suffix;
-        instance.isCopyable = isCopyable;
-        instance.markedForTask = markedForTask;
-        instance.defaultValueList = defaultValueList;  // shallow copy is ok
+    public ValidValueModel getNewInstance(boolean isCloneRequired) {
+        ValidValueModel instance = this;
+        if (isCloneRequired || (! sharedForAllSessionFiles)) {
+            instance = new ValidValueModel();
+            instance.displayName = displayName;
+            instance.isRequired = isRequired;
+            instance.validValues = validValues; // shallow copy should be safe
+            instance.selectedValue = selectedValue;
+            instance.prefix = prefix;
+            instance.suffix = suffix;
+            instance.isCopyable = isCopyable;
+            instance.markedForTask = markedForTask;
+            instance.sharedForAllSessionFiles = sharedForAllSessionFiles;
+            instance.defaultValueList = defaultValueList;  // shallow copy is ok
+        }
         return instance;
     }
 

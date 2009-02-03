@@ -33,6 +33,7 @@ public class VerifiedFieldEditor extends AbstractCellEditor
         private JTextField textField;
         private VerifiedFieldModel verifiedFieldModel;
         boolean isNextCellSelectValid;
+        private JTable table;
 
         public VerifiedFieldEditor(Component dialogParent) {
             this.dialogParent = dialogParent;
@@ -53,6 +54,7 @@ public class VerifiedFieldEditor extends AbstractCellEditor
                 if (isSelected) {
                     textField.selectAll();
                 }
+                this.table = table;
             }
             return textField;
         }
@@ -93,6 +95,9 @@ public class VerifiedFieldEditor extends AbstractCellEditor
 
             if (isEditingStopped) {
                 fireEditingStopped();
+                if (verifiedFieldModel.isSharedForAllSessionFiles()) {
+                    table.repaint();
+                }
             }
 
             return isEditingStopped;

@@ -104,7 +104,7 @@ public class VerifiedTextModelTest extends TestCase {
         model.setPattern("pattern");
         model.setConvertToUpperCase(true);
 
-        VerifiedTextModel newInstance = model.getNewInstance();
+        VerifiedTextModel newInstance = model.getNewInstance(false);
 
         Object[][] attributes = {
                 {"DisplayName", model.getDisplayName(), newInstance.getDisplayName() },
@@ -120,6 +120,14 @@ public class VerifiedTextModelTest extends TestCase {
             assertEquals((String)attribute[0], attribute[1], attribute[2]);
         }
 
+        model.setSharedForAllSessionFiles(true);
+        newInstance = model.getNewInstance(false);
+        assertTrue("new instance for shared model is not the same",
+                   (newInstance == model));
+
+        newInstance = model.getNewInstance(true);
+        assertTrue("new instance not returned when clone is required",
+                   (newInstance != model));        
     }
 
 }

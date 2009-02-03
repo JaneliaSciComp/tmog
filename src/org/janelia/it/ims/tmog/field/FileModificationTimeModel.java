@@ -25,7 +25,7 @@ public class FileModificationTimeModel extends DatePatternModel {
     public FileModificationTimeModel() {
     }
 
-    public FileModificationTimeModel getNewInstance() {
+    public FileModificationTimeModel getNewInstance(boolean isCloneRequired) {
         FileModificationTimeModel instance = new FileModificationTimeModel();
         initNewInstance(instance);
         // do not copy sourceDate (must be derived when rename occurs)

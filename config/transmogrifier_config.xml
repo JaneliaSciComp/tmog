@@ -11,7 +11,28 @@
         <dataFields>
             <separator value="BSB_"/>
 
-            <text displayName="Line" required="true" pattern="[0-9A-Za-z\-\_]++" />
+            <text displayName="Line" pattern="[0-9A-Za-z\-\_]++" />
+            <text displayName="Line2" pattern="[0-9A-Za-z\-\_]++"
+                  sharedForAllSessionFiles="true"/>
+
+            <number displayName="Num" minimumValue="0" maximumValue="5"/>
+            <number displayName="Num2" minimumValue="0" maximumValue="5"
+                    sharedForAllSessionFiles="true"/>
+
+            <validValueList displayName="List" required="true"
+                            markedForTask="false">
+                <validValue displayName="jenetta" value="jenetta"/>
+                <validValue displayName="ngot" value="ngot"/>
+                <validValue displayName="trautmane" value="trautmane"/>
+            </validValueList>
+            <validValueList displayName="List2" required="true"
+                            markedForTask="false"
+                            sharedForAllSessionFiles="true">
+                <validValue displayName="jenetta" value="jenetta"/>
+                <validValue displayName="ngot" value="ngot"/>
+                <validValue displayName="trautmane" value="trautmane"/>
+            </validValueList>
+            
             <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
         </dataFields>

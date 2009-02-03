@@ -47,7 +47,7 @@ public class PluginDataModel implements DataField {
         this.markedForTask = markedForTask;
     }
 
-    public PluginDataModel getNewInstance() {
+    public PluginDataModel getNewInstance(boolean isCloneRequired) {
         PluginDataModel instance = new PluginDataModel();
         instance.setDisplayName(displayName);
         instance.setValue(value);

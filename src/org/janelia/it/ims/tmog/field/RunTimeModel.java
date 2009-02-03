@@ -24,7 +24,7 @@ public class RunTimeModel extends DatePatternModel {
     public RunTimeModel() {
     }
 
-    public RunTimeModel getNewInstance() {
+    public RunTimeModel getNewInstance(boolean isCloneRequired) {
         RunTimeModel instance = new RunTimeModel();
         initNewInstance(instance);
         // do not copy runTime

@@ -46,6 +46,14 @@ public class ValidValueEditor extends DefaultCellEditor {
             JComboBox comboBox = (JComboBox) component;
             comboBoxModel = (ComboBoxModel) value;
             comboBox.setModel(comboBoxModel);
+
+            if ((comboBoxModel instanceof ValidValueModel) &&
+                ((ValidValueModel) comboBoxModel).isSharedForAllSessionFiles()) {
+
+                TableRepainter tableRepainter = new TableRepainter(table);
+                comboBoxModel.removeListDataListener(tableRepainter);
+                comboBoxModel.addListDataListener(tableRepainter);
+            }
         }
 
         return component;

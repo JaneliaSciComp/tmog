@@ -40,9 +40,12 @@ public interface DataField {
     public boolean isMarkedForTask();
 
     /**
+     * @param  isCloneRequired  indicates whether a clone (deep copy)
+     *                          is required (true) or optional (false).
+     *
      * @return a new instance of this field (similar to clone - deep copy).
      */
-    public DataField getNewInstance();
+    public DataField getNewInstance(boolean isCloneRequired);
 
     /**
      * @return the core value for this field (as entered).

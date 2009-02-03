@@ -63,10 +63,13 @@ public class VerifiedWellModel extends VerifiedFieldModel {
         return isValid;
     }
 
-    public VerifiedWellModel getNewInstance() {
-        VerifiedWellModel instance = new VerifiedWellModel();
-        cloneValuesForNewInstance(instance);
-        instance.setFormFactor(formFactor);
+    public VerifiedWellModel getNewInstance(boolean isCloneRequired) {
+        VerifiedWellModel instance = this;
+        if (isCloneRequired || (! isSharedForAllSessionFiles())) {
+            instance = new VerifiedWellModel();
+            cloneValuesForNewInstance(instance);
+            instance.setFormFactor(formFactor);
+        }
         return instance;
     }
 

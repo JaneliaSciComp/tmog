@@ -153,7 +153,7 @@ public class DataTableModel extends AbstractTableModel {
         for (int fieldIndex = 0; fieldIndex < fieldCount; fieldIndex++) {
             DataField fromField = fromRow.getField(fieldIndex);
             if (fromField.isCopyable()) {
-                toRow.setField(fieldIndex, fromField.getNewInstance());
+                toRow.setField(fieldIndex, fromField.getNewInstance(false));
             }
         }
         this.fireTableDataChanged();

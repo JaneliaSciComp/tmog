@@ -19,9 +19,11 @@ public abstract class DatePatternModel implements DataField, DatePatternField {
     private String displayName;
     private String datePattern;
     private boolean markedForTask;
+    private boolean sharedForAllSessionFiles;
 
     public DatePatternModel() {
         this.markedForTask = true;
+        this.sharedForAllSessionFiles = false;
     }
 
     public String getDisplayName() {
@@ -48,7 +50,15 @@ public abstract class DatePatternModel implements DataField, DatePatternField {
         this.markedForTask = markedForTask;
     }
 
-    public abstract DatePatternModel getNewInstance();
+    public boolean isSharedForAllSessionFiles() {
+        return sharedForAllSessionFiles;
+    }
+
+    public void setSharedForAllSessionFiles(boolean sharedForAllSessionFiles) {
+        this.sharedForAllSessionFiles = sharedForAllSessionFiles;
+    }
+
+    public abstract DatePatternModel getNewInstance(boolean isCloneRequired);
 
     public abstract String getFileNameValue();
 
@@ -92,6 +102,7 @@ public abstract class DatePatternModel implements DataField, DatePatternField {
         instance.setDisplayName(displayName);
         instance.setDatePattern(datePattern);
         instance.setMarkedForTask(markedForTask);
+        instance.setSharedForAllSessionFiles(sharedForAllSessionFiles);
     }
 
 }
