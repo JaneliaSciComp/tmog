@@ -68,6 +68,8 @@
         <xs:sequence>
             <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
                         minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="staticDefault" type="staticDefaultType"
+                        minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:boolean"/>
@@ -84,6 +86,8 @@
         <xs:sequence>
             <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
                         minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="staticDefault" type="staticDefaultType"
+                        minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:boolean"/>
@@ -100,6 +104,8 @@
         <xs:sequence>
             <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
                         minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="staticDefault" type="staticDefaultType"
+                        minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:boolean"/>
@@ -194,6 +200,10 @@
         <xs:attribute name="matchType" type="matchType"/>
         <xs:attribute name="fromDatePattern" type="xs:string"/>
         <xs:attribute name="toDatePattern" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="staticDefaultType">
+        <xs:attribute name="value" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="projectType">

@@ -1,4 +1,6 @@
+========================================
 Build and Deployment Instructions:
+========================================
 
 1. Increment app.version value in build.properties.
 
@@ -28,3 +30,21 @@ Build and Deployment Instructions:
    > exit
 
 6. Test launch of app from lab share and make sure latest version is loaded.
+
+========================================
+JNLP and Configuration File Deployment:
+========================================
+
+The following files:
+
+  transmogrifier.jnlp
+  transmogrifier_config.xsd
+  transmogrifier_config_<lab>.xml
+
+are deployed for the following lab groups:
+
+  baker    /groups/baker/bakerlab/tmog
+  leet     /groups/leet/leetlab/tmog
+  rubin    /groups/rubin/data1/rubinlab/renamer
+  simpson  /groups/simpson/MicroscopeData/renamer
+

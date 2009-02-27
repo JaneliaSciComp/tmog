@@ -20,6 +20,7 @@ import org.janelia.it.ims.tmog.field.RunTimeModel;
 import org.janelia.it.ims.tmog.field.SourceFileDateDefaultValue;
 import org.janelia.it.ims.tmog.field.SourceFileDefaultValue;
 import org.janelia.it.ims.tmog.field.StaticDataModel;
+import org.janelia.it.ims.tmog.field.StaticDefaultValue;
 import org.janelia.it.ims.tmog.field.ValidValue;
 import org.janelia.it.ims.tmog.field.ValidValueModel;
 import org.janelia.it.ims.tmog.field.VerifiedDateModel;
@@ -189,6 +190,11 @@ public class TransmogrifierConfiguration {
         digester.addSetProperties("transmogrifierConfiguration/project/dataFields/number/sourceFileDefault");
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/number/sourceFileDefault",
                             "addDefaultValue");
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/number/staticDefault",
+                                 StaticDefaultValue.class);
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/number/staticDefault");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/number/staticDefault",
+                            "addDefaultValue");
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/number",
                             "add");
 
@@ -199,6 +205,11 @@ public class TransmogrifierConfiguration {
                                  SourceFileDefaultValue.class);
         digester.addSetProperties("transmogrifierConfiguration/project/dataFields/decimal/sourceFileDefault");
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/decimal/sourceFileDefault",
+                            "addDefaultValue");
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/decimal/staticDefault",
+                                 StaticDefaultValue.class);
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/decimal/staticDefault");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/decimal/staticDefault",
                             "addDefaultValue");
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/decimal",
                             "add");
@@ -213,6 +224,11 @@ public class TransmogrifierConfiguration {
                                  SourceFileDefaultValue.class);
         digester.addSetProperties("transmogrifierConfiguration/project/dataFields/text/sourceFileDefault");
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/text/sourceFileDefault",
+                            "addDefaultValue");
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/text/staticDefault",
+                                 StaticDefaultValue.class);
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/text/staticDefault");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/text/staticDefault",
                             "addDefaultValue");
 
         digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/date",
