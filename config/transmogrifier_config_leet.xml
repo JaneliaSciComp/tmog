@@ -7,8 +7,13 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="\\dm3.int.janelia.org\leetlab\confocalStacks"
-                         derivedFromEarliestModifiedFile="true"/>
+        <outputDirectory>
+            <path path="\\dm3.int.janelia.org\leetconfocal\confocalStacks\" />
+            <renameFieldValue fieldDisplayName="Plate" />
+            <renameFieldValue fieldDisplayName="Well" suffix="_"/>
+            <renameFieldValue fieldDisplayName="Vector ID" suffix="_"/>
+            <renameFieldValue fieldDisplayName="Landing Site" />
+        </outputDirectory>
 
         <plugins>
             <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
@@ -57,7 +62,6 @@
                 <validValue displayName="11: su(Hw)attP7-3rd " value="11"/>
                 <validValue displayName="12: su(Hw)attP8-X" value="12"/>
             </validValueList>
-            <!-- TODO: is this needed? <pluginData displayName="imageLocationRank" format="_%02d" />  -->
 
             <separator value="-"/>
             <validValueList displayName="Gender" required="true">
@@ -128,10 +132,6 @@
                 <staticDefault value="0"/>
             </number>
 
-            <!--
-            See http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html
-            for datePattern options.
-            -->
             <separator value="_"/>
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
