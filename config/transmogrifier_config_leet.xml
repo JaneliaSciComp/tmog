@@ -9,7 +9,7 @@
 
         <outputDirectory>
             <path path="\\dm3.int.janelia.org\leetconfocal\confocalStacks\" />
-            <renameFieldValue fieldDisplayName="Plate" />
+            <renameFieldValue fieldDisplayName="Plate" prefix="GMR_"/>
             <renameFieldValue fieldDisplayName="Well" suffix="_"/>
             <renameFieldValue fieldDisplayName="Vector ID" suffix="_"/>
             <renameFieldValue fieldDisplayName="Landing Site" />
@@ -17,6 +17,9 @@
 
         <plugins>
             <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\dm3.int.janelia.org\leetconfocal\tmog\summaries\TZL"/>
+            </sessionListener>
         </plugins>
 
         <dataFields>
