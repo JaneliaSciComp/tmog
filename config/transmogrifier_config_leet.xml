@@ -69,7 +69,7 @@
                 <validValue displayName="f: Female" value="f"/>
                 <validValue displayName="x: Not Defined" value="x"/>
             </validValueList>
-            <validValueList displayName="Disection Age" required="true">
+            <validValueList displayName="Age" required="true">
                 <validValue displayName="X00: undefined" value="X00"/>
                 <validValue displayName="P01: Prepupa" value="P01"/>
                 <validValue displayName="P02: Pupa" value="P02"/>
@@ -127,6 +127,7 @@
                 <validValue displayName="P17: 7 day pupa" value="P17"/>
                 <validValue displayName="P18: 8 day pupa" value="P18"/>
             </validValueList>
+            <separator value="_"/>
             <number displayName="Heat Shock Minute" required="true"
                     minimumValue="0" maximumValue="90" >
                 <staticDefault value="0"/>
