@@ -7,6 +7,7 @@
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
+import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 
 /**
@@ -14,12 +15,22 @@ import org.janelia.it.ims.tmog.plugin.PluginDataRow;
  *
  * @author Eric Trautman
  */
-public class CreatedBySetter implements ImagePropertySetter {
+public class CreatedBySetter extends SimpleSetter {
 
     /**
      * The type value for created by data stored in the image_property table.
      */
     public static final String TYPE = "created_by";
+
+    /**
+     * Value constructor.
+     *
+     * @param  fieldName  the display name of the data field that contains
+     *                    created by information.
+     */
+    public CreatedBySetter(String fieldName) {
+        super(TYPE, fieldName);
+    }
 
     /**
      * Adds a created by property type and value to the specified image.
@@ -29,7 +40,14 @@ public class CreatedBySetter implements ImagePropertySetter {
      */
     public void setProperty(PluginDataRow row,
                             Image image) {
-        image.addProperty(TYPE,
-                          System.getProperty("user.name"));
+        String value;
+        DataField field = row.getDataField(getFieldName());
+        // if explicitly defined use that value, otherwise use user name
+        if (field != null) {
+            value = field.getCoreValue();
+        } else {
+            value = System.getProperty("user.name");
+        }
+        image.addProperty(TYPE, value);
     }
 }

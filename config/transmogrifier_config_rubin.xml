@@ -21,6 +21,8 @@
                 <property name="family" value="family"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
                 <property name="line" value="${Plate}${Well}_${Vector ID}_${Landing Site}"/>
+                <property name="created_by" value="Imager"/>
+                <property name="renamed_by" value="Renamer"/>
             </rowListener>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm10.isln.janelia.org\rubindata\renamer\summaries\GMR"/>
@@ -132,6 +134,25 @@
                 <validValue displayName="JFRC-IVS-A1" value="JFRC-IVS-A1" default="true"/>
                 <validValue displayName="mcd8GFP" value="mcd8GFP"/>
             </validValueList>
+            <validValueList displayName="Imager" required="true"
+                            markedForTask="false">
+                <validValue displayName="Cavallaro, Amanda" value="cavallaroa"/>
+                <validValue displayName="Hall, Donald" value="halld"/>
+                <validValue displayName="Jenett, aRnim" value="jenetta"/>
+                <validValue displayName="Murphy, Christine" value="murphyc"/>
+                <validValue displayName="Ngo, Teri" value="ngot"/>
+                <validValue displayName="Zugates, Chris" value="zugatesc"/>
+            </validValueList>
+            <validValueList displayName="Renamer" required="true"
+                            markedForTask="false"
+                            sharedForAllSessionFiles="true">
+                <validValue displayName="Cavallaro, Amanda" value="cavallaroa"/>
+                <validValue displayName="Hall, Donald" value="halld"/>
+                <validValue displayName="Jenett, aRnim" value="jenetta"/>
+                <validValue displayName="Murphy, Christine" value="murphyc"/>
+                <validValue displayName="Ngo, Teri" value="ngot"/>
+                <validValue displayName="Zugates, Chris" value="zugatesc"/>
+            </validValueList>
             <static name="family" value="rubin-chacrm" markedForTask="false"/>
         </dataFields>
 
@@ -178,7 +199,7 @@
             </validValueList>
             <text displayName="L-Number" required="false" prefix="-L"
                   pattern="[0-9]++" copyable="false">
-                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>                
+                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>
                 <sourceFileDefault pattern=".*_L([0-9]++)\.lsm"/>
             </text>
             <text displayName="Comment" required="false" prefix="-"

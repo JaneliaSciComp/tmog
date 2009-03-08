@@ -179,7 +179,7 @@ public class ImageDataPlugin implements RowListener {
         } else if (FamilySetter.TYPE.equals(propertyType)) {
             propertySetter = new FamilySetter(fieldName);
         } else if (CreatedBySetter.TYPE.equals(propertyType)) {
-            propertySetter = new CreatedBySetter();
+            propertySetter = new CreatedBySetter(fieldName);
         } else if (DisplaySetter.TYPE.equals(propertyType)) {
             propertySetter = new DisplaySetter(fieldName);
         } else if (fieldName.contains(CompositeSetter.TOKEN_ID)) {
