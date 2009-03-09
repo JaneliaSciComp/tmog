@@ -207,13 +207,15 @@ public class TransformantDao {
      * in the repository.
      *
      * @param  transformant  transformant to be updated.
+     * @param  user          person responsible for changing the status.
      *
      * @throws SystemException
      *   if any errors occur while persiting the data.
      * @throws IllegalArgumentException
      *   if a null transformant or image location is specified.
      */
-    public void setTransformantStatusAndLocation(Transformant transformant)
+    public void setTransformantStatusAndLocation(Transformant transformant,
+                                                 User user)
             throws SystemException, IllegalArgumentException {
 
         if (transformant == null) {
@@ -236,12 +238,13 @@ public class TransformantDao {
             statement.setInt(1, featureID);
             statement.setString(2, imageLocation.getRelativePath());
             statement.setInt(3, imageLocation.getRank());
-            statement.setString(4, getUserName());
+            statement.setString(4, user.getName());
 
             statement.executeUpdate();
 
             if (LOG.isInfoEnabled()) {
-                LOG.info("successfully set status for " + transformant);
+                LOG.info("successfully set status for " + transformant +
+                         ", " + user);
             }
             
         } catch (DbConfigException e) {
@@ -325,13 +328,15 @@ public class TransformantDao {
      * if necessary.
      *
      * @param  imageLocation  image location to be removed.
+     * @param  user           person responsible for removing the location.
      *
      * @throws SystemException
      *   if any errors occur while removing the data.
      * @throws IllegalArgumentException
      *   if a image location is specified.
      */
-    public void deleteImageLocationAndRollbackStatus(ImageLocation imageLocation)
+    public void deleteImageLocationAndRollbackStatus(ImageLocation imageLocation,
+                                                     User user)
             throws SystemException, IllegalArgumentException {
 
         if (imageLocation == null) {
@@ -345,12 +350,12 @@ public class TransformantDao {
             connection = dbManager.getConnection();
             statement = connection.prepareCall(SQL_CALL_REMOVE_IMAGE_LOCATION);
             statement.setString(1, imageLocation.getRelativePath());
-            statement.setString(2, getUserName());
+            statement.setString(2, user.getName());
 
             statement.executeUpdate();
 
             if (LOG.isInfoEnabled()) {
-                LOG.info("successfully removed " + imageLocation);
+                LOG.info("successfully removed " + imageLocation + ", " + user);
             }
 
         } catch (DbConfigException e) {
@@ -405,7 +410,4 @@ public class TransformantDao {
         return props;
     }
 
-    private String getUserName() {
-        return System.getProperty("user.name");
-    }
 }

@@ -113,8 +113,9 @@ public class CleanupChacrmManager implements RowListener {
                                      labImageSharePattern);
             if (fromFileImageLocation != null) {
                 try {
+                    User user = User.getUser(row);
                     dao.deleteImageLocationAndRollbackStatus(
-                            fromFileImageLocation);
+                            fromFileImageLocation, user);
                 } catch (Exception e) {
                     // log this error, but allow transaction to complete
                     LOG.error("failed to remove " + fromFileImageLocation +

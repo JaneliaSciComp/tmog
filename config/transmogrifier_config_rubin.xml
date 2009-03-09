@@ -7,8 +7,8 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="\\dm10.isln.janelia.org\rubindata\confocalStacks"
-                         derivedFromEarliestModifiedFile="true"/>
+        <!--<outputDirectory basePath="\\dm10.isln.janelia.org\rubindata\confocalStacks"-->
+                         <!--derivedFromEarliestModifiedFile="true"/>-->
 
         <plugins>
             <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
@@ -24,9 +24,9 @@
                 <property name="created_by" value="Imager"/>
                 <property name="renamed_by" value="Renamer"/>
             </rowListener>
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\renamer\summaries\GMR"/>
-            </sessionListener>
+            <!--<sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">-->
+                <!--<property name="directory" value="\\dm10.isln.janelia.org\rubindata\renamer\summaries\GMR"/>-->
+            <!--</sessionListener>-->
         </plugins>
 
         <dataFields>
@@ -136,22 +136,22 @@
             </validValueList>
             <validValueList displayName="Imager" required="true"
                             markedForTask="false">
-                <validValue displayName="Cavallaro, Amanda" value="cavallaroa"/>
-                <validValue displayName="Hall, Donald" value="halld"/>
-                <validValue displayName="Jenett, aRnim" value="jenetta"/>
-                <validValue displayName="Murphy, Christine" value="murphyc"/>
-                <validValue displayName="Ngo, Teri" value="ngot"/>
-                <validValue displayName="Zugates, Chris" value="zugatesc"/>
+                <validValue value="Amanda Cavallaro"/>
+                <validValue value="aRnim Jenett"/>
+                <validValue value="Chris Zugates"/>
+                <validValue value="Christine Murphy"/>
+                <validValue value="Donald Hall"/>
+                <validValue value="Teri Ngo"/>
             </validValueList>
             <validValueList displayName="Renamer" required="true"
                             markedForTask="false"
                             sharedForAllSessionFiles="true">
-                <validValue displayName="Cavallaro, Amanda" value="cavallaroa"/>
-                <validValue displayName="Hall, Donald" value="halld"/>
-                <validValue displayName="Jenett, aRnim" value="jenetta"/>
-                <validValue displayName="Murphy, Christine" value="murphyc"/>
-                <validValue displayName="Ngo, Teri" value="ngot"/>
-                <validValue displayName="Zugates, Chris" value="zugatesc"/>
+                <validValue value="Amanda Cavallaro"/>
+                <validValue value="aRnim Jenett"/>
+                <validValue value="Chris Zugates"/>
+                <validValue value="Christine Murphy"/>
+                <validValue value="Donald Hall"/>
+                <validValue value="Teri Ngo"/>
             </validValueList>
             <static name="family" value="rubin-chacrm" markedForTask="false"/>
         </dataFields>

@@ -39,6 +39,7 @@ public class TransformantDaoTest extends TestCase {
     private static final Integer BAD_FEATURE_ID = -1;
     private static final DbManager EMPTY_DB_MANAGER =
             new DbManager("empty", new Properties());
+    private static final User USER = User.getUser(null);
 
     private DbManager dbManager;
     private TransformantDao dao;
@@ -143,7 +144,7 @@ public class TransformantDaoTest extends TestCase {
                                   existingImageLocation.getRank());
         newTransformant.setImageLocation(newImageLocation);
 
-        dao.setTransformantStatusAndLocation(newTransformant);
+        dao.setTransformantStatusAndLocation(newTransformant, USER);
 
         Transformant retrievedTransformant =
                 dao.getTransformant(transformantName, false);
@@ -157,7 +158,7 @@ public class TransformantDaoTest extends TestCase {
                      retrievedTransformant.getStatus());
 
         try {
-            dao.setTransformantStatusAndLocation(null);
+            dao.setTransformantStatusAndLocation(null, USER);
             fail("set with null transformant should have caused exception");
         } catch (IllegalArgumentException e) {
             LOG.info("expected exception thrown", e); // test passed
@@ -167,7 +168,7 @@ public class TransformantDaoTest extends TestCase {
             Transformant badTransformant =
                     new Transformant(BAD_TRANSFORMANT_ID, null, null);
             badTransformant.setImageLocation(null);
-            dao.setTransformantStatusAndLocation(badTransformant);
+            dao.setTransformantStatusAndLocation(badTransformant, USER);
             fail("set with null image location should have caused exception");
         } catch (IllegalArgumentException e) {
             LOG.info("expected exception thrown", e); // test passed
@@ -179,7 +180,7 @@ public class TransformantDaoTest extends TestCase {
                                      Status.imaged,
                                      BAD_FEATURE_ID);
             badTransformant.setImageLocation(new ImageLocation("", 0));
-            dao.setTransformantStatusAndLocation(badTransformant);
+            dao.setTransformantStatusAndLocation(badTransformant, USER);
             fail("set with bad feature ID should have caused exception");
         } catch (SystemException e) {
             LOG.info("expected exception thrown", e); // test passed
@@ -187,7 +188,7 @@ public class TransformantDaoTest extends TestCase {
 
         dao = new TransformantDao(EMPTY_DB_MANAGER);
         try {
-            dao.setTransformantStatusAndLocation(newTransformant);
+            dao.setTransformantStatusAndLocation(newTransformant, USER);
             fail("inavalid dbManager should have caused exception");
         } catch (SystemException e) {
             LOG.info("expected exception thrown", e); // test passed
@@ -265,7 +266,7 @@ public class TransformantDaoTest extends TestCase {
                                       location1.getRank());
         transformant.setImageLocation(location1);
 
-        dao.setTransformantStatusAndLocation(transformant);
+        dao.setTransformantStatusAndLocation(transformant, USER);
 
         validateFragmentElements("after first location add",
                                  Transformant.Status.imaged,
@@ -281,7 +282,7 @@ public class TransformantDaoTest extends TestCase {
                                       location2.getRank());
         transformant.setImageLocation(location2);
 
-        dao.setTransformantStatusAndLocation(transformant);
+        dao.setTransformantStatusAndLocation(transformant, USER);
 
         validateFragmentElements("after second location add",
                                  Transformant.Status.imaged,
@@ -290,7 +291,7 @@ public class TransformantDaoTest extends TestCase {
                                  transformantName,
                                  Arrays.asList(location1Path, location2Path));
 
-        dao.deleteImageLocationAndRollbackStatus(location1);
+        dao.deleteImageLocationAndRollbackStatus(location1, USER);
 
         validateFragmentElements("after delete",
                                  Transformant.Status.imaged,
@@ -322,7 +323,7 @@ public class TransformantDaoTest extends TestCase {
                                       location1.getRank());
         transformant.setImageLocation(location1);
 
-        dao.setTransformantStatusAndLocation(transformant);
+        dao.setTransformantStatusAndLocation(transformant, USER);
 
         validateFragmentElements("after first location add",
                                  Transformant.Status.imaged,
@@ -331,7 +332,7 @@ public class TransformantDaoTest extends TestCase {
                                  transformantName,
                                  Arrays.asList(location1Path));
 
-        dao.deleteImageLocationAndRollbackStatus(location1);
+        dao.deleteImageLocationAndRollbackStatus(location1, USER);
 
         validateFragmentElements("after delete",
                                  Transformant.Status.crossed,
@@ -365,7 +366,7 @@ public class TransformantDaoTest extends TestCase {
                                       location1.getRank());
         transformant.setImageLocation(location1);
 
-        dao.setTransformantStatusAndLocation(transformant);
+        dao.setTransformantStatusAndLocation(transformant, USER);
 
         validateFragmentElements("after first location add",
                                  Transformant.Status.imaged,
@@ -377,7 +378,7 @@ public class TransformantDaoTest extends TestCase {
         // add second transformant to prevent fragment status rollback
         createTransformant(Transformant.Status.imaged);
 
-        dao.deleteImageLocationAndRollbackStatus(location1);
+        dao.deleteImageLocationAndRollbackStatus(location1, USER);
 
         validateFragmentElements("after delete",
                                  Transformant.Status.imaged,
@@ -410,7 +411,7 @@ public class TransformantDaoTest extends TestCase {
                                       location1.getRank());
         transformant.setImageLocation(location1);
 
-        dao.setTransformantStatusAndLocation(transformant);
+        dao.setTransformantStatusAndLocation(transformant, USER);
 
         // set transformant status to gsi_failed after adding location since
         // adding location automatically updates transformant status to imaged
@@ -425,7 +426,7 @@ public class TransformantDaoTest extends TestCase {
                                  Arrays.asList(location1Path));
 
         try {
-            dao.deleteImageLocationAndRollbackStatus(location1);
+            dao.deleteImageLocationAndRollbackStatus(location1, USER);
             fail("transformant without imaged status should cause exception");
         } catch (SystemException e) {
             LOG.info("expected exception was thrown", e);  // test passed
@@ -464,7 +465,7 @@ public class TransformantDaoTest extends TestCase {
                                       location1.getRank());
         transformant.setImageLocation(location1);
 
-        dao.setTransformantStatusAndLocation(transformant);
+        dao.setTransformantStatusAndLocation(transformant, USER);
 
         validateFragmentElements("after first location add",
                                  Transformant.Status.imaged,
@@ -477,7 +478,7 @@ public class TransformantDaoTest extends TestCase {
                 new ImageLocation(location1.getRelativePath() + "bad",
                                   location1.getRank());
         try {
-            dao.deleteImageLocationAndRollbackStatus(badLocation);
+            dao.deleteImageLocationAndRollbackStatus(badLocation, USER);
             fail("bad image location should cause exception");
         } catch (SystemException e) {
             LOG.info("expected exception was thrown", e);  // test passed
@@ -514,7 +515,7 @@ public class TransformantDaoTest extends TestCase {
                                       location1.getRank());
         transformant.setImageLocation(location1);
 
-        dao.setTransformantStatusAndLocation(transformant);
+        dao.setTransformantStatusAndLocation(transformant, USER);
 
         validateFragmentElements("after first location add",
                                  Transformant.Status.imaged,
@@ -529,7 +530,7 @@ public class TransformantDaoTest extends TestCase {
                                       location2.getRank());
         transformant.setImageLocation(location2);
 
-        dao.setTransformantStatusAndLocation(transformant);
+        dao.setTransformantStatusAndLocation(transformant, USER);
 
         validateFragmentElements("after second location add",
                                  Transformant.Status.imaged,
@@ -539,7 +540,7 @@ public class TransformantDaoTest extends TestCase {
                                  Arrays.asList(location1Path, location1Path));
 
         try {
-            dao.deleteImageLocationAndRollbackStatus(location1);
+            dao.deleteImageLocationAndRollbackStatus(location1, USER);
             fail("duplicate image location should cause exception");
         } catch (SystemException e) {
             LOG.info("expected exception was thrown", e);  // test passed

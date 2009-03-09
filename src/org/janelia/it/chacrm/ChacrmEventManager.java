@@ -267,7 +267,9 @@ public class ChacrmEventManager implements RowValidator, RowListener {
                     row.getPluginDataValue(IMAGE_LOCATION_RANK);
             ImageLocation imageLocation = new ImageLocation(relativePath, rank);
             transformant.setImageLocation(imageLocation);
-            dao.setTransformantStatusAndLocation(transformant);
+
+            User user = User.getUser(row);
+            dao.setTransformantStatusAndLocation(transformant, user);
 
             File fromFile = row.getFromFile();
             String fromFileName = fromFile.getAbsolutePath();
@@ -276,7 +278,9 @@ public class ChacrmEventManager implements RowValidator, RowListener {
                                      labImageSharePattern);
             if (fromFileImageLocation != null) {
                 try {
-                    dao.deleteImageLocationAndRollbackStatus(fromFileImageLocation);
+                    dao.deleteImageLocationAndRollbackStatus(
+                            fromFileImageLocation,
+                            user);
                 } catch (Exception e) {
                     // log this error, but allow transaction to complete
                     LOG.error("failed to remove " + fromFileImageLocation +

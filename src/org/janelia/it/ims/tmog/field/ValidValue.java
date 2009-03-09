@@ -48,6 +48,9 @@ public class ValidValue {
 
     public void setValue(String value) {
         this.value = value;
+        if (this.displayName == null) {
+            this.displayName = value;
+        }
     }
 
     public boolean isDefault() {
