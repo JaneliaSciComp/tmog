@@ -7,8 +7,8 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <!--<outputDirectory basePath="\\dm10.isln.janelia.org\rubindata\confocalStacks"-->
-                         <!--derivedFromEarliestModifiedFile="true"/>-->
+        <outputDirectory basePath="\\dm10.isln.janelia.org\rubindata\confocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
             <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
@@ -24,9 +24,9 @@
                 <property name="created_by" value="Imager"/>
                 <property name="renamed_by" value="Renamer"/>
             </rowListener>
-            <!--<sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">-->
-                <!--<property name="directory" value="\\dm10.isln.janelia.org\rubindata\renamer\summaries\GMR"/>-->
-            <!--</sessionListener>-->
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\renamer\summaries\GMR"/>
+            </sessionListener>
         </plugins>
 
         <dataFields>
