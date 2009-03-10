@@ -137,7 +137,7 @@
             <validValueList displayName="Imager" required="true"
                             markedForTask="false">
                 <validValue value="Amanda Cavallaro"/>
-                <validValue value="aRnim Jenett"/>
+                <validValue value="Arnim Jenett"/>
                 <validValue value="Chris Zugates"/>
                 <validValue value="Christine Murphy"/>
                 <validValue value="Donald Hall"/>
@@ -147,7 +147,7 @@
                             markedForTask="false"
                             sharedForAllSessionFiles="true">
                 <validValue value="Amanda Cavallaro"/>
-                <validValue value="aRnim Jenett"/>
+                <validValue value="Arnim Jenett"/>
                 <validValue value="Chris Zugates"/>
                 <validValue value="Christine Murphy"/>
                 <validValue value="Donald Hall"/>
