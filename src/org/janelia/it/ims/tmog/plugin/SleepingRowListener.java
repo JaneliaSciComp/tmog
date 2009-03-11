@@ -7,15 +7,16 @@ import org.janelia.it.ims.tmog.config.PluginConfiguration;
  * This class sleeps for a configured number of seconds (or a default of
  * 10 seconds) each time a {@link EventType#END_FAIL} or
  * {@link EventType#END_SUCCESS} copy event is received.
- * It is intended to be used to simulate long running copies during testing.
+ * It was originally intended to be used to simulate long running copies
+ * during testing, but could be used for other purposes.
  * To use the class, add the following to the transmogrifier_config.xml file:
  *
  * <br/>
  * <xmp>
  *
- *   <copyListener className="org.janelia.it.ims.tmog.plugin.SleepingCopyListener">
+ *   <rowListener className="org.janelia.it.ims.tmog.plugin.SleepingRowListener">
  *     <property name="seconds" value="30"/>
- *   </copyListener>
+ *   </rowListener>
  *
  * </xmp>
  *
@@ -24,7 +25,8 @@ import org.janelia.it.ims.tmog.config.PluginConfiguration;
 public class SleepingRowListener implements RowListener {
 
     /** The logger for this class. */
-    private static final Logger LOG = Logger.getLogger(SleepingRowListener.class);
+    private static final Logger LOG =
+            Logger.getLogger(SleepingRowListener.class);
 
     private int seconds;
 
@@ -32,7 +34,8 @@ public class SleepingRowListener implements RowListener {
         this.seconds = 10;
     }
 
-    public void init(PluginConfiguration config) throws ExternalSystemException {
+    public void init(PluginConfiguration config)
+            throws ExternalSystemException {
         String secondsStr = config.getProperty("seconds");
         if (secondsStr != null) {
             try {
