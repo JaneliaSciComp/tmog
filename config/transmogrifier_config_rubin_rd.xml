@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <project name="Rubin Lab: Research and Development (RD_*: MMddyy)" default="true">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <outputDirectory basePath="\\dm6.int.janelia.org\rubinimg\RDconfocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+
+        <plugins>
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\dm6.int.janelia.org\rubinimg\tmog\summaries\RD"/>
+            </sessionListener>
+        </plugins>
+
+        <dataFields>
+            <separator value="RD_"/>
+            <text displayName="Promoter" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Transcript" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Responder" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Creator Initials" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <date displayName="Capture Date" required="true"
+                  datePattern="yyMMdd" prefix="_" copyable="false">
+                <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d)_L[0-9]++_Sum\.lsm"
+                                       fromDatePattern="MMddyy"
+                                       toDatePattern="yyMMdd"/>
+                <sourceFileDateDefault pattern=".*_(\d\d\d\d\d\d)_R.*\.lsm"
+                                       fromDatePattern="MMddyy"
+                                       toDatePattern="yyMMdd"/>
+            </date>
+            <validValueList displayName="Area" required="false" prefix="-">
+                <validValue displayName="br: Brain" value="br"/>
+                <validValue displayName="vnc: Ventral Nerve Cord" value="vnc"/>
+            </validValueList>
+            <text displayName="L-Number" required="false" prefix="-L"
+                  pattern="[0-9]++" copyable="false">
+                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>
+                <sourceFileDefault pattern=".*_L([0-9]++)\.lsm"/>
+            </text>
+            <text displayName="Comment" required="false" prefix="-"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+        </dataFields>
+
+    </project>
+
+    <project name="Rubin Lab: Research and Development (RD_*: yyMMdd)">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <outputDirectory basePath="\\dm6.int.janelia.org\rubinimg\RDconfocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+
+        <plugins>
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\dm6.int.janelia.org\rubinimg\tmog\summaries\RD"/>
+            </sessionListener>
+        </plugins>
+
+        <dataFields>
+            <separator value="RD_"/>
+            <text displayName="Promoter" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Transcript" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Responder" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Creator Initials" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <date displayName="Capture Date" required="true"
+                  datePattern="yyMMdd" prefix="_" copyable="false">
+                <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d)_L[0-9]++_Sum\.lsm"
+                                       fromDatePattern="yyMMdd"
+                                       toDatePattern="yyMMdd"/>
+            </date>
+            <validValueList displayName="Area" required="false" prefix="-">
+                <validValue displayName="br: Brain" value="br"/>
+                <validValue displayName="vnc: Ventral Nerve Cord" value="vnc"/>
+            </validValueList>
+            <text displayName="L-Number" required="false" prefix="-L"
+                  pattern="[0-9]++" copyable="false">
+                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>
+            </text>
+            <text displayName="Comment" required="false" prefix="-"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+        </dataFields>
+
+    </project>
+
+    <project name="Rubin Lab: Research and Development (RD_*: manual date)">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <outputDirectory basePath="\\dm6.int.janelia.org\rubinimg\RDconfocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+
+        <plugins>
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\dm6.int.janelia.org\rubinimg\tmog\summaries\RD"/>
+            </sessionListener>
+        </plugins>
+
+        <dataFields>
+            <separator value="RD_"/>
+            <text displayName="Promoter" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Transcript" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Responder" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <text displayName="Creator Initials" required="true"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <date displayName="Capture Date" required="true"
+                  datePattern="yyMMdd" prefix="_" />
+            <validValueList displayName="Area" required="false" prefix="-">
+                <validValue displayName="br: Brain" value="br"/>
+                <validValue displayName="vnc: Ventral Nerve Cord" value="vnc"/>
+            </validValueList>
+            <text displayName="L-Number" required="false" prefix="-L"
+                  pattern="[0-9]++" copyable="false">
+                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>
+            </text>
+            <text displayName="Comment" required="false" prefix="-"
+                  pattern="[0-9A-Za-z\\-]++"/>
+            <separator value="_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>

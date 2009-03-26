@@ -20,12 +20,12 @@
                 <property name="capture_date" value="Capture Date"/>
                 <property name="family" value="family"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
-                <property name="line" value="${Plate}${Well}_${Vector ID}_${Landing Site}"/>
+                <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
                 <property name="created_by" value="Imager"/>
                 <property name="renamed_by" value="Renamer"/>
             </rowListener>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\renamer\summaries\GMR"/>
+                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\GMR"/>
             </sessionListener>
         </plugins>
 
@@ -154,153 +154,6 @@
                 <validValue value="Teri Ngo"/>
             </validValueList>
             <static name="family" value="rubin-chacrm" markedForTask="false"/>
-        </dataFields>
-
-    </project>
-
-    <project name="Rubin Lab: Research and Development (RD_*: MMddyy)">
-
-        <inputFileSorter sortAlgorithm="LNumber" />
-
-        <outputDirectory basePath="\\dm6.int.janelia.org\rubinimg\RDconfocalStacks"
-                         derivedFromEarliestModifiedFile="true"/>
-
-        <plugins>
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\renamer\summaries\RD"/>
-            </sessionListener>
-        </plugins>
-
-        <dataFields>
-            <separator value="RD_"/>
-            <text displayName="Promoter" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <text displayName="Transcript" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <text displayName="Responder" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <text displayName="Creator Initials" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <date displayName="Capture Date" required="true"
-                  datePattern="yyMMdd" prefix="_" copyable="false">
-                <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d)_L[0-9]++_Sum\.lsm"
-                                       fromDatePattern="MMddyy"
-                                       toDatePattern="yyMMdd"/>
-                <sourceFileDateDefault pattern=".*_(\d\d\d\d\d\d)_R.*\.lsm"
-                                       fromDatePattern="MMddyy"
-                                       toDatePattern="yyMMdd"/>
-            </date>
-            <validValueList displayName="Area" required="false" prefix="-">
-                <validValue displayName="br: Brain" value="br"/>
-                <validValue displayName="vnc: Ventral Nerve Cord" value="vnc"/>
-            </validValueList>
-            <text displayName="L-Number" required="false" prefix="-L"
-                  pattern="[0-9]++" copyable="false">
-                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>
-                <sourceFileDefault pattern=".*_L([0-9]++)\.lsm"/>
-            </text>
-            <text displayName="Comment" required="false" prefix="-"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <runTime datePattern="yyyyMMddHHmmssSSS"/>
-            <separator value=".lsm"/>
-        </dataFields>
-
-    </project>
-
-    <project name="Rubin Lab: Research and Development (RD_*: yyMMdd)">
-
-        <inputFileSorter sortAlgorithm="LNumber" />
-
-        <outputDirectory basePath="\\dm6.int.janelia.org\rubinimg\RDconfocalStacks"
-                         derivedFromEarliestModifiedFile="true"/>
-
-        <plugins>
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\renamer\summaries\RD"/>
-            </sessionListener>
-        </plugins>
-
-        <dataFields>
-            <separator value="RD_"/>
-            <text displayName="Promoter" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <text displayName="Transcript" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <text displayName="Responder" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <text displayName="Creator Initials" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <date displayName="Capture Date" required="true"
-                  datePattern="yyMMdd" prefix="_" copyable="false">
-                <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d)_L[0-9]++_Sum\.lsm"
-                                       fromDatePattern="yyMMdd"
-                                       toDatePattern="yyMMdd"/>
-            </date>
-            <validValueList displayName="Area" required="false" prefix="-">
-                <validValue displayName="br: Brain" value="br"/>
-                <validValue displayName="vnc: Ventral Nerve Cord" value="vnc"/>
-            </validValueList>
-            <text displayName="L-Number" required="false" prefix="-L"
-                  pattern="[0-9]++" copyable="false">
-                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>
-            </text>
-            <text displayName="Comment" required="false" prefix="-"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <runTime datePattern="yyyyMMddHHmmssSSS"/>
-            <separator value=".lsm"/>
-        </dataFields>
-
-    </project>
-
-    <project name="Rubin Lab: Research and Development (RD_*: manual date)">
-
-        <inputFileSorter sortAlgorithm="LNumber" />
-
-        <outputDirectory basePath="\\dm6.int.janelia.org\rubinimg\RDconfocalStacks"
-                         derivedFromEarliestModifiedFile="true"/>
-
-        <plugins>
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\renamer\summaries\RD"/>
-            </sessionListener>
-        </plugins>
-
-        <dataFields>
-            <separator value="RD_"/>
-            <text displayName="Promoter" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <text displayName="Transcript" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <text displayName="Responder" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <text displayName="Creator Initials" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <date displayName="Capture Date" required="true"
-                  datePattern="yyMMdd" prefix="_" />
-            <validValueList displayName="Area" required="false" prefix="-">
-                <validValue displayName="br: Brain" value="br"/>
-                <validValue displayName="vnc: Ventral Nerve Cord" value="vnc"/>
-            </validValueList>
-            <text displayName="L-Number" required="false" prefix="-L"
-                  pattern="[0-9]++" copyable="false">
-                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>
-            </text>
-            <text displayName="Comment" required="false" prefix="-"
-                  pattern="[0-9A-Za-z\\-]++"/>
-            <separator value="_"/>
-            <runTime datePattern="yyyyMMddHHmmssSSS"/>
-            <separator value=".lsm"/>
         </dataFields>
 
     </project>

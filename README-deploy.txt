@@ -38,13 +38,14 @@ JNLP and Configuration File Deployment:
 The following files:
 
   transmogrifier.jnlp
-  transmogrifier_config.xsd
+  transmogrifier_config.xsd        # TODO: deploy xsd on central server instead
   transmogrifier_config_<lab>.xml
 
 are deployed for the following lab groups:
 
-  baker    /groups/baker/bakerlab/tmog
-  leet     /groups/leet/leetlab/tmog
-  rubin    /groups/rubin/data1/rubinlab/renamer
-  simpson  /groups/simpson/MicroscopeData/renamer
+  baker            /groups/baker/bakerlab/tmog
+  leet             /groups/leet/leetconfocal/tmog
+  rubin (ChaCRM)   /groups/rubin/data1/rubinlab/tmog
+  rubin (R&D)      /groups/rubin/rubinimg/tmog
+  simpson          /groups/simpson/MicroscopeData/renamer
 
