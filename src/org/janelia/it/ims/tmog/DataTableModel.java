@@ -159,6 +159,27 @@ public class DataTableModel extends AbstractTableModel {
         this.fireTableDataChanged();
     }
 
+    public void fillDown(int fromRowIndex,
+                         int fromColumnIndex) {
+
+        if (fromColumnIndex > TARGET_COLUMN) {
+            DataTableRow fromRow = rows.get(fromRowIndex);
+            final int fieldIndex = columnToFieldIndexMap.get(fromColumnIndex);
+            final DataField fromField = fromRow.getField(fieldIndex);
+            if (fromField.isCopyable()) {
+                final int numberOfRows = rows.size();
+
+                DataTableRow toRow;
+                for (int rowIndex = fromRowIndex + 1; rowIndex < numberOfRows;
+                     rowIndex++) {
+                    toRow = rows.get(rowIndex);
+                    toRow.setField(fieldIndex, fromField.getNewInstance(false));
+                }
+            }
+            this.fireTableDataChanged();
+        }
+    }
+
     public String getLongestValue(int columnIndex) {
         final int numRows = this.getRowCount();
         int longestLength = 0;

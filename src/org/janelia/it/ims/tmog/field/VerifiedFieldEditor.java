@@ -7,6 +7,7 @@
 
 package org.janelia.it.ims.tmog.field;
 
+import org.janelia.it.ims.tmog.view.component.DataTable;
 import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
 
 import javax.swing.*;
@@ -17,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.EventObject;
 
@@ -29,17 +31,15 @@ import java.util.EventObject;
 public class VerifiedFieldEditor extends AbstractCellEditor
         implements TableCellEditor, ActionListener, ItemListener {
 
-        private Component dialogParent;
+        private DataTable dataTable;
         private JTextField textField;
         private VerifiedFieldModel verifiedFieldModel;
-        boolean isNextCellSelectValid;
-        private JTable table;
 
-        public VerifiedFieldEditor(Component dialogParent) {
-            this.dialogParent = dialogParent;
+        public VerifiedFieldEditor(DataTable table) {
+            this.dataTable = table;
             this.textField = new JTextField();
             this.textField.addActionListener(this);
-            this.isNextCellSelectValid = true;
+            this.textField.addKeyListener(table.getFillDownListener());
         }
 
         public Component getTableCellEditorComponent(JTable table,
@@ -54,7 +54,6 @@ public class VerifiedFieldEditor extends AbstractCellEditor
                 if (isSelected) {
                     textField.selectAll();
                 }
-                this.table = table;
             }
             return textField;
         }
@@ -68,6 +67,13 @@ public class VerifiedFieldEditor extends AbstractCellEditor
         }
 
         public boolean stopCellEditing() {
+
+            // We need to record what event caused editing to stop
+            // immediately before any other events (e.g. mouse click
+            // in the confirmation dialog) get placed on the queue.
+            final boolean isStopCausedByKeyEdit =
+                    (EventQueue.getCurrentEvent() instanceof KeyEvent);
+
             boolean isEditingStopped = true;
 
             if (! verifiedFieldModel.verify()) {
@@ -76,7 +82,7 @@ public class VerifiedFieldEditor extends AbstractCellEditor
                         "  Would you like to correct the field now?";
 
                 int selection = NarrowOptionPane.showConfirmDialog(
-                        dialogParent,
+                        dataTable,
                         dialogMsg,
                         "Invalid Entry", // title
                         JOptionPane.YES_NO_OPTION,
@@ -87,16 +93,27 @@ public class VerifiedFieldEditor extends AbstractCellEditor
                     textField.selectAll();
                     textField.requestFocusInWindow();
                     isEditingStopped = false;
-                    isNextCellSelectValid = false;
                 } else {
-                    // TODO: determine how to restore key events
+                    // If a key edit (e.g. tab) caused editing to stop
+                    // and the user has decided not to fix the current
+                    // invalid cell, we need to "schedule" a request focus
+                    // event for the newly selected cell.
+                    // Otherwise (e.g. if a mouse click caused editing
+                    // to stop), nothing needs to be done.
+                    if (isStopCausedByKeyEdit) {
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                dataTable.editAndRequestFocusForSelectedCell();
+                            }
+                        });
+                    }
                 }
             }
 
             if (isEditingStopped) {
                 fireEditingStopped();
                 if (verifiedFieldModel.isSharedForAllSessionFiles()) {
-                    table.repaint();
+                    dataTable.repaint();
                 }
             }
 
@@ -119,24 +136,11 @@ public class VerifiedFieldEditor extends AbstractCellEditor
         }
 
         /**
-         * Returns true to indicate that the editing cell may
-         * be selected.
-         *
-         * @param   anEvent         the event
-         * @return  true
-         * @see #isCellEditable
-         */
-         public boolean shouldSelectCell(EventObject anEvent) {
-            boolean isCurrentSelectValid = isNextCellSelectValid;
-            isNextCellSelectValid = true;
-            return isCurrentSelectValid;
-         }
-
-        /**
          * @param  anEvent  the event
          *
          * @return true to indicate that editing has begun.
          */
+        @SuppressWarnings({"UnusedDeclaration"})
         public boolean startCellEditing(EventObject anEvent) {
             return true;
         }

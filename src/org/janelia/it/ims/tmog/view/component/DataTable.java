@@ -24,10 +24,10 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 
 /**
@@ -37,6 +37,11 @@ import java.io.File;
  * @author Eric Trautman
  */
 public class DataTable extends JTable {
+
+    /** {@link javax.swing.plaf.basic.BasicTableUI.Actions} */
+    private static final String NEXT_COLUMN_CELL = "selectNextColumnCell";
+    private static final String PREVIOUS_COLUMN_CELL =
+            "selectPreviousColumnCell";
 
     /**
      * Constructs a default table that is initialized with a default
@@ -55,29 +60,92 @@ public class DataTable extends JTable {
 
         setDefaultEditor(JButton.class, new ButtonEditor());
         setDefaultEditor(ValidValueModel.class,
-                         new ValidValueEditor());
+                         new ValidValueEditor(this));
         setDefaultEditor(VerifiedFieldModel.class,
                          new VerifiedFieldEditor(this));
 
         getTableHeader().setReorderingAllowed(false);
 
-        addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent e) {
-                int code = e.getKeyCode();
-                if ((code == KeyEvent.VK_TAB) || code == KeyEvent.VK_RIGHT ||
-                    code == KeyEvent.VK_LEFT || code == KeyEvent.VK_UP ||
-                    code == KeyEvent.VK_DOWN) {
-                    requestFocusForFileTableEditor(
-                            getEditorComponent());
+        // TODO: is there a better way to handle keyboard navigation focus issues by using setSurrendersFocusOnKeystroke?
+
+        ActionMap actionMap = getActionMap();
+        final Action nextColumnCellAction = actionMap.get(NEXT_COLUMN_CELL);
+        Action wrappedNextColumnCellAction = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                nextColumnCellAction.actionPerformed(e);
+                if (getSelectedColumn() == 0) {
+                    changeSelection(getSelectedRow(),
+                                    DataTableModel.getFirstFieldColumn(),
+                                    false,
+                                    false);
                 }
             }
-        });
+        };
+        actionMap.put(NEXT_COLUMN_CELL, wrappedNextColumnCellAction);
 
-        addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                requestFocusForFileTableEditor(getEditorComponent());
+        final Action previousColumnCellAction =
+                actionMap.get(PREVIOUS_COLUMN_CELL);
+        Action wrappedPreviousColumnCellAction = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                previousColumnCellAction.actionPerformed(e);
+                if (getSelectedColumn() < DataTableModel.getFirstFieldColumn()) {
+                    int selectedRow = getSelectedRow();
+                    if (selectedRow > 0) {
+                        TableModel model = getModel();
+                        changeSelection(selectedRow - 1,
+                                        model.getColumnCount() - 1,
+                                        false,
+                                        false);
+                    } else {
+                        changeSelection(selectedRow,
+                                        DataTableModel.getFirstFieldColumn(),
+                                        false,
+                                        false);
+                    }
+                }
             }
-        });
+        };
+        actionMap.put(PREVIOUS_COLUMN_CELL, wrappedPreviousColumnCellAction);
+
+        addKeyListener(getFillDownListener());
+    }
+
+    @Override
+    protected boolean processKeyBinding(KeyStroke ks,
+                                        KeyEvent e,
+                                        int condition,
+                                        boolean pressed) {
+
+        Component editor = this.getEditorComponent();
+        if (editor instanceof JComboBox) {
+            int keyCode = e.getKeyCode();
+            if (! pressed) {
+                if ((keyCode == KeyEvent.VK_TAB) ||
+                    (keyCode == KeyEvent.VK_LEFT) ||
+                    (keyCode == KeyEvent.VK_RIGHT) ||
+                    (keyCode == KeyEvent.VK_UP) ||
+                    (keyCode == KeyEvent.VK_DOWN)) {
+                    JComboBox comboBox = (JComboBox) editor;
+
+                    if (! comboBox.isPopupVisible()) {
+                        comboBox.requestFocusInWindow();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return super.processKeyBinding(ks, e, condition, pressed);
+    }
+
+    public void editAndRequestFocusForSelectedCell() {
+        int row = getSelectedRow();
+        int column = getSelectedColumn();
+        editCellAt(row, column);
+        Component editor = getEditorComponent();
+        if (editor != null) {
+            editor.requestFocusInWindow();
+        }
     }
 
     /**
@@ -150,12 +218,7 @@ public class DataTable extends JTable {
                                            "Invalid Entry", // title
                                            JOptionPane.ERROR_MESSAGE);
 
-        requestFocus();
-        editCellAt(rowIndex, columnIndex);
-        Component editor = getEditorComponent();
-        if (editor != null) {
-            editor.requestFocus();
-        }
+        editAndRequestFocusForSelectedCell();
     }
 
     /**
@@ -168,16 +231,23 @@ public class DataTable extends JTable {
         changeSelection(info.getLastRowProcessed(), 1, false, false);
     }
 
-    private void requestFocusForFileTableEditor(Component editor) {
-        if (editor != null) {
-            editor.requestFocus();
-        } else {
-            int row = getSelectedRow();
-            changeSelection(row,
-                            DataTableModel.getFirstFieldColumn(),
-                            false,
-                            false);
-        }
+    public KeyListener getFillDownListener() {
+        return new KeyAdapter() {
+                public void keyReleased(KeyEvent e) {
+                    int code = e.getKeyCode();
+                    if (code == KeyEvent.VK_D) {
+                        if (e.isControlDown() && (cellEditor != null)) {
+                            if (cellEditor.stopCellEditing()) {
+                                DataTableModel model =
+                                        (DataTableModel) getModel();
+                                int row = getSelectedRow();
+                                int column = getSelectedColumn();
+                                model.fillDown(row, column);
+                                changeSelection(row, column, false, false);
+                            }
+                        }
+                    }
+                }
+            };
     }
-
 }
