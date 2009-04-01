@@ -203,7 +203,9 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
         sb.append(totalRowsToProcess);
         sb.append(": ");
         sb.append(modelRow.getTarget().getName());
-        int pctComplete = lastRowProcessed / totalRowsToProcess;
+        int pctComplete = (int)
+                (100 *
+                 ((double) lastRowProcessed / (double) totalRowsToProcess));
 
         return new TaskProgressInfo(lastRowProcessed,
                                     totalRowsToProcess,

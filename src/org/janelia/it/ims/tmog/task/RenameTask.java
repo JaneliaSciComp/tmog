@@ -88,16 +88,21 @@ public class RenameTask extends SimpleTask {
         appendToSummary(fromDirectoryName);
         appendToSummary(":\n\n");
 
-        this.bytesInChunk = 1000000; // default to megabytes
-        this.totalByteChunksToCopy = 1; // prevent rare but possible divide by zero
+        long totalBytesToCopy = 0;
         for (DataTableRow modelRow : modelRows) {
             File file = getTargetFile(modelRow);
-            this.totalByteChunksToCopy += (file.length() / this.bytesInChunk);
+            totalBytesToCopy += file.length();
         }
-        // reset to gigabytes if necessary
-        if (this.totalByteChunksToCopy > (long) Integer.MAX_VALUE) {
-            this.totalByteChunksToCopy = this.totalByteChunksToCopy / 1000;
-            this.bytesInChunk = this.bytesInChunk * 1000;
+
+        if (totalBytesToCopy == 0) {
+            this.totalByteChunksToCopy = 1; // prevent divide by zero
+        } else if (totalBytesToCopy < (long) Integer.MAX_VALUE) {
+            this.bytesInChunk = 1;
+            this.totalByteChunksToCopy = (int) totalBytesToCopy;
+        } else {
+            this.bytesInChunk = 1000000; // use megabytes instead of bytes
+            this.totalByteChunksToCopy = (int)
+                    (totalBytesToCopy / this.bytesInChunk);
         }
 
         this.chunksProcessed = 0;
@@ -151,7 +156,8 @@ public class RenameTask extends SimpleTask {
         sb.append(" -> ");
         sb.append(toFile.getName());
         int pctComplete = (int)
-                (100 * (chunksProcessed / totalByteChunksToCopy));
+                (100 *
+                 ((double) chunksProcessed / (double) totalByteChunksToCopy));
 
         return new TaskProgressInfo(lastRowProcessed,
                                     totalRowsToProcess,
@@ -177,7 +183,18 @@ public class RenameTask extends SimpleTask {
         try {
             SafeFileTransfer.copy(rowFile, renamedFile, false);
             if (outputDirConfig.isFileModeReadOnly()) {
-                renamedFile.setReadOnly();
+                boolean isReadOnlySet = false;
+                try {
+                    isReadOnlySet = renamedFile.setReadOnly();
+                } catch (Exception e) {
+                    LOG.warn("Faied to set read only permissions for " +
+                             renamedFile.getAbsolutePath() +
+                             " - ignoring exception", e);
+                }
+                if (! isReadOnlySet) {
+                    LOG.warn("Faied to set read only permissions for " +
+                             renamedFile.getAbsolutePath());
+                }
             }
             renameSuccessful = true;
         } catch (FileCopyFailedException e) {
@@ -213,13 +230,7 @@ public class RenameTask extends SimpleTask {
             appendToSummary("renamed ");
 
             // clean up the original file
-            try {
-                rowFile.delete();
-            } catch (Exception e) {
-                LOG.warn("Failed to remove " +
-                         rowFile.getAbsolutePath() +
-                         " after rename succeeded.", e);
-            }
+            deleteFile(rowFile, "succeeded");
 
         } else {
 
@@ -230,13 +241,7 @@ public class RenameTask extends SimpleTask {
             if ((renamedFile != null) &&
                 renamedFile.exists() &&
                 (!renamedFile.equals(rowFile))) {
-                try {
-                    renamedFile.delete();
-                } catch (Exception e) {
-                    LOG.warn("Failed to remove " +
-                             renamedFile.getAbsolutePath() +
-                             " after rename failed.", e);
-                }
+                deleteFile(renamedFile, "failed");
             }
         }
 
@@ -248,6 +253,22 @@ public class RenameTask extends SimpleTask {
         appendToSummary("\n");
 
         currentRow = null;
+    }
+
+    private void deleteFile(File file,
+                            String status) {
+        boolean isDeleteSuccessful = false;
+        try {
+            isDeleteSuccessful = file.delete();
+        } catch (Exception e) {
+            LOG.warn("Failed to remove " + file.getAbsolutePath() +
+                     " after rename " + status + " - ignoring exception", e);
+        }
+        if (! isDeleteSuccessful) {
+            LOG.warn("Failed to remove " + file.getAbsolutePath() +
+                     " after rename " + status);
+
+        }
     }
 
     private File getTargetFile(DataTableRow row) {
