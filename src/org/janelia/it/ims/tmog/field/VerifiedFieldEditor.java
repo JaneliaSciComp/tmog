@@ -39,7 +39,7 @@ public class VerifiedFieldEditor extends AbstractCellEditor
             this.dataTable = table;
             this.textField = new JTextField();
             this.textField.addActionListener(this);
-            this.textField.addKeyListener(table.getFillDownListener());
+            this.textField.addKeyListener(table.getKeyListener());
         }
 
         public Component getTableCellEditorComponent(JTable table,

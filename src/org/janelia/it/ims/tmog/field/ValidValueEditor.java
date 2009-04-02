@@ -31,7 +31,7 @@ public class ValidValueEditor extends DefaultCellEditor {
        super(new EditorComboBox());
        this.dataTable = table;
        this.editorComboBox = (EditorComboBox) editorComponent;
-       this.editorComboBox.addKeyListener(table.getFillDownListener());
+       this.editorComboBox.addKeyListener(table.getKeyListener());
     }
 
     public Component getTableCellEditorComponent(JTable table,

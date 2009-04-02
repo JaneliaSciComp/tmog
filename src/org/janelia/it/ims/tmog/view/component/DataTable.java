@@ -107,7 +107,7 @@ public class DataTable extends JTable {
         };
         actionMap.put(PREVIOUS_COLUMN_CELL, wrappedPreviousColumnCellAction);
 
-        addKeyListener(getFillDownListener());
+        addKeyListener(getKeyListener());
     }
 
     @Override
@@ -231,18 +231,34 @@ public class DataTable extends JTable {
         changeSelection(info.getLastRowProcessed(), 1, false, false);
     }
 
-    public KeyListener getFillDownListener() {
+    /**
+     * @return a listener that will handle shortcut key events
+     *         for editing this table's cells.
+     */
+    public KeyListener getKeyListener() {
         return new KeyAdapter() {
                 public void keyReleased(KeyEvent e) {
                     int code = e.getKeyCode();
-                    if (code == KeyEvent.VK_D) {
-                        if (e.isControlDown() && (cellEditor != null)) {
+                    // only check for control keys when a cell is being edited
+                    if (e.isControlDown() && (cellEditor != null)) {
+                        if (code == KeyEvent.VK_D) {
                             if (cellEditor.stopCellEditing()) {
                                 DataTableModel model =
                                         (DataTableModel) getModel();
                                 int row = getSelectedRow();
                                 int column = getSelectedColumn();
                                 model.fillDown(row, column);
+                                changeSelection(row, column, false, false);
+                            }
+                        } else if (code == KeyEvent.VK_R) {
+                            cellEditor.cancelCellEditing();
+                            DataTableModel model =
+                                    (DataTableModel) getModel();
+                            int row = getSelectedRow();
+                            int column = getSelectedColumn();
+                            int previousRow = row - 1;
+                            if (previousRow >= 0) {
+                                model.copyRow(previousRow, row);
                                 changeSelection(row, column, false, false);
                             }
                         }

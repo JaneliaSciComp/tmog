@@ -149,14 +149,16 @@ public class DataTableModel extends AbstractTableModel {
                         int toRowIndex) {
         DataTableRow fromRow = rows.get(fromRowIndex);
         DataTableRow toRow = rows.get(toRowIndex);
-        int fieldCount = toRow.getFieldCount();
-        for (int fieldIndex = 0; fieldIndex < fieldCount; fieldIndex++) {
-            DataField fromField = fromRow.getField(fieldIndex);
-            if (fromField.isCopyable()) {
-                toRow.setField(fieldIndex, fromField.getNewInstance(false));
+        if ((fromRow != null) && (toRow != null)) {
+            int fieldCount = toRow.getFieldCount();
+            for (int fieldIndex = 0; fieldIndex < fieldCount; fieldIndex++) {
+                DataField fromField = fromRow.getField(fieldIndex);
+                if (fromField.isCopyable()) {
+                    toRow.setField(fieldIndex, fromField.getNewInstance(false));
+                }
             }
+            this.fireTableDataChanged();
         }
-        this.fireTableDataChanged();
     }
 
     public void fillDown(int fromRowIndex,
