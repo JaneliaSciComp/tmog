@@ -17,7 +17,6 @@
             </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
-                <property name="capture_date" value="Capture Date"/>
                 <property name="family" value="family"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
                 <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
