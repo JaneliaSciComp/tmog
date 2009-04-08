@@ -245,11 +245,15 @@
         <xs:attribute name="taskName" type="xs:string"/>
     </xs:complexType>
 
+    <xs:complexType name="globalType">
+        <xs:attribute name="minimumVersion" type="xs:string"/>
+    </xs:complexType>
 
     <xs:element name="transmogrifierConfiguration">
         <xs:complexType>
-            <xs:sequence minOccurs="1" maxOccurs="unbounded">
-                <xs:element name="project" type="projectType" minOccurs="1"/>
+            <xs:sequence>
+                <xs:element name="global" type="globalType" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="project" type="projectType" minOccurs="1" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

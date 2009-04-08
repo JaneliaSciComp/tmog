@@ -2,7 +2,8 @@
 Build and Deployment Instructions:
 ========================================
 
-1. Increment app.version value in build.properties.
+1. Increment app.version value in build.properties and
+   in JaneliaTransmogrifier.java.
 
 2. Rebuild project in IntelliJ IDEA (Build -> Rebuild Project).
 

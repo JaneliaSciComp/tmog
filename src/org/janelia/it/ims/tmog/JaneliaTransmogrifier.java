@@ -30,6 +30,15 @@ public class JaneliaTransmogrifier extends JFrame {
             Logger.getLogger(JaneliaTransmogrifier.class);
 
     /**
+     * The current version of this application.
+     * This needs to be kept in sync with the version in build.properties
+     * until I find a better way to dynamically populate this when the
+     * app is run from within an IDE (package information can be used
+     * when the app is run from a jar file). 
+     */
+    public static final String VERSION = "2.2.2";
+    
+    /**
      * Set up a thread pool to limit the number of concurrent
      * session tasks running at any given time.
      *
@@ -51,11 +60,9 @@ public class JaneliaTransmogrifier extends JFrame {
 
     /**
      * Construct the application
-     *
-     * @param  version  the application version number to be used in the title. 
      */
-    public JaneliaTransmogrifier(String version) {
-        super("Janelia Transmogrifier " + version);
+    public JaneliaTransmogrifier() {
+        super("Janelia Transmogrifier " + VERSION);
         TabbedView tabbedView = new TabbedView();
         setContentPane(tabbedView.getContentPanel());
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -103,18 +110,14 @@ public class JaneliaTransmogrifier extends JFrame {
         }
 
         Package pkg = JaneliaTransmogrifier.class.getPackage();
-        String version = pkg.getSpecificationVersion();
-        if (version == null) {
-            version = "?";
-        }
         String revision = pkg.getImplementationVersion();
         if (revision == null) {
             revision = "?";
         }
-        LOG.info("starting Janelia Transmogrifier version " + version +
+        LOG.info("starting Janelia Transmogrifier version " + VERSION +
                  ", revision " + revision);
 
-        JFrame frame = new JaneliaTransmogrifier(version);
+        JFrame frame = new JaneliaTransmogrifier();
         frame.setIconImage(APP_ICON.getImage());
 
         //Center the window

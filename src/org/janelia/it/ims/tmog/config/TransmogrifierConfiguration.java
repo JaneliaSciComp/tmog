@@ -9,6 +9,7 @@ package org.janelia.it.ims.tmog.config;
 
 import org.apache.commons.digester.Digester;
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.tmog.JaneliaTransmogrifier;
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.tmog.config.output.Path;
 import org.janelia.it.ims.tmog.config.output.RenameFieldValue;
@@ -134,6 +135,12 @@ public class TransmogrifierConfiguration {
 
         digester.addObjectCreate("transmogrifierConfiguration",
                                  ArrayList.class);
+
+        digester.addObjectCreate("transmogrifierConfiguration/global",
+                                 GlobalConfiguration.class);
+        digester.addSetProperties("transmogrifierConfiguration/global");
+        digester.addSetNext("transmogrifierConfiguration/global",
+                            "add");
 
         digester.addObjectCreate("transmogrifierConfiguration/project",
                                  ProjectConfiguration.class);
@@ -321,6 +328,9 @@ public class TransmogrifierConfiguration {
                             (ProjectConfiguration) element;
                     pConfig.initializeAndVerify();
                     this.addProjectConfiguration(pConfig);
+                } else if (element instanceof GlobalConfiguration) {
+                    GlobalConfiguration gConfig = (GlobalConfiguration) element;
+                    gConfig.verify(JaneliaTransmogrifier.VERSION);
                 }
             }
         } catch (IOException e) {
