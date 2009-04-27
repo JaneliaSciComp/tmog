@@ -8,6 +8,7 @@
 package org.janelia.it.ims.tmog;
 
 import org.janelia.it.ims.tmog.field.DataField;
+import org.janelia.it.ims.tmog.target.Target;
 
 import java.util.ArrayList;
 import java.util.List;

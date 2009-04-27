@@ -8,7 +8,7 @@
 package org.janelia.it.ims.tmog.field;
 
 import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.Target;
+import org.janelia.it.ims.tmog.target.Target;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

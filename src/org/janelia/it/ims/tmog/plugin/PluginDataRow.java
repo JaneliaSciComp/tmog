@@ -8,10 +8,10 @@
 package org.janelia.it.ims.tmog.plugin;
 
 import org.janelia.it.ims.tmog.DataRow;
-import org.janelia.it.ims.tmog.FileTarget;
-import org.janelia.it.ims.tmog.Target;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.PluginDataModel;
+import org.janelia.it.ims.tmog.target.FileTarget;
+import org.janelia.it.ims.tmog.target.Target;
 
 import java.io.File;
 import java.util.HashMap;

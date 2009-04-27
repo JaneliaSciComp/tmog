@@ -7,7 +7,7 @@
 
 package org.janelia.it.ims.tmog.field;
 
-import org.janelia.it.ims.tmog.Target;
+import org.janelia.it.ims.tmog.target.Target;
 
 /**
  * This interface specifies the methods required for all data fields.

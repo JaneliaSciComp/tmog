@@ -1,6 +1,6 @@
 package org.janelia.it.ims.tmog.field;
 
-import org.janelia.it.ims.tmog.Target;
+import org.janelia.it.ims.tmog.target.Target;
 
 /**
  * This model supports inserting the source file extension

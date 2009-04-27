@@ -10,12 +10,12 @@ package org.janelia.it.ims.tmog.task;
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.DataTableRow;
-import org.janelia.it.ims.tmog.Target;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RowListener;
 import org.janelia.it.ims.tmog.plugin.SessionListener;
+import org.janelia.it.ims.tmog.target.Target;
 import org.janelia.it.utils.LoggingUtils;
 import org.jdesktop.swingworker.SwingWorker;
 

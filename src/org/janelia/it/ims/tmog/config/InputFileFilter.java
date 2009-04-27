@@ -8,7 +8,7 @@
 package org.janelia.it.ims.tmog.config;
 
 import org.janelia.it.ims.tmog.filefilter.FileNamePatternFilter;
-import org.janelia.it.ims.tmog.filefilter.QueryFilter;
+import org.janelia.it.ims.tmog.filefilter.FileNamePatternWithQueryFilter;
 
 import java.io.FileFilter;
 
@@ -26,9 +26,11 @@ public class InputFileFilter {
     private String includeQueryUrl;
     private String excludeQueryUrl;
     private FileFilter filter;
+    private boolean recursiveSearch;
 
     public InputFileFilter() {
         this.setPatternString(LSM_PATTERN_STRING);
+        this.recursiveSearch = false;
     }
 
     public String getPatternString() {
@@ -56,12 +58,27 @@ public class InputFileFilter {
         this.includeQueryUrl = includeQueryUrl;
     }
 
+    public boolean isRecursiveSearch() {
+        return recursiveSearch;
+    }
+
+    public void setRecursiveSearch(boolean recursiveSearch) {
+        this.recursiveSearch = recursiveSearch;
+    }
+
+    /**
+     * @return a file filter based upon configured parameters.
+     */
     public FileFilter getFilter() {
         // rebuild query filters for each request
         if (excludeQueryUrl != null) {
-            filter = new QueryFilter(excludeQueryUrl, false);
+            filter = new FileNamePatternWithQueryFilter(patternString,
+                                                        excludeQueryUrl,
+                                                        false);
         } else if (includeQueryUrl != null) {
-            filter = new QueryFilter(includeQueryUrl, true);
+            filter = new FileNamePatternWithQueryFilter(patternString,
+                                                        includeQueryUrl,
+                                                        true);
         }
         return filter;
     }

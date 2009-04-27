@@ -10,6 +10,7 @@ package org.janelia.it.ims.tmog;
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.ValidValueModel;
+import org.janelia.it.ims.tmog.target.Target;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -35,7 +36,7 @@ public class DataTableModel extends AbstractTableModel {
     private Map<Integer, Integer> fieldToColumnIndexMap;
 
     public DataTableModel(String targetColumnName,
-                          List<Target> targets,
+                          List<? extends Target> targets,
                           ProjectConfiguration config) {
 
         List<DataField> dataFieldConfigs = config.getFieldConfigurations();

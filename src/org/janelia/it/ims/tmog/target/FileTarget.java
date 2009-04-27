@@ -5,9 +5,12 @@
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
  */
 
-package org.janelia.it.ims.tmog;
+package org.janelia.it.ims.tmog.target;
+
+import org.janelia.it.ims.tmog.filefilter.AlphabeticComparator;
 
 import java.io.File;
+import java.util.Comparator;
 
 /**
  * This class encapsulates data targets that are files.
@@ -40,4 +43,20 @@ public class FileTarget implements Target {
         }
         return name;
     }
+
+    private static final AlphabeticComparator FILE_NAME_COMPARATOR =
+            new AlphabeticComparator();
+
+    /**
+     * Comparator for sorting file targets by file name.
+     */
+    public static final Comparator<FileTarget> ALPHABETIC_COMPARATOR =
+            new Comparator<FileTarget>() {
+                public int compare(FileTarget o1,
+                                   FileTarget o2) {
+                    return FILE_NAME_COMPARATOR.compare(o1.getFile(),
+                                                        o2.getFile());
+                }
+    };
+
 }

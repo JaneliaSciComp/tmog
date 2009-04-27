@@ -10,10 +10,10 @@ package org.janelia.it.ims.tmog.task;
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.DataTableRow;
-import org.janelia.it.ims.tmog.Target;
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
+import org.janelia.it.ims.tmog.target.Target;
 import org.janelia.it.utils.filexfer.FileCopyFailedException;
 import org.janelia.it.utils.filexfer.SafeFileTransfer;
 

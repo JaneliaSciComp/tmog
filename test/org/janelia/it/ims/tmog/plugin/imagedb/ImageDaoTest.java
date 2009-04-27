@@ -13,9 +13,9 @@ import junit.framework.TestSuite;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.janelia.it.ims.tmog.DataRow;
-import org.janelia.it.ims.tmog.FileTarget;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
+import org.janelia.it.ims.tmog.target.FileTarget;
 import org.janelia.it.utils.db.DbManager;
 
 import java.io.File;

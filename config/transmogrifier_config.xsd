@@ -6,6 +6,7 @@
         <xs:attribute name="patternString" type="xs:string"/>
         <xs:attribute name="excludeQueryUrl" type="xs:anyURI"/>
         <xs:attribute name="includeQueryUrl" type="xs:anyURI"/>
+        <xs:attribute name="recursiveSearch" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="inputFileSorterType">

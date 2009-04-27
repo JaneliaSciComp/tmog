@@ -17,6 +17,8 @@ import org.janelia.it.ims.tmog.field.FileExtensionModel;
 import org.janelia.it.ims.tmog.field.FileModificationTimeModel;
 import org.janelia.it.ims.tmog.field.VerifiedIntegerModel;
 import org.janelia.it.ims.tmog.field.VerifiedTextModel;
+import org.janelia.it.ims.tmog.target.FileTarget;
+import org.janelia.it.ims.tmog.target.Target;
 
 import java.io.File;
 import java.util.ArrayList;

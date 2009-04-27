@@ -11,9 +11,9 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.janelia.it.ims.tmog.DataRow;
-import org.janelia.it.ims.tmog.FileTarget;
 import org.janelia.it.ims.tmog.field.StaticDataModel;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.target.FileTarget;
 
 /**
  * Tests the CompositeSetter class.

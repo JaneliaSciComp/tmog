@@ -11,11 +11,11 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.janelia.it.ims.tmog.DataRow;
-import org.janelia.it.ims.tmog.FileTarget;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.PluginDataModel;
 import org.janelia.it.ims.tmog.field.RunTimeModel;
 import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
+import org.janelia.it.ims.tmog.target.FileTarget;
 
 import java.io.File;
 import java.util.Arrays;

@@ -7,7 +7,9 @@
 
     <project name="Kerr Lab: Multi-Worm Tracker" taskName="collector" default="true">
 
-        <inputFileFilter excludeQueryUrl="http://val1.int.janelia.org:8080/wormTracker/experiment" />
+        <inputFileFilter patternString="(\d\d\d\d\d\d\d\d_\d\d\d\d\d\d){1}"
+                         excludeQueryUrl="http://val1.int.janelia.org:8080/wormTracker/experiment"
+                         recursiveSearch="true"/>
         
         <plugins>
             <rowListener className="org.janelia.it.ims.tmog.plugin.RestDataPlugin">

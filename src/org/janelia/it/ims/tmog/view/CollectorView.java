@@ -10,16 +10,16 @@ package org.janelia.it.ims.tmog.view;
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.DataTableRow;
-import org.janelia.it.ims.tmog.FileTarget;
-import org.janelia.it.ims.tmog.Target;
 import org.janelia.it.ims.tmog.config.InputFileFilter;
-import org.janelia.it.ims.tmog.config.InputFileSorter;
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RowValidator;
+import org.janelia.it.ims.tmog.target.FileTarget;
+import org.janelia.it.ims.tmog.target.FileTargetWorker;
+import org.janelia.it.ims.tmog.target.Target;
 import org.janelia.it.ims.tmog.task.SimpleTask;
 import org.janelia.it.ims.tmog.task.Task;
 import org.janelia.it.ims.tmog.view.component.DataTable;
@@ -33,10 +33,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileFilter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -60,9 +60,11 @@ public class CollectorView implements SessionView {
     private JLabel taskProgressLabel;
     private JProgressBar taskProgressBar;
     private DataTable dataTable;
+    private JButton cancelTargetWorkerButton;
 
     private ProjectConfiguration projectConfig;
     private File defaultDirectory;
+    private FileTargetWorker fileTargetWorker;
     private DataTableModel tableModel;
     private SimpleTask task;
     private TaskComponents taskComponents;
@@ -121,80 +123,151 @@ public class CollectorView implements SessionView {
                         fileChooser.setCurrentDirectory(defaultDirectory);
                     }
                 }
-                fileChooser.setFileSelectionMode(
-                        JFileChooser.FILES_AND_DIRECTORIES);
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 int choice = fileChooser.showDialog(parentPanel,
                                                     "Select Root Directory");
 
                 if (choice == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
-                    if ((selectedFile != null) &&
-                        (!selectedFile.isDirectory())) {
-                        selectedFile = selectedFile.getParentFile();
-                    }
-
                     if (selectedFile != null) {
-                        validateDirectorySelection(selectedFile);
+                        handleRootDirectorySelection(selectedFile);
                     }
+                }
+            }
+        });
+
+        cancelTargetWorkerButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (fileTargetWorker != null) {
+                    fileTargetWorker.cancel(true);
                 }
             }
         });
     }
 
-    private void validateDirectorySelection(File selectedFile) {
+    private void handleRootDirectorySelection(File selectedFile) {
         defaultDirectory = selectedFile;
 
         InputFileFilter inputFilter = projectConfig.getInputFileFilter();
         FileFilter fileFilter = inputFilter.getFilter();
-        File[] files = defaultDirectory.listFiles(fileFilter);
+        fileTargetWorker =
+                new FileTargetWorker(selectedFile,
+                                     fileFilter,
+                                     inputFilter.isRecursiveSearch(),
+                                     FileTarget.ALPHABETIC_COMPARATOR);
 
-        StringBuilder reject = new StringBuilder();
-        if (files.length > 0) {
-            rootDirectoryField.setText(
-                    defaultDirectory.getAbsolutePath());
+        fileTargetWorker.addPropertyChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (fileTargetWorker != null) {
+                    if (fileTargetWorker.isProgressEvent(evt)) {
+                        handleFileTargetWorkerUpdate(evt);
+                    } else if (fileTargetWorker.isDoneEvent(evt)) {
+                        handleFileTargetWorkerCompletion();
+                    }
+                }
+            }
+        });
 
-            InputFileSorter sorter = projectConfig.getInputFileSorter();
-            Arrays.sort(files, sorter.getComparator());
-            ArrayList<Target> targets = new ArrayList<Target>(files.length);
-            for (File file : files) {
-                targets.add(new FileTarget(file));
+        rootDirectoryBtn.setVisible(false);
+        cancelTargetWorkerButton.setVisible(true);
+        dataTable.setModel(new DefaultTableModel());
+
+        fileTargetWorker.submitTask();
+
+    }
+
+    private void handleFileTargetWorkerUpdate(PropertyChangeEvent evt) {
+        Object value = evt.getNewValue();
+        if (value instanceof List) {
+            List list = (List) value;
+            int size = list.size();
+            if (size > 0) {
+                Object lastItem = list.get(size - 1);
+                if (lastItem instanceof String) {
+                    rootDirectoryField.setText(
+                            (String) lastItem);
+                }
+            }
+        }
+    }
+
+    private void handleFileTargetWorkerCompletion() {
+
+        if (fileTargetWorker.isCancelled()) {
+
+            resetData();
+
+        } else if (fileTargetWorker.hasFailed()) {
+
+            @SuppressWarnings({"ThrowableResultOfMethodCallIgnored"})
+            final Throwable failureCause =
+                    fileTargetWorker.getFailureCause();
+            resetData();
+            NarrowOptionPane.showMessageDialog(
+                    appPanel,
+                    "The following error occurred when " +
+                    "attempting to locate targets:\n" +
+                    failureCause.getMessage(),
+                    "Target Location Failure",
+                    JOptionPane.ERROR_MESSAGE);
+
+        } else {
+
+            List<FileTarget> targets = null;
+            try {
+                targets = fileTargetWorker.get();
+            } catch (Exception e) {
+                LOG.error(e);
+                NarrowOptionPane.showMessageDialog(
+                        appPanel,
+                        "The following error occurred when " +
+                        "attempting to retrieve targets:\n" +
+                        e.getMessage(),
+                        "Target Retrieval Failure",
+                        JOptionPane.ERROR_MESSAGE);
             }
 
-            tableModel = new DataTableModel("File Name",
-                                            targets,
-                                            projectConfig);
-            dataTable.setModel(tableModel);
-            dataTable.sizeTable();
-            saveBtn.setEnabled(true);
-        } else {
-            reject.append("The selected directory (");
-            reject.append(defaultDirectory.getAbsolutePath());
-            reject.append(") does not contain any files or directories that ");
-            reject.append("match this project's configured filter criteria.  ");
-            reject.append("Please choose another directory.");
-            NarrowOptionPane.showMessageDialog(appPanel,
-                                               reject.toString(),
-                                               "Root Directory Selection Error",
-                                               JOptionPane.ERROR_MESSAGE);
-            resetData();
+            if (targets != null) {
+                if (targets.size() > 0) {
+                    createDataTableModel(targets);
+                } else {
+                    resetData();
+                    File rootDirectory = fileTargetWorker.getRootDirectory();
+                    NarrowOptionPane.showMessageDialog(
+                            appPanel,
+                            "No eligible targets were found " +
+                            "in the selected root directory: " +
+                            rootDirectory.getAbsolutePath(),
+                            "No Eligible Targets Found",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            }
         }
+
+        fileTargetWorker = null;
+    }
+
+    private void createDataTableModel(List<? extends Target> targets) {
+        rootDirectoryField.setText(defaultDirectory.getAbsolutePath());
+        tableModel = new DataTableModel("File Name",
+                                        targets,
+                                        projectConfig);
+        dataTable.setModel(tableModel);
+        dataTable.sizeTable();
+        enableView(true);
     }
 
     private void resetData() {
         rootDirectoryField.setText("");
         dataTable.setModel(new DefaultTableModel());
-        setEnabled(true, false);
+        enableView(false);
     }
 
-    private void setEnabled(boolean isEnabled,
-                            boolean isTaskButtonEnabled) {
-        Component[] cList = { rootDirectoryBtn, dataTable};
-        for (Component c : cList) {
-            if (isEnabled != c.isEnabled()) {
-                c.setEnabled(isEnabled);
-            }
-        }
-
+    private void enableView(boolean isTaskButtonEnabled) {
+        rootDirectoryBtn.setVisible(true);
+        cancelTargetWorkerButton.setVisible(false);
+        rootDirectoryBtn.setEnabled(true);
+        dataTable.setEnabled(true);
         saveBtn.setEnabled(isTaskButtonEnabled);
     }
 
@@ -317,7 +390,7 @@ public class CollectorView implements SessionView {
             // we had errors, so remove the files copied successfully
             // and restore the rest of the model
             tableModel.removeSuccessfullyCopiedFiles(failedRowIndices);
-            setEnabled(true, true);
+            enableView(true);
         }
     }
 

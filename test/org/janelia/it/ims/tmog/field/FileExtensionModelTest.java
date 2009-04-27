@@ -3,7 +3,7 @@ package org.janelia.it.ims.tmog.field;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.janelia.it.ims.tmog.FileTarget;
+import org.janelia.it.ims.tmog.target.FileTarget;
 
 import java.io.File;
 
