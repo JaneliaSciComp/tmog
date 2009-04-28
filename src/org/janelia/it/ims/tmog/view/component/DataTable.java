@@ -177,19 +177,22 @@ public class DataTable extends JTable {
                 }
 
                 // set preferred sizes for all other columns
+                String columnName;
                 for (int columnIndex = DataTableModel.TARGET_COLUMN;
                      columnIndex < numColumns;
                      columnIndex++) {
 
+                    columnName = dataModel.getColumnName(columnIndex);
                     tableColumn = colModel.getColumn(columnIndex);
                     String longestVal = dataModel.getLongestValue(columnIndex);
-                    if (longestVal.length() > 0) {
-                        JLabel text = new JLabel(longestVal);
-                        text.setFont(getFont());
-                        Dimension dimension = text.getPreferredSize();
-                        int preferredWidth = dimension.width + (2 * cellMargin);
-                        tableColumn.setPreferredWidth(preferredWidth);
+                    if (columnName.length() > longestVal.length()) {
+                        longestVal = columnName;
                     }
+                    JLabel text = new JLabel(longestVal);
+                    text.setFont(getFont());
+                    Dimension dimension = text.getPreferredSize();
+                    int preferredWidth = dimension.width + (2 * cellMargin);
+                    tableColumn.setPreferredWidth(preferredWidth);
                 }
 
                 int preferredHeight = copyButtonHeight + (2 * cellMargin);

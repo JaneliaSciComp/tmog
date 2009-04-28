@@ -182,28 +182,27 @@ public class DataTableModel extends AbstractTableModel {
         int longestLength = 0;
         String longestValue = "";
 
-        if (columnIndex == TARGET_COLUMN) {
-            String displayValue;
-            int length;
-            for (int rowIndex = 0; rowIndex < numRows; rowIndex++) {
-                Object model = this.getValueAt(rowIndex, columnIndex);
-                if (model instanceof Target) {
-                    Target target = (Target) model;
-                    displayValue = target.getName();
-                    length = displayValue.length();
-                    if (length > longestLength) {
-                        longestLength = length;
-                        longestValue = displayValue;
-                    }
-                }
-            }
-        } else if (columnIndex > TARGET_COLUMN) {
-            Object model = this.getValueAt(0, columnIndex);
+        String value = longestValue;
+        int length;
+        for (int rowIndex = 0; rowIndex < numRows; rowIndex++) {
+            Object model = this.getValueAt(rowIndex, columnIndex);
             if (model instanceof ValidValueModel) {
                 ValidValueModel vvModel = (ValidValueModel) model;
                 longestValue = vvModel.getLongestDisplayName();
+                break;
+            } else if (model instanceof DataField){
+                value = ((DataField) model).getCoreValue();
+            } else if (model instanceof Target) {
+                value = ((Target) model).getName();
+            }
+
+            length = value.length();
+            if (length > longestLength) {
+                longestLength = length;
+                longestValue = value;
             }
         }
+
         return longestValue;
     }
 
