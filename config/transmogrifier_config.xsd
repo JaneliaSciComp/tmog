@@ -4,6 +4,7 @@
 
     <xs:complexType name="inputFileFilterType">
         <xs:attribute name="patternString" type="xs:string"/>
+        <xs:attribute name="patternGroupNumber" type="xs:positiveInteger"/>
         <xs:attribute name="excludeQueryUrl" type="xs:anyURI"/>
         <xs:attribute name="includeQueryUrl" type="xs:anyURI"/>
         <xs:attribute name="recursiveSearch" type="xs:boolean"/>

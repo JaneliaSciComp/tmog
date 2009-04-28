@@ -14,7 +14,6 @@ import org.janelia.it.ims.tmog.target.Target;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,8 +83,6 @@ public class DataTableModel extends AbstractTableModel {
         Class columnClass = Object.class;
         if ((index < TARGET_COLUMN)) {
             columnClass = JButton.class;
-        } else if (index == TARGET_COLUMN) {
-            columnClass = File.class;
         } else if (rows.size() > 0) {
             Object firstRowField = getValueAt(0, index);
             columnClass = firstRowField.getClass();
@@ -111,10 +108,7 @@ public class DataTableModel extends AbstractTableModel {
                 value = row.getCopyButton();
             }
         } else if (columnIndex == TARGET_COLUMN) {
-            Target target = row.getTarget();
-            if (target != null) {
-                value = target.getInstance();
-            }
+            value = row.getTarget();
         } else {
             int fieldIndex = columnToFieldIndexMap.get(columnIndex);
             value = row.getField(fieldIndex);
@@ -193,9 +187,9 @@ public class DataTableModel extends AbstractTableModel {
             int length;
             for (int rowIndex = 0; rowIndex < numRows; rowIndex++) {
                 Object model = this.getValueAt(rowIndex, columnIndex);
-                if (model instanceof File) {
-                    File file = (File) model;
-                    displayValue = file.getName();
+                if (model instanceof Target) {
+                    Target target = (Target) model;
+                    displayValue = target.getName();
                     length = displayValue.length();
                     if (length > longestLength) {
                         longestLength = length;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright 2009 Howard Hughes Medical Institute.
  * All rights reserved.  
  * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
@@ -7,18 +7,19 @@
 
 package org.janelia.it.ims.tmog.field;
 
+import org.janelia.it.ims.tmog.target.Target;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
-import java.io.File;
 
 /**
- * This class supports the rendering of a file cell
+ * This class supports the rendering of a target cell
  * within the file table.
  *
- * @author Peter Davies
+ * @author Eric Trautman
  */
-public class FileRenderer extends DefaultTableCellRenderer {
+public class TargetRenderer extends DefaultTableCellRenderer {
 
     public Component getTableCellRendererComponent(JTable table,
                                                    Object value,
@@ -28,11 +29,11 @@ public class FileRenderer extends DefaultTableCellRenderer {
                                                    int column) {
         Component cellRenderer;
 
-        if (value instanceof File) {
-            File file = (File) value;
+        if (value instanceof Target) {
+            Target target = (Target) value;
             cellRenderer =
                     super.getTableCellRendererComponent(table,
-                                                        file.getName(),
+                                                        target.getName(),
                                                         isSelected,
                                                         hasFocus,
                                                         row,

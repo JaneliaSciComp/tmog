@@ -9,6 +9,7 @@ package org.janelia.it.ims.tmog.config;
 
 import org.janelia.it.ims.tmog.filefilter.FileNamePatternFilter;
 import org.janelia.it.ims.tmog.filefilter.FileNamePatternWithQueryFilter;
+import org.janelia.it.ims.tmog.target.TargetNamer;
 
 import java.io.FileFilter;
 
@@ -23,6 +24,7 @@ public class InputFileFilter {
     public static final String LSM_PATTERN_STRING = ".*\\.lsm";
 
     private String patternString;
+    private Integer patternGroupNumber;
     private String includeQueryUrl;
     private String excludeQueryUrl;
     private FileFilter filter;
@@ -40,6 +42,19 @@ public class InputFileFilter {
     public void setPatternString(String patternString) {
         this.patternString = patternString;
         this.filter = new FileNamePatternFilter(patternString);
+    }
+
+    public Integer getPatternGroupNumber() {
+        return patternGroupNumber;
+    }
+
+    public void setPatternGroupNumber(Integer patternGroupNumber) {
+        if (patternGroupNumber < 1) {
+            throw new IllegalArgumentException(
+                    "input file filter pattern group number " +
+                    "must be greater than zero");
+        }
+        this.patternGroupNumber = patternGroupNumber;
     }
 
     public String getExcludeQueryUrl() {
@@ -81,6 +96,17 @@ public class InputFileFilter {
                                                         true);
         }
         return filter;
+    }
+
+    /**
+     * @return a target namer based upon configured parameters.
+     */
+    public TargetNamer getTargetNamer() {
+        TargetNamer namer = null;
+        if (patternGroupNumber != null) {
+            namer = new TargetNamer(patternString, patternGroupNumber);
+        }
+        return namer;
     }
 }
 

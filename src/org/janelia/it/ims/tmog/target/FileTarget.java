@@ -19,15 +19,23 @@ public class FileTarget implements Target {
 
     private File file;
     private File rootPath;
+    private TargetNamer namer;
 
     public FileTarget(File file) {
-        this(file, null);
+        this(file, null, null);
     }
 
     public FileTarget(File file,
                       File rootPath) {
+        this(file, rootPath, null);
+    }
+
+    public FileTarget(File file,
+                      File rootPath,
+                      TargetNamer namer) {
         this.file = file;
         this.rootPath = rootPath;
+        this.namer = namer;
     }
 
     public File getFile() {
@@ -55,6 +63,9 @@ public class FileTarget implements Target {
         String name = null;
         if (file != null) {
             name = file.getName();
+            if (namer != null) {
+                name = namer.getName(name);
+            }
         }
         return name;
     }

@@ -8,6 +8,7 @@
     <project name="Kerr Lab: Multi-Worm Tracker" taskName="collector" default="true">
 
         <inputFileFilter patternString="(\d{8}_\d{6}){1}(.zip)?"
+                         patternGroupNumber="1"
                          excludeQueryUrl="http://val1.int.janelia.org:8080/wormTracker/experiment"
                          recursiveSearch="true"/>
         

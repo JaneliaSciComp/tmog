@@ -28,6 +28,7 @@ public class FileTargetWorker
     private FileFilter filter;
     private boolean recursiveSearch;
     private Comparator<FileTarget> sortComparator;
+    private TargetNamer namer;
 
     /**
      * Constructs a new worker.
@@ -45,16 +46,22 @@ public class FileTargetWorker
      *
      * @param  sortComparator   comparator for sorting the result target
      *                          list (or null if sorting is not needed).
+     *
+     * @param  namer            namer for converting file names to
+     *                          desired target names (or null if
+     *                          conversion is not needed).
      */
     public FileTargetWorker(File rootDirectory,
                             FileFilter filter,
                             boolean recursiveSearch,
-                            Comparator<FileTarget> sortComparator) {
+                            Comparator<FileTarget> sortComparator,
+                            TargetNamer namer) {
 
         this.rootDirectory = rootDirectory;
         this.filter = filter;
         this.recursiveSearch = recursiveSearch;
         this.sortComparator = sortComparator;
+        this.namer = namer;
     }
 
     /**
@@ -80,7 +87,7 @@ public class FileTargetWorker
             final File[] children = rootDirectory.listFiles(filter);
             targets = new ArrayList<FileTarget>(children.length);
             for (File child : children) {
-                targets.add(new FileTarget(child, rootDirectory));
+                targets.add(new FileTarget(child, rootDirectory, namer));
             }
         }
 
@@ -102,7 +109,7 @@ public class FileTargetWorker
                                         List<FileTarget> targets) {
         if (! isCancelled()) {
             if ((filter == null) || filter.accept(file)) {
-                targets.add(new FileTarget(file, rootDirectory));
+                targets.add(new FileTarget(file, rootDirectory, namer));
             } else if (file.isDirectory()) {
                 updateStatus("searching " + file.getName());
                 final File[] children = file.listFiles();

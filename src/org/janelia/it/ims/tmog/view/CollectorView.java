@@ -36,7 +36,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileFilter;
 import java.util.List;
 
 /**
@@ -149,12 +148,12 @@ public class CollectorView implements SessionView {
         defaultDirectory = selectedFile;
 
         InputFileFilter inputFilter = projectConfig.getInputFileFilter();
-        FileFilter fileFilter = inputFilter.getFilter();
         fileTargetWorker =
                 new FileTargetWorker(selectedFile,
-                                     fileFilter,
+                                     inputFilter.getFilter(),
                                      inputFilter.isRecursiveSearch(),
-                                     FileTarget.ALPHABETIC_COMPARATOR);
+                                     FileTarget.ALPHABETIC_COMPARATOR,
+                                     inputFilter.getTargetNamer());
 
         fileTargetWorker.addPropertyChangeListener(new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {

@@ -10,13 +10,14 @@ package org.janelia.it.ims.tmog.view.component;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.field.ButtonEditor;
 import org.janelia.it.ims.tmog.field.ButtonRenderer;
-import org.janelia.it.ims.tmog.field.FileRenderer;
+import org.janelia.it.ims.tmog.field.TargetRenderer;
 import org.janelia.it.ims.tmog.field.ValidValueEditor;
 import org.janelia.it.ims.tmog.field.ValidValueModel;
 import org.janelia.it.ims.tmog.field.ValidValueRenderer;
 import org.janelia.it.ims.tmog.field.VerifiedFieldEditor;
 import org.janelia.it.ims.tmog.field.VerifiedFieldModel;
 import org.janelia.it.ims.tmog.field.VerifiedFieldRenderer;
+import org.janelia.it.ims.tmog.target.FileTarget;
 import org.janelia.it.ims.tmog.task.TaskProgressInfo;
 
 import javax.swing.*;
@@ -28,7 +29,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
 
 /**
  * This component supports the display of a data table driven by
@@ -51,7 +51,7 @@ public class DataTable extends JTable {
     public DataTable() {
         super();
 
-        setDefaultRenderer(File.class, new FileRenderer());
+        setDefaultRenderer(FileTarget.class, new TargetRenderer());
         setDefaultRenderer(JButton.class, new ButtonRenderer());
         setDefaultRenderer(ValidValueModel.class,
                            new ValidValueRenderer());
