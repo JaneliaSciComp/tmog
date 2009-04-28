@@ -189,7 +189,7 @@ public class RenameView implements SessionView {
             Arrays.sort(files, sorter.getComparator());
             ArrayList<Target> targets = new ArrayList<Target>(files.length);
             for (File file : files) {
-                targets.add(new FileTarget(file));
+                targets.add(new FileTarget(file, lsmDirectory));
             }
             
             tableModel = new DataTableModel("File Name",

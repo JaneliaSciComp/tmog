@@ -16,14 +16,29 @@ import java.util.Comparator;
  * This class encapsulates data targets that are files.
  */
 public class FileTarget implements Target {
-    File file;
+
+    private File file;
+    private File rootPath;
 
     public FileTarget(File file) {
+        this(file, null);
+    }
+
+    public FileTarget(File file,
+                      File rootPath) {
         this.file = file;
+        this.rootPath = rootPath;
     }
 
     public File getFile() {
         return file;
+    }
+
+    /**
+     * @return the root path selected when this target was located. 
+     */
+    public File getRootPath() {
+        return rootPath;
     }
 
     /**

@@ -80,7 +80,7 @@ public class FileTargetWorker
             final File[] children = rootDirectory.listFiles(filter);
             targets = new ArrayList<FileTarget>(children.length);
             for (File child : children) {
-                targets.add(new FileTarget(child));
+                targets.add(new FileTarget(child, rootDirectory));
             }
         }
 
@@ -102,7 +102,7 @@ public class FileTargetWorker
                                         List<FileTarget> targets) {
         if (! isCancelled()) {
             if ((filter == null) || filter.accept(file)) {
-                targets.add(new FileTarget(file));
+                targets.add(new FileTarget(file, rootDirectory));
             } else if (file.isDirectory()) {
                 updateStatus("searching " + file.getName());
                 final File[] children = file.listFiles();

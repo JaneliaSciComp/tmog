@@ -7,7 +7,7 @@
 
     <project name="Kerr Lab: Multi-Worm Tracker" taskName="collector" default="true">
 
-        <inputFileFilter patternString="(\d\d\d\d\d\d\d\d_\d\d\d\d\d\d){1}"
+        <inputFileFilter patternString="(\d{8}_\d{6}){1}(.zip)?"
                          excludeQueryUrl="http://val1.int.janelia.org:8080/wormTracker/experiment"
                          recursiveSearch="true"/>
         
@@ -27,17 +27,14 @@
                 <validValue displayName="D" value="D"/>
                 <validValue displayName="E" value="E"/>
             </validValueList>
-            <text displayName="Worm Strain" required="true" pattern="[0-9A-Za-z\s]++"/>
-            <text displayName="RNAI" required="true" pattern="[0-9A-Za-z\s]++"/>
-            <validValueList displayName="Stimulus Protocol" required="true">
-                <validValue displayName="A: Protocol A" value="A"/>
-                <validValue displayName="B: Protocol B" value="B"/>
-            </validValueList>
-            <text displayName="Path" required="true" copyable="false">
-                <sourceFileDefault pattern=".*[/\\\\]([^/\\\\]++)[/\\\\]\d\d\d\d\d\d\d\d_\d\d\d\d\d\d"
-                                   matchType="path"/>
-            </text>
+            <text displayName="Worm Strain" required="true" pattern="[0-9A-Za-z,_\s\\-\\(\\)]++"/>
+            <text displayName="Growth Conditions" required="true"/>
+            <number displayName="Duration" required="true" minimumValue="0"/>
+            <number displayName="Baseline" required="true" minimumValue="0"/>
+            <number displayName="Tap Number" required="true" minimumValue="0"/>
+            <number displayName="ISI" required="true" minimumValue="0"/>
             <text displayName="Notes" required="false" />
+            <fileRelativePath displayName="Path"/>
         </dataFields>
 
     </project>

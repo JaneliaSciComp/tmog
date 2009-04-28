@@ -16,6 +16,7 @@ import org.janelia.it.ims.tmog.config.output.RenameFieldValue;
 import org.janelia.it.ims.tmog.config.output.SourceFileModificationTime;
 import org.janelia.it.ims.tmog.field.FileExtensionModel;
 import org.janelia.it.ims.tmog.field.FileModificationTimeModel;
+import org.janelia.it.ims.tmog.field.FileRelativePathModel;
 import org.janelia.it.ims.tmog.field.PluginDataModel;
 import org.janelia.it.ims.tmog.field.RunTimeModel;
 import org.janelia.it.ims.tmog.field.SourceFileDateDefaultValue;
@@ -297,6 +298,12 @@ public class TransmogrifierConfiguration {
                                  TargetNameModel.class);
         digester.addSetProperties("transmogrifierConfiguration/project/dataFields/targetName");
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/targetName",
+                            "add");
+
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/fileRelativePath",
+                                 FileRelativePathModel.class);
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/fileRelativePath");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/fileRelativePath",
                             "add");
 
         digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/validValueList",
