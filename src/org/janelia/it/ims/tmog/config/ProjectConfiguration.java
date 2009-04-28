@@ -9,6 +9,7 @@ package org.janelia.it.ims.tmog.config;
 
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.tmog.field.DataField;
+import org.janelia.it.ims.tmog.field.TargetNameModel;
 import org.janelia.it.ims.tmog.plugin.RowListener;
 import org.janelia.it.ims.tmog.plugin.RowValidator;
 import org.janelia.it.ims.tmog.plugin.SessionListener;
@@ -28,6 +29,7 @@ public class ProjectConfiguration {
     private boolean isDefault;
     private String taskName;
     private DataFields dataFields;
+    private String targetDisplayName;
     private InputFileFilter inputFileFilter;
     private InputFileSorter inputFileSorter;
     private OutputDirectoryConfiguration outputDirectoryConfiguration;
@@ -64,6 +66,10 @@ public class ProjectConfiguration {
             fieldConfigurations.add(field.getNewInstance(true));
         }
         return fieldConfigurations;
+    }
+
+    public String getTargetDisplayName() {
+        return targetDisplayName;
     }
 
     public InputFileFilter getInputFileFilter() {
@@ -146,6 +152,18 @@ public class ProjectConfiguration {
      * @throws ConfigurationException if any errors occur.
      */
     public void initializeAndVerify() throws ConfigurationException {
+
+        for (DataField field : dataFields.getFields()) {
+            if (field instanceof TargetNameModel) {
+                targetDisplayName = field.getDisplayName();
+                break;
+            }
+        }
+
+        if (targetDisplayName == null) {
+            targetDisplayName = "File Name";
+        }
+
         if (outputDirectoryConfiguration == null) {
             throw new ConfigurationException(
                     "The output directory is not defined for the " +

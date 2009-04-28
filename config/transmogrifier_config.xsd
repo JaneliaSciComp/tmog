@@ -182,6 +182,12 @@
     </xs:complexType>
 
     <xs:complexType name="fileExtensionType">
+        <xs:attribute name="markedForTask" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="targetNameType">
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="markedForTask" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:simpleType name="matchType">
@@ -236,6 +242,8 @@
                         <xs:element name="runTime" type="runTimeType"/>
                         <xs:element name="fileExtension"
                                     type="fileExtensionType"/>
+                        <xs:element name="targetName"
+                                    type="targetNameType"/>
                     </xs:choice>
                 </xs:complexType>
             </xs:element>

@@ -249,7 +249,7 @@ public class CollectorView implements SessionView {
 
     private void createDataTableModel(List<? extends Target> targets) {
         rootDirectoryField.setText(defaultDirectory.getAbsolutePath());
-        tableModel = new DataTableModel("File Name",
+        tableModel = new DataTableModel(projectConfig.getTargetDisplayName(),
                                         targets,
                                         projectConfig);
         dataTable.setModel(tableModel);

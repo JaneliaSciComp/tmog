@@ -22,6 +22,7 @@ import org.janelia.it.ims.tmog.field.SourceFileDateDefaultValue;
 import org.janelia.it.ims.tmog.field.SourceFileDefaultValue;
 import org.janelia.it.ims.tmog.field.StaticDataModel;
 import org.janelia.it.ims.tmog.field.StaticDefaultValue;
+import org.janelia.it.ims.tmog.field.TargetNameModel;
 import org.janelia.it.ims.tmog.field.ValidValue;
 import org.janelia.it.ims.tmog.field.ValidValueModel;
 import org.janelia.it.ims.tmog.field.VerifiedDateModel;
@@ -288,7 +289,14 @@ public class TransmogrifierConfiguration {
 
         digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/fileExtension",
                                  FileExtensionModel.class);
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/fileExtension");
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/fileExtension",
+                            "add");
+
+        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/targetName",
+                                 TargetNameModel.class);
+        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/targetName");
+        digester.addSetNext("transmogrifierConfiguration/project/dataFields/targetName",
                             "add");
 
         digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/validValueList",

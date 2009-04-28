@@ -19,6 +19,14 @@
         </plugins>
 
         <dataFields>
+            <targetName displayName="Experiment Timestamp"/>
+            <validValueList displayName="Tracker Tag" required="true">
+                <validValue displayName="A" value="A"/>
+                <validValue displayName="B" value="B"/>
+                <validValue displayName="C" value="C"/>
+                <validValue displayName="D" value="D"/>
+                <validValue displayName="E" value="E"/>
+            </validValueList>
             <text displayName="Worm Strain" required="true" pattern="[0-9A-Za-z\s]++"/>
             <text displayName="RNAI" required="true" pattern="[0-9A-Za-z\s]++"/>
             <validValueList displayName="Stimulus Protocol" required="true">
@@ -29,14 +37,6 @@
                 <sourceFileDefault pattern=".*[/\\\\]([^/\\\\]++)[/\\\\]\d\d\d\d\d\d\d\d_\d\d\d\d\d\d"
                                    matchType="path"/>
             </text>
-            <date displayName="Experiment Timestamp" required="true"
-                  datePattern="yyyyMMdd_HHmmss" copyable="false">
-                <sourceFileDateDefault pattern="(\d\d\d\d\d\d\d\d_\d\d\d\d\d\d){1}"
-                                       fromDatePattern="yyyyMMdd_HHmmss"
-                                       toDatePattern="yyyyMMdd_HHmmss"
-                                       matchType="name"/>
-            </date>
-            <text displayName="Tracker Tag" required="true" pattern="[0-9A-Za-z\s]++"/>
             <text displayName="Notes" required="false" />
         </dataFields>
 
