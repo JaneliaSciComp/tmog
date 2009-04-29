@@ -7,6 +7,8 @@
 
 package org.janelia.it.ims.tmog.filefilter;
 
+import org.janelia.it.ims.tmog.target.TargetNamer;
+
 import java.io.File;
 
 /**
@@ -20,10 +22,12 @@ public class FileNamePatternWithQueryFilter extends FileNamePatternFilter {
 
     public FileNamePatternWithQueryFilter(String pattern,
                                           String queryUrl,
-                                          boolean includeFilesMatchingQuery) {
+                                          boolean includeFilesMatchingQuery,
+                                          TargetNamer targetNamer) {
         super(pattern);
         this.queryFilter = new QueryFilter(queryUrl,
-                                           includeFilesMatchingQuery);
+                                           includeFilesMatchingQuery,
+                                           targetNamer);
     }
 
     public boolean accept(File pathname) {

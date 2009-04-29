@@ -8,6 +8,7 @@
 package org.janelia.it.ims.tmog.filefilter;
 
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.tmog.target.TargetNamer;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,11 +31,14 @@ public class QueryFilter extends javax.swing.filechooser.FileFilter
     private String queryUrl;
     private boolean includeMatchedFiles;
     private Set<String> queryResults;
+    private TargetNamer targetNamer;
 
     public QueryFilter(String queryUrl,
-                       boolean includeMatchedFiles) {
+                       boolean includeMatchedFiles,
+                       TargetNamer targetNamer) {
         this.queryUrl = queryUrl;
         this.includeMatchedFiles = includeMatchedFiles;
+        this.targetNamer = targetNamer;
         this.queryResults = new HashSet<String>(1024);
         BufferedReader in = null;
         try {
@@ -89,12 +93,15 @@ public class QueryFilter extends javax.swing.filechooser.FileFilter
     }
 
     public boolean accept(File pathname) {
-        String fileName = pathname.getName();
+        String targetName = pathname.getName();
+        if (targetNamer != null) {
+            targetName = targetNamer.getName(targetName);
+        }
         boolean isAccepted;
         if (includeMatchedFiles) {
-            isAccepted = queryResults.contains(fileName);
+            isAccepted = queryResults.contains(targetName);
         } else {
-            isAccepted = ! queryResults.contains(fileName);
+            isAccepted = ! queryResults.contains(targetName);
         }
         return isAccepted;
     }

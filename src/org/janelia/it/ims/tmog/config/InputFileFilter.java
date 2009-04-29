@@ -89,11 +89,13 @@ public class InputFileFilter {
         if (excludeQueryUrl != null) {
             filter = new FileNamePatternWithQueryFilter(patternString,
                                                         excludeQueryUrl,
-                                                        false);
+                                                        false,
+                                                        getTargetNamer());
         } else if (includeQueryUrl != null) {
             filter = new FileNamePatternWithQueryFilter(patternString,
                                                         includeQueryUrl,
-                                                        true);
+                                                        true,
+                                                        getTargetNamer());
         }
         return filter;
     }
