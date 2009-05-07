@@ -5,33 +5,44 @@
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
  */
 
-package org.janelia.it.ims.tmog.plugin;
+package org.janelia.it.wormtracker;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.field.DataField;
+import org.janelia.it.ims.tmog.plugin.ExternalDataException;
+import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
+import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.plugin.RowListener;
+import org.janelia.it.utils.StringUtil;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.util.Arrays;
+import java.net.URLEncoder;
 
 /**
- * This plug-in converts task completion events into HTTP POST requests
- * for a REST data server.
+ * This plug-in creates HTTP requests to store collected data in the
+ * worm tracker database using the worm tracker web service.
  *
  * @author Eric Trautman
  */
-public class RestDataPlugin implements RowListener {
+public class WormTrackerDataPlugin implements RowListener {
 
     /** The logger for this class. */
-    private static final Log LOG = LogFactory.getLog(RestDataPlugin.class);
+    private static final Log LOG =
+            LogFactory.getLog(WormTrackerDataPlugin.class);
+
+    private static final String INIT_FAILURE_MSG =
+            "Failed to initialize the Worm Tracker Data plug-in.  ";
 
     /**
      * URL for the data server
@@ -49,7 +60,7 @@ public class RestDataPlugin implements RowListener {
      * Empty constructor required by
      * {@link org.janelia.it.ims.tmog.config.PluginFactory}.
      */
-    public RestDataPlugin() {
+    public WormTrackerDataPlugin() {
     }
 
     /**
@@ -58,7 +69,7 @@ public class RestDataPlugin implements RowListener {
      *
      * @param  config  the plugin configuration.
      *
-     * @throws ExternalSystemException
+     * @throws org.janelia.it.ims.tmog.plugin.ExternalSystemException
      *   if the plugin can not be initialized.
      */
     public void init(PluginConfiguration config)
@@ -74,13 +85,27 @@ public class RestDataPlugin implements RowListener {
             this.dataServerUrlName += '/';
         }
 
+        URI uri;
+        int responseCode;
         try {
-            HttpMethod method = new GetMethod(this.dataServerUrlName);
-            sendRequest(method);
+            HttpMethod method = new GetMethod(this.dataServerUrlName +
+                                              "is-service-available");
+            uri = method.getURI();
+            LOG.info("init: execute GET " + uri);
+            HttpClient httpClient = new HttpClient();
+            responseCode = httpClient.executeMethod(method);
+
         } catch (Throwable t) {
             throw new ExternalSystemException(
                     INIT_FAILURE_MSG + t.getMessage(),
                     t);
+        }
+
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            throw new ExternalSystemException(
+                    INIT_FAILURE_MSG +
+                    "The request for '" + uri +
+                    "' failed with response code " + responseCode + ".");
         }
 
         this.resourceFieldName = config.getProperty("resourceField");
@@ -101,7 +126,7 @@ public class RestDataPlugin implements RowListener {
      * @return the data row for processing (with any
      *         updates from this plugin).
      *
-     * @throws ExternalDataException
+     * @throws org.janelia.it.ims.tmog.plugin.ExternalDataException
      *   if a recoverable data error occurs during processing.
      * @throws ExternalSystemException
      *   if a non-recoverable system error occurs during processing.
@@ -129,52 +154,6 @@ public class RestDataPlugin implements RowListener {
     }
 
     /**
-     * Creates a new HTTP client instance and executes the specified method,
-     * logging the request.
-     *
-     * @param  method  request to execute.
-     *
-     * @throws ExternalSystemException
-     *   if any errors occur.
-     */
-    private void sendRequest(HttpMethod method)
-            throws ExternalSystemException {
-
-        int responseCode;
-        URI requestUri = null;
-        try {
-            StringBuilder sb = new StringBuilder();
-            sb.append("sendRequest: uri=");
-            requestUri = method.getURI();
-            sb.append(requestUri);
-            sb.append(", method=");
-            sb.append(method.getName());
-            if (method instanceof PostMethod) {
-                sb.append(", postParameters=");
-                sb.append(Arrays.asList(((PostMethod) method).getParameters()));
-            }
-            LOG.info(sb.toString());
-
-            HttpClient httpClient = new HttpClient();
-            responseCode = httpClient.executeMethod(method);
-            
-        } catch (IOException e) {
-            throw new ExternalSystemException(
-                    "The request for '" + requestUri +
-                    "' failed.  The detailed error was: " + e.getMessage() +
-                    ".");
-        } finally {
-            method.releaseConnection();
-        }
-
-        if (responseCode != HttpURLConnection.HTTP_OK) {
-            throw new ExternalSystemException(
-                    "The request for '" + requestUri +
-                    "' failed with response code " + responseCode + ".");
-        }
-    }
-
-    /**
      * Converts the specified row data into an HTTP POST request and then
      * sends the request.
      *
@@ -197,21 +176,78 @@ public class RestDataPlugin implements RowListener {
                     "Please verify your configuration.");
         }
 
-        PostMethod method = new PostMethod(this.dataServerUrlName +
-                                           resourceField);
+        String encodedResource;
+        try {
+            encodedResource = URLEncoder.encode(resourceField,
+                                                "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new ExternalSystemException(
+                    "Unable to find UTF-8 encoding.", e);
+        }
 
+        PutMethod method = new PutMethod(this.dataServerUrlName +
+                                         encodedResource);
+
+        StringBuilder xml = new StringBuilder(256);
+
+        xml.append("<experiment>");
         DataRow dataRow = row.getDataRow();
+        String fieldName;
         String fieldValue;
         for (DataField field : dataRow.getFields()) {
-            if (! resourceFieldName.equals(field.getDisplayName())) {
+            fieldName = field.getDisplayName();
+            if (! resourceFieldName.equals(fieldName)) {
                 fieldValue = field.getCoreValue();
                 if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                    method.addParameter(field.getDisplayName(), fieldValue);
+                    xml.append("<property type=\"");
+                    xml.append(StringUtil.getDefinedXmlValue(fieldName));
+                    xml.append("\">");
+                    xml.append(StringUtil.getDefinedXmlValue(fieldValue));
+                    xml.append("</property>");
                 }
             }
         }
+        xml.append("</experiment>");
 
-        sendRequest(method);
+
+        int responseCode;
+        URI requestUri = null;
+        try {
+            requestUri = method.getURI();
+            
+            StringRequestEntity requestEntity =
+                    new StringRequestEntity(
+                            xml.toString(),
+                            "application/janelia-wormtracker+xml",
+                            "UTF-8");
+            method.setRequestEntity(requestEntity);
+
+            if (LOG.isInfoEnabled()) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("sendRequest: PUT ");
+                sb.append(requestUri);
+                sb.append(", xml=");
+                sb.append(xml);
+                LOG.info(sb.toString());
+            }
+
+            HttpClient httpClient = new HttpClient();
+            responseCode = httpClient.executeMethod(method);
+
+        } catch (IOException e) {
+            throw new ExternalSystemException(
+                    "The request for '" + requestUri +
+                    "' failed.  The detailed error was: " + e.getMessage() +
+                    ".");
+        } finally {
+            method.releaseConnection();
+        }
+
+        if (responseCode != HttpURLConnection.HTTP_NO_CONTENT) {
+            throw new ExternalSystemException(
+                    "The request for '" + requestUri +
+                    "' failed with response code " + responseCode + ".");
+        }
     }
 
     private void logFailure(EventType eventType,
@@ -221,6 +257,4 @@ public class RestDataPlugin implements RowListener {
                   " event for " + row, t);
     }
 
-    private static final String INIT_FAILURE_MSG =
-            "Failed to initialize REST data manager plug-in.  ";
 }

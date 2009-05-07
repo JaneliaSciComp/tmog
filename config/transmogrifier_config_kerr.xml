@@ -9,19 +9,19 @@
 
         <inputFileFilter patternString="(\d{8}_\d{6}){1}(.zip)?"
                          patternGroupNumber="1"
-                         excludeQueryUrl="http://val1.int.janelia.org:8080/wormTracker/experiment"
+                         excludeQueryUrl="http://trautmane-ws:8080/wormtracker"
                          recursiveSearch="true"/>
         
         <plugins>
             <rowListener className="org.janelia.it.wormtracker.SummaryPrefixPlugin"/>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.RestDataPlugin">
-                <property name="dataServerUrl" value="http://val1.int.janelia.org:8080/wormTracker/experiment"/>
-                <property name="resourceField" value="Experiment Timestamp"/>
+            <rowListener className="org.janelia.it.wormtracker.WormTrackerDataPlugin">
+                <property name="dataServerUrl" value="http://trautmane-ws:8080/wormtracker"/>
+                <property name="resourceField" value="Experiment ID"/>
             </rowListener>
         </plugins>
 
         <dataFields>
-            <targetName displayName="Experiment Timestamp"/>
+            <targetName displayName="Experiment ID"/>
             <validValueList displayName="Tracker Tag" required="true">
                 <validValue displayName="A" value="A"/>
                 <validValue displayName="B" value="B"/>
@@ -36,8 +36,7 @@
             <number displayName="Tap Number" required="true" minimumValue="0"/>
             <number displayName="ISI" required="true" minimumValue="0"/>
             <text displayName="Notes" required="false" />
-            <fileRelativePath displayName="Path"/>
-            <pluginData displayName="Prefix" />            
+            <pluginData displayName="Prefix" />
         </dataFields>
 
     </project>
