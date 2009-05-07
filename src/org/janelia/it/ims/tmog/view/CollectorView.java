@@ -150,10 +150,10 @@ public class CollectorView implements SessionView {
         InputFileFilter inputFilter = projectConfig.getInputFileFilter();
         fileTargetWorker =
                 new FileTargetWorker(selectedFile,
-                                     inputFilter.getFilter(),
+                                     inputFilter.getFilter(defaultDirectory),
                                      inputFilter.isRecursiveSearch(),
                                      FileTarget.ALPHABETIC_COMPARATOR,
-                                     inputFilter.getTargetNamer());
+                                     inputFilter.getTargetNamer(defaultDirectory));
 
         fileTargetWorker.addPropertyChangeListener(new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {

@@ -9,13 +9,16 @@ package org.janelia.it.ims.tmog.config;
 
 import org.janelia.it.ims.tmog.filefilter.FileNamePatternFilter;
 import org.janelia.it.ims.tmog.filefilter.FileNamePatternWithQueryFilter;
-import org.janelia.it.ims.tmog.target.TargetNamer;
+import org.janelia.it.ims.tmog.target.FileTargetNamer;
 
+import java.io.File;
 import java.io.FileFilter;
 
 /**
  * This class encapsulates configuration information about the
  * input directory file filter.
+ *
+ * TODO: revisit target namer configuration and creation
  *
  * @author Eric Trautman
  */
@@ -82,31 +85,37 @@ public class InputFileFilter {
     }
 
     /**
+     * @param  rootDirectory  root directory for all input files.
+     *
      * @return a file filter based upon configured parameters.
      */
-    public FileFilter getFilter() {
+    public FileFilter getFilter(File rootDirectory) {
         // rebuild query filters for each request
         if (excludeQueryUrl != null) {
             filter = new FileNamePatternWithQueryFilter(patternString,
                                                         excludeQueryUrl,
                                                         false,
-                                                        getTargetNamer());
+                                                        getTargetNamer(rootDirectory));
         } else if (includeQueryUrl != null) {
             filter = new FileNamePatternWithQueryFilter(patternString,
                                                         includeQueryUrl,
                                                         true,
-                                                        getTargetNamer());
+                                                        getTargetNamer(rootDirectory));
         }
         return filter;
     }
 
     /**
+     * @param  rootDirectory  root directory for all input files.
+     *
      * @return a target namer based upon configured parameters.
      */
-    public TargetNamer getTargetNamer() {
-        TargetNamer namer = null;
+    public FileTargetNamer getTargetNamer(File rootDirectory) {
+        FileTargetNamer namer = null;
         if (patternGroupNumber != null) {
-            namer = new TargetNamer(patternString, patternGroupNumber);
+            namer = new FileTargetNamer(patternString,
+                                        patternGroupNumber,
+                                        rootDirectory.getAbsolutePath());
         }
         return namer;
     }

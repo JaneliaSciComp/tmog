@@ -133,7 +133,7 @@ public class RenameView implements SessionView {
         lsmDirectory = selectedFile;
 
         InputFileFilter inputFilter = projectConfig.getInputFileFilter();
-        FileFilter fileFilter = inputFilter.getFilter();
+        FileFilter fileFilter = inputFilter.getFilter(lsmDirectory);
         File[] files = lsmDirectory.listFiles(fileFilter);
         boolean acceptSelectedFile = (files.length > 0);
         OutputDirectoryConfiguration odConfig = projectConfig.getOutputDirectory();

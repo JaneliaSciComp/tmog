@@ -28,7 +28,7 @@ public class FileTargetWorker
     private FileFilter filter;
     private boolean recursiveSearch;
     private Comparator<FileTarget> sortComparator;
-    private TargetNamer namer;
+    private FileTargetNamer namer;
 
     /**
      * Constructs a new worker.
@@ -55,7 +55,7 @@ public class FileTargetWorker
                             FileFilter filter,
                             boolean recursiveSearch,
                             Comparator<FileTarget> sortComparator,
-                            TargetNamer namer) {
+                            FileTargetNamer namer) {
 
         this.rootDirectory = rootDirectory;
         this.filter = filter;

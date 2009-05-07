@@ -7,8 +7,6 @@
 
 package org.janelia.it.ims.tmog.target;
 
-import org.janelia.it.ims.tmog.filefilter.AlphabeticComparator;
-
 import java.io.File;
 import java.util.Comparator;
 
@@ -19,7 +17,7 @@ public class FileTarget implements Target {
 
     private File file;
     private File rootPath;
-    private TargetNamer namer;
+    private FileTargetNamer namer;
 
     public FileTarget(File file) {
         this(file, null, null);
@@ -32,7 +30,7 @@ public class FileTarget implements Target {
 
     public FileTarget(File file,
                       File rootPath,
-                      TargetNamer namer) {
+                      FileTargetNamer namer) {
         this.file = file;
         this.rootPath = rootPath;
         this.namer = namer;
@@ -62,16 +60,14 @@ public class FileTarget implements Target {
     public String getName() {
         String name = null;
         if (file != null) {
-            name = file.getName();
-            if (namer != null) {
-                name = namer.getName(name);
+            if (namer == null) {
+                name = file.getName();                
+            } else {
+                name = namer.getName(file);
             }
         }
         return name;
     }
-
-    private static final AlphabeticComparator FILE_NAME_COMPARATOR =
-            new AlphabeticComparator();
 
     /**
      * Comparator for sorting file targets by file name.
@@ -80,8 +76,7 @@ public class FileTarget implements Target {
             new Comparator<FileTarget>() {
                 public int compare(FileTarget o1,
                                    FileTarget o2) {
-                    return FILE_NAME_COMPARATOR.compare(o1.getFile(),
-                                                        o2.getFile());
+                    return o1.getName().compareTo(o2.getName());
                 }
     };
 

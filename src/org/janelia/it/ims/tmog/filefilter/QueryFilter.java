@@ -7,15 +7,17 @@
 
 package org.janelia.it.ims.tmog.filefilter;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.URI;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.target.TargetNamer;
+import org.janelia.it.ims.tmog.target.FileTargetNamer;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.HttpURLConnection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,25 +33,38 @@ public class QueryFilter extends javax.swing.filechooser.FileFilter
     private String queryUrl;
     private boolean includeMatchedFiles;
     private Set<String> queryResults;
-    private TargetNamer targetNamer;
+    private FileTargetNamer targetNamer;
 
     public QueryFilter(String queryUrl,
                        boolean includeMatchedFiles,
-                       TargetNamer targetNamer) {
+                       FileTargetNamer targetNamer) {
         this.queryUrl = queryUrl;
         this.includeMatchedFiles = includeMatchedFiles;
         this.targetNamer = targetNamer;
         this.queryResults = new HashSet<String>(1024);
         BufferedReader in = null;
+
+        int responseCode;
+        URI requestUri = null;
+        GetMethod method = new GetMethod(queryUrl);
         try {
-            URL url = new URL(queryUrl);
-            URLConnection connection = url.openConnection();
+            method.setRequestHeader("Accept", "text/plain");
+            HttpClient httpClient = new HttpClient();
+            LOG.info("sending GET " + queryUrl);
+            responseCode = httpClient.executeMethod(method);
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                throw new IOException(
+                        "The request for '" + requestUri +
+                        "' failed with response code " + responseCode + ".");
+            }
+
             in = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
+                    new InputStreamReader(method.getResponseBodyAsStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 this.queryResults.add(inputLine);
             }
+
         } catch (IOException e) {
             LOG.warn("Failed to execute file query '" + queryUrl + "'", e);
             // TODO: should filter errors propogate to user?
@@ -62,11 +77,10 @@ public class QueryFilter extends javax.swing.filechooser.FileFilter
                               "ignoring error", e);
                 }
             }
+            method.releaseConnection();
         }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("queryResults=" + queryResults);
-        }
+        LOG.info("retrieved " + queryResults.size() + " results");
     }
 
     public String getQueryUrl() {
@@ -93,10 +107,13 @@ public class QueryFilter extends javax.swing.filechooser.FileFilter
     }
 
     public boolean accept(File pathname) {
-        String targetName = pathname.getName();
-        if (targetNamer != null) {
-            targetName = targetNamer.getName(targetName);
+        String targetName;
+        if (targetNamer == null) {
+            targetName = pathname.getName();
+        } else {
+            targetName = targetNamer.getName(pathname);
         }
+        
         boolean isAccepted;
         if (includeMatchedFiles) {
             isAccepted = queryResults.contains(targetName);
