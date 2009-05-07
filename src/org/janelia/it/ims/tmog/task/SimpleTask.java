@@ -159,7 +159,8 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
                         SessionListener.EventType.END,
                         taskSummary.toString());
             } catch (Exception e) {
-                LOG.error("session listener processing failed", e);
+                LOG.error("session listener processing failed, " +
+                          "taskSummary is " + taskSummary, e);
             }
 
             LOG.debug("finished task");
@@ -333,7 +334,6 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
                                 RowListener.EventType.END_SUCCESS,
                                 pluginDataRow);
                     } else {
-                        addFailedRowIndex(rowIndex);
                         notifyRowListeners(
                                 RowListener.EventType.END_FAIL,
                                 pluginDataRow);
@@ -344,6 +344,10 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
                     isRowProcessingSuccessful = false;
                 }
 
+            }
+
+            if (! isRowProcessingSuccessful) {
+                addFailedRowIndex(rowIndex);
             }
 
             cleanupRow(modelRow, isRowProcessingSuccessful);
