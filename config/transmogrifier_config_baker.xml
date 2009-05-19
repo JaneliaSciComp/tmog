@@ -8,16 +8,15 @@
     <project name="Baker Lab: GAL4 Lines (BSB_*)" default="true">
 
         <outputDirectory>
-            <!--<path path="\\dm3.int.janelia.org\bakerlab\MicroscopeData\Baker_Confocal_Stacks\" />-->
-            <path path="/home/trautmane/renamer/bakerlab/out/" />
+            <path path="\\dm3.int.janelia.org\bakerlab\MicroscopeData\Baker_Confocal_Stacks\" />
             <renameFieldValue fieldDisplayName="Line" />
         </outputDirectory>
 
         <plugins>
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
-                <property name="db.config.key" value="nighthawk"/>
-                <property name="shouldExist" value="false"/>
-            </rowValidator>
+            <!--<rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">-->
+                <!--<property name="db.config.key" value="nighthawk"/>-->
+                <!--<property name="shouldExist" value="false"/>-->
+            <!--</rowValidator>-->
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
                 <property name="db.config.key" value="nighthawk" />
                 <property name="Specimen Number" value="urn:lsid:janelia.org:baker_lab_line_specimen:${Line}" />
@@ -133,8 +132,7 @@
     <project name="Baker Lab: Fix Data for Existing GAL4 Lines (BSB_*)">
 
         <outputDirectory>
-            <!--<path path="\\dm3.int.janelia.org\bakerlab\MicroscopeData\Baker_Confocal_Stacks\" />-->
-            <path path="/home/trautmane/renamer/bakerlab/out/" />
+            <path path="\\dm3.int.janelia.org\bakerlab\MicroscopeData\Baker_Confocal_Stacks\" />
             <renameFieldValue fieldDisplayName="Line" />
         </outputDirectory>
 

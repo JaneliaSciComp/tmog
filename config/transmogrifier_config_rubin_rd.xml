@@ -43,6 +43,7 @@
             <validValueList displayName="Area" required="false" prefix="-">
                 <validValue displayName="br: Brain" value="br"/>
                 <validValue displayName="vnc: Ventral Nerve Cord" value="vnc"/>
+                <validValue displayName="ccx: Central Complex" value="ccx"/>
             </validValueList>
             <text displayName="L-Number" required="false" prefix="-L"
                   pattern="[0-9]++" copyable="false">
