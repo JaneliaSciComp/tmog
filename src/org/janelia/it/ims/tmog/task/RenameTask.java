@@ -94,10 +94,10 @@ public class RenameTask extends SimpleTask {
             totalBytesToCopy += file.length();
         }
 
+        this.bytesInChunk = 1;
         if (totalBytesToCopy == 0) {
             this.totalByteChunksToCopy = 1; // prevent divide by zero
         } else if (totalBytesToCopy < (long) Integer.MAX_VALUE) {
-            this.bytesInChunk = 1;
             this.totalByteChunksToCopy = (int) totalBytesToCopy;
         } else {
             this.bytesInChunk = 1000000; // use megabytes instead of bytes
