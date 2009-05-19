@@ -29,7 +29,7 @@
                 <validValue displayName="D" value="D"/>
                 <validValue displayName="E" value="E"/>
             </validValueList>
-            <text displayName="Worm Strain" required="true" pattern="[0-9A-Za-z,_\s\\-\\(\\)]++"/>
+            <text displayName="Worm Strain" required="true" pattern="[0-9A-Za-z,_\s\-\\(\\)]++"/>
             <text displayName="Growth Conditions" required="true"/>
             <number displayName="Duration" required="true" minimumValue="0"/>
             <number displayName="Baseline" required="true" minimumValue="0"/>
