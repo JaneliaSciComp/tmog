@@ -197,6 +197,14 @@
         <xs:attribute name="visible" type="xs:boolean"/>
     </xs:complexType>
 
+    <xs:complexType name="fileNameType">
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="markedForTask" type="xs:boolean"/>
+        <xs:attribute name="patternString" type="xs:string"/>
+        <xs:attribute name="patternGroupNumber" type="xs:positiveInteger"/>
+        <xs:attribute name="visible" type="xs:boolean"/>
+    </xs:complexType>
+
     <xs:simpleType name="matchType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="name"/>
@@ -253,6 +261,8 @@
                                     type="targetNameType"/>
                         <xs:element name="fileRelativePath"
                                     type="fileRelativePathType"/>
+                        <xs:element name="fileName"
+                                    type="fileNameType"/>
                     </xs:choice>
                 </xs:complexType>
             </xs:element>

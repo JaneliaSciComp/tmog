@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.2.2"/>
+    <global minimumVersion="2.2.3"/>
 
     <!-- replace "trautmane-ws:8080" with "wormtracker" for production  -->
     <project name="Kerr Lab: Multi-Worm Tracker" taskName="collector" default="true">
@@ -39,6 +39,10 @@
             <text displayName="Notes" required="false" />
             <pluginData displayName="Prefix" />
             <fileRelativePath displayName="Path" visible="false"/>
+            <fileName displayName="Timestamp"
+                      visible="false" 
+                      patternString="(\d{8}_\d{6}){1}(.zip)?"
+                      patternGroupNumber="1" />
         </dataFields>
 
     </project>

@@ -148,7 +148,9 @@ public class SummaryPrefixPlugin implements RowListener {
                             entry = entries.nextElement();
                             fileName = entry.getName();
                             if (fileName.endsWith(SUMMARY_EXTENSION)) {
-                                summaryFileName = fileName;
+                                // strip off parent directory info
+                                File summaryFile = new File(fileName);
+                                summaryFileName = summaryFile.getName();
                                 break;
                             }
                         }
