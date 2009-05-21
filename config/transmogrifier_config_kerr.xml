@@ -5,6 +5,7 @@
 
     <global minimumVersion="2.2.2"/>
 
+    <!-- replace "trautmane-ws:8080" with "wormtracker" for production  -->
     <project name="Kerr Lab: Multi-Worm Tracker" taskName="collector" default="true">
 
         <inputFileFilter patternString="(\d{8}_\d{6}){1}(.zip)?"
@@ -37,6 +38,7 @@
             <number displayName="ISI" required="true" minimumValue="0"/>
             <text displayName="Notes" required="false" />
             <pluginData displayName="Prefix" />
+            <fileRelativePath displayName="Path" visible="false"/>
         </dataFields>
 
     </project>
