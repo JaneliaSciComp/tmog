@@ -36,7 +36,7 @@ public class JaneliaTransmogrifier extends JFrame {
      * app is run from within an IDE (package information can be used
      * when the app is run from a jar file). 
      */
-    public static final String VERSION = "2.2.4";
+    public static final String VERSION = "2.2.5";
     
     /**
      * Set up a thread pool to limit the number of concurrent

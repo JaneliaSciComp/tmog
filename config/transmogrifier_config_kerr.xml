@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.2.4"/>
+    <global minimumVersion="2.2.5"/>
 
     <!-- replace "trautmane-ws:8080" with "wormtracker" for production  -->
     <project name="Kerr Lab: Multi-Worm Tracker" taskName="collector" default="true">

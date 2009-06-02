@@ -104,20 +104,20 @@ public class FileTargetWorker
                 new HashMap<String, FileTarget>(targets.size());
         HashSet<FileTarget> duplicateTargets = new HashSet<FileTarget>();
         String name;
-        FileTarget targetWithSameName;
+        FileTarget existingTarget;
         for (FileTarget target : targets) {
             name = target.getName();
-            targetWithSameName = nameToTargetMap.get(name);
-            if (targetWithSameName == null) {
+            existingTarget = nameToTargetMap.get(name);
+            if (existingTarget == null) {
                 nameToTargetMap.put(name, target);
             } else {
-                File dupFile = targetWithSameName.getFile();
-                if (dupFile.isFile()) {
+                File targetFile = target.getFile();
+                if (targetFile.isFile()) {
                     // files take precedence over directories
-                    duplicateTargets.add(target);
-                    nameToTargetMap.put(name, targetWithSameName);
+                    duplicateTargets.add(existingTarget);
+                    nameToTargetMap.put(name, target);
                 } else {
-                    duplicateTargets.add(targetWithSameName);
+                    duplicateTargets.add(target);
                 }
             }
         }
