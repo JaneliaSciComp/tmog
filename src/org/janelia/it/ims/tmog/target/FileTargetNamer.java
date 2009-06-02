@@ -49,16 +49,22 @@ public class FileTargetNamer extends TargetNamer {
     public String getName(File file) {
         String name = super.getName(file.getName());
         if (rootPath != null) {
-            String absName = file.getAbsolutePath();
-            if (absName.startsWith(rootPath)) {
-                int start = rootPath.length() + 1;
-                int stop = absName.lastIndexOf(File.separatorChar);
-                if ((stop != -1) && (start < stop)) {
-                    stop = stop + 1;
-                    name = absName.substring(start, stop) + name;
-                    name = name.replace('\\', '/');                    
-                }
-            }
+            // TODO: revisit target namer configuration and creation
+
+// The following block was commented out after wormtracker no longer needed
+// to add normalized relative path information to the target name.
+// We still need to come up with a cleaner solution for deriving target names.
+
+//            String absName = file.getAbsolutePath();
+//            if (absName.startsWith(rootPath)) {
+//                int start = rootPath.length() + 1;
+//                int stop = absName.lastIndexOf(File.separatorChar);
+//                if ((stop != -1) && (start < stop)) {
+//                    stop = stop + 1;
+//                    name = absName.substring(start, stop) + name;
+//                    name = name.replace('\\', '/');
+//                }
+//            }
         }
         return name;
     }

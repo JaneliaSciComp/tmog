@@ -14,6 +14,9 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -88,6 +91,42 @@ public class FileTargetWorker
             targets = new ArrayList<FileTarget>(children.length);
             for (File child : children) {
                 targets.add(new FileTarget(child, rootDirectory, namer));
+            }
+        }
+
+        // A root wormtracker data directory can contain directories and zip
+        // files for the same experiment.  We need to filter out duplicate
+        // experiments here, giving zip files precedence over directories.
+
+        // TODO: make duplicate target filtering process configurable
+        
+        HashMap<String, FileTarget> nameToTargetMap =
+                new HashMap<String, FileTarget>(targets.size());
+        HashSet<FileTarget> duplicateTargets = new HashSet<FileTarget>();
+        String name;
+        FileTarget targetWithSameName;
+        for (FileTarget target : targets) {
+            name = target.getName();
+            targetWithSameName = nameToTargetMap.get(name);
+            if (targetWithSameName == null) {
+                nameToTargetMap.put(name, target);
+            } else {
+                File dupFile = targetWithSameName.getFile();
+                if (dupFile.isFile()) {
+                    // files take precedence over directories
+                    duplicateTargets.add(target);
+                    nameToTargetMap.put(name, targetWithSameName);
+                } else {
+                    duplicateTargets.add(targetWithSameName);
+                }
+            }
+        }
+
+        if (duplicateTargets.size() > 0) {
+            for (Iterator<FileTarget> i = targets.iterator(); i.hasNext();) {
+                if (duplicateTargets.contains(i.next())) {
+                    i.remove();
+                }
             }
         }
 
