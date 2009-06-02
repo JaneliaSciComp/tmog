@@ -124,8 +124,8 @@ public class PluginFactory {
         return pluginInstances;
     }
 
-    private static Object constructInstance(String className,
-                                            String projectName)
+    public static Object constructInstance(String className,
+                                           String projectName)
             throws ConfigurationException {
 
         Class clazz;

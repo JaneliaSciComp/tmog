@@ -9,6 +9,10 @@ package org.janelia.it.ims.tmog.config;
 
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.tmog.field.DataField;
+import org.janelia.it.ims.tmog.field.DefaultValue;
+import org.janelia.it.ims.tmog.field.DefaultValueList;
+import org.janelia.it.ims.tmog.field.DefaultValueModel;
+import org.janelia.it.ims.tmog.field.PluginDefaultValue;
 import org.janelia.it.ims.tmog.field.TargetNameModel;
 import org.janelia.it.ims.tmog.plugin.RowListener;
 import org.janelia.it.ims.tmog.plugin.RowValidator;
@@ -154,9 +158,12 @@ public class ProjectConfiguration {
     public void initializeAndVerify() throws ConfigurationException {
 
         for (DataField field : dataFields.getFields()) {
-            if (field instanceof TargetNameModel) {
+            if (field instanceof DefaultValueModel) {
+                DefaultValueModel defaultField = (DefaultValueModel) field;
+                constructDefaultValuePluginInstances(
+                        defaultField.getDefaultValueList());
+            } else if (field instanceof TargetNameModel) {
                 targetDisplayName = field.getDisplayName();
-                break;
             }
         }
 
@@ -170,6 +177,7 @@ public class ProjectConfiguration {
                     name + " project.");
         }
         outputDirectoryConfiguration.verify(name, dataFields.getFields());
+
         if (pluginFactory != null) {
             pluginFactory.constructInstances(name);
         }
@@ -178,4 +186,35 @@ public class ProjectConfiguration {
     public int getNumberOfEditableFields() {
         return dataFields.getNumberOfEditableFields();
     }
+
+    private void constructDefaultValuePluginInstances(DefaultValueList defaultList)
+            throws ConfigurationException {
+
+        DefaultValue value;
+        PluginDefaultValue pluginValue;
+        PluginDefaultValueConfiguration config;
+        for (int i = 0; i < defaultList.size(); i++) {
+            value = defaultList.get(i);
+            if (value instanceof PluginDefaultValueConfiguration) {
+                config = (PluginDefaultValueConfiguration) value;
+                String className = config.getClassName();
+                Object newInstance =
+                        PluginFactory.constructInstance(className,
+                                                        name);
+                if (newInstance instanceof PluginDefaultValue) {
+                    pluginValue = (PluginDefaultValue) newInstance;
+                    pluginValue.init(config.getProperties());
+                } else {
+                    throw new ConfigurationException(
+                            "The configured default value plugin class (" +
+                            className + ") for the " + name +
+                            " project does not implement " +
+                            PluginDefaultValue.class.getName() + ".");
+                }
+                defaultList.set(i, pluginValue);
+            }
+        }
+        
+    }
+
 }

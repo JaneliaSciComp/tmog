@@ -114,57 +114,11 @@ public class SummaryPrefixPlugin implements RowListener {
         if (target instanceof FileTarget) {
             FileTarget fileTarget = (FileTarget) target;
             File file = fileTarget.getFile();
-
-            if (file.isDirectory()) {
-
-                File[] summaryFiles = file.listFiles(SUMMARY_FILTER);
-                if (summaryFiles.length > 0) {
-                    summaryFileName = summaryFiles[0].getName();
-                }
-
-                if (summaryFiles.length > 1) {
-                    StringBuilder msg = new StringBuilder();
-                    msg.append("multiple summary files exist in ");
-                    msg.append(file.getAbsolutePath());
-                    msg.append(", files are: ");
-                    for (File summaryFile : summaryFiles) {
-                        msg.append(summaryFile.getName());
-                        msg.append(", ");
-                    }
-                    msg.setLength(msg.length() - 2);
-                    LOG.warn(msg.toString());
-                }
-
-            } else {
-
-                String fileName = file.getName();
-                if (fileName.endsWith(".zip")) {
-                    try {
-                        ZipFile zipFile = new ZipFile(file);
-                        Enumeration<? extends ZipEntry> entries =
-                                zipFile.entries();
-                        ZipEntry entry;
-                        while (entries.hasMoreElements()) {
-                            entry = entries.nextElement();
-                            fileName = entry.getName();
-                            if (fileName.endsWith(SUMMARY_EXTENSION)) {
-                                // strip off parent directory info
-                                File summaryFile = new File(fileName);
-                                summaryFileName = summaryFile.getName();
-                                break;
-                            }
-                        }
-                    } catch (IOException e) {
-                        LOG.error("failed to open zip file " +
-                                  file.getAbsolutePath(), e);
-                    }
-                }
-            }
+            summaryFileName = getSummaryFileName(file);
 
             if (summaryFileName == null) {
-                LOG.error("summary file not found in " +
-                          file.getAbsolutePath());
-                // TODO: should a data exception be thrown here?
+                LOG.warn("summary file not found in " +
+                         file.getAbsolutePath());
             }
         }
 
@@ -176,6 +130,66 @@ public class SummaryPrefixPlugin implements RowListener {
         }
 
         return row;
+    }
+
+    /**
+     * @param  experimentContainer  the directory or zip file that contains
+     *                              all of the experiment's data files
+     *
+     * @return the name of the experiment's summary file
+     *         or null if the summary file cannot be found.
+     */
+    public static String getSummaryFileName(File experimentContainer) {
+
+        String summaryFileName = null;
+
+        if (experimentContainer.isDirectory()) {
+
+            File[] summaryFiles = experimentContainer.listFiles(SUMMARY_FILTER);
+            if (summaryFiles.length > 0) {
+                summaryFileName = summaryFiles[0].getName();
+            }
+
+            if (summaryFiles.length > 1) {
+                StringBuilder msg = new StringBuilder();
+                msg.append("multiple summary files exist in ");
+                msg.append(experimentContainer.getAbsolutePath());
+                msg.append(", files are: ");
+                for (File summaryFile : summaryFiles) {
+                    msg.append(summaryFile.getName());
+                    msg.append(", ");
+                }
+                msg.setLength(msg.length() - 2);
+                LOG.warn(msg.toString());
+            }
+
+        } else {
+
+            String fileName = experimentContainer.getName();
+            if (fileName.endsWith(".zip")) {
+                try {
+                    ZipFile zipFile = new ZipFile(experimentContainer);
+                    Enumeration<? extends ZipEntry> entries =
+                            zipFile.entries();
+                    ZipEntry entry;
+                    while (entries.hasMoreElements()) {
+                        entry = entries.nextElement();
+                        fileName = entry.getName();
+                        if (fileName.endsWith(SUMMARY_EXTENSION)) {
+                            // strip off parent directory info
+                            File summaryFile = new File(fileName);
+                            summaryFileName = summaryFile.getName();
+                            break;
+                        }
+                    }
+                } catch (IOException e) {
+                    LOG.error("failed to open zip file " +
+                              experimentContainer.getAbsolutePath(), e);
+                }
+            }
+        }
+
+        return summaryFileName;
     }
 
 }

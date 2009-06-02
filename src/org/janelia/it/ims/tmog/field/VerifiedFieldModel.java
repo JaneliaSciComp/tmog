@@ -18,7 +18,8 @@ import javax.swing.text.PlainDocument;
  *
  * @author Eric Trautman
  */
-public abstract class VerifiedFieldModel extends PlainDocument implements DataField {
+public abstract class VerifiedFieldModel extends PlainDocument
+        implements DataField, DefaultValueModel {
 
     private String displayName;
     private boolean isRequired;
@@ -132,7 +133,11 @@ public abstract class VerifiedFieldModel extends PlainDocument implements DataFi
     public void addDefaultValue(DefaultValue defaultValue) {
         defaultValueList.add(defaultValue);
     }
-    
+
+    public DefaultValueList getDefaultValueList() {
+        return defaultValueList;
+    }
+
     public String getErrorMessage() {
         return errorMessage;
     }

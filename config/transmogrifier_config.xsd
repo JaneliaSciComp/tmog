@@ -72,6 +72,8 @@
                         minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="staticDefault" type="staticDefaultType"
                         minOccurs="0" maxOccurs="1"/>
+            <xs:element name="pluginDefault" type="pluginDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:boolean"/>
@@ -90,11 +92,13 @@
                         minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="staticDefault" type="staticDefaultType"
                         minOccurs="0" maxOccurs="1"/>
+            <xs:element name="pluginDefault" type="pluginDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:boolean"/>
-        <xs:attribute name="minimumValue" type="xs:integer"/>
-        <xs:attribute name="maximumValue" type="xs:integer"/>
+        <xs:attribute name="minimumValue" type="xs:double"/>
+        <xs:attribute name="maximumValue" type="xs:double"/>
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
         <xs:attribute name="copyable" type="xs:boolean"/>
@@ -108,6 +112,8 @@
                         minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="staticDefault" type="staticDefaultType"
                         minOccurs="0" maxOccurs="1"/>
+            <xs:element name="pluginDefault" type="pluginDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:boolean"/>
@@ -124,6 +130,8 @@
     <xs:complexType name="dateType">
         <xs:sequence>
             <xs:element name="sourceFileDateDefault" type="sourceFileDateDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="pluginDefault" type="pluginDefaultType"
                         minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
@@ -156,6 +164,8 @@
     <xs:complexType name="validValueListType">
         <xs:sequence>
             <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="pluginDefault" type="pluginDefaultType"
                         minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="validValue" type="validValueType" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
@@ -226,6 +236,13 @@
 
     <xs:complexType name="staticDefaultType">
         <xs:attribute name="value" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="pluginDefaultType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="property" type="propertyType"/>
+        </xs:sequence>
+        <xs:attribute name="className" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="projectType">

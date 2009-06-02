@@ -205,6 +205,7 @@ public class TransmogrifierConfiguration {
         digester.addSetProperties("transmogrifierConfiguration/project/dataFields/number/staticDefault");
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/number/staticDefault",
                             "addDefaultValue");
+        addDefaultPlugin("transmogrifierConfiguration/project/dataFields/number", digester);
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/number",
                             "add");
 
@@ -221,6 +222,7 @@ public class TransmogrifierConfiguration {
         digester.addSetProperties("transmogrifierConfiguration/project/dataFields/decimal/staticDefault");
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/decimal/staticDefault",
                             "addDefaultValue");
+        addDefaultPlugin("transmogrifierConfiguration/project/dataFields/decimal", digester);
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/decimal",
                             "add");
 
@@ -240,6 +242,7 @@ public class TransmogrifierConfiguration {
         digester.addSetProperties("transmogrifierConfiguration/project/dataFields/text/staticDefault");
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/text/staticDefault",
                             "addDefaultValue");
+        addDefaultPlugin("transmogrifierConfiguration/project/dataFields/text", digester);
 
         digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/date",
                                  VerifiedDateModel.class);
@@ -252,6 +255,7 @@ public class TransmogrifierConfiguration {
         digester.addSetProperties("transmogrifierConfiguration/project/dataFields/date/sourceFileDateDefault");
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/date/sourceFileDateDefault",
                             "addDefaultValue");
+        addDefaultPlugin("transmogrifierConfiguration/project/dataFields/date", digester);
 
         digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/well",
                                  VerifiedWellModel.class);
@@ -322,6 +326,7 @@ public class TransmogrifierConfiguration {
         digester.addSetProperties("transmogrifierConfiguration/project/dataFields/validValueList/sourceFileDefault");
         digester.addSetNext("transmogrifierConfiguration/project/dataFields/validValueList/sourceFileDefault",
                             "addDefaultValue");
+        addDefaultPlugin("transmogrifierConfiguration/project/dataFields/validValueList", digester);
 
         digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/validValueList/validValue",
                                  ValidValue.class);
@@ -387,4 +392,22 @@ public class TransmogrifierConfiguration {
         digester.addSetNext(pluginRoot,
                             addMethodName.toString());
     }
+
+    private void addDefaultPlugin(String parentRoot,
+                                  Digester digester) {
+
+        final String pluginRoot = parentRoot + "/pluginDefault";
+        final String propertyRoot = pluginRoot + "/property";
+
+        digester.addObjectCreate(pluginRoot,
+                                 PluginDefaultValueConfiguration.class);
+        digester.addSetProperties(pluginRoot);
+        digester.addSetNext(pluginRoot,
+                            "addDefaultValue");
+
+        digester.addCallMethod(propertyRoot, "setProperty", 2);
+        digester.addCallParam(propertyRoot, 0, "name");
+        digester.addCallParam(propertyRoot, 1, "value");
+    }
+
 }

@@ -18,7 +18,8 @@ import java.util.ArrayList;
  *
  * @author Eric Trautman
  */
-public class ValidValueModel extends AbstractListModel implements ComboBoxModel, DataField {
+public class ValidValueModel extends AbstractListModel
+        implements ComboBoxModel, DataField, DefaultValueModel {
 
     private String displayName;
     private boolean isRequired;
@@ -47,6 +48,10 @@ public class ValidValueModel extends AbstractListModel implements ComboBoxModel,
         if (validValue.isDefault() && (selectedValue == null)) {
             selectedValue = validValue;
         }
+    }
+
+    public DefaultValueList getDefaultValueList() {
+        return defaultValueList;
     }
 
     public String getDisplayName() {

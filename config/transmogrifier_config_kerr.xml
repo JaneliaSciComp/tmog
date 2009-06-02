@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.2.3"/>
+    <global minimumVersion="2.2.4"/>
 
     <!-- replace "trautmane-ws:8080" with "wormtracker" for production  -->
     <project name="Kerr Lab: Multi-Worm Tracker" taskName="collector" default="true">
@@ -22,27 +22,63 @@
         </plugins>
 
         <dataFields>
+
             <targetName displayName="Experiment ID"/>
+
             <validValueList displayName="Tracker Tag" required="true">
+                <pluginDefault className="org.janelia.it.wormtracker.SummaryDefaultValue">
+                    <property name="pattern" value=".*_.*_.*_.*_([A-E]).*\.summary"/>
+                </pluginDefault>
                 <validValue displayName="A" value="A"/>
                 <validValue displayName="B" value="B"/>
                 <validValue displayName="C" value="C"/>
                 <validValue displayName="D" value="D"/>
                 <validValue displayName="E" value="E"/>
             </validValueList>
-            <text displayName="Worm Strain" required="true" pattern="[0-9A-Za-z,_\s\-\\(\\)]++"/>
-            <text displayName="Growth Conditions" required="true"/>
-            <number displayName="Duration" required="true" minimumValue="0"/>
-            <number displayName="Baseline" required="true" minimumValue="0"/>
-            <number displayName="Tap Number" required="true" minimumValue="0"/>
-            <number displayName="ISI" required="true" minimumValue="0"/>
+
+            <text displayName="Strain Name" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++">
+                <pluginDefault className="org.janelia.it.wormtracker.SummaryDefaultValue">
+                    <property name="pattern" value="(.*)_.*_.*_.*_.*\.summary"/>
+                </pluginDefault>
+            </text>
+
+            <text displayName="Eggs" required="true" pattern="\d+(?:x\d+)?">
+                <pluginDefault className="org.janelia.it.wormtracker.SummaryDefaultValue">
+                    <property name="pattern" value=".*_(.*)_.*_.*_.*\.summary"/>
+                </pluginDefault>
+            </text>
+
+            <text displayName="Food" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++">
+                <pluginDefault className="org.janelia.it.wormtracker.SummaryDefaultValue">
+                    <property name="pattern" value=".*_.*_(.*)_.*_.*\.summary"/>
+                </pluginDefault>
+            </text>
+
+            <number displayName="Age" required="true" minimumValue="0"/>
+
+            <decimal displayName="Temperature" required="true"
+                     minimumValue="10.0" maximumValue="30.0"/>
+
+            <text displayName="Intended Protocol" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++">
+                <pluginDefault className="org.janelia.it.wormtracker.SummaryDefaultValue">
+                    <property name="pattern" value=".*_.*_.*_(.*)_.*\.summary"/>
+                </pluginDefault>
+            </text>
+
+            <text displayName="Plate Code" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++">
+                <pluginDefault className="org.janelia.it.wormtracker.SummaryDefaultValue">
+                    <property name="pattern" value=".*_.*_.*_.*_[A-E](.*)\.summary"/>
+                </pluginDefault>
+            </text>
+
+            <text displayName="Visible" required="false" />
+
             <text displayName="Notes" required="false" />
+
             <pluginData displayName="Prefix" />
+
             <fileRelativePath displayName="Path" visible="false"/>
-            <fileName displayName="Timestamp"
-                      visible="false" 
-                      patternString="(\d{8}_\d{6}){1}(.zip)?"
-                      patternGroupNumber="1" />
+
         </dataFields>
 
     </project>
