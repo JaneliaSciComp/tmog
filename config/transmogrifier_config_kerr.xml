@@ -25,7 +25,7 @@
 
             <targetName displayName="Experiment ID"/>
 
-            <validValueList displayName="Tracker Tag" required="true">
+            <validValueList displayName="Tracker Tag" required="true" copyable="false">
                 <pluginDefault className="org.janelia.it.wormtracker.SummaryDefaultValue">
                     <property name="pattern" value=".*_.*_.*_.*_([A-E]).*\.summary"/>
                 </pluginDefault>
@@ -36,19 +36,19 @@
                 <validValue displayName="E" value="E"/>
             </validValueList>
 
-            <text displayName="Strain Name" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++">
+            <text displayName="Strain Name" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++" copyable="false">
                 <pluginDefault className="org.janelia.it.wormtracker.SummaryDefaultValue">
                     <property name="pattern" value="(.*)_.*_.*_.*_.*\.summary"/>
                 </pluginDefault>
             </text>
 
-            <text displayName="Eggs" required="true" pattern="\d+(?:x\d+)?">
+            <text displayName="Eggs" required="true" pattern="\d+(?:x\d+)?" copyable="false">
                 <pluginDefault className="org.janelia.it.wormtracker.SummaryDefaultValue">
                     <property name="pattern" value=".*_(.*)_.*_.*_.*\.summary"/>
                 </pluginDefault>
             </text>
 
-            <text displayName="Food" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++">
+            <text displayName="Food" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++" copyable="false">
                 <pluginDefault className="org.janelia.it.wormtracker.SummaryDefaultValue">
                     <property name="pattern" value=".*_.*_(.*)_.*_.*\.summary"/>
                 </pluginDefault>
@@ -59,13 +59,13 @@
             <decimal displayName="Temperature" required="true"
                      minimumValue="10.0" maximumValue="30.0"/>
 
-            <text displayName="Intended Protocol" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++">
+            <text displayName="Intended Protocol" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++" copyable="false">
                 <pluginDefault className="org.janelia.it.wormtracker.SummaryDefaultValue">
                     <property name="pattern" value=".*_.*_.*_(.*)_.*\.summary"/>
                 </pluginDefault>
             </text>
 
-            <text displayName="Plate Code" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++">
+            <text displayName="Plate Code" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++" copyable="false">
                 <pluginDefault className="org.janelia.it.wormtracker.SummaryDefaultValue">
                     <property name="pattern" value=".*_.*_.*_.*_[A-E](.*)\.summary"/>
                 </pluginDefault>
