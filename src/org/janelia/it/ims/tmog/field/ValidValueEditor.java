@@ -67,7 +67,8 @@ public class ValidValueEditor extends DefaultCellEditor {
 
         boolean isEditingStopped = true;
 
-        if (! model.verify()) {
+        String coreValue = model.getCoreValue();
+        if ((coreValue.length() > 0) && (! model.verify())) {
             String dialogMsg = model.getErrorMessage() +
                     "  Would you like to correct the field now?";
 
