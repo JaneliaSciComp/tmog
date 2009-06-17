@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 
 /**
  * This plug-in creates HTTP requests to store collected data in the
@@ -85,7 +86,7 @@ public class WormTrackerDataPlugin implements RowListener {
             this.dataServerUrlName += '/';
         }
 
-        URI uri;
+        URI uri = null;
         int responseCode;
         try {
             HttpMethod method = new GetMethod(this.dataServerUrlName +
@@ -95,9 +96,15 @@ public class WormTrackerDataPlugin implements RowListener {
             HttpClient httpClient = new HttpClient();
             responseCode = httpClient.executeMethod(method);
 
+        } catch (UnknownHostException e) {
+            throw new ExternalSystemException(
+                    INIT_FAILURE_MSG + "The host for '" +
+                    this.dataServerUrlName + "' cannot be found.",
+                    e);
         } catch (Throwable t) {
             throw new ExternalSystemException(
-                    INIT_FAILURE_MSG + t.getMessage(),
+                    INIT_FAILURE_MSG + "A request for '" + uri +
+                    "' could not be completed because: " + t.getMessage(),
                     t);
         }
 
