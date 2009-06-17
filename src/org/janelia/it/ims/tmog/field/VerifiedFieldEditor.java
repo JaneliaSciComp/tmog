@@ -76,7 +76,8 @@ public class VerifiedFieldEditor extends AbstractCellEditor
 
             boolean isEditingStopped = true;
 
-            if (! verifiedFieldModel.verify()) {
+            String coreValue = verifiedFieldModel.getCoreValue();
+            if ((coreValue.length() > 0) && (! verifiedFieldModel.verify())) {
 
                 String dialogMsg = verifiedFieldModel.getErrorMessage() +
                         "  Would you like to correct the field now?";
