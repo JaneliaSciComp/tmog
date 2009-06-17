@@ -88,8 +88,13 @@ public class InputFileFilter {
      * @param  rootDirectory  root directory for all input files.
      *
      * @return a file filter based upon configured parameters.
+     *
+     * @throws IllegalArgumentException
+     *   if a service at the configured query URL cannot be reached. 
      */
-    public FileFilter getFilter(File rootDirectory) {
+    public FileFilter getFilter(File rootDirectory)
+            throws IllegalArgumentException {
+
         // rebuild query filters for each request
         if (excludeQueryUrl != null) {
             filter = new FileNamePatternWithQueryFilter(patternString,

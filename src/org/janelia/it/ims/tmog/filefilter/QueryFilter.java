@@ -37,7 +37,9 @@ public class QueryFilter extends javax.swing.filechooser.FileFilter
 
     public QueryFilter(String queryUrl,
                        boolean includeMatchedFiles,
-                       FileTargetNamer targetNamer) {
+                       FileTargetNamer targetNamer)
+            throws IllegalArgumentException {
+        
         this.queryUrl = queryUrl;
         this.includeMatchedFiles = includeMatchedFiles;
         this.targetNamer = targetNamer;
@@ -66,8 +68,10 @@ public class QueryFilter extends javax.swing.filechooser.FileFilter
             }
 
         } catch (IOException e) {
-            LOG.warn("Failed to execute file query '" + queryUrl + "'", e);
-            // TODO: should filter errors propogate to user?
+            throw new IllegalArgumentException(
+                    "Failed to submit filter request to '" + queryUrl +
+                    "'.  Please verify the configured url is accurate and " +
+                    "that the corresponding service is available.", e);
         } finally {
             if (in != null) {
                 try {

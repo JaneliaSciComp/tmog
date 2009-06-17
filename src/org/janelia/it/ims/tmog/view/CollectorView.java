@@ -36,6 +36,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FileFilter;
 import java.util.List;
 
 /**
@@ -148,9 +149,22 @@ public class CollectorView implements SessionView {
         defaultDirectory = selectedFile;
 
         InputFileFilter inputFilter = projectConfig.getInputFileFilter();
+        FileFilter fileFilter;
+        try {
+            fileFilter = inputFilter.getFilter(defaultDirectory);
+        } catch (IllegalArgumentException e) {
+            LOG.error(e);
+            NarrowOptionPane.showMessageDialog(
+                    appPanel,
+                    e.getMessage(),
+                    "File Filter Failure",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         fileTargetWorker =
                 new FileTargetWorker(selectedFile,
-                                     inputFilter.getFilter(defaultDirectory),
+                                     fileFilter,
                                      inputFilter.isRecursiveSearch(),
                                      FileTarget.ALPHABETIC_COMPARATOR,
                                      inputFilter.getTargetNamer(defaultDirectory));

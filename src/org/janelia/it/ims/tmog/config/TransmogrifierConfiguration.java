@@ -58,8 +58,14 @@ public class TransmogrifierConfiguration {
 
     private List<ProjectConfiguration> projectList;
 
+    private String configFileName;
+
     public TransmogrifierConfiguration() {
         this.projectList = new ArrayList<ProjectConfiguration>();
+    }
+
+    public String getConfigFileName() {
+        return configFileName;
     }
 
     public void addProjectConfiguration(ProjectConfiguration projectConfig) {
@@ -94,26 +100,27 @@ public class TransmogrifierConfiguration {
         if (fileName != null) {
             String convertedFileName = PathUtil.convertPath(fileName);
             File configFile = new File(convertedFileName);
+            configFileName = configFile.getAbsolutePath();
             InputStream stream;
             try {
                 stream = new FileInputStream(configFile);
             } catch (FileNotFoundException e) {
                 throw new ConfigurationException(
-                        "Configuration file " + configFile.getAbsolutePath() +
+                        "Configuration file " + configFileName +
                         " does not exist.  Please verify the configFile " +
                         "property which was specified as '" + fileName + "'.",
                         e);
             }
-            String absoluteFileName = configFile.getAbsolutePath();
+
             LOG.info("attempting to load configuration from " +
-                     absoluteFileName);
+                     configFileName);
             try {
                 load(stream);
             } catch (ConfigurationException e) {
                 throw new ConfigurationException(
                         e.getMessage() +
                         "  Configuration information was read from " +
-                        absoluteFileName + ".", e);
+                        configFileName + ".", e);
             }
         } else {
             throw new ConfigurationException(

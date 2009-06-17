@@ -23,7 +23,9 @@ public class FileNamePatternWithQueryFilter extends FileNamePatternFilter {
     public FileNamePatternWithQueryFilter(String pattern,
                                           String queryUrl,
                                           boolean includeFilesMatchingQuery,
-                                          FileTargetNamer targetNamer) {
+                                          FileTargetNamer targetNamer)
+            throws IllegalArgumentException {
+        
         super(pattern);
         this.queryFilter = new QueryFilter(queryUrl,
                                            includeFilesMatchingQuery,

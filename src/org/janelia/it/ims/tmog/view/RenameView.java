@@ -133,7 +133,19 @@ public class RenameView implements SessionView {
         lsmDirectory = selectedFile;
 
         InputFileFilter inputFilter = projectConfig.getInputFileFilter();
-        FileFilter fileFilter = inputFilter.getFilter(lsmDirectory);
+        FileFilter fileFilter;
+        try {
+            fileFilter = inputFilter.getFilter(lsmDirectory);
+        } catch (IllegalArgumentException e) {
+            LOG.error(e);
+            NarrowOptionPane.showMessageDialog(
+                    appPanel,
+                    e.getMessage(),
+                    "File Filter Failure",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         File[] files = lsmDirectory.listFiles(fileFilter);
         boolean acceptSelectedFile = (files.length > 0);
         OutputDirectoryConfiguration odConfig = projectConfig.getOutputDirectory();
