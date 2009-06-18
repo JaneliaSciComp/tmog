@@ -73,9 +73,9 @@
                 </pluginDefault>
             </text>
 
-            <text displayName="Visible Phenotypes" displayWidth="30" required="false" />
+            <text displayName="Visible Phenotypes" displayWidth="30" required="false" copyable="false"/>
 
-            <text displayName="Additional Notes" displayWidth="50" required="false" />
+            <text displayName="Additional Notes" displayWidth="50" required="false" copyable="false"/>
 
             <pluginData displayName="Prefix" />
 
