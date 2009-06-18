@@ -36,7 +36,7 @@ public class JaneliaTransmogrifier extends JFrame {
      * app is run from within an IDE (package information can be used
      * when the app is run from a jar file). 
      */
-    public static final String VERSION = "2.2.5";
+    public static final String VERSION = "2.2.6";
     
     /**
      * Set up a thread pool to limit the number of concurrent
@@ -87,20 +87,33 @@ public class JaneliaTransmogrifier extends JFrame {
             String lookAndFeelClassName =
                     UIManager.getSystemLookAndFeelClassName();
 
-            // work around Mac Leopard bug with combo boxes
-            // see http://www.randelshofer.ch/quaqua/ for another option
+            String osName = System.getProperty("os.name");
+            String osVersion = System.getProperty("os.version");
+
+            boolean isMacLeopard1_5 = false;
             String javaVersion = System.getProperty("java.runtime.version");
             if ((javaVersion != null) && (javaVersion.startsWith("1.5"))) {
-                String osName = System.getProperty("os.name");
-                if ((osName != null) && osName.startsWith("Mac")) {
-                    String osVersion = System.getProperty("os.version");
-                    if ((osVersion != null) && osVersion.startsWith("10")) {
-                        LOG.info("use Metal look and feel for java " + 
-                                 javaVersion + " on " + osName +
-                                 " (" + osVersion + ")");
-                        lookAndFeelClassName = MetalLookAndFeel.class.getName();
-                    }
+                if (osName != null) {
+                    isMacLeopard1_5 =
+                            osName.startsWith("Mac") &&
+                            (osVersion != null) && osVersion.startsWith("10");
                 }
+            }
+
+            // work around Mac Leopard bug with combo boxes
+            // see http://www.randelshofer.ch/quaqua/ for another option
+
+            // work around Ubuntu 9.04 bug with tables
+            //     Exception in thread "AWT-EventQueue-0" 
+            //     java.lang.NullPointerException at
+            //     javax.swing.plaf.synth.SynthTableUI.paintCell
+            //     (SynthTableUI.java:623)
+
+            if (isMacLeopard1_5 || osName.equals("Linux")) {
+                LOG.info("use Metal look and feel for java " +
+                         javaVersion + " on " + osName +
+                         " (" + osVersion + ")");
+                lookAndFeelClassName = MetalLookAndFeel.class.getName();
             }
 
             UIManager.setLookAndFeel(lookAndFeelClassName);
