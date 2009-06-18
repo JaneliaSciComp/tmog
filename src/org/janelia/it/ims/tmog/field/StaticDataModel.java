@@ -27,6 +27,10 @@ public class StaticDataModel implements DataField {
         return name;
     }
 
+    public Integer getDisplayWidth() {
+        return null;
+    }
+
     public String getName() {
         return name;
     }

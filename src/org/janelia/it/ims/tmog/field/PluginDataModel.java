@@ -31,6 +31,10 @@ public class PluginDataModel implements DataField {
         return displayName;
     }
 
+    public Integer getDisplayWidth() {
+        return null;
+    }
+
     public boolean isEditable() {
         return false;
     }

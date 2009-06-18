@@ -182,7 +182,7 @@ public class DataTableModel extends AbstractTableModel {
         int longestLength = 0;
         String longestValue = "";
 
-        String value = longestValue;
+        String value;
         int length;
         for (int rowIndex = 0; rowIndex < numRows; rowIndex++) {
             Object model = this.getValueAt(rowIndex, columnIndex);
@@ -191,9 +191,19 @@ public class DataTableModel extends AbstractTableModel {
                 longestValue = vvModel.getLongestDisplayName();
                 break;
             } else if (model instanceof DataField){
+                // default longest length to configured witdh
+                if (rowIndex == 0) {
+                    Integer width = ((DataField) model).getDisplayWidth();
+                    if (width != null) {
+                        longestLength = width;
+                        longestValue = String.format("%0" + width + "d", 0);
+                    }
+                }
                 value = ((DataField) model).getCoreValue();
             } else if (model instanceof Target) {
                 value = ((Target) model).getName();
+            } else {
+                value = "";
             }
 
             length = value.length();

@@ -21,6 +21,7 @@ import java.io.File;
 public class FileRelativePathModel implements DataField {
 
     private String displayName;
+    private Integer displayWidth;
     private boolean markedForTask;
     private String path;
     private boolean visible;
@@ -36,6 +37,14 @@ public class FileRelativePathModel implements DataField {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public Integer getDisplayWidth() {
+        return displayWidth;
+    }
+
+    public void setDisplayWidth(Integer displayWidth) {
+        this.displayWidth = displayWidth;
     }
 
     public boolean isEditable() {
@@ -67,6 +76,7 @@ public class FileRelativePathModel implements DataField {
     public FileRelativePathModel getNewInstance(boolean isCloneRequired) {
         FileRelativePathModel instance = new FileRelativePathModel();
         instance.setDisplayName(displayName);
+        instance.setDisplayWidth(displayWidth);
         instance.setMarkedForTask(markedForTask);
         instance.setVisible(visible);
         // do not copy path (must be derived when rename occurs)

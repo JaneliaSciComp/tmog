@@ -28,6 +28,10 @@ public class TargetNameModel implements DataField {
         return displayName;
     }
 
+    public Integer getDisplayWidth() {
+        return null;
+    }
+
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }

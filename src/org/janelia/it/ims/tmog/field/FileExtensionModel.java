@@ -21,6 +21,10 @@ public class FileExtensionModel implements DataField {
         return null;
     }
 
+    public Integer getDisplayWidth() {
+        return null;
+    }
+
     public boolean isEditable() {
         return false;
     }

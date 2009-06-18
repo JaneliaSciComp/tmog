@@ -22,6 +22,12 @@ public interface DataField {
     public String getDisplayName();
 
     /**
+     * @return the preferred width for this field's column
+     *         (or null if none has been configured).
+     */
+    public Integer getDisplayWidth();
+
+    /**
      * @return true if the field should be editable (and displayed) in
      *         within the data field table; otherwise false.
      */

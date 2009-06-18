@@ -22,6 +22,7 @@ public abstract class VerifiedFieldModel extends PlainDocument
         implements DataField, DefaultValueModel {
 
     private String displayName;
+    private Integer displayWidth;
     private boolean isRequired;
     private String errorMessage;
     private String prefix;
@@ -42,6 +43,14 @@ public abstract class VerifiedFieldModel extends PlainDocument
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public Integer getDisplayWidth() {
+        return displayWidth;
+    }
+
+    public void setDisplayWidth(Integer displayWidth) {
+        this.displayWidth = displayWidth;
     }
 
     public boolean isEditable() {
@@ -73,6 +82,7 @@ public abstract class VerifiedFieldModel extends PlainDocument
     public void cloneValuesForNewInstance(VerifiedFieldModel instance) {
         instance.setText(getFullText());
         instance.displayName = displayName;
+        instance.displayWidth = displayWidth;
         instance.isRequired = isRequired;
         instance.prefix = prefix;
         instance.suffix = suffix;

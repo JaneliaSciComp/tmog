@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 public class FileNameModel implements DataField {
 
     private String displayName;
+    private Integer displayWidth;
     private boolean markedForTask;
     private String patternString;
     private Pattern compiledPattern;
@@ -41,6 +42,14 @@ public class FileNameModel implements DataField {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public Integer getDisplayWidth() {
+        return displayWidth;
+    }
+
+    public void setDisplayWidth(Integer displayWidth) {
+        this.displayWidth = displayWidth;
     }
 
     public boolean isEditable() {
@@ -89,6 +98,7 @@ public class FileNameModel implements DataField {
     public FileNameModel getNewInstance(boolean isCloneRequired) {
         FileNameModel instance = new FileNameModel();
         instance.setDisplayName(displayName);
+        instance.setDisplayWidth(displayWidth);
         instance.setMarkedForTask(markedForTask);
         // do not set patternString, simply copy already compiled pattern
         instance.compiledPattern = compiledPattern;

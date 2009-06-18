@@ -58,6 +58,10 @@ public class ValidValueModel extends AbstractListModel
         return displayName;
     }
 
+    public Integer getDisplayWidth() {
+        return null;
+    }
+
     public boolean isEditable() {
         return true;
     }

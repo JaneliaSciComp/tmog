@@ -76,6 +76,7 @@
                         minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="displayWidth" type="xs:positiveInteger"/>
         <xs:attribute name="required" type="xs:boolean"/>
         <xs:attribute name="minimumValue" type="xs:integer"/>
         <xs:attribute name="maximumValue" type="xs:integer"/>
@@ -96,6 +97,7 @@
                         minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="displayWidth" type="xs:positiveInteger"/>
         <xs:attribute name="required" type="xs:boolean"/>
         <xs:attribute name="minimumValue" type="xs:double"/>
         <xs:attribute name="maximumValue" type="xs:double"/>
@@ -116,6 +118,7 @@
                         minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="displayWidth" type="xs:positiveInteger"/>
         <xs:attribute name="required" type="xs:boolean"/>
         <xs:attribute name="minimumLength" type="xs:integer"/>
         <xs:attribute name="maximumLength" type="xs:integer"/>
@@ -135,6 +138,7 @@
                         minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="displayWidth" type="xs:positiveInteger"/>
         <xs:attribute name="required" type="xs:boolean"/>
         <xs:attribute name="datePattern" type="xs:string"/>
         <xs:attribute name="prefix" type="xs:string"/>
@@ -146,6 +150,7 @@
 
     <xs:complexType name="wellType">
         <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="displayWidth" type="xs:positiveInteger"/>
         <xs:attribute name="required" type="xs:boolean"/>
         <xs:attribute name="formFactor" type="xs:integer"/>
         <xs:attribute name="prefix" type="xs:string"/>
@@ -203,12 +208,14 @@
 
     <xs:complexType name="fileRelativePathType">
         <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="displayWidth" type="xs:positiveInteger"/>
         <xs:attribute name="markedForTask" type="xs:boolean"/>
         <xs:attribute name="visible" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="fileNameType">
         <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="displayWidth" type="xs:positiveInteger"/>
         <xs:attribute name="markedForTask" type="xs:boolean"/>
         <xs:attribute name="patternString" type="xs:string"/>
         <xs:attribute name="patternGroupNumber" type="xs:positiveInteger"/>

@@ -17,6 +17,7 @@ import java.util.Date;
  */
 public abstract class DatePatternModel implements DataField, DatePatternField {
     private String displayName;
+    private Integer displayWidth;
     private String datePattern;
     private boolean markedForTask;
     private boolean sharedForAllSessionFiles;
@@ -32,6 +33,14 @@ public abstract class DatePatternModel implements DataField, DatePatternField {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public Integer getDisplayWidth() {
+        return displayWidth;
+    }
+
+    public void setDisplayWidth(Integer displayWidth) {
+        this.displayWidth = displayWidth;
     }
 
     public boolean isEditable() {
@@ -100,6 +109,7 @@ public abstract class DatePatternModel implements DataField, DatePatternField {
 
     protected void initNewInstance(DatePatternModel instance) {
         instance.setDisplayName(displayName);
+        instance.setDisplayWidth(displayWidth);
         instance.setDatePattern(datePattern);
         instance.setMarkedForTask(markedForTask);
         instance.setSharedForAllSessionFiles(sharedForAllSessionFiles);

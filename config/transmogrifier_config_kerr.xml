@@ -3,9 +3,9 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.2.5"/>
+    <global minimumVersion="2.2.6"/>
 
-    <!-- replace "trautmane-ws:8080" with "wormtracker" for production  -->
+    <!-- replace "trautmane-ws:8080" with "wormtracker.int.janelia.org" for production  -->
     <project name="Kerr Lab: Multi-Worm Tracker" taskName="collector" default="true">
 
         <inputFileFilter patternString="(\d{8}_\d{6}){1}(.zip)?"
@@ -17,15 +17,15 @@
             <rowListener className="org.janelia.it.wormtracker.SummaryPrefixPlugin"/>
             <rowListener className="org.janelia.it.wormtracker.WormTrackerDataPlugin">
                 <property name="dataServerUrl" value="http://trautmane-ws:8080/wormtracker"/>
-                <property name="resourceField" value="Experiment ID"/>
+                <property name="resourceField" value="Experiment"/>
             </rowListener>
         </plugins>
 
         <dataFields>
 
-            <targetName displayName="Experiment ID"/>
+            <targetName displayName="Experiment"/>
 
-            <validValueList displayName="Tracker Tag" required="true" copyable="false">
+            <validValueList displayName="Tracker" required="true" copyable="false">
                 <pluginDefault className="org.janelia.it.wormtracker.SummaryDefaultValue">
                     <property name="pattern" value=".*_.*_.*_.*_([A-E]).*\.summary"/>
                 </pluginDefault>
@@ -36,7 +36,7 @@
                 <validValue displayName="E" value="E"/>
             </validValueList>
 
-            <text displayName="Strain Name" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++" copyable="false">
+            <text displayName="Strain" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++" copyable="false">
                 <pluginDefault className="org.janelia.it.wormtracker.SummaryDefaultValue">
                     <property name="pattern" value="(.*)_.*_.*_.*_.*\.summary"/>
                 </pluginDefault>
@@ -56,10 +56,10 @@
 
             <number displayName="Age" required="true" minimumValue="0"/>
 
-            <decimal displayName="Temperature" required="true"
+            <decimal displayName="Temp" required="true"
                      minimumValue="10.0" maximumValue="30.0"/>
 
-            <text displayName="Intended Protocol" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++" copyable="false">
+            <text displayName="Protocol" required="true" pattern="[0-9A-Za-z\\(\\),@\.\\-]++" copyable="false">
                 <pluginDefault className="org.janelia.it.wormtracker.SummaryDefaultValue">
                     <property name="pattern" value=".*_.*_.*_(.*)_.*\.summary"/>
                 </pluginDefault>
@@ -71,9 +71,9 @@
                 </pluginDefault>
             </text>
 
-            <text displayName="Visible" required="false" />
+            <text displayName="Visible Phenotypes" displayWidth="30" required="false" />
 
-            <text displayName="Notes" required="false" />
+            <text displayName="Additional Notes" displayWidth="50" required="false" />
 
             <pluginData displayName="Prefix" />
 
