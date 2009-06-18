@@ -16,6 +16,7 @@ package org.janelia.it.ims.tmog.config;
 public class GlobalConfiguration {
 
     private String minimumVersion;
+    private Integer frameSizePercentage;
 
     public GlobalConfiguration() {
     }
@@ -26,6 +27,14 @@ public class GlobalConfiguration {
 
     public void setMinimumVersion(String minimumVersion) {
         this.minimumVersion = minimumVersion.trim();
+    }
+
+    public Integer getFrameSizePercentage() {
+        return frameSizePercentage;
+    }
+
+    public void setFrameSizePercentage(Integer frameSizePercentage) {
+        this.frameSizePercentage = frameSizePercentage;
     }
 
     /**

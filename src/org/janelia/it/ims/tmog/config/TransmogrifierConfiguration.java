@@ -56,12 +56,17 @@ public class TransmogrifierConfiguration {
      */
     private static final Logger LOG = Logger.getLogger(TransmogrifierConfiguration.class);
 
+    private GlobalConfiguration globalConfiguration;
     private List<ProjectConfiguration> projectList;
 
     private String configFileName;
 
     public TransmogrifierConfiguration() {
         this.projectList = new ArrayList<ProjectConfiguration>();
+    }
+
+    public GlobalConfiguration getGlobalConfiguration() {
+        return globalConfiguration;
     }
 
     public String getConfigFileName() {
@@ -363,8 +368,8 @@ public class TransmogrifierConfiguration {
                     pConfig.initializeAndVerify();
                     this.addProjectConfiguration(pConfig);
                 } else if (element instanceof GlobalConfiguration) {
-                    GlobalConfiguration gConfig = (GlobalConfiguration) element;
-                    gConfig.verify(JaneliaTransmogrifier.VERSION);
+                    globalConfiguration = (GlobalConfiguration) element;
+                    globalConfiguration.verify(JaneliaTransmogrifier.VERSION);
                 }
             }
         } catch (IOException e) {

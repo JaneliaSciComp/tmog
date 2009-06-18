@@ -95,6 +95,10 @@ public class TabbedView implements ActionListener {
         };
     }
 
+    public TransmogrifierConfiguration getTmogConfig() {
+        return tmogConfig;
+    }
+
     private void exitApplicationSafely() {
         if (! hasActiveSessions(sessionList.keySet())) {
             System.exit(0);

@@ -299,6 +299,8 @@
 
     <xs:complexType name="globalType">
         <xs:attribute name="minimumVersion" type="xs:string"/>
+        <!-- ratios not between 40 and 99 will be reset to 80 -->
+        <xs:attribute name="frameSizePercentage" type="xs:positiveInteger"/>
     </xs:complexType>
 
     <xs:element name="transmogrifierConfiguration">

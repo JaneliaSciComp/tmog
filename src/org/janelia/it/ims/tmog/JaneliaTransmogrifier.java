@@ -8,6 +8,8 @@
 package org.janelia.it.ims.tmog;
 
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.tmog.config.GlobalConfiguration;
+import org.janelia.it.ims.tmog.config.TransmogrifierConfiguration;
 import org.janelia.it.ims.tmog.view.TabbedView;
 
 import javax.swing.*;
@@ -58,6 +60,8 @@ public class JaneliaTransmogrifier extends JFrame {
     private static final ImageIcon APP_ICON =
             new ImageIcon(APP_IMAGE_URL, "Janelia Transmogrifier");
 
+    private Integer frameSizePercentage;
+
     /**
      * Construct the application
      */
@@ -69,8 +73,15 @@ public class JaneliaTransmogrifier extends JFrame {
         addWindowListener(tabbedView.getWindowListener());
         JMenuBar menuBar = tabbedView.getMenuBar();
         this.setJMenuBar(menuBar);
-
         pack();
+
+        TransmogrifierConfiguration config = tabbedView.getTmogConfig();
+        GlobalConfiguration globalConfig = config.getGlobalConfiguration();
+        this.frameSizePercentage = globalConfig.getFrameSizePercentage();
+    }
+
+    public Integer getFrameSizePercentage() {
+        return frameSizePercentage;
     }
 
     /**
@@ -130,23 +141,38 @@ public class JaneliaTransmogrifier extends JFrame {
         LOG.info("starting Janelia Transmogrifier version " + VERSION +
                  ", revision " + revision);
 
-        JFrame frame = new JaneliaTransmogrifier();
+        JaneliaTransmogrifier frame = new JaneliaTransmogrifier();
         frame.setIconImage(APP_ICON.getImage());
 
-        //Center the window
+        // size the window
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension frameSize = frame.getSize();
 
-        if (frameSize.height > screenSize.height) {
-            frameSize.height = screenSize.height;
+        Integer frameSizePct = frame.getFrameSizePercentage();
+        final int minPct = 40;
+        final int defaultPct = 80;
+        final int maxPct = 99;
+        if (frameSizePct == null) {
+            frameSizePct = defaultPct;
+        } else if (frameSizePct < minPct) {
+            frameSizePct = minPct;
+        } else if (frameSizePct > maxPct) {
+            frameSizePct = maxPct;
         }
 
-        if (frameSize.width > screenSize.width) {
-            frameSize.width = screenSize.width;
+        @SuppressWarnings({"RedundantCast"})
+        final double frameSizeFactor = (double) frameSizePct / 100;
+        frameSize.height = (int) (screenSize.height * frameSizeFactor);
+        frameSize.width = (int) (screenSize.width * frameSizeFactor);
+
+        // hack for dual screens
+        final int maxWidth = (int) (1920 * frameSizeFactor);
+        if (frameSize.width > maxWidth) {
+            frameSize.width = maxWidth;
         }
 
-        frame.setLocation((screenSize.width - frameSize.width) / 2,
-                (screenSize.height - frameSize.height) / 2);
+        frame.setSize(frameSize.width, frameSize.height);
+        frame.setPreferredSize(frameSize);
 
         frame.setVisible(true);
     }
