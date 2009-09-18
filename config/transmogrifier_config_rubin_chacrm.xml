@@ -24,7 +24,7 @@
                 <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
                 <property name="created_by" value="Imager"/>
                 <property name="renamed_by" value="Renamer"/>
-                <property name="rework" value="Rework"/>
+                <property name="class" value="Class"/>
             </rowListener>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\GMR"/>
@@ -155,10 +155,10 @@
                 <validValue value="Donald Hall"/>
                 <validValue value="Teri Ngo"/>
             </validValueList>
-            <validValueList displayName="Rework" required="false"
+            <validValueList displayName="Class" required="false"
                             markedForTask="false">
-                <validValue displayName="Yes" value="yes"/>
-                <validValue displayName="No" value="" default="true"/>
+                <validValue displayName="Screening" value="Screening" default="true"/>
+                <validValue displayName="Golden Rework" value="Golden Rework"/>
             </validValueList>
             <static name="family" value="rubin-chacrm" markedForTask="false"/>
         </dataFields>
