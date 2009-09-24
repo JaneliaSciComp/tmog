@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="2.2.7"/>
+
+    <project name="Zlatic Lab: ChaCRM verified Lines" default="true">
+
+        <inputFileFilter patternString=".+\..+"/>
+        
+        <outputDirectory>
+            <path path="\\dm4.int.janelia.org\zlaticlab\Data\results\" />
+            <renameFieldValue fieldDisplayName="Date and Time" />
+        </outputDirectory>
+
+        <plugins>
+            <rowValidator className="org.janelia.it.chacrm.ChacrmLineValidator">
+                <property name="linePropertyName" value="Genotype"/>
+            </rowValidator>
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\dm4.int.janelia.org\zlaticlab\tmog\summaries"/>
+            </sessionListener>
+        </plugins>
+
+        <dataFields>
+            <date displayName="Date and Time" required="true"
+                  datePattern="yyyyMMdd_HHmmss">
+                <sourceFileDateDefault pattern=".*[/\\\\](\d{8}_\d{6})[/\\\\].*"
+                                       fromDatePattern="yyyyMMdd_HHmmss"
+                                       toDatePattern="yyyyMMdd_HHmmss"
+                                       matchType="path"/>
+            </date>
+
+            <separator value="@"/>
+
+            <text displayName="Genotype" required="true"
+                  pattern="[0-9A-Za-z\-\_]++"/>
+
+            <separator value="@"/>
+
+            <text displayName="Effector" required="true"
+                  pattern="[0-9A-Za-z\-\_]++"/>
+
+            <separator value="@"/>
+
+            <validValueList displayName="Tracker" required="true">
+                <validValue displayName="t1" value="t1"/>
+                <validValue displayName="t2" value="t2"/>
+                <validValue displayName="t3" value="t3"/>
+                <validValue displayName="t4" value="t4"/>
+                <validValue displayName="t5" value="t5"/>
+            </validValueList>
+
+            <separator value="@"/>
+
+            <validValueList displayName="Stimulus" required="true">
+                <validValue displayName="puff" value="puff"/>
+            </validValueList>
+
+            <separator value="@"/>
+
+            <text displayName="Protocol" required="true"
+                  pattern="[0-9A-Za-z]++"/>
+
+            <fileExtension/>
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
