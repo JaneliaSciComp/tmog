@@ -203,8 +203,16 @@ public class RenameView implements SessionView, InputSelectionView {
                     fileChooser.addChoosableFileFilter(
                             new DirectoryOnlyFilter(
                                     lsmDirectoryField.getText()));
-                    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                    fileChooser.showDialog(getPanel(), "Select Output Directory");
+                    fileChooser.setFileSelectionMode(
+                            JFileChooser.DIRECTORIES_ONLY);
+
+                    final Dimension panelSize = appPanel.getSize();
+                    double height = panelSize.height * 0.9;
+                    double width = panelSize.width * 0.9;
+                    fileChooser.setPreferredSize(
+                            new Dimension((int)width, (int)height));
+
+                    fileChooser.showDialog(appPanel, "Select Output Directory");
                     File selectedDirectory = fileChooser.getSelectedFile();
                     if (selectedDirectory != null) {
                         outputDirectoryField.setText(selectedDirectory.getPath());

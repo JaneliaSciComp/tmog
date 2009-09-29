@@ -48,18 +48,18 @@
 
             <validValueList displayName="Tracker" required="true">
                 <sourceFileDefault pattern=".+?@.+?@(.+?)@.*"/>
-                <validValue displayName="t1" value="t1"/>
-                <validValue displayName="t2" value="t2"/>
-                <validValue displayName="t3" value="t3"/>
-                <validValue displayName="t4" value="t4"/>
-                <validValue displayName="t5" value="t5"/>
+                <validValue value="t1"/>
+                <validValue value="t2"/>
+                <validValue value="t3"/>
+                <validValue value="t4"/>
+                <validValue value="t5"/>
             </validValueList>
 
             <separator value="@"/>
 
             <validValueList displayName="Stimulus" required="true">
                 <sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.*"/>
-                <validValue displayName="puff" value="puff"/>
+                <validValue value="puff"/>
             </validValueList>
 
             <separator value="@"/>
@@ -69,7 +69,7 @@
                 <sourceFileDefault pattern=".+@.+@.+@.+@([^@_]+)([@_]??[^\.]+)??\..+"/>
             </text>
 
-            <fileName displayName="Sequence"
+            <fileName displayName="Suffix"
                       patternString=".+@.+@.+@.+@[^@_]+([@_]??[^\.]+)??\..+"
                       patternGroupNumber="1"
                       visible="true" />

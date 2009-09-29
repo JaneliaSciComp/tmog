@@ -16,6 +16,7 @@ import org.janelia.it.ims.tmog.target.FileTargetWorker;
 import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -127,7 +128,15 @@ public class InputSelectionHandler {
                     }
                 }
                 fileChooser.setFileSelectionMode(selectionMode);
-                int choice = fileChooser.showDialog(view.getPanel(),
+
+                final JPanel parentPanel = view.getPanel();
+                final Dimension panelSize = parentPanel.getSize();
+                double height = panelSize.height * 0.9;
+                double width = panelSize.width * 0.9;
+                fileChooser.setPreferredSize(
+                        new Dimension((int)width, (int)height));
+                
+                int choice = fileChooser.showDialog(parentPanel,
                                                     selectButtonText);
 
                 if (choice == JFileChooser.APPROVE_OPTION) {
@@ -244,6 +253,8 @@ public class InputSelectionHandler {
             if (targets != null) {
                 if (targets.size() > 0) {
                     directoryField.setText(defaultDirectory.getAbsolutePath());
+                    directoryField.setToolTipText(targets.size() +
+                                                  " targets found");
                     view.processInputTargets(targets);
                 } else {
                     resetInputRoot();
