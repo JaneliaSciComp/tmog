@@ -231,6 +231,7 @@
 
     <xs:complexType name="sourceFileDefaultType">
         <xs:attribute name="pattern" type="xs:string"/>
+        <xs:attribute name="patternGroupNumber" type="xs:positiveInteger"/>
         <xs:attribute name="matchType" type="matchType"/>
     </xs:complexType>
 

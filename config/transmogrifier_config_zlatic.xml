@@ -3,11 +3,12 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.2.7"/>
+    <global minimumVersion="2.2.8"/>
 
     <project name="Zlatic Lab: ChaCRM verified Lines" default="true">
 
-        <inputFileFilter patternString=".+\..+"/>
+        <inputFileFilter patternString=".+\.(png|blob|summary)"
+                         recursiveSearch="true"/>
         
         <outputDirectory>
             <path path="\\dm4.int.janelia.org\zlaticlab\Data\results\" />
@@ -18,9 +19,6 @@
             <rowValidator className="org.janelia.it.chacrm.ChacrmLineValidator">
                 <property name="linePropertyName" value="Genotype"/>
             </rowValidator>
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm4.int.janelia.org\zlaticlab\tmog\summaries"/>
-            </sessionListener>
         </plugins>
 
         <dataFields>
@@ -35,16 +33,21 @@
             <separator value="@"/>
 
             <text displayName="Genotype" required="true"
-                  pattern="[0-9A-Za-z\-\_]++"/>
+                  pattern="[0-9A-Za-z\-\_]++">
+                <sourceFileDefault pattern="(.+?)@.*"/>
+            </text>
 
             <separator value="@"/>
 
             <text displayName="Effector" required="true"
-                  pattern="[0-9A-Za-z\-\_]++"/>
+                  pattern="[0-9A-Za-z\-\_]++">
+                <sourceFileDefault pattern=".+?@(.+?)@.*"/>
+            </text>
 
             <separator value="@"/>
 
             <validValueList displayName="Tracker" required="true">
+                <sourceFileDefault pattern=".+?@.+?@(.+?)@.*"/>
                 <validValue displayName="t1" value="t1"/>
                 <validValue displayName="t2" value="t2"/>
                 <validValue displayName="t3" value="t3"/>
@@ -55,14 +58,21 @@
             <separator value="@"/>
 
             <validValueList displayName="Stimulus" required="true">
+                <sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.*"/>
                 <validValue displayName="puff" value="puff"/>
             </validValueList>
 
             <separator value="@"/>
 
             <text displayName="Protocol" required="true"
-                  pattern="[0-9A-Za-z]++"/>
+                  pattern="[0-9A-Za-z]++">
+                <sourceFileDefault pattern=".+@.+@.+@.+@([^@_]+)([@_]??[^\.]+)??\..+"/>
+            </text>
 
+            <fileName displayName="Sequence"
+                      patternString=".+@.+@.+@.+@[^@_]+([@_]??[^\.]+)??\..+"
+                      patternGroupNumber="1"
+                      visible="true" />
             <fileExtension/>
         </dataFields>
 

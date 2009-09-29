@@ -30,6 +30,7 @@ public class SourceFileDefaultValue implements DefaultValue {
     public enum MatchType { name, path }
     
     private String pattern;
+    private Integer patternGroupNumber;
     private Pattern compiledPattern;
     private MatchType matchType;
 
@@ -40,6 +41,7 @@ public class SourceFileDefaultValue implements DefaultValue {
     public SourceFileDefaultValue(String pattern,
                                   MatchType matchType) {
         setPattern(pattern);
+        this.patternGroupNumber = 1;
         this.matchType = matchType;
     }
 
@@ -51,6 +53,20 @@ public class SourceFileDefaultValue implements DefaultValue {
         this.pattern = pattern;
         if (pattern != null) {
             compiledPattern = Pattern.compile(pattern);
+        }
+    }
+
+    public Integer getPatternGroupNumber() {
+        return patternGroupNumber;
+    }
+
+    public void setPatternGroupNumber(Integer patternGroupNumber) {
+        if (patternGroupNumber > 0) {
+            this.patternGroupNumber = patternGroupNumber;
+        } else {
+            throw new IllegalArgumentException(
+                    "pattern group number (" + patternGroupNumber +
+                    ") must be greater than zero");
         }
     }
 
@@ -82,8 +98,8 @@ public class SourceFileDefaultValue implements DefaultValue {
             }
             Matcher m = compiledPattern.matcher(textToMatch);
             if (m.matches()) {
-                if (m.groupCount() > 0) {
-                    value = m.group(1);
+                if (m.groupCount() >= patternGroupNumber) {
+                    value = m.group(patternGroupNumber);
                 }
             }
         }
@@ -92,12 +108,11 @@ public class SourceFileDefaultValue implements DefaultValue {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("SourceFileDefaultValue");
-        sb.append("{pattern='").append(pattern).append('\'');
-        sb.append(", matchType=").append(matchType);
-        sb.append('}');
-        return sb.toString();
+        return "SourceFileDefaultValue{" +
+               "matchType=" + matchType +
+               ", pattern='" + pattern + '\'' +
+               ", patternGroupNumber=" + patternGroupNumber +
+               '}';
     }
 
     /** The logger for this class. */

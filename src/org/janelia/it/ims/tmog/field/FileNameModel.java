@@ -144,12 +144,13 @@ public class FileNameModel implements DataField {
                 fileName = file.getName();
 
                 if ((compiledPattern != null) && (patternGroupNumber != null)) {
-                    fileName = "";
                     Matcher matcher = compiledPattern.matcher(fileName);
                     if (matcher.matches()) {
                         if (matcher.groupCount() >= patternGroupNumber) {
                             fileName = matcher.group(patternGroupNumber);
                         }
+                    } else {
+                        fileName = "";                        
                     }
                 }
 
