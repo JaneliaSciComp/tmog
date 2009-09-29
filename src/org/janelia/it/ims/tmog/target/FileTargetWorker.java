@@ -88,9 +88,13 @@ public class FileTargetWorker
             targets = getAllTargets();
         } else {
             final File[] children = rootDirectory.listFiles(filter);
-            targets = new ArrayList<FileTarget>(children.length);
-            for (File child : children) {
-                targets.add(new FileTarget(child, rootDirectory, namer));
+            if (children != null) {
+                targets = new ArrayList<FileTarget>(children.length);
+                for (File child : children) {
+                    targets.add(new FileTarget(child, rootDirectory, namer));
+                }
+            } else {
+                targets = new ArrayList<FileTarget>(0);
             }
         }
 

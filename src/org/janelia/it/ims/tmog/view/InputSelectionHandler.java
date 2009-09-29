@@ -146,6 +146,11 @@ public class InputSelectionHandler {
 
                 if (choice == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
+                    if ((selectedFile != null) &&
+                        (! selectedFile.isDirectory())) {
+                        selectedFile = selectedFile.getParentFile();
+                    }
+
                     if (selectedFile != null) {
                         handleDirectorySelection(selectedFile);
                     }
@@ -256,10 +261,10 @@ public class InputSelectionHandler {
             }
 
             if (targets != null) {
-                if (targets.size() > 0) {
+                final int numTargets = targets.size();
+                if (numTargets > 0) {
                     directoryField.setText(defaultDirectory.getAbsolutePath());
-                    directoryField.setToolTipText(targets.size() +
-                                                  " targets found");
+                    directoryField.setToolTipText(getToolTip(numTargets));                    
                     view.processInputTargets(targets);
                 } else {
                     resetInputRoot();
@@ -276,6 +281,17 @@ public class InputSelectionHandler {
         }
 
         fileTargetWorker = null;
+    }
+
+    private String getToolTip(int numTargets) {
+        StringBuilder toolTip = new StringBuilder(64);
+        toolTip.append(numTargets);
+        toolTip.append(" file");
+        if (numTargets > 1) {
+            toolTip.append("s");
+        }
+        toolTip.append(" found");
+        return toolTip.toString();
     }
 
     /** The logger for this class. */
