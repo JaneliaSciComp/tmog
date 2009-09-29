@@ -9,7 +9,7 @@
     </properties>
     <border type="none"/>
     <children>
-      <grid id="bfb16" binding="directoryPanel" layout-manager="GridLayoutManager" row-count="4" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="bfb16" binding="directoryPanel" layout-manager="GridLayoutManager" row-count="4" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints border-constraint="North"/>
         <properties/>
@@ -17,7 +17,7 @@
         <children>
           <component id="5ffcf" class="javax.swing.JLabel">
             <constraints>
-              <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="3" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="74" height="14"/>
               </grid>
             </constraints>
@@ -27,7 +27,7 @@
           </component>
           <component id="ba681" class="javax.swing.JLabel" binding="lsmDirectoryField">
             <constraints>
-              <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="38" height="14"/>
               </grid>
             </constraints>
@@ -37,7 +37,7 @@
           </component>
           <component id="2bebd" class="javax.swing.JLabel" binding="outputDirectoryField">
             <constraints>
-              <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+              <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="38" height="14"/>
               </grid>
             </constraints>
@@ -54,7 +54,7 @@
           </hspacer>
           <component id="bad2a" class="javax.swing.JLabel">
             <constraints>
-              <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="Output Directory:"/>
@@ -62,14 +62,14 @@
           </component>
           <hspacer id="4df67">
             <constraints>
-              <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+              <grid row="2" column="6" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
                 <minimum-size width="10" height="-1"/>
               </grid>
             </constraints>
           </hspacer>
           <hspacer id="20865">
             <constraints>
-              <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+              <grid row="3" column="6" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
                 <minimum-size width="10" height="-1"/>
               </grid>
             </constraints>
@@ -83,7 +83,7 @@
             <properties>
               <horizontalAlignment value="0"/>
               <text value="Set"/>
-              <toolTipText value="Change LSM Directory"/>
+              <toolTipText value="Change Source File Directory"/>
             </properties>
           </component>
           <component id="84d05" class="javax.swing.JButton" binding="outputDirectoryBtn">
@@ -99,7 +99,7 @@
           </component>
           <component id="8a85d" class="javax.swing.JLabel" binding="projectLabel">
             <constraints>
-              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value=""/>
@@ -107,7 +107,7 @@
           </component>
           <component id="ce25d" class="javax.swing.JLabel">
             <constraints>
-              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="Project:"/>
@@ -120,6 +120,18 @@
               </grid>
             </constraints>
           </vspacer>
+          <component id="473ba" class="javax.swing.JButton" binding="cancelInputSearch">
+            <constraints>
+              <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="20" height="25"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text value="Cancel"/>
+              <toolTipText value="Cancel Source File Search"/>
+              <visible value="false"/>
+            </properties>
+          </component>
         </children>
       </grid>
       <grid id="146cd" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

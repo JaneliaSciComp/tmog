@@ -7,10 +7,9 @@
 
 package org.janelia.it.ims.tmog.config;
 
-import org.janelia.it.ims.tmog.filefilter.AlphabeticComparator;
 import org.janelia.it.ims.tmog.filefilter.LNumberComparator;
+import org.janelia.it.ims.tmog.target.FileTarget;
 
-import java.io.File;
 import java.util.Comparator;
 
 
@@ -26,20 +25,16 @@ public class InputFileSorter {
     public static final String LNUMBER_NAME = "LNumber";
 
     /** Comparator for sorting by L-Numbers. */
-    public static final Comparator<File> LNUMBER_COMPARATOR =
+    public static final Comparator<FileTarget> LNUMBER_COMPARATOR =
             new LNumberComparator();
 
-    /** Comparator for sorting alphbetically. */
-    public static final Comparator<File> ALPHABETIC_COMPARATOR =
-            new AlphabeticComparator();
-
-    private Comparator<File> comparator;
+    private Comparator<FileTarget> comparator;
 
     public InputFileSorter() {
-        this.comparator = ALPHABETIC_COMPARATOR;
+        this.comparator = FileTarget.ALPHABETIC_COMPARATOR;
     }
 
-    public Comparator<File> getComparator() {
+    public Comparator<FileTarget> getComparator() {
         return comparator;
     }
 

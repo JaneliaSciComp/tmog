@@ -10,8 +10,6 @@ package org.janelia.it.ims.tmog.view;
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.DataTableRow;
-import org.janelia.it.ims.tmog.config.InputFileFilter;
-import org.janelia.it.ims.tmog.config.InputFileSorter;
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.tmog.field.DataField;
@@ -36,9 +34,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileFilter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -48,21 +43,22 @@ import java.util.List;
  * @author Peter Davies
  * @author Eric Trautman
  */
-public class RenameView implements SessionView {
+public class RenameView implements SessionView, InputSelectionView {
 
-    private File lsmDirectory;
     private JLabel lsmDirectoryField;
     private JButton lsmDirectoryBtn;
+    private InputSelectionHandler inputSelectionHandler;
     private JButton outputDirectoryBtn;
     private JLabel outputDirectoryField;
     private JPanel appPanel;
     @SuppressWarnings({"UnusedDeclaration"})
-    private JPanel directoryPanel; // referenced by RenameView.formw.form
+    private JPanel directoryPanel;
     private JButton copyAndRenameBtn;
     private DataTable dataTable;
     private JProgressBar copyProgressBar;
     private JLabel copyProgressLabel;
     private JLabel projectLabel;
+    private JButton cancelInputSearch;
     private DataTableModel tableModel;
     private ProjectConfiguration projectConfig;
     private RenameTask task;
@@ -72,9 +68,18 @@ public class RenameView implements SessionView {
                       File lsmDirectory,
                       JTabbedPane parentTabbedPane) {
         this.projectConfig = projectConfig;
-        this.lsmDirectory = lsmDirectory;
         this.projectLabel.setText(projectConfig.getName());
-        setupInputDirectory();
+
+
+        this.inputSelectionHandler =
+                new InputSelectionHandler(projectConfig,
+                                          lsmDirectory,
+                                          lsmDirectoryField,
+                                          lsmDirectoryBtn,
+                                          cancelInputSearch,
+                                          JFileChooser.FILES_AND_DIRECTORIES,
+                                          "Select Source",
+                                          this);
         setupOutputDirectory();
         setupTaskComponents(parentTabbedPane);
     }
@@ -84,7 +89,7 @@ public class RenameView implements SessionView {
     }
 
     public File getDefaultDirectory() {
-        return lsmDirectory;
+        return inputSelectionHandler.getDefaultDirectory();
     }
 
     public boolean isTaskInProgress() {
@@ -95,115 +100,66 @@ public class RenameView implements SessionView {
         return taskComponents.getSessionIcon();
     }
 
-    private void setupInputDirectory() {
-        lsmDirectoryBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-                JPanel parentPanel = getPanel();
-                JFileChooser fileChooser = new JFileChooser();
-                if (lsmDirectory != null) {
-                    File parentLsmDirectory = lsmDirectory.getParentFile();
-                    if (parentLsmDirectory != null) {
-                        fileChooser.setCurrentDirectory(parentLsmDirectory);
-                    } else {
-                        fileChooser.setCurrentDirectory(lsmDirectory);
-                    }
-                }
-                fileChooser.setFileSelectionMode(
-                        JFileChooser.FILES_AND_DIRECTORIES);
-                int choice = fileChooser.showDialog(parentPanel,
-                                                    "Select Source");
-
-                if (choice == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    if ((selectedFile != null) &&
-                        (!selectedFile.isDirectory())) {
-                        selectedFile = selectedFile.getParentFile();
-                    }
-
-                    if (selectedFile != null) {
-                        validateLsmDirectorySelection(selectedFile);
-                    }
-                }
-            }
-        });
+    public void handleInputRootSelection(File selectedFile) {
+        dataTable.setModel(new DefaultTableModel());
     }
 
-    private void validateLsmDirectorySelection(File selectedFile) {
-        lsmDirectory = selectedFile;
-
-        InputFileFilter inputFilter = projectConfig.getInputFileFilter();
-        FileFilter fileFilter;
-        try {
-            fileFilter = inputFilter.getFilter(lsmDirectory);
-        } catch (IllegalArgumentException e) {
-            LOG.error(e);
-            NarrowOptionPane.showMessageDialog(
-                    appPanel,
-                    e.getMessage(),
-                    "File Filter Failure",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
+    public void handleInputRootReset() {
+        OutputDirectoryConfiguration odConfig =
+                projectConfig.getOutputDirectory();
+        if (odConfig.isDerivedFromEarliestModifiedFile()) {
+            outputDirectoryField.setText("");
         }
+        dataTable.setModel(new DefaultTableModel());
+        setFileTableEnabled(true, false);
+    }
 
-        File[] files = lsmDirectory.listFiles(fileFilter);
-        boolean acceptSelectedFile = (files.length > 0);
-        OutputDirectoryConfiguration odConfig = projectConfig.getOutputDirectory();
+    public void processInputTargets(List<FileTarget> targets) {
+
+        boolean acceptSelectedFile = true;
+        OutputDirectoryConfiguration odConfig =
+                projectConfig.getOutputDirectory();
         boolean isOutputDerivedFromSelection =
                 odConfig.isDerivedFromEarliestModifiedFile();
 
         StringBuilder reject = new StringBuilder();
         String outputPath = null;
-        if (acceptSelectedFile) {
-            if (isOutputDerivedFromSelection) {
-                outputPath = odConfig.getDerivedPathForEarliestFile(
-                        lsmDirectory, files);
-                File derivedOutputDir = new File(outputPath);
-                boolean outputDirExists = derivedOutputDir.exists();
-                if (outputDirExists) {
-                    acceptSelectedFile =
-                            derivedOutputDir.canWrite();
-                } else {
-                    File outputBaseDir =
-                            derivedOutputDir.getParentFile();
-                    acceptSelectedFile =
-                            (outputBaseDir != null) &&
-                            outputBaseDir.canWrite();
-                }
-                if (!acceptSelectedFile) {
-                    reject.append("The derived output directory for your selection (");
-                    reject.append(outputPath);
-                    if (outputDirExists) {
-                        reject.append(") does not allow you write access.  ");
-                    } else {
-                        reject.append(") can not be created.  ");
-                    }
-                    reject.append("Please verify your access privileges and the ");
-                    reject.append("constraints set for this filesystem.");
-                }
+        if (isOutputDerivedFromSelection) {
+            outputPath =
+                    odConfig.getDerivedPathForEarliestFile(
+                            inputSelectionHandler.getDefaultDirectory(),
+                            targets);
+            File derivedOutputDir = new File(outputPath);
+            boolean outputDirExists = derivedOutputDir.exists();
+            if (outputDirExists) {
+                acceptSelectedFile =
+                        derivedOutputDir.canWrite();
+            } else {
+                File outputBaseDir =
+                        derivedOutputDir.getParentFile();
+                acceptSelectedFile =
+                        (outputBaseDir != null) &&
+                        outputBaseDir.canWrite();
             }
-        } else {
-            reject.append("The selected directory (");
-            reject.append(lsmDirectory.getAbsolutePath());
-            reject.append(") does not contain any files with names that match the pattern '");
-            reject.append(inputFilter.getPatternString());
-            reject.append("'.  Please choose another directory.");
+
+            if (! acceptSelectedFile) {
+                reject.append("The derived output directory for your selection (");
+                reject.append(outputPath);
+                if (outputDirExists) {
+                    reject.append(") does not allow you write access.  ");
+                } else {
+                    reject.append(") can not be created.  ");
+                }
+                reject.append("Please verify your access privileges and the ");
+                reject.append("constraints set for this filesystem.");
+            }
         }
 
         if (acceptSelectedFile) {
-            lsmDirectoryField.setText(
-                    lsmDirectory.getAbsolutePath());
+            inputSelectionHandler.setEnabled(true);            
             if (isOutputDerivedFromSelection) {
                 outputDirectoryField.setText(outputPath);
             }
-
-            InputFileSorter sorter = projectConfig.getInputFileSorter();
-            Arrays.sort(files, sorter.getComparator());
-            ArrayList<Target> targets = new ArrayList<Target>(files.length);
-            for (File file : files) {
-                targets.add(new FileTarget(file, lsmDirectory));
-            }
-            
             tableModel = new DataTableModel("File Name",
                                             targets,
                                             projectConfig);
@@ -216,25 +172,14 @@ public class RenameView implements SessionView {
                     reject.toString(),
                     "Source File Directory Selection Error",
                     JOptionPane.ERROR_MESSAGE);
-            resetFileTable();
+            inputSelectionHandler.resetInputRoot();
         }
-    }
-
-    private void resetFileTable() {
-        lsmDirectoryField.setText("");
-        OutputDirectoryConfiguration odConfig =
-                projectConfig.getOutputDirectory();
-        if (odConfig.isDerivedFromEarliestModifiedFile()) {
-            outputDirectoryField.setText("");
-        }
-        dataTable.setModel(new DefaultTableModel());
-        setFileTableEnabled(true, false);
     }
 
     private void setFileTableEnabled(boolean isEnabled,
                                      boolean isCopyButtonEnabled) {
-        Component[] cList = {
-                lsmDirectoryBtn, outputDirectoryBtn, dataTable};
+        inputSelectionHandler.setEnabled(isEnabled);
+        Component[] cList = { outputDirectoryBtn, dataTable };
         for (Component c : cList) {
             if (isEnabled != c.isEnabled()) {
                 c.setEnabled(isEnabled);
@@ -275,12 +220,12 @@ public class RenameView implements SessionView {
     private void setupTaskComponents(Component iconParent) {
         this.taskComponents =
                 new TaskComponents(dataTable,
-                                            copyAndRenameBtn,
-                                            copyProgressBar,
-                                            copyProgressLabel,
-                                            iconParent,
-                                            projectConfig,
-                                            TaskButtonText.RENAME) {
+                                   copyAndRenameBtn,
+                                   copyProgressBar,
+                                   copyProgressLabel,
+                                   iconParent,
+                                   projectConfig,
+                                   TaskButtonText.RENAME) {
                     protected Task getNewTask() {
                         return getNewTaskForView();
                     }
@@ -436,7 +381,7 @@ public class RenameView implements SessionView {
 
         if (numberOfCopyFailures == 0) {
             // everything succeeded, so reset the main view
-            resetFileTable();
+            inputSelectionHandler.resetInputRoot();
         } else {
             // we had errors, so remove the files copied successfully
             // and restore the rest of the model

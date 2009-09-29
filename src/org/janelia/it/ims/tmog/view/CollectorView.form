@@ -58,7 +58,7 @@
             <properties>
               <horizontalAlignment value="0"/>
               <text value="Set"/>
-              <toolTipText value="Change LSM Directory"/>
+              <toolTipText value="Change Root Directory"/>
             </properties>
           </component>
           <component id="8a85d" class="javax.swing.JLabel" binding="projectLabel">
@@ -93,7 +93,7 @@
             <properties>
               <horizontalAlignment value="0"/>
               <text value="Cancel"/>
-              <toolTipText value="Change LSM Directory"/>
+              <toolTipText value="Cancel Source File Search"/>
               <visible value="false"/>
             </properties>
           </component>

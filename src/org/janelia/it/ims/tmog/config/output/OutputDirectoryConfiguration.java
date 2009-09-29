@@ -10,6 +10,7 @@ package org.janelia.it.ims.tmog.config.output;
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.config.ConfigurationException;
 import org.janelia.it.ims.tmog.field.DataField;
+import org.janelia.it.ims.tmog.target.FileTarget;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -204,17 +205,19 @@ public class OutputDirectoryConfiguration {
      * that file.
      *
      * @param  sourceDirectory  directory containing the session's source files.
-     * @param  sourceFiles      the source files being renamed.
+     * @param  targets          the source files being renamed.
      *
      * @return a path fragment derived from the earliest source file.
      */
     public String getDerivedPathForEarliestFile(File sourceDirectory,
-                                                File[] sourceFiles) {
+                                                List<FileTarget> targets) {
 
         File earliestFile = sourceDirectory;
         if (sourceDirectory.isDirectory()) {
             long earliestMod = sourceDirectory.lastModified();
-            for (File sourceFile : sourceFiles) {
+            File sourceFile;
+            for (FileTarget target : targets) {
+                sourceFile = target.getFile();
                 long fileMod = sourceFile.lastModified();
                 if (fileMod < earliestMod) {
                     earliestMod = fileMod;
@@ -259,6 +262,7 @@ public class OutputDirectoryConfiguration {
 
         if (!outputDirectory.exists()) {
             try {
+                //noinspection ResultOfMethodCallIgnored
                 outputDirectory.mkdir();
             } catch (Exception e1) {
                 outputFailureMsg =

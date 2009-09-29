@@ -10,6 +10,7 @@ package org.janelia.it.ims.tmog.filefilter;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.janelia.it.ims.tmog.target.FileTarget;
 
 import java.io.File;
 import java.util.Arrays;
@@ -68,9 +69,11 @@ public class LNumberComparatorTest extends TestCase {
         for (Object[] testRow : testData) {
             String name1 = (String) testRow[0];
             String name2 = (String) testRow[1];
+            File file1 = new File(name1);
+            File file2 = new File(name2);
             int expectedResult = (Integer) testRow[2];
-            int actualResult = comparator.compare(new File(name1),
-                                                  new File(name2));
+            int actualResult = comparator.compare(new FileTarget(file1),
+                                                  new FileTarget(file2));
 
             boolean isValid = ((expectedResult > 0) && (actualResult > 0)) ||
                     ((expectedResult < 0) && (actualResult < 0)) ||
@@ -116,22 +119,23 @@ public class LNumberComparatorTest extends TestCase {
                 "9999_bbb"                
         };
 
-        File[] files = new File[correctlySortedNames.length];
+        FileTarget[] targets = new FileTarget[correctlySortedNames.length];
 
         int index = 0;
         for (String name : correctlySortedNames) {
-            int reverseOrder = files.length - 1 - index;
-            files[reverseOrder] = new File(name);
+            int reverseOrder = targets.length - 1 - index;
+            File file = new File(name);
+            targets[reverseOrder] = new FileTarget(file);
             index++;
         }
 
-        Arrays.sort(files, new LNumberComparator());
+        Arrays.sort(targets, new LNumberComparator());
 
         index = 0;
-        for (File file : files) {
-            assertEquals("name " + index + " of " + files.length +
+        for (FileTarget target : targets) {
+            assertEquals("name " + index + " of " + targets.length +
                          " was not sorted correctly",
-                         correctlySortedNames[index], file.getName());
+                         correctlySortedNames[index], target.getName());
             index++;
         }
     }
