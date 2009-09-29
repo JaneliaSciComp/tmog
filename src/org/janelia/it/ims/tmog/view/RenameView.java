@@ -206,11 +206,9 @@ public class RenameView implements SessionView, InputSelectionView {
                     fileChooser.setFileSelectionMode(
                             JFileChooser.DIRECTORIES_ONLY);
 
-                    final Dimension panelSize = appPanel.getSize();
-                    double height = panelSize.height * 0.9;
-                    double width = panelSize.width * 0.9;
-                    fileChooser.setPreferredSize(
-                            new Dimension((int)width, (int)height));
+                    InputSelectionHandler.setPreferredSize(fileChooser,
+                                                           appPanel,
+                                                           0.9);
 
                     fileChooser.showDialog(appPanel, "Select Output Directory");
                     File selectedDirectory = fileChooser.getSelectedFile();

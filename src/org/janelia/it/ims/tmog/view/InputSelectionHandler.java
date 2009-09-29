@@ -114,6 +114,16 @@ public class InputSelectionHandler {
         view.handleInputRootReset();
     }
 
+    public static void setPreferredSize(Component forComponent,
+                                        Component relativeTo,
+                                        double factor) {
+        final Dimension relativeSize = relativeTo.getSize();
+        final double height = relativeSize.height * factor;
+        final double width = relativeSize.width * factor;
+        forComponent.setPreferredSize(
+                new Dimension((int)width, (int)height));
+    }
+
     private void setupInputDirectory() {
         setDirectoryButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -128,15 +138,10 @@ public class InputSelectionHandler {
                     }
                 }
                 fileChooser.setFileSelectionMode(selectionMode);
+                final JPanel appPanel = view.getPanel();
+                setPreferredSize(fileChooser, appPanel, 0.9);
 
-                final JPanel parentPanel = view.getPanel();
-                final Dimension panelSize = parentPanel.getSize();
-                double height = panelSize.height * 0.9;
-                double width = panelSize.width * 0.9;
-                fileChooser.setPreferredSize(
-                        new Dimension((int)width, (int)height));
-                
-                int choice = fileChooser.showDialog(parentPanel,
+                int choice = fileChooser.showDialog(appPanel,
                                                     selectButtonText);
 
                 if (choice == JFileChooser.APPROVE_OPTION) {
