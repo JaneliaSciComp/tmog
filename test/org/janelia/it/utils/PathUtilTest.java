@@ -33,6 +33,32 @@ public class PathUtilTest extends TestCase {
     }
 
     /**
+     * Tests the convertShareName method.
+     *
+     * @throws Exception
+     *   if any unexpected errors occur.
+     */
+    public void testConvertShareName() throws Exception {
+        String srcPath = "\\\\dm6.int.janelia.org\\rubinlab\\confocalStacks";
+        assertEquals("invalid windows-mac conversion for '" + srcPath + "'",
+                     srcPath,
+                     PathUtil.convertShareName(srcPath, false));
+
+        srcPath = "smb://dm6.int.janelia.org/rubinlab/confocalStacks";
+        assertEquals("invalid unix conversion for '" + srcPath + "'",
+                     srcPath,
+                     PathUtil.convertShareName(srcPath, true));
+
+        srcPath = "[\\\\dm6.int.janelia.org|/groups/rubin/data0]\\rubinlab\\confocalStacks";
+        assertEquals("invalid windows-mac conversion for '" + srcPath + "'",
+                     "\\\\dm6.int.janelia.org\\rubinlab\\confocalStacks",
+                     PathUtil.convertShareName(srcPath, false));
+        assertEquals("invalid unix conversion for '" + srcPath + "'",
+                     "/groups/rubin/data0\\rubinlab\\confocalStacks",
+                     PathUtil.convertShareName(srcPath, true));
+    }
+
+    /**
      * Tests the convertPathToMac method.
      *
      * @throws Exception

@@ -7,6 +7,8 @@
 package org.janelia.it.utils;
 
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class provides utilities for managing file path names.
@@ -26,13 +28,42 @@ public class PathUtil {
      * @return the converted path.
      */
     public static String convertPath(String srcPath) {
-        String targetPath = srcPath;
+        String targetPath = convertShareName(srcPath, ON_UNIX);
+
         if (ON_MAC) {
-            targetPath = convertPathToMac(srcPath);
+            targetPath = convertPathToMac(targetPath);
         } else if (ON_WINDOWS) {
-            targetPath = convertPathToWindows(srcPath);
+            targetPath = convertPathToWindows(targetPath);
         } else if (ON_UNIX) {
-            targetPath = convertPathToUnix(srcPath);
+            targetPath = convertPathToUnix(targetPath);
+        }
+        return targetPath;
+    }
+
+    /**
+     * Converts the share name in the specified path if multiple
+     * share names are provided using the form
+     * [windows-or-mac-share|unix-share]/common path.
+     * Simply returns the srcPath for values that do not match the pattern.
+     *
+     * @param  srcPath   the path to convert.
+     * @param  isOnUnix  true if converting for UNIX; otherwise false.
+     *
+     * @return the converted path.
+     */
+    public static String convertShareName(String srcPath,
+                                          boolean isOnUnix) {
+        String targetPath = srcPath;
+        Matcher m = SHARE_PATTERN.matcher(srcPath);
+        if (m.matches()) {
+            final String shareName;
+            if (isOnUnix) {
+                shareName = m.group(2);
+            } else {
+                shareName = m.group(1);
+            }
+            final String commonPath = m.group(3);
+            targetPath = shareName + commonPath;
         }
         return targetPath;
     }
@@ -127,18 +158,18 @@ public class PathUtil {
     // Logic to detect runtime operating system taken from:
     //   org/apache/tools/ant/taskdefs/condition/Os.java
 
-    private static final String OS_NAME =
+    public static final String OS_NAME =
         System.getProperty("os.name").toLowerCase(Locale.US);
 
-    private static final String PATH_SEP =
+    public static final String PATH_SEP =
         System.getProperty("path.separator");
 
-    private static final boolean ON_WINDOWS =
+    public static final boolean ON_WINDOWS =
             PATH_SEP.equals(";") && (OS_NAME.indexOf("netware") == -1);
 
-    private static final boolean ON_MAC = OS_NAME.indexOf("mac") > -1;
+    public static final boolean ON_MAC = OS_NAME.indexOf("mac") > -1;
 
-    private static final boolean ON_UNIX =
+    public static final boolean ON_UNIX =
             PATH_SEP.equals(":") &&
             (OS_NAME.indexOf("openvms") == -1) &&
             ((! ON_MAC) || OS_NAME.endsWith("x"));
@@ -147,4 +178,7 @@ public class PathUtil {
             "smb://";
     private static final String MAC_VOLUMES_ROOT =
             "/Volumes";
+
+    private static final Pattern SHARE_PATTERN =
+            Pattern.compile("^\\[([^|]+?)\\|([^\\]]+?)\\](.+)");
 }

@@ -11,7 +11,7 @@
                          recursiveSearch="true"/>
         
         <outputDirectory>
-            <path path="\\dm4.int.janelia.org\zlaticlab\Data\results\" />
+            <path path="[\\dm4.int.janelia.org|/groups/zlatic]\zlaticlab\Data\results\" />
             <renameFieldValue fieldDisplayName="Date and Time" />
         </outputDirectory>
 
