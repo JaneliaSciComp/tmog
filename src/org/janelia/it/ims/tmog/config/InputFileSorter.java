@@ -8,6 +8,7 @@
 package org.janelia.it.ims.tmog.config;
 
 import org.janelia.it.ims.tmog.filefilter.LNumberComparator;
+import org.janelia.it.ims.tmog.filefilter.PathComparator;
 import org.janelia.it.ims.tmog.target.FileTarget;
 
 import java.util.Comparator;
@@ -28,6 +29,13 @@ public class InputFileSorter {
     public static final Comparator<FileTarget> LNUMBER_COMPARATOR =
             new LNumberComparator();
 
+    /** Algrotihm name for sorting by path. */
+    public static final String PATH_NAME = "Path";
+
+    /** Comparator for sorting by path. */
+    public static final Comparator<FileTarget> PATH_COMPARATOR =
+            new PathComparator();
+
     private Comparator<FileTarget> comparator;
 
     public InputFileSorter() {
@@ -41,6 +49,8 @@ public class InputFileSorter {
     public void setSortAlgorithm(String algorithmName) {
         if (LNUMBER_NAME.equals(algorithmName)) {
             comparator = LNUMBER_COMPARATOR;
-        }                
+        } else if (PATH_NAME.equals(algorithmName)) {
+            comparator = PATH_COMPARATOR;
+        }
     }
 }

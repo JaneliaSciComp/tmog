@@ -4,7 +4,7 @@
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
     <!-- frameSizePercentage default is 80, min is 40, and max is 99 --> 
-    <global minimumVersion="2.2.6"
+    <global minimumVersion="2.2.9"
             frameSizePercentage="95"/>
 
     <!-- replace "trautmane-ws:8080" with "wormtracker.int.janelia.org" for production  -->
@@ -13,8 +13,13 @@
         <inputFileFilter patternString="(\d{8}_\d{6}){1}(.zip)?"
                          patternGroupNumber="1"
                          excludeQueryUrl="http://trautmane-ws:8080/wormtracker"
-                         recursiveSearch="true"/>
-        
+                         recursiveSearch="true"
+                         filterDuplicates="true"/>
+        <!-- Filter Notes:                                                     -->
+        <!-- A root wormtracker data directory can contain directories and zip -->
+        <!-- files for the same experiment.  We need to filter out duplicate   -->
+        <!-- experiments, giving zip files precedence over directories.        -->        
+
         <plugins>
             <rowListener className="org.janelia.it.wormtracker.SummaryPrefixPlugin"/>
             <rowListener className="org.janelia.it.wormtracker.WormTrackerDataPlugin">

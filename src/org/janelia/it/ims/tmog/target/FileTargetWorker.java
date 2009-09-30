@@ -32,6 +32,7 @@ public class FileTargetWorker
     private boolean recursiveSearch;
     private Comparator<FileTarget> sortComparator;
     private FileTargetNamer namer;
+    private boolean filterDuplicateTargets;
 
     /**
      * Constructs a new worker.
@@ -53,18 +54,23 @@ public class FileTargetWorker
      * @param  namer            namer for converting file names to
      *                          desired target names (or null if
      *                          conversion is not needed).
+     *
+     * @param  filterDuplicateTargets  indicates whether targets with the
+     *                                 same name should be filtered.
      */
     public FileTargetWorker(File rootDirectory,
                             FileFilter filter,
                             boolean recursiveSearch,
                             Comparator<FileTarget> sortComparator,
-                            FileTargetNamer namer) {
+                            FileTargetNamer namer,
+                            boolean filterDuplicateTargets) {
 
         this.rootDirectory = rootDirectory;
         this.filter = filter;
         this.recursiveSearch = recursiveSearch;
         this.sortComparator = sortComparator;
         this.namer = namer;
+        this.filterDuplicateTargets = filterDuplicateTargets;
     }
 
     /**
@@ -98,38 +104,43 @@ public class FileTargetWorker
             }
         }
 
-        // A root wormtracker data directory can contain directories and zip
-        // files for the same experiment.  We need to filter out duplicate
-        // experiments here, giving zip files precedence over directories.
+        if (filterDuplicateTargets) {
 
-        // TODO: make duplicate target filtering process configurable
-        
-        HashMap<String, FileTarget> nameToTargetMap =
-                new HashMap<String, FileTarget>(targets.size());
-        HashSet<FileTarget> duplicateTargets = new HashSet<FileTarget>();
-        String name;
-        FileTarget existingTarget;
-        for (FileTarget target : targets) {
-            name = target.getName();
-            existingTarget = nameToTargetMap.get(name);
-            if (existingTarget == null) {
-                nameToTargetMap.put(name, target);
-            } else {
-                File targetFile = target.getFile();
-                if (targetFile.isFile()) {
-                    // files take precedence over directories
-                    duplicateTargets.add(existingTarget);
+            // A root wormtracker data directory can contain directories and zip
+            // files for the same experiment.  We need to filter out duplicate
+            // experiments here, giving zip files precedence over directories.
+
+            // NOTE: This assumes experiment names are unique.
+            // If the names are not unique, experiments with the same name
+            // but in different paths will get filtered.
+
+            HashMap<String, FileTarget> nameToTargetMap =
+                    new HashMap<String, FileTarget>(targets.size());
+            HashSet<FileTarget> duplicateTargets = new HashSet<FileTarget>();
+            String name;
+            FileTarget existingTarget;
+            for (FileTarget target : targets) {
+                name = target.getName();
+                existingTarget = nameToTargetMap.get(name);
+                if (existingTarget == null) {
                     nameToTargetMap.put(name, target);
                 } else {
-                    duplicateTargets.add(target);
+                    File targetFile = target.getFile();
+                    if (targetFile.isFile()) {
+                        // files take precedence over directories
+                        duplicateTargets.add(existingTarget);
+                        nameToTargetMap.put(name, target);
+                    } else {
+                        duplicateTargets.add(target);
+                    }
                 }
             }
-        }
 
-        if (duplicateTargets.size() > 0) {
-            for (Iterator<FileTarget> i = targets.iterator(); i.hasNext();) {
-                if (duplicateTargets.contains(i.next())) {
-                    i.remove();
+            if (duplicateTargets.size() > 0) {
+                for (Iterator<FileTarget> i = targets.iterator(); i.hasNext();) {
+                    if (duplicateTargets.contains(i.next())) {
+                        i.remove();
+                    }
                 }
             }
         }

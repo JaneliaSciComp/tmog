@@ -23,7 +23,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileFilter;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -42,7 +41,7 @@ public class InputSelectionHandler {
     private InputSelectionView view;
 
     private InputFileFilter inputFilter;
-    private Comparator<FileTarget> sortComparator;
+    private InputFileSorter inputSorter;
     private File defaultDirectory;
     private FileTargetWorker fileTargetWorker;
 
@@ -70,8 +69,7 @@ public class InputSelectionHandler {
                                  String selectButtonText,
                                  InputSelectionView view) {
         this.inputFilter = projectConfig.getInputFileFilter();
-        InputFileSorter sorter = projectConfig.getInputFileSorter();
-        this.sortComparator = sorter.getComparator();
+        this.inputSorter = projectConfig.getInputFileSorter();
         this.defaultDirectory = defaultDirectory;
         this.directoryField = directoryField;
         this.setDirectoryButton = setDirectoryButton;
@@ -187,8 +185,9 @@ public class InputSelectionHandler {
                 new FileTargetWorker(selectedFile,
                                      fileFilter,
                                      inputFilter.isRecursiveSearch(),
-                                     sortComparator,
-                                     inputFilter.getTargetNamer(defaultDirectory));
+                                     inputSorter.getComparator(),
+                                     inputFilter.getTargetNamer(defaultDirectory),
+                                     inputFilter.isFilterDuplicates());
 
         fileTargetWorker.addPropertyChangeListener(new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {

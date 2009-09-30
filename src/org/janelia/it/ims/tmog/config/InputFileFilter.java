@@ -32,10 +32,12 @@ public class InputFileFilter {
     private String excludeQueryUrl;
     private FileFilter filter;
     private boolean recursiveSearch;
+    private boolean filterDuplicates;
 
     public InputFileFilter() {
         this.setPatternString(LSM_PATTERN_STRING);
         this.recursiveSearch = false;
+        this.filterDuplicates = false;
     }
 
     public String getPatternString() {
@@ -82,6 +84,14 @@ public class InputFileFilter {
 
     public void setRecursiveSearch(boolean recursiveSearch) {
         this.recursiveSearch = recursiveSearch;
+    }
+
+    public boolean isFilterDuplicates() {
+        return filterDuplicates;
+    }
+
+    public void setFilterDuplicates(boolean filterDuplicates) {
+        this.filterDuplicates = filterDuplicates;
     }
 
     /**
