@@ -7,6 +7,9 @@
 
 package org.janelia.it.utils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * This class provides common string utility methods and constants.
  *
@@ -80,6 +83,35 @@ public class StringUtil {
     }
 
     /**
+     * Simplistically transforms the specified name into a valid XML element
+     * name by replacing all non-alphanumeric characters with an underscore,
+     * prepending an underscore if the the name starts with a number, and
+     * converting all characters to lower case.
+     *
+     * See <a href="http://www.w3.org/TR/xml/#NT-Name">
+     * http://www.w3.org/TR/xml/#NT-Name</a> for XML element naming rules.
+     *
+     * @param  name  name to transform.
+     *
+     * @return a version of the specified name that is valid for use as an XML
+     *         element name.
+     */
+    public static String getXmlElementName(String name) {
+        String elementName;
+        if ((name == null) || (name.length() == 0)) {
+            elementName = "element";
+        } else {
+            Matcher m = NON_ALPHA_NUMERIC_PATTERN.matcher(name);
+            elementName = m.replaceAll("_");
+            if (Character.isDigit(elementName.charAt(0))) {
+                elementName = "_" + elementName;
+            }
+            elementName = elementName.toLowerCase();
+        }
+        return elementName;
+    }
+
+    /**
      * @param  str  string to check.
      *
      * @return true if the specified string has 1 or more non-blank characters;
@@ -101,4 +133,7 @@ public class StringUtil {
     private static final String XML_GT = "&gt;";
     private static final String XML_QUOT = "&quot;";
     private static final String XML_APOS = "&apos;";
+
+    private static final Pattern NON_ALPHA_NUMERIC_PATTERN =
+            Pattern.compile("[^\\p{Alnum}]");
 }
