@@ -158,7 +158,7 @@
             <validValueList displayName="Class" required="false"
                             markedForTask="false">
                 <validValue displayName="Screening" value="Screening" default="true"/>
-                <validValue displayName="Golden Rework" value="Golden Rework"/>
+                <validValue displayName="Rework" value="Rework"/>
             </validValueList>
             <static name="family" value="rubin-chacrm" markedForTask="false"/>
         </dataFields>
