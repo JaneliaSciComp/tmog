@@ -45,6 +45,7 @@ The following files:
 are deployed for the following lab groups:
 
   baker            /groups/baker/bakerlab/tmog
+  flylight (R&D)   /groups/rubin/data1/rubinlab/tmog
   kerr             /groups/kerr/kerrlab/tmog
   leet             /groups/leet/leetconfocal/tmog
   rubin (ChaCRM)   /groups/rubin/data1/rubinlab/tmog
