@@ -61,18 +61,21 @@
             </validValueList>
             <separator value="_"/>
             <validValueList displayName="Landing Site" required="true">
-                <validValue displayName="01: attP2" value="01" default="true"/>
-                <validValue displayName="02: attP40-2nd" value="02"/>
-                <validValue displayName="03: attP16-2R" value="03"/>
-                <validValue displayName="04: attP3-X" value="04"/>
-                <validValue displayName="05: attP83-CyO" value="05"/>
+                <validValue displayName="01: attP2-3L:68A4" value="01" default="true"/>
+                <validValue displayName="02: VK00005-3L:75B1" value="02"/>
+                <validValue displayName="03: su(Hw)attP1-3R:87B " value="03"/>
+                <validValue displayName="04: VK00027-3R:89E11" value="04"/>
+                <validValue displayName="05: su(Hw)attP2-3R:92D" value="05"/>
                 <validValue displayName="06: su(Hw)attP1-3rd " value="06"/>
                 <validValue displayName="07: su(Hw)attP2-3rd " value="07"/>
                 <validValue displayName="08: su(Hw)attP4-3rd " value="08"/>
                 <validValue displayName="09: su(Hw)attP5-2nd " value="09"/>
-                <validValue displayName="10: su(Hw)attP6-2nd " value="10"/>
-                <validValue displayName="11: su(Hw)attP7-3rd " value="11"/>
-                <validValue displayName="12: su(Hw)attP8-X" value="12"/>
+                <validValue displayName="10: attP18-X:6C" value="10"/>
+                <validValue displayName="11: su(Hw)attP8-X:8E3" value="11"/>
+                <validValue displayName="12: attP3-X:19C4" value="12"/>
+                <validValue displayName="20: su(Hw)attP6-2L:24D" value="20"/>
+                <validValue displayName="21: attP40-2L:25C7" value="21"/>
+                <validValue displayName="22: su(Hw)attP5-2R:51E" value="22"/>
             </validValueList>
             <pluginData displayName="imageLocationRank" format="_%02d" />
             <separator value="-"/>
