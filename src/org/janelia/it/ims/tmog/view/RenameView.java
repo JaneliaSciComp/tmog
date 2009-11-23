@@ -20,6 +20,7 @@ import org.janelia.it.ims.tmog.plugin.RowValidator;
 import org.janelia.it.ims.tmog.target.FileTarget;
 import org.janelia.it.ims.tmog.target.Target;
 import org.janelia.it.ims.tmog.task.RenameTask;
+import org.janelia.it.ims.tmog.task.RenameWithoutDeleteTask;
 import org.janelia.it.ims.tmog.task.Task;
 import org.janelia.it.ims.tmog.view.component.DataTable;
 import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
@@ -245,9 +246,17 @@ public class RenameView implements SessionView, InputSelectionView {
     }
 
     private Task getNewTaskForView() {
-        task = new RenameTask(tableModel,
-                              projectConfig.getOutputDirectory(),
-                              outputDirectoryField.getText());
+        if (RenameWithoutDeleteTask.TASK_NAME.equals(
+                projectConfig.getTaskName())) {
+            task = new RenameWithoutDeleteTask(
+                    tableModel,
+                    projectConfig.getOutputDirectory(),
+                    outputDirectoryField.getText());            
+        } else {
+            task = new RenameTask(tableModel,
+                                  projectConfig.getOutputDirectory(),
+                                  outputDirectoryField.getText());
+        }
         return task;
     }
 

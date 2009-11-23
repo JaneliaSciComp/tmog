@@ -49,35 +49,38 @@ public class XmlWriterPlugin implements RowListener {
     public void init(PluginConfiguration config) throws ExternalSystemException {
         try {
             String directoryName = config.getProperty("directory");
-            directoryName = PathUtil.convertPath(directoryName);
-            directory = new File(directoryName);
-            if (directory.exists()) {
-                if (directory.isDirectory()) {
-                    if (!directory.canWrite()) {
+            if ((directoryName != null) && (directory.length() > 0)) {
+                directoryName = PathUtil.convertPath(directoryName);
+                directory = new File(directoryName);
+                if (directory.exists()) {
+                    if (directory.isDirectory()) {
+                        if (!directory.canWrite()) {
+                            throw new ExternalSystemException(
+                                    INIT_FAILURE_MSG +
+                                    "Unable to write to directory: " +
+                                    directory.getAbsolutePath());
+                        }
+                    } else {
                         throw new ExternalSystemException(
                                 INIT_FAILURE_MSG +
-                                "Unable to write to directory: " +
-                                directory.getAbsolutePath());
+                                "Configured directory (" +
+                                directory.getAbsolutePath() +
+                                ") for is not a directory.");
                     }
                 } else {
                     throw new ExternalSystemException(
                             INIT_FAILURE_MSG +
-                            "Configured directory (" +
-                            directory.getAbsolutePath() +
-                            ") for is not a directory.");
+                            "Unable to find directory: " +
+                            directory.getAbsolutePath());
                 }
             } else {
-                throw new ExternalSystemException(
-                        INIT_FAILURE_MSG +
-                        "Unable to find directory: " +
-                        directory.getAbsolutePath());
+                directory = null;
             }
         } catch (Throwable t) {
             throw new ExternalSystemException(
                     INIT_FAILURE_MSG + t.getMessage(),
                     t);
         }
-
     }
 
     /**
@@ -119,7 +122,13 @@ public class XmlWriterPlugin implements RowListener {
 
         final File targetFile = row.getTargetFile();
         final String xmlFileName = targetFile.getName() + ".xml";
-        File file = new File(directory, xmlFileName);  //TODO: what to name this?
+        File xmlDirectory;
+        if (directory != null) {
+            xmlDirectory = directory;
+        } else {
+            xmlDirectory = targetFile.getParentFile();
+        }
+        File file = new File(xmlDirectory, xmlFileName);
         FileWriter fileWriter = null;
         try {
             fileWriter = new FileWriter(file);

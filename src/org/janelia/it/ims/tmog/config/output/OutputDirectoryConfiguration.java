@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * This class encapsulates configuration information about the
@@ -261,13 +262,25 @@ public class OutputDirectoryConfiguration {
         String outputFailureMsg = null;
 
         if (!outputDirectory.exists()) {
+            Stack<File> missingDirectories = new Stack<File>();
+            missingDirectories.push(outputDirectory);
+            File parent = outputDirectory.getParentFile();
+            while (parent != null) {
+                missingDirectories.push(parent);
+                parent = parent.getParentFile();
+            }
+
+            File missingDirectory = outputDirectory;
             try {
-                //noinspection ResultOfMethodCallIgnored
-                outputDirectory.mkdir();
+                while (! missingDirectories.empty()) {
+                    missingDirectory = missingDirectories.pop();
+                    //noinspection ResultOfMethodCallIgnored
+                    missingDirectory.mkdir();
+                }
             } catch (Exception e1) {
                 outputFailureMsg =
                         "Failed to create output directory " +
-                        outputDirectory.getAbsolutePath() + ".";
+                        missingDirectory.getAbsolutePath() + ".";
                 LOG.error(outputFailureMsg, e1);
             }
         }

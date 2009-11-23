@@ -256,8 +256,8 @@ public class RenameTask extends SimpleTask {
         currentRow = null;
     }
 
-    private void deleteFile(File file,
-                            String status) {
+    protected void deleteFile(File file,
+                              String status) {
         boolean isDeleteSuccessful = false;
         try {
             isDeleteSuccessful = file.delete();

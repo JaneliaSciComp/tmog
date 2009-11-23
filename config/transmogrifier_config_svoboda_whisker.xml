@@ -4,63 +4,64 @@
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
     <!-- frameSizePercentage default is 80, min is 40, and max is 99 --> 
-    <global minimumVersion="2.3.0" frameSizePercentage="95"/>
+    <global minimumVersion="2.3.2" frameSizePercentage="95"/>
 
-    <project name="Svoboda Lab: Whisker Project" default="true">
+    <project name="Whisker-Dependent Behavior Project"
+             taskName="rename-without-delete"
+             default="true">
 
-        <inputFileFilter patternString=".+\.(avi|wmv)"
+        <inputFileFilter patternString=".+\.seq"
                          recursiveSearch="true"/>
 
+        <outputDirectory>
+            <path path="/Users/trautmane/Desktop/whisker/wdbp/" />
+            <!--<path path="\\dm10.isln.janelia.org\wdbp\unprocessed\" />-->
+            <renameFieldValue fieldDisplayName="Animal ID" />
+            <path path="/" />
+            <renameFieldValue fieldDisplayName="Experiment Date" suffix="_" />
+            <renameFieldValue fieldDisplayName="Session ID" />
+        </outputDirectory>
+
         <plugins>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.XmlWriterPlugin" >
-                <property name="directory" value="\\dm6.int.janelia.org\svobodalab\tmog\xml-whisker"/>
-            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.XmlWriterPlugin" />
         </plugins>
 
         <dataFields>
 
-            <separator value="KS-W_"/>
+            <!-- The following fields are collected
+                 AND included in the file name. -->
 
-            <validValueList displayName="Experimenter"
-                            required="true"
-                            markedForTask="false">
-                <validValue displayName="Daniel Huber" value="huberd"/>
-                <validValue displayName="Dan O'Connor" value="oconnord"/>
-                <validValue displayName="Leopoldo Petreanu" value="petreanul"/>
-                <validValue displayName="Simon Peron" value="perons"/>
-            </validValueList>
-
-            <date displayName="Experiment Date" required="true"
-                  datePattern="yyyyMMdd" suffix="-"/>
-
-            <validValueList displayName="Experiment Location"
-                            required="true"
-                            suffix="_">
-                <validValue displayName="r1: rig 1 in 2W.???" value="r1"/>
-                <validValue displayName="r2: rig 2 in 2W.???" value="r2"/>
-            </validValueList>
+            <separator value="WDBP_"/>
 
             <text displayName="Animal ID"
                   required="true"
+                  sharedForAllSessionFiles="true"
+                  suffix="_"/>
+
+            <date displayName="Experiment Date"
+                  required="true"
+                  datePattern="yyyy_MM_dd"
+                  sharedForAllSessionFiles="true"
                   suffix="_"/>
 
             <number displayName="Session ID"
                     required="true"
                     minimumValue="1"
+                    sharedForAllSessionFiles="true"
                     suffix="_">
                 <staticDefault value="1"/>
             </number>
 
-            <text displayName="Whiskers Present"
-                  required="true"
-                  suffix="_"/>
-
-            <number displayName="Frame Rate"
-                    required="true"
-                    minimumValue="0"
-                    suffix="_"/>
+            <validValueList displayName="Experiment Location"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            suffix="_">
+                <validValue displayName="r1: rig 1 in 2W.???" value="r1"/>
+                <validValue displayName="r2: rig 2 in 2W.???" value="r2"/>
+            </validValueList>
 
             <validValueList displayName="Stimulation Protocol"
+                            sharedForAllSessionFiles="true"
                             required="true">
                 <validValue displayName="1: go/nogo" value="1"/>
                 <validValue displayName="2: go/nogo with multiple go positions" value="2"/>
@@ -69,14 +70,37 @@
             <runTime datePattern="_yyyyMMddHHmmssSSS"/>
             <fileExtension/>
 
-            <!-- The following fields are collected but not included in the file name -->
+            <!-- The following fields are collected but
+                 NOT included in the file name (markedForTask == false). -->
+
+            <validValueList displayName="Experimenter"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue displayName="Daniel Huber" value="huberd"/>
+                <validValue displayName="Dan O'Connor" value="oconnord"/>
+                <validValue displayName="Leopoldo Petreanu" value="petreanul"/>
+                <validValue displayName="Simon Peron" value="perons"/>
+            </validValueList>
+
+            <text displayName="Whiskers Present"
+                  required="true"
+                  markedForTask="false"/>
+
             <number displayName="Number of Whiskers"
                     required="true"
                     minimumValue="0"
                     markedForTask="false"/>
 
+            <number displayName="Frame Rate"
+                    required="true"
+                    minimumValue="0"
+                    sharedForAllSessionFiles="true"
+                    markedForTask="false"/>
+
             <validValueList displayName="Face Parameter"
                             required="true"
+                            sharedForAllSessionFiles="true"
                             markedForTask="false">
                 <validValue displayName="top" value="top"/>
                 <validValue displayName="bottom" value="bottom"/>
@@ -84,12 +108,12 @@
                 <validValue displayName="right" value="right"/>
             </validValueList>
 
-            <validValueList displayName="Px2mm"
-                            required="true"
-                            markedForTask="false">
-                <validValue displayName="5x1" value="5x1"/>
-                <validValue displayName="7x2" value="7x2"/>
-            </validValueList>
+            <decimal displayName="Px2mm"
+                     required="true"
+                     minimumValue="0.00"
+                     sharedForAllSessionFiles="true"
+                     markedForTask="false">
+            </decimal>
 
         </dataFields>
 
