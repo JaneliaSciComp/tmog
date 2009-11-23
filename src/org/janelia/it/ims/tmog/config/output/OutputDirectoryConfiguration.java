@@ -265,7 +265,7 @@ public class OutputDirectoryConfiguration {
             Stack<File> missingDirectories = new Stack<File>();
             missingDirectories.push(outputDirectory);
             File parent = outputDirectory.getParentFile();
-            while (parent != null) {
+            while ((parent != null) && (! parent.exists())) {
                 missingDirectories.push(parent);
                 parent = parent.getParentFile();
             }
