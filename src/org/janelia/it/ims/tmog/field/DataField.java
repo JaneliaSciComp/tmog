@@ -28,10 +28,16 @@ public interface DataField {
     public Integer getDisplayWidth();
 
     /**
-     * @return true if the field should be editable (and displayed) in
+     * @return true if the field should be editable in
      *         within the data field table; otherwise false.
      */
     public boolean isEditable();
+
+    /**
+     * @return true if the field should be displayed in
+     *         the data field table; otherwise false.
+     */
+    public boolean isVisible();
 
     /**
      * @return true if the field should be copied when its row is

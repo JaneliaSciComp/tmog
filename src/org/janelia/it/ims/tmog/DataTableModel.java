@@ -9,15 +9,17 @@ package org.janelia.it.ims.tmog;
 
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
 import org.janelia.it.ims.tmog.field.DataField;
-import org.janelia.it.ims.tmog.field.ValidValueModel;
+import org.janelia.it.ims.tmog.field.DataFieldGroupModel;
 import org.janelia.it.ims.tmog.target.Target;
+import org.janelia.it.ims.tmog.view.component.ButtonPanel;
 
-import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.event.TableModelEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This class contains the data model for renaming a set of files.
@@ -25,11 +27,11 @@ import java.util.Map;
  * @author Peter Davies
  * @author Eric Trautman
  */
-public class DataTableModel extends AbstractTableModel {
+public class DataTableModel extends AbstractTransmogrifierTableModel {
 
     public static final int TARGET_COLUMN = 2;
 
-    private List<DataTableRow> rows;
+    private List<DataRow> rows;
     private List<String> columnNames;
     private Map<Integer, Integer> columnToFieldIndexMap;
     private Map<Integer, Integer> fieldToColumnIndexMap;
@@ -41,7 +43,7 @@ public class DataTableModel extends AbstractTableModel {
         List<DataField> dataFieldConfigs = config.getFieldConfigurations();
 
         // set up column names and field mappings
-        int numberOfColumns = config.getNumberOfEditableFields() + 3;
+        int numberOfColumns = config.getNumberOfVisibleFields() + 3;
         columnNames = new ArrayList<String>(numberOfColumns);
         columnToFieldIndexMap = new HashMap<Integer, Integer>();
         fieldToColumnIndexMap = new HashMap<Integer, Integer>();
@@ -49,21 +51,36 @@ public class DataTableModel extends AbstractTableModel {
         columnNames.add(" "); // copy button
         columnNames.add(targetColumnName);
 
+        Set<Integer> nestedColumns = new LinkedHashSet<Integer>();
         int fieldIndex = 0;
         for (DataField fieldConfig : dataFieldConfigs) {
-            if (fieldConfig.isEditable()) {
+            if (fieldConfig.isVisible()) {
                 int columnIndex = columnNames.size();
                 columnNames.add(fieldConfig.getDisplayName());
                 columnToFieldIndexMap.put(columnIndex, fieldIndex);
                 fieldToColumnIndexMap.put(fieldIndex, columnIndex);
+                if (fieldConfig instanceof DataFieldGroupModel) {
+                    nestedColumns.add(columnIndex);
+                }
             }
             fieldIndex++;
         }
+        setNestedTableColumns(nestedColumns);
 
         // create the model rows
-        this.rows = new ArrayList<DataTableRow>(targets.size());
+        this.rows = new ArrayList<DataRow>(targets.size());
         for (Target target : targets) {
-            this.rows.add(new DataTableRow(target, dataFieldConfigs));
+            DataRow dataRow = new DataRow(target);
+            for (DataField dataFieldConfig : dataFieldConfigs) {
+                DataField newFieldInstance =
+                        dataFieldConfig.getNewInstance(false);
+                dataRow.addField(newFieldInstance);
+                newFieldInstance.initializeValue(target);
+                if (newFieldInstance instanceof DataFieldGroupModel) {
+                    ((DataFieldGroupModel) newFieldInstance).setParent(this);
+                }
+            }
+            this.rows.add(dataRow);
         }
     }
 
@@ -82,7 +99,7 @@ public class DataTableModel extends AbstractTableModel {
     public Class getColumnClass(int index) {
         Class columnClass = Object.class;
         if ((index < TARGET_COLUMN)) {
-            columnClass = JButton.class;
+            columnClass = ButtonPanel.class;
         } else if (rows.size() > 0) {
             Object firstRowField = getValueAt(0, index);
             columnClass = firstRowField.getClass();
@@ -92,26 +109,42 @@ public class DataTableModel extends AbstractTableModel {
 
     public boolean isCellEditable(int rowIndex,
                                   int columnIndex) {
-        return (columnIndex != TARGET_COLUMN);
+        boolean isEditable = true; // button columns must be editable
+        if (columnIndex == TARGET_COLUMN) {
+            isEditable = false;
+        } else if (columnIndex > TARGET_COLUMN) {
+            final DataRow row = rows.get(rowIndex);
+            final int fieldIndex = columnToFieldIndexMap.get(columnIndex);
+            final DataField field = row.getField(fieldIndex);
+            isEditable = field.isEditable();
+        }
+        return isEditable;
+    }
+
+    public void fireTableDataChanged() {
+        final TableModelEvent event = getUpdateEvent();
+        super.fireTableChanged(event);
     }
 
     public Object getValueAt(int rowIndex,
                              int columnIndex) {
         Object value = null;
-        DataTableRow row = rows.get(rowIndex);
+        DataRow row = rows.get(rowIndex);
         if (columnIndex == 0) {
             if (rows.size() > 1) {
-                value = row.getRemoveButton();
+                value = ButtonPanel.EXCLUDE_TARGET;
             }
         } else if (columnIndex == 1) {
             if (rowIndex > 0) {
-                value = row.getCopyButton();
+                value = ButtonPanel.COPY_PREVIOUS_ROW;
             }
         } else if (columnIndex == TARGET_COLUMN) {
             value = row.getTarget();
         } else {
-            int fieldIndex = columnToFieldIndexMap.get(columnIndex);
-            value = row.getField(fieldIndex);
+            Integer fieldIndex = columnToFieldIndexMap.get(columnIndex);
+            if (fieldIndex != null) {
+                value = row.getField(fieldIndex);
+            }
         }
         return value;
     }
@@ -119,7 +152,7 @@ public class DataTableModel extends AbstractTableModel {
     public void setValueAt(Object aValue,
                            int rowIndex,
                            int columnIndex) {
-        DataTableRow row = rows.get(rowIndex);
+        DataRow row = rows.get(rowIndex);
         if (columnIndex > TARGET_COLUMN) {
             int fieldIndex = columnToFieldIndexMap.get(columnIndex);
             DataField field = (DataField) aValue;
@@ -131,8 +164,63 @@ public class DataTableModel extends AbstractTableModel {
         return fieldToColumnIndexMap.get(fieldIndex);
     }
 
-    public List<DataTableRow> getRows() {
+    public List<DataRow> getRows() {
         return rows;
+    }
+
+    public boolean verify() {
+        boolean isValid = true;
+        setError(null, null, null);
+
+        final int numRows = rows.size();
+        int numFields;
+        DataRow row;
+        DataField field;
+        for (int rowIndex = 0; rowIndex < numRows; rowIndex++) {
+            row = rows.get(rowIndex);
+            numFields = row.getFieldCount();
+            for (int fieldIndex = 0; fieldIndex < numFields; fieldIndex++) {
+                field = row.getField(fieldIndex);
+                if (! field.verify()) {
+                    isValid = false;
+
+                    final int columnIndex = getColumnIndexForField(fieldIndex);
+                    final Target rowTarget = row.getTarget();
+
+                    StringBuilder message = new StringBuilder();
+                    message.append("The ");
+                    message.append(field.getDisplayName());
+
+                    if (field instanceof DataFieldGroupModel) {
+                        DataFieldGroupModel dfgm = (DataFieldGroupModel) field;
+                        Object nestedErrorField =
+                                dfgm.getValueAt(dfgm.getErrorRow(),
+                                                dfgm.getErrorColumn());
+                        if (nestedErrorField instanceof DataField) {
+                            message.append(": ");
+                            message.append(((DataField) nestedErrorField).getDisplayName());
+                        }
+                    }
+                    message.append(" value for ");
+                    message.append(rowTarget.getName());
+                    message.append(" is invalid.  ");
+                    message.append(field.getErrorMessage());
+                                                                    
+                    setError(rowIndex, columnIndex, message.toString());
+                    break;
+                }
+            }
+            if (! isValid) {
+                break;
+            }
+        }
+
+        return isValid;
+    }
+
+    public void addRow(int rowIndex) {
+        throw new UnsupportedOperationException(
+                "dynamic addition of rows not supported for main data table");
     }
 
     public void removeRow(int rowIndex) {
@@ -142,8 +230,8 @@ public class DataTableModel extends AbstractTableModel {
 
     public void copyRow(int fromRowIndex,
                         int toRowIndex) {
-        DataTableRow fromRow = rows.get(fromRowIndex);
-        DataTableRow toRow = rows.get(toRowIndex);
+        DataRow fromRow = rows.get(fromRowIndex);
+        DataRow toRow = rows.get(toRowIndex);
         if ((fromRow != null) && (toRow != null)) {
             int fieldCount = toRow.getFieldCount();
             for (int fieldIndex = 0; fieldIndex < fieldCount; fieldIndex++) {
@@ -160,13 +248,13 @@ public class DataTableModel extends AbstractTableModel {
                          int fromColumnIndex) {
 
         if (fromColumnIndex > TARGET_COLUMN) {
-            DataTableRow fromRow = rows.get(fromRowIndex);
+            DataRow fromRow = rows.get(fromRowIndex);
             final int fieldIndex = columnToFieldIndexMap.get(fromColumnIndex);
             final DataField fromField = fromRow.getField(fieldIndex);
             if (fromField.isCopyable()) {
                 final int numberOfRows = rows.size();
 
-                DataTableRow toRow;
+                DataRow toRow;
                 for (int rowIndex = fromRowIndex + 1; rowIndex < numberOfRows;
                      rowIndex++) {
                     toRow = rows.get(rowIndex);
@@ -177,47 +265,26 @@ public class DataTableModel extends AbstractTableModel {
         }
     }
 
-    public String getLongestValue(int columnIndex) {
-        final int numRows = this.getRowCount();
-        int longestLength = 0;
-        String longestValue = "";
-
-        String value;
-        int length;
-        for (int rowIndex = 0; rowIndex < numRows; rowIndex++) {
-            Object model = this.getValueAt(rowIndex, columnIndex);
-            if (model instanceof ValidValueModel) {
-                ValidValueModel vvModel = (ValidValueModel) model;
-                longestValue = vvModel.getLongestDisplayName();
-                break;
-            } else if (model instanceof DataField){
-                // default longest length to configured witdh
-                if (rowIndex == 0) {
-                    Integer width = ((DataField) model).getDisplayWidth();
-                    if (width != null) {
-                        longestLength = width;
-                        longestValue = String.format("%0" + width + "d", 0);
-                    }
-                }
-                value = ((DataField) model).getCoreValue();
-            } else if (model instanceof Target) {
-                value = ((Target) model).getName();
-            } else {
-                value = "";
-            }
-
-            length = value.length();
-            if (length > longestLength) {
-                longestLength = length;
-                longestValue = value;
-            }
-        }
-
-        return longestValue;
+    @Override
+    public boolean isTargetColumn(int columnIndex) {
+        return (columnIndex == TARGET_COLUMN);
     }
 
-    public static int getFirstFieldColumn() {
-        return TARGET_COLUMN + 1;
+    public boolean isButtonColumn(int columnIndex) {
+        return ((columnIndex >= 0) && (columnIndex < TARGET_COLUMN));
+    }
+
+    public boolean isSelectable(int columnIndex) {
+        boolean isSelectable = false;
+        final int numberOfColumns = getColumnCount();
+        if ((columnIndex > TARGET_COLUMN) &&
+            (columnIndex < numberOfColumns)){
+            Object value = getValueAt(0, columnIndex);
+            if (value instanceof DataField) {
+                isSelectable = ((DataField) value).isEditable();
+            }   
+        }
+        return isSelectable;
     }
 
     public void removeSuccessfullyCopiedFiles(List<Integer> failedCopyRowIndices) {

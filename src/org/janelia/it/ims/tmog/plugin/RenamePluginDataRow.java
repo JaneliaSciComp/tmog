@@ -88,11 +88,10 @@ public class RenamePluginDataRow extends PluginDataRow {
     }
 
     /**
-     * @return the relative path (parent directory + file name) for the
-     *         renamed file.
+     * @return the renamed file.
      */
-    public String getRelativePath() {
-        return getRelativePath(renamedFile);
+    public File getTargetFile() {
+        return getRenamedFile();
     }
 
     /**
@@ -112,6 +111,7 @@ public class RenamePluginDataRow extends PluginDataRow {
     private void setRenamedFile() {
         StringBuilder fileName = new StringBuilder();
         DataRow dataRow = getDataRow();
+        // TODO: add support for nested fields
         List<DataField> dataFields = dataRow.getFields();
         for (DataField field : dataFields) {
             if (field.isMarkedForTask()) {

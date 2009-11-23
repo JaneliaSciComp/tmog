@@ -40,6 +40,10 @@ public class TargetNameModel implements DataField {
         return false;
     }
 
+    public boolean isVisible() {
+        return false;
+    }
+
     public boolean isCopyable() {
         return false;
     }
@@ -86,6 +90,7 @@ public class TargetNameModel implements DataField {
      * @param  target  the target being processed.
      */
     public void initializeValue(Target target) {
+        targetName = null;
         if (target != null) {
             targetName = target.getName();
         }

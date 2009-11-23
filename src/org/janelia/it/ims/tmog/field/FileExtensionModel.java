@@ -29,6 +29,10 @@ public class FileExtensionModel implements DataField {
         return false;
     }
 
+    public boolean isVisible() {
+        return false;
+    }
+
     public boolean isCopyable() {
         return false;
     }
@@ -74,6 +78,7 @@ public class FileExtensionModel implements DataField {
      * @param  target  the target being processed.
      */
     public void initializeValue(Target target) {
+        extension = null;
         if (target != null) {
             String fileName = target.getName();
             int extStart = fileName.lastIndexOf('.');

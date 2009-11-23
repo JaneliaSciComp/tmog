@@ -8,7 +8,6 @@
 package org.janelia.it.ims.tmog.field;
 
 import org.janelia.it.ims.tmog.view.component.DataTable;
-import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,16 +68,7 @@ public class ValidValueEditor extends DefaultCellEditor {
 
         String coreValue = model.getCoreValue();
         if ((coreValue.length() > 0) && (! model.verify())) {
-            String dialogMsg = model.getErrorMessage() +
-                    "  Would you like to correct the field now?";
-
-            int selection =
-                    NarrowOptionPane.showConfirmDialog(
-                            dataTable,
-                            dialogMsg,
-                            "Invalid Entry", // title
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE);
+            int selection = dataTable.showInvalidEntryConfimDialog(model);
 
             if (selection == JOptionPane.YES_OPTION)  {
                 editorComboBox.requestFocusInWindow();
@@ -110,6 +100,28 @@ public class ValidValueEditor extends DefaultCellEditor {
     static class EditorComboBox extends JComboBox {
         public EditorComboBox() {
             setKeySelectionManager(new MyKeySelectionManager());
+        }
+
+        @Override
+        public void processKeyEvent(KeyEvent e) {
+            super.processKeyEvent(e);
+
+            // Hitting the tab key normally hides the combo box popup
+            // (see the JComboBox implementation of this method).
+            // We override that action here because this combo box editor
+            // is potentially used for both a previously edited cell and
+            // the current cell being edited.  The loss of focus on the
+            // previous cell will hide its popup and the focus on the
+            // current cell will show its popup (see processFocusEvent below).
+            // The tab keyboard event then hides the current cell popup.
+            // This simply restores it once again.
+            //
+            // NOTE: The combo box isShowing() check is needed to make
+            //       sure we have tabbed into another valid value cell.       
+            final int keyCode = e.getKeyCode();
+            if ((keyCode == KeyEvent.VK_TAB) && isShowing()) {
+                showPopup();
+            }
         }
 
         @Override

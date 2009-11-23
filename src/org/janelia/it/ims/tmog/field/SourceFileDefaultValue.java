@@ -8,6 +8,7 @@
 package org.janelia.it.ims.tmog.field;
 
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.tmog.target.FileTarget;
 import org.janelia.it.ims.tmog.target.Target;
 
 import java.io.File;
@@ -85,9 +86,8 @@ public class SourceFileDefaultValue implements DefaultValue {
     public String getValue(Target target) {
         String value = null;
         File sourceFile = null;
-        Object sourceValue = target.getInstance();
-        if (sourceValue instanceof File) {
-            sourceFile = (File) sourceValue;
+        if (target instanceof FileTarget) {
+            sourceFile = ((FileTarget) target).getFile();
         }
         if (sourceFile != null) {
             String textToMatch;

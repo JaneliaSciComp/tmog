@@ -37,6 +37,7 @@ public abstract class VerifiedFieldModel extends PlainDocument
         this.defaultValueList = new DefaultValueList();
         this.isCopyable = true;
         this.markedForTask = true;
+        this.displayWidth = 100;
     }
 
     public abstract boolean verify();
@@ -54,6 +55,10 @@ public abstract class VerifiedFieldModel extends PlainDocument
     }
 
     public boolean isEditable() {
+        return true;
+    }
+
+    public boolean isVisible() {
         return true;
     }
 
@@ -161,6 +166,8 @@ public abstract class VerifiedFieldModel extends PlainDocument
         String defaultValue = defaultValueList.getValue(target);
         if (defaultValue != null) {
             setText(defaultValue);
+        } else {
+            setText("");
         }
     }
     

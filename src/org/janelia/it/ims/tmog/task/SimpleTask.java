@@ -8,8 +8,8 @@
 package org.janelia.it.ims.tmog.task;
 
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
-import org.janelia.it.ims.tmog.DataTableRow;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
@@ -144,7 +144,7 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
                 taskSummary.append("Session cancelled before start.");
 
                 // mark all rows as failed
-                List<DataTableRow> modelRows = model.getRows();
+                List<DataRow> modelRows = model.getRows();
                 int numberOfRows = modelRows.size();
                 for (int i = 0; i < numberOfRows; i++) {
                     failedRowIndices.add(i);
@@ -179,8 +179,8 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
      *
      * @return a plug-in data row for the current model row.
      */
-    protected PluginDataRow getPluginDataRow(DataTableRow modelRow) {
-        return new PluginDataRow(modelRow.getDataRow());
+    protected PluginDataRow getPluginDataRow(DataRow modelRow) {
+        return new PluginDataRow(modelRow);
     }
 
     /**
@@ -195,7 +195,7 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
      */
     protected TaskProgressInfo getProgressInfo(int lastRowProcessed,
                                                int totalRowsToProcess,
-                                               DataTableRow modelRow) {
+                                               DataRow modelRow) {
 
         StringBuilder sb = new StringBuilder();
         sb.append("processing ");
@@ -223,7 +223,7 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
      *
      * @return true if the processing completes successfully; otherwise false.
      */
-    protected boolean processRow(DataTableRow modelRow) {
+    protected boolean processRow(DataRow modelRow) {
         return true;
     }
 
@@ -238,7 +238,7 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
      *                             and all listeners completed their processing
      *                             successfully; otherwise false.
      */
-    protected void cleanupRow(DataTableRow modelRow,
+    protected void cleanupRow(DataRow modelRow,
                               boolean isSuccessful) {
         if (isSuccessful) {
             appendToSummary("Saved data for ");
@@ -294,7 +294,7 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
     private void processRows() {
 
         DataTableModel model = getModel();
-        List<DataTableRow> modelRows = model.getRows();
+        List<DataRow> modelRows = model.getRows();
 
         int rowIndex = 0;
         final int numberOfRows = modelRows.size();
@@ -304,7 +304,7 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
         PluginDataRow pluginDataRow;
         TaskProgressInfo progressInfo;
 
-        for (DataTableRow modelRow : modelRows) {
+        for (DataRow modelRow : modelRows) {
 
             isStartNotificationSuccessful = false;
             isRowProcessingSuccessful = false;

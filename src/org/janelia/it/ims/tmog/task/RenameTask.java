@@ -8,8 +8,8 @@
 package org.janelia.it.ims.tmog.task;
 
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
-import org.janelia.it.ims.tmog.DataTableRow;
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
@@ -75,10 +75,10 @@ public class RenameTask extends SimpleTask {
         this.outputDirConfig = outputDirConfig;
         this.sessionOutputDirectory = new File(sessionOutputDirectoryName);
 
-        List<DataTableRow> modelRows = model.getRows();
+        List<DataRow> modelRows = model.getRows();
         String fromDirectoryName = null;
         if (modelRows.size() > 0) {
-            DataTableRow firstModelRow = modelRows.get(0);
+            DataRow firstModelRow = modelRows.get(0);
             File firstFile = getTargetFile(firstModelRow);
             File fromDirectory = firstFile.getParentFile();
             fromDirectoryName = fromDirectory.getAbsolutePath();
@@ -89,7 +89,7 @@ public class RenameTask extends SimpleTask {
         appendToSummary(":\n\n");
 
         long totalBytesToCopy = 0;
-        for (DataTableRow modelRow : modelRows) {
+        for (DataRow modelRow : modelRows) {
             File file = getTargetFile(modelRow);
             totalBytesToCopy += file.length();
         }
@@ -115,18 +115,19 @@ public class RenameTask extends SimpleTask {
      * @return a plug-in data row for the current model row.
      */
     @Override
-    protected PluginDataRow getPluginDataRow(DataTableRow modelRow) {
+    protected PluginDataRow getPluginDataRow(DataRow modelRow) {
         File rowFile = getTargetFile(modelRow);
         File toDirectory = sessionOutputDirectory;
 
         if (! outputDirConfig.isDerivedForSession()) {
+            // TODO: add support for nested fields
             toDirectory = new File(
                     outputDirConfig.getDerivedPath(rowFile,
                                                    modelRow.getFields()));
         }
 
         currentRow =  new RenamePluginDataRow(rowFile,
-                                              modelRow.getDataRow(),
+                                              modelRow,
                                               toDirectory);
         return currentRow;
     }
@@ -141,7 +142,7 @@ public class RenameTask extends SimpleTask {
     @Override
     protected TaskProgressInfo getProgressInfo(int lastRowProcessed,
                                                int totalRowsToProcess,
-                                               DataTableRow modelRow) {
+                                               DataRow modelRow) {
 
         File fromFile = currentRow.getFromFile();
         File toFile = currentRow.getRenamedFile();
@@ -173,7 +174,7 @@ public class RenameTask extends SimpleTask {
      * @return true if the processing completes successfully; otherwise false.
      */
     @Override
-    protected boolean processRow(DataTableRow modelRow) {
+    protected boolean processRow(DataRow modelRow) {
 
         boolean renameSuccessful = false;
         File rowFile = currentRow.getFromFile();
@@ -217,7 +218,7 @@ public class RenameTask extends SimpleTask {
      *                             successfully; otherwise false.
      */
     @Override
-    protected void cleanupRow(DataTableRow modelRow,
+    protected void cleanupRow(DataRow modelRow,
                               boolean isSuccessful) {
 
         File rowFile = currentRow.getFromFile();
@@ -271,7 +272,7 @@ public class RenameTask extends SimpleTask {
         }
     }
 
-    private File getTargetFile(DataTableRow row) {
+    private File getTargetFile(DataRow row) {
         Target target = row.getTarget();
         return (File) target.getInstance();
     }

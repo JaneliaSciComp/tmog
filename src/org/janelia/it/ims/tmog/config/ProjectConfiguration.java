@@ -183,8 +183,8 @@ public class ProjectConfiguration {
         }
     }
 
-    public int getNumberOfEditableFields() {
-        return dataFields.getNumberOfEditableFields();
+    public int getNumberOfVisibleFields() {
+        return dataFields.getNumberOfVisibleFields();
     }
 
     private void constructDefaultValuePluginInstances(DefaultValueList defaultList)

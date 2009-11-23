@@ -201,6 +201,7 @@ public class WormTrackerDataPlugin implements RowListener {
         DataRow dataRow = row.getDataRow();
         String fieldName;
         String fieldValue;
+        // TODO: handle nested fields
         for (DataField field : dataRow.getFields()) {
             fieldName = field.getDisplayName();
             if (! resourceFieldName.equals(fieldName)) {

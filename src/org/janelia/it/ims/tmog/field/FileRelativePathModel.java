@@ -48,9 +48,7 @@ public class FileRelativePathModel implements DataField {
     }
 
     public boolean isEditable() {
-        // NOTE: This will make the value visible in the data table, 
-        // but it is not really editable since it does not have a renderer.
-        return visible;
+        return false;
     }
 
     public boolean isCopyable() {
@@ -109,7 +107,7 @@ public class FileRelativePathModel implements DataField {
      * @param  target  the target being processed.
      */
     public void initializeValue(Target target) {
-
+        path = null;
         if (target instanceof FileTarget) {
             FileTarget fileTarget = (FileTarget) target;
             File file = fileTarget.getFile();

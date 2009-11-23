@@ -8,11 +8,10 @@
 package org.janelia.it.ims.tmog.view;
 
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
-import org.janelia.it.ims.tmog.DataTableRow;
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
-import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.filefilter.DirectoryOnlyFilter;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
@@ -53,6 +52,8 @@ public class RenameView implements SessionView, InputSelectionView {
     private JPanel appPanel;
     @SuppressWarnings({"UnusedDeclaration"})
     private JPanel directoryPanel;
+    @SuppressWarnings({"UnusedDeclaration"})
+    private JPanel dataPanel;
     private JButton copyAndRenameBtn;
     private DataTable dataTable;
     private JProgressBar copyProgressBar;
@@ -164,7 +165,6 @@ public class RenameView implements SessionView, InputSelectionView {
                                             targets,
                                             projectConfig);
             dataTable.setModel(tableModel);
-            dataTable.sizeTable();
             copyAndRenameBtn.setEnabled(true);
         } else {
             NarrowOptionPane.showMessageDialog(
@@ -290,88 +290,74 @@ public class RenameView implements SessionView, InputSelectionView {
     }
 
     private boolean validateAllFields(File baseOutputDirectory) {
-        boolean isValid = true;
+        boolean isValid = tableModel.verify();
 
-        OutputDirectoryConfiguration odCfg = projectConfig.getOutputDirectory();
-        boolean isOutputDirectoryAlreadyValidated = odCfg.isDerivedForSession();
-        File outputDirectory = null;
-        String outputDirectoryPath;
-        List<DataTableRow> rows = tableModel.getRows();
-        int rowIndex = 0;
-        for (DataTableRow row : rows) {
-            Target rowTarget= row.getTarget();
-            File rowFile = (File) rowTarget.getInstance();
-            List<DataField> rowFields = row.getFields();
+        // only perform other validation checks if basic field validation succeeds
+        if (isValid) {
+            OutputDirectoryConfiguration odCfg = projectConfig.getOutputDirectory();
+            boolean isOutputDirectoryAlreadyValidated = odCfg.isDerivedForSession();
+            File outputDirectory;
+            String outputDirectoryPath;
+            List<DataRow> rows = tableModel.getRows();
+            int rowIndex = 0;
+            for (DataRow row : rows) {
+                Target rowTarget= row.getTarget();
+                File rowFile = (File) rowTarget.getInstance();
 
-            // validate syntax based on transmogrifier configuration
-            for (int fieldIndex = 0; fieldIndex < rowFields.size(); fieldIndex++) {
-                DataField field = rowFields.get(fieldIndex);
-                if (!field.verify()) {
-                    isValid = false;
-                    String message = "The " + field.getDisplayName() +
-                                     " value for " + rowTarget.getName() +
-                                     " is invalid.  " + field.getErrorMessage();
-                    int columnIndex =
-                            tableModel.getColumnIndexForField(fieldIndex);
-                    dataTable.displayErrorDialog(message,
-                                                 rowIndex,
-                                                 columnIndex);
-                    break;
-                }
-            }
-
-            // only perform output directory validation if field validation
-            if (isValid) {
                 if (isOutputDirectoryAlreadyValidated) {
                     outputDirectory = baseOutputDirectory;
                 } else {
                     // setup and validate the directories for each file
+                    // TODO: add support for nested fields
                     outputDirectoryPath = odCfg.getDerivedPath(rowFile,
-                                                               rowFields);
+                                                               row.getFields());
                     outputDirectory = new File(outputDirectoryPath);
                     String outputFailureMsg =
                             OutputDirectoryConfiguration.createAndValidateDirectory(
                                     outputDirectory);
                     if (outputFailureMsg != null) {
                         isValid = false;
-                        dataTable.displayErrorDialog(outputFailureMsg,
-                                                     rowIndex,
-                                                     2);
+                        dataTable.selectRow(rowIndex);
+                        dataTable.displayErrorDialog(outputFailureMsg);
                     }
                 }
-            }
 
-            // only perform external validation if internal validation succeeds
-            if (isValid) {
-                String externalErrorMsg = null;
-                try {
-                    for (RowValidator validator : projectConfig.getRowValidators()) {
-                        validator.validate(
-                                new RenamePluginDataRow(rowFile,
-                                                        row.getDataRow(),
-                                                        outputDirectory));
+                // only perform external validation if output directory validation succeeds
+                if (isValid) {
+                    String externalErrorMsg = null;
+                    try {
+                        for (RowValidator validator : projectConfig.getRowValidators()) {
+                            validator.validate(
+                                    new RenamePluginDataRow(rowFile,
+                                                            row,
+                                                            outputDirectory));
+                        }
+                    } catch (ExternalDataException e) {
+                        externalErrorMsg = e.getMessage();
+                        LOG.info("external validation failed", e);
+                    } catch (ExternalSystemException e) {
+                        externalErrorMsg = e.getMessage();
+                        LOG.error(e.getMessage(), e);
                     }
-                } catch (ExternalDataException e) {
-                    externalErrorMsg = e.getMessage();
-                    LOG.info("external validation failed", e);
-                } catch (ExternalSystemException e) {
-                    externalErrorMsg = e.getMessage();
-                    LOG.error(e.getMessage(), e);
+
+                    if (externalErrorMsg != null) {
+                        isValid = false;
+                        dataTable.selectRow(rowIndex);
+                        dataTable.displayErrorDialog(externalErrorMsg);
+                    }
                 }
 
-                if (externalErrorMsg != null) {
-                    isValid = false;
-                    dataTable.displayErrorDialog(externalErrorMsg,
-                                                 rowIndex,
-                                                 2);
+                if (! isValid) {
+                    break;
                 }
-            }
 
-            if (! isValid) {
-                break;
+                rowIndex++;
             }
+        } else {
 
-            rowIndex++;
+            dataTable.selectErrorCell();
+            dataTable.displayErrorDialog(tableModel.getErrorMessage());
+
         }
         return isValid;
     }

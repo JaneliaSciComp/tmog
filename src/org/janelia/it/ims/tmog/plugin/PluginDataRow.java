@@ -62,6 +62,7 @@ public class PluginDataRow {
      * @return the associated field model value or null.
      */
     public String getCoreValue(String fieldDisplayName) {
+        // TODO: add support for nested fields
         String value = null;
         DataField field = displayNameToFieldMap.get(fieldDisplayName);
         if (field != null) {
@@ -132,14 +133,25 @@ public class PluginDataRow {
     }
 
     /**
+     * @return the target file or null if this row's target is not a file.
+     */
+    public File getTargetFile() {
+        File targetFile = null;
+        Target target = dataRow.getTarget();
+        if (target instanceof FileTarget) {
+            targetFile = ((FileTarget) target).getFile();
+        }
+        return targetFile;
+    }
+    
+    /**
      * @return the relative path (parent directory + file name) for the
      *         target file or "" if this row's target is not a file.
      */
     public String getRelativePath() {
         String relativePath = "";
-        Target target = dataRow.getTarget();
-        if (target instanceof FileTarget) {
-            File targetFile = ((FileTarget) target).getFile();
+        File targetFile = getTargetFile();
+        if (targetFile != null) {
             relativePath = getRelativePath(targetFile);
         }
         return relativePath;

@@ -43,6 +43,10 @@ public class StaticDataModel implements DataField {
         return false;
     }
 
+    public boolean isVisible() {
+        return false;
+    }
+
     public boolean isCopyable() {
         return false;
     }

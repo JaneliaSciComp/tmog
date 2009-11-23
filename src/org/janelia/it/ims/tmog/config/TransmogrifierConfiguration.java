@@ -14,6 +14,7 @@ import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.tmog.config.output.Path;
 import org.janelia.it.ims.tmog.config.output.RenameFieldValue;
 import org.janelia.it.ims.tmog.config.output.SourceFileModificationTime;
+import org.janelia.it.ims.tmog.field.DataFieldGroupModel;
 import org.janelia.it.ims.tmog.field.FileExtensionModel;
 import org.janelia.it.ims.tmog.field.FileModificationTimeModel;
 import org.janelia.it.ims.tmog.field.FileNameModel;
@@ -151,214 +152,96 @@ public class TransmogrifierConfiguration {
         digester.addObjectCreate("transmogrifierConfiguration",
                                  ArrayList.class);
 
-        digester.addObjectCreate("transmogrifierConfiguration/global",
-                                 GlobalConfiguration.class);
-        digester.addSetProperties("transmogrifierConfiguration/global");
-        digester.addSetNext("transmogrifierConfiguration/global",
-                            "add");
+        createSetAndAdd("*/global",
+                        GlobalConfiguration.class, digester);
+        createSetAndAdd("*/project",
+                        ProjectConfiguration.class, digester);
+        createSetAndAdd("*/inputFileFilter",
+                        InputFileFilter.class,
+                        "setInputFileFilter", digester);
+        createSetAndAdd("*/inputFileSorter",
+                        InputFileSorter.class,
+                        "setInputFileSorter", digester);
+        createSetAndAdd("*/outputDirectory",
+                        OutputDirectoryConfiguration.class,
+                        "setOutputDirectory", digester);
+        createSetAndAdd("*/outputDirectory/path",
+                        Path.class,
+                        "addComponent", digester);
+        createSetAndAdd("*/outputDirectory/renameFieldValue",
+                        RenameFieldValue.class,
+                        "addComponent", digester);
+        createSetAndAdd("*/outputDirectory/sourceFileModificationTime",
+                        SourceFileModificationTime.class,
+                        "addComponent", digester);
 
-        digester.addObjectCreate("transmogrifierConfiguration/project",
-                                 ProjectConfiguration.class);
-        digester.addSetProperties("transmogrifierConfiguration/project");
-        digester.addSetNext("transmogrifierConfiguration/project",
-                            "add");
+        digester.addObjectCreate("*/dataFields", DataFields.class);
+        digester.addSetNext("*/dataFields", "setDataFields");
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/inputFileFilter",
-                                 InputFileFilter.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/inputFileFilter");
-        digester.addSetNext("transmogrifierConfiguration/project/inputFileFilter",
-                            "setInputFileFilter");
+        createSetAndAdd("*/date",
+                        VerifiedDateModel.class, digester);
+        createSetAndAdd("*/decimal",
+                        VerifiedDecimalModel.class, digester);
+        createSetAndAdd("*/fieldGroup",
+                        DataFieldGroupModel.class, digester);
+        createSetAndAdd("*/fileExtension",
+                        FileExtensionModel.class, digester);
+        createSetAndAdd("*/fileModificationTime",
+                        FileModificationTimeModel.class, digester);
+        createSetAndAdd("*/fileName",
+                        FileNameModel.class, digester);
+        createSetAndAdd("*/fileRelativePath",
+                        FileRelativePathModel.class, digester);
+        createSetAndAdd("*/number",
+                        VerifiedIntegerModel.class, digester);
+        createSetAndAdd("*/pluginData",
+                        PluginDataModel.class, digester);
+        createSetAndAdd("*/runTime",
+                        RunTimeModel.class, digester);
+        createSetAndAdd("*/separator",
+                        StaticDataModel.class, digester);
+        createSetAndAdd("*/static",
+                        StaticDataModel.class, digester);
+        createSetAndAdd("*/targetName",
+                        TargetNameModel.class, digester);
+        createSetAndAdd("*/text",
+                        VerifiedTextModel.class, digester);
+        createSetAndAdd("*/validValue",
+                        ValidValue.class,
+                        "addValidValue", digester);
+        createSetAndAdd("*/validValueList",
+                        ValidValueModel.class, digester);
+        createSetAndAdd("*/well",
+                        VerifiedWellModel.class, digester);
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/inputFileSorter",
-                                 InputFileSorter.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/inputFileSorter");
-        digester.addSetNext("transmogrifierConfiguration/project/inputFileSorter",
-                            "setInputFileSorter");
+        createSetAndAddDefault("*/sourceFileDefault",
+                               SourceFileDefaultValue.class,
+                               digester);
+        createSetAndAddDefault("*/staticDefault",
+                               StaticDefaultValue.class,
+                               digester);
+        createSetAndAddDefault("*/sourceFileDateDefault",
+                               SourceFileDateDefaultValue.class,
+                               digester);
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/outputDirectory",
-                                 OutputDirectoryConfiguration.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/outputDirectory");
-        digester.addSetNext("transmogrifierConfiguration/project/outputDirectory",
-                            "setOutputDirectory");
+        final String pluginDefaultPath = "*/pluginDefault";
+        createSetAndAddDefault(pluginDefaultPath,
+                                      PluginDefaultValueConfiguration.class,
+                                      digester);
+        final String pluginDefaultPropertyPath =
+                pluginDefaultPath + "/property";
+        digester.addCallMethod(pluginDefaultPropertyPath, "setProperty", 2);
+        digester.addCallParam(pluginDefaultPropertyPath, 0, "name");
+        digester.addCallParam(pluginDefaultPropertyPath, 1, "value");
 
-        digester.addObjectCreate("transmogrifierConfiguration/project/outputDirectory/path",
-                                 Path.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/outputDirectory/path");
-        digester.addSetNext("transmogrifierConfiguration/project/outputDirectory/path",
-                            "addComponent");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/outputDirectory/renameFieldValue",
-                                 RenameFieldValue.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/outputDirectory/renameFieldValue");
-        digester.addSetNext("transmogrifierConfiguration/project/outputDirectory/renameFieldValue",
-                            "addComponent");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/outputDirectory/sourceFileModificationTime",
-                                 SourceFileModificationTime.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/outputDirectory/sourceFileModificationTime");
-        digester.addSetNext("transmogrifierConfiguration/project/outputDirectory/sourceFileModificationTime",
-                            "addComponent");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields",
-                                 DataFields.class);
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields",
-                            "setDataFields");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/number",
-                                 VerifiedIntegerModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/number");
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/number/sourceFileDefault",
-                                 SourceFileDefaultValue.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/number/sourceFileDefault");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/number/sourceFileDefault",
-                            "addDefaultValue");
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/number/staticDefault",
-                                 StaticDefaultValue.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/number/staticDefault");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/number/staticDefault",
-                            "addDefaultValue");
-        addDefaultPlugin("transmogrifierConfiguration/project/dataFields/number", digester);
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/number",
-                            "add");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/decimal",
-                                 VerifiedDecimalModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/decimal");
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/decimal/sourceFileDefault",
-                                 SourceFileDefaultValue.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/decimal/sourceFileDefault");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/decimal/sourceFileDefault",
-                            "addDefaultValue");
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/decimal/staticDefault",
-                                 StaticDefaultValue.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/decimal/staticDefault");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/decimal/staticDefault",
-                            "addDefaultValue");
-        addDefaultPlugin("transmogrifierConfiguration/project/dataFields/decimal", digester);
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/decimal",
-                            "add");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/text",
-                                 VerifiedTextModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/text");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/text",
-                            "add");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/text/sourceFileDefault",
-                                 SourceFileDefaultValue.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/text/sourceFileDefault");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/text/sourceFileDefault",
-                            "addDefaultValue");
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/text/staticDefault",
-                                 StaticDefaultValue.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/text/staticDefault");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/text/staticDefault",
-                            "addDefaultValue");
-        addDefaultPlugin("transmogrifierConfiguration/project/dataFields/text", digester);
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/date",
-                                 VerifiedDateModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/date");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/date",
-                            "add");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/date/sourceFileDateDefault",
-                                 SourceFileDateDefaultValue.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/date/sourceFileDateDefault");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/date/sourceFileDateDefault",
-                            "addDefaultValue");
-        addDefaultPlugin("transmogrifierConfiguration/project/dataFields/date", digester);
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/well",
-                                 VerifiedWellModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/well");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/well",
-                            "add");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/separator",
-                                 StaticDataModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/separator");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/separator",
-                            "add");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/static",
-                                 StaticDataModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/static");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/static",
-                            "add");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/pluginData",
-                                 PluginDataModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/pluginData");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/pluginData",
-                            "add");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/runTime",
-                                 RunTimeModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/runTime");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/runTime",
-                            "add");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/fileModificationTime",
-                                 FileModificationTimeModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/fileModificationTime");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/fileModificationTime",
-                            "add");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/fileExtension",
-                                 FileExtensionModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/fileExtension");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/fileExtension",
-                            "add");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/targetName",
-                                 TargetNameModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/targetName");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/targetName",
-                            "add");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/fileRelativePath",
-                                 FileRelativePathModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/fileRelativePath");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/fileRelativePath",
-                            "add");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/fileName",
-                                 FileNameModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/fileName");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/fileName",
-                            "add");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/validValueList",
-                                 ValidValueModel.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/validValueList");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/validValueList/sourceFileDefault",
-                                 SourceFileDefaultValue.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/validValueList/sourceFileDefault");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/validValueList/sourceFileDefault",
-                            "addDefaultValue");
-        addDefaultPlugin("transmogrifierConfiguration/project/dataFields/validValueList", digester);
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/dataFields/validValueList/validValue",
-                                 ValidValue.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/dataFields/validValueList/validValue");
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/validValueList/validValue",
-                            "addValidValue");
-
-        digester.addSetNext("transmogrifierConfiguration/project/dataFields/validValueList",
-                            "add");
-
-        digester.addObjectCreate("transmogrifierConfiguration/project/plugins",
-                                 PluginFactory.class);
-        digester.addSetProperties("transmogrifierConfiguration/project/plugins");
+        createSetAndAdd("*/plugins",
+                        PluginFactory.class,
+                        "setPluginFactory", digester);
 
         addPlugin("rowListener", digester);
         addPlugin("rowValidator", digester);
         addPlugin("sessionListener", digester);
 
-        digester.addSetNext("transmogrifierConfiguration/project/plugins",
-                            "setPluginFactory");
         try {
             ArrayList parsedList = (ArrayList) digester.parse(stream);
             for (Object element : parsedList) {
@@ -405,21 +288,24 @@ public class TransmogrifierConfiguration {
                             addMethodName.toString());
     }
 
-    private void addDefaultPlugin(String parentRoot,
-                                  Digester digester) {
-
-        final String pluginRoot = parentRoot + "/pluginDefault";
-        final String propertyRoot = pluginRoot + "/property";
-
-        digester.addObjectCreate(pluginRoot,
-                                 PluginDefaultValueConfiguration.class);
-        digester.addSetProperties(pluginRoot);
-        digester.addSetNext(pluginRoot,
-                            "addDefaultValue");
-
-        digester.addCallMethod(propertyRoot, "setProperty", 2);
-        digester.addCallParam(propertyRoot, 0, "name");
-        digester.addCallParam(propertyRoot, 1, "value");
+    private void createSetAndAdd(String path,
+                                 Class fieldClass,
+                                 String setNextMethodName,
+                                 Digester digester) {
+        digester.addObjectCreate(path, fieldClass);
+        digester.addSetProperties(path);
+        digester.addSetNext(path, setNextMethodName);
     }
 
+    private void createSetAndAdd(String path,
+                                 Class fieldClass,
+                                 Digester digester) {
+        createSetAndAdd(path, fieldClass, "add", digester);
+    }
+
+    private void createSetAndAddDefault(String path,
+                                        Class defaultClass,
+                                        Digester digester) {
+        createSetAndAdd(path, defaultClass, "addDefaultValue", digester);
+    }
 }

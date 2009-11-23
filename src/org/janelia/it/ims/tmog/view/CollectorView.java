@@ -8,16 +8,14 @@
 package org.janelia.it.ims.tmog.view;
 
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
-import org.janelia.it.ims.tmog.DataTableRow;
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
-import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RowValidator;
 import org.janelia.it.ims.tmog.target.FileTarget;
-import org.janelia.it.ims.tmog.target.Target;
 import org.janelia.it.ims.tmog.task.SimpleTask;
 import org.janelia.it.ims.tmog.task.Task;
 import org.janelia.it.ims.tmog.view.component.DataTable;
@@ -46,6 +44,8 @@ public class CollectorView implements SessionView, InputSelectionView {
     private JPanel appPanel;
     @SuppressWarnings({"UnusedDeclaration"})
     private JPanel directoryPanel;
+    @SuppressWarnings({"UnusedDeclaration"})
+    private JPanel dataPanel;
     private JLabel rootDirectoryField;
     private JButton rootDirectoryBtn;
     private JLabel projectLabel;
@@ -125,7 +125,6 @@ public class CollectorView implements SessionView, InputSelectionView {
                                         targets,
                                         projectConfig);
         dataTable.setModel(tableModel);
-        dataTable.sizeTable();
         enableView(true);
     }
 
@@ -174,38 +173,19 @@ public class CollectorView implements SessionView, InputSelectionView {
     }
 
     private boolean validateAllFields() {
-        boolean isValid = true;
+        boolean isValid = tableModel.verify();
 
-        List<DataTableRow> rows = tableModel.getRows();
-        int rowIndex = 0;
-        for (DataTableRow row : rows) {
-            Target rowTarget = row.getTarget();
-            List<DataField> rowFields = row.getFields();
+        // only perform external validation if internal validation succeeds
+        if (isValid) {
 
-            // validate syntax based on transmogrifier configuration
-            for (int fieldIndex = 0; fieldIndex < rowFields.size(); fieldIndex++) {
-                DataField field = rowFields.get(fieldIndex);
-                if (!field.verify()) {
-                    isValid = false;
-                    String message = "The " + field.getDisplayName() +
-                                     " value for " + rowTarget.getName() +
-                                     " is invalid.  " + field.getErrorMessage();
-                    int columnIndex =
-                            tableModel.getColumnIndexForField(fieldIndex);
-                    dataTable.displayErrorDialog(message,
-                                                 rowIndex,
-                                                 columnIndex);
-                    break;
-                }
-            }
-
-            // only perform external validation if internal validation succeeds
-            if (isValid) {
+            List<DataRow> rows = tableModel.getRows();
+            int rowIndex = 0;
+            for (DataRow row : rows) {
                 String externalErrorMsg = null;
                 try {
                     for (RowValidator validator :
                             projectConfig.getRowValidators()) {
-                        validator.validate(new PluginDataRow(row.getDataRow()));
+                        validator.validate(new PluginDataRow(row));
                     }
                 } catch (ExternalDataException e) {
                     externalErrorMsg = e.getMessage();
@@ -217,18 +197,24 @@ public class CollectorView implements SessionView, InputSelectionView {
 
                 if (externalErrorMsg != null) {
                     isValid = false;
-                    dataTable.displayErrorDialog(externalErrorMsg,
-                                                 rowIndex,
-                                                 2);
+                    dataTable.selectRow(rowIndex);
+                    dataTable.displayErrorDialog(externalErrorMsg);
                 }
+
+                if (! isValid) {
+                    break;
+                }
+
+                rowIndex++;
             }
 
-            if (! isValid) {
-                break;
-            }
+        } else {
 
-            rowIndex++;
+            dataTable.selectErrorCell();            
+            dataTable.displayErrorDialog(tableModel.getErrorMessage());
+
         }
+
         return isValid;
     }
 

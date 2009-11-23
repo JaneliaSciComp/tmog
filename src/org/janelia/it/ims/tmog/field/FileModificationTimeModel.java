@@ -43,9 +43,11 @@ public class FileModificationTimeModel extends DatePatternModel {
      */
     public void initializeValue(Target target) {
         File sourceFile = null;
-        Object sourceValue = target.getInstance();
-        if (sourceValue instanceof File) {
-            sourceFile = (File) sourceValue;
+        if (target != null) {
+            Object sourceValue = target.getInstance();
+            if (sourceValue instanceof File) {
+                sourceFile = (File) sourceValue;
+            }
         }
 
         if (sourceFile != null) {

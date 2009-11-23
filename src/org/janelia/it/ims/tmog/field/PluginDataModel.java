@@ -39,6 +39,10 @@ public class PluginDataModel implements DataField {
         return false;
     }
 
+    public boolean isVisible() {
+        return false;
+    }
+
     public boolean isCopyable() {
         return false;
     }
@@ -95,7 +99,7 @@ public class PluginDataModel implements DataField {
      * @param  target  the target being processed.
      */
     public void initializeValue(Target target) {
-        // nothing to initialize
+        value = null;
     }
 
     public Object getValue() {

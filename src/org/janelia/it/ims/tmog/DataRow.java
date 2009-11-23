@@ -49,13 +49,7 @@ public class DataRow {
         fields.add(field);
     }
 
-    public void addAllFields(List<DataField> fieldList) {
-        fields.addAll(fieldList);
-    }
-
     public int getFieldCount() {
         return fields.size();
     }
-
-    
 }

@@ -138,12 +138,12 @@ public class DataTableModelTest extends TestCase {
         numberField.setText(numberValue);
         model.setValueAt(numberField, 0, DataTableModel.TARGET_COLUMN + 2);
 
-        List<DataTableRow> rows = model.getRows();
+        List<DataRow> rows = model.getRows();
         assertNotNull("rows are missing from model", rows);
         assertEquals("model has incorrect number of rows",
                      files.length, rows.size());
 
-        DataTableRow row0 = rows.get(0);
+        DataRow row0 = rows.get(0);
         checkFileTableRow(row0, "0", textValue, numberValue, fileAExtension);
 
         // -----------------------
@@ -155,11 +155,11 @@ public class DataTableModelTest extends TestCase {
         rows = model.getRows();
         row0 = rows.get(0);
         checkFileTableRow(row0, "0", textValue, numberValue, fileAExtension);
-        DataTableRow row1 = rows.get(1);
+        DataRow row1 = rows.get(1);
         checkFileTableRow(row1, "1", textValue, numberValue, fileBExtension);
     }
 
-    private void checkFileTableRow(DataTableRow row,
+    private void checkFileTableRow(DataRow row,
                                    String rowName,
                                    String expectedTextValue,
                                    String expectedNumberValue,

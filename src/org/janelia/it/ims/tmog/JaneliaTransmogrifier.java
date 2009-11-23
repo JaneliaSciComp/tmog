@@ -38,7 +38,7 @@ public class JaneliaTransmogrifier extends JFrame {
      * app is run from within an IDE (package information can be used
      * when the app is run from a jar file). 
      */
-    public static final String VERSION = "2.2.9";
+    public static final String VERSION = "2.3.1";
     
     /**
      * Set up a thread pool to limit the number of concurrent
@@ -100,16 +100,7 @@ public class JaneliaTransmogrifier extends JFrame {
 
             String osName = System.getProperty("os.name");
             String osVersion = System.getProperty("os.version");
-
-            boolean isMacLeopard1_5 = false;
             String javaVersion = System.getProperty("java.runtime.version");
-            if ((javaVersion != null) && (javaVersion.startsWith("1.5"))) {
-                if (osName != null) {
-                    isMacLeopard1_5 =
-                            osName.startsWith("Mac") &&
-                            (osVersion != null) && osVersion.startsWith("10");
-                }
-            }
 
             // work around Mac Leopard bug with combo boxes
             // see http://www.randelshofer.ch/quaqua/ for another option
@@ -120,11 +111,15 @@ public class JaneliaTransmogrifier extends JFrame {
             //     javax.swing.plaf.synth.SynthTableUI.paintCell
             //     (SynthTableUI.java:623)
 
-            if (isMacLeopard1_5 || osName.equals("Linux")) {
+            if (osName.startsWith("Mac") || osName.equals("Linux")) {
                 LOG.info("use Metal look and feel for java " +
                          javaVersion + " on " + osName +
                          " (" + osVersion + ")");
                 lookAndFeelClassName = MetalLookAndFeel.class.getName();
+            } else {
+                LOG.info("use Native look and feel for java " +
+                         javaVersion + " on " + osName +
+                         " (" + osVersion + ")");
             }
 
             UIManager.setLookAndFeel(lookAndFeelClassName);

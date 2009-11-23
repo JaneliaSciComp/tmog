@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <!-- frameSizePercentage default is 80, min is 40, and max is 99 --> 
+    <global minimumVersion="2.3.0" frameSizePercentage="95"/>
+
+    <project name="Svoboda Lab: Whisker Project" default="true">
+
+        <inputFileFilter patternString=".+\.(avi|wmv)"
+                         recursiveSearch="true"/>
+
+        <plugins>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.XmlWriterPlugin" >
+                <property name="directory" value="\\dm6.int.janelia.org\svobodalab\tmog\xml-whisker"/>
+            </rowListener>
+        </plugins>
+
+        <dataFields>
+
+            <separator value="KS-W_"/>
+
+            <validValueList displayName="Experimenter"
+                            required="true"
+                            markedForTask="false">
+                <validValue displayName="Daniel Huber" value="huberd"/>
+                <validValue displayName="Dan O'Connor" value="oconnord"/>
+                <validValue displayName="Leopoldo Petreanu" value="petreanul"/>
+                <validValue displayName="Simon Peron" value="perons"/>
+            </validValueList>
+
+            <date displayName="Experiment Date" required="true"
+                  datePattern="yyyyMMdd" suffix="-"/>
+
+            <validValueList displayName="Experiment Location"
+                            required="true"
+                            suffix="_">
+                <validValue displayName="r1: rig 1 in 2W.???" value="r1"/>
+                <validValue displayName="r2: rig 2 in 2W.???" value="r2"/>
+            </validValueList>
+
+            <text displayName="Animal ID"
+                  required="true"
+                  suffix="_"/>
+
+            <number displayName="Session ID"
+                    required="true"
+                    minimumValue="1"
+                    suffix="_">
+                <staticDefault value="1"/>
+            </number>
+
+            <text displayName="Whiskers Present"
+                  required="true"
+                  suffix="_"/>
+
+            <number displayName="Frame Rate"
+                    required="true"
+                    minimumValue="0"
+                    suffix="_"/>
+
+            <validValueList displayName="Stimulation Protocol"
+                            required="true">
+                <validValue displayName="1: go/nogo" value="1"/>
+                <validValue displayName="2: go/nogo with multiple go positions" value="2"/>
+            </validValueList>
+
+            <runTime datePattern="_yyyyMMddHHmmssSSS"/>
+            <fileExtension/>
+
+            <!-- The following fields are collected but not included in the file name -->
+            <number displayName="Number of Whiskers"
+                    required="true"
+                    minimumValue="0"
+                    markedForTask="false"/>
+
+            <validValueList displayName="Face Parameter"
+                            required="true"
+                            markedForTask="false">
+                <validValue displayName="top" value="top"/>
+                <validValue displayName="bottom" value="bottom"/>
+                <validValue displayName="left" value="left"/>
+                <validValue displayName="right" value="right"/>
+            </validValueList>
+
+            <validValueList displayName="Px2mm"
+                            required="true"
+                            markedForTask="false">
+                <validValue displayName="5x1" value="5x1"/>
+                <validValue displayName="7x2" value="7x2"/>
+            </validValueList>
+
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>

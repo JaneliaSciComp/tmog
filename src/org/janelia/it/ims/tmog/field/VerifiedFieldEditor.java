@@ -8,7 +8,6 @@
 package org.janelia.it.ims.tmog.field;
 
 import org.janelia.it.ims.tmog.view.component.DataTable;
-import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -79,15 +78,9 @@ public class VerifiedFieldEditor extends AbstractCellEditor
             String coreValue = verifiedFieldModel.getCoreValue();
             if ((coreValue.length() > 0) && (! verifiedFieldModel.verify())) {
 
-                String dialogMsg = verifiedFieldModel.getErrorMessage() +
-                        "  Would you like to correct the field now?";
-
-                int selection = NarrowOptionPane.showConfirmDialog(
-                        dataTable,
-                        dialogMsg,
-                        "Invalid Entry", // title
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE);
+                int selection =
+                        dataTable.showInvalidEntryConfimDialog(
+                                verifiedFieldModel);
 
                 if (selection == JOptionPane.YES_OPTION)  {
                     textField.setBorder(new LineBorder(Color.red));

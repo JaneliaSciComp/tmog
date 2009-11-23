@@ -33,10 +33,10 @@ public class DataFields {
         return fields.add(field);
     }
 
-    public int getNumberOfEditableFields() {
+    public int getNumberOfVisibleFields() {
         int count = 0;
         for (DataField field : fields) {
-            if (field.isEditable()) {
+            if (field.isVisible()) {
                 count++;
             }
         }

@@ -47,6 +47,10 @@ public abstract class DatePatternModel implements DataField, DatePatternField {
         return false;
     }
 
+    public boolean isVisible() {
+        return false;
+    }
+
     public boolean isCopyable() {
         return false;
     }

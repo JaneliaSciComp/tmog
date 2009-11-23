@@ -254,6 +254,50 @@
         <xs:attribute name="className" type="xs:string"/>
     </xs:complexType>
 
+    <xs:complexType name="fieldGroupType">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="number" type="numberType"/>
+            <xs:element name="decimal" type="decimalType"/>
+            <xs:element name="text" type="textType"/>
+            <xs:element name="date" type="dateType"/>
+            <xs:element name="well" type="wellType"/>
+            <xs:element name="validValueList"
+                        type="validValueListType"/>
+        </xs:choice>
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="displayWidth" type="xs:positiveInteger"/>
+        <xs:attribute name="minimumRows" type="xs:positiveInteger"/>
+        <xs:attribute name="maximumRows" type="xs:positiveInteger"/>
+    </xs:complexType>
+
+    <xs:complexType name="dataFieldsType">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="separator" type="staticType"/>
+            <xs:element name="static" type="staticType"/>
+            <xs:element name="number" type="numberType"/>
+            <xs:element name="decimal" type="decimalType"/>
+            <xs:element name="text" type="textType"/>
+            <xs:element name="date" type="dateType"/>
+            <xs:element name="well" type="wellType"/>
+            <xs:element name="validValueList"
+                        type="validValueListType"/>
+            <xs:element name="pluginData" type="pluginDataType"/>
+            <xs:element name="fileModificationTime"
+                        type="fileModificationTimeType"/>
+            <xs:element name="runTime" type="runTimeType"/>
+            <xs:element name="fileExtension"
+                        type="fileExtensionType"/>
+            <xs:element name="targetName"
+                        type="targetNameType"/>
+            <xs:element name="fileRelativePath"
+                        type="fileRelativePathType"/>
+            <xs:element name="fileName"
+                        type="fileNameType"/>
+            <xs:element name="fieldGroup"
+                        type="fieldGroupType"/>
+        </xs:choice>
+    </xs:complexType>
+
     <xs:complexType name="projectType">
         <xs:sequence>
 
@@ -265,33 +309,7 @@
 
             <xs:element name="plugins" type="pluginsType" minOccurs="0"/>
 
-            <xs:element name="dataFields" maxOccurs="1">
-                <xs:complexType>
-                    <xs:choice minOccurs="0" maxOccurs="unbounded">
-                        <xs:element name="separator" type="staticType"/>
-                        <xs:element name="static" type="staticType"/>
-                        <xs:element name="number" type="numberType"/>
-                        <xs:element name="decimal" type="decimalType"/>
-                        <xs:element name="text" type="textType"/>
-                        <xs:element name="date" type="dateType"/>
-                        <xs:element name="well" type="wellType"/>
-                        <xs:element name="validValueList"
-                                    type="validValueListType"/>
-                        <xs:element name="pluginData" type="pluginDataType"/>
-                        <xs:element name="fileModificationTime"
-                                    type="fileModificationTimeType"/>
-                        <xs:element name="runTime" type="runTimeType"/>
-                        <xs:element name="fileExtension"
-                                    type="fileExtensionType"/>
-                        <xs:element name="targetName"
-                                    type="targetNameType"/>
-                        <xs:element name="fileRelativePath"
-                                    type="fileRelativePathType"/>
-                        <xs:element name="fileName"
-                                    type="fileNameType"/>
-                    </xs:choice>
-                </xs:complexType>
-            </xs:element>
+            <xs:element name="dataFields" type="dataFieldsType" maxOccurs="1"/>
 
         </xs:sequence>
         <xs:attribute name="name" type="xs:string"/>

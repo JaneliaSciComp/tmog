@@ -1,19 +1,19 @@
 /*
- * Copyright � 2007 Howard Hughes Medical Institute. 
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
+ * Copyright 2009 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Center Software Copyright 1.0
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
  */
 
 package org.janelia.it.ims.tmog.field;
 
-import org.janelia.it.ims.tmog.DataTableModel;
+import org.janelia.it.ims.tmog.TransmogrifierTableModel;
+import org.janelia.it.ims.tmog.view.component.ButtonPanel;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * This class supports the editing of button cells
@@ -22,18 +22,10 @@ import java.awt.event.ActionListener;
  * @author Eric Trautman
  */
 public class ButtonEditor extends AbstractCellEditor
-        implements TableCellEditor, ActionListener {
-
-    private JTable fileTable;
-    private JButton button;
-    private int row;
-    private int column;
-
-    public ButtonEditor() {
-    }
+        implements TableCellEditor {
 
     public Object getCellEditorValue() {
-        return button;
+        return null;
     }
 
     public Component getTableCellEditorComponent(JTable table,
@@ -41,40 +33,26 @@ public class ButtonEditor extends AbstractCellEditor
                                                  boolean isSelected,
                                                  int row,
                                                  int column) {
-        fileTable = table;
-        this.row = row;
-        this.column = column;
-        button = (JButton) value;
-        if (button != null) {
-            ActionListener[] listeners = this.button.getActionListeners();
-            for (ActionListener listener : listeners) {
-                button.removeActionListener(listener);
+        if (value instanceof ButtonPanel) {
+            TableModel tableModel = table.getModel();
+            if (tableModel instanceof TransmogrifierTableModel) {
+                TransmogrifierTableModel model =
+                        (TransmogrifierTableModel) tableModel;
+                ButtonPanel panel = (ButtonPanel) value;
+                if (panel.isDeleteRow()) {
+                    stopCellEditing();
+                    model.removeRow(row);
+                } else if (panel.isCopyPreviousRow()) {
+                    stopCellEditing();
+                    model.copyRow((row - 1), row);
+                } else if (panel.isAddRow()) {
+                    stopCellEditing();
+                    model.addRow(row);
+                }
             }
-            button.addActionListener(this);
         }
 
-        return button;
+        return null;
     }
 
-    public void actionPerformed(ActionEvent e) {
-
-        DataTableModel model = (DataTableModel) fileTable.getModel();
-        final boolean isRemoveFileButton = (column == 0);
-        final boolean isCopyButton = (column == 1);
-
-        fireEditingStopped(); //Make the renderer reappear.
-
-        if (isRemoveFileButton) {
-            model.removeRow(row);
-        } else if (isCopyButton) {
-            model.copyRow((row - 1), row);
-        }
-
-        if (isCopyButton) {
-            final int firstFieldCol = DataTableModel.getFirstFieldColumn();
-            fileTable.changeSelection(row, firstFieldCol, false, false);
-            fileTable.editCellAt(row, firstFieldCol);
-        }
-
-    }
 }

@@ -11,15 +11,12 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.janelia.it.ims.tmog.DataRow;
-import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.PluginDataModel;
 import org.janelia.it.ims.tmog.field.RunTimeModel;
 import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 import org.janelia.it.ims.tmog.target.FileTarget;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Tests the RenamePluginDataRow class.
@@ -64,9 +61,9 @@ public class RenamePluginDataRowTest extends TestCase {
         fieldTwo.setDisplayName(fieldTwoDisplayName);
         fieldTwo.setFormat("%02d");
         fieldTwo.setValue(2);
-        List<DataField> fields = Arrays.asList(fieldOne, fieldTwo);
         DataRow dataRow = new DataRow(new FileTarget(fromFile));
-        dataRow.addAllFields(fields);
+        dataRow.addField(fieldOne);
+        dataRow.addField(fieldTwo);
         File outputDir = new File("/home/outputDir");
         RenamePluginDataRow row = new RenamePluginDataRow(fromFile, 
                                                           dataRow,
