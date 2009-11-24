@@ -7,11 +7,13 @@
 
 package org.janelia.it.ims.tmog.field;
 
+import org.janelia.it.ims.tmog.target.FileTarget;
 import org.janelia.it.ims.tmog.target.Target;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
+import java.io.File;
 
 /**
  * This class supports the rendering of a target cell
@@ -38,6 +40,16 @@ public class TargetRenderer extends DefaultTableCellRenderer {
                                                         hasFocus,
                                                         row,
                                                         column);
+            // add absolute path tool tip for file targets
+            if ((target instanceof FileTarget) &&
+                (cellRenderer instanceof JComponent)) {
+                File targetFile = ((FileTarget) target).getFile();
+                if (targetFile != null) {
+                    ((JComponent) cellRenderer).setToolTipText(
+                            targetFile.getAbsolutePath());
+                }
+            }
+
         } else {
             cellRenderer =
                     super.getTableCellRendererComponent(table,
