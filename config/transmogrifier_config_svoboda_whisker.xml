@@ -14,16 +14,17 @@
                          recursiveSearch="true"/>
 
         <outputDirectory>
-            <path path="/Users/trautmane/Desktop/whisker/wdbp/" />
-            <!--<path path="\\dm10.isln.janelia.org\wdbp\unprocessed\" />-->
+            <!--<path path="/Users/trautmane/Desktop/whisker/wdbp/" />-->
+            <path path="\\dm10.isln.janelia.org\wdbp\unprocessed\" />
             <renameFieldValue fieldDisplayName="Animal ID" />
             <path path="/" />
-            <renameFieldValue fieldDisplayName="Experiment Date" suffix="_" />
+            <renameFieldValue fieldDisplayName="Experiment Date" suffix="-" />
             <renameFieldValue fieldDisplayName="Session ID" />
         </outputDirectory>
 
         <plugins>
             <rowListener className="org.janelia.it.ims.tmog.plugin.XmlWriterPlugin" />
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.RelativeSessionSummaryFileWriter"/>
         </plugins>
 
         <dataFields>
@@ -36,13 +37,21 @@
             <text displayName="Animal ID"
                   required="true"
                   sharedForAllSessionFiles="true"
-                  suffix="_"/>
+                  suffix="-">
+                <sourceFileDefault pattern=".*[/\\\\]([0-9A-Za-z]++)[/\\\\]\d{4}x\d{2}x\d{2}.*"
+                                   matchType="path"/>
+            </text>
 
             <date displayName="Experiment Date"
                   required="true"
                   datePattern="yyyy_MM_dd"
                   sharedForAllSessionFiles="true"
-                  suffix="_"/>
+                  suffix="-">
+                <sourceFileDateDefault pattern=".*[-/\\\\](\d{4}x\d{2}x\d{2}).*"
+                                       fromDatePattern="yyyy'x'MM'x'dd"
+                                       toDatePattern="yyyy_MM_dd"
+                                       matchType="path"/>
+            </date>
 
             <number displayName="Session ID"
                     required="true"
@@ -55,17 +64,25 @@
             <validValueList displayName="Experiment Location"
                             required="true"
                             sharedForAllSessionFiles="true"
-                            suffix="_">
+                            suffix="-">
                 <validValue displayName="r1: rig 1 in 2W.???" value="r1"/>
                 <validValue displayName="r2: rig 2 in 2W.???" value="r2"/>
             </validValueList>
 
             <validValueList displayName="Stimulation Protocol"
+                            required="true"
                             sharedForAllSessionFiles="true"
-                            required="true">
+                            suffix="_">
                 <validValue displayName="1: go/nogo" value="1"/>
                 <validValue displayName="2: go/nogo with multiple go positions" value="2"/>
             </validValueList>
+
+            <text displayName="Trial Number"
+                  pattern="\d{4}"
+                  required="true">
+                <sourceFileDefault pattern=".*_(\d{4})\.seq"
+                                   matchType="name"/>
+            </text>
 
             <runTime datePattern="_yyyyMMddHHmmssSSS"/>
             <fileExtension/>

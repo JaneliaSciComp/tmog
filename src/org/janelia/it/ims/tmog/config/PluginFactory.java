@@ -92,6 +92,10 @@ public class PluginFactory {
                                            SessionListener.class);
         for (Object instance : pluginInstances) {
             sessionListeners.add((SessionListener) instance);
+            // hack for adding RelativeSessionSummaryFileWriter instances
+            if (instance instanceof RowListener) {
+                rowListeners.add((RowListener) instance);
+            }
         }
     }
 

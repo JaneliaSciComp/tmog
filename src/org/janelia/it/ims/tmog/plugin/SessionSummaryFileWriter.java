@@ -45,6 +45,13 @@ public class SessionSummaryFileWriter implements SessionListener {
     }
 
     /**
+     * @return the session summary file's parent directory.
+     */
+    public File getDirectory() {
+        return directory;
+    }
+
+    /**
      * Verifies that the plugin is ready for use by checking external
      * dependencies.
      *
@@ -87,8 +94,11 @@ public class SessionSummaryFileWriter implements SessionListener {
      *
      * @param eventType type of session event.
      * @param message   details about the event.
-     * @throws ExternalDataException   if a recoverable data error occurs during processing.
-     * @throws ExternalSystemException if a non-recoverable system error occurs during processing.
+     *
+     * @throws ExternalDataException
+     *   if a recoverable data error occurs during processing.
+     * @throws ExternalSystemException
+     *   if a non-recoverable system error occurs during processing.
      */
     public void processEvent(SessionListener.EventType eventType,
                              String message)
@@ -134,7 +144,8 @@ public class SessionSummaryFileWriter implements SessionListener {
 
         sb.append("-session-summary.log");
 
-        return new File(directory, sb.toString());
+        File parentDirectory = getDirectory();
+        return new File(parentDirectory, sb.toString());
     }
 
     /**
