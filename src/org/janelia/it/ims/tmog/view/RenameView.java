@@ -219,7 +219,8 @@ public class RenameView implements SessionView, InputSelectionView {
                 }
             });
         } else if (! odCfg.isDerivedFromEarliestModifiedFile()) {
-            outputDirectoryField.setText(odCfg.getDescription());
+            // add space after description to work around Metal clipping error 
+            outputDirectoryField.setText(odCfg.getDescription() + " ");
         }
 
     }
