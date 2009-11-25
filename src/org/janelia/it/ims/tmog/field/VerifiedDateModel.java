@@ -9,6 +9,7 @@ package org.janelia.it.ims.tmog.field;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * This model supports inserting verified (validated) date strings
@@ -33,7 +34,10 @@ public class VerifiedDateModel extends VerifiedFieldModel implements DatePattern
 
         if ((value != null) && (value.length() > 0)) {
             try {
-                formatter.parse(value);
+                Date date = formatter.parse(value);
+                // reformat value in case it was entered in a parsable
+                // but non-standard format (e.g. 2009_1_1 => 2009_01_01)
+                setText(formatter.format(date));
             } catch (ParseException e) {
                 setErrorMessage(
                         "This field should contain a valid date that " +
