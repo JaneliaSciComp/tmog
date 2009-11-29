@@ -1,5 +1,6 @@
 package org.janelia.it.ims.tmog.field;
 
+import org.janelia.it.ims.tmog.config.preferences.FieldDefaultSet;
 import org.janelia.it.ims.tmog.target.Target;
 
 /**
@@ -86,6 +87,14 @@ public class FileExtensionModel implements DataField {
                 extension = fileName.substring(extStart);
             }
         }
+    }
+
+    public void applyDefault(FieldDefaultSet defaultSet) {
+        // defaults do not get applied to this model
+    }
+
+    public void addAsDefault(FieldDefaultSet defaultSet) {
+        // defaults do not get applied to this model
     }
 
     public String getExtension() {

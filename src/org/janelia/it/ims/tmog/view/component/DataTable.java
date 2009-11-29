@@ -62,31 +62,64 @@ public class DataTable extends JTable {
             ButtonPanel.BUTTON_HEIGHT + (2 * CELL_MARGIN);
 
     /**
+     * List of column classes that have default renderers and/or editors.
+     * This list allows {@link NestedDataTable} instances to reuse
+     * parent data table renderer and editor instances.
+     */
+    protected static final Class[] columnClasses = {
+            FileTarget.class,
+            ButtonPanel.ButtonType.class,
+            ValidValueModel.class,
+            VerifiedFieldModel.class,
+            DataFieldGroupModel.class
+    };
+
+    /**
      * Constructs an empty data table.
      */
     public DataTable() {
+        this(true);
+    }
+
+    /**
+     * Constructs an empty data table.
+     *
+     * @param  setDefaultRenderersAndEditors  flag indicating whether default
+     *                                        renderers and editors should be
+     *                                        set.  This allows nested data
+     *                                        tables to reuse parent renderer
+     *                                        and editor instances.
+     */
+    protected DataTable(boolean setDefaultRenderersAndEditors) {
         super();
 
         TableColumnModel columnModel = getColumnModel();
         DataTableHeader tableHeader = new DataTableHeader(columnModel);
         setTableHeader(tableHeader);
 
-        setDefaultRenderer(FileTarget.class, new TargetRenderer());
-        setDefaultRenderer(ButtonPanel.class, new ButtonRenderer());
-        setDefaultRenderer(ValidValueModel.class,
-                           new ValidValueRenderer());
-        setDefaultRenderer(VerifiedFieldModel.class,
-                           new VerifiedFieldRenderer());
-        setDefaultRenderer(DataFieldGroupModel.class,
-                           new DataFieldGroupRenderer(this));
+        if (setDefaultRenderersAndEditors) {
+            // NOTE: when adding/removing renderers and editors,
+            // be sure to keep the columnClasses defined above in sync
+            setDefaultRenderer(FileTarget.class,
+                               new TargetRenderer());
+            setDefaultRenderer(ButtonPanel.ButtonType.class,
+                               new ButtonRenderer());
+            setDefaultRenderer(ValidValueModel.class,
+                               new ValidValueRenderer());
+            setDefaultRenderer(VerifiedFieldModel.class,
+                               new VerifiedFieldRenderer());
+            setDefaultRenderer(DataFieldGroupModel.class,
+                               new DataFieldGroupRenderer(this));
 
-        setDefaultEditor(ButtonPanel.class, new ButtonEditor());
-        setDefaultEditor(ValidValueModel.class,
-                         new ValidValueEditor(this));
-        setDefaultEditor(VerifiedFieldModel.class,
-                         new VerifiedFieldEditor(this));
-        setDefaultEditor(DataFieldGroupModel.class,
-                         new DataFieldGroupEditor(this));
+            setDefaultEditor(ButtonPanel.ButtonType.class,
+                             new ButtonEditor());
+            setDefaultEditor(ValidValueModel.class,
+                             new ValidValueEditor(this));
+            setDefaultEditor(VerifiedFieldModel.class,
+                             new VerifiedFieldEditor(this));
+            setDefaultEditor(DataFieldGroupModel.class,
+                             new DataFieldGroupEditor(this));
+        }
 
         ActionMap actionMap = getActionMap();
         Action nextColumnCellAction = new AbstractAction() {
@@ -287,6 +320,21 @@ public class DataTable extends JTable {
                         DataTableModel.TARGET_COLUMN,
                         false,
                         false);
+    }
+
+    /**
+     * @return the data panel parent for dialogs (so that centering doesn't
+     *         get messed up by wide tables with horizontal scroll bars).
+     */
+    public Container getDialogParent() {
+        Container parent = getParent();
+        if (parent != null) {
+            parent = parent.getParent();
+            if (parent != null) {
+                parent = parent.getParent();
+            }
+        }
+        return parent;
     }
 
     /**
@@ -551,7 +599,7 @@ public class DataTable extends JTable {
                 }
             }
 
-            if (value == null) {
+            if ((value == null) || (value instanceof ButtonPanel.ButtonType)) {
                 if (ButtonPanel.BUTTON_WIDTH > preferredWidth) {
                     preferredWidth = ButtonPanel.BUTTON_WIDTH;
                 }
@@ -572,7 +620,6 @@ public class DataTable extends JTable {
                                                                    false,
                                                                    0,
                                                                    columnIndex);
-                    foundPreferredSize = (value instanceof ButtonPanel);
                 }
 
                 width = component.getPreferredSize().width;
@@ -780,20 +827,5 @@ public class DataTable extends JTable {
      */
     protected void repaintTableForHeaderClick() {
         repaint();
-    }
-
-    /**
-     * @return the data panel parent for dialogs (so that centering doesn't
-     *         get messed up by wide tables with horizontal scroll bars).
-     */
-    protected Container getDialogParent() {
-        Container parent = getParent();
-        if (parent != null) {
-            parent = parent.getParent();
-            if (parent != null) {
-                parent = parent.getParent();
-            }
-        }
-        return parent;
     }
 }

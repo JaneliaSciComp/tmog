@@ -10,7 +10,9 @@ package org.janelia.it.ims.tmog;
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.config.GlobalConfiguration;
 import org.janelia.it.ims.tmog.config.TransmogrifierConfiguration;
+import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
 import org.janelia.it.ims.tmog.view.TabbedView;
+import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -78,6 +80,19 @@ public class JaneliaTransmogrifier extends JFrame {
         TransmogrifierConfiguration config = tabbedView.getTmogConfig();
         GlobalConfiguration globalConfig = config.getGlobalConfiguration();
         this.frameSizePercentage = globalConfig.getFrameSizePercentage();
+
+        // attenpt to load preferences
+        TransmogrifierPreferences tmogPrefs =
+                TransmogrifierPreferences.getInstance();
+        if (tmogPrefs.getLoadError() != null) {
+            NarrowOptionPane.showMessageDialog(
+                    this,
+                    tmogPrefs.getLoadError() +
+                    "  Consequently, all preferences related features " +
+                    "will be disabled.",
+                    "Preferences Features Disabled",
+                    JOptionPane.WARNING_MESSAGE);            
+        }
     }
 
     public Integer getFrameSizePercentage() {

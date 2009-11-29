@@ -8,6 +8,9 @@
 package org.janelia.it.ims.tmog;
 
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
+import org.janelia.it.ims.tmog.config.preferences.FieldDefaultSet;
+import org.janelia.it.ims.tmog.config.preferences.ProjectPreferences;
+import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.DataFieldGroupModel;
 import org.janelia.it.ims.tmog.target.Target;
@@ -31,6 +34,7 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
 
     public static final int TARGET_COLUMN = 2;
 
+    private ProjectConfiguration config;
     private List<DataRow> rows;
     private List<String> columnNames;
     private Map<Integer, Integer> columnToFieldIndexMap;
@@ -40,6 +44,7 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
                           List<? extends Target> targets,
                           ProjectConfiguration config) {
 
+        this.config = config;
         List<DataField> dataFieldConfigs = config.getFieldConfigurations();
 
         // set up column names and field mappings
@@ -99,7 +104,7 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
     public Class getColumnClass(int index) {
         Class columnClass = Object.class;
         if ((index < TARGET_COLUMN)) {
-            columnClass = ButtonPanel.class;
+            columnClass = ButtonPanel.ButtonType.class;
         } else if (rows.size() > 0) {
             Object firstRowField = getValueAt(0, index);
             columnClass = firstRowField.getClass();
@@ -132,12 +137,10 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         DataRow row = rows.get(rowIndex);
         if (columnIndex == 0) {
             if (rows.size() > 1) {
-                value = ButtonPanel.EXCLUDE_TARGET;
+                value = ButtonPanel.ButtonType.EXCLUDE_TARGET;
             }
         } else if (columnIndex == 1) {
-            if (rowIndex > 0) {
-                value = ButtonPanel.COPY_PREVIOUS_ROW;
-            }
+            value = ButtonPanel.ButtonType.ROW_MENU;
         } else if (columnIndex == TARGET_COLUMN) {
             value = row.getTarget();
         } else {
@@ -157,6 +160,7 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
             int fieldIndex = columnToFieldIndexMap.get(columnIndex);
             DataField field = (DataField) aValue;
             row.setField(fieldIndex, field);
+            fireTableCellUpdated(rowIndex, columnIndex);
         }
     }
 
@@ -287,6 +291,76 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         return isSelectable;
     }
 
+    public Set<String> getFieldDefaultSetNames() {
+        final ProjectPreferences prefs = getPreferences();
+        return prefs.getFieldDefaultSetNames();
+    }
+
+    public boolean canEditFieldDefaultSets() {
+        final TransmogrifierPreferences tmogPrefs =
+                TransmogrifierPreferences.getInstance();
+        return ((tmogPrefs != null) && tmogPrefs.canWrite());
+    }
+
+    public void applyFieldDefaultSet(String defaultSetName,
+                                     int rowIndex) {
+
+        final ProjectPreferences prefs = getPreferences();
+        final FieldDefaultSet defaultSet =
+                prefs.getFieldDefaultSet(defaultSetName);
+
+        if (defaultSet != null) {
+            DataRow row = rows.get(rowIndex);
+            for (DataField field : row.getFields()) {
+                field.applyDefault(defaultSet);
+            }
+        }
+
+        this.fireTableDataChanged();
+    }
+
+    public boolean saveRowValuesAsFieldDefaultSet(String defaultSetName,
+                                                  int rowIndex) {
+
+        boolean wasSaveSuccessful = false;
+
+        FieldDefaultSet defaultSet = new FieldDefaultSet();
+        defaultSet.setName(defaultSetName);
+
+        DataRow row = rows.get(rowIndex);
+        for (DataField field : row.getFields()) {
+            field.addAsDefault(defaultSet);
+        }
+
+        if (defaultSet.size() > 0) {
+            TransmogrifierPreferences tmogPrefs =
+                    TransmogrifierPreferences.getInstance();
+            if (tmogPrefs != null) {
+                ProjectPreferences prefs = getPreferences();
+                prefs.addFieldDefaultSet(defaultSet);
+                tmogPrefs.addProjectPreferences(prefs);
+                wasSaveSuccessful = tmogPrefs.save();
+            }
+        }
+
+        return wasSaveSuccessful;
+    }
+
+    public boolean removeFieldDefaultSet(String defaultSetName) {
+
+        boolean wasRemoveSuccessful = false;
+
+        TransmogrifierPreferences tmogPrefs =
+                TransmogrifierPreferences.getInstance();
+        if (tmogPrefs != null) {
+            ProjectPreferences projectPrefs = getPreferences();
+            projectPrefs.removeFieldDefaultSet(defaultSetName);
+            wasRemoveSuccessful = tmogPrefs.save();
+        }
+
+        return wasRemoveSuccessful;
+    }
+
     public void removeSuccessfullyCopiedFiles(List<Integer> failedCopyRowIndices) {
 
         final int numberOfRows = rows.size();
@@ -302,5 +376,23 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         }
 
         this.fireTableDataChanged();
+    }
+
+    private ProjectPreferences getPreferences() {
+        ProjectPreferences projectPrefs = null;
+
+        final String projectName = config.getName();
+        final TransmogrifierPreferences tmogPrefs =
+                TransmogrifierPreferences.getInstance();
+        if (tmogPrefs != null) {
+            projectPrefs = tmogPrefs.getPreferences(projectName);
+        }
+
+        if (projectPrefs == null) {
+            projectPrefs = new ProjectPreferences();
+            projectPrefs.setName(projectName);
+        }
+
+        return projectPrefs;
     }
 }

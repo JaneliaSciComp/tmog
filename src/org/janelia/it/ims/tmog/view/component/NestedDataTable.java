@@ -9,6 +9,8 @@ package org.janelia.it.ims.tmog.view.component;
 
 import org.janelia.it.ims.tmog.TransmogrifierTableModel;
 
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -32,9 +34,29 @@ public class NestedDataTable extends DataTable {
      * @param  parentTable  parent table that contains this table.
      */
     public NestedDataTable(DataTable parentTable) {
-        super();
+        super(false);
+
+        if (parentTable == null) {
+            throw new IllegalArgumentException(
+                    "nested data tables must have a defined parent table");
+        }
+
         this.parentTable = parentTable;
         this.parentColumnIndex = null;
+
+        // reuse parent table default renderers and editors
+        TableCellRenderer renderer;
+        TableCellEditor editor;
+        for (Class clazz : columnClasses) {
+            renderer = parentTable.getDefaultRenderer(clazz);
+            if (renderer != null) {
+                setDefaultRenderer(clazz, renderer);
+            }
+            editor = parentTable.getDefaultEditor(clazz);
+            if (editor != null) {
+                setDefaultEditor(clazz, editor);
+            }
+        }
     }
 
     /**
@@ -51,6 +73,19 @@ public class NestedDataTable extends DataTable {
                          int parentColumnIndex) {
         this.parentColumnIndex = parentColumnIndex;
         super.setModel(dataModel);
+    }
+
+    /**
+     * @return the data panel parent for dialogs (so that centering doesn't
+     *         get messed up by wide tables with horizontal scroll bars).
+     */
+    @Override
+    public Container getDialogParent() {
+        Container parent = null;
+        if (parentTable != null) {
+            parent = parentTable.getDialogParent();
+        }
+        return parent;
     }
 
     /**
@@ -110,19 +145,4 @@ public class NestedDataTable extends DataTable {
         }
         return handled;
     }
-
-    /**
-     * @return the data panel parent for dialogs (so that centering doesn't
-     *         get messed up by wide tables with horizontal scroll bars).
-     */
-    @Override
-    protected Container getDialogParent() {
-        Container parent = null;
-        if (parentTable != null) {
-            parent = parentTable.getDialogParent();            
-        }
-        return parent;
-    }
-
-    
 }

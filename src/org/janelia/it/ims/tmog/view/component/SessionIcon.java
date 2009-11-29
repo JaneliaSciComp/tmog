@@ -53,7 +53,7 @@ public class SessionIcon extends ImageIcon {
     }
 
     private static final URL ENTER_VALUES_IMAGE_URL =
-            SessionIcon.class.getResource("/16-em-pencil.png");
+            SessionIcon.class.getResource("/16-transmogrifier_icon.png");
     private static final ImageIcon ENTER_VALUES_ICON =
             new ImageIcon(ENTER_VALUES_IMAGE_URL, "Entering Values");
 

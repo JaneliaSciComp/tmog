@@ -10,6 +10,7 @@ package org.janelia.it.ims.tmog.field;
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.AbstractTransmogrifierTableModel;
 import org.janelia.it.ims.tmog.TransmogrifierTableModel;
+import org.janelia.it.ims.tmog.config.preferences.FieldDefaultSet;
 import org.janelia.it.ims.tmog.target.Target;
 import org.janelia.it.ims.tmog.view.component.ButtonPanel;
 
@@ -212,6 +213,22 @@ public class DataFieldGroupModel
         }
     }
 
+    public void applyDefault(FieldDefaultSet defaultSet) {
+        // TODO: add support for applying defaults to specific rows
+        List<DataField> firstRow = getFirstRow();
+        for (DataField field : firstRow) {
+            field.applyDefault(defaultSet);
+        }
+    }
+
+    public void addAsDefault(FieldDefaultSet defaultSet) {
+        // TODO: add support for adding defaults for specific rows
+        List<DataField> firstRow = getFirstRow();
+        for (DataField field : firstRow) {
+            field.addAsDefault(defaultSet);
+        }
+    }
+
     public int getRowCount() {
         return fieldRows.size();
     }
@@ -233,11 +250,7 @@ public class DataFieldGroupModel
         if ((columnIndex > -1) && (columnIndex < rowSize)) {
             value = row.get(columnIndex);
         } else if (columnIndex == rowSize) {
-            value = ButtonPanel.ADD_ROW;
-        } else if (columnIndex == (rowSize + 1)) {
-            if (fieldRows.size() > 1) {
-                value = ButtonPanel.DELETE_ROW;
-            }
+            value = ButtonPanel.ButtonType.FIELD_GROUP_ROW_MENU;
         }
         return value;
     }
@@ -260,7 +273,7 @@ public class DataFieldGroupModel
             final DataField columnModel = firstRow.get(index);
             clazz = columnModel.getClass();
         } else {
-            clazz = ButtonPanel.class;
+            clazz = ButtonPanel.ButtonType.class;
         }
         return clazz;
     }
@@ -334,16 +347,16 @@ public class DataFieldGroupModel
     private void addRow(int rowIndex,
                         boolean fireEvent) {
         if ((maximumRows == null) || (fieldRows.size() < maximumRows)) {
-            List<DataField> currentRow = fieldRows.get(rowIndex);
+            List<DataField> firstRow = getFirstRow();
             List<DataField> newRow =
-                    new ArrayList<DataField>(currentRow.size());
+                    new ArrayList<DataField>(firstRow.size());
             DataField newField;
-            for (DataField field : currentRow) {
+            for (DataField field : firstRow) {
                 newField = field.getNewInstance(false);
                 newField.initializeValue(null); // clear previous values
                 newRow.add(newField);
             }
-            fieldRows.add(rowIndex + 1, newRow);
+            fieldRows.add(rowIndex, newRow);
             if (fireEvent) {
                 this.fireTableDataChanged();
             }
@@ -354,5 +367,5 @@ public class DataFieldGroupModel
     private static final Logger LOG =
             Logger.getLogger(DataFieldGroupModel.class);
 
-    private static final int NUMBER_OF_BUTTON_COLUMNS = 2;
+    private static final int NUMBER_OF_BUTTON_COLUMNS = 1;
 }

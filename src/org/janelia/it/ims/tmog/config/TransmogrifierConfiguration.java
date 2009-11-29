@@ -52,15 +52,25 @@ import java.util.List;
  */
 public class TransmogrifierConfiguration {
 
+    private static String configFileName = null;
+
     /**
-     * The logger for this class.
+     * @return the configuration file name.
      */
-    private static final Logger LOG = Logger.getLogger(TransmogrifierConfiguration.class);
+    public static String getConfigFileName() {
+        if (configFileName == null) {
+            String fileName = System.getProperty(CONFIG_FILE_PROPERTY_NAME);
+            if (fileName != null) {
+                String convertedFileName = PathUtil.convertPath(fileName);
+                File configFile = new File(convertedFileName);
+                configFileName = configFile.getAbsolutePath();
+            }
+        }
+        return configFileName;
+    }
 
     private GlobalConfiguration globalConfiguration;
     private List<ProjectConfiguration> projectList;
-
-    private String configFileName;
 
     public TransmogrifierConfiguration() {
         this.projectList = new ArrayList<ProjectConfiguration>();
@@ -68,10 +78,6 @@ public class TransmogrifierConfiguration {
 
     public GlobalConfiguration getGlobalConfiguration() {
         return globalConfiguration;
-    }
-
-    public String getConfigFileName() {
-        return configFileName;
     }
 
     public void addProjectConfiguration(ProjectConfiguration projectConfig) {
@@ -102,11 +108,9 @@ public class TransmogrifierConfiguration {
      */
     public void load() throws ConfigurationException {
 
-        String fileName = System.getProperty("configFile");
-        if (fileName != null) {
-            String convertedFileName = PathUtil.convertPath(fileName);
+        String convertedFileName = getConfigFileName();
+        if (convertedFileName != null) {
             File configFile = new File(convertedFileName);
-            configFileName = configFile.getAbsolutePath();
             InputStream stream;
             try {
                 stream = new FileInputStream(configFile);
@@ -114,7 +118,8 @@ public class TransmogrifierConfiguration {
                 throw new ConfigurationException(
                         "Configuration file " + configFileName +
                         " does not exist.  Please verify the configFile " +
-                        "property which was specified as '" + fileName + "'.",
+                        "property which was specified as '" +
+                        System.getProperty(CONFIG_FILE_PROPERTY_NAME) + "'.",
                         e);
             }
 
@@ -308,4 +313,9 @@ public class TransmogrifierConfiguration {
                                         Digester digester) {
         createSetAndAdd(path, defaultClass, "addDefaultValue", digester);
     }
+
+    private static final Logger LOG =
+            Logger.getLogger(TransmogrifierConfiguration.class);
+
+    private static final String CONFIG_FILE_PROPERTY_NAME = "configFile";    
 }

@@ -7,6 +7,8 @@
 
 package org.janelia.it.ims.tmog.field;
 
+import org.janelia.it.ims.tmog.config.preferences.FieldDefaultSet;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -104,6 +106,14 @@ public abstract class DatePatternModel implements DataField, DatePatternField {
 
     public void setDatePattern(String datePattern) {
         this.datePattern = datePattern;
+    }
+
+    public void applyDefault(FieldDefaultSet defaultSet) {
+        // defaults do not get applied to this model
+    }
+
+    public void addAsDefault(FieldDefaultSet defaultSet) {
+        // defaults do not get applied to this model
     }
 
     @Override

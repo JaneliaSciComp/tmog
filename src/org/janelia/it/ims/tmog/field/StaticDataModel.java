@@ -7,6 +7,7 @@
 
 package org.janelia.it.ims.tmog.field;
 
+import org.janelia.it.ims.tmog.config.preferences.FieldDefaultSet;
 import org.janelia.it.ims.tmog.target.Target;
 
 /**
@@ -96,6 +97,14 @@ public class StaticDataModel implements DataField {
         // nothing to initialize
     }
     
+    public void applyDefault(FieldDefaultSet defaultSet) {
+        // defaults do not get applied to this model
+    }
+
+    public void addAsDefault(FieldDefaultSet defaultSet) {
+        // defaults do not get applied to this model
+    }
+
     public String getValue() {
         return value;
     }

@@ -11,7 +11,30 @@ import java.net.URL;
  *
  * @author Eric Trautman
  */
-public class ButtonPanel {
+public class ButtonPanel extends JPanel {
+
+    public enum ButtonType {
+        EXCLUDE_TARGET("/removeTarget.png", "exclude target"),
+        ROW_MENU("/16-em-pencil.png", "show editing short cuts"),
+        FIELD_GROUP_ROW_MENU("/16-em-pencil.png", "field group options");
+
+        private String imagePath;
+        private String toolTip;
+
+        private ButtonType(String imagePath,
+                           String toolTip) {
+            this.imagePath = imagePath;
+            this.toolTip = toolTip;
+        }
+
+        public String getImagePath() {
+            return imagePath;
+        }
+
+        public String getToolTip() {
+            return toolTip;
+        }
+    }
 
     /** The width of all data table buttons. */
     protected static final int BUTTON_WIDTH = 20;
@@ -19,62 +42,24 @@ public class ButtonPanel {
     /** The height of all data table buttons. */
     protected static final int BUTTON_HEIGHT = 20;
 
-    private static final Dimension DEFAULT_SIZE =
+    protected static final Dimension DEFAULT_SIZE =
             new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
 
-    public static final ButtonPanel ADD_ROW = new ButtonPanel(
-            getButton(ButtonPanel.class.getResource("/addRow.png"),
-                      DEFAULT_SIZE),
-            "add new row");
-
-    public static final ButtonPanel COPY_PREVIOUS_ROW = new ButtonPanel(
-            getButton(ButtonPanel.class.getResource("/copyArrowSimple.png"),
-                      DEFAULT_SIZE),
-            "copy values from previous row");
-
-    public static final ButtonPanel DELETE_ROW = new ButtonPanel(
-            getButton(ButtonPanel.class.getResource("/deleteRow.png"),
-                      DEFAULT_SIZE),
-            "delete row");
-
-    public static final ButtonPanel EXCLUDE_TARGET = new ButtonPanel(
-            getButton(ButtonPanel.class.getResource("/removeTarget.png"),
-                      DEFAULT_SIZE),
-            "exclude target");
-
-    private JPanel panel;
     private JButton button;
 
-    private ButtonPanel(JButton button,
-                        String tip) {
+    public ButtonPanel(ButtonType buttonType) {
+        super(new GridBagLayout());
 
-        this.button = button;
-        this.panel = new JPanel(new GridBagLayout());
+        URL imageUrl = ButtonPanel.class.getResource(buttonType.getImagePath());
+        this.button = getButton(imageUrl, DEFAULT_SIZE);
         final GridBagConstraints centerWithFixedSize = new GridBagConstraints();
-        this.panel.add(this.button, centerWithFixedSize);
-
-        this.panel.setBackground(Color.WHITE);
-        this.panel.setToolTipText(tip);
-    }
-
-    public JPanel getPanel() {
-        return panel;
+        add(this.button, centerWithFixedSize);
+        setBackground(Color.WHITE);
+        setToolTipText(buttonType.getToolTip());
     }
 
     public JButton getButton() {
         return button;
-    }
-
-    public boolean isAddRow() {
-        return this == ADD_ROW;
-    }
-
-    public boolean isCopyPreviousRow() {
-        return this == COPY_PREVIOUS_ROW;
-    }
-
-    public boolean isDeleteRow() {
-        return (this == EXCLUDE_TARGET) || (this == DELETE_ROW);
     }
 
     private static JButton getButton(URL imageUrl,
@@ -84,7 +69,6 @@ public class ButtonPanel {
         b.setPreferredSize(size);
         b.setSize(size);
         b.setMaximumSize(size);
-        b.setBorderPainted(false);
         return b;
     }
 

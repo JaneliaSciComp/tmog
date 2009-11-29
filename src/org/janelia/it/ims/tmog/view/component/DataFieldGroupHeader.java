@@ -47,7 +47,7 @@ public class DataFieldGroupHeader extends JPanel implements MouseInputListener {
         groupNameLabel.setFont(this.getFont());
 
         final DataTable mainDataTable = dataTable;
-        DataTable fieldNameTable = new DataTable() {
+        DataTable fieldNameTable = new DataTable(false) {
             // use original JTable implementation to correct sizing
             // (not sure why I had to do this ...)
             @Override

@@ -7,6 +7,8 @@
 
 package org.janelia.it.ims.tmog.field;
 
+import org.janelia.it.ims.tmog.config.preferences.FieldDefault;
+import org.janelia.it.ims.tmog.config.preferences.FieldDefaultSet;
 import org.janelia.it.ims.tmog.target.Target;
 
 import javax.swing.*;
@@ -172,6 +174,32 @@ public class ValidValueModel extends AbstractListModel
         }
     }
     
+    public void applyDefault(FieldDefaultSet defaultSet) {
+        final FieldDefault fieldDefault =
+                defaultSet.getFieldDefault(displayName);
+        if (fieldDefault != null) {
+            final String value = fieldDefault.getValue();
+            if (value != null) {
+                for (ValidValue validValue : validValues) {
+                    if (value.equals(validValue.getValue())) {
+                        setSelectedValue(validValue);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void addAsDefault(FieldDefaultSet defaultSet) {
+        final String coreValue = getCoreValue();
+        if (coreValue.length() > 0) {
+            FieldDefault fieldDefault = new FieldDefault();
+            fieldDefault.setName(displayName);
+            fieldDefault.setValue(coreValue);
+            defaultSet.addFieldDefault(fieldDefault);
+        }
+    }
+
     public boolean isRequired() {
         return isRequired;
     }

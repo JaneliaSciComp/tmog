@@ -7,6 +7,7 @@
 
 package org.janelia.it.ims.tmog.field;
 
+import org.janelia.it.ims.tmog.config.preferences.FieldDefaultSet;
 import org.janelia.it.ims.tmog.target.Target;
 
 /**
@@ -94,4 +95,19 @@ public interface DataField {
      * @param  target  the target being processed.
      */
     public void initializeValue(Target target);
+
+    /**
+     * If the specified set of defaults contains a value for this field,
+     * sets this field's core value to that default.
+     *
+     * @param  defaultSet  set of default values to examine.
+     */
+    public void applyDefault(FieldDefaultSet defaultSet);
+
+    /**
+     * Adds this field's core value as a default for the specified set.
+     *
+     * @param  defaultSet  set of default values to modify.
+     */
+    public void addAsDefault(FieldDefaultSet defaultSet);
 }
