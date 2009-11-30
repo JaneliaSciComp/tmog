@@ -84,7 +84,7 @@ public class RenameTask extends SimpleTask {
             fromDirectoryName = fromDirectory.getAbsolutePath();
         }
 
-        appendToSummary("Moved and renamed the following files from ");
+        appendToSummary(getSummaryHeader());
         appendToSummary(fromDirectoryName);
         appendToSummary(":\n\n");
 
@@ -228,14 +228,14 @@ public class RenameTask extends SimpleTask {
 
         if (isSuccessful) {
 
-            appendToSummary("renamed ");
+            appendToSummary(getSummarySuccessLinePrefix());
 
             // clean up the original file
             deleteFile(rowFile, "succeeded");
 
         } else {
 
-            appendToSummary("ERROR: failed to rename ");
+            appendToSummary(getSummaryFailedLinePrefix());
 
             // clean up the copied file if it exists and
             // it isn't the same as the source file
@@ -270,6 +270,18 @@ public class RenameTask extends SimpleTask {
                      " after rename " + status);
 
         }
+    }
+
+    protected String getSummaryHeader() {
+        return "Moved and renamed the following files from ";
+    }
+
+    protected String getSummarySuccessLinePrefix() {
+        return "renamed ";
+    }
+
+    protected String getSummaryFailedLinePrefix() {
+        return "ERROR: failed to rename ";
     }
 
     private File getTargetFile(DataRow row) {

@@ -41,4 +41,16 @@ public class RenameWithoutDeleteTask extends RenameTask {
                               String status) {
         // don't delete anything
     }
+
+    protected String getSummaryHeader() {
+        return "Copied the following files from ";
+    }
+
+    protected String getSummarySuccessLinePrefix() {
+        return "copied ";
+    }
+
+    protected String getSummaryFailedLinePrefix() {
+        return "ERROR: failed to copy ";
+    }
 }
