@@ -38,7 +38,7 @@
                   required="true"
                   sharedForAllSessionFiles="true"
                   suffix="-">
-                <sourceFileDefault pattern=".*[/\\\\]([0-9A-Za-z]++)[/\\\\]\d{4}x\d{2}x\d{2}.*"
+                <sourceFileDefault pattern=".*[/\\\\]([0-9A-Za-z]++)[/\\\\]\d{4}[x_]\d{2}[x_]\d{2}.*"
                                    matchType="path"/>
             </text>
 
@@ -51,23 +51,20 @@
                                        fromDatePattern="yyyy'x'MM'x'dd"
                                        toDatePattern="yyyy_MM_dd"
                                        matchType="path"/>
+                <sourceFileDateDefault pattern=".*[-/\\\\](\d{4}_\d{2}_\d{2}).*"
+                                       fromDatePattern="yyyy_MM_dd"
+                                       toDatePattern="yyyy_MM_dd"
+                                       matchType="path"/>
             </date>
 
-            <number displayName="Session ID"
-                    required="true"
-                    minimumValue="1"
-                    sharedForAllSessionFiles="true"
-                    suffix="_">
+            <text displayName="Session ID"
+                  required="true"
+                  sharedForAllSessionFiles="true"
+                  suffix="_">
+                <sourceFileDefault pattern=".*_\d{4}_\d{2}_\d{2}_([^_]++).*"
+                                   matchType="name"/>
                 <staticDefault value="1"/>
-            </number>
-
-            <validValueList displayName="Experiment Location"
-                            required="true"
-                            sharedForAllSessionFiles="true"
-                            suffix="-">
-                <validValue displayName="r1: rig 1 in 2W.???" value="r1"/>
-                <validValue displayName="r2: rig 2 in 2W.???" value="r2"/>
-            </validValueList>
+            </text>
 
             <validValueList displayName="Stimulation Protocol"
                             required="true"
@@ -98,6 +95,14 @@
                 <validValue displayName="Dan O'Connor" value="oconnord"/>
                 <validValue displayName="Leopoldo Petreanu" value="petreanul"/>
                 <validValue displayName="Simon Peron" value="perons"/>
+            </validValueList>
+
+            <validValueList displayName="Experiment Location"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue displayName="r1: rig 1 in 2W.???" value="r1"/>
+                <validValue displayName="r2: rig 2 in 2W.???" value="r2"/>
             </validValueList>
 
             <text displayName="Whiskers Present"
