@@ -66,20 +66,10 @@
                 <staticDefault value="1"/>
             </text>
 
-            <validValueList displayName="Stimulation Protocol"
-                            required="true"
-                            sharedForAllSessionFiles="true"
-                            suffix="_">
-                <validValue displayName="1: go/nogo" value="1"/>
-                <validValue displayName="2: go/nogo with multiple go positions" value="2"/>
-            </validValueList>
-
-            <text displayName="Trial Number"
-                  pattern="\d{4}"
-                  required="true">
-                <sourceFileDefault pattern=".*_(\d{4})\.seq"
-                                   matchType="name"/>
-            </text>
+            <fileName displayName="Trial Number"
+                      patternString=".*_(\d{4})\.seq"
+                      patternGroupNumber="1"
+                      visible="true" />
 
             <runTime datePattern="_yyyyMMddHHmmssSSS"/>
             <fileExtension/>
@@ -101,8 +91,8 @@
                             required="true"
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
-                <validValue displayName="r1: rig 1 in 2W.???" value="r1"/>
-                <validValue displayName="r2: rig 2 in 2W.???" value="r2"/>
+                <validValue value="rig 1 in 2C.384"/>
+                <validValue value="rig 2 in 2C.???"/>
             </validValueList>
 
             <text displayName="Whiskers Present"
@@ -113,6 +103,14 @@
                     required="true"
                     minimumValue="0"
                     markedForTask="false"/>
+
+            <validValueList displayName="Stimulation Protocol"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue value="go/nogo"/>
+                <validValue value="go/nogo with multiple go positions"/>
+            </validValueList>
 
             <number displayName="Frame Rate"
                     required="true"
