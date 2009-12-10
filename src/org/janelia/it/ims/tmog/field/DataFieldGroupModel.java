@@ -87,6 +87,10 @@ public class DataFieldGroupModel
         this.maximumRows = maximumRows;
     }
 
+    public List<List<DataField>> getFieldRows() {
+        return fieldRows;
+    }
+
     public void add(DataField field) {
         List<DataField> firstRow = getFirstRow();
         firstRow.add(field);
