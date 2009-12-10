@@ -10,7 +10,7 @@
         <inputFileSorter sortAlgorithm="LNumber" />
 
         <outputDirectory>
-            <path path="\\dm3.int.janelia.org\leetconfocal\confocalStacks\" />
+            <path path="\\dm10.isln.janelia.org\leetconfocal\confocalStacks\" />
             <renameFieldValue fieldDisplayName="Plate" prefix="GMR_"/>
             <renameFieldValue fieldDisplayName="Well" suffix="_"/>
             <renameFieldValue fieldDisplayName="Vector ID" suffix="_"/>
@@ -20,7 +20,7 @@
         <plugins>
             <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm3.int.janelia.org\leetconfocal\tmog\summaries\TZL"/>
+                <property name="directory" value="\\dm10.isln.janelia.org\leetconfocal\tmog\summaries\TZL"/>
             </sessionListener>
         </plugins>
 
@@ -36,21 +36,85 @@
                 <validValue displayName="AC: pBPGDacw" value="AC"/>
                 <validValue displayName="AD: pBPGw" value="AD"/>
                 <validValue displayName="AE: pBPGUw" value="AE"/>
-                <validValue displayName="AF: pBPGUv" value="AF"/>
-                <validValue displayName="AG: pBPLxVUw-1" value="AG"/>
-                <validValue displayName="AH: pBPLxVw-1" value="AH"/>
-                <validValue displayName="AI: pBPLxVUw-2" value="AI"/>
-                <validValue displayName="AJ: pBPLxVw-2" value="AJ"/>
-                <validValue displayName="AK: pBPLxGUw" value="AK"/>
-                <validValue displayName="AL: pBPLxGw" value="AL"/>
-                <validValue displayName="AM: pBPLxPUw" value="AM"/>
-                <validValue displayName="AN: pBPLxPw" value="AN"/>
-                <validValue displayName="AO: pBPGfpUw" value="AO"/>
-                <validValue displayName="AP: pBPGfpw" value="AP"/>
-                <validValue displayName="AQ: pBPGhERUw" value="AQ"/>
-                <validValue displayName="AR: pBPGhERw" value="AR"/>
-                <validValue displayName="AS: pBPSwitchUw" value="AS"/>
-                <validValue displayName="AT: pBPSwitchw" value="AT"/>
+                <validValue displayName="AF: pBPGUw5-SV40" value="AF"/>
+                <validValue displayName="AG: pBPGw5-SV40" value="AG"/>
+                <validValue displayName="AH: pBPOptGAL4Uw" value="AH"/>
+                <validValue displayName="AI: pBPOptGAL4w" value="AI"/>
+                <validValue displayName="AJ: pBPOptGAL4dUw-deletion" value="AJ"/>
+                <validValue displayName="AK: pBPOptGAL4dw-deletion" value="AK"/>
+                <validValue displayName="AL: pBPGAL4::VP16Uw" value="AL"/>
+                <validValue displayName="AM: pBPGAL4::VP16w" value="AM"/>
+                <validValue displayName="AN: pBPGAL4::p65Uw" value="AN"/>
+                <validValue displayName="AO: pBPGAL4::p65w" value="AO"/>
+                <validValue displayName="AP: pBPGeneSwitchUw" value="AP"/>
+                <validValue displayName="AQ: pBPGeneSwitchw" value="AQ"/>
+                <validValue displayName="AR: pBPGAL4hERUw" value="AR"/>
+                <validValue displayName="AS: pBPGAL4hERw" value="AS"/>
+                <validValue displayName="AT: pBPGUv-vermillion" value="AT"/>
+                <validValue displayName="AU: pBPGv-vermillion" value="AU"/>
+                <validValue displayName="AV: pBPZpGdbdUw-SplitDBD" value="AV"/>
+                <validValue displayName="AW: pBPZpGdbdw-SplitDBD" value="AW"/>
+                <validValue displayName="AX: pBPZp_LL_GdbdUw" value="AX"/>
+                <validValue displayName="AY: pBPZp_LL_Gdbdw" value="AY"/>
+                <validValue displayName="AZ: pBPZp_LL_AST_GdbdUw" value="AZ"/>
+                <validValue displayName="BA: pBPZp_LL_AST_Gdbdw" value="BA"/>
+                <validValue displayName="BB: pBPp65ADZpUw –SplitAD" value="BB"/>
+                <validValue displayName="BC: pBPp65ADZpw –SplitAD" value="BC"/>
+                <validValue displayName="BD: pBPGADflZpUw" value="BD"/>
+                <validValue displayName="BE: pBPGADflZpw" value="BE"/>
+                <validValue displayName="BF: pBPGADfl_LL_ZpUw" value="BF"/>
+                <validValue displayName="BG: pBPGADfl_LL_Zpw" value="BG"/>
+                <validValue displayName="BH: pBPGADfl_VYLL_ZpUw" value="BH"/>
+                <validValue displayName="BI: pBPGADfl_VYLL_Zpw" value="BI"/>
+                <validValue displayName="BJ: pBPp65ADZpUv–vermillion " value="BJ"/>
+                <validValue displayName="BK: pBPp65ADZpv–vermillion" value="BK"/>
+                <validValue displayName="BL: pBPSwitchZpUw" value="BL"/>
+                <validValue displayName="BM: pBPSwitchZpw" value="BM"/>
+                <validValue displayName="BN: pBPSwitch_LL_ZpUw" value="BN"/>
+                <validValue displayName="BO: pBPSwitch_LL_Zpw" value="BO"/>
+                <validValue displayName="BP: pBPSwitch_VYLL_ZpUw" value="BP"/>
+                <validValue displayName="BQ: pBPSwitch_VYLL_Zpw" value="BQ"/>
+                <validValue displayName="GA: pBPGAL80Uw" value="GA"/>
+                <validValue displayName="GB: pBPGAL80w" value="GB"/>
+                <validValue displayName="GC: pBPivsGAL80-WPREUw" value="GC"/>
+                <validValue displayName="GD: pBPivsGAL80-WPREw" value="GD"/>
+                <validValue displayName="GE: pBPivsGAL80s-1-WPREUw" value="GE"/>
+                <validValue displayName="GF: pBPivsGAL80s-1-WPREw" value="GF"/>
+                <validValue displayName="GG: pBPGAL80Uw5-SV40" value="GG"/>
+                <validValue displayName="GH: pBPGAL80w5-SV40" value="GH"/>
+                <validValue displayName="GI: pBPtdGAL80Uw-SV40" value="GI"/>
+                <validValue displayName="GJ: pBPtdGAL80w-SV40" value="GJ"/>
+                <validValue displayName="GK: pBPtsGAL80Uw" value="GK"/>
+                <validValue displayName="GL: pBPtsGAL80w" value="GL"/>
+                <validValue displayName="GM: pBPivstsGAL80-WPREUw" value="GM"/>
+                <validValue displayName="GN: pBPivstsGAL80-WPREw" value="GN"/>
+                <validValue displayName="LA: pBPLexA::GADdUw-deletion" value="LA"/>
+                <validValue displayName="LB: pBPLexA::GADdw-deletion" value="LB"/>
+                <validValue displayName="LC: pBPLexA::GADflUw" value="LC"/>
+                <validValue displayName="LD: pBPLexA::GADflw" value="LD"/>
+                <validValue displayName="LE: pBPnlsLexA::GADflUw" value="LE"/>
+                <validValue displayName="LF: pBPnlsLexA::GADflw" value="LF"/>
+                <validValue displayName="LG: pBPwtLexA::VP16Uw" value="LG"/>
+                <validValue displayName="LH: pBPLexA::VP16Uw" value="LH"/>
+                <validValue displayName="LI: pBPLexA::VP16w" value="LI"/>
+                <validValue displayName="LJ: pBPLexA::p65Uw" value="LJ"/>
+                <validValue displayName="LK: pBPLexA::p65w" value="LK"/>
+                <validValue displayName="LL: pBPnlsLexA::p65Uw" value="LL"/>
+                <validValue displayName="LM: pBPnlsLexA::p65w" value="LM"/>
+                <validValue displayName="RA: pBPFlpPESTUw" value="RA"/>
+                <validValue displayName="RB: pBPFlpPESTw" value="RB"/>
+                <validValue displayName="RC: pBPwtFlpG->DUw" value="RC"/>
+                <validValue displayName="RD: pBPwtFlpG->Dw" value="RD"/>
+                <validValue displayName="RE: pBPFlpG->DUw" value="RE"/>
+                <validValue displayName="RF: pBPFlpG->Dw" value="RF"/>
+                <validValue displayName="RG: pBPivsFlpG->D-WPREUw" value="RG"/>
+                <validValue displayName="RH: pBPivsFlpG->D-WPREw" value="RH"/>
+                <validValue displayName="QA: pBPwtQFUw" value="QA"/>
+                <validValue displayName="QB: pBPwtQFw" value="QB"/>
+                <validValue displayName="QC: pBPQA1FUw" value="QC"/>
+                <validValue displayName="QD: pBPQA1Fw" value="QD"/>
+                <validValue displayName="QE: pBPivsQSUw" value="QE"/>
+                <validValue displayName="QF: pBPivsQSw" value="QF"/>
             </validValueList>
             <separator value="_"/>
             <validValueList displayName="Landing Site" required="true">
