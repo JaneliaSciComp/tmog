@@ -43,21 +43,21 @@
                 <validValue displayName="AC: pBPGDacw" value="AC"/>
                 <validValue displayName="AD: pBPGw" value="AD"/>
                 <validValue displayName="AE: pBPGUw" value="AE"/>
-                <validValue displayName="AF: pBPGUv" value="AF"/>
-                <validValue displayName="AG: pBPLxVUw-1" value="AG"/>
-                <validValue displayName="AH: pBPLxVw-1" value="AH"/>
+                <validValue displayName="AF: pBPGUw5-SV40" value="AF"/>
+                <validValue displayName="AG: pBPGw5-SV40" value="AG"/>
+                <validValue displayName="AH: pBPOptGAL4Uw" value="AH"/>
                 <validValue displayName="AI: pBPOptGAL4w" value="AI"/>
-                <validValue displayName="AJ: pBPLxVw-2" value="AJ"/>
-                <validValue displayName="AK: pBPLxGUw" value="AK"/>
-                <validValue displayName="AL: pBPLxGw" value="AL"/>
-                <validValue displayName="AM: pBPLxPUw" value="AM"/>
-                <validValue displayName="AN: pBPLxPw" value="AN"/>
-                <validValue displayName="AO: pBPGfpUw" value="AO"/>
-                <validValue displayName="AP: pBPGfpw" value="AP"/>
-                <validValue displayName="AQ: pBPGhERUw" value="AQ"/>
-                <validValue displayName="AR: pBPGhERw" value="AR"/>
-                <validValue displayName="AS: pBPSwitchUw" value="AS"/>
-                <validValue displayName="AT: pBPSwitchw" value="AT"/>
+                <validValue displayName="AJ: pBPOptGAL4dUw-deletion" value="AJ"/>
+                <validValue displayName="AK: pBPOptGAL4dw-deletion" value="AK"/>
+                <validValue displayName="AL: pBPGAL4::VP16Uw" value="AL"/>
+                <validValue displayName="AM: pBPGAL4::VP16w" value="AM"/>
+                <validValue displayName="AN: pBPGAL4::p65Uw" value="AN"/>
+                <validValue displayName="AO: pBPGAL4::p65w" value="AO"/>
+                <validValue displayName="AP: pBPGeneSwitchUw" value="AP"/>
+                <validValue displayName="AQ: pBPGeneSwitchw" value="AQ"/>
+                <validValue displayName="AR: pBPGAL4hERUw" value="AR"/>
+                <validValue displayName="AS: pBPGAL4hERw" value="AS"/>
+                <validValue displayName="AT: pBPGUv-vermillion" value="AT"/>
                 <validValue displayName="AU: pBPGv-vermillion" value="AU"/>
                 <validValue displayName="AV: pBPZpGdbdUw-SplitDBD" value="AV"/>
                 <validValue displayName="AW: pBPZpGdbdw-SplitDBD" value="AW"/>
