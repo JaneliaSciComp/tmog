@@ -13,7 +13,7 @@ package org.janelia.it.ims.tmog.field;
  * @author Eric Trautman
  */
 public class ValidValue {
-    public static final ValidValue NONE = new ValidValue("", null);
+    public static final ValidValue NONE = new ValidValue("");
 
     private String displayName;
     private String value;
