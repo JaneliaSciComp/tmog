@@ -474,6 +474,23 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
     }
 
     /**
+     * @param  defaultSetName  name of the default field set.
+     *
+     * @return true if a set with the specified name is defined for this
+     *         model's project; otherwise false.
+     */
+    public boolean containsDefaultSet(String defaultSetName) {
+        boolean containsSet = false;
+        TransmogrifierPreferences tmogPrefs =
+                TransmogrifierPreferences.getInstance();
+        if (tmogPrefs != null) {
+            ProjectPreferences projectPrefs = getPreferences();
+            containsSet = projectPrefs.containsDefaultSet(defaultSetName);
+        }
+        return containsSet;
+    }
+
+    /**
      * Removes the specified default field set.
      *
      * @param  defaultSetName  name of set to remove.

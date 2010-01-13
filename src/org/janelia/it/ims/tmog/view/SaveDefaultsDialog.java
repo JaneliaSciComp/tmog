@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Set;
 
 /**
  * A dialog window for saving default field sets.
@@ -36,7 +37,9 @@ public class SaveDefaultsDialog
     private JPanel buttonPanel;
     @SuppressWarnings({"UnusedDeclaration"})
     private JPanel dataPanel;
+    private JComboBox existingSetsComboBox;
     private DataTableModel defaultsModel;
+    private ComboBoxModel existingSetsModel;
 
     /**
      * Displays a modal dialog using the specified model.
@@ -70,6 +73,23 @@ public class SaveDefaultsDialog
     public SaveDefaultsDialog(DataTableModel defaultsModel) {
         this.defaultsModel = defaultsModel;
         dataTable.setModel(defaultsModel);
+
+        Set<String> setNames = defaultsModel.getFieldDefaultSetNames();
+        String[] setNamesArray = new String[setNames.size()];
+        setNamesArray = setNames.toArray(setNamesArray);
+        existingSetsModel = new DefaultComboBoxModel(setNamesArray);
+        existingSetsModel.setSelectedItem(null);
+        existingSetsComboBox.setModel(existingSetsModel);
+        existingSetsComboBox.addActionListener(new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                String nameText = "";
+                Object selectedItem = existingSetsModel.getSelectedItem();
+                if (selectedItem instanceof String) {
+                    nameText = (String) selectedItem;
+                }
+                defaultSetName.setText(nameText);
+            }
+        });
 
         setTitle("Save Default Set");
         setContentPane(contentPane);
@@ -107,7 +127,45 @@ public class SaveDefaultsDialog
 
     private void onSave() {
         String name = defaultSetName.getText();
+
+        boolean performSave = false;
+
         if (StringUtil.isDefined(name)) {
+
+            name = name.trim();
+
+            if (defaultsModel.containsDefaultSet(name)) {
+
+                int overrwiteExistingSet =
+                        NarrowOptionPane.showConfirmDialog(
+                                this,
+                                "A '" + name + "' default set already exists " +
+                                "for this project.  Do you wish to replace " +
+                                "the information saved for this set?",
+                                "Default Set Exists",
+                                JOptionPane.YES_NO_OPTION);
+
+                performSave = (overrwiteExistingSet == JOptionPane.YES_OPTION);
+
+            } else {
+
+                performSave = true;
+
+            }
+
+        } else {
+
+            NarrowOptionPane.showMessageDialog(
+                    getParent(),
+                    "Please specify the name for this set of default values.",
+                    "Default Set Not Named",
+                    JOptionPane.ERROR_MESSAGE);
+            defaultSetName.requestFocus();
+            
+        }
+
+        if (performSave) {
+
             boolean wasSaveSuccessful =
                     defaultsModel.saveRowValuesAsFieldDefaultSet(name, 0);
 
@@ -130,13 +188,6 @@ public class SaveDefaultsDialog
             }
 
             dispose();
-        } else {
-            NarrowOptionPane.showMessageDialog(
-                    getParent(),
-                    "Please specify the name for this set of default values.",
-                    "Default Set Not Named",
-                    JOptionPane.ERROR_MESSAGE);
-            defaultSetName.requestFocus();
         }
     }
 
