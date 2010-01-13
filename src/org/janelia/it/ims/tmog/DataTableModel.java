@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright 2010 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog;
@@ -32,23 +32,112 @@ import java.util.Set;
  */
 public class DataTableModel extends AbstractTransmogrifierTableModel {
 
-    public static final int TARGET_COLUMN = 2;
+    public static final int NOT_DISPLAYED = -1;
 
-    private ProjectConfiguration config;
+    /**
+     * Index of the column containing the exclude target button.
+     * If the column should not be displayed, its value should be
+     * {@link #NOT_DISPLAYED}.
+     */
+    private int excludeColumnIndex;
+
+    /**
+     * Index of the column containing the row menu (actions) button,
+     * If the column should not be displayed, its value should be
+     * {@link #NOT_DISPLAYED}.
+     */
+    private int rowMenuColumnIndex;
+
+    /**
+     * Index of the column containing the target name,
+     * If the column should not be displayed, its value should be
+     * {@link #NOT_DISPLAYED}.
+     */
+    private int targetColumnIndex;
+
+    /**
+     * The configuration for the project associated with this model.
+     */
+    private ProjectConfiguration projectConfiguration;
+
     private List<DataRow> rows;
     private List<String> columnNames;
     private Map<Integer, Integer> columnToFieldIndexMap;
     private Map<Integer, Integer> fieldToColumnIndexMap;
 
+    /**
+     * Constructs a "save defaults dialog" model with fields copied
+     * from the specified data row.
+     *
+     * @param  row                   data row selected for saving defaults.
+     * @param  projectConfiguration  configuration for the current project.
+     */
+    public DataTableModel(DataRow row,
+                          ProjectConfiguration projectConfiguration) {
+
+        // disable menu and target columns
+        this.excludeColumnIndex = NOT_DISPLAYED;
+        this.rowMenuColumnIndex = NOT_DISPLAYED;
+        this.targetColumnIndex = NOT_DISPLAYED;
+
+        this.projectConfiguration = projectConfiguration;
+        this.columnNames = new ArrayList<String>();
+        this.columnToFieldIndexMap = new HashMap<Integer, Integer>();
+        this.fieldToColumnIndexMap = new HashMap<Integer, Integer>();
+
+        // create new instances so that default edits do not affect real data
+        final Target target = row.getTarget();
+        DataRow rowInstance = new DataRow(target);
+        int columnIndex = 0;
+        Set<Integer> nestedColumns = new LinkedHashSet<Integer>();
+        for (DataField field : row.getFields()) {
+            if (field.isEditable()) {
+                columnNames.add(field.getDisplayName());
+                columnToFieldIndexMap.put(columnIndex, columnIndex);
+                fieldToColumnIndexMap.put(columnIndex, columnIndex);
+                DataField fieldInstance = field.getNewInstance(true);
+                rowInstance.addField(fieldInstance);
+                if (fieldInstance instanceof DataFieldGroupModel) {
+                    ((DataFieldGroupModel) fieldInstance).setParent(this);
+                    nestedColumns.add(columnIndex);
+                }
+                columnIndex++;
+            }
+        }
+
+        setNestedTableColumns(nestedColumns);
+
+        this.rows = new ArrayList<DataRow>(1);
+        this.rows.add(rowInstance);
+    }
+
+    /**
+     * Constructs a standard data model.
+     *
+     * @param  targetColumnName      column (header) name for the table's
+     *                               target column.
+     *
+     * @param  targets               list of targets for which data should be
+     *                               collected.
+     *
+     * @param  projectConfiguration  configuration for the current project that
+     *                               defines what fields should be collected
+     *                               for each target.
+     */
     public DataTableModel(String targetColumnName,
                           List<? extends Target> targets,
-                          ProjectConfiguration config) {
+                          ProjectConfiguration projectConfiguration) {
 
-        this.config = config;
-        List<DataField> dataFieldConfigs = config.getFieldConfigurations();
+        this.excludeColumnIndex = 0;
+        this.rowMenuColumnIndex = 1;
+        this.targetColumnIndex = 2;
+        this.projectConfiguration = projectConfiguration;
+        List<DataField> dataFieldConfigs =
+                projectConfiguration.getFieldConfigurations();
 
         // set up column names and field mappings
-        int numberOfColumns = config.getNumberOfVisibleFields() + 3;
+        int numberOfColumns =
+                projectConfiguration.getNumberOfVisibleFields() + 3;
         columnNames = new ArrayList<String>(numberOfColumns);
         columnToFieldIndexMap = new HashMap<Integer, Integer>();
         fieldToColumnIndexMap = new HashMap<Integer, Integer>();
@@ -89,6 +178,21 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         }
     }
 
+    /**
+     * @return the index of the target column or {@link #NOT_DISPLAYED}
+     *         if the target column should not be displayed for this model.
+     */
+    public int getTargetColumnIndex() {
+        return targetColumnIndex;
+    }
+
+    /**
+     * @return the configuration for the project associated with this model.
+     */
+    public ProjectConfiguration getProjectConfiguration() {
+        return projectConfiguration;
+    }
+
     public int getRowCount() {
         return rows.size();
     }
@@ -103,7 +207,7 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
 
     public Class getColumnClass(int index) {
         Class columnClass = Object.class;
-        if ((index < TARGET_COLUMN)) {
+        if ((index < targetColumnIndex)) {
             columnClass = ButtonPanel.ButtonType.class;
         } else if (rows.size() > 0) {
             Object firstRowField = getValueAt(0, index);
@@ -115,9 +219,9 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
     public boolean isCellEditable(int rowIndex,
                                   int columnIndex) {
         boolean isEditable = true; // button columns must be editable
-        if (columnIndex == TARGET_COLUMN) {
+        if (columnIndex == targetColumnIndex) {
             isEditable = false;
-        } else if (columnIndex > TARGET_COLUMN) {
+        } else if (columnIndex > targetColumnIndex) {
             final DataRow row = rows.get(rowIndex);
             final int fieldIndex = columnToFieldIndexMap.get(columnIndex);
             final DataField field = row.getField(fieldIndex);
@@ -135,13 +239,13 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
                              int columnIndex) {
         Object value = null;
         DataRow row = rows.get(rowIndex);
-        if (columnIndex == 0) {
+        if (columnIndex == excludeColumnIndex) {
             if (rows.size() > 1) {
                 value = ButtonPanel.ButtonType.EXCLUDE_TARGET;
             }
-        } else if (columnIndex == 1) {
+        } else if (columnIndex == rowMenuColumnIndex) {
             value = ButtonPanel.ButtonType.ROW_MENU;
-        } else if (columnIndex == TARGET_COLUMN) {
+        } else if (columnIndex == targetColumnIndex) {
             value = row.getTarget();
         } else {
             Integer fieldIndex = columnToFieldIndexMap.get(columnIndex);
@@ -156,7 +260,7 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
                            int rowIndex,
                            int columnIndex) {
         DataRow row = rows.get(rowIndex);
-        if (columnIndex > TARGET_COLUMN) {
+        if (columnIndex > targetColumnIndex) {
             int fieldIndex = columnToFieldIndexMap.get(columnIndex);
             DataField field = (DataField) aValue;
             row.setField(fieldIndex, field);
@@ -164,10 +268,9 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         }
     }
 
-    public int getColumnIndexForField(int fieldIndex) {
-        return fieldToColumnIndexMap.get(fieldIndex);
-    }
-
+    /**
+     * @return the list of data rows for this model.
+     */
     public List<DataRow> getRows() {
         return rows;
     }
@@ -251,7 +354,7 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
     public void fillDown(int fromRowIndex,
                          int fromColumnIndex) {
 
-        if (fromColumnIndex > TARGET_COLUMN) {
+        if (fromColumnIndex > targetColumnIndex) {
             DataRow fromRow = rows.get(fromRowIndex);
             final int fieldIndex = columnToFieldIndexMap.get(fromColumnIndex);
             final DataField fromField = fromRow.getField(fieldIndex);
@@ -271,17 +374,17 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
 
     @Override
     public boolean isTargetColumn(int columnIndex) {
-        return (columnIndex == TARGET_COLUMN);
+        return (columnIndex == targetColumnIndex);
     }
 
     public boolean isButtonColumn(int columnIndex) {
-        return ((columnIndex >= 0) && (columnIndex < TARGET_COLUMN));
+        return ((columnIndex >= 0) && (columnIndex < targetColumnIndex));
     }
 
     public boolean isSelectable(int columnIndex) {
         boolean isSelectable = false;
         final int numberOfColumns = getColumnCount();
-        if ((columnIndex > TARGET_COLUMN) &&
+        if ((columnIndex > targetColumnIndex) &&
             (columnIndex < numberOfColumns)){
             Object value = getValueAt(0, columnIndex);
             if (value instanceof DataField) {
@@ -291,17 +394,32 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         return isSelectable;
     }
 
+    /**
+     * @return the names of the default field sets configured for
+     *         this model's project.
+     */
     public Set<String> getFieldDefaultSetNames() {
         final ProjectPreferences prefs = getPreferences();
         return prefs.getFieldDefaultSetNames();
     }
 
+    /**
+     * @return true if the current user is allowed to edit default field sets
+     *         for this model's project; otherwise false.
+     */
     public boolean canEditFieldDefaultSets() {
         final TransmogrifierPreferences tmogPrefs =
                 TransmogrifierPreferences.getInstance();
         return ((tmogPrefs != null) && tmogPrefs.canWrite());
     }
 
+    /**
+     * Applies values from the specified default field set to
+     * the specified row in this model.
+     *
+     * @param  defaultSetName  name of the default field set.
+     * @param  rowIndex        index of row to update.
+     */
     public void applyFieldDefaultSet(String defaultSetName,
                                      int rowIndex) {
 
@@ -319,6 +437,15 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         this.fireTableDataChanged();
     }
 
+    /**
+     * Saves the values entered for the specified row as a default field
+     * set for this model's project.
+     *
+     * @param  defaultSetName  name of the default field set.
+     * @param  rowIndex        index of row to save.
+     *
+     * @return true if the values were saved successfully; otherwise false.
+     */
     public boolean saveRowValuesAsFieldDefaultSet(String defaultSetName,
                                                   int rowIndex) {
 
@@ -346,6 +473,13 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         return wasSaveSuccessful;
     }
 
+    /**
+     * Removes the specified default field set.
+     *
+     * @param  defaultSetName  name of set to remove.
+     *
+     * @return true if the set was removed successfully; otherwise false.
+     */
     public boolean removeFieldDefaultSet(String defaultSetName) {
 
         boolean wasRemoveSuccessful = false;
@@ -361,6 +495,11 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         return wasRemoveSuccessful;
     }
 
+    /**
+     * Removes all rows not in the specified list from this model.
+     *
+     * @param  failedCopyRowIndices  list of row indicies whose copy failed.
+     */
     public void removeSuccessfullyCopiedFiles(List<Integer> failedCopyRowIndices) {
 
         final int numberOfRows = rows.size();
@@ -378,10 +517,14 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         this.fireTableDataChanged();
     }
 
+    private int getColumnIndexForField(int fieldIndex) {
+        return fieldToColumnIndexMap.get(fieldIndex);
+    }
+
     private ProjectPreferences getPreferences() {
         ProjectPreferences projectPrefs = null;
 
-        final String projectName = config.getName();
+        final String projectName = projectConfiguration.getName();
         final TransmogrifierPreferences tmogPrefs =
                 TransmogrifierPreferences.getInstance();
         if (tmogPrefs != null) {

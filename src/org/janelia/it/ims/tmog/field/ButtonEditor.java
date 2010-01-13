@@ -1,14 +1,16 @@
 /*
- * Copyright 2009 Howard Hughes Medical Institute.
+ * Copyright 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.field;
 
+import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.TransmogrifierTableModel;
+import org.janelia.it.ims.tmog.view.SaveDefaultsDialog;
 import org.janelia.it.ims.tmog.view.component.ButtonPanel;
 import org.janelia.it.ims.tmog.view.component.ButtonPanel.ButtonType;
 import org.janelia.it.ims.tmog.view.component.DataTable;
@@ -313,37 +315,12 @@ public class ButtonEditor extends AbstractCellEditor
         }
 
         public void actionPerformed(ActionEvent e) {
-            String defaultSetName = JOptionPane.showInputDialog(
-                    dialogParent,
-                    "Please specify the name for this set of default values:",
-                    "Save Default Value Set",
-                    JOptionPane.QUESTION_MESSAGE);
-
-            if (defaultSetName != null) {
-                DataTableModel dataTableModel = getModel();
-                boolean wasSaveSuccessful =
-                        dataTableModel.saveRowValuesAsFieldDefaultSet(
-                                defaultSetName, row);
-
-                if (wasSaveSuccessful) {
-                    NarrowOptionPane.showMessageDialog(
-                            dialogParent,
-                            "The '" + defaultSetName +
-                            "' default set was successfully saved.",
-                            "Default Set Saved",
-                            JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    NarrowOptionPane.showMessageDialog(
-                            dialogParent,
-                            "The '" + defaultSetName + "' default set was " +
-                            "NOT saved for this row.  Please verify that " +
-                            "data has been entered for the row and that you " +
-                            "have access to save defaults.",
-                            "Default Set Not Saved",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            }
-
+            DataTableModel dataTableModel = getModel();
+            java.util.List<DataRow> dataRows = dataTableModel.getRows();
+            DataTableModel defaultsModel =
+                    new DataTableModel(dataRows.get(row),
+                                       dataTableModel.getProjectConfiguration());
+            SaveDefaultsDialog.showDialog(defaultsModel, dialogParent);
         }
     }
 

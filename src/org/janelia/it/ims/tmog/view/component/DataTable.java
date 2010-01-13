@@ -1,8 +1,8 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
+ * Copyright 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.view.component;
@@ -316,10 +316,13 @@ public class DataTable extends JTable {
      * @param  rowIndex  row to be selected.
      */
     public void selectRow(int rowIndex) {
-        changeSelection(rowIndex,
-                        DataTableModel.TARGET_COLUMN,
-                        false,
-                        false);
+        TableModel model = getModel();
+        if (model instanceof DataTableModel) {
+            changeSelection(rowIndex,
+                            ((DataTableModel) model).getTargetColumnIndex(),
+                            false,
+                            false);
+        }
     }
 
     /**

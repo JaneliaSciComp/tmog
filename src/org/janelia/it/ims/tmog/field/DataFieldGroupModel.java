@@ -1,8 +1,8 @@
 /*
- * Copyright 2009 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright 2010 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.field;
@@ -140,15 +140,25 @@ public class DataFieldGroupModel
         instance.setDisplayName(displayName);
         instance.setMinimumRows(minimumRows);
         instance.setMaximumRows(maximumRows);
-        final List<DataField> firstRow = getFirstRow();
         DataField fieldInstance;
 
-        for (DataField field : firstRow) {
-            fieldInstance = field.getNewInstance(isCloneRequired);
-            instance.add(fieldInstance);
+        List<DataField> instanceRow;
+        int rowIndex = 0;
+        for (List<DataField> row : fieldRows) {
+            if (rowIndex == 0) {
+                instanceRow = instance.getFirstRow(); // empty 1st row created by constructor
+            } else {
+                instanceRow = new ArrayList<DataField>();
+                instance.fieldRows.add(instanceRow);
+            }
+            for (DataField field : row) {
+                fieldInstance = field.getNewInstance(isCloneRequired);
+                instanceRow.add(fieldInstance);
+            }
+            rowIndex++;
         }
 
-        for (int i = 1; i < minimumRows; i++) {
+        for (int i = instance.getRowCount(); i < minimumRows; i++) {
             instance.addRow(i-1, false);
         }
 
@@ -159,6 +169,7 @@ public class DataFieldGroupModel
             // TODO: consider supporting copying groups with non-copyable fields
             //       need to use parentTable context to grab cell being copied
             boolean allFieldsAllowCopies = true;
+            final List<DataField> firstRow = getFirstRow();
             for (DataField field : firstRow) {
                 if (! field.isCopyable()) {
                     allFieldsAllowCopies = false;
@@ -218,18 +229,42 @@ public class DataFieldGroupModel
     }
 
     public void applyDefault(FieldDefaultSet defaultSet) {
-        // TODO: add support for applying defaults to specific rows
-        List<DataField> firstRow = getFirstRow();
-        for (DataField field : firstRow) {
-            field.applyDefault(defaultSet);
+        final FieldDefaultSet groupSet =
+                defaultSet.getFieldDefaultSet(displayName);
+        if (groupSet != null) {
+            final int lastRowIndex = fieldRows.size() - 1;
+            int rowIndex = 0;
+            for (FieldDefaultSet rowSet : groupSet.getFieldDefaultSets()) {
+                if (rowIndex > lastRowIndex) {
+                    addRow(rowIndex, false);
+                }
+                for (DataField field : fieldRows.get(rowIndex)) {
+                    field.applyDefault(rowSet);
+                }
+                rowIndex++;
+            }
         }
     }
 
     public void addAsDefault(FieldDefaultSet defaultSet) {
-        // TODO: add support for adding defaults for specific rows
-        List<DataField> firstRow = getFirstRow();
-        for (DataField field : firstRow) {
-            field.addAsDefault(defaultSet);
+        FieldDefaultSet groupSet = new FieldDefaultSet();
+        groupSet.setName(displayName);
+
+        int rowIndex = 0;
+        for (List<DataField> row : fieldRows) {
+            FieldDefaultSet rowSet = new FieldDefaultSet();
+            rowSet.setName(String.valueOf(rowIndex));
+            for (DataField field : row) {
+                field.addAsDefault(rowSet);
+            }
+            if (rowSet.size() > 0) {
+                groupSet.addFieldDefaultSet(rowSet);
+            }
+            rowIndex++;
+        }
+
+        if (groupSet.size() > 0) {
+            defaultSet.addFieldDefaultSet(groupSet);
         }
     }
 

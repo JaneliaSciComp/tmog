@@ -1,8 +1,8 @@
 /*
- * Copyright 2009 Howard Hughes Medical Institute.
+ * Copyright 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 package org.janelia.it.ims.tmog.config.preferences;
 
@@ -61,12 +61,22 @@ public class TransmogrifierPreferencesTest extends TestCase {
                 "  <projectPreferences name=\"testProject2\">\n" +
                 "    <fieldDefaultSet name=\"testSetB\">\n" +
                 "      <fieldDefault name=\"f4\">v4</fieldDefault>\n" +
+                "    </fieldDefaultSet>\n" +
+                "    <fieldDefaultSet name=\"testSetC\">\n" +
                 "      <fieldDefault name=\"f5\">v5</fieldDefault>\n" +
-                "      <fieldDefault name=\"f6\">v6</fieldDefault>\n" +
+                "      <fieldDefaultSet name=\"groupOne\">\n" +
+                "        <fieldDefaultSet name=\"1\">\n" +
+                "          <fieldDefault name=\"f6\">v61</fieldDefault>\n" +
+                "          <fieldDefault name=\"f7\">v71</fieldDefault>\n" +
+                "        </fieldDefaultSet>\n" +
+                "        <fieldDefaultSet name=\"2\">\n" +
+                "          <fieldDefault name=\"f6\">v62</fieldDefault>\n" +
+                "          <fieldDefault name=\"f7\">v72</fieldDefault>\n" +
+                "        </fieldDefaultSet>\n" +
+                "      </fieldDefaultSet>\n" +
                 "    </fieldDefaultSet>\n" +
                 "  </projectPreferences>\n" +
                 "</transmogrifierPreferences>";
-
 
         prefs.load(new ByteArrayInputStream(validXml.getBytes()));
         String actualXml = prefs.toXml();

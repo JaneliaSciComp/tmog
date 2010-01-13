@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright 2010 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.field;
@@ -26,11 +26,13 @@ public class ValidValueEditor extends DefaultCellEditor {
     private EditorComboBox editorComboBox;
     private ValidValueModel model;
 
-   public ValidValueEditor(DataTable table) {
-       super(new EditorComboBox());
-       this.dataTable = table;
-       this.editorComboBox = (EditorComboBox) editorComponent;
-       this.editorComboBox.addKeyListener(table.getKeyListener());
+    public ValidValueEditor(DataTable table) {
+        super(new EditorComboBox());
+        this.dataTable = table;
+        this.editorComboBox = (EditorComboBox) editorComponent;
+        if (table != null) {
+            this.editorComboBox.addKeyListener(table.getKeyListener());
+        }
     }
 
     public Component getTableCellEditorComponent(JTable table,
@@ -67,7 +69,10 @@ public class ValidValueEditor extends DefaultCellEditor {
         boolean isEditingStopped = true;
 
         String coreValue = model.getCoreValue();
-        if ((coreValue.length() > 0) && (! model.verify())) {
+        if ((dataTable != null) &&
+            (coreValue.length() > 0) &&
+            (! model.verify())) {
+
             int selection = dataTable.showInvalidEntryConfimDialog(model);
 
             if (selection == JOptionPane.YES_OPTION)  {

@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright 2010 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.field;
@@ -38,7 +38,9 @@ public class VerifiedFieldEditor extends AbstractCellEditor
             this.dataTable = table;
             this.textField = new JTextField();
             this.textField.addActionListener(this);
-            this.textField.addKeyListener(table.getKeyListener());
+            if (table != null) {
+                this.textField.addKeyListener(table.getKeyListener());
+            }
         }
 
         public Component getTableCellEditorComponent(JTable table,
@@ -76,7 +78,9 @@ public class VerifiedFieldEditor extends AbstractCellEditor
             boolean isEditingStopped = true;
 
             String coreValue = verifiedFieldModel.getCoreValue();
-            if ((coreValue.length() > 0) && (! verifiedFieldModel.verify())) {
+            if ((dataTable != null) &&
+                (coreValue.length() > 0) &&
+                (! verifiedFieldModel.verify())) {
 
                 int selection =
                         dataTable.showInvalidEntryConfimDialog(
@@ -106,7 +110,8 @@ public class VerifiedFieldEditor extends AbstractCellEditor
 
             if (isEditingStopped) {
                 fireEditingStopped();
-                if (verifiedFieldModel.isSharedForAllSessionFiles()) {
+                if (verifiedFieldModel.isSharedForAllSessionFiles() &&
+                    (dataTable != null)) {
                     dataTable.repaint();
                 }
             }

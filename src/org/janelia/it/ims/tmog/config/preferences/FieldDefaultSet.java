@@ -1,8 +1,8 @@
 /*
- * Copyright 2009 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright 2010 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.config.preferences;
@@ -21,19 +21,55 @@ import java.util.Map;
 public class FieldDefaultSet extends NamedObject {
 
     private Map<String, FieldDefault> nameToDefaultMap;
+    private Map<String, FieldDefaultSet> nameToDefaultSetMap;
 
+    /**
+     * Constructs an empty set.
+     */
     public FieldDefaultSet() {
         this.nameToDefaultMap = new LinkedHashMap<String, FieldDefault>();
+        this.nameToDefaultSetMap = new LinkedHashMap<String, FieldDefaultSet>();
     }
 
+    /**
+     * @return the collection of defaults in this set.
+     */
     public Collection<FieldDefault> getFieldDefaults() {
         return nameToDefaultMap.values();
     }
 
+    /**
+     * @return the collection of sets nested within this set.
+     */
+    public Collection<FieldDefaultSet> getFieldDefaultSets() {
+        return nameToDefaultSetMap.values();
+    }
+
+    /**
+     * @param  name  name of the default to retrieve.
+     *
+     * @return the default associated with the specified name
+     *         (or null if none exists).
+     */
     public FieldDefault getFieldDefault(String name) {
         return nameToDefaultMap.get(name);
     }
 
+    /**
+     * @param  name  name of the default set to retrieve.
+     *
+     * @return the nested default set associated with the specified name
+     *         (or null if none exists).
+     */
+    public FieldDefaultSet getFieldDefaultSet(String name) {
+        return nameToDefaultSetMap.get(name);
+    }
+
+    /**
+     * Adds the specified default to this set.
+     *
+     * @param  fieldDefault  default to add.
+     */
     public void addFieldDefault(FieldDefault fieldDefault) {
         final String name = fieldDefault.getName();
         if (StringUtil.isDefined(name) &&
@@ -42,28 +78,72 @@ public class FieldDefaultSet extends NamedObject {
         }
     }
 
-    public int size() {
-        return nameToDefaultMap.size();
+    /**
+     * Adds the specified default set to this set.
+     *
+     * @param  fieldDefaultSet  default set to add.
+     */
+    public void addFieldDefaultSet(FieldDefaultSet fieldDefaultSet) {
+        final String name = fieldDefaultSet.getName();
+        if (StringUtil.isDefined(name) && fieldDefaultSet.size() > 0) {
+            this.nameToDefaultSetMap.put(name, fieldDefaultSet);
+        }
     }
-    
-    // TODO: replace this with jaxb annotations whenever we can drop jdk1.5
+
+    /**
+     * @return the total number of defaults and nested default sets in this set.
+     */
+    public int size() {
+        return nameToDefaultMap.size() + nameToDefaultSetMap.size();
+    }
+
+    /**
+     * @return an xml representation of this set
+     *         formatted with default indentation.
+     */
     public String toXml() {
+        return toXml("    ");
+    }
+
+    /**
+     * @param  indent  indentation string to prepend to all elements.
+     *
+     * @return an xml representation of this set
+     *         formatted with the specified indentation.
+     */
+    // TODO: replace this with jaxb annotations whenever we can drop jdk1.5
+    protected String toXml(String indent) {
         String xml;
-        final String name = getName();
-        if (StringUtil.isDefined(name) && (nameToDefaultMap.size() > 0)) {
+        if (size() > 0) {
             StringBuilder sb = new StringBuilder();
-            sb.append("    <fieldDefaultSet name=\"");
-            sb.append(StringUtil.getDefinedXmlValue(name));
-            sb.append("\">\n");
+            sb.append(indent);
+            final String name = getName();
+            if (StringUtil.isDefined(name)) {
+                sb.append("<fieldDefaultSet name=\"");
+                sb.append(StringUtil.getDefinedXmlValue(name));
+                sb.append("\">\n");
+            } else {
+                sb.append("<fieldDefaultSet>\n");
+            }
+
             String valueXml;
             for (FieldDefault fieldDefault : nameToDefaultMap.values()) {
                 valueXml = fieldDefault.toXml();
                 if (valueXml.length() > 0) {
-                    sb.append("      ");
+                    sb.append(indent);
+                    sb.append("  ");
                     sb.append(valueXml);
                 }
             }
-            sb.append("    </fieldDefaultSet>\n");
+            
+            for (FieldDefaultSet groupSet : nameToDefaultSetMap.values()) {
+                if (groupSet.size() > 0) {
+                    sb.append(groupSet.toXml(indent + "  "));
+                }
+            }
+
+            sb.append(indent);
+            sb.append("</fieldDefaultSet>\n");
             xml = sb.toString();
         } else {
             xml = "";

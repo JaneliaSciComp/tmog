@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog;
@@ -81,7 +81,8 @@ public class DataTableModelTest extends TestCase {
         assertEquals("row count should be the same as failed list size",
                      failedList.size(), model.getRowCount());
 
-        File lastFile = (File) model.getValueAt(0, DataTableModel.TARGET_COLUMN);
+        File lastFile = (File) model.getValueAt(0,
+                                                model.getTargetColumnIndex());
         assertEquals("incorrect file saved",
                      savedFile.getName(), lastFile.getName());                        
     }
@@ -132,11 +133,15 @@ public class DataTableModelTest extends TestCase {
 
         String textValue = "a1";
         textField.setText(textValue);
-        model.setValueAt(textField, 0, DataTableModel.TARGET_COLUMN + 1);
+        model.setValueAt(textField,
+                         0,
+                         model.getTargetColumnIndex() + 1);
 
         String numberValue = "5";
         numberField.setText(numberValue);
-        model.setValueAt(numberField, 0, DataTableModel.TARGET_COLUMN + 2);
+        model.setValueAt(numberField,
+                         0,
+                         model.getTargetColumnIndex() + 2);
 
         List<DataRow> rows = model.getRows();
         assertNotNull("rows are missing from model", rows);
