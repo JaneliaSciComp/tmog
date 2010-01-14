@@ -114,7 +114,7 @@ public class DataTable extends JTable {
             setDefaultEditor(ButtonPanel.ButtonType.class,
                              new ButtonEditor());
             setDefaultEditor(ValidValueModel.class,
-                             new ValidValueEditor(this));
+                             new ValidValueEditor());
             setDefaultEditor(VerifiedFieldModel.class,
                              new VerifiedFieldEditor(this));
             setDefaultEditor(DataFieldGroupModel.class,

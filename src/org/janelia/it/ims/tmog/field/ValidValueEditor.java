@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * This class supports the editing of a valid value cell
@@ -23,16 +24,10 @@ import java.awt.event.KeyEvent;
 public class ValidValueEditor extends DefaultCellEditor {
 
     private DataTable dataTable;
-    private EditorComboBox editorComboBox;
     private ValidValueModel model;
 
-    public ValidValueEditor(DataTable table) {
+    public ValidValueEditor() {
         super(new EditorComboBox());
-        this.dataTable = table;
-        this.editorComboBox = (EditorComboBox) editorComponent;
-        if (table != null) {
-            this.editorComboBox.addKeyListener(table.getKeyListener());
-        }
     }
 
     public Component getTableCellEditorComponent(JTable table,
@@ -40,7 +35,21 @@ public class ValidValueEditor extends DefaultCellEditor {
                                                  boolean isSelected,
                                                  int row,
                                                  int column) {
-        if (value instanceof ValidValueModel) {
+
+        EditorComboBox editorComboBox = (EditorComboBox) editorComponent;
+
+        if ((table instanceof DataTable) &&
+            (value instanceof ValidValueModel)) {
+
+            if (dataTable != table) {
+                dataTable = (DataTable) table;                
+                // remove any existing listeners
+                for (KeyListener listener : editorComboBox.getKeyListeners()) {
+                    editorComboBox.removeKeyListener(listener);
+                }
+                editorComboBox.addKeyListener(dataTable.getKeyListener());
+            }
+
             model = (ValidValueModel) value;
             editorComboBox.setModel(model);
             if (model.isSharedForAllSessionFiles()) {
@@ -48,6 +57,11 @@ public class ValidValueEditor extends DefaultCellEditor {
                 model.removeListDataListener(tableRepainter);
                 model.addListDataListener(tableRepainter);
             }
+
+        } else {
+            editorComboBox = null;
+            dataTable = null;
+            model = null;
         }
 
         return editorComboBox;
@@ -63,43 +77,27 @@ public class ValidValueEditor extends DefaultCellEditor {
         // We need to record what event caused editing to stop
         // immediately before any other events (e.g. mouse click
         // in the confirmation dialog) get placed on the queue.
-        final boolean isStopCausedByKeyEdit =
-                (EventQueue.getCurrentEvent() instanceof KeyEvent);
+        final AWTEvent event = EventQueue.getCurrentEvent();
+        final boolean isStopCausedByKeyEdit = (event instanceof KeyEvent);
 
-        boolean isEditingStopped = true;
+        // Always stop editing since during editing,
+        // we only validate populated entries and any populated entry
+        // must be a valid selection from the value list.
+        fireEditingStopped();
 
-        String coreValue = model.getCoreValue();
-        if ((dataTable != null) &&
-            (coreValue.length() > 0) &&
-            (! model.verify())) {
-
-            int selection = dataTable.showInvalidEntryConfimDialog(model);
-
-            if (selection == JOptionPane.YES_OPTION)  {
-                editorComboBox.requestFocusInWindow();
-                isEditingStopped = false;
-            } else {
-                // If a key edit (e.g. tab) caused editing to stop
-                // and the user has decided not to fix the current
-                // invalid cell, we need to "schedule" a request focus
-                // event for the newly selected cell.
-                // Otherwise (e.g. if a mouse click caused editing
-                // to stop), nothing needs to be done.
-                if (isStopCausedByKeyEdit) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            dataTable.editAndRequestFocusForSelectedCell();
-                        }
-                    });
+        // If a key edit (e.g. tab) caused editing to stop,
+        // we need to "schedule" a request focus event for the
+        // selected cell.  This prevents the drop down menu
+        // from losing focus (a problem with nested tables).
+        if (isStopCausedByKeyEdit && (dataTable != null)) {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    dataTable.editAndRequestFocusForSelectedCell();
                 }
-            }
+            });
         }
 
-        if (isEditingStopped) {
-            fireEditingStopped();
-        }
-
-        return isEditingStopped;
+        return true;
     }
 
     static class EditorComboBox extends JComboBox {
