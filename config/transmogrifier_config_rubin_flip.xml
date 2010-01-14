@@ -148,10 +148,10 @@
                 <validValue displayName="02: ??" value="02"/>
             </validValueList>
             <text displayName="L Number" required="true"
-                  pattern="^\d\d$" minimumLength="2" maximumLength="2"
-                  prefix="_L">
+                  pattern="^\d++$" minimumLength="1" maximumLength="3"
+                  prefix="_L" padFormat="30">
                 <sourceFileDefault pattern=".*L(\d++).lsm"/>
-                <staticDefault value="00"/>
+                <staticDefault value="0"/>
             </text>
             <separator value="_"/>
             <runTime datePattern="yyyyMMddHHmmssSSS"/>

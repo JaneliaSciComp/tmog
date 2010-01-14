@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright 2010 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.field;
@@ -10,6 +10,7 @@ package org.janelia.it.ims.tmog.field;
 import org.janelia.it.ims.tmog.config.preferences.FieldDefault;
 import org.janelia.it.ims.tmog.config.preferences.FieldDefaultSet;
 import org.janelia.it.ims.tmog.target.Target;
+import org.janelia.it.utils.PadFormatter;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
@@ -32,6 +33,7 @@ public abstract class VerifiedFieldModel extends PlainDocument
     private boolean isCopyable;
     private boolean markedForTask;
     private boolean sharedForAllSessionFiles;
+    private PadFormatter padFormatter;
     private DefaultValueList defaultValueList;
 
     public VerifiedFieldModel() {
@@ -84,6 +86,18 @@ public abstract class VerifiedFieldModel extends PlainDocument
         this.markedForTask = markedForTask;
     }
 
+    public String getPadFormat() {
+        String padFormat = null;
+        if (padFormatter != null) {
+            padFormat = padFormatter.getFormat();
+        }
+        return padFormat;
+    }
+
+    public void setPadFormat(String padFormat) {
+        this.padFormatter = new PadFormatter(padFormat);
+    }
+
     public abstract VerifiedFieldModel getNewInstance(boolean isCloneRequired);
 
     public void cloneValuesForNewInstance(VerifiedFieldModel instance) {
@@ -96,6 +110,7 @@ public abstract class VerifiedFieldModel extends PlainDocument
         instance.isCopyable = isCopyable;
         instance.markedForTask = markedForTask;
         instance.sharedForAllSessionFiles = sharedForAllSessionFiles;
+        instance.padFormatter = padFormatter;
         instance.defaultValueList = defaultValueList;  // shallow copy is ok
     }
 
@@ -110,17 +125,26 @@ public abstract class VerifiedFieldModel extends PlainDocument
     public String getFileNameValue() {
         String fileNameValue = getFullText();
         if ((fileNameValue != null) && (fileNameValue.length() > 0)) {
-            if ((prefix != null) || (suffix != null)) {
+
+            if ((prefix != null) ||
+                (suffix != null) ||
+                (padFormatter != null)) {
+
                 StringBuilder sb = new StringBuilder(64);
                 if (prefix != null) {
                     sb.append(prefix);
                 }
-                sb.append(fileNameValue);
+                if (padFormatter != null) {
+                    sb.append(padFormatter.formatValue(fileNameValue));
+                } else {
+                    sb.append(fileNameValue);
+                }
                 if (suffix != null) {
                     sb.append(suffix);
                 }
                 fileNameValue = sb.toString();
             }
+
         } else {
             fileNameValue = "";
         }
