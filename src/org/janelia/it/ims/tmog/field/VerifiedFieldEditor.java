@@ -18,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.util.EventObject;
 
@@ -34,13 +35,9 @@ public class VerifiedFieldEditor extends AbstractCellEditor
         private JTextField textField;
         private VerifiedFieldModel verifiedFieldModel;
 
-        public VerifiedFieldEditor(DataTable table) {
-            this.dataTable = table;
+        public VerifiedFieldEditor() {
             this.textField = new JTextField();
             this.textField.addActionListener(this);
-            if (table != null) {
-                this.textField.addKeyListener(table.getKeyListener());
-            }
         }
 
         public Component getTableCellEditorComponent(JTable table,
@@ -48,7 +45,18 @@ public class VerifiedFieldEditor extends AbstractCellEditor
                                                      boolean isSelected,
                                                      int row,
                                                      int column) {
-            if (value instanceof VerifiedFieldModel) {
+            if ((table instanceof DataTable) &&
+                (value instanceof VerifiedFieldModel)) {
+
+                if (dataTable != table) {
+                    dataTable = (DataTable) table;
+                    // remove any existing listeners
+                    for (KeyListener listener : textField.getKeyListeners()) {
+                        textField.removeKeyListener(listener);
+                    }
+                    textField.addKeyListener(dataTable.getKeyListener());
+                }
+
                 verifiedFieldModel = (VerifiedFieldModel) value;
                 textField.setDocument(verifiedFieldModel);
                 textField.setBorder(new LineBorder(Color.gray));

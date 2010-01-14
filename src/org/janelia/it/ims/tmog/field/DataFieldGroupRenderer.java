@@ -25,17 +25,6 @@ public class DataFieldGroupRenderer extends DefaultTableCellRenderer {
     private DataTable parentTable;
     private NestedDataTable nestedTable;
 
-    /**
-     * Constructs a renderer for field group cells in the specified parent
-     * data table.
-     *
-     * @param  parentTable  data table that containf field group cells.
-     */
-    public DataFieldGroupRenderer(DataTable parentTable) {
-        this.parentTable = parentTable;
-        this.nestedTable = null;
-    }
-
     public Component getTableCellRendererComponent(JTable table,
                                                    Object value,
                                                    boolean isSelected,
@@ -45,15 +34,15 @@ public class DataFieldGroupRenderer extends DefaultTableCellRenderer {
         Component cellRenderer;
 
 
-        if (value instanceof DataFieldGroupModel) {
-            DataFieldGroupModel model = (DataFieldGroupModel) value;
-            if (nestedTable == null) {
-                // NOTE: need to create nested table here instead of
-                //       in renderer constructor to prevent infinite
-                //       recursion problem when the nested table sets
-                //       up its renderers
-                nestedTable = new NestedDataTable(parentTable);                
+        if ((table instanceof DataTable) &&
+            (value instanceof DataFieldGroupModel)) {
+
+            if (parentTable != table) {
+                parentTable = (DataTable) table;
+                nestedTable = new NestedDataTable(parentTable);
             }
+
+            DataFieldGroupModel model = (DataFieldGroupModel) value;
             nestedTable.setModel(model, column);
 
             // reflect row selection background in nested table 

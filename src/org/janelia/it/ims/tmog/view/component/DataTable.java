@@ -109,16 +109,16 @@ public class DataTable extends JTable {
             setDefaultRenderer(VerifiedFieldModel.class,
                                new VerifiedFieldRenderer());
             setDefaultRenderer(DataFieldGroupModel.class,
-                               new DataFieldGroupRenderer(this));
+                               new DataFieldGroupRenderer());
 
             setDefaultEditor(ButtonPanel.ButtonType.class,
                              new ButtonEditor());
             setDefaultEditor(ValidValueModel.class,
                              new ValidValueEditor());
             setDefaultEditor(VerifiedFieldModel.class,
-                             new VerifiedFieldEditor(this));
+                             new VerifiedFieldEditor());
             setDefaultEditor(DataFieldGroupModel.class,
-                             new DataFieldGroupEditor(this));
+                             new DataFieldGroupEditor());
         }
 
         ActionMap actionMap = getActionMap();

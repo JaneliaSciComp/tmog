@@ -28,12 +28,6 @@ public class DataFieldGroupEditor
     private NestedDataTable nestedTable;
     private DataFieldGroupModel model;
 
-    public DataFieldGroupEditor(DataTable parentTable) {
-        this.parentTable = parentTable;
-        this.nestedTable = null;
-        this.model = null;
-    }
-
     public Component getTableCellEditorComponent(JTable table,
                                                  Object value,
                                                  boolean isSelected,
@@ -41,16 +35,15 @@ public class DataFieldGroupEditor
                                                  int column) {
         Component component = null;
 
-        if (value instanceof DataFieldGroupModel) {
-            model = (DataFieldGroupModel) value;
+        if ((table instanceof DataTable) &&
+            (value instanceof DataFieldGroupModel)) {
 
-            if (nestedTable == null) {
-                // NOTE: need to create nested table here instead of
-                //       in editor constructor to prevent infinite
-                //       recursion problem when the nested table sets
-                //       up its editors
+            if (parentTable != table) {
+                parentTable = (DataTable) table;
                 nestedTable = new NestedDataTable(parentTable);
             }
+
+            model = (DataFieldGroupModel) value;
             nestedTable.setModel(model, column);
             component = nestedTable;
         }
@@ -65,7 +58,7 @@ public class DataFieldGroupEditor
     @Override
     public boolean stopCellEditing() {
         boolean isEditingStopped = true;
-        if (nestedTable.isEditing()) {
+        if ((nestedTable != null) && nestedTable.isEditing()) {
             isEditingStopped = nestedTable.getCellEditor().stopCellEditing();
         }
         if (isEditingStopped) {
@@ -77,7 +70,7 @@ public class DataFieldGroupEditor
 
     @Override
     public void cancelCellEditing() {
-        if (nestedTable.isEditing()) {
+        if ((nestedTable != null) && nestedTable.isEditing()) {
             nestedTable.getCellEditor().cancelCellEditing();
         }
         fireEditingCanceled();
