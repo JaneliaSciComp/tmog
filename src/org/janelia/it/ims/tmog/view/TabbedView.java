@@ -169,6 +169,18 @@ public class TabbedView implements ActionListener {
                                  KeyEvent.VK_E);
         exitItem.addActionListener(this);
         menu.add(exitItem);
+
+        JMenu helpMenu = new JMenu("Help");
+        helpMenu.setMnemonic(KeyEvent.VK_H);
+        menuBar.add(helpMenu);
+
+        JMenu shortcutsMenu = new JMenu("Keyboard Shortcuts");
+        helpMenu.add(shortcutsMenu);
+
+        shortcutsMenu.add(new JMenuItem(
+                "Ctrl-D: fill down value from current cell to all cells below it"));
+        shortcutsMenu.add(new JMenuItem(
+                "Ctrl-R: copy all values from previous row to current row"));
     }
 
     public void actionPerformed(ActionEvent e) {
