@@ -74,30 +74,38 @@ public class ValidValueEditor extends DefaultCellEditor {
     @Override
     public boolean stopCellEditing() {
 
+        boolean isEditingStopped = false;
+
         // We need to record what event caused editing to stop
         // immediately before any other events (e.g. mouse click
         // in the confirmation dialog) get placed on the queue.
         final AWTEvent event = EventQueue.getCurrentEvent();
         final boolean isStopCausedByKeyEdit = (event instanceof KeyEvent);
+        final EditorComboBox comboBox = (EditorComboBox) editorComponent;
 
-        // Always stop editing since during editing,
-        // we only validate populated entries and any populated entry
-        // must be a valid selection from the value list.
-        fireEditingStopped();
+        // If a keyboard event triggered selection of an item in the drop down
+        // menu, simply hide the menu and allow the editor to remain
+        // (and retain focus).  Otherwise, allow editing to completely stop
+        // by notifying all listeners.
 
-        // If a key edit (e.g. tab) caused editing to stop,
-        // we need to "schedule" a request focus event for the
-        // selected cell.  This prevents the drop down menu
-        // from losing focus (a problem with nested tables).
-        if (isStopCausedByKeyEdit && (dataTable != null)) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    dataTable.editAndRequestFocusForSelectedCell();
-                }
-            });
+        // NOTE: This works around a bug where valid value fields are
+        //       configured in both the data table and at least one nested
+        //       data table.  For some reason in these cases, focus is
+        //       properly handled for the field selected initially but
+        //       focus is lost for other fields.  For example, selecting
+        //       a data table field first causes focus to be lost whenever
+        //       selecting a nested data table field.  This work around
+        //       fixes the focus problem for keyboard selections (when it
+        //       matters).  You can still observe the problem with mouse
+        //       selections.
+        if (isStopCausedByKeyEdit && comboBox.isPopupVisible()) {
+            comboBox.hidePopup();
+        } else {
+            fireEditingStopped();
+            isEditingStopped = true;
         }
 
-        return true;
+        return isEditingStopped;
     }
 
     static class EditorComboBox extends JComboBox {
