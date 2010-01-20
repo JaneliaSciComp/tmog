@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.3.3"/>
+    <global minimumVersion="2.3.3" frameSizePercentage="95"/>
 
     <project name="Rubin Lab: Flip (GMR_*)" default="true">
 
@@ -14,7 +14,7 @@
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
-            <!-- TODO: should transformant ids be validated? -->
+            <!--<rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />-->
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
                 <property name="family" value="family"/>

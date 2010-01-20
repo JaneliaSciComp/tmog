@@ -51,5 +51,6 @@ are deployed for the following lab groups:
   rubin (ChaCRM)   /groups/rubin/data1/rubinlab/tmog
   rubin (R&D)      /groups/rubin/rubinimg/tmog
   simpson          /groups/simpson/MicroscopeData/renamer
+  svoboda          /groups/svoboda/wdbp/tmog
   zlatic           /groups/zlatic/zlaticlab/tmog
 
