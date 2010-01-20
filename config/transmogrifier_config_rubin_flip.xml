@@ -26,7 +26,7 @@
                 <property name="temperature" value="Temperature"/>
                 <property name="protocol" value="Protocol"/>
                 <property name="stain:field-group" value="Stain"/>
-                <property name="comments" value="Comments"/>
+                <property name="notes" value="Notes"/>
             </rowListener>
         </plugins>
 
@@ -143,6 +143,7 @@
                 <validValue displayName="22: su(Hw)attP5-2R:51E" value="22"/>
             </validValueList>
             <separator value="_"/>
+            <!-- TODO: should this be UAS Reporter? -->
             <validValueList displayName="Reporter Construct" required="true">
                 <validValue displayName="01: ??" value="01"/>
                 <validValue displayName="02: ??" value="02"/>
@@ -224,7 +225,7 @@
 
             </fieldGroup>
 
-            <text displayName="Comments"
+            <text displayName="Notes"
                   required="false"
                   markedForTask="false"/>
 
@@ -240,7 +241,7 @@
                 <validValue value="Teri Ngo"/>
             </validValueList>
 
-            <static name="family" value="rubin-flip" markedForTask="false"/>
+            <static name="family" value="rubin_flip" markedForTask="false"/>
         </dataFields>
 
     </project>
