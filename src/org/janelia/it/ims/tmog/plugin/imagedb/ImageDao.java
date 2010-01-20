@@ -95,20 +95,22 @@ public class ImageDao implements ImagePropertyWriter {
         Connection connection = null;
         ResultSet resultSet = null;
         PreparedStatement select = null;
+        PreparedStatement deleteImage = null;
 
         try {
             connection = dbManager.getConnection();
             connection.setAutoCommit(false);
 
-            Integer imageId = null;
             String previousRelativePath = image.getPreviousRelativePath();
-            if (previousRelativePath != null) {
-                imageId = getImageId(previousRelativePath, connection);
-                if (imageId != null) {
-                    LOG.info("saveProperties: using image id " + imageId +
-                             " found for previous relative path " +
-                             previousRelativePath);
-                    relativePath = previousRelativePath;
+            if (! relativePath.equals(previousRelativePath)) {
+                deleteImage = connection.prepareStatement(SQL_DELETE_IMAGE);
+                deleteImage.setString(1, previousRelativePath);
+                int rowsUpdated = deleteImage.executeUpdate();
+                if (rowsUpdated > 0) {
+                    LOG.info("removed " + rowsUpdated +
+                             " image row(s) for existing image name " +
+                             previousRelativePath +
+                             " because it is being renamed to " + relativePath);
                 }
             }
 
@@ -116,6 +118,7 @@ public class ImageDao implements ImagePropertyWriter {
             select.setString(1, relativePath);
             resultSet = select.executeQuery();
 
+            Integer imageId = null;
             Integer lastImageId = null;
             List<String> existingPropertyNames = new ArrayList<String>();
             String propertyName;
@@ -154,6 +157,7 @@ public class ImageDao implements ImagePropertyWriter {
                     "Failed to store image properties for '" +
                     relativePath + "'.", e);
         } finally {
+            DbManager.closeResources(null, deleteImage, null, LOG);
             DbManager.closeResources(resultSet, select, connection, LOG);
         }
 
@@ -605,5 +609,12 @@ public class ImageDao implements ImagePropertyWriter {
     private static final String SQL_UPDATE_SEQUENCE_NUMBER =
             "UPDATE namespace_sequence_number SET sequence_number=? " +
             "WHERE namespace=?";
+
+    /**
+     * SQL for deleting all properties for an image.
+     *   Parameter 1 is the image name.
+     */
+    private static final String SQL_DELETE_IMAGE =
+            "DELETE FROM image WHERE name=?";
 
 }

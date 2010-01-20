@@ -81,8 +81,9 @@ public class DataTableModelTest extends TestCase {
         assertEquals("row count should be the same as failed list size",
                      failedList.size(), model.getRowCount());
 
-        File lastFile = (File) model.getValueAt(0,
-                                                model.getTargetColumnIndex());
+        FileTarget lastFileTarget = (FileTarget)
+                model.getValueAt(0, model.getTargetColumnIndex());
+        File lastFile = lastFileTarget.getFile();
         assertEquals("incorrect file saved",
                      savedFile.getName(), lastFile.getName());                        
     }

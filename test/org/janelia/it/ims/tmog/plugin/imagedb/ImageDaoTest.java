@@ -178,6 +178,7 @@ public class ImageDaoTest extends TestCase {
         testImage.setId(testImageId);
         testImage.setRelativePath(relativePath);
         testImage.setCaptureDate(new Date());
+        testImage.setFamily("testFamily");
 
         File fromFile = new File(previousRelativePath);
         FileTarget target = new FileTarget(new File(relativePath));
@@ -189,11 +190,14 @@ public class ImageDaoTest extends TestCase {
 
         testImage = dao.saveProperties(testImage);
 
-        assertEquals("id changed after update", testImageId, testImage.getId());
+        Integer previousId = dao.getImageId(previousRelativePath);
+        assertNull("image for previous relative path '" +
+                   previousRelativePath + "' should have been removed",
+                   previousId);
 
-        Integer previousImageId = dao.getImageId(previousRelativePath);
-        assertNull("id incorrectly returned for previous relative path " +
-                   previousRelativePath, previousImageId);
+        Integer imageId = dao.getImageId(relativePath);
+        assertEquals("invalid id returned for " + relativePath,
+                     testImage.getId(), imageId);
     }
 
     /**
