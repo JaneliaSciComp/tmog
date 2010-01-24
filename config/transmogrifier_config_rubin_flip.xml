@@ -96,6 +96,8 @@
                 <validValue displayName="GL: pBPtsGAL80w" value="GL"/>
                 <validValue displayName="GM: pBPivstsGAL80-WPREUw" value="GM"/>
                 <validValue displayName="GN: pBPivstsGAL80-WPREw" value="GN"/>
+                <validValue displayName="GO: pBPivsGAL80-WPREUw-SV40" value="GO"/>
+                <validValue displayName="GP: pBPivsGAL80-WPREw-SV40" value="GP"/>
                 <validValue displayName="LA: pBPLexA::GADdUw-deletion" value="LA"/>
                 <validValue displayName="LB: pBPLexA::GADdw-deletion" value="LB"/>
                 <validValue displayName="LC: pBPLexA::GADflUw" value="LC"/>
