@@ -162,7 +162,6 @@ public class ValidValueModel extends AbstractListModel
      * @param  target  the target being processed.
      */
     public void initializeValue(Target target) {
-        setSelectedValue(null);
         String defaultValue = defaultValueList.getValue(target);
         if (defaultValue != null) {
             for (ValidValue validValue : validValues) {

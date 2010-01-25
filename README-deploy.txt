@@ -47,10 +47,10 @@ are deployed for the following lab groups:
   baker            /groups/baker/bakerlab/tmog
   flylight (R&D)   /groups/rubin/data1/rubinlab/tmog
   kerr             /groups/kerr/kerrlab/tmog
-  leet             /groups/leet/leetconfocal/tmog
-  rubin (ChaCRM)   /groups/rubin/data1/rubinlab/tmog
+  leet             /groups/leet/leetconfocal/tmog/config
+  rubin (ChaCRM)   /groups/rubin/data1/rubinlab/tmog/config
   rubin (R&D)      /groups/rubin/rubinimg/tmog
   simpson          /groups/simpson/MicroscopeData/renamer
   svoboda          /groups/svoboda/wdbp/tmog
-  zlatic           /groups/zlatic/zlaticlab/tmog
+  zlatic           /groups/zlatic/zlaticlab/tmog/config
 
