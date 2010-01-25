@@ -1,8 +1,8 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
+ * Copyright 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
@@ -11,11 +11,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.utils.StringUtil;
+import org.janelia.it.utils.db.AbstractDao;
 import org.janelia.it.utils.db.DbConfigException;
 import org.janelia.it.utils.db.DbManager;
-import org.janelia.it.utils.security.StringEncrypter;
 
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,7 +24,6 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -33,14 +31,8 @@ import java.util.Set;
  *
  * @author Eric Trautman
  */
-public class ImageDao implements ImagePropertyWriter {
-
-    /**
-     * The manager used to establish connections with the database.
-     */
-    private DbManager dbManager;
-
-    private String dbConfigurationKey;
+public class ImageDao extends AbstractDao
+        implements ImagePropertyWriter {
 
     /**
      * Constructs a dao using the default manager and configuration.
@@ -52,13 +44,7 @@ public class ImageDao implements ImagePropertyWriter {
      *   if the database configuration information cannot be loaded.
      */
     public ImageDao(String dbConfigurationKey) throws ExternalSystemException {
-        Properties props = loadDatabaseProperties(dbConfigurationKey);
-        this.dbManager = new DbManager(dbConfigurationKey, props);
-        this.dbConfigurationKey = dbConfigurationKey;
-    }
-
-    public DbManager getDbManager() {
-        return dbManager;
+        super(dbConfigurationKey);
     }
 
     /**
@@ -70,6 +56,7 @@ public class ImageDao implements ImagePropertyWriter {
     public void checkAvailability() throws ExternalSystemException {
         Connection connection = null;
         try {
+            final DbManager dbManager = getDbManager();
             connection = dbManager.getConnection();
         } catch (DbConfigException e) {
             throw new ExternalSystemException(e.getMessage(), e);
@@ -98,6 +85,7 @@ public class ImageDao implements ImagePropertyWriter {
         PreparedStatement deleteImage = null;
 
         try {
+            final DbManager dbManager = getDbManager();
             connection = dbManager.getConnection();
             connection.setAutoCommit(false);
 
@@ -163,7 +151,7 @@ public class ImageDao implements ImagePropertyWriter {
 
         if (LOG.isInfoEnabled()) {
             LOG.info("successfully persisted image properties to the '" +
-                     dbConfigurationKey + "' database: " + image);
+                     getDbConfigurationKey() + "' database: " + image);
         }
 
         return image;
@@ -253,6 +241,7 @@ public class ImageDao implements ImagePropertyWriter {
         Connection connection = null;
 
         try {
+            final DbManager dbManager = getDbManager();
             connection = dbManager.getConnection();
             imageId = getImageId(relativePath, connection);
         } catch (DbConfigException e) {
@@ -492,51 +481,6 @@ public class ImageDao implements ImagePropertyWriter {
         }
     }
     
-    /**
-     * Utility to load database properties from classpath.
-     *
-     * @param  dbConfigurationKey  the key for loading database
-     *                             configuration information.
-     *
-     * @return populated database properties object.
-     *
-     * @throws ExternalSystemException
-     *   if the load fails.
-     */
-    private static Properties loadDatabaseProperties(String dbConfigurationKey)
-            throws ExternalSystemException {
-        Properties props = new Properties();
-        final String propFileName = "/" + dbConfigurationKey + ".properties";
-        InputStream dbIn = ImageDao.class.getResourceAsStream(propFileName);
-        try {
-            props.load(dbIn);
-        } catch (Exception e) {
-            throw new ExternalSystemException(
-                    "Failed to load " + dbConfigurationKey +
-                    " configuration properties.",
-                    e);
-        }
-
-        String passwordKey = "db." + dbConfigurationKey + ".password";
-        String encryptedPassword = props.getProperty(passwordKey);
-        if ((encryptedPassword != null) && (encryptedPassword.length() > 0)) {
-            try {
-                StringEncrypter encrypter =
-                        new StringEncrypter(
-                                StringEncrypter.DES_ENCRYPTION_SCHEME,
-                                StringEncrypter.DEFAULT_ENCRYPTION_KEY);
-                String clearPassword = encrypter.decrypt(encryptedPassword);
-                props.put(passwordKey, clearPassword);
-            } catch (Exception e) {
-                throw new ExternalSystemException(
-                        "Failed to decrypt " + dbConfigurationKey +
-                        " password.", e);
-            }
-        }
-
-        return props;
-    }
-
     /** The logger for this class. */
     private static final Log LOG = LogFactory.getLog(ImageDao.class);
 

@@ -12,7 +12,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.janelia.it.chacrm.TransformantDao;
 
 import java.sql.Connection;
 import java.util.Properties;
@@ -55,8 +54,9 @@ public class DbManagerTest extends TestCase {
      */
     public void testGetConnection() throws Exception {
 
-        Properties props = TransformantDao.loadChaCRMDatabaseProperties();
-        DbManager mgr = new DbManager("chacrm", props);
+        final String dbName = "chacrm";
+        Properties props = AbstractDao.loadDatabaseProperties(dbName);
+        DbManager mgr = new DbManager(dbName, props);
 
         Exception connectionException = null;
         Connection connection = null;

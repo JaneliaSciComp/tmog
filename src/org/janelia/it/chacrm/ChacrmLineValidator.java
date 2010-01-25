@@ -50,13 +50,13 @@ public class ChacrmLineValidator
     public void init(PluginConfiguration config) throws ExternalSystemException {
         try {
             setDao();
-            dao.checkConnection();
+            dao.checkAvailability();
             String configuredLinePropertyName =
                     config.getProperty("linePropertyName");
             if (configuredLinePropertyName != null) {
                 this.linePropertyName = configuredLinePropertyName;
             }
-        } catch (SystemException e) {
+        } catch (ExternalSystemException e) {
             throw new ExternalSystemException(
                     "Failed to initialize ChacrmLineValidator plugin.  " +
                     e.getMessage(),
@@ -95,7 +95,7 @@ public class ChacrmLineValidator
                     "Please verify the " + linePropertyName +
                     " specified for the file " +
                     fileName, e);
-        } catch (SystemException e) {
+        } catch (ExternalSystemException e) {
             throw new ExternalSystemException(
                     "Failed to retrieve ChaCRM status for transformant ID '" +
                     transformantID + "' because of a system error.", e);
@@ -123,10 +123,10 @@ public class ChacrmLineValidator
     /**
      * Create the dao for this plug-in if it does not already exist.
      *
-     * @throws SystemException
+     * @throws ExternalSystemException
      *   if any error occurs during creation.
      */
-    private synchronized void setDao() throws SystemException {
+    private synchronized void setDao() throws ExternalSystemException {
         if (dao == null) {
             dao = new TransformantDao();
         }

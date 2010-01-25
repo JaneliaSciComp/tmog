@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.chacrm;
@@ -67,7 +67,7 @@ public class CleanupChacrmManager implements RowListener {
     public void init(PluginConfiguration config) throws ExternalSystemException {
         try {
             setDao();
-            dao.checkConnection();
+            dao.checkAvailability();
             labImageSharePatternValue =
                     config.getProperty("labImageSharePattern");
             if (labImageSharePatternValue != null) {
@@ -79,7 +79,7 @@ public class CleanupChacrmManager implements RowListener {
                     "Failed to initialize ChaCRM plugin because of invalid " +
                     "labImageSharePattern '" + labImageSharePatternValue +
                     "'.  " + pse.getMessage(), pse);
-        } catch (SystemException e) {
+        } catch (ExternalSystemException e) {
             throw new ExternalSystemException(
                     "Failed to initialize ChaCRM plugin.  " + e.getMessage(),
                     e);
@@ -130,9 +130,10 @@ public class CleanupChacrmManager implements RowListener {
     /**
      * Create the dao for this manager if it does not already exist.
      *
-     * @throws SystemException if any error occurs during creation.
+     * @throws ExternalSystemException
+     *   if any error occurs during creation.
      */
-    private synchronized void setDao() throws SystemException {
+    private synchronized void setDao() throws ExternalSystemException {
         if (dao == null) {
             dao = new TransformantDao();
         }

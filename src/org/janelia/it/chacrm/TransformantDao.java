@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.chacrm;
@@ -10,19 +10,17 @@ package org.janelia.it.chacrm;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import static org.janelia.it.chacrm.Transformant.Status;
+import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
+import org.janelia.it.utils.db.AbstractDao;
 import org.janelia.it.utils.db.DbConfigException;
 import org.janelia.it.utils.db.DbManager;
-import org.janelia.it.utils.security.StringEncrypter;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Properties;
 
 /**
  * This class supports management of transformant data within the ChaCRM
@@ -31,7 +29,7 @@ import java.util.Properties;
  * @author R. Svirskas
  * @author Eric Trautman
  */
-public class TransformantDao {
+public class TransformantDao extends AbstractDao {
 
     /** The logger for this class. */
     private static final Log LOG =
@@ -83,46 +81,13 @@ public class TransformantDao {
             "'image_location' AND is_obsolete = 0)";
 
     /**
-     * The manager used to establish connections with the ChaCRM repository.
-     */
-    private DbManager dbManager;
-
-    /**
      * Constructs a dao using the default manager and configuration.
      *
-     * @throws SystemException
+     * @throws ExternalSystemException
      *   if the database configuration information cannot be loaded.
      */
-    public TransformantDao() throws SystemException {
-        Properties props = loadChaCRMDatabaseProperties();
-        dbManager = new DbManager("chacrm", props);
-    }
-
-    /**
-     * Value constructor.
-     *
-     * @param  dbManager  manager used to establish connections
-     *                    with the ChaCRM repository.
-     */
-    public TransformantDao(DbManager dbManager) {
-        this.dbManager = dbManager;
-    }
-
-    /**
-     * Verifies that a connection to the database can be established.
-     *
-     * @throws SystemException
-     *   if a connection to the database can not be established.
-     */
-    public void checkConnection() throws SystemException {
-        Connection connection = null;
-        try {
-            connection = dbManager.getConnection();
-        } catch (DbConfigException e) {
-            throw new SystemException(e.getMessage(), e);
-        } finally {
-            DbManager.closeResources(null, null, connection, LOG);
-        }
+    public TransformantDao() throws ExternalSystemException {
+        super("chacrm");
     }
 
     /**
@@ -139,12 +104,12 @@ public class TransformantDao {
      *
      * @throws TransformantNotFoundException
      *   if no transformat exists with the specified identifier.
-     * @throws SystemException
+     * @throws ExternalSystemException
      *   if any other errors occur while retrieving the data.
      */
     public Transformant getTransformant(String transformantID,
                                         boolean isNewImageLocationNeeded)
-            throws TransformantNotFoundException, SystemException {
+            throws TransformantNotFoundException, ExternalSystemException {
 
         Transformant transformant = null;
         Connection connection = null;
@@ -153,6 +118,7 @@ public class TransformantDao {
         CallableStatement cStatement = null;
 
         try {
+            final DbManager dbManager = getDbManager();
             connection = dbManager.getConnection();
             pStatement = connection.prepareStatement(SQL_SELECT_TRANSFORMANT);
             pStatement.setString(1, transformantID);
@@ -189,9 +155,9 @@ public class TransformantDao {
                 transformant.setImageLocation(imageLocation);
             }
         } catch (DbConfigException e) {
-            throw new SystemException(e.getMessage(), e);
+            throw new ExternalSystemException(e.getMessage(), e);
         } catch (SQLException e) {
-            throw new SystemException(
+            throw new ExternalSystemException(
                     "Failed to retrieve transformant from database with ID: " +
                     transformantID, e);
         } finally {
@@ -209,14 +175,14 @@ public class TransformantDao {
      * @param  transformant  transformant to be updated.
      * @param  user          person responsible for changing the status.
      *
-     * @throws SystemException
+     * @throws ExternalSystemException
      *   if any errors occur while persiting the data.
      * @throws IllegalArgumentException
      *   if a null transformant or image location is specified.
      */
     public void setTransformantStatusAndLocation(Transformant transformant,
                                                  User user)
-            throws SystemException, IllegalArgumentException {
+            throws ExternalSystemException, IllegalArgumentException {
 
         if (transformant == null) {
             throw new IllegalArgumentException("Transformant is null.");
@@ -232,6 +198,7 @@ public class TransformantDao {
         ResultSet resultSet = null;
         CallableStatement statement = null;
         try {
+            final DbManager dbManager = getDbManager();
             connection = dbManager.getConnection();
             statement = connection.prepareCall(SQL_CALL_IMAGE_TRANSFORMANT);
             Integer featureID = transformant.getFeatureID();
@@ -248,9 +215,9 @@ public class TransformantDao {
             }
             
         } catch (DbConfigException e) {
-            throw new SystemException(e.getMessage(), e);
+            throw new ExternalSystemException(e.getMessage(), e);
         } catch (SQLException e) {
-            throw new SystemException(
+            throw new ExternalSystemException(
                     "Failed to update status and image location " +
                     "in database for transformant: " +
                     transformant, e);
@@ -268,13 +235,13 @@ public class TransformantDao {
      *
      * @throws TransformantNotFoundException
      *   if the transformant image location cannot be found.
-     * @throws SystemException
+     * @throws ExternalSystemException
      *   if any other errors occur while deleting the data.
      * @throws IllegalArgumentException
      *   if a null transformant or image location is specified.
      */
     public void deleteImageLocation(Transformant transformant)
-            throws TransformantNotFoundException, SystemException,
+            throws TransformantNotFoundException, ExternalSystemException,
                    IllegalArgumentException {
 
         if (transformant == null) {
@@ -293,6 +260,7 @@ public class TransformantDao {
         PreparedStatement statement = null;
 
         try {
+            final DbManager dbManager = getDbManager();
             connection = dbManager.getConnection();
             statement = connection.prepareStatement(
                     SQL_DELETE_TRANSFORMANT_IMAGE_LOCATION);
@@ -313,9 +281,9 @@ public class TransformantDao {
             }
 
         } catch (DbConfigException e) {
-            throw new SystemException(e.getMessage(), e);
+            throw new ExternalSystemException(e.getMessage(), e);
         } catch (SQLException e) {
-            throw new SystemException(
+            throw new ExternalSystemException(
                     "Failed to delete image location for " + transformant, e);
         } finally {
             DbManager.closeResources(resultSet, statement, connection, LOG);
@@ -330,14 +298,14 @@ public class TransformantDao {
      * @param  imageLocation  image location to be removed.
      * @param  user           person responsible for removing the location.
      *
-     * @throws SystemException
+     * @throws ExternalSystemException
      *   if any errors occur while removing the data.
      * @throws IllegalArgumentException
      *   if a image location is specified.
      */
     public void deleteImageLocationAndRollbackStatus(ImageLocation imageLocation,
                                                      User user)
-            throws SystemException, IllegalArgumentException {
+            throws ExternalSystemException, IllegalArgumentException {
 
         if (imageLocation == null) {
             throw new IllegalArgumentException("Image location is null.");
@@ -347,6 +315,7 @@ public class TransformantDao {
         ResultSet resultSet = null;
         CallableStatement statement = null;
         try {
+            final DbManager dbManager = getDbManager();
             connection = dbManager.getConnection();
             statement = connection.prepareCall(SQL_CALL_REMOVE_IMAGE_LOCATION);
             statement.setString(1, imageLocation.getRelativePath());
@@ -359,55 +328,13 @@ public class TransformantDao {
             }
 
         } catch (DbConfigException e) {
-            throw new SystemException(e.getMessage(), e);
+            throw new ExternalSystemException(e.getMessage(), e);
         } catch (SQLException e) {
-            throw new SystemException(
+            throw new ExternalSystemException(
                     "Failed to remove image location: " +
                     imageLocation, e);
         } finally {
             DbManager.closeResources(resultSet, statement, connection, LOG);
         }
     }
-
-    /**
-     * Utility to load ChaCRM database properties from classpath.
-     *
-     * @return populated database properties object.
-     *
-     * @throws SystemException
-     *   if the load fails.
-     */
-    public static Properties loadChaCRMDatabaseProperties()
-            throws SystemException {
-        Properties props = new Properties();
-        final String propFileName = "/chacrm.properties";
-        InputStream dbIn =
-                TransformantDao.class.getResourceAsStream(propFileName);
-        try {
-            props.load(dbIn);
-        } catch (IOException e) {
-            throw new SystemException(
-                    "Failed to load ChaCRM database configuration properties.",
-                    e);
-        }
-
-        String passwordKey = "db.chacrm.password";
-        String encryptedPassword = props.getProperty(passwordKey);
-        if ((encryptedPassword != null) && (encryptedPassword.length() > 0)) {
-            try {
-                StringEncrypter encrypter =
-                        new StringEncrypter(
-                                StringEncrypter.DES_ENCRYPTION_SCHEME,
-                                StringEncrypter.DEFAULT_ENCRYPTION_KEY);
-                String clearPassword = encrypter.decrypt(encryptedPassword);
-                props.put(passwordKey, clearPassword);
-            } catch (Exception e) {
-                throw new SystemException(
-                        "Failed to decrypt ChaCRM database password.", e);
-            }
-        }
-
-        return props;
-    }
-
 }

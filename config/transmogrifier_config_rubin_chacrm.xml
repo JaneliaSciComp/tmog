@@ -3,17 +3,29 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.2.2"/>
+    <global minimumVersion="2.3.4" frameSizePercentage="95"/>
 
     <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="true">
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="\\dm10.isln.janelia.org\rubindata\confocalStacks"
-                         derivedFromEarliestModifiedFile="true"/>
+        <!--<outputDirectory basePath="\\dm10.isln.janelia.org\rubindata\confocalStacks"-->
+                         <!--derivedFromEarliestModifiedFile="true"/>-->
 
         <plugins>
+
+            <rowValidator className="org.janelia.it.wip.WipDataPlugin">
+                <property name="batchNameFieldName" value="Batch Name"/>
+                <property name="batchNumberFieldName" value="Batch Number"/>
+                <property name="batchColorFieldName" value="Batch Color"/>
+            </rowValidator>
             <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
+
+            <rowListener className="org.janelia.it.wip.WipDataPlugin">
+                <property name="batchNameFieldName" value="Batch Name"/>
+                <property name="batchNumberFieldName" value="Batch Number"/>
+                <property name="batchColorFieldName" value="Batch Color"/>
+            </rowListener>
             <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
                 <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
             </rowListener>
@@ -25,10 +37,13 @@
                 <property name="created_by" value="Imager"/>
                 <property name="renamed_by" value="Renamer"/>
                 <property name="class" value="Class"/>
+                <property name="ihc_batch_name" value="Batch Name"/>
             </rowListener>
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\GMR"/>
-            </sessionListener>
+
+            <!--<sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">-->
+                <!--<property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\GMR"/>-->
+            <!--</sessionListener>-->
+
         </plugins>
 
         <dataFields>
@@ -200,6 +215,25 @@
              These values are collected for the nighthawk database but are not
              included as components of the file name (markedForTask="false").
              -->
+            <number displayName="Batch Number" required="true"
+                    minimumValue="80" maximumValue="600"
+                    markedForTask="false" />
+
+            <validValueList displayName="Batch Color" required="true"
+                            markedForTask="false">
+                <validValue value="gray"/>
+                <validValue value="pink"/>
+                <validValue value="white"/>
+                <validValue value="blue"/>
+                <validValue value="purple"/>
+                <validValue value="tan"/>
+                <validValue value="orange"/>
+                <validValue value="yellow"/>
+                <validValue value="green"/>
+            </validValueList>
+
+            <pluginData displayName="Batch Name" markedForTask="false" />
+
             <validValueList displayName="UAS Reporter" required="true"
                             markedForTask="false">
                 <validValue displayName="JFRC-IVS-A1" value="JFRC-IVS-A1" default="true"/>

@@ -73,12 +73,13 @@ public class ChacrmEventManager implements RowValidator, RowListener {
      * dependencies.
      *
      * @param config the plugin configuration.
-     * @throws ExternalSystemException if the plugin can not be initialized.
+     * @throws ExternalSystemException
+     *   if the plugin can not be initialized.
      */
     public void init(PluginConfiguration config) throws ExternalSystemException {
         try {
             setDao();
-            dao.checkConnection();
+            dao.checkAvailability();
             labImageSharePatternValue =
                     config.getProperty("labImageSharePattern");
             if (labImageSharePatternValue != null) {
@@ -90,7 +91,7 @@ public class ChacrmEventManager implements RowValidator, RowListener {
                     "Failed to initialize ChaCRM plugin because of invalid " +
                     "labImageSharePattern '" + labImageSharePatternValue +
                     "'.  " + pse.getMessage(), pse);
-        } catch (SystemException e) {
+        } catch (ExternalSystemException e) {
             throw new ExternalSystemException(
                     "Failed to initialize ChaCRM plugin.  " + e.getMessage(),
                     e);
@@ -129,7 +130,7 @@ public class ChacrmEventManager implements RowValidator, RowListener {
                     "Transformant ID '" + transformantID +
                     "' does not exist in the ChaCRM database.  " +
                     MSG_VERIFY_TRANSFORMANT_COMPONENTS + fileName, e);
-        } catch (SystemException e) {
+        } catch (ExternalSystemException e) {
             throw new ExternalSystemException(
                     "Failed to retrieve ChaCRM status for transformant ID '" +
                     transformantID + "' because of a system error.", e);
@@ -234,7 +235,7 @@ public class ChacrmEventManager implements RowValidator, RowListener {
                     "because transformant ID " + transformantID +
                     " does not exist in the ChaCRM database.  " +
                     "Detailed data is: " + row, e);
-        } catch (SystemException e) {
+        } catch (ExternalSystemException e) {
             throw new ExternalSystemException(
                     "Failed to retrieve ChaCRM image rank for " +
                     "transformant ID " + transformantID +
@@ -340,9 +341,10 @@ public class ChacrmEventManager implements RowValidator, RowListener {
     /**
      * Create the dao for this manager if it does not already exist.
      *
-     * @throws SystemException if any error occurs during creation.
+     * @throws ExternalSystemException
+     *   if any error occurs during creation.
      */
-    private synchronized void setDao() throws SystemException {
+    private synchronized void setDao() throws ExternalSystemException {
         if (dao == null) {
             dao = new TransformantDao();
         }

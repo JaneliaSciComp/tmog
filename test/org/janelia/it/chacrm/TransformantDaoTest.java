@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.chacrm;
@@ -13,6 +13,7 @@ import junit.framework.TestSuite;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import static org.janelia.it.chacrm.Transformant.Status;
+import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.utils.db.DbManager;
 
 import java.sql.Connection;
@@ -23,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * Tests the TransformantDao class.
@@ -37,8 +37,6 @@ public class TransformantDaoTest extends TestCase {
 
     private static final String BAD_TRANSFORMANT_ID = "bogus";
     private static final Integer BAD_FEATURE_ID = -1;
-    private static final DbManager EMPTY_DB_MANAGER =
-            new DbManager("empty", new Properties());
     private static final User USER = User.getUser(null);
 
     private DbManager dbManager;
@@ -76,10 +74,8 @@ public class TransformantDaoTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        Properties props = TransformantDao.loadChaCRMDatabaseProperties();
-        dbManager = new DbManager("chacrm", props);
-
         dao = new TransformantDao();
+        dbManager = dao.getDbManager();
 
         creatTestFragment(Transformant.Status.crossed);
         transformant = createTransformant(Transformant.Status.crossed);
@@ -112,15 +108,6 @@ public class TransformantDaoTest extends TestCase {
             fail("inavalid transformant ID should have caused exception " +
                  "but returned this instead: " + transformant);
         } catch (TransformantNotFoundException e) {
-            LOG.info("expected exception thrown", e); // test passed
-        }
-
-        dao = new TransformantDao(EMPTY_DB_MANAGER);
-        try {
-            dao.getTransformant(transformantName,
-                                false);
-            fail("inavalid dbManager should have caused exception");
-        } catch (SystemException e) {
             LOG.info("expected exception thrown", e); // test passed
         }
     }
@@ -182,15 +169,7 @@ public class TransformantDaoTest extends TestCase {
             badTransformant.setImageLocation(new ImageLocation("", 0));
             dao.setTransformantStatusAndLocation(badTransformant, USER);
             fail("set with bad feature ID should have caused exception");
-        } catch (SystemException e) {
-            LOG.info("expected exception thrown", e); // test passed
-        }
-
-        dao = new TransformantDao(EMPTY_DB_MANAGER);
-        try {
-            dao.setTransformantStatusAndLocation(newTransformant, USER);
-            fail("inavalid dbManager should have caused exception");
-        } catch (SystemException e) {
+        } catch (ExternalSystemException e) {
             LOG.info("expected exception thrown", e); // test passed
         }
     }
@@ -428,7 +407,7 @@ public class TransformantDaoTest extends TestCase {
         try {
             dao.deleteImageLocationAndRollbackStatus(location1, USER);
             fail("transformant without imaged status should cause exception");
-        } catch (SystemException e) {
+        } catch (ExternalSystemException e) {
             LOG.info("expected exception was thrown", e);  // test passed
         }
 
@@ -480,7 +459,7 @@ public class TransformantDaoTest extends TestCase {
         try {
             dao.deleteImageLocationAndRollbackStatus(badLocation, USER);
             fail("bad image location should cause exception");
-        } catch (SystemException e) {
+        } catch (ExternalSystemException e) {
             LOG.info("expected exception was thrown", e);  // test passed
         }
 
@@ -542,7 +521,7 @@ public class TransformantDaoTest extends TestCase {
         try {
             dao.deleteImageLocationAndRollbackStatus(location1, USER);
             fail("duplicate image location should cause exception");
-        } catch (SystemException e) {
+        } catch (ExternalSystemException e) {
             LOG.info("expected exception was thrown", e);  // test passed
         }
 
@@ -557,7 +536,7 @@ public class TransformantDaoTest extends TestCase {
 
     private Transformant getTransformant(String transformantName,
                                          boolean isNewImageLocationNeeded)
-            throws TransformantNotFoundException, SystemException {
+            throws TransformantNotFoundException, ExternalSystemException {
         Transformant transformant =
                 dao.getTransformant(transformantName,
                                     isNewImageLocationNeeded);
