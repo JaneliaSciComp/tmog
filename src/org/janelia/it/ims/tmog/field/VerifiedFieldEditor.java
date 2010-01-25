@@ -8,6 +8,7 @@
 package org.janelia.it.ims.tmog.field;
 
 import org.janelia.it.ims.tmog.view.component.DataTable;
+import org.janelia.it.ims.tmog.view.component.DataTableKeyListener;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -50,11 +51,14 @@ public class VerifiedFieldEditor extends AbstractCellEditor
 
                 if (dataTable != table) {
                     dataTable = (DataTable) table;
-                    // remove any existing listeners
+                    // remove any existing data table listeners
                     for (KeyListener listener : textField.getKeyListeners()) {
-                        textField.removeKeyListener(listener);
+                        if (listener instanceof DataTableKeyListener) {
+                            textField.removeKeyListener(listener);
+                        }
                     }
-                    textField.addKeyListener(dataTable.getKeyListener());
+                    final KeyListener dtListener = dataTable.getKeyListener();
+                    textField.addKeyListener(dtListener);
                 }
 
                 verifiedFieldModel = (VerifiedFieldModel) value;
