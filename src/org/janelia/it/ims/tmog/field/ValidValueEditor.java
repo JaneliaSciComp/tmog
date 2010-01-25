@@ -8,6 +8,7 @@
 package org.janelia.it.ims.tmog.field;
 
 import org.janelia.it.ims.tmog.view.component.DataTable;
+import org.janelia.it.ims.tmog.view.component.DataTableKeyListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,11 +44,15 @@ public class ValidValueEditor extends DefaultCellEditor {
 
             if (dataTable != table) {
                 dataTable = (DataTable) table;                
-                // remove any existing listeners
+                // remove any existing data table listeners
+                // (leave ui listener alone or combo box key selection fails)
                 for (KeyListener listener : editorComboBox.getKeyListeners()) {
-                    editorComboBox.removeKeyListener(listener);
+                    if (listener instanceof DataTableKeyListener) {
+                        editorComboBox.removeKeyListener(listener);
+                    }
                 }
-                editorComboBox.addKeyListener(dataTable.getKeyListener());
+                final KeyListener dtListener = dataTable.getKeyListener();
+                editorComboBox.addKeyListener(dtListener);
             }
 
             model = (ValidValueModel) value;

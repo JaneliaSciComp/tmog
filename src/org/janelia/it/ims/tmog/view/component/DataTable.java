@@ -35,7 +35,6 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -73,6 +72,9 @@ public class DataTable extends JTable {
             VerifiedFieldModel.class,
             DataFieldGroupModel.class
     };
+
+    /** The listener for this table's keyboard shortcuts. */
+    private KeyListener keyListener;
 
     /**
      * Constructs an empty data table.
@@ -391,35 +393,10 @@ public class DataTable extends JTable {
      *         for editing this table's cells.
      */
     public KeyListener getKeyListener() {
-        return new KeyAdapter() {
-            public void keyReleased(KeyEvent e) {
-                int code = e.getKeyCode();
-                // only check for control keys when a cell is being edited
-                if (e.isControlDown() && (cellEditor != null)) {
-                    if (code == KeyEvent.VK_D) {
-                        if (cellEditor.stopCellEditing()) {
-                            TransmogrifierTableModel model =
-                                    (TransmogrifierTableModel) getModel();
-                            int row = getSelectedRow();
-                            int column = getSelectedColumn();
-                            model.fillDown(row, column);
-                            changeSelection(row, column, false, false);
-                        }
-                    } else if (code == KeyEvent.VK_R) {
-                        cellEditor.cancelCellEditing();
-                        TransmogrifierTableModel model =
-                                (TransmogrifierTableModel) getModel();
-                        int row = getSelectedRow();
-                        int column = getSelectedColumn();
-                        int previousRow = row - 1;
-                        if (previousRow >= 0) {
-                            model.copyRow(previousRow, row);
-                            changeSelection(row, column, false, false);
-                        }
-                    }
-                }
-            }
-        };
+        if (keyListener == null) {
+            keyListener = new DataTableKeyListener(this);
+        }
+        return keyListener;
     }
 
     /**
