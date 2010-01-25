@@ -37,7 +37,7 @@
                 <property name="created_by" value="Imager"/>
                 <property name="renamed_by" value="Renamer"/>
                 <property name="class" value="Class"/>
-                <property name="ihc_batch_name" value="Batch Name"/>
+                <property name="ihc_batch" value="Batch Name"/>
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
