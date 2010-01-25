@@ -70,18 +70,19 @@
             <validValueList displayName="Stimulus 1 Type" required="true"
                             suffix="_">
                 <sourceFileDefault pattern=".*@([^\$]+?)\$.*@.*"/>
-                <validValue displayName="puff" value="p"/>
-                <validValue displayName="buzz" value="b"/>
-                <validValue displayName="green" value="green"/>
-                <validValue displayName="blue" value="blue"/>
-                <validValue displayName="light" value="light"/>
-                <validValue displayName="pinch" value="pinch"/>
-                <validValue displayName="hot" value="hot"/>
-                <validValue displayName="cold" value="cold"/>
-                <validValue displayName="hole" value="hole"/>
-                <validValue displayName="scratch" value="scratch"/>
-                <validValue displayName="chr: channel rhodopsin" value="chr"/>
-                <validValue displayName="none" value="n"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="z: buzz" value="z"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="b: blue" value="b"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n"/>
             </validValueList>
 
             <text displayName="Stimulus 1 Specs" required="true"
@@ -174,10 +175,19 @@
             <validValueList displayName="Stimulus 1 Type" required="true"
                             suffix="_">
                 <sourceFileDefault pattern=".*@([^_]+?)_.*#.*#.*#.*@.*"/>
-                <validValue displayName="puff" value="p"/>
-                <validValue displayName="buzz" value="b"/>
-                <validValue displayName="chr: channel rhodopsin" value="chr"/>
-                <validValue displayName="none" value="n"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="z: buzz" value="z"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="b: blue" value="b"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n"/>
             </validValueList>
 
             <text displayName="Stimulus 1 Specs" required="true"
@@ -195,10 +205,19 @@
             <validValueList displayName="Stimulus 2 Type" required="false"
                             suffix="_">
                 <sourceFileDefault pattern=".*#([^_]+?)_.*#.*#.*@.*"/>
-                <validValue displayName="puff" value="p"/>
-                <validValue displayName="buzz" value="b"/>
-                <validValue displayName="chr: channel rhodopsin" value="chr"/>
-                <validValue displayName="none" value="n"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="z: buzz" value="z"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="b: blue" value="b"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n"/>
             </validValueList>
 
             <text displayName="Stimulus 2 Specs" required="false"
@@ -216,10 +235,19 @@
             <validValueList displayName="Stimulus 3 Type" required="false"
                             suffix="_">
                 <sourceFileDefault pattern=".*#.*#([^_]+?)_.*#.*@.*"/>
-                <validValue displayName="puff" value="p"/>
-                <validValue displayName="buzz" value="b"/>
-                <validValue displayName="chr: channel rhodopsin" value="chr"/>
-                <validValue displayName="none" value="n"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="z: buzz" value="z"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="b: blue" value="b"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n"/>
             </validValueList>
 
             <text displayName="Stimulus 3 Specs" required="false"
@@ -237,10 +265,19 @@
             <validValueList displayName="Stimulus 4 Type" required="false"
                             suffix="_">
                 <sourceFileDefault pattern=".*#.*#.*#([^_]+?)_.*@.*"/>
-                <validValue displayName="puff" value="p"/>
-                <validValue displayName="buzz" value="b"/>
-                <validValue displayName="chr: channel rhodopsin" value="chr"/>
-                <validValue displayName="none" value="n"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="z: buzz" value="z"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="b: blue" value="b"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n"/>
             </validValueList>
 
             <text displayName="Stimulus 4 Specs" required="false"
