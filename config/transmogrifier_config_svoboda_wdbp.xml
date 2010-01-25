@@ -16,6 +16,8 @@
         <outputDirectory>
             <!--<path path="/Users/trautmane/Desktop/whisker/wdbp/" />-->
             <path path="\\dm10.isln.janelia.org\wdbp\unprocessed\" />
+            <renameFieldValue fieldDisplayName="Experimenter" />
+            <path path="/" />
             <renameFieldValue fieldDisplayName="Animal ID" />
             <path path="/" />
             <renameFieldValue fieldDisplayName="Experiment Date" suffix="-" />
@@ -59,7 +61,7 @@
 
             <text displayName="Session ID"
                   required="true"
-                  sharedForAllSessionFiles="true"
+                  sharedForAllSessionFiles="false"
                   suffix="_">
                 <sourceFileDefault pattern=".*_\d{4}_\d{2}_\d{2}_([^_]++).*"
                                    matchType="name"/>
@@ -85,6 +87,8 @@
                 <validValue displayName="Dan O'Connor" value="oconnord"/>
                 <validValue displayName="Leopoldo Petreanu" value="petreanul"/>
                 <validValue displayName="Simon Peron" value="perons"/>
+                <validValue displayName="Ning-long Xu" value="xun"/>
+                <validValue displayName="Andrew Hires" value="sahires"/>
             </validValueList>
 
             <validValueList displayName="Experiment Location"
@@ -95,6 +99,7 @@
                 <validValue value="rig 2 in 2W.333"/>
             </validValueList>
 
+            
             <text displayName="Whiskers Present"
                   required="true"
                   markedForTask="false"/>
