@@ -9,8 +9,8 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <!--<outputDirectory basePath="\\dm10.isln.janelia.org\rubindata\confocalStacks"-->
-                         <!--derivedFromEarliestModifiedFile="true"/>-->
+        <outputDirectory basePath="\\dm10.isln.janelia.org\rubindata\confocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
 
@@ -40,9 +40,9 @@
                 <property name="ihc_batch_name" value="Batch Name"/>
             </rowListener>
 
-            <!--<sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">-->
-                <!--<property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\GMR"/>-->
-            <!--</sessionListener>-->
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\GMR"/>
+            </sessionListener>
 
         </plugins>
 
