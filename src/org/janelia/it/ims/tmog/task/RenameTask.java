@@ -180,27 +180,37 @@ public class RenameTask extends SimpleTask {
         File rowFile = currentRow.getFromFile();
         File renamedFile = currentRow.getRenamedFile();
 
-        // perform the actual copy and rename
-        try {
-            SafeFileTransfer.copy(rowFile, renamedFile, false);
-            if (outputDirConfig.isFileModeReadOnly()) {
-                boolean isReadOnlySet = false;
-                try {
-                    isReadOnlySet = renamedFile.setReadOnly();
-                } catch (Exception e) {
-                    LOG.warn("Faied to set read only permissions for " +
-                             renamedFile.getAbsolutePath() +
-                             " - ignoring exception", e);
+        if (currentRow.isOverwriteRequiredForRename()) {
+
+            LOG.error(renamedFile.getAbsolutePath() +
+                      " already exists.  Skipping copy of " +
+                      rowFile.getAbsolutePath());
+
+        } else {
+
+            // perform the actual copy and rename
+            try {
+                SafeFileTransfer.copy(rowFile, renamedFile, false);
+                if (outputDirConfig.isFileModeReadOnly()) {
+                    boolean isReadOnlySet = false;
+                    try {
+                        isReadOnlySet = renamedFile.setReadOnly();
+                    } catch (Exception e) {
+                        LOG.warn("Faied to set read only permissions for " +
+                                 renamedFile.getAbsolutePath() +
+                                 " - ignoring exception", e);
+                    }
+                    if (! isReadOnlySet) {
+                        LOG.warn("Faied to set read only permissions for " +
+                                 renamedFile.getAbsolutePath());
+                    }
                 }
-                if (! isReadOnlySet) {
-                    LOG.warn("Faied to set read only permissions for " +
-                             renamedFile.getAbsolutePath());
-                }
+                renameSuccessful = true;
+            } catch (FileCopyFailedException e) {
+                LOG.error("Failed to copy " + rowFile.getAbsolutePath() +
+                          " to " + renamedFile.getAbsolutePath(), e);
             }
-            renameSuccessful = true;
-        } catch (FileCopyFailedException e) {
-            LOG.error("Failed to copy " + rowFile.getAbsolutePath() +
-                      " to " + renamedFile.getAbsolutePath(), e);
+
         }
 
         return renameSuccessful;
@@ -241,7 +251,10 @@ public class RenameTask extends SimpleTask {
             // it isn't the same as the source file
             if ((renamedFile != null) &&
                 renamedFile.exists() &&
-                (!renamedFile.equals(rowFile))) {
+                (!renamedFile.equals(rowFile)) &&
+                (! currentRow.isOverwriteRequiredForRename())) {
+                LOG.warn("Removing " + renamedFile.getAbsolutePath() +
+                         " after rename failed.");
                 deleteFile(renamedFile, "failed");
             }
         }

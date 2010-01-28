@@ -30,6 +30,8 @@ public class RenamePluginDataRow extends PluginDataRow {
     /** The renamed file. */
     private File renamedFile;
 
+    private boolean overwriteRequiredForRename;
+    
     /**
      * Constructs a copy complete information object.
      *
@@ -44,6 +46,7 @@ public class RenamePluginDataRow extends PluginDataRow {
         super(dataRow);
         this.fromFile = fromFile;
         this.outputDirectory = outputDirectory;
+        this.overwriteRequiredForRename = false;
     }
 
     /**
@@ -68,6 +71,14 @@ public class RenamePluginDataRow extends PluginDataRow {
             setRenamedFile();
         }
         return renamedFile;
+    }
+
+    /**
+     * @return true if renaming this file will overwrite an existing file;
+     *         otherwise false.
+     */
+    public boolean isOverwriteRequiredForRename() {
+        return overwriteRequiredForRename;
     }
 
     /**
@@ -119,5 +130,6 @@ public class RenamePluginDataRow extends PluginDataRow {
             }
         }
         renamedFile = new File(outputDirectory, fileName.toString());
+        overwriteRequiredForRename = renamedFile.exists();
     }
 }
