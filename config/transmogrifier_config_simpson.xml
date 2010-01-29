@@ -19,7 +19,7 @@
 
         <plugins>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm8.int.janelia.org\simpsonmicro\tmog\summaries"/>
+                <property name="directory" value="\\dm8.int.janelia.org\simpsonmicro\tmog\summaries\LexA"/>
             </sessionListener>
         </plugins>
 
@@ -45,12 +45,6 @@
                 <validValue displayName="t: Thorax" value="t"/>
             </validValueList>
 
-            <text displayName="L-Number" required="false" prefix="_L"
-                  pattern="[0-9]++" copyable="false">
-                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>
-                <sourceFileDefault pattern=".*_L([0-9]++)\.lsm"/>
-            </text>
-
             <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
 
             <fileExtension/>
@@ -75,7 +69,7 @@
                 <property name="Specimen Number" value="urn:lsid:janelia.org:simpson_lab_line_specimen:${Line}${'_'Insertion Number}" />
             </rowListener>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm8.int.janelia.org\simpsonmicro\tmog\summaries"/>
+                <property name="directory" value="\\dm8.int.janelia.org\simpsonmicro\tmog\summaries\GAL4"/>
             </sessionListener>
         </plugins>
 
@@ -132,7 +126,7 @@
                 <property name="Specimen Number" value="urn:lsid:janelia.org:simpson_lab_line_specimen:${Line}${'_'Insertion Number}" />
             </rowListener>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm8.int.janelia.org\simpsonmicro\tmog\summaries"/>
+                <property name="directory" value="\\dm8.int.janelia.org\simpsonmicro\tmog\summaries\GAL4"/>
             </sessionListener>
         </plugins>
         <dataFields>
