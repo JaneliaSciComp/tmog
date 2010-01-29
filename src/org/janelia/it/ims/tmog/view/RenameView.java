@@ -49,7 +49,8 @@ public class RenameView implements SessionView, InputSelectionView {
     private JButton lsmDirectoryBtn;
     private InputSelectionHandler inputSelectionHandler;
     private JButton outputDirectoryBtn;
-    private JLabel outputDirectoryField;
+    private JScrollPane outputDirectoryPane;
+    private JTextArea outputDirectoryField;
     private JPanel appPanel;
     @SuppressWarnings({"UnusedDeclaration"})
     private JPanel directoryPanel;
@@ -196,6 +197,8 @@ public class RenameView implements SessionView, InputSelectionView {
         OutputDirectoryConfiguration odCfg = projectConfig.getOutputDirectory();
         boolean isManuallyChosen = odCfg.isManuallyChosen();
         outputDirectoryBtn.setVisible(isManuallyChosen);
+        outputDirectoryField.setBackground(directoryPanel.getBackground());
+        outputDirectoryPane.setBorder(null);
 
         if (isManuallyChosen) {
             outputDirectoryBtn.addActionListener(new ActionListener() {
@@ -252,7 +255,7 @@ public class RenameView implements SessionView, InputSelectionView {
             task = new RenameWithoutDeleteTask(
                     tableModel,
                     projectConfig.getOutputDirectory(),
-                    outputDirectoryField.getText());            
+                    outputDirectoryField.getText());
         } else {
             task = new RenameTask(tableModel,
                                   projectConfig.getOutputDirectory(),
