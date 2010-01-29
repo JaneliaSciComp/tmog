@@ -43,9 +43,9 @@
             <separator value="_"/>
 
             <validValueList displayName="Organ" required="true">
-                <validValue displayName="B: Brain" value="B"/>
-                <validValue displayName="L: Larva" value="L"/>
-                <validValue displayName="T: Thorax" value="T"/>
+                <validValue displayName="b: Brain" value="b"/>
+                <validValue displayName="l: Larva" value="l"/>
+                <validValue displayName="t: Thorax" value="t"/>
             </validValueList>
 
             <text displayName="L-Number" required="false" prefix="_L"
