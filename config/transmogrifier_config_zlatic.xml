@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.2.9"/>
+    <global minimumVersion="2.3.6"/>
 
     <project name="Zlatic Lab: ChaCRM verified Lines" default="true">
 
