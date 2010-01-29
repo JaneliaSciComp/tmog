@@ -46,7 +46,7 @@ public class CollectorView implements SessionView, InputSelectionView {
     private JPanel directoryPanel;
     @SuppressWarnings({"UnusedDeclaration"})
     private JPanel dataPanel;
-    private JLabel rootDirectoryField;
+    private JTextArea rootDirectoryField;
     private JButton rootDirectoryBtn;
     private JLabel projectLabel;
     private JButton saveBtn;
@@ -54,6 +54,7 @@ public class CollectorView implements SessionView, InputSelectionView {
     private JProgressBar taskProgressBar;
     private DataTable dataTable;
     private JButton cancelTargetWorkerButton;
+    private JScrollPane rootDirectoryPane;
 
     private ProjectConfiguration projectConfig;
     private File defaultDirectory;

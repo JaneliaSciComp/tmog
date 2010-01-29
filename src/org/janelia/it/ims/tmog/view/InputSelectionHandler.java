@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class InputSelectionHandler {
 
-    private JLabel directoryField;
+    private JTextArea directoryField;
     private JButton setDirectoryButton;
     private JButton cancelButton;
     private int selectionMode;
@@ -62,7 +62,7 @@ public class InputSelectionHandler {
      */
     public InputSelectionHandler(ProjectConfiguration projectConfig,
                                  File defaultDirectory,
-                                 JLabel directoryField,
+                                 JTextArea directoryField,
                                  JButton setDirectoryButton,
                                  JButton cancelButton,
                                  int selectionMode,

@@ -45,8 +45,10 @@ import java.util.List;
  */
 public class RenameView implements SessionView, InputSelectionView {
 
-    private JLabel lsmDirectoryField;
+    private JTextArea projectName;
     private JButton lsmDirectoryBtn;
+    private JScrollPane lsmDirectoryPane;
+    private JTextArea lsmDirectoryField;
     private InputSelectionHandler inputSelectionHandler;
     private JButton outputDirectoryBtn;
     private JScrollPane outputDirectoryPane;
@@ -60,8 +62,8 @@ public class RenameView implements SessionView, InputSelectionView {
     private DataTable dataTable;
     private JProgressBar copyProgressBar;
     private JLabel copyProgressLabel;
-    private JLabel projectLabel;
     private JButton cancelInputSearch;
+    private JScrollPane projectNamePane;
     private DataTableModel tableModel;
     private ProjectConfiguration projectConfig;
     private RenameTask task;
@@ -71,7 +73,7 @@ public class RenameView implements SessionView, InputSelectionView {
                       File lsmDirectory,
                       JTabbedPane parentTabbedPane) {
         this.projectConfig = projectConfig;
-        this.projectLabel.setText(projectConfig.getName());
+        this.projectName.setText(projectConfig.getName());
 
 
         this.inputSelectionHandler =
@@ -83,6 +85,13 @@ public class RenameView implements SessionView, InputSelectionView {
                                           JFileChooser.FILES_AND_DIRECTORIES,
                                           "Select Source",
                                           this);
+
+        projectName.setBackground(directoryPanel.getBackground());
+        projectNamePane.setBorder(null);
+        
+        lsmDirectoryField.setBackground(directoryPanel.getBackground());
+        lsmDirectoryPane.setBorder(null);
+
         setupOutputDirectory();
         setupTaskComponents(parentTabbedPane);
     }
