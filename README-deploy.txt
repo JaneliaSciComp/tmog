@@ -50,7 +50,7 @@ are deployed for the following lab groups:
   leet             /groups/leet/leetconfocal/tmog/config
   rubin (ChaCRM)   /groups/rubin/data1/rubinlab/tmog/config
   rubin (R&D)      /groups/rubin/rubinimg/tmog
-  simpson          /groups/simpson/MicroscopeData/renamer
+  simpson          /groups/simpson/MicroscopeData/tmog/config
   svoboda          /groups/svoboda/wdbp/tmog
   zlatic           /groups/zlatic/zlaticlab/tmog/config
 

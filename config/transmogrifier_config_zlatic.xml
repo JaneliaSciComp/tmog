@@ -82,7 +82,7 @@
             <separator value="@"/>
 
             <validValueList displayName="Stimulus 1 Type" required="true">
-                <sourceFileDefault pattern=".*@([^\$]+?)\$.*@.*"/>
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@([^\$]+?)\$.+?@.+?@.+?@.+?@.*"/>
                 <sourceFileDefault pattern=".*@([n])@n@n@n@.*"/>
                 <validValue displayName="p: puff" value="p"/>
                 <validValue displayName="b: buzz" value="b"/>
@@ -101,16 +101,104 @@
 
             <text displayName="Stimulus 1 Specs" required="false"
                   pattern="[0-9A-Za-z]++" prefix="_">
-                <sourceFileDefault pattern=".*@[^\$]+?\$([^\$]+?)\$.*@.*"/>
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$.+?@.+?@.+?@.+?@.*"/>
             </text>
 
             <text displayName="Stimulus 1 Times" required="false"
                   pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
                   prefix="_">
-                <sourceFileDefault pattern=".*\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.*"/>
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.+?@.+?@.+?@.*"/>
             </text>
 
-            <separator value="#n#n#n"/>
+            <separator value="#"/>
+
+            <validValueList displayName="Stimulus 2 Type" required="true">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@([^\$]+?)\$.+?@.+?@.+?@.*"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="b: buzz" value="b"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="a: blue" value="a"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n" default="true"/>
+            </validValueList>
+
+            <text displayName="Stimulus 2 Specs" required="false"
+                  pattern="[0-9A-Za-z]++" prefix="_">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$.+?@.+?@.+?@.*"/>
+            </text>
+
+            <text displayName="Stimulus 2 Times" required="false"
+                  pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
+                  prefix="_">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.+?@.+?@.*"/>
+            </text>
+
+            <separator value="#"/>
+
+            <validValueList displayName="Stimulus 3 Type" required="true">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@([^\$]+?)\$.+?@.+?@.*"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="b: buzz" value="b"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="a: blue" value="a"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n" default="true"/>
+            </validValueList>
+
+            <text displayName="Stimulus 3 Specs" required="false"
+                  pattern="[0-9A-Za-z]++" prefix="_">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$.+?@.+?@.*"/>
+            </text>
+
+            <text displayName="Stimulus 3 Times" required="false"
+                  pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
+                  prefix="_">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.+?@.*"/>
+            </text>
+
+            <separator value="#"/>
+
+            <validValueList displayName="Stimulus 4 Type" required="true">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?@([^\$]+?)\$.+?@.*"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="b: buzz" value="b"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="a: blue" value="a"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n" default="true"/>
+            </validValueList>
+
+            <text displayName="Stimulus 4 Specs" required="false"
+                  pattern="[0-9A-Za-z]++" prefix="_">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$.+?@.*"/>
+            </text>
+
+            <text displayName="Stimulus 4 Times" required="false"
+                  pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
+                  prefix="_">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.*"/>
+            </text>
 
             <separator value="@"/>
 
