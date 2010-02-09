@@ -22,7 +22,19 @@
             <renameFieldValue fieldDisplayName="Stimulus 1 Type"/>
             <renameFieldValue fieldDisplayName="Stimulus 1 Specs" prefix="_"/>
             <renameFieldValue fieldDisplayName="Stimulus 1 Times" prefix="_"/>
-            <path path="#n#n#n@"/>
+            <path path="#"/>
+            <renameFieldValue fieldDisplayName="Stimulus 2 Type"/>
+            <renameFieldValue fieldDisplayName="Stimulus 2 Specs" prefix="_"/>
+            <renameFieldValue fieldDisplayName="Stimulus 2 Times" prefix="_"/>
+            <path path="#"/>
+            <renameFieldValue fieldDisplayName="Stimulus 3 Type"/>
+            <renameFieldValue fieldDisplayName="Stimulus 3 Specs" prefix="_"/>
+            <renameFieldValue fieldDisplayName="Stimulus 3 Times" prefix="_"/>
+            <path path="#"/>
+            <renameFieldValue fieldDisplayName="Stimulus 4 Type"/>
+            <renameFieldValue fieldDisplayName="Stimulus 4 Specs" prefix="_"/>
+            <renameFieldValue fieldDisplayName="Stimulus 4 Times" prefix="_"/>
+            <path path="@"/>
             <renameFieldValue fieldDisplayName="Animal Number"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Date"/>
