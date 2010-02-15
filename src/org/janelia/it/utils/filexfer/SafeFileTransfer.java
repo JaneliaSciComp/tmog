@@ -26,8 +26,8 @@ public class SafeFileTransfer {
 
     /** The logger for this class. */
     private static final Logger LOG = Logger.getLogger(SafeFileTransfer.class);
-    private static final String DIGEST_ALGORITHM = "SHA-1";
-    private static final int BUFFER_SIZE = 100 * 1024;
+    private static final String DIGEST_ALGORITHM = "md5";
+    private static final int BUFFER_SIZE = 1000 * 1024;
 
     /**
      * If srcLocation is a directory, the whole directory will be moved.  Pretty much the
