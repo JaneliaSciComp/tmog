@@ -119,7 +119,7 @@
             <text displayName="Stimulus 1 Times" required="false"
                   pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
                   prefix="_">
-                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.+?@.+?@.+?@.*"/>
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?\$.+?\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.+?@.+?@.+?@.*"/>
             </text>
 
             <separator value="#"/>
@@ -149,7 +149,7 @@
             <text displayName="Stimulus 2 Times" required="false"
                   pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
                   prefix="_">
-                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.+?@.+?@.*"/>
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?\$.+?\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.+?@.+?@.*"/>
             </text>
 
             <separator value="#"/>
@@ -179,7 +179,7 @@
             <text displayName="Stimulus 3 Times" required="false"
                   pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
                   prefix="_">
-                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.+?@.*"/>
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?\$.+?\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.+?@.*"/>
             </text>
 
             <separator value="#"/>
@@ -209,7 +209,7 @@
             <text displayName="Stimulus 4 Times" required="false"
                   pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
                   prefix="_">
-                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.*"/>
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?@.+?\$.+?\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.*"/>
             </text>
 
             <separator value="@"/>
