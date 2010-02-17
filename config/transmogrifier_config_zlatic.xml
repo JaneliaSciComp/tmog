@@ -12,7 +12,7 @@
 
         <inputFileSorter sortAlgorithm="Path"/>
 
-        <outputDirectory>
+        <outputDirectory fileModeReadOnly="false">
             <path path="[\\dm4.int.janelia.org|/groups/zlatic]\zlaticlab\Data\results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
@@ -239,7 +239,7 @@
 
         <inputFileSorter sortAlgorithm="Path"/>
 
-        <outputDirectory>
+        <outputDirectory fileModeReadOnly="false">
             <path path="[\\dm4.int.janelia.org|/groups/zlatic]\zlaticlab\Data\results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
