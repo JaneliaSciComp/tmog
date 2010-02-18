@@ -221,15 +221,16 @@
 
             <validValueList displayName="Batch Color" required="true"
                             markedForTask="false">
-                <validValue value="gray"/>
-                <validValue value="pink"/>
-                <validValue value="white"/>
-                <validValue value="blue"/>
-                <validValue value="purple"/>
+                <validValue value="red"/>
                 <validValue value="tan"/>
-                <validValue value="orange"/>
-                <validValue value="yellow"/>
+                <validValue value="purple"/>
+                <validValue value="blue"/>
+                <validValue value="white"/>
+                <validValue value="pink"/>
+                <validValue value="gray"/>
                 <validValue value="green"/>
+                <validValue value="yellow"/>
+                <validValue value="orange"/>
             </validValueList>
 
             <pluginData displayName="Batch Name" markedForTask="false" />
