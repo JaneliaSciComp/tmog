@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.config;
@@ -37,6 +37,7 @@ public class ProjectConfiguration {
     private InputFileFilter inputFileFilter;
     private InputFileSorter inputFileSorter;
     private OutputDirectoryConfiguration outputDirectoryConfiguration;
+    private FileTransferConfiguration fileTransferConfiguration;
     private PluginFactory pluginFactory;
 
     public ProjectConfiguration() {
@@ -45,6 +46,7 @@ public class ProjectConfiguration {
         this.inputFileFilter = new InputFileFilter();
         this.inputFileSorter = new InputFileSorter();
         this.outputDirectoryConfiguration = new OutputDirectoryConfiguration();
+        this.fileTransferConfiguration = new FileTransferConfiguration();
     }
 
     public String getName() {
@@ -88,6 +90,10 @@ public class ProjectConfiguration {
         return outputDirectoryConfiguration;
     }
 
+    public FileTransferConfiguration getFileTransfer() {
+        return fileTransferConfiguration;
+    }
+
     public List<RowListener> getRowListeners() {
         List<RowListener> listeners;
         if (pluginFactory != null) {
@@ -118,14 +124,17 @@ public class ProjectConfiguration {
         return listeners;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setName(String name) {
         this.name = name;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setDefault(boolean aDefault) {
         isDefault = aDefault;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setTaskName(String taskName) {
         this.taskName = taskName;
     }
@@ -134,18 +143,27 @@ public class ProjectConfiguration {
         this.dataFields = dataFields;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setInputFileFilter(InputFileFilter inputFileFilter) {
         this.inputFileFilter = inputFileFilter;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setInputFileSorter(InputFileSorter inputFileSorter) {
         this.inputFileSorter = inputFileSorter;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setOutputDirectory(OutputDirectoryConfiguration outputDirectoryConfiguration) {
         this.outputDirectoryConfiguration = outputDirectoryConfiguration;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
+    public void setFileTransfer(FileTransferConfiguration fileTransferConfiguration) {
+        this.fileTransferConfiguration = fileTransferConfiguration;
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setPluginFactory(PluginFactory pluginFactory) {
         this.pluginFactory = pluginFactory;
     }
@@ -177,6 +195,8 @@ public class ProjectConfiguration {
                     name + " project.");
         }
         outputDirectoryConfiguration.verify(name, dataFields.getFields());
+
+        fileTransferConfiguration.verify();
 
         if (pluginFactory != null) {
             pluginFactory.constructInstances(name);

@@ -1,5 +1,12 @@
 <?xml version="1.0"?>
 
+<!--
+  ~ Copyright (c) 2010 Howard Hughes Medical Institute.
+  ~ All rights reserved.
+  ~ Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+  ~ license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
+  -->
+
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xs:complexType name="inputFileFilterType">
@@ -25,6 +32,23 @@
         <xs:attribute name="basePath" type="xs:string"/>
         <xs:attribute name="derivedFromEarliestModifiedFile" type="xs:boolean"/>
         <xs:attribute name="fileModeReadOnly" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="fileTransferType">
+        <xs:attribute name="bufferSize" type="xs:positiveInteger"/>
+        <xs:attribute name="digestAlgorithm">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="none"/>
+                    <xs:enumeration value="adler32"/>
+                    <xs:enumeration value="crc32"/>
+                    <xs:enumeration value="md5"/>
+                    <xs:enumeration value="sha1"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="validationRequired" type="xs:boolean"/>
+        <xs:attribute name="nioRequired" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="pathType">
@@ -311,6 +335,8 @@
 
             <xs:element name="outputDirectory" type="outputDirectoryType" minOccurs="0"/>
 
+            <xs:element name="fileTransfer" type="fileTransferType" minOccurs="0"/>
+
             <xs:element name="plugins" type="pluginsType" minOccurs="0"/>
 
             <xs:element name="dataFields" type="dataFieldsType" maxOccurs="1"/>
@@ -318,7 +344,15 @@
         </xs:sequence>
         <xs:attribute name="name" type="xs:string"/>
         <xs:attribute name="default" type="xs:boolean"/>
-        <xs:attribute name="taskName" type="xs:string"/>
+        <xs:attribute name="taskName">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="rename"/>
+                    <xs:enumeration value="rename-without-delete"/>
+                    <xs:enumeration value="collector"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
     </xs:complexType>
 
     <xs:complexType name="globalType">

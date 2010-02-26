@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+
+<!--
+  ~ Copyright (c) 2010 Howard Hughes Medical Institute.
+  ~ All rights reserved.
+  ~ Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+  ~ license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
+  -->
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="2.3.5" frameSizePercentage="95"/>
+
+    <project name="Cell Type Specific Virus Project"
+             default="true">
+
+        <inputFileFilter patternString=".*"
+                         recursiveSearch="false"/>
+
+        <outputDirectory>
+            <!--<path path="\\dm7.int.janelia.org\karpovalab\???\" />-->
+            <renameFieldValue fieldDisplayName="Species" />
+            <path path="/" />
+            <renameFieldValue fieldDisplayName="Vector ID" />
+        </outputDirectory>
+
+        <plugins>
+            <!--<rowListener className="org.janelia.it.ims.tmog.plugin.XmlWriterPlugin" />-->
+            <!--<sessionListener className="org.janelia.it.ims.tmog.plugin.RelativeSessionSummaryFileWriter"/>-->
+        </plugins>
+
+        <dataFields>
+
+            <!-- The following fields are collected
+                 AND included in the file name. -->
+
+            <validValueList displayName="Species"
+                            required="true">
+                <validValue displayName="mouse" value="mouse"/>
+                <validValue displayName="rat" value="rat"/>
+            </validValueList>
+
+            <text displayName="Animal ID"
+                  required="false">
+            </text>
+
+            <text displayName="Vector ID"
+                  pattern="AK-\d{3}\d"
+                  required="true">
+            </text>
+
+            <text displayName="Virus Lot"
+                  required="true">
+            </text>
+
+            <validValueList displayName="Virus Type"
+                            required="true">
+                <validValue displayName="eiav" value="eiav"/>
+                <validValue displayName="hiv" value="hiv"/>
+                <validValue displayName="aav" value="aav"/>
+                <validValue displayName="siv" value="siv"/>
+            </validValueList>
+
+            <validValueList displayName="Virus Pseudotype"
+                            required="false">
+                <validValue displayName="vsvg" value="vsvg"/>
+            </validValueList>
+
+            <validValueList displayName="Virus Serotype"
+                            required="false">
+                <validValue displayName="tbd" value="tbd"/>
+            </validValueList>
+
+            <validValueList displayName="Gender"
+                            required="true">
+                <validValue displayName="male" value="male"/>
+                <validValue displayName="female" value="female"/>
+                <validValue displayName="unknown" value="unknown"/>
+            </validValueList>
+
+            <validValueList displayName="Brain Region"
+                            required="true">
+                <validValue displayName="acc" value="acc"/>
+                <validValue displayName="striatum" value="striatum"/>
+                <validValue displayName="vta" value="vta"/>
+                <validValue displayName="lc" value="lc"/>
+            </validValueList>
+
+            <fieldGroup displayName="Injection">
+
+                <decimal displayName="dv Coordinate" required="false"/>
+                <decimal displayName="ml Coordinate" required="false"/>
+                <decimal displayName="ap Coordinate" required="false"/>
+
+                <number displayName="Volume"
+                        required="false"
+                        minimumValue="0"/>
+
+                <date displayName="Date"
+                      required="false"
+                      datePattern="yyyy_MM_dd">
+                </date>
+
+                <number displayName="Duration"
+                        required="false"
+                        minimumValue="0"/>
+
+            </fieldGroup>
+            
+            <fieldGroup displayName="Implant">
+
+                <validValueList displayName="Type"
+                                required="false">
+                    <validValue displayName="silicon probe" value="silicon probe"/>
+                    <validValue displayName="cannula" value="cannula"/>
+                    <validValue displayName="optical fiber" value="optical fiber"/>
+                </validValueList>
+
+                <decimal displayName="dv Coordinate" required="false"/>
+                <decimal displayName="ml Coordinate" required="false"/>
+                <decimal displayName="ap Coordinate" required="false"/>
+
+                <date displayName="Date"
+                      required="false"
+                      datePattern="yyyy_MM_dd">
+                </date>
+            </fieldGroup>
+
+            <fieldGroup displayName="Histology">
+
+                <date displayName="Date"
+                      required="true"
+                      datePattern="yyyy_MM_dd">
+                </date>
+
+                <!-- units microns -->
+                <decimal displayName="Thickness"
+                         required="true"
+                         minimumValue="0"
+                         maximumValue="5000"/>
+
+                <validValueList displayName="Objective"
+                                required="true">
+                    <validValue displayName="1x" value="1x"/>
+                    <validValue displayName="2x" value="2x"/>
+                    <validValue displayName="4x" value="4x"/>
+                    <validValue displayName="10x" value="10x"/>
+                    <validValue displayName="20x" value="20x"/>
+                    <validValue displayName="40x" value="40x"/>
+                    <validValue displayName="60x" value="60x"/>
+                    <validValue displayName="100x" value="100x"/>
+                </validValueList>
+
+                <text displayName="Filter"
+                      required="true">
+                </text>
+
+                <!-- TODO: Staining fields? -->
+            </fieldGroup>
+
+            <date displayName="Imaging Date"
+                  required="true"
+                  datePattern="yyyy_MM_dd">
+            </date>
+
+            <text displayName="Mouse Strain"
+                  required="false">
+            </text>
+
+            <validValueList displayName="In Vitro"
+                            required="true">
+                <validValue displayName="yes" value="yes"/>
+                <validValue displayName="no" value="no"/>
+            </validValueList>
+
+            <!--<runTime datePattern="_yyyyMMddHHmmssSSS"/>-->
+            <!--<fileExtension/>-->
+
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>

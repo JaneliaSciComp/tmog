@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute. 
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.task;
@@ -10,14 +10,16 @@ package org.janelia.it.ims.tmog.task;
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
+import org.janelia.it.ims.tmog.config.FileTransferConfiguration;
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 import org.janelia.it.ims.tmog.target.Target;
-import org.janelia.it.utils.filexfer.FileCopyFailedException;
+import org.janelia.it.utils.filexfer.FileTransferUtil;
 import org.janelia.it.utils.filexfer.SafeFileTransfer;
 
 import java.io.File;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
@@ -37,6 +39,16 @@ public class RenameTask extends SimpleTask {
      */
     private OutputDirectoryConfiguration outputDirConfig;
 
+    /**
+     * The file transfer configuration information for the project.
+     */
+    private FileTransferConfiguration fileTransferConfig;
+
+    /**
+     * Utility for nio file transfers.
+     */
+    private FileTransferUtil fileTransferUtil;
+    
     /**
      * The target directory for all copied files when the output configuration
      * indicates that the same directory should be used for all files
@@ -64,15 +76,28 @@ public class RenameTask extends SimpleTask {
      *
      * @param model                       data model for this rename session.
      * @param outputDirConfig             the output directory configuration.
+     * @param fileTransferConfig          the file transfer configuration.
      * @param sessionOutputDirectoryName  the session output directory name
      *                                    (for session derived configurations).
      */
     public RenameTask(DataTableModel model,
                       OutputDirectoryConfiguration outputDirConfig,
+                      FileTransferConfiguration fileTransferConfig,
                       String sessionOutputDirectoryName) {
         super(model);
 
         this.outputDirConfig = outputDirConfig;
+
+        this.fileTransferConfig = fileTransferConfig;
+        try {
+            this.fileTransferUtil =
+                    new FileTransferUtil(fileTransferConfig.getBufferSize(),
+                                         fileTransferConfig.getDigestAlgorithm());
+        } catch (NoSuchAlgorithmException e) {
+            LOG.error("failed to construct file transfer utility from config " +
+                      fileTransferConfig, e);
+        }
+
         this.sessionOutputDirectory = new File(sessionOutputDirectoryName);
 
         List<DataRow> modelRows = model.getRows();
@@ -190,23 +215,36 @@ public class RenameTask extends SimpleTask {
 
             // perform the actual copy and rename
             try {
-                SafeFileTransfer.copy(rowFile, renamedFile, false);
+                if (fileTransferConfig.isNioRequired() &&
+                    (fileTransferUtil != null)) {
+
+                    fileTransferUtil.copyAndValidate(
+                            rowFile,
+                            renamedFile,
+                            fileTransferConfig.isValidationRequired());
+
+                } else {
+
+                    SafeFileTransfer.copy(rowFile, renamedFile, false);
+
+                }
+
                 if (outputDirConfig.isFileModeReadOnly()) {
                     boolean isReadOnlySet = false;
                     try {
                         isReadOnlySet = renamedFile.setReadOnly();
                     } catch (Exception e) {
-                        LOG.warn("Faied to set read only permissions for " +
+                        LOG.warn("Failed to set read only permissions for " +
                                  renamedFile.getAbsolutePath() +
                                  " - ignoring exception", e);
                     }
                     if (! isReadOnlySet) {
-                        LOG.warn("Faied to set read only permissions for " +
+                        LOG.warn("Failed to set read only permissions for " +
                                  renamedFile.getAbsolutePath());
                     }
                 }
                 renameSuccessful = true;
-            } catch (FileCopyFailedException e) {
+            } catch (Exception e) {
                 LOG.error("Failed to copy " + rowFile.getAbsolutePath() +
                           " to " + renamedFile.getAbsolutePath(), e);
             }

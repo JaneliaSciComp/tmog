@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.config;
@@ -170,6 +170,9 @@ public class TransmogrifierConfiguration {
         createSetAndAdd("*/outputDirectory",
                         OutputDirectoryConfiguration.class,
                         "setOutputDirectory", digester);
+        createSetAndAdd("*/fileTransfer",
+                        FileTransferConfiguration.class,
+                        "setFileTransfer", digester);
         createSetAndAdd("*/outputDirectory/path",
                         Path.class,
                         "addComponent", digester);

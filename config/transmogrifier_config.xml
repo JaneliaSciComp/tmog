@@ -1,42 +1,141 @@
 <?xml version="1.0"?>
 
+<!--
+  ~ Copyright (c) 2010 Howard Hughes Medical Institute.
+  ~ All rights reserved.
+  ~ Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+  ~ license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
+  -->
+
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.2.2"/>
+    <global minimumVersion="2.4.0"/>
 
-    <project name="Test Project" default="true">
+    <project name="NIO Without Validation" default="true" taskName="rename-without-delete">
+
+        <inputFileFilter patternString=".+\.(lsm|seq|png|blob|summary)"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <outputDirectory fileModeReadOnly="false">
+            <path path="/opt/wdbp/b"/>
+        </outputDirectory>
+
+        <fileTransfer nioRequired="true" validationRequired="false"/>
+        
+        <plugins>
+        </plugins>
+
+        <dataFields>
+            <separator value="xfer_"/>
+
+            <text displayName="Name">
+                <sourceFileDefault pattern="(.*)"/>
+            </text>
+        </dataFields>
+
+    </project>
+
+    <project name="NIO With MD5" taskName="rename-without-delete">
+
+        <inputFileFilter patternString=".+\.(lsm|seq|png|blob|summary)"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <outputDirectory fileModeReadOnly="false">
+            <path path="/opt/wdbp/b"/>
+        </outputDirectory>
+
+        <fileTransfer nioRequired="true"/>
 
         <plugins>
         </plugins>
 
         <dataFields>
-            <separator value="BSB_"/>
+            <separator value="xfer_"/>
 
-            <text displayName="Line" pattern="[0-9A-Za-z\-\_]++" />
-            <text displayName="Line2" pattern="[0-9A-Za-z\-\_]++"
-                  sharedForAllSessionFiles="true"/>
+            <text displayName="Name">
+                <sourceFileDefault pattern="(.*)"/>
+            </text>
+        </dataFields>
 
-            <number displayName="Num" minimumValue="0" maximumValue="5"/>
-            <number displayName="Num2" minimumValue="0" maximumValue="5"
-                    sharedForAllSessionFiles="true"/>
+    </project>
 
-            <validValueList displayName="List" required="true"
-                            markedForTask="false">
-                <validValue displayName="jenetta" value="jenetta"/>
-                <validValue displayName="ngot" value="ngot"/>
-                <validValue displayName="trautmane" value="trautmane"/>
-            </validValueList>
-            <validValueList displayName="List2" required="true"
-                            markedForTask="false"
-                            sharedForAllSessionFiles="true">
-                <validValue displayName="jenetta" value="jenetta"/>
-                <validValue displayName="ngot" value="ngot"/>
-                <validValue displayName="trautmane" value="trautmane"/>
-            </validValueList>
-            
-            <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
-            <separator value=".lsm"/>
+    <project name="NIO With Adler" taskName="rename-without-delete">
+
+        <inputFileFilter patternString=".+\.(lsm|seq|png|blob|summary)"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <outputDirectory fileModeReadOnly="false">
+            <path path="/opt/wdbp/b"/>
+        </outputDirectory>
+
+        <fileTransfer digestAlgorithm="adler32"/>
+
+        <plugins>
+        </plugins>
+
+        <dataFields>
+            <separator value="xfer_"/>
+
+            <text displayName="Name">
+                <sourceFileDefault pattern="(.*)"/>
+            </text>
+        </dataFields>
+
+    </project>
+
+    <project name="NIO With Adler and Big Buffer" taskName="rename-without-delete">
+
+        <inputFileFilter patternString=".+\.(lsm|seq|png|blob|summary)"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <outputDirectory fileModeReadOnly="false">
+            <path path="/opt/wdbp/b"/>
+        </outputDirectory>
+
+        <fileTransfer bufferSize="10240000" digestAlgorithm="adler32"/>
+
+        <plugins>
+        </plugins>
+
+        <dataFields>
+            <separator value="xfer_"/>
+
+            <text displayName="Name">
+                <sourceFileDefault pattern="(.*)"/>
+            </text>
+        </dataFields>
+
+    </project>
+
+    <project name="Stream Transfer (old)" taskName="rename-without-delete">
+
+        <inputFileFilter patternString=".+\.(lsm|seq|png|blob|summary)"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <outputDirectory fileModeReadOnly="false">
+            <path path="/opt/wdbp/b"/>
+        </outputDirectory>
+
+        <plugins>
+        </plugins>
+
+        <dataFields>
+            <separator value="xfer_"/>
+
+            <text displayName="Name">
+                <sourceFileDefault pattern="(.*)"/>
+            </text>
         </dataFields>
 
     </project>

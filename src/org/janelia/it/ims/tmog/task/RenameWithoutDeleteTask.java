@@ -1,13 +1,14 @@
 /*
- * Copyright 2009 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.task;
 
 import org.janelia.it.ims.tmog.DataTableModel;
+import org.janelia.it.ims.tmog.config.FileTransferConfiguration;
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
 
 import java.io.File;
@@ -28,13 +29,18 @@ public class RenameWithoutDeleteTask extends RenameTask {
      *
      * @param model                       data model for this rename session.
      * @param outputDirConfig             the output directory configuration.
+     * @param fileTransferConfig          the file transfer configuration.
      * @param sessionOutputDirectoryName  the session output directory name
      *                                    (for session derived configurations).
      */
     public RenameWithoutDeleteTask(DataTableModel model,
                                    OutputDirectoryConfiguration outputDirConfig,
+                                   FileTransferConfiguration fileTransferConfig,
                                    String sessionOutputDirectoryName) {
-        super(model, outputDirConfig, sessionOutputDirectoryName);
+        super(model,
+              outputDirConfig,
+              fileTransferConfig,
+              sessionOutputDirectoryName);
     }
 
     protected void deleteFile(File file,

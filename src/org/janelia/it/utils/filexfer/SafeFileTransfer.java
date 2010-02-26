@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
+ */
+
 package org.janelia.it.utils.filexfer;
 
 import org.apache.log4j.Logger;
@@ -26,8 +33,8 @@ public class SafeFileTransfer {
 
     /** The logger for this class. */
     private static final Logger LOG = Logger.getLogger(SafeFileTransfer.class);
-    private static final String DIGEST_ALGORITHM = "md5";
-    private static final int BUFFER_SIZE = 1000 * 1024;
+    public static final String DIGEST_ALGORITHM = "md5";
+    public static final int BUFFER_SIZE = 1024 * 1024;
 
     /**
      * If srcLocation is a directory, the whole directory will be moved.  Pretty much the
@@ -100,7 +107,7 @@ public class SafeFileTransfer {
             throws FileCopyFailedException{
 
         if (LOG.isInfoEnabled()) {
-            LOG.info("starting copy of " + srcLocation.getAbsolutePath() + 
+            LOG.info("starting copy of " + srcLocation.getAbsolutePath() +
                      " to " + destLocation.getAbsolutePath());
         }
 
@@ -109,11 +116,19 @@ public class SafeFileTransfer {
              if (!overWriteExisting && destLocation.exists()) throw new FileCopyFailedException("Destination "+destLocation+" exists!");
              destLocation.getParentFile().mkdirs();
              if (overWriteExisting && destLocation.exists()) destLocation.delete();
+             final long copyStartTime = System.currentTimeMillis();
              byte[] hashCode=recursiveCopy(srcLocation,destLocation);
+             final long valStartTime = System.currentTimeMillis();
              boolean success=recursiveHashValidation(destLocation, hashCode);
+             final long valStopTime = System.currentTimeMillis();
              if (success) {
                  if (LOG.isInfoEnabled()) {
-                     logCopyStats(hashCode, srcLocation, destLocation);
+                     final double copyDurationSeconds =
+                             (valStartTime - copyStartTime) / 1000.0;
+                     final double valDurationSeconds =
+                             (valStopTime - valStartTime) / 1000.0;
+                     logCopyStats(hashCode, srcLocation, destLocation,
+                                  copyDurationSeconds, valDurationSeconds);
                  }
              } else {
                  destLocation.delete();
@@ -188,7 +203,7 @@ public class SafeFileTransfer {
         return true;
     }
 
-    static private void recursiveHashValidationHelper(File srcLocation,MessageDigest digest)
+    static protected void recursiveHashValidationHelper(File srcLocation,MessageDigest digest)
         throws IOException {
         if (srcLocation.isDirectory()){
            File[] files=srcLocation.listFiles();
@@ -332,7 +347,9 @@ public class SafeFileTransfer {
 
     private static void logCopyStats(byte[] hashCode,
                                      File srcLocation,
-                                     File destLocation) {
+                                     File destLocation,
+                                     double copyDurationSeconds,
+                                     double validationDurationSeconds) {
         StringBuilder sb =
                 new StringBuilder(hashCode.length + 256);
         sb.append("Successfully copied ");
@@ -342,74 +359,19 @@ public class SafeFileTransfer {
         if (! srcLocation.isDirectory()) {
             sb.append(".  A total of ");
             sb.append(srcLocation.length());
-            sb.append(" bytes were copied");
+            sb.append(" bytes were copied in ");
+            sb.append(copyDurationSeconds);
+            sb.append(" seconds");
         }
         sb.append(".  Verified ");
         sb.append(DIGEST_ALGORITHM);
-        sb.append(" digest is: ");
+        sb.append(" digest ");
         for (byte b : hashCode) {
             sb.append(b);
         }
+        sb.append(" was calculated in ");
+        sb.append(validationDurationSeconds);
+        sb.append(" seconds.");
         LOG.info(sb.toString());
     }
-
-//    /**
-//     * Sample code to use FileChannel objects for copy.
-//     */
-//    private static boolean copyFileChannel(File fromFile,
-//                                           File toFile)
-//            throws IOException, NoSuchAlgorithmException {
-//        boolean isSuccessful = false;
-//        FileInputStream fromStream = null;
-//        FileChannel fromChannel = null;
-//        FileOutputStream toStream = null;
-//        FileChannel toChannel = null;
-//        byte[] fromDigest = new byte[0];
-//        try {
-//            fromStream = new FileInputStream(fromFile);
-//            fromChannel = fromStream.getChannel();
-//            fromDigest = digest(fromChannel);
-//            toStream = new FileOutputStream(toFile);
-//            toChannel = toStream.getChannel();
-//
-//            // This loop works around a 'bug' with channel transfers
-//            // of large files on Windows.
-//            // See http://forum.java.sun.com/thread.jspa?threadID=439695&messageID=2917510
-//            // for details.
-//            int maxCount = (64 * 1024 * 1024) - (32 * 1024);
-//            long size = fromChannel.size();
-//            long position = 0;
-//            while (position < size) {
-//                position += fromChannel.transferTo(position, maxCount, toChannel);
-//            }
-//        } finally {
-//            Closeable[] streams = new Closeable[] {fromStream, toStream};
-//            for (Closeable stream : streams) {
-//                if (stream != null) {
-//                    try {
-//                        stream.close();
-//                    } catch (IOException e) {
-//                        LOG.error("close failed", e);
-//                    }
-//                }
-//            }
-//        }
-//
-//        isSuccessful = recursiveHashValidation(toFile, fromDigest);
-//
-//        return isSuccessful;
-//    }
-//
-//    /**
-//     * Taken from http://blogs.sun.com/andreas/entry/hashing_a_file_in_3
-//     */
-//    private static byte[] digest(FileChannel channel)
-//            throws NoSuchAlgorithmException, IOException {
-//        ByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY,
-//                                        0,
-//                                        channel.size());
-//        MessageDigest md = MessageDigest.getInstance(DIGEST_ALGORITHM);
-//        md.update(buffer.duplicate());
-//        return md.digest();
-//    }
 }
