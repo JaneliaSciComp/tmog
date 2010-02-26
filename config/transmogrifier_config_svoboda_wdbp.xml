@@ -14,8 +14,9 @@
     <global minimumVersion="2.4.0" frameSizePercentage="95"/>
 
     <project name="Whisker-Dependent Behavior Project"
+             default="true"
              taskName="rename-without-delete"
-             default="true">
+             copyPreviousButtonVisible="false">
 
         <inputFileFilter patternString=".+\.seq"
                          recursiveSearch="true"/>

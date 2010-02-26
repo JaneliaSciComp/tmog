@@ -353,6 +353,7 @@
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
+        <xs:attribute name="copyPreviousButtonVisible" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="globalType">

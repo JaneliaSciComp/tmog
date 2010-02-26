@@ -12,44 +12,17 @@
 
     <global minimumVersion="2.4.0"/>
 
-    <project name="NIO Without Validation" default="true" taskName="rename-without-delete">
+    <project name="Copy Button"
+             default="true"
+             taskName="rename-without-delete">
 
-        <inputFileFilter patternString=".+\.(lsm|seq|png|blob|summary)"
-                         recursiveSearch="true"/>
-
-        <inputFileSorter sortAlgorithm="Path"/>
-
-        <outputDirectory fileModeReadOnly="false">
-            <path path="/opt/wdbp/b"/>
-        </outputDirectory>
-
-        <fileTransfer nioRequired="true" validationRequired="false"/>
-        
-        <plugins>
-        </plugins>
-
-        <dataFields>
-            <separator value="xfer_"/>
-
-            <text displayName="Name">
-                <sourceFileDefault pattern="(.*)"/>
-            </text>
-        </dataFields>
-
-    </project>
-
-    <project name="NIO With MD5" taskName="rename-without-delete">
-
-        <inputFileFilter patternString=".+\.(lsm|seq|png|blob|summary)"
-                         recursiveSearch="true"/>
+        <inputFileFilter patternString=".+\.*"/>
 
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
             <path path="/opt/wdbp/b"/>
         </outputDirectory>
-
-        <fileTransfer nioRequired="true"/>
 
         <plugins>
         </plugins>
@@ -64,62 +37,11 @@
 
     </project>
 
-    <project name="NIO With Adler" taskName="rename-without-delete">
+    <project name="No Copy Button"
+             taskName="rename-without-delete"
+             copyPreviousButtonVisible="false">
 
-        <inputFileFilter patternString=".+\.(lsm|seq|png|blob|summary)"
-                         recursiveSearch="true"/>
-
-        <inputFileSorter sortAlgorithm="Path"/>
-
-        <outputDirectory fileModeReadOnly="false">
-            <path path="/opt/wdbp/b"/>
-        </outputDirectory>
-
-        <fileTransfer digestAlgorithm="adler32"/>
-
-        <plugins>
-        </plugins>
-
-        <dataFields>
-            <separator value="xfer_"/>
-
-            <text displayName="Name">
-                <sourceFileDefault pattern="(.*)"/>
-            </text>
-        </dataFields>
-
-    </project>
-
-    <project name="NIO With Adler and Big Buffer" taskName="rename-without-delete">
-
-        <inputFileFilter patternString=".+\.(lsm|seq|png|blob|summary)"
-                         recursiveSearch="true"/>
-
-        <inputFileSorter sortAlgorithm="Path"/>
-
-        <outputDirectory fileModeReadOnly="false">
-            <path path="/opt/wdbp/b"/>
-        </outputDirectory>
-
-        <fileTransfer bufferSize="10240000" digestAlgorithm="adler32"/>
-
-        <plugins>
-        </plugins>
-
-        <dataFields>
-            <separator value="xfer_"/>
-
-            <text displayName="Name">
-                <sourceFileDefault pattern="(.*)"/>
-            </text>
-        </dataFields>
-
-    </project>
-
-    <project name="Stream Transfer (old)" taskName="rename-without-delete">
-
-        <inputFileFilter patternString=".+\.(lsm|seq|png|blob|summary)"
-                         recursiveSearch="true"/>
+        <inputFileFilter patternString=".+\.*"/>
 
         <inputFileSorter sortAlgorithm="Path"/>
 

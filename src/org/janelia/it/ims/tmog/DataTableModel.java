@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -49,6 +49,13 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
     private int rowMenuColumnIndex;
 
     /**
+     * Index of the column containing the copy previous row button,
+     * If the column should not be displayed, its value should be
+     * {@link #NOT_DISPLAYED}.
+     */
+    private int copyPreviousColumnIndex;
+
+    /**
      * Index of the column containing the target name,
      * If the column should not be displayed, its value should be
      * {@link #NOT_DISPLAYED}.
@@ -78,6 +85,7 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         // disable menu and target columns
         this.excludeColumnIndex = NOT_DISPLAYED;
         this.rowMenuColumnIndex = NOT_DISPLAYED;
+        this.copyPreviousColumnIndex = NOT_DISPLAYED;
         this.targetColumnIndex = NOT_DISPLAYED;
 
         this.projectConfiguration = projectConfiguration;
@@ -130,19 +138,30 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
 
         this.excludeColumnIndex = 0;
         this.rowMenuColumnIndex = 1;
-        this.targetColumnIndex = 2;
+
+        if (projectConfiguration.isCopyPreviousButtonVisible()) {
+            this.copyPreviousColumnIndex = 2;
+            this.targetColumnIndex = 3;
+        } else {
+            this.copyPreviousColumnIndex = NOT_DISPLAYED;
+            this.targetColumnIndex = 2;
+        }
         this.projectConfiguration = projectConfiguration;
         List<DataField> dataFieldConfigs =
                 projectConfiguration.getFieldConfigurations();
 
         // set up column names and field mappings
         int numberOfColumns =
-                projectConfiguration.getNumberOfVisibleFields() + 3;
+                projectConfiguration.getNumberOfVisibleFields() +
+                this.targetColumnIndex + 1;
         columnNames = new ArrayList<String>(numberOfColumns);
         columnToFieldIndexMap = new HashMap<Integer, Integer>();
         fieldToColumnIndexMap = new HashMap<Integer, Integer>();
-        columnNames.add(" "); // checkbox - 1 space needed for header row height
-        columnNames.add(" "); // copy button
+
+        // empty button headers need single space column names for row height
+        for (int i = 0; i < targetColumnIndex; i++) {
+            columnNames.add(" ");
+        }
         columnNames.add(targetColumnName);
 
         Set<Integer> nestedColumns = new LinkedHashSet<Integer>();
@@ -245,6 +264,10 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
             }
         } else if (columnIndex == rowMenuColumnIndex) {
             value = ButtonPanel.ButtonType.ROW_MENU;
+        } else if (columnIndex == copyPreviousColumnIndex) {
+            if (rowIndex > 0) {
+                value = ButtonPanel.ButtonType.COPY_PREVIOUS_ROW;
+            }
         } else if (columnIndex == targetColumnIndex) {
             value = row.getTarget();
         } else {

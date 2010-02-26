@@ -32,6 +32,7 @@ public class ProjectConfiguration {
     private String name;
     private boolean isDefault;
     private String taskName;
+    private boolean copyPreviousButtonVisible;
     private DataFields dataFields;
     private String targetDisplayName;
     private InputFileFilter inputFileFilter;
@@ -42,6 +43,7 @@ public class ProjectConfiguration {
 
     public ProjectConfiguration() {
         this.isDefault = false;
+        this.copyPreviousButtonVisible = true;
         this.dataFields = new DataFields();
         this.inputFileFilter = new InputFileFilter();
         this.inputFileSorter = new InputFileSorter();
@@ -59,6 +61,10 @@ public class ProjectConfiguration {
 
     public String getTaskName() {
         return taskName;
+    }
+
+    public boolean isCopyPreviousButtonVisible() {
+        return copyPreviousButtonVisible;
     }
 
     /**
@@ -137,6 +143,11 @@ public class ProjectConfiguration {
     @SuppressWarnings({"UnusedDeclaration"})
     public void setTaskName(String taskName) {
         this.taskName = taskName;
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    public void setCopyPreviousButtonVisible(boolean copyPreviousButtonVisible) {
+        this.copyPreviousButtonVisible = copyPreviousButtonVisible;
     }
 
     public void setDataFields(DataFields dataFields) {

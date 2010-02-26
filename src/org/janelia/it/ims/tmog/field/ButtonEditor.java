@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -76,6 +76,13 @@ public class ButtonEditor extends AbstractCellEditor
                 stopCellEditing();
                 model.removeRow(row);
                 
+            } else if (ButtonType.COPY_PREVIOUS_ROW.equals(buttonType)) {
+
+                stopCellEditing();
+                if (row > 0) {
+                    model.copyRow((row - 1), row);
+                }
+
             } else {
 
                 switch (buttonType) {

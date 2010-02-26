@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
+ */
+
 package org.janelia.it.ims.tmog.view.component;
 
 import javax.swing.*;
@@ -15,6 +22,7 @@ public class ButtonPanel extends JPanel {
 
     public enum ButtonType {
         EXCLUDE_TARGET("/removeTarget.png", "exclude target"),
+        COPY_PREVIOUS_ROW("/copyArrowSimple.png", "copy values from previous row"),
         ROW_MENU("/16-em-pencil.png", "show editing short cuts"),
         FIELD_GROUP_ROW_MENU("/16-em-pencil.png", "field group options");
 
