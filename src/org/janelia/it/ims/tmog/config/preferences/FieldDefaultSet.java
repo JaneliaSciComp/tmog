@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -29,13 +29,6 @@ public class FieldDefaultSet extends NamedObject {
     public FieldDefaultSet() {
         this.nameToDefaultMap = new LinkedHashMap<String, FieldDefault>();
         this.nameToDefaultSetMap = new LinkedHashMap<String, FieldDefaultSet>();
-    }
-
-    /**
-     * @return the collection of defaults in this set.
-     */
-    public Collection<FieldDefault> getFieldDefaults() {
-        return nameToDefaultMap.values();
     }
 
     /**
@@ -95,14 +88,6 @@ public class FieldDefaultSet extends NamedObject {
      */
     public int size() {
         return nameToDefaultMap.size() + nameToDefaultSetMap.size();
-    }
-
-    /**
-     * @return an xml representation of this set
-     *         formatted with default indentation.
-     */
-    public String toXml() {
-        return toXml("    ");
     }
 
     /**

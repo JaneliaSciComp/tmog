@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -48,7 +48,7 @@ public class TransmogrifierPreferencesTest extends TestCase {
      */
     public void testLoadAndToXml() throws Exception {
 
-        TransmogrifierPreferences prefs = new TransmogrifierPreferences();
+        TransmogrifierPreferences preferences = new TransmogrifierPreferences();
         String validXml =
                 "<transmogrifierPreferences>\n" +
                 "  <projectPreferences name=\"testProject1\">\n" +
@@ -57,6 +57,20 @@ public class TransmogrifierPreferencesTest extends TestCase {
                 "      <fieldDefault name=\"f2\">v2</fieldDefault>\n" +
                 "      <fieldDefault name=\"f3\">v3</fieldDefault>\n" +
                 "    </fieldDefaultSet>\n" +
+                "    <viewDefault name=\"current\">\n" +
+                "      <pathDefault name=\"source\">/tmp/source</pathDefault>\n" +
+                "      <pathDefault name=\"target\">/tmp/target</pathDefault>\n" +
+                "      <columnDefault name=\"c1\" width=\"10\"/>\n" +
+                "      <columnDefault name=\"c2\" width=\"20\"/>\n" +
+                "      <columnDefault name=\"c3\" width=\"30\">\n" +
+                "        <columnDefault name=\"c31\" width=\"31\"/>\n" +
+                "        <columnDefault name=\"c32\" width=\"32\"/>\n" +
+                "        <columnDefault name=\"c33\" width=\"33\"/>\n" +
+                "      </columnDefault>\n" +
+                "    </viewDefault>\n" +
+                "    <viewDefault name=\"old\">\n" +
+                "      <columnDefault name=\"c1\" width=\"10\"/>\n" +
+                "    </viewDefault>\n" +
                 "  </projectPreferences>\n" +
                 "  <projectPreferences name=\"testProject2\">\n" +
                 "    <fieldDefaultSet name=\"testSetB\">\n" +
@@ -76,10 +90,20 @@ public class TransmogrifierPreferencesTest extends TestCase {
                 "      </fieldDefaultSet>\n" +
                 "    </fieldDefaultSet>\n" +
                 "  </projectPreferences>\n" +
-                "</transmogrifierPreferences>";
+                "</transmogrifierPreferences>\n";
 
-        prefs.load(new ByteArrayInputStream(validXml.getBytes()));
-        String actualXml = prefs.toXml();
+        preferences.load(new ByteArrayInputStream(validXml.getBytes()));
+        String actualXml = preferences.toXml();
         assertEquals("invalid xml returned", validXml, actualXml);
+
+        validXml =
+                "<transmogrifierPreferences>\n" +
+                "</transmogrifierPreferences>\n";
+
+        preferences = new TransmogrifierPreferences();
+        preferences.load(new ByteArrayInputStream(validXml.getBytes()));
+        actualXml = preferences.toXml();
+        assertEquals("invalid xml returned for empty object",
+                     validXml, actualXml);
     }
 }

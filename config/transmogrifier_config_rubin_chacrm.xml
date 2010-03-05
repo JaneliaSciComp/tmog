@@ -1,5 +1,12 @@
 <?xml version="1.0"?>
 
+<!--
+  ~ Copyright (c) 2010 Howard Hughes Medical Institute.
+  ~ All rights reserved.
+  ~ Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+  ~ license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
+  -->
+
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
@@ -9,41 +16,7 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="\\dm10.isln.janelia.org\rubindata\confocalStacks"
-                         derivedFromEarliestModifiedFile="true"/>
-
         <plugins>
-
-            <rowValidator className="org.janelia.it.wip.WipDataPlugin">
-                <property name="batchNameFieldName" value="Batch Name"/>
-                <property name="batchNumberFieldName" value="Batch Number"/>
-                <property name="batchColorFieldName" value="Batch Color"/>
-            </rowValidator>
-            <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
-
-            <rowListener className="org.janelia.it.wip.WipDataPlugin">
-                <property name="batchNameFieldName" value="Batch Name"/>
-                <property name="batchNumberFieldName" value="Batch Number"/>
-                <property name="batchColorFieldName" value="Batch Color"/>
-            </rowListener>
-            <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
-                <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
-            </rowListener>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="nighthawk"/>
-                <property name="family" value="family"/>
-                <property name="uas_reporter" value="UAS Reporter"/>
-                <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
-                <property name="created_by" value="Imager"/>
-                <property name="renamed_by" value="Renamer"/>
-                <property name="class" value="Class"/>
-                <property name="ihc_batch" value="Batch Name"/>
-            </rowListener>
-
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\GMR"/>
-            </sessionListener>
-
         </plugins>
 
         <dataFields>
@@ -140,125 +113,44 @@
                 <validValue displayName="QE: pBPivsQSUw" value="QE"/>
                 <validValue displayName="QF: pBPivsQSw" value="QF"/>
             </validValueList>
-            <separator value="_"/>
-            <validValueList displayName="Landing Site" required="true">
-                <validValue displayName="01: attP2-3L:68A4" value="01" default="true"/>
-                <validValue displayName="02: VK00005-3L:75B1" value="02"/>
-                <validValue displayName="03: su(Hw)attP1-3R:87B " value="03"/>
-                <validValue displayName="04: VK00027-3R:89E11" value="04"/>
-                <validValue displayName="05: su(Hw)attP2-3R:92D" value="05"/>
-                <validValue displayName="06: su(Hw)attP1-3rd " value="06"/>
-                <validValue displayName="07: su(Hw)attP2-3rd " value="07"/>
-                <validValue displayName="08: su(Hw)attP4-3rd " value="08"/>
-                <validValue displayName="09: su(Hw)attP5-2nd " value="09"/>
-                <validValue displayName="10: attP18-X:6C" value="10"/>
-                <validValue displayName="11: su(Hw)attP8-X:8E3" value="11"/>
-                <validValue displayName="12: attP3-X:19C4" value="12"/>
-                <validValue displayName="20: su(Hw)attP6-2L:24D" value="20"/>
-                <validValue displayName="21: attP40-2L:25C7" value="21"/>
-                <validValue displayName="22: su(Hw)attP5-2R:51E" value="22"/>
-            </validValueList>
-            <pluginData displayName="imageLocationRank" format="_%02d" />
-            <separator value="-"/>
-            <validValueList displayName="Gender" required="true">
-                <validValue displayName="m: Male" value="m"/>
-                <validValue displayName="f: Female" value="f"/>
-                <validValue displayName="x: Not Defined" value="x"/>
-            </validValueList>
-            <validValueList displayName="Age" required="true">
-                <validValue displayName="X00: undefined" value="X00"/>
-                <validValue displayName="P01: Prepupa" value="P01"/>
-                <validValue displayName="P02: Pupa" value="P02"/>
-                <validValue displayName="E01: Embryonic Stage 1" value="E01"/>
-                <validValue displayName="E02: Embryonic Stage 2" value="E02"/>
-                <validValue displayName="E03: Embryonic Stage 3" value="E03"/>
-                <validValue displayName="E04: Embryonic Stage 4" value="E04"/>
-                <validValue displayName="E05: Embryonic Stage 5" value="E05"/>
-                <validValue displayName="E06: Embryonic Stage 6" value="E06"/>
-                <validValue displayName="E07: Embryonic Stage 7" value="E07"/>
-                <validValue displayName="E08: Embryonic Stage 8" value="E08"/>
-                <validValue displayName="E09: Embryonic Stage 9" value="E09"/>
-                <validValue displayName="E10: Embryonic Stage 10" value="E10"/>
-                <validValue displayName="E11: Embryonic Stage 11" value="E11"/>
-                <validValue displayName="E12: Embryonic Stage 12" value="E12"/>
-                <validValue displayName="E13: Embryonic Stage 13" value="E13"/>
-                <validValue displayName="E14: Embryonic Stage 14" value="E14"/>
-                <validValue displayName="E15: Embryonic Stage 15" value="E15"/>
-                <validValue displayName="E16: Embryonic Stage 16" value="E16"/>
-                <validValue displayName="E17: Embryonic Stage 17" value="E17"/>
-                <validValue displayName="L01: First Instar" value="L01"/>
-                <validValue displayName="L02: Second Instar" value="L02"/>
-                <validValue displayName="L03: Third Instar" value="L03"/>
-                <validValue displayName="A01: Day 1-5" value="A01"/>
-                <validValue displayName="A02: Day 6-10" value="A02"/>
-                <validValue displayName="A03: Day 11-15" value="A03"/>
-                <validValue displayName="A04: Day 16-20" value="A04"/>
-                <validValue displayName="A05: Day 21-25" value="A05"/>
-                <validValue displayName="A06: Day 26-30" value="A06"/>
-            </validValueList>
-            <validValueList displayName="Area" required="true">
-                <validValue displayName="s: Salivary Gland" value="s"/>
-                <validValue displayName="b: Brain" value="b"/>
-                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
-            </validValueList>
-            <!--
-            See http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html
-            for datePattern options.
-            -->
-            <separator value="_C"/>
-            <fileModificationTime displayName="Capture Date" datePattern="yyMMdd" />
-            <separator value="_"/>
-            <runTime datePattern="yyyyMMddHHmmssSSS"/>
-            <separator value=".lsm"/>
+            <fieldGroup displayName="Channel">
 
-            <!--
-             These values are collected for the nighthawk database but are not
-             included as components of the file name (markedForTask="false").
-             -->
-            <number displayName="Batch Number" required="true"
-                    minimumValue="80" maximumValue="600"
-                    markedForTask="false" />
+                <validValueList displayName="Fluorophore"
+                                required="true"
+                                markedForTask="false">
+                    <validValue value="GFP"/>
+                    <validValue value="tdTomato"/>
+                    <validValue value="mCherry"/>
+                    <validValue value="Alexa-594"/>
+                    <validValue value="Darkfield_450nm"/>
+                </validValueList>
 
-            <validValueList displayName="Batch Color" required="true"
-                            markedForTask="false">
-                <validValue value="red"/>
-                <validValue value="tan"/>
-                <validValue value="purple"/>
-                <validValue value="blue"/>
-                <validValue value="white"/>
-                <validValue value="pink"/>
-                <validValue value="gray"/>
-                <validValue value="green"/>
-                <validValue value="yellow"/>
-                <validValue value="orange"/>
-            </validValueList>
+                <validValueList displayName="Antigen"
+                                required="true"
+                                markedForTask="false">
+                    <validValue value="GFP"/>
+                </validValueList>
 
-            <pluginData displayName="Batch Name" markedForTask="false" />
+                <number displayName="Number of Channel Sections"
+                        required="true"
+                        minimumValue="0"
+                        markedForTask="false"/>
 
-            <validValueList displayName="UAS Reporter" required="true"
-                            markedForTask="false">
-                <validValue displayName="JFRC-IVS-A1" value="JFRC-IVS-A1" default="true"/>
-                <validValue displayName="mcd8GFP" value="mcd8GFP"/>
-            </validValueList>
-            <validValueList displayName="Imager" required="true"
-                            markedForTask="false">
-                <validValue value="Amanda Cavallaro"/>
-                <validValue value="Arnim Jenett"/>
-                <validValue value="Chris Zugates"/>
-                <validValue value="Christine Murphy"/>
-                <validValue value="Donald Hall"/>
-                <validValue value="Teri Ngo"/>
-            </validValueList>
-            <validValueList displayName="Renamer" required="true"
-                            markedForTask="false"
-                            sharedForAllSessionFiles="true">
-                <validValue value="Amanda Cavallaro"/>
-                <validValue value="Arnim Jenett"/>
-                <validValue value="Chris Zugates"/>
-                <validValue value="Christine Murphy"/>
-                <validValue value="Donald Hall"/>
-                <validValue value="Teri Ngo"/>
-            </validValueList>
+                <number displayName="Channel Section Spacing"
+                        required="true"
+                        minimumValue="1"
+                        maximumValue="10000"
+                        markedForTask="false"/>
+
+                <number displayName="Channel Section Range Start"
+                        required="true"
+                        markedForTask="false"/>
+
+                <number displayName="Channel Section Range End"
+                        required="true"
+                        markedForTask="false"/>
+
+            </fieldGroup>
             <validValueList displayName="Class" required="false"
                             markedForTask="false">
                 <validValue displayName="Screening" value="Screening" default="true"/>

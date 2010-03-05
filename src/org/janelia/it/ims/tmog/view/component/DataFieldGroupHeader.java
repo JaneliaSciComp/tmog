@@ -1,12 +1,14 @@
 /*
- * Copyright 2009 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.view.component;
 
+import org.janelia.it.ims.tmog.config.preferences.ColumnDefault;
+import org.janelia.it.ims.tmog.config.preferences.ColumnDefaultSet;
 import org.janelia.it.ims.tmog.field.DataFieldGroupModel;
 
 import javax.swing.*;
@@ -26,8 +28,11 @@ import java.awt.event.MouseEvent;
  */
 public class DataFieldGroupHeader extends JPanel implements MouseInputListener {
 
+    private String groupName;
     private DataTable dataTable;
+    private DataTable fieldNameTable;
     private JTableHeader fieldNameTableHeader;
+    private ColumnDefault columnDefault;
 
     /**
      * Constructs a data field group header.
@@ -39,15 +44,16 @@ public class DataFieldGroupHeader extends JPanel implements MouseInputListener {
                                 DataTable dataTable) {
         super(new BorderLayout());
 
+        this.groupName = groupModel.getDisplayName();
         this.dataTable = dataTable;
+        this.columnDefault = null;
 
-        final JLabel groupNameLabel =
-                new JLabel(groupModel.getDisplayName());
+        final JLabel groupNameLabel = new JLabel(groupName);
         groupNameLabel.setHorizontalAlignment(JLabel.CENTER);
         groupNameLabel.setFont(this.getFont());
 
         final DataTable mainDataTable = dataTable;
-        DataTable fieldNameTable = new DataTable(false) {
+        this.fieldNameTable = new DataTable(false) {
             // use original JTable implementation to correct sizing
             // (not sure why I had to do this ...)
             @Override
@@ -63,6 +69,18 @@ public class DataFieldGroupHeader extends JPanel implements MouseInputListener {
                 mainDataTable.repaint();
             }
         };
+
+        ColumnDefaultSet parentColumnDefaults = dataTable.getColumnDefaults();
+        if (parentColumnDefaults != null) {
+            this.columnDefault =
+                    parentColumnDefaults.getColumnDefault(groupName);
+            if (this.columnDefault != null) {
+                ColumnDefaultSet nestedColumnDefaults =
+                        this.columnDefault.getNestedColumnDefaults();
+                fieldNameTable.setColumnDefaults(nestedColumnDefaults,
+                                                 false);
+            }
+        }
 
         fieldNameTable.setModel(groupModel);
 
@@ -88,6 +106,53 @@ public class DataFieldGroupHeader extends JPanel implements MouseInputListener {
         add(Box.createHorizontalStrut(2), BorderLayout.EAST);
 
         setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+    }
+
+    /**
+     * @return the (column) name for this field group.
+     */
+    public String getGroupName() {
+        return groupName;
+    }
+
+    /**
+     * @return the default information for this group's nested columns.
+     */
+    public ColumnDefault getColumnDefault() {
+        return columnDefault;
+    }
+
+    /**
+     * Sets the default information for this group's nested columns.
+     *
+     * @param  columnDefault  the default for this field group column
+     *                        (which should contain nested defaults) or
+     *                        null if the default should be cleared.
+     *
+     * @param  updateDisplay  true if the header should be refreshed
+     *                        immediately; false if it will be refreshed
+     *                        by another process.
+     */
+    public void setColumnDefault(ColumnDefault columnDefault,
+                                 boolean updateDisplay) {
+        this.columnDefault = columnDefault;
+        ColumnDefaultSet nestedDefaults;
+        if (columnDefault == null) {
+            nestedDefaults = null;
+        } else {
+            nestedDefaults = columnDefault.getNestedColumnDefaults();
+        }
+        fieldNameTable.setColumnDefaults(nestedDefaults, updateDisplay);
+    }
+
+    /**
+     * Sets this group's nested column defaults based upon the current
+     * view state.
+     */
+    public void setColumnDefaultsToCurrent() {
+        fieldNameTable.setColumnDefaultsToCurrent();
+        columnDefault = new ColumnDefault(groupName);
+        columnDefault.addAllColumnDefaults(fieldNameTable.getColumnDefaults());
     }
 
     /**

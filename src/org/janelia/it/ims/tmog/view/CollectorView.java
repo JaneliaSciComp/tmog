@@ -1,8 +1,8 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.view;
@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
+import org.janelia.it.ims.tmog.config.preferences.ColumnDefaultSet;
+import org.janelia.it.ims.tmog.config.preferences.ViewDefault;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
@@ -46,6 +48,9 @@ public class CollectorView implements SessionView, InputSelectionView {
     private JPanel directoryPanel;
     @SuppressWarnings({"UnusedDeclaration"})
     private JPanel dataPanel;
+    private JScrollPane dataTableScrollPane;
+    @SuppressWarnings({"UnusedDeclaration"})
+    private JPanel dataButtonPanel;
     private JTextArea rootDirectoryField;
     private JButton rootDirectoryBtn;
     private JLabel projectLabel;
@@ -110,6 +115,54 @@ public class CollectorView implements SessionView, InputSelectionView {
         return taskComponents.getSessionIcon();
     }
 
+    public void setPreferencesForCurrentProject() {
+        if (tableModel != null) {
+            dataTable.setColumnDefaultsToCurrent();
+            final ColumnDefaultSet columnDefaults =
+                    dataTable.getColumnDefaults();
+            ViewDefault viewDefault = new ViewDefault(ViewDefault.CURRENT);
+            viewDefault.deepCopyAndSetColumnDefaults(columnDefaults);
+
+            tableModel.updateProjectViewPreferences(viewDefault);
+        }
+    }
+
+    public void clearPreferencesForCurrentProject() {
+        if (tableModel != null) {
+            dataTable.setColumnDefaults(null, true);
+            ViewDefault viewDefault = new ViewDefault(ViewDefault.CURRENT);
+            tableModel.updateProjectViewPreferences(viewDefault);
+        }
+    }
+
+    public void resizeDataTable(ResizeType resizeType) {
+        switch (resizeType) {
+
+            case WINDOW:
+                final JScrollBar scrollBar =
+                        dataTableScrollPane.getHorizontalScrollBar();
+                if ((scrollBar != null) && scrollBar.isVisible()) {
+                    dataTable.setColumnDefaultsToFit(dataPanel.getWidth());
+                }
+                break;
+
+            case DATA:
+                dataTable.setColumnDefaults(null, true);
+                break;
+
+            case PREFERENCES:
+                if (tableModel != null) {
+                    ViewDefault viewDefault =
+                            tableModel.getProjectViewPreferences();
+                    if (viewDefault != null) {
+                        ColumnDefaultSet columnDefaults =
+                                viewDefault.getColumnDefaultsCopy();
+                        dataTable.setColumnDefaults(columnDefaults, true);
+                    }
+                }
+                break;
+        }
+    }
 
     public void handleInputRootSelection(File selectedFile) {
         dataTable.setModel(new DefaultTableModel());
@@ -125,7 +178,7 @@ public class CollectorView implements SessionView, InputSelectionView {
         tableModel = new DataTableModel(projectConfig.getTargetDisplayName(),
                                         targets,
                                         projectConfig);
-        dataTable.setModel(tableModel);
+        dataTable.setModelAndColumnDefaults(tableModel);
         enableView(true);
     }
 

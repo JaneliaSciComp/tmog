@@ -8,6 +8,7 @@
 package org.janelia.it.ims.tmog;
 
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.tmog.config.ConfigurationException;
 import org.janelia.it.ims.tmog.config.GlobalConfiguration;
 import org.janelia.it.ims.tmog.config.TransmogrifierConfiguration;
 import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
@@ -69,6 +70,24 @@ public class JaneliaTransmogrifier extends JFrame {
      */
     public JaneliaTransmogrifier() {
         super("Janelia Transmogrifier " + VERSION);
+
+        // attempt to load preferences
+        TransmogrifierPreferences tmogPreferences =
+                TransmogrifierPreferences.getInstance();
+        try {
+            tmogPreferences.load();
+        } catch (ConfigurationException e) {
+            LOG.error("Preferences Error", e);
+
+            NarrowOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage() +
+                    "  Consequently, all preferences related features " +
+                    "will be disabled.",
+                    "Preferences Features Disabled",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+
         TabbedView tabbedView = new TabbedView();
         setContentPane(tabbedView.getContentPanel());
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -80,19 +99,6 @@ public class JaneliaTransmogrifier extends JFrame {
         TransmogrifierConfiguration config = tabbedView.getTmogConfig();
         GlobalConfiguration globalConfig = config.getGlobalConfiguration();
         this.frameSizePercentage = globalConfig.getFrameSizePercentage();
-
-        // attenpt to load preferences
-        TransmogrifierPreferences tmogPrefs =
-                TransmogrifierPreferences.getInstance();
-        if (tmogPrefs.getLoadError() != null) {
-            NarrowOptionPane.showMessageDialog(
-                    this,
-                    tmogPrefs.getLoadError() +
-                    "  Consequently, all preferences related features " +
-                    "will be disabled.",
-                    "Preferences Features Disabled",
-                    JOptionPane.WARNING_MESSAGE);            
-        }
     }
 
     public Integer getFrameSizePercentage() {

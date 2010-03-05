@@ -1,8 +1,8 @@
 /*
- * Copyright 2009 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.config.preferences;
@@ -27,64 +27,79 @@ import java.util.Map;
  */
 public class TransmogrifierPreferences {
 
-    private static TransmogrifierPreferences instance = null;
+    private static TransmogrifierPreferences instance =
+            new TransmogrifierPreferences();
 
     public static TransmogrifierPreferences getInstance() {
-        if (instance == null) {
-            TransmogrifierPreferences prefs = new TransmogrifierPreferences();
-            try {
-                prefs.load();
-            } catch (ConfigurationException e) {
-                LOG.error("Preferences Error", e);
-                prefs.loadError = e.getMessage();
-            }
-            instance = prefs;
-        }
         return instance;
     }
     
-    private File prefsFile;
+    private File preferencesFile;
     private Map<String, ProjectPreferences> projectNameToPreferencesMap;
-    private String loadError;
+    private boolean loaded;
 
+    /**
+     * Constructs an unloaded empty instance.
+     */
     protected TransmogrifierPreferences() {
         this.projectNameToPreferencesMap =
                 new LinkedHashMap<String, ProjectPreferences>();
-        this.loadError = null;
+        this.loaded = false;
     }
 
+    /**
+     * @param  projectName  name of project to retrieve.
+     *
+     * @return the preferences for the specified project or null if none exist.
+     */
     public ProjectPreferences getPreferences(String projectName) {
         return projectNameToPreferencesMap.get(projectName);
     }
-    
+
+    /**
+     * Adds the specified project preferences to the set managed for
+     * the application.
+     *
+     * @param projectPreferences  project preferences to add.
+     */
     public void addProjectPreferences(ProjectPreferences projectPreferences) {
         this.projectNameToPreferencesMap.put(
                 projectPreferences.getName(),
                 projectPreferences);
     }
 
-    public String getLoadError() {
-        return loadError;
+    /**
+     * @return true if the application preferences have been loaded from disk;
+     *         otherwise false.
+     */
+    public boolean areLoaded() {
+        return loaded;
     }
 
+    /**
+     * @return the absolute path of the preferences file or null if none exists.
+     */
+    public String getAbsolutePath() {
+        String path = null;
+        if (preferencesFile != null) {
+            path = preferencesFile.getAbsolutePath();
+        }
+        return path;
+    }
+
+    /**
+     * @return an xml representation of this object.
+     */
     // TODO: replace this with jaxb annotations whenever we can drop jdk1.5
     public String toXml() {
-        String xml;
-        if (projectNameToPreferencesMap.size() > 0) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("<transmogrifierPreferences>\n");
-            for (ProjectPreferences projectPreferences :
-                    projectNameToPreferencesMap.values()) {
-                if (projectPreferences.getNumberOfFieldDefaultSets() > 0) {
-                    sb.append(projectPreferences.toXml());
-                }
-            }
-            sb.append("</transmogrifierPreferences>");
-            xml = sb.toString();
-        } else {
-            xml = "";
+        StringBuilder sb = new StringBuilder();
+        sb.append("<transmogrifierPreferences>\n");
+        for (ProjectPreferences projectPreferences :
+                projectNameToPreferencesMap.values()) {
+            sb.append(projectPreferences.toXml());
         }
-        return xml;
+        sb.append("</transmogrifierPreferences>\n");
+        return sb.toString();
     }
 
     /**
@@ -93,25 +108,26 @@ public class TransmogrifierPreferences {
      * @throws ConfigurationException
      *   if an error occurs parsing the preferences file.
      */
-    public void load() throws ConfigurationException {
+    public synchronized void load() throws ConfigurationException {
 
-        // TODO: consider load of common (not user specific) preferences - need to handle concurrent write issues
+        this.loaded = false;
 
         final String userHomePath = System.getProperty("user.home");
-        prefsFile = new File(userHomePath, FILE_NAME);
-        final String prefsPath = prefsFile.getAbsolutePath();
+        preferencesFile = new File(userHomePath, FILE_NAME);
+        final String preferencesPath = preferencesFile.getAbsolutePath();
 
-        if (prefsFile.exists()) {
+        if (preferencesFile.exists()) {
 
-            if (prefsFile.canRead()) {
+            if (preferencesFile.canRead()) {
+
                 FileInputStream fis = null;
                 try {
-                    fis = new FileInputStream(prefsFile);
+                    fis = new FileInputStream(preferencesFile);
                     load(fis);
-                    LOG.info("Loaded preferences file " + prefsPath);
+                    LOG.info("Loaded preferences file " + preferencesPath);
                 } catch (Exception e) {
                     String msg = "Failed to load preferences file " +
-                                 prefsPath;
+                                 preferencesPath;
                     throw new ConfigurationException(msg, e);
                 } finally {
                     if (fis != null) {
@@ -119,7 +135,7 @@ public class TransmogrifierPreferences {
                             fis.close();
                         } catch (IOException e) {
                             LOG.warn("After load, failed to close " +
-                                     prefsPath);
+                                     preferencesPath);
                         }
                     }
                 }
@@ -127,18 +143,19 @@ public class TransmogrifierPreferences {
             } else {
                 throw new ConfigurationException(
                         "You do not have access to read preference data from " +
-                        prefsPath + ".");
+                        preferencesPath + ".");
             }
 
         } else {
-            File prefsDir = prefsFile.getParentFile();
+            File prefsDir = preferencesFile.getParentFile();
             if ((prefsDir == null) || (! prefsDir.canWrite())) {
                 throw new ConfigurationException(
                         "You do not have access to save preference data to " +
-                        prefsPath + ".");
+                        preferencesPath + ".");
             }
         }
 
+        this.loaded = true;
     }
 
     // TODO: replace this with jaxb annotations whenever we can drop jdk1.5
@@ -176,6 +193,23 @@ public class TransmogrifierPreferences {
                             digester);
             digester.addCallMethod(fieldDefaultElements, "setValue", 0);
 
+            createSetAndAdd("*/viewDefault",
+                            ViewDefault.class,
+                            "addViewDefault",
+                            digester);
+
+            final String pathDefaultElements = "*/pathDefault";
+            createSetAndAdd(pathDefaultElements,
+                            PathDefault.class,
+                            "addPathDefault",
+                            digester);
+            digester.addCallMethod(pathDefaultElements, "setValue", 0);
+
+            createSetAndAdd("*/columnDefault",
+                            ColumnDefault.class,
+                            "addColumnDefault",
+                            digester);
+            
             ArrayList parsedList = (ArrayList) digester.parse(stream);
             if (parsedList != null) {
                 for (Object element : parsedList) {
@@ -193,15 +227,21 @@ public class TransmogrifierPreferences {
         }
     }
 
+    /**
+     * Overwrites the preferences file with an xml representation of this
+     * object.
+     *
+     * @return true if the save completed successfully; otherwise false.
+     */
     public boolean save() {
 
         boolean wasSaveSuccessful = false;
 
         if (canWrite()) {
-            String prefsPath = prefsFile.getAbsolutePath();
+            String prefsPath = preferencesFile.getAbsolutePath();
             FileOutputStream fos = null;
             try {
-                fos = new FileOutputStream(prefsFile);
+                fos = new FileOutputStream(preferencesFile);
                 final String xml = toXml();
                 fos.write(xml.getBytes());
                 LOG.info("Saved preferences file " + prefsPath);
@@ -225,14 +265,18 @@ public class TransmogrifierPreferences {
         return wasSaveSuccessful;
     }
 
+    /**
+     * @return true if the preferences file can be written.
+     */
     public boolean canWrite() {
         boolean canWrite = false;
-        if ((loadError == null) && (prefsFile != null)) {
-            if (prefsFile.exists()) {
-                canWrite = prefsFile.canWrite();
+        if (loaded && (preferencesFile != null)) {
+            if (preferencesFile.exists()) {
+                canWrite = preferencesFile.canWrite();
             } else {
-                File prefsDir = prefsFile.getParentFile();
-                canWrite = ((prefsDir != null) && prefsDir.canWrite());
+                File preferencesDirectory = preferencesFile.getParentFile();
+                canWrite = ((preferencesDirectory != null) &&
+                            preferencesDirectory.canWrite());
             }
         }
         return canWrite;

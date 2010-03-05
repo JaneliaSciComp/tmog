@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.view;
@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.config.ConfigurationException;
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
 import org.janelia.it.ims.tmog.config.TransmogrifierConfiguration;
+import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
 import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
 import org.janelia.it.utils.LoggingUtils;
 
@@ -44,6 +45,11 @@ public class TabbedView implements ActionListener {
     private Map<JMenuItem, ProjectConfiguration> addSessionItems;
     private JMenuItem removeSessionItem;
     private JMenuItem exitItem;
+    private JMenuItem resizeToWindowItem;
+    private JMenuItem resizeToDataItem;
+    private JMenuItem resizeToPreferencesItem;
+    private JMenuItem savePreferencesItem;
+    private JMenuItem deletePreferencesItem;
     private TransmogrifierConfiguration tmogConfig;
 
     private HashMap<String, SessionView> sessionList;
@@ -99,6 +105,31 @@ public class TabbedView implements ActionListener {
         return tmogConfig;
     }
 
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+        if (source == removeSessionItem) {
+            removeSession();
+        } else if (source == exitItem) {
+            exitApplicationSafely();
+        } else if (source == resizeToWindowItem) {
+            resize(SessionView.ResizeType.WINDOW);
+        } else if (source == resizeToDataItem) {
+            resize(SessionView.ResizeType.DATA);
+        } else if (source == resizeToPreferencesItem) {
+            resize(SessionView.ResizeType.PREFERENCES);
+        } else if (source == savePreferencesItem) {
+            updatePreferences(false);
+        } else if (source == deletePreferencesItem) {
+            updatePreferences(true);
+        } else {
+            JMenuItem addItem = (JMenuItem) source;
+            ProjectConfiguration pConfig = addSessionItems.get(addItem);
+            if (pConfig != null) {
+                addSession(pConfig);
+            }
+        }
+    }
+
     private void exitApplicationSafely() {
         if (! hasActiveSessions(sessionList.keySet())) {
             System.exit(0);
@@ -144,32 +175,73 @@ public class TabbedView implements ActionListener {
     }
 
     private void createMenuBar() {
-        JMenu menu = new JMenu("Menu");
-        menu.setMnemonic(KeyEvent.VK_M);
-        menuBar.add(menu);
+        createSessionMenu();
+        createViewMenu();
+        createHelpMenu();
+    }
+
+    private void createSessionMenu() {
+        JMenu sessionMenu = new JMenu("Session");
+        sessionMenu.setMnemonic(KeyEvent.VK_S);
+        menuBar.add(sessionMenu);
 
         List<ProjectConfiguration> projectList = tmogConfig.getProjectList();
         addSessionItems =
                 new HashMap<JMenuItem, ProjectConfiguration>(projectList.size());
+        JMenuItem addSessionItem;
         for (ProjectConfiguration project : projectList) {
-            JMenuItem addSessionItem = new JMenuItem(
-                    "Add '" + project.getName() + "' Session");
-            addSessionItem.addActionListener(this);
-            menu.add(addSessionItem);
+            addSessionItem = createAndAddMenuItem(
+                    "Add '" + project.getName() + "' Session",
+                    null,
+                    true,
+                    sessionMenu);
             addSessionItems.put(addSessionItem, project);
         }
 
-        removeSessionItem = new JMenuItem("Remove Current Session",
-                                          KeyEvent.VK_R);
-        removeSessionItem.addActionListener(this);
-        menu.add(removeSessionItem);
+        removeSessionItem = createAndAddMenuItem("Remove Current Session",
+                                                 KeyEvent.VK_R,
+                                                 false,
+                                                 sessionMenu);
 
-        menu.addSeparator();
-        exitItem = new JMenuItem("Exit",
-                                 KeyEvent.VK_E);
-        exitItem.addActionListener(this);
-        menu.add(exitItem);
+        sessionMenu.addSeparator();
 
+        exitItem = createAndAddMenuItem("Exit",
+                                        KeyEvent.VK_E,
+                                        true,
+                                        sessionMenu);
+    }
+
+    private void createViewMenu() {
+        JMenu viewMenu = new JMenu("View");
+        viewMenu.setMnemonic(KeyEvent.VK_V);
+
+        resizeToDataItem = createAndAddMenuItem("Resize to Fit Data",
+                                                KeyEvent.VK_F,
+                                                false,
+                                                viewMenu);
+        resizeToWindowItem = createAndAddMenuItem("Resize to Fit Window",
+                                                  KeyEvent.VK_W,
+                                                  false,
+                                                  viewMenu);
+        resizeToPreferencesItem = createAndAddMenuItem("Resize to Preferences",
+                                                       KeyEvent.VK_P,
+                                                       false,
+                                                       viewMenu);
+        viewMenu.addSeparator();
+
+        savePreferencesItem = createAndAddMenuItem("Save Current as Preference",
+                                                   KeyEvent.VK_S,
+                                                   false,
+                                                   viewMenu);
+        deletePreferencesItem = createAndAddMenuItem("Delete Preference",
+                                                     KeyEvent.VK_D,
+                                                     false,
+                                                     viewMenu);
+
+        menuBar.add(viewMenu);
+    }
+
+    private void createHelpMenu() {
         JMenu helpMenu = new JMenu("Help");
         helpMenu.setMnemonic(KeyEvent.VK_H);
         menuBar.add(helpMenu);
@@ -183,17 +255,92 @@ public class TabbedView implements ActionListener {
                 "Ctrl-R: copy all values from previous row to current row"));
     }
 
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-        if (source == removeSessionItem) {
-            removeSession();
-        } else if (source == exitItem) {
-            exitApplicationSafely();
+    private JMenuItem createAndAddMenuItem(String text,
+                                           Integer mnemonic,
+                                           boolean enabled,
+                                           JMenu menu) {
+        JMenuItem item;
+
+        if (mnemonic == null) {
+            item = new JMenuItem(text);
         } else {
-            JMenuItem addItem = (JMenuItem) source;
-            ProjectConfiguration pConfig = addSessionItems.get(addItem);
-            if (pConfig != null) {
-                addSession(pConfig);
+            item = new JMenuItem(text, mnemonic);
+        }
+
+        item.addActionListener(this);
+        item.setEnabled(enabled);
+        menu.add(item);
+
+        return item;
+    }
+
+    private SessionView getCurrentView() {
+        SessionView currentView = null;
+        int currentTab = tabbedPane.getSelectedIndex();
+        if (currentTab > -1) {
+            String currentTitle = tabbedPane.getTitleAt(currentTab);
+            currentView = sessionList.get(currentTitle);
+        }
+        return currentView;
+    }
+
+    private void resize(SessionView.ResizeType resizeType) {
+        SessionView currentView = getCurrentView();
+        if (currentView != null) {
+            currentView.resizeDataTable(resizeType);
+        }
+    }
+
+    private void updatePreferences(boolean clear) {
+
+        SessionView currentView = getCurrentView();
+
+        if (currentView != null) {
+
+            String action;
+            if (clear) {
+                action = " deleted.";
+            } else {
+                action = " saved.";
+            }
+
+            TransmogrifierPreferences preferences =
+                    TransmogrifierPreferences.getInstance();
+            if (preferences.canWrite()) {
+
+                if (clear) {
+                    currentView.clearPreferencesForCurrentProject();
+                } else {
+                    currentView.setPreferencesForCurrentProject();
+                }
+
+                final boolean wasSaveSuccessful = preferences.save();
+                if (wasSaveSuccessful) {
+                    NarrowOptionPane.showMessageDialog(
+                            contentPanel,
+                            "Preferences were successfully" + action,
+                            "Preferences Updated",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    NarrowOptionPane.showMessageDialog(
+                            contentPanel,
+                            "Preferences were NOT"  + action +
+                            "  Please verify that you have access to the " +
+                            "preferences file " + preferences.getAbsolutePath(),
+                            "Preferences Not Updated",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+            } else {
+
+                NarrowOptionPane.showMessageDialog(
+                        contentPanel,
+                        "Preferences were NOT"  + action +
+                        "You do not have access to overwrite the " +
+                        "preferences file " + preferences.getAbsolutePath(),
+                        "Preferences Not Updated",
+                        JOptionPane.ERROR_MESSAGE);
+
             }
         }
     }
@@ -216,6 +363,21 @@ public class TabbedView implements ActionListener {
                           newView.getPanel());
         int newSelectedIndex = tabbedPane.getTabCount() - 1;
         tabbedPane.setSelectedIndex(newSelectedIndex);
+
+        if (sessionList.size() == 1) {
+            removeSessionItem.setEnabled(true);
+            resizeToWindowItem.setEnabled(true);
+            resizeToDataItem.setEnabled(true);
+            resizeToPreferencesItem.setEnabled(true);
+
+            TransmogrifierPreferences preferences =
+                    TransmogrifierPreferences.getInstance();
+            if (preferences.canWrite()) {
+                savePreferencesItem.setEnabled(true);
+                deletePreferencesItem.setEnabled(true);
+            }
+
+        }
     }
 
     private void removeSession() {
@@ -227,6 +389,15 @@ public class TabbedView implements ActionListener {
             if (! hasActiveSessions(sessionNames)) {
                 sessionList.remove(sessionTitle);
                 tabbedPane.removeTabAt(currentTab);
+            }
+
+            if (sessionList.size() == 0) {
+                removeSessionItem.setEnabled(false);
+                resizeToWindowItem.setEnabled(false);
+                resizeToDataItem.setEnabled(false);
+                resizeToPreferencesItem.setEnabled(false);
+                savePreferencesItem.setEnabled(false);
+                deletePreferencesItem.setEnabled(false);
             }
         }
     }

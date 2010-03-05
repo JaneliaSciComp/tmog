@@ -1,8 +1,8 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.view;
@@ -18,6 +18,11 @@ import java.io.File;
  * @author Eric Trautman
  */
 public interface SessionView {
+
+    /**
+     * Enumerates the supported data table resize options.
+     */
+    public enum ResizeType { WINDOW, DATA, PREFERENCES }
 
     /**
      * @return the primary content panel (container) for the view.
@@ -40,4 +45,21 @@ public interface SessionView {
      */
     public SessionIcon getSessionIcon();
 
+    /**
+     * Sets the preferences for this view's current project
+     * based upon the view's current state.
+     */
+    public void setPreferencesForCurrentProject();
+
+    /**
+     * Clears the preferences for this view's current project.
+     */
+    public void clearPreferencesForCurrentProject();
+
+    /**
+     * Resizes this view's data table.
+     *
+     * @param  resizeType  identifies type of resize to perform.
+     */
+    public void resizeDataTable(ResizeType resizeType);
 }

@@ -12,6 +12,8 @@ import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
+import org.janelia.it.ims.tmog.config.preferences.ColumnDefaultSet;
+import org.janelia.it.ims.tmog.config.preferences.ViewDefault;
 import org.janelia.it.ims.tmog.filefilter.DirectoryOnlyFilter;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
@@ -58,6 +60,9 @@ public class RenameView implements SessionView, InputSelectionView {
     private JPanel directoryPanel;
     @SuppressWarnings({"UnusedDeclaration"})
     private JPanel dataPanel;
+    private JScrollPane dataTableScrollPane;
+    @SuppressWarnings({"UnusedDeclaration"})
+    private JPanel dataButtonPanel;
     private JButton copyAndRenameBtn;
     private DataTable dataTable;
     private JProgressBar copyProgressBar;
@@ -110,6 +115,56 @@ public class RenameView implements SessionView, InputSelectionView {
 
     public SessionIcon getSessionIcon() {
         return taskComponents.getSessionIcon();
+    }
+
+    public void setPreferencesForCurrentProject() {
+        if (tableModel != null) {
+            dataTable.setColumnDefaultsToCurrent();
+            final ColumnDefaultSet columnDefaults =
+                    dataTable.getColumnDefaults();
+            ViewDefault viewDefault = new ViewDefault(ViewDefault.CURRENT);
+            viewDefault.deepCopyAndSetColumnDefaults(columnDefaults);
+
+            tableModel.updateProjectViewPreferences(viewDefault);
+        }
+    }
+
+    public void clearPreferencesForCurrentProject() {
+        if (tableModel != null) {
+            dataTable.setColumnDefaults(null, true);
+            ViewDefault viewDefault = new ViewDefault(ViewDefault.CURRENT);
+            tableModel.updateProjectViewPreferences(viewDefault);
+        }
+    }
+
+
+    public void resizeDataTable(ResizeType resizeType) {
+        switch (resizeType) {
+
+            case WINDOW:
+                final JScrollBar scrollBar =
+                        dataTableScrollPane.getHorizontalScrollBar();
+                if ((scrollBar != null) && scrollBar.isVisible()) {
+                    dataTable.setColumnDefaultsToFit(dataPanel.getWidth());
+                }
+                break;
+
+            case DATA:
+                dataTable.setColumnDefaults(null, true);
+                break;
+
+            case PREFERENCES:
+                if (tableModel != null) {
+                    ViewDefault viewDefault =
+                            tableModel.getProjectViewPreferences();
+                    if (viewDefault != null) {
+                        ColumnDefaultSet columnDefaults =
+                                viewDefault.getColumnDefaultsCopy();
+                        dataTable.setColumnDefaults(columnDefaults, true);
+                    }
+                }
+                break;
+        }
     }
 
     public void handleInputRootSelection(File selectedFile) {
@@ -175,7 +230,7 @@ public class RenameView implements SessionView, InputSelectionView {
             tableModel = new DataTableModel("File Name",
                                             targets,
                                             projectConfig);
-            dataTable.setModel(tableModel);
+            dataTable.setModelAndColumnDefaults(tableModel);
             copyAndRenameBtn.setEnabled(true);
         } else {
             NarrowOptionPane.showMessageDialog(

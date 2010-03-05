@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -9,6 +9,9 @@ package org.janelia.it.ims.tmog.view.component;
 
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.TransmogrifierTableModel;
+import org.janelia.it.ims.tmog.config.preferences.ColumnDefault;
+import org.janelia.it.ims.tmog.config.preferences.ColumnDefaultSet;
+import org.janelia.it.ims.tmog.config.preferences.ViewDefault;
 import org.janelia.it.ims.tmog.field.ButtonEditor;
 import org.janelia.it.ims.tmog.field.ButtonRenderer;
 import org.janelia.it.ims.tmog.field.DataField;
@@ -55,8 +58,6 @@ public class DataTable extends JTable {
             "selectPreviousColumnCell";
 
     protected static final int CELL_MARGIN = 5;
-    protected static final int BUTTON_WITH_MARGIN_WIDTH =
-            ButtonPanel.BUTTON_WIDTH + (2 * CELL_MARGIN);
     protected static final int ROW_WITH_MARGIN_HEIGHT =
             ButtonPanel.BUTTON_HEIGHT + (2 * CELL_MARGIN);
 
@@ -73,8 +74,17 @@ public class DataTable extends JTable {
             DataFieldGroupModel.class
     };
 
+    /**
+     * Width used for minimized columns that should not grow
+     * when other columns are resized.
+     */
+    private static final int MINIMIZED_COLUMN_WIDTH = 20;
+
     /** The listener for this table's keyboard shortcuts. */
     private KeyListener keyListener;
+
+    /** The default settings for this table's columns. */
+    private ColumnDefaultSet columnDefaults;
 
     /**
      * Constructs an empty data table.
@@ -94,6 +104,8 @@ public class DataTable extends JTable {
      */
     protected DataTable(boolean setDefaultRenderersAndEditors) {
         super();
+
+        this.columnDefaults = null;
 
         TableColumnModel columnModel = getColumnModel();
         DataTableHeader tableHeader = new DataTableHeader(columnModel);
@@ -222,6 +234,25 @@ public class DataTable extends JTable {
             resizeAllColumnWidths(model);
             resizeAllRowHeights(model);
         }
+    }
+
+    /**
+     * Applies column default information from the specified model's
+     * project view preferences, sets the model for this table,
+     * and then resizes all columns and rows.
+     *
+     * @param  dataModel  model for this table.
+     */
+    public void setModelAndColumnDefaults(DataTableModel dataModel) {
+
+        ViewDefault viewDefault = dataModel.getProjectViewPreferences();
+        if ((viewDefault != null) && (viewDefault.hasColumnDefaults())) {
+            setColumnDefaults(viewDefault.getColumnDefaultsCopy(), false);
+        } else {
+            setColumnDefaults(null, false);
+        }
+
+        setModel(dataModel);
     }
 
     /**
@@ -502,45 +533,254 @@ public class DataTable extends JTable {
     }
 
     /**
-     * Resizes this table's column widths based upon its data model.
-     *
-     * @param  tmogModel  the table's data model.
+     * @return the current defaults for this table or null if
+     *         they do not exist.
      */
-    protected void resizeAllColumnWidths(TransmogrifierTableModel tmogModel) {
-        final int numColumns = dataModel.getColumnCount();
-        TableColumnModel colModel = getColumnModel();
-        colModel.setColumnMargin(CELL_MARGIN);
-        TableColumn tableColumn;
-        int preferredWidth;
-        for (int columnIndex = 0; columnIndex < numColumns; columnIndex++) {
-            tableColumn = colModel.getColumn(columnIndex);
-            preferredWidth = getPreferredWidth(columnIndex);
-            tableColumn.setPreferredWidth(preferredWidth);
-            if ((tmogModel.isButtonColumn(columnIndex)) ||
-                (tmogModel.isTargetColumn(columnIndex))) {
-                tableColumn.setMinWidth(preferredWidth);
-                tableColumn.setMaxWidth(preferredWidth);
+    public ColumnDefaultSet getColumnDefaults() {
+        return columnDefaults;
+    }
+
+    /**
+     * Sets the column defaults for this table.
+     *
+     * @param  columnDefaults  the defaults for this table or
+     *                         null if the defaults should be cleared.
+     *
+     * @param  updateDisplay  true if the columns should be refreshed
+     *                        immediately; false if they will be refreshed
+     *                        by another process.
+     */
+    public void setColumnDefaults(ColumnDefaultSet columnDefaults,
+                                  boolean updateDisplay) {
+        this.columnDefaults = columnDefaults;
+
+        TableModel model = getModel();
+        if (model instanceof TransmogrifierTableModel) {
+            final int numColumns = model.getColumnCount();
+            final TableColumnModel colModel = getColumnModel();
+            TableColumn col;
+            Object headerValue;
+            DataFieldGroupHeader headerGroup;
+            ColumnDefault groupDefault;
+            for (int i = 0; i < numColumns; i++) {
+                col = colModel.getColumn(i);
+                headerValue = col.getHeaderValue();
+                if (headerValue instanceof DataFieldGroupHeader) {
+                    headerGroup = (DataFieldGroupHeader) headerValue;
+                    if (columnDefaults == null) {
+                        groupDefault = null;
+                    } else {
+                        groupDefault = columnDefaults.getColumnDefault(
+                                headerGroup.getGroupName());
+                    }
+                    headerGroup.setColumnDefault(groupDefault, updateDisplay);
+                }
+            }
+
+            if (updateDisplay) {
+                resizeAllColumnWidths((TransmogrifierTableModel) model);
+                repaint();
+            }
+        }
+
+    }
+
+    /**
+     * Sets this table's column defaults based upon the current view state.
+     */
+    public void setColumnDefaultsToCurrent() {
+
+        columnDefaults = new ColumnDefaultSet();
+
+        TableModel model = getModel();
+        final int numColumns = model.getColumnCount();
+        final TableColumnModel colModel = getColumnModel();
+        TableColumn col;
+        Object headerValue;
+        String headerString;
+        DataFieldGroupHeader headerGroup;
+        ColumnDefault columnDefault;
+        for (int i = 0; i < numColumns; i++) {
+            col = colModel.getColumn(i);
+            headerValue = col.getHeaderValue();
+            if (headerValue instanceof String) {
+                headerString = ((String) headerValue).trim();
+                if (headerString.length() > 0) {
+                    columnDefault = new ColumnDefault(headerString);
+                    columnDefault.setWidth(col.getWidth());
+                    columnDefaults.addColumnDefault(columnDefault);
+                }
+            } else if (headerValue instanceof DataFieldGroupHeader) {
+                headerGroup = (DataFieldGroupHeader) headerValue;
+                headerGroup.setColumnDefaultsToCurrent();
+                columnDefault = headerGroup.getColumnDefault();
+                columnDefaults.addColumnDefault(columnDefault);
             }
         }
     }
 
     /**
+     * Sets this table's column defaults so that they proportionally fit
+     * within the specified width.
+     *
+     * @param  fitWidth  expected total width for the table after
+     *                   proportionally resizing its columns.
+     */
+    public void setColumnDefaultsToFit(int fitWidth) {
+
+        TableModel model = getModel();
+        if (model instanceof DataTableModel) {
+            DataTableModel dataTableModel = (DataTableModel) model;
+
+            setColumnDefaults(null, true); // clear any current defaults
+            setColumnDefaultsToCurrent();  // mark preferred data sizes
+
+            final int tableWidth = getWidth();
+            final int scalableWidth =  getScalableColumnWidth(dataTableModel);
+            final int fixedWidth = tableWidth - scalableWidth;
+            final double fitRemaining = fitWidth - fixedWidth;
+            final double factor = fitRemaining / (double) scalableWidth;
+            columnDefaults.scale(factor);
+            setColumnDefaults(columnDefaults, true);
+        }
+    }
+
+    /**
+     * @param  dataTableModel  the current table model.
+     *
+     * @return the total width of all scalable columns in the model.
+     *         Button and target columns are not scalable.
+     */
+    protected int getScalableColumnWidth(DataTableModel dataTableModel) {
+        int scalableWidth = 0;
+
+        final int numColumns = dataTableModel.getColumnCount();
+        final TableColumnModel colModel = getColumnModel();
+        TableColumn tableColumn;
+        for (int columnIndex = 0; columnIndex < numColumns; columnIndex++) {
+            tableColumn = colModel.getColumn(columnIndex);
+
+            if (dataTableModel.isNestedTableColumn(columnIndex)) {
+
+                final Object headerValue = tableColumn.getHeaderValue();
+                if (headerValue instanceof DataFieldGroupHeader) {
+                    final DataFieldGroupHeader headerGroup =
+                            (DataFieldGroupHeader) headerValue;
+                    final ColumnDefault groupDefault =
+                            headerGroup.getColumnDefault();
+                    scalableWidth += groupDefault.getTotalWidth();
+                }
+
+            } else if (! (dataTableModel.isButtonColumn(columnIndex) ||
+                          dataTableModel.isTargetColumn(columnIndex))) {
+
+                scalableWidth += tableColumn.getWidth();
+
+            }
+        }
+
+        return scalableWidth;
+    }
+
+    /**
+     * Resizes this table's column widths based upon its data model.
+     *
+     * @param  tmogModel  the table's data model.
+     */
+    protected void resizeAllColumnWidths(TransmogrifierTableModel tmogModel) {
+
+        int targetColumnIndex = -1;
+        if (tmogModel instanceof DataTableModel) {
+            targetColumnIndex =
+                    ((DataTableModel) tmogModel).getTargetColumnIndex();
+        }
+
+        final int numColumns = tmogModel.getColumnCount();
+        TableColumnModel colModel = getColumnModel();
+        colModel.setColumnMargin(CELL_MARGIN);
+        TableColumn tableColumn;
+        int preferredWidth;
+        boolean useDefaults;
+        int maxWidth;
+        for (int columnIndex = 0; columnIndex < numColumns; columnIndex++) {
+            tableColumn = colModel.getColumn(columnIndex);
+            // ignore defaults for the target column
+            useDefaults = (columnIndex != targetColumnIndex);
+            preferredWidth = getPreferredWidth(columnIndex, useDefaults);
+
+            maxWidth = tableColumn.getMaxWidth();
+            if (tmogModel.isButtonColumn(columnIndex)) {
+                tableColumn.setMinWidth(preferredWidth);
+                tableColumn.setMaxWidth(preferredWidth);
+            } else if (preferredWidth == MINIMIZED_COLUMN_WIDTH) {
+                // if column should be minimized (see handleHeaderClick below),
+                // set max width so that it stays minimized
+                tableColumn.setMaxWidth(MINIMIZED_COLUMN_WIDTH);
+            } else  if (maxWidth == MINIMIZED_COLUMN_WIDTH) {
+                // if column should be expanded (see handleHeaderClick below),
+                // set max width to unlimited
+                tableColumn.setMaxWidth(Integer.MAX_VALUE);
+            }
+
+            // set preferred width after max width has been "corrected"
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
+    }
+
+    /**
      * @param  columnIndex  column to check.
+     * @param  useDefaults  indicates if column default values should
+     *                      be used when defined.
      *
      * @return the preferred width of the specified column.
      */
-    protected int getPreferredWidth(int columnIndex) {
+    protected int getPreferredWidth(int columnIndex,
+                                    boolean useDefaults) {
 
         int preferredWidth;
 
         final int numRows = this.getRowCount();
-
-        // ----------------------------------------
-        // 1. Default preferred width to column header's preferred width.
-
         final JTableHeader tableHeader = getTableHeader();
         final TableColumnModel columnModel = tableHeader.getColumnModel();
         final TableColumn column = columnModel.getColumn(columnIndex);
+
+        // ----------------------------------------
+        // 1. Use explicit default width if defined.
+
+        Integer defaultWidth = null;
+        if (useDefaults &&
+            (columnDefaults != null) && (columnDefaults.size() > 0)) {
+
+            final Object headerValue = column.getHeaderValue();
+            ColumnDefault columnDefault;
+            if (headerValue instanceof String) {
+                columnDefault = columnDefaults.getColumnDefault(
+                        (String) headerValue);
+                if (columnDefault != null) {
+                    defaultWidth = columnDefault.getWidth();
+                }
+            } else if (headerValue instanceof DataFieldGroupHeader) {
+                DataFieldGroupHeader headerGroup =
+                        (DataFieldGroupHeader) headerValue;
+                columnDefault = headerGroup.getColumnDefault();
+                if (columnDefault != null) {
+                    final ColumnDefaultSet columnDefaultSet =
+                            columnDefault.getNestedColumnDefaults();
+                    final int totalWidth = columnDefaultSet.getTotalWidth();
+                    if (totalWidth > 0) {
+                        defaultWidth = totalWidth;
+                    }
+                }
+            }
+        }
+
+        if (defaultWidth != null) {
+            return defaultWidth;
+        }
+
+        // ----------------------------------------
+        // 2. Default preferred width to column header's preferred width.
+
         TableCellRenderer renderer = column.getHeaderRenderer();
         if (renderer == null) {
             renderer = tableHeader.getDefaultRenderer();
@@ -561,7 +801,7 @@ public class DataTable extends JTable {
         }
 
         // ----------------------------------------
-        // 2. Look at configured display and actual widths for the column's
+        // 3. Look at configured display and actual widths for the column's
         //    first row value and update preferred width as needed.
         //    Optimize process by flagging completion for columns whose
         //    subsequent rows won't contain values with differing preferred
@@ -610,7 +850,7 @@ public class DataTable extends JTable {
         }
 
         // ----------------------------------------
-        // 3. If we still need to check values in each row
+        // 4. If we still need to check values in each row
         //    (e.g. for text fields with default values),
         //    loop through the remaining rows and update the
         //    preferred width as needed.
@@ -788,10 +1028,15 @@ public class DataTable extends JTable {
                 TableColumnModel columnModel =
                         tableHeader.getColumnModel();
                 TableColumn column = columnModel.getColumn(columnIndex);
-                final int minimizedWidth = 20;
-                int preferredWidth = getPreferredWidth(columnIndex);
-                if (column.getWidth() >= preferredWidth) {
-                    column.setMaxWidth(minimizedWidth);
+                // header clicks should override column defaults
+                final boolean useDefaults = false;
+                final int preferredWidth =
+                        getPreferredWidth(columnIndex, useDefaults);
+                if (column.getWidth() > MINIMIZED_COLUMN_WIDTH) {
+                    // set max width so that column stays minimized
+                    // when other columns are resized
+                    column.setMaxWidth(MINIMIZED_COLUMN_WIDTH);
+                    column.setPreferredWidth(MINIMIZED_COLUMN_WIDTH);
                 } else {
                     column.setMaxWidth(Integer.MAX_VALUE);
                     column.setPreferredWidth(preferredWidth);
