@@ -25,6 +25,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * This class contains the data model for renaming a set of files.
@@ -480,7 +481,8 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         if (projectPreferences == null) {
             names = new HashSet<String>();
         } else {
-            names = projectPreferences.getFieldDefaultSetNames();
+            names = new TreeSet<String>(
+                    projectPreferences.getFieldDefaultSetNames());
         }
         return names;
     }
