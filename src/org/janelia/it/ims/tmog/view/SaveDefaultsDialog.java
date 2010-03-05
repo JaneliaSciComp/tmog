@@ -1,5 +1,5 @@
-/**
- * Copyright 2010 Howard Hughes Medical Institute.
+/*
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -156,7 +156,7 @@ public class SaveDefaultsDialog
         } else {
 
             NarrowOptionPane.showMessageDialog(
-                    getParent(),
+                    contentPane,
                     "Please specify the name for this set of default values.",
                     "Default Set Not Named",
                     JOptionPane.ERROR_MESSAGE);
@@ -171,14 +171,14 @@ public class SaveDefaultsDialog
 
             if (wasSaveSuccessful) {
                 NarrowOptionPane.showMessageDialog(
-                        getParent(),
+                        contentPane,
                         "The '" + name +
                         "' default set was successfully saved.",
                         "Default Set Saved",
                         JOptionPane.INFORMATION_MESSAGE);
             } else {
                 NarrowOptionPane.showMessageDialog(
-                        getParent(),
+                        contentPane,
                         "The '" + name + "' default set was " +
                         "NOT saved for this row.  Please verify that " +
                         "data has been entered for the row and that you " +
