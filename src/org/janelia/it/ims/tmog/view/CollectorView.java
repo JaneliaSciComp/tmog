@@ -123,6 +123,7 @@ public class CollectorView implements SessionView, InputSelectionView {
         return taskComponents.getSessionIcon();
     }
 
+    // TODO: refactor duplicated view preferences methods into abstract base class
     public void setPreferencesForCurrentProject() {
         if (tableModel != null) {
             dataTable.setColumnDefaultsToCurrent();
@@ -150,7 +151,12 @@ public class CollectorView implements SessionView, InputSelectionView {
                 final JScrollBar scrollBar =
                         dataTableScrollPane.getHorizontalScrollBar();
                 if ((scrollBar != null) && scrollBar.isVisible()) {
-                    dataTable.setColumnDefaultsToFit(dataPanel.getWidth());
+                    int fitWidth = dataPanel.getWidth();
+                    // HACK: reduce data panel width by 20% to ensure
+                    // data table completely fits in displayable area
+                    final int magicFactor = fitWidth / 5;
+                    fitWidth = fitWidth - magicFactor;
+                    dataTable.setColumnDefaultsToFit(fitWidth);
                 }
                 break;
 
