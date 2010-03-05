@@ -51,15 +51,16 @@ public class CollectorView implements SessionView, InputSelectionView {
     private JScrollPane dataTableScrollPane;
     @SuppressWarnings({"UnusedDeclaration"})
     private JPanel dataButtonPanel;
+    private JScrollPane projectNamePane;
+    private JTextArea projectName;
+    private JScrollPane rootDirectoryPane;
     private JTextArea rootDirectoryField;
     private JButton rootDirectoryBtn;
-    private JLabel projectLabel;
     private JButton saveBtn;
     private JLabel taskProgressLabel;
     private JProgressBar taskProgressBar;
     private DataTable dataTable;
     private JButton cancelTargetWorkerButton;
-    private JScrollPane rootDirectoryPane;
 
     private ProjectConfiguration projectConfig;
     private File defaultDirectory;
@@ -73,7 +74,7 @@ public class CollectorView implements SessionView, InputSelectionView {
                          JTabbedPane parentTabbedPane) {
         this.projectConfig = projectConfig;
         this.defaultDirectory = defaultDirectory;
-        this.projectLabel.setText(projectConfig.getName());
+        this.projectName.setText(projectConfig.getName());
         this.inputSelectionHandler =
                 new InputSelectionHandler(projectConfig,
                                           defaultDirectory,
@@ -83,6 +84,13 @@ public class CollectorView implements SessionView, InputSelectionView {
                                           JFileChooser.DIRECTORIES_ONLY,
                                           "Select Root Directory",
                                           this);
+
+        projectName.setBackground(directoryPanel.getBackground());
+        projectNamePane.setBorder(null);
+
+        rootDirectoryField.setBackground(directoryPanel.getBackground());
+        rootDirectoryPane.setBorder(null);
+
         setupTaskComponents(parentTabbedPane);
     }
 

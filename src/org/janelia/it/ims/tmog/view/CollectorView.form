@@ -51,14 +51,6 @@
               <toolTipText value="Change Root Directory"/>
             </properties>
           </component>
-          <component id="8a85d" class="javax.swing.JLabel" binding="projectLabel">
-            <constraints>
-              <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value=""/>
-            </properties>
-          </component>
           <component id="ce25d" class="javax.swing.JLabel">
             <constraints>
               <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -89,7 +81,7 @@
           </component>
           <scrollpane id="31248" binding="rootDirectoryPane">
             <constraints>
-              <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <horizontalScrollBarPolicy value="31"/>
@@ -98,6 +90,26 @@
             <border type="none"/>
             <children>
               <component id="98df" class="javax.swing.JTextArea" binding="rootDirectoryField">
+                <constraints/>
+                <properties>
+                  <editable value="false"/>
+                  <lineWrap value="true"/>
+                  <wrapStyleWord value="true"/>
+                </properties>
+              </component>
+            </children>
+          </scrollpane>
+          <scrollpane id="13714" binding="projectNamePane">
+            <constraints>
+              <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <horizontalScrollBarPolicy value="31"/>
+              <verticalScrollBarPolicy value="21"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="a8f9e" class="javax.swing.JTextArea" binding="projectName">
                 <constraints/>
                 <properties>
                   <editable value="false"/>
@@ -208,7 +220,7 @@
               <component id="e2479" class="org.janelia.it.ims.tmog.view.component.DataTable" binding="dataTable">
                 <constraints/>
                 <properties>
-                  <autoResizeMode value="0"/>
+                  <autoResizeMode value="2"/>
                 </properties>
               </component>
             </children>
