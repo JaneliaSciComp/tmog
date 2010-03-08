@@ -11,7 +11,6 @@ import org.janelia.it.ims.tmog.config.ProjectConfiguration;
 import org.janelia.it.ims.tmog.config.preferences.FieldDefaultSet;
 import org.janelia.it.ims.tmog.config.preferences.ProjectPreferences;
 import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
-import org.janelia.it.ims.tmog.config.preferences.ViewDefault;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.DataFieldGroupModel;
 import org.janelia.it.ims.tmog.target.Target;
@@ -421,54 +420,10 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
     }
 
     /**
-     * @return current user preferences for this model's project or
-     *         null if user preferences cannot be managed.
+     * @return the project name for this model.
      */
-    public ProjectPreferences getProjectPreferences() {
-
-        ProjectPreferences projectPreferences = null;
-
-        final String projectName = projectConfiguration.getName();
-        TransmogrifierPreferences tmogPreferences =
-                TransmogrifierPreferences.getInstance();
-        if (tmogPreferences.areLoaded()) {
-            projectPreferences = tmogPreferences.getPreferences(projectName);
-
-            if (projectPreferences == null) {
-                projectPreferences = new ProjectPreferences();
-                projectPreferences.setName(projectName);
-                tmogPreferences.addProjectPreferences(projectPreferences);
-            }
-        }
-
-        return projectPreferences;
-    }
-
-    /**
-     * @return the user view preferences for this model's project or
-     *         null if they don't exist.
-     */
-    public ViewDefault getProjectViewPreferences() {
-        ViewDefault viewDefault = null;
-        ProjectPreferences projectPreferences = getProjectPreferences();
-        if (projectPreferences != null) {
-            viewDefault =
-                    projectPreferences.getViewDefault(ViewDefault.CURRENT);
-        }
-        return viewDefault;
-    }
-
-    /**
-     * Overwrites or adds the specified view preferences to the
-     * user preferences for this model's project.
-     *
-     * @param  viewDefault  view preferences to update.
-     */
-    public void updateProjectViewPreferences(ViewDefault viewDefault) {
-        ProjectPreferences projectPreferences = getProjectPreferences();
-        if (projectPreferences != null) {
-            projectPreferences.addViewDefault(viewDefault);
-        }
+    public String getProjectName() {
+        return projectConfiguration.getName();
     }
 
     /**
@@ -477,7 +432,9 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
      */
     public Set<String> getFieldDefaultSetNames() {
         Set<String> names;
-        final ProjectPreferences projectPreferences = getProjectPreferences();
+        ProjectPreferences projectPreferences =
+                TransmogrifierPreferences.getProjectPreferences(
+                        projectConfiguration.getName());
         if (projectPreferences == null) {
             names = new HashSet<String>();
         } else {
@@ -507,7 +464,9 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
     public void applyFieldDefaultSet(String defaultSetName,
                                      int rowIndex) {
 
-        final ProjectPreferences projectPreferences = getProjectPreferences();
+        ProjectPreferences projectPreferences =
+                TransmogrifierPreferences.getProjectPreferences(
+                        projectConfiguration.getName());
         if (projectPreferences != null) {
             final FieldDefaultSet defaultSet =
                     projectPreferences.getFieldDefaultSet(defaultSetName);
@@ -548,7 +507,9 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
             TransmogrifierPreferences tmogPreferences =
                     TransmogrifierPreferences.getInstance();
             if (tmogPreferences.canWrite()) {
-                ProjectPreferences projectPreferences = getProjectPreferences();
+                ProjectPreferences projectPreferences =
+                        TransmogrifierPreferences.getProjectPreferences(
+                                projectConfiguration.getName());
                 projectPreferences.addFieldDefaultSet(defaultSet);
                 wasSaveSuccessful = tmogPreferences.save();
             }
@@ -564,7 +525,9 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
      *         model's project; otherwise false.
      */
     public boolean containsDefaultSet(String defaultSetName) {
-        ProjectPreferences projectPreferences = getProjectPreferences();
+        ProjectPreferences projectPreferences =
+                TransmogrifierPreferences.getProjectPreferences(
+                        projectConfiguration.getName());
         return projectPreferences.containsDefaultSet(defaultSetName);
     }
 
@@ -582,7 +545,9 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         TransmogrifierPreferences tmogPreferences =
                 TransmogrifierPreferences.getInstance();
         if (tmogPreferences.canWrite()) {
-            ProjectPreferences projectPreferences = getProjectPreferences();
+            ProjectPreferences projectPreferences =
+                    TransmogrifierPreferences.getProjectPreferences(
+                            projectConfiguration.getName());
             projectPreferences.removeFieldDefaultSet(defaultSetName);
             wasRemoveSuccessful = tmogPreferences.save();
         }

@@ -17,9 +17,19 @@ import org.janelia.it.utils.StringUtil;
 public class PathDefault
         extends NamedObject {
 
+    /** Name of the source directory path default. */
+    public static final String SOURCE_DIRECTORY = "sourceDirectory";
+
+    /** Name of the transfer directory path default. */
+    public static final String TRANSFER_DIRECTORY = "transferDirectory";
+
     private String value;
 
     public PathDefault() {
+    }
+
+    public PathDefault(String name) {
+        super(name);
     }
 
     public String getValue() {

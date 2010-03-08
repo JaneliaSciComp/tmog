@@ -33,7 +33,63 @@ public class TransmogrifierPreferences {
     public static TransmogrifierPreferences getInstance() {
         return instance;
     }
-    
+
+    /**
+     * @param  projectName  project name.
+     *
+     * @return current user preferences for the specified project or
+     *         null if user preferences cannot be managed.
+     */
+    public static synchronized ProjectPreferences getProjectPreferences(String projectName) {
+
+        ProjectPreferences projectPreferences = null;
+
+        if (instance.areLoaded()) {
+            projectPreferences = instance.getPreferences(projectName);
+
+            if (projectPreferences == null) {
+                projectPreferences = new ProjectPreferences();
+                projectPreferences.setName(projectName);
+                instance.addProjectPreferences(projectPreferences);
+            }
+        }
+
+        return projectPreferences;
+    }
+
+    /**
+     * @param  projectName  project name.
+     *
+     * @return the user view preferences for the specified project or
+     *         null if they cannot be managed.
+     */
+    public static synchronized ViewDefault getProjectViewPreferences(String projectName) {
+        ViewDefault viewDefault = null;
+        ProjectPreferences projectPreferences =
+                getProjectPreferences(projectName);
+        if (projectPreferences != null) {
+            viewDefault = projectPreferences.getViewDefault(ViewDefault.CURRENT,
+                                                            true);
+        }
+        return viewDefault;
+    }
+
+    /**
+     * Overwrites or adds the specified view preferences to the
+     * user preferences for the specified project.
+     *
+     * @param  projectName  project name.
+     * @param  viewDefault  view preferences to update.
+     */
+    public static void updateProjectViewPreferences(String projectName,
+                                                    ViewDefault viewDefault) {
+        ProjectPreferences projectPreferences =
+                getProjectPreferences(projectName);
+        if (projectPreferences != null) {
+            projectPreferences.addViewDefault(viewDefault);
+        }
+    }
+
     private File preferencesFile;
     private Map<String, ProjectPreferences> projectNameToPreferencesMap;
     private boolean loaded;

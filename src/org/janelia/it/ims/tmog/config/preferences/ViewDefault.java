@@ -44,6 +44,29 @@ public class ViewDefault
     }
 
     /**
+     * @param  pathDefaultName  name of default to retrieve.
+     *
+     * @return path default with the specified name or null if none exists.
+     */
+    public PathDefault getPathDefault(String pathDefaultName) {
+        return pathDefaults.get(pathDefaultName);
+    }
+
+    /**
+     * @return the source path default or null if none exists.
+     */
+    public PathDefault getSourcePathDefault() {
+        return getPathDefault(PathDefault.SOURCE_DIRECTORY);
+    }
+
+    /**
+     * @return the transfer path default or null if none exists.
+     */
+    public PathDefault getTransferPathDefault() {
+        return getPathDefault(PathDefault.TRANSFER_DIRECTORY);
+    }
+
+    /**
      * Adds the specified path default to this view.
      *
      * @param  pathDefault  default to add.

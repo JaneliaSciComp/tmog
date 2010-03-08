@@ -11,6 +11,7 @@ import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.TransmogrifierTableModel;
 import org.janelia.it.ims.tmog.config.preferences.ColumnDefault;
 import org.janelia.it.ims.tmog.config.preferences.ColumnDefaultSet;
+import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
 import org.janelia.it.ims.tmog.config.preferences.ViewDefault;
 import org.janelia.it.ims.tmog.field.ButtonEditor;
 import org.janelia.it.ims.tmog.field.ButtonRenderer;
@@ -245,7 +246,9 @@ public class DataTable extends JTable {
      */
     public void setModelAndColumnDefaults(DataTableModel dataModel) {
 
-        ViewDefault viewDefault = dataModel.getProjectViewPreferences();
+        ViewDefault viewDefault =
+                TransmogrifierPreferences.getProjectViewPreferences(
+                        dataModel.getProjectName());
         if ((viewDefault != null) && (viewDefault.hasColumnDefaults())) {
             setColumnDefaults(viewDefault.getColumnDefaultsCopy(), false);
         } else {

@@ -12,6 +12,7 @@ import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
 import org.janelia.it.ims.tmog.config.preferences.ColumnDefaultSet;
+import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
 import org.janelia.it.ims.tmog.config.preferences.ViewDefault;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
@@ -68,13 +69,16 @@ public class CollectorView implements SessionView, InputSelectionView {
     private DataTableModel tableModel;
     private SimpleTask task;
     private TaskComponents taskComponents;
+    private String projectNameText;
+
 
     public CollectorView(ProjectConfiguration projectConfig,
                          File defaultDirectory,
                          JTabbedPane parentTabbedPane) {
         this.projectConfig = projectConfig;
         this.defaultDirectory = defaultDirectory;
-        this.projectName.setText(projectConfig.getName());
+        this.projectNameText = projectConfig.getName();
+        this.projectName.setText(projectNameText);
         this.inputSelectionHandler =
                 new InputSelectionHandler(projectConfig,
                                           defaultDirectory,
@@ -132,7 +136,9 @@ public class CollectorView implements SessionView, InputSelectionView {
             ViewDefault viewDefault = new ViewDefault(ViewDefault.CURRENT);
             viewDefault.deepCopyAndSetColumnDefaults(columnDefaults);
 
-            tableModel.updateProjectViewPreferences(viewDefault);
+            TransmogrifierPreferences.updateProjectViewPreferences(
+                                    projectNameText,
+                                    viewDefault);
         }
     }
 
@@ -140,7 +146,9 @@ public class CollectorView implements SessionView, InputSelectionView {
         if (tableModel != null) {
             dataTable.setColumnDefaults(null, true);
             ViewDefault viewDefault = new ViewDefault(ViewDefault.CURRENT);
-            tableModel.updateProjectViewPreferences(viewDefault);
+            TransmogrifierPreferences.updateProjectViewPreferences(
+                                    projectNameText,
+                                    viewDefault);
         }
     }
 
@@ -167,7 +175,8 @@ public class CollectorView implements SessionView, InputSelectionView {
             case PREFERENCES:
                 if (tableModel != null) {
                     ViewDefault viewDefault =
-                            tableModel.getProjectViewPreferences();
+                            TransmogrifierPreferences.getProjectViewPreferences(
+                                    projectNameText);
                     if (viewDefault != null) {
                         ColumnDefaultSet columnDefaults =
                                 viewDefault.getColumnDefaultsCopy();

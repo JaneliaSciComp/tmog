@@ -13,6 +13,8 @@ import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.tmog.config.preferences.ColumnDefaultSet;
+import org.janelia.it.ims.tmog.config.preferences.PathDefault;
+import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
 import org.janelia.it.ims.tmog.config.preferences.ViewDefault;
 import org.janelia.it.ims.tmog.filefilter.DirectoryOnlyFilter;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
@@ -73,13 +75,14 @@ public class RenameView implements SessionView, InputSelectionView {
     private ProjectConfiguration projectConfig;
     private RenameTask task;
     private TaskComponents taskComponents;
+    private String projectNameText;
 
     public RenameView(ProjectConfiguration projectConfig,
                       File lsmDirectory,
                       JTabbedPane parentTabbedPane) {
         this.projectConfig = projectConfig;
-        this.projectName.setText(projectConfig.getName());
-
+        this.projectNameText = projectConfig.getName();
+        this.projectName.setText(projectNameText);
 
         this.inputSelectionHandler =
                 new InputSelectionHandler(projectConfig,
@@ -126,7 +129,9 @@ public class RenameView implements SessionView, InputSelectionView {
             ViewDefault viewDefault = new ViewDefault(ViewDefault.CURRENT);
             viewDefault.deepCopyAndSetColumnDefaults(columnDefaults);
 
-            tableModel.updateProjectViewPreferences(viewDefault);
+            TransmogrifierPreferences.updateProjectViewPreferences(
+                                    projectNameText,
+                                    viewDefault);
         }
     }
 
@@ -134,7 +139,9 @@ public class RenameView implements SessionView, InputSelectionView {
         if (tableModel != null) {
             dataTable.setColumnDefaults(null, true);
             ViewDefault viewDefault = new ViewDefault(ViewDefault.CURRENT);
-            tableModel.updateProjectViewPreferences(viewDefault);
+            TransmogrifierPreferences.updateProjectViewPreferences(
+                                    projectNameText,
+                                    viewDefault);
         }
     }
 
@@ -162,7 +169,8 @@ public class RenameView implements SessionView, InputSelectionView {
             case PREFERENCES:
                 if (tableModel != null) {
                     ViewDefault viewDefault =
-                            tableModel.getProjectViewPreferences();
+                            TransmogrifierPreferences.getProjectViewPreferences(
+                                    projectNameText);
                     if (viewDefault != null) {
                         ColumnDefaultSet columnDefaults =
                                 viewDefault.getColumnDefaultsCopy();
@@ -280,6 +288,7 @@ public class RenameView implements SessionView, InputSelectionView {
                     fileChooser.setFileSelectionMode(
                             JFileChooser.DIRECTORIES_ONLY);
 
+                    setFileChooserCurrentDirectory(fileChooser);
                     InputSelectionHandler.setPreferredSize(fileChooser,
                                                            appPanel,
                                                            0.9);
@@ -288,6 +297,7 @@ public class RenameView implements SessionView, InputSelectionView {
                     File selectedDirectory = fileChooser.getSelectedFile();
                     if (selectedDirectory != null) {
                         outputDirectoryField.setText(selectedDirectory.getPath());
+                        saveTransferDirectoryPreference(selectedDirectory);
                     }
                 }
             });
@@ -464,6 +474,51 @@ public class RenameView implements SessionView, InputSelectionView {
             // and restore the rest of the model
             tableModel.removeSuccessfullyCopiedFiles(failedRowIndices);
             setFileTableEnabled(true, true);
+        }
+    }
+
+    private void setFileChooserCurrentDirectory(JFileChooser fileChooser) {
+
+        File directory = null;
+        ViewDefault viewDefault =
+                TransmogrifierPreferences.getProjectViewPreferences(
+                        projectNameText);
+        if (viewDefault != null) {
+            PathDefault pathDefault = viewDefault.getTransferPathDefault();
+            if (pathDefault != null) {
+                directory = new File(pathDefault.getValue());
+            }
+        }
+
+        if ((directory != null) &&
+            directory.exists() &&
+            directory.canRead() &&
+            directory.isDirectory()) {
+            fileChooser.setCurrentDirectory(directory);
+        }
+    }
+
+    private void saveTransferDirectoryPreference(File directory) {
+
+        ViewDefault viewDefault =
+                TransmogrifierPreferences.getProjectViewPreferences(
+                        projectNameText);
+        if (viewDefault != null) {
+            PathDefault pathDefault = viewDefault.getTransferPathDefault();
+            if (pathDefault == null) {
+                pathDefault = new PathDefault(PathDefault.TRANSFER_DIRECTORY);
+                viewDefault.addPathDefault(pathDefault);
+            }
+            File value = directory.getParentFile();
+            if (value == null) {
+                value = directory;
+            }
+            pathDefault.setValue(value.getAbsolutePath());
+            TransmogrifierPreferences preferences =
+                    TransmogrifierPreferences.getInstance();
+            if (preferences.canWrite()) {
+                preferences.save();
+            }
         }
     }
 

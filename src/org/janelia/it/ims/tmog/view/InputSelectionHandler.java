@@ -1,8 +1,8 @@
 /*
- * Copyright 2009 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.view;
@@ -11,6 +11,9 @@ import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.config.InputFileFilter;
 import org.janelia.it.ims.tmog.config.InputFileSorter;
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
+import org.janelia.it.ims.tmog.config.preferences.PathDefault;
+import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
+import org.janelia.it.ims.tmog.config.preferences.ViewDefault;
 import org.janelia.it.ims.tmog.target.FileTarget;
 import org.janelia.it.ims.tmog.target.FileTargetWorker;
 import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
@@ -40,6 +43,7 @@ public class InputSelectionHandler {
     private String selectButtonText;
     private InputSelectionView view;
 
+    private String projectName;
     private InputFileFilter inputFilter;
     private InputFileSorter inputSorter;
     private File defaultDirectory;
@@ -49,7 +53,7 @@ public class InputSelectionHandler {
      * Constructs a new handler.
      *
      * @param  projectConfig       configuration for the current project.
-     * @param  defaultDirectory    current default directory.
+     * @param  globalDefaultDirectory  current global default directory.
      * @param  directoryField      label for displaying the selected directory.
      * @param  setDirectoryButton  button that initiates input selection.
      * @param  cancelButton        button for cancelling input searches.
@@ -61,16 +65,17 @@ public class InputSelectionHandler {
      * @param  view                the view using this handler (for callbacks).
      */
     public InputSelectionHandler(ProjectConfiguration projectConfig,
-                                 File defaultDirectory,
+                                 File globalDefaultDirectory,
                                  JTextArea directoryField,
                                  JButton setDirectoryButton,
                                  JButton cancelButton,
                                  int selectionMode,
                                  String selectButtonText,
                                  InputSelectionView view) {
+        this.projectName = projectConfig.getName();
         this.inputFilter = projectConfig.getInputFileFilter();
         this.inputSorter = projectConfig.getInputFileSorter();
-        this.defaultDirectory = defaultDirectory;
+        setDefaultDirectory(globalDefaultDirectory);
         this.directoryField = directoryField;
         this.setDirectoryButton = setDirectoryButton;
         this.cancelButton = cancelButton;
@@ -167,6 +172,7 @@ public class InputSelectionHandler {
 
     private void handleDirectorySelection(File selectedFile) {
         defaultDirectory = selectedFile;
+        updateProjectPreferences(defaultDirectory);
 
         FileFilter fileFilter;
         try {
@@ -291,6 +297,46 @@ public class InputSelectionHandler {
         }
         toolTip.append(" found");
         return toolTip.toString();
+    }
+
+    private void setDefaultDirectory(File globalDefaultDirectory) {
+
+        defaultDirectory = null;
+        ViewDefault viewDefault =
+                TransmogrifierPreferences.getProjectViewPreferences(
+                        projectName);
+        if (viewDefault != null) {
+            PathDefault pathDefault = viewDefault.getSourcePathDefault();
+            if (pathDefault != null) {
+                defaultDirectory = new File(pathDefault.getValue());
+            }
+        }
+
+        if ((defaultDirectory == null) ||
+            (! defaultDirectory.exists()) ||
+            (! defaultDirectory.canRead()) ||
+            (! defaultDirectory.isDirectory())) {
+            defaultDirectory = globalDefaultDirectory;
+        }
+    }
+
+    private void updateProjectPreferences(File sourceDefaultDirectory) {
+        ViewDefault viewDefault =
+                TransmogrifierPreferences.getProjectViewPreferences(
+                        projectName);
+        if (viewDefault != null) {
+            PathDefault pathDefault = viewDefault.getSourcePathDefault();
+            if (pathDefault == null) {
+                pathDefault = new PathDefault(PathDefault.SOURCE_DIRECTORY);
+                viewDefault.addPathDefault(pathDefault);
+            }
+            pathDefault.setValue(sourceDefaultDirectory.getAbsolutePath());
+            TransmogrifierPreferences preferences =
+                    TransmogrifierPreferences.getInstance();
+            if (preferences.canWrite()) {
+                preferences.save();
+            }
+        }
     }
 
     /** The logger for this class. */
