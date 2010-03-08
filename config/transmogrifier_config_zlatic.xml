@@ -222,7 +222,7 @@
             <separator value="@"/>
 
             <fileName displayName="Suffix"
-                      patternString=".+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"
+                      patternString=".+?@.+?@.+?@.+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"
                       patternGroupNumber="1"
                       visible="true" />
 
