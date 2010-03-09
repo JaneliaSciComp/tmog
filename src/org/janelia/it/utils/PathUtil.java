@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 package org.janelia.it.utils;
 
@@ -21,20 +21,22 @@ public class PathUtil {
      * Converts the specified path as needed for the current operating system.
      * Primarily, conversion involves setting the appropriate file separator.
      * It also involves converting between smb://server/dir on Mac and
-     * \\server\dir on Windows for paths that refernce remote file servers.
+     * \\server\dir on Windows for paths that reference remote file servers.
      *
      * @param  srcPath  the path to convert.
      *
      * @return the converted path.
      */
     public static String convertPath(String srcPath) {
-        String targetPath = convertShareName(srcPath, ON_UNIX);
-
+        String targetPath = srcPath;
         if (ON_MAC) {
+            targetPath = convertShareName(srcPath, false);
             targetPath = convertPathToMac(targetPath);
         } else if (ON_WINDOWS) {
+            targetPath = convertShareName(srcPath, false);
             targetPath = convertPathToWindows(targetPath);
         } else if (ON_UNIX) {
+            targetPath = convertShareName(srcPath, true);
             targetPath = convertPathToUnix(targetPath);
         }
         return targetPath;
