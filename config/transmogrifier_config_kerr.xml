@@ -4,15 +4,14 @@
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
     <!-- frameSizePercentage default is 80, min is 40, and max is 99 --> 
-    <global minimumVersion="2.2.9"
+    <global minimumVersion="2.4.0"
             frameSizePercentage="95"/>
 
-    <!-- replace "trautmane-ws:8080" with "wormtracker.int.janelia.org" for production  -->
     <project name="Kerr Lab: Multi-Worm Tracker" taskName="collector" default="true">
 
         <inputFileFilter patternString="(\d{8}_\d{6}){1}(.zip)?"
                          patternGroupNumber="1"
-                         excludeQueryUrl="http://trautmane-ws:8080/wormtracker"
+                         excludeQueryUrl="http://wormtracker.int.janelia.org/wormtracker"
                          recursiveSearch="true"
                          filterDuplicates="true"/>
         <!-- Filter Notes:                                                     -->
@@ -23,7 +22,7 @@
         <plugins>
             <rowListener className="org.janelia.it.wormtracker.SummaryPrefixPlugin"/>
             <rowListener className="org.janelia.it.wormtracker.WormTrackerDataPlugin">
-                <property name="dataServerUrl" value="http://trautmane-ws:8080/wormtracker"/>
+                <property name="dataServerUrl" value="http://wormtracker.int.janelia.org/wormtracker"/>
                 <property name="resourceField" value="Experiment"/>
             </rowListener>
         </plugins>

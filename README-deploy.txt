@@ -46,7 +46,7 @@ are deployed for the following lab groups:
 
   baker            /groups/baker/bakerlab/tmog
   flylight (R&D)   /groups/rubin/data1/rubinlab/tmog
-  kerr             /groups/kerr/kerrlab/tmog
+  kerr             /groups/kerr/kerrlab/tmog/config
   leet             /groups/leet/leetconfocal/tmog/config
   rubin (ChaCRM)   /groups/rubin/data1/rubinlab/tmog/config
   rubin (R&D)      /groups/rubin/rubinimg/tmog
