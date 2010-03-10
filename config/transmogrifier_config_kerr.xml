@@ -83,7 +83,9 @@
 
             <pluginData displayName="Prefix" />
 
-            <fileRelativePath displayName="Path" visible="false"/>
+            <text displayName="Path" copyable="false">
+                <sourceFileDefault matchType="path" pattern=".*MWTdata[/\\\\](.*)[/\\\\](\d{8}_\d{6}){1}(.zip)?"/>
+            </text>
 
         </dataFields>
 
