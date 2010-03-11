@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.2.2"/>
+    <global minimumVersion="2.4.1"/>
 
     <project name="Baker Lab: GAL4 Lines (BSB_*)" default="true">
 
@@ -25,6 +25,17 @@
                 <property name="db.config.key" value="nighthawk"/>
                 <property name="line" value="Line"/>
                 <property name="family" value="family"/>
+                <property name="display" value="display"/>
+                <property name="genotype" value="Genotype"/>
+                <property name="chron_interval" value="Chron Interval"/>
+                <property name="heat_shock_hour" value="Heat Shock Hour"/>
+                <property name="heat_shock_interval" value="Heat Shock Interval"/>
+            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="lab" value="lab"/>
+                <property name="line" value="Line"/>
+                <property name="family" value="sage_family"/>
                 <property name="display" value="display"/>
                 <property name="genotype" value="Genotype"/>
                 <property name="chron_interval" value="Chron Interval"/>
@@ -105,6 +116,8 @@
             </validValueList>
 
             <static name="family" value="baker-lab" markedForTask="false"/>
+            <static name="sage_family" value="baker_lab" markedForTask="false"/>
+            <static name="lab" value="baker" markedForTask="false"/>
         </dataFields>
 
     </project>
@@ -117,6 +130,10 @@
             </rowValidator>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
+                <property name="display" value="display"/>
+            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
                 <property name="display" value="display"/>
             </rowListener>
         </plugins>
@@ -143,6 +160,18 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
                 <property name="line" value="Line"/>
+                <property name="family" value="family"/>
+                <property name="display" value="display"/>
+                <property name="genotype" value="Genotype"/>
+                <property name="chron_interval" value="Chron Interval"/>
+                <property name="heat_shock_hour" value="Heat Shock Hour"/>
+                <property name="heat_shock_interval" value="Heat Shock Interval"/>
+            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="lab" value="lab"/>
+                <property name="line" value="Line"/>
+                <property name="family" value="sage_family"/>
                 <property name="display" value="display"/>
                 <property name="genotype" value="Genotype"/>
                 <property name="chron_interval" value="Chron Interval"/>
@@ -225,6 +254,9 @@
                 <validValue displayName="No" value="false" default="true"/>
             </validValueList>
 
+            <static name="family" value="baker-lab" markedForTask="false"/>
+            <static name="sage_family" value="baker_lab" markedForTask="false"/>
+            <static name="lab" value="baker" markedForTask="false"/>
         </dataFields>
 
     </project>

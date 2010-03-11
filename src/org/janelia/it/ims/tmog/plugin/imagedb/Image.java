@@ -1,8 +1,8 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
@@ -17,9 +17,12 @@ import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This class encapsulates information collected for images.
@@ -28,9 +31,13 @@ import java.util.Map;
  */
 public class Image {
 
+    public static final String LINE_PROPERTY = "line";
+    public static final String LAB_PROPERTY = "lab";
+    
     private Integer id;
     private String relativePath;
     private Date captureDate;
+    private String source;
     private String family;
     private boolean display;
     private Map<String, String> propertyTypeToValueMap;
@@ -39,6 +46,7 @@ public class Image {
     public Image() {
         this.id = null;
         this.propertyTypeToValueMap = new LinkedHashMap<String, String>();
+        this.source = "JFRC";
         this.display = true;
         this.row = null;
     }
@@ -98,6 +106,10 @@ public class Image {
         }
     }
 
+    public String getSource() {
+        return source;
+    }
+
     public String getFamily() {
         return family;
     }
@@ -127,6 +139,29 @@ public class Image {
 
     public Map<String, String> getPropertyTypeToValueMap() {
         return propertyTypeToValueMap;
+    }
+
+    public Map<String, String> getPropertyTypeToValueMapForSage() {
+        Map<String, String> filteredMap =
+                new HashMap<String, String>(propertyTypeToValueMap);
+        for (String key : propertyTypeToValueMap.keySet()) {
+            if (SAGE_FILTERED_PROPERTIES.contains(key)) {
+                filteredMap.remove(key);
+            }
+        }
+        return filteredMap;
+    }
+
+    public String getLineName() {
+        return propertyTypeToValueMap.get(LINE_PROPERTY);
+    }
+
+    public String getLabName() {
+        return propertyTypeToValueMap.get(LAB_PROPERTY);
+    }
+
+    public boolean isRepresentative() {
+        return false;
     }
 
     public void addProperty(String type,
@@ -166,4 +201,11 @@ public class Image {
     /** The logger for this class. */
     private static final Log LOG = LogFactory.getLog(Image.class);
 
+    private static final Set<String> SAGE_FILTERED_PROPERTIES;
+    static {
+        Set<String> set = new HashSet<String>();
+        set.add(LINE_PROPERTY);
+        set.add(LAB_PROPERTY);
+        SAGE_FILTERED_PROPERTIES = set;
+    }
 }
