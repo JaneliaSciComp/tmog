@@ -144,6 +144,15 @@
                      markedForTask="false">
             </decimal>
 
+            <text displayName="Limit Parameter"
+                  required="false"
+                  markedForTask="false"/>
+
+            <text displayName="Follicle Parameter"
+                  required="false"
+                  markedForTask="false"/>
+
+            
         </dataFields>
 
     </project>
