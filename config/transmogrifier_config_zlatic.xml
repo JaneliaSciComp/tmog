@@ -346,7 +346,7 @@
 
     <project name="Zlatic Lab: Fix Missing At Symbol">
 
-        <inputFileFilter patternString=".+\.(png|blob|summary)"
+        <inputFileFilter patternString=".+@n_.*\.(png|blob)"
                          recursiveSearch="true"/>
 
         <inputFileSorter sortAlgorithm="Path"/>
