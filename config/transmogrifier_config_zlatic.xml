@@ -5,7 +5,8 @@
 
     <global minimumVersion="2.4.1"/>
 
-    <project name="Zlatic Lab: ChaCRM verified Lines" default="true">
+    <project name="Zlatic Lab: ChaCRM verified Lines" default="true"
+            copyPreviousButtonVisible="false">
 
         <inputFileFilter patternString=".+\.(png|blob|summary)"
                          recursiveSearch="true"/>
@@ -232,7 +233,8 @@
 
     </project>
 
-    <project name="Zlatic Lab: Fix Already Renamed Files" default="true">
+    <project name="Zlatic Lab: Fix Already Renamed Files"
+             copyPreviousButtonVisible="false">
 
         <inputFileFilter patternString=".+\.(png|blob|summary)"
                          recursiveSearch="true"/>
@@ -297,20 +299,20 @@
 
             <text displayName="Genotype" required="true"
                   pattern="[0-9A-Za-z\-\_]++">
-                <sourceFileDefault pattern="(.+?)@.+?@.+?@.+?@.+?@.*"/>
+                <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.+?@.*"/>
             </text>
 
             <separator value="@"/>
 
             <text displayName="Effector" required="true"
                   pattern="[0-9A-Za-z\-\_]++">
-                <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.*"/>
+                <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.+?@.*"/>
             </text>
 
             <separator value="@"/>
 
             <validValueList displayName="Tracker" required="true">
-                <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*"/>
+                <sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.+?@.*"/>
                 <validValue value="t1"/>
                 <validValue value="t2"/>
                 <validValue value="t3"/>
@@ -442,13 +444,13 @@
 
             <number displayName="Animal Number" required="true"
                     minimumValue="0" maximumValue="100">
-                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@(.+?)@.*"/>
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@(.+?)@.*"/>
             </number>
 
             <separator value="@"/>
 
             <fileName displayName="Suffix"
-                      patternString=".+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"
+                      patternString=".+?@.+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"
                       patternGroupNumber="1"
                       visible="true" />
 
@@ -458,7 +460,8 @@
 
     </project>
 
-    <project name="Zlatic Lab: Fix Trial Runs">
+    <project name="Zlatic Lab: Fix Trial Runs"
+            copyPreviousButtonVisible="false">
 
         <inputFileFilter patternString=".+\.(png|blob|summary)"
                          recursiveSearch="true"/>
