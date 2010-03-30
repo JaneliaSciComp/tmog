@@ -240,8 +240,8 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm4.int.janelia.org|/groups/zlatic]\zlaticlab\Data\results\t1old\" />
-            <renameFieldValue fieldDisplayName="Genotype" prefix="old"/>
+            <path path="[\\dm4.int.janelia.org|/groups/zlatic]\zlaticlab\Data\results\t1\" />
+            <renameFieldValue fieldDisplayName="Genotype" prefix="2009_"/>
             <renameFieldValue fieldDisplayName="Effector" prefix="@"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Stimulus 1 Type"/>
@@ -276,7 +276,7 @@
                                        matchType="path"/>
             </date>
 
-            <separator value="@old"/>
+            <separator value="@2009_"/>
 
             <text displayName="Genotype" required="true"
                   pattern="[0-9A-Za-z\-\_]++">
