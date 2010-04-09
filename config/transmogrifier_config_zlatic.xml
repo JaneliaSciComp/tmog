@@ -463,7 +463,7 @@
     <project name="Zlatic Lab: Fix Already Renamed Files With Space In Suffix"
              copyPreviousButtonVisible="false">
 
-        <inputFileFilter patternString=".+\.(png|blob|summary)"
+        <inputFileFilter patternString=".+@ [_0-9]*\.(png|blob|summary)"
                          recursiveSearch="true"/>
 
         <inputFileSorter sortAlgorithm="Path"/>
