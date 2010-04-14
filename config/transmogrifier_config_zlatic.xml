@@ -105,6 +105,7 @@
                 <validValue displayName="i: IR pinch" value="i"/>
                 <validValue displayName="h: hot" value="h"/>
                 <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
                 <validValue displayName="o: hole" value="o"/>
                 <validValue displayName="s: scratch" value="s"/>
                 <validValue displayName="r: channel rhodopsin" value="r"/>
@@ -135,6 +136,7 @@
                 <validValue displayName="i: IR pinch" value="i"/>
                 <validValue displayName="h: hot" value="h"/>
                 <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
                 <validValue displayName="o: hole" value="o"/>
                 <validValue displayName="s: scratch" value="s"/>
                 <validValue displayName="r: channel rhodopsin" value="r"/>
@@ -165,6 +167,7 @@
                 <validValue displayName="i: IR pinch" value="i"/>
                 <validValue displayName="h: hot" value="h"/>
                 <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
                 <validValue displayName="o: hole" value="o"/>
                 <validValue displayName="s: scratch" value="s"/>
                 <validValue displayName="r: channel rhodopsin" value="r"/>
@@ -195,6 +198,7 @@
                 <validValue displayName="i: IR pinch" value="i"/>
                 <validValue displayName="h: hot" value="h"/>
                 <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
                 <validValue displayName="o: hole" value="o"/>
                 <validValue displayName="s: scratch" value="s"/>
                 <validValue displayName="r: channel rhodopsin" value="r"/>
@@ -332,6 +336,7 @@
                 <validValue displayName="i: IR pinch" value="i"/>
                 <validValue displayName="h: hot" value="h"/>
                 <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
                 <validValue displayName="o: hole" value="o"/>
                 <validValue displayName="s: scratch" value="s"/>
                 <validValue displayName="r: channel rhodopsin" value="r"/>
@@ -362,6 +367,7 @@
                 <validValue displayName="i: IR pinch" value="i"/>
                 <validValue displayName="h: hot" value="h"/>
                 <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
                 <validValue displayName="o: hole" value="o"/>
                 <validValue displayName="s: scratch" value="s"/>
                 <validValue displayName="r: channel rhodopsin" value="r"/>
@@ -392,6 +398,7 @@
                 <validValue displayName="i: IR pinch" value="i"/>
                 <validValue displayName="h: hot" value="h"/>
                 <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
                 <validValue displayName="o: hole" value="o"/>
                 <validValue displayName="s: scratch" value="s"/>
                 <validValue displayName="r: channel rhodopsin" value="r"/>
@@ -422,6 +429,7 @@
                 <validValue displayName="i: IR pinch" value="i"/>
                 <validValue displayName="h: hot" value="h"/>
                 <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
                 <validValue displayName="o: hole" value="o"/>
                 <validValue displayName="s: scratch" value="s"/>
                 <validValue displayName="r: channel rhodopsin" value="r"/>
@@ -559,6 +567,7 @@
                 <validValue displayName="i: IR pinch" value="i"/>
                 <validValue displayName="h: hot" value="h"/>
                 <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
                 <validValue displayName="o: hole" value="o"/>
                 <validValue displayName="s: scratch" value="s"/>
                 <validValue displayName="r: channel rhodopsin" value="r"/>
@@ -589,6 +598,7 @@
                 <validValue displayName="i: IR pinch" value="i"/>
                 <validValue displayName="h: hot" value="h"/>
                 <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
                 <validValue displayName="o: hole" value="o"/>
                 <validValue displayName="s: scratch" value="s"/>
                 <validValue displayName="r: channel rhodopsin" value="r"/>
@@ -619,6 +629,7 @@
                 <validValue displayName="i: IR pinch" value="i"/>
                 <validValue displayName="h: hot" value="h"/>
                 <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
                 <validValue displayName="o: hole" value="o"/>
                 <validValue displayName="s: scratch" value="s"/>
                 <validValue displayName="r: channel rhodopsin" value="r"/>
@@ -649,6 +660,7 @@
                 <validValue displayName="i: IR pinch" value="i"/>
                 <validValue displayName="h: hot" value="h"/>
                 <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
                 <validValue displayName="o: hole" value="o"/>
                 <validValue displayName="s: scratch" value="s"/>
                 <validValue displayName="r: channel rhodopsin" value="r"/>
