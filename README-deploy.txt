@@ -44,13 +44,13 @@ The following files:
 
 are deployed for the following lab groups:
 
-  baker            /groups/baker/bakerlab/tmog
-  flylight (R&D)   /groups/rubin/data1/rubinlab/tmog
+  baker            /groups/baker/bakerlab/tmog/config
+  flylight (R&D)   /groups/rubin/data1/rubinlab/tmog/config
   kerr             /groups/kerr/kerrlab/tmog/config
   leet             /groups/leet/leetconfocal/tmog/config
   rubin (ChaCRM)   /groups/rubin/data1/rubinlab/tmog/config
   rubin (R&D)      /groups/rubin/rubinimg/tmog
   simpson          /groups/simpson/MicroscopeData/tmog/config
-  svoboda          /groups/svoboda/wdbp/tmog
+  svoboda          /groups/svoboda/wdbp/tmog/config
   zlatic           /groups/zlatic/zlaticlab/tmog/config
 
