@@ -90,6 +90,7 @@
                 <validValue value="t3"/>
                 <validValue value="t4"/>
                 <validValue value="t5"/>
+                <validValue value="t6"/>
             </validValueList>
 
             <separator value="@"/>
@@ -322,6 +323,7 @@
                 <validValue value="t3"/>
                 <validValue value="t4"/>
                 <validValue value="t5"/>
+                <validValue value="t6"/>
             </validValueList>
 
             <separator value="@"/>
@@ -553,6 +555,7 @@
                 <validValue value="t3"/>
                 <validValue value="t4"/>
                 <validValue value="t5"/>
+                <validValue value="t6"/>
             </validValueList>
 
             <separator value="@"/>
@@ -767,6 +770,7 @@
                 <validValue value="t3"/>
                 <validValue value="t4"/>
                 <validValue value="t5"/>
+                <validValue value="t6"/>
             </validValueList>
 
             <separator value="@"/>
