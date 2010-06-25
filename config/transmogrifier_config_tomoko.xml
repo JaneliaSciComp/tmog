@@ -9,7 +9,7 @@
              taskName="rename-without-delete"
              copyPreviousButtonVisible="false">
 
-        <inputFileFilter patternString=".+\.(png|blob|summary)"
+        <inputFileFilter patternString=".+\.(png|blob|blobs|set|summary)"
                          recursiveSearch="true"/>
 
         <inputFileSorter sortAlgorithm="Path"/>

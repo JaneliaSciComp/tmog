@@ -8,7 +8,7 @@
     <project name="Zlatic Lab: ChaCRM verified Lines" default="true"
             copyPreviousButtonVisible="false">
 
-        <inputFileFilter patternString=".+\.(png|blob|summary)"
+        <inputFileFilter patternString=".+\.(png|blob|blobs|set|summary)"
                          recursiveSearch="true"/>
 
         <inputFileSorter sortAlgorithm="Path"/>
@@ -241,7 +241,7 @@
     <project name="Zlatic Lab: Fix Already Renamed Files"
              copyPreviousButtonVisible="false">
 
-        <inputFileFilter patternString=".+\.(png|blob|summary)"
+        <inputFileFilter patternString=".+\.(png|blob|blobs|set|summary)"
                          recursiveSearch="true"/>
 
         <inputFileSorter sortAlgorithm="Path"/>
@@ -473,7 +473,7 @@
     <project name="Zlatic Lab: Fix Already Renamed Files With Space In Suffix"
              copyPreviousButtonVisible="false">
 
-        <inputFileFilter patternString=".+@ [_0-9]*\.(png|blob|summary)"
+        <inputFileFilter patternString=".+@ [_0-9]*\.(png|blob|blobs|set|summary)"
                          recursiveSearch="true"/>
 
         <inputFileSorter sortAlgorithm="Path"/>
@@ -705,7 +705,7 @@
     <project name="Zlatic Lab: Fix Trial Runs"
             copyPreviousButtonVisible="false">
 
-        <inputFileFilter patternString=".+\.(png|blob|summary)"
+        <inputFileFilter patternString=".+\.(png|blob|blobs|set|summary)"
                          recursiveSearch="true"/>
 
         <inputFileSorter sortAlgorithm="Path"/>
