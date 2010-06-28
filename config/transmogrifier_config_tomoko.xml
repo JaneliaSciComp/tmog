@@ -225,7 +225,7 @@
             <separator value="@"/>
 
             <text displayName="Suffix" required="false"
-                  copyable="false" pattern="^_\d{5}$">
+                  copyable="false" pattern="^_\d{5}(\dk)??$">
                 <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"/>
             </text>
 
