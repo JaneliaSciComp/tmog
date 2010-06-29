@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.config;
@@ -43,14 +43,17 @@ public class PluginFactory {
         sessionListeners = new ArrayList<SessionListener>();
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void addRowListenerPlugin(PluginConfiguration plugin) {
         rowListenerPlugins.add(plugin);
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void addRowValidatorPlugin(PluginConfiguration plugin) {
         rowValidatorPlugins.add(plugin);
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void addSessionListenerPlugin(PluginConfiguration plugin) {
         sessionListenerPlugins.add(plugin);
     }
@@ -92,7 +95,7 @@ public class PluginFactory {
                                            SessionListener.class);
         for (Object instance : pluginInstances) {
             sessionListeners.add((SessionListener) instance);
-            // hack for adding RelativeSessionSummaryFileWriter instances
+            // TODO: fix hack for adding session listeners that are also row listeners
             if (instance instanceof RowListener) {
                 rowListeners.add((RowListener) instance);
             }
@@ -132,7 +135,8 @@ public class PluginFactory {
                                            String projectName)
             throws ConfigurationException {
 
-        Class clazz;
+        // see http://java.sun.com/javase/6/docs/technotes/guides/reflection/enhancements.html
+        Class<?> clazz;
         try {
             clazz = Class.forName(className);
         } catch (ClassNotFoundException e) {
@@ -142,7 +146,7 @@ public class PluginFactory {
                     " project cannot be found.", e);
         }
 
-        final Class[] args = new Class[0];
+        final Class<?>[] args = new Class[0];
         Constructor constructor;
         try {
             constructor = clazz.getConstructor(args);

@@ -4,7 +4,7 @@
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
     <!-- frameSizePercentage default is 80, min is 40, and max is 99 --> 
-    <global minimumVersion="2.4.0" frameSizePercentage="95"/>
+    <global minimumVersion="2.4.3" frameSizePercentage="95"/>
 
     <project name="Whisker-Dependent Behavior Project"
              default="true"
@@ -30,7 +30,9 @@
 
         <plugins>
             <rowListener className="org.janelia.it.ims.tmog.plugin.XmlWriterPlugin" />
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.RelativeSessionSummaryFileWriter"/>
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionCompleteFileWriter">
+                <property name="fileName" value="transfer-complete"/>
+            </sessionListener>
         </plugins>
 
         <dataFields>
