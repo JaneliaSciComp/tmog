@@ -85,6 +85,14 @@
             <!-- The following fields are collected but
                  NOT included in the file name (markedForTask == false). -->
 
+            <validValueList displayName="Autodelete SEQ files"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue value="yes"/>
+                <validValue value="no"/>
+            </validValueList>
+
             <validValueList displayName="Experimenter"
                             required="true"
                             sharedForAllSessionFiles="true"
