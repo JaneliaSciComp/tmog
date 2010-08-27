@@ -33,6 +33,9 @@ import java.util.Set;
 public class SageImageDao
         extends ImageDao {
 
+    public static final String RUBIN_LAB_LINE_PREFIX = "GMR_";
+    public static final String RUBIN_LAB_NAME = "rubin";
+
     /**
      * Constructs a dao using the default manager and configuration.
      *
@@ -135,15 +138,16 @@ public class SageImageDao
 
             } else {
 
-                String labName = image.getLabName();
-                if (labName == null) {
+                final String lineLabName = deriveLineLabName(image.getLabName(),
+                                                             lineName);
+                if (lineLabName == null) {
                     throw new ExternalSystemException(
                             "Lab name must be specified to manage line data.");
                 }
 
-                lineId = getLineId(lineName, labName, connection);
+                lineId = getLineId(lineName, lineLabName, connection);
                 if (lineId == null) {
-                    lineId = addLine(lineName, labName, connection);
+                    lineId = addLine(lineName, lineLabName, connection);
                 }
 
             }
@@ -430,9 +434,9 @@ public class SageImageDao
 
     }
 
-    private Integer getLineId(String lineName,
-                              String labName,
-                              Connection connection)
+    protected Integer getLineId(String lineName,
+                                String lineLabName,
+                                Connection connection)
             throws SQLException, ExternalSystemException {
 
         Integer lineId = null;
@@ -442,14 +446,14 @@ public class SageImageDao
         try {
             select = connection.prepareStatement(SQL_SELECT_LINE_ID);
             select.setString(1, lineName);
-            select.setString(2, labName);
+            select.setString(2, lineLabName);
             resultSet = select.executeQuery();
             if (resultSet.next()) {
                 lineId = resultSet.getInt(1);
                 if (resultSet.next()) {
                     throw new ExternalSystemException(
                             "Multiple lines exist with the name '" +
-                            lineName + "' and lab '" + labName + "'.");
+                            lineName + "' and lab '" + lineLabName + "'.");
                 }
             }
         } finally {
@@ -460,7 +464,7 @@ public class SageImageDao
     }
 
     private Integer addLine(String lineName,
-                            String labName,
+                            String lineLabName,
                             Connection connection)
             throws SQLException, ExternalSystemException {
 
@@ -470,21 +474,21 @@ public class SageImageDao
         try {
             insertLine = connection.prepareStatement(SQL_INSERT_LINE);
             insertLine.setString(1, lineName);
-            insertLine.setString(2, labName);
+            insertLine.setString(2, lineLabName);
 
             int rowsUpdated = insertLine.executeUpdate();
             if (rowsUpdated != 1) {
                 throw new ExternalSystemException(
-                        "Failed to create line '" + lineName +
-                        "' for lab '" + labName + "'.  Attempted to create " +
+                        "Failed to create line '" + lineName + "' for lab '" +
+                        lineLabName + "'.  Attempted to create " +
                         rowsUpdated + " rows.");
             }
 
-            lineId = getLineId(lineName, labName, connection);
+            lineId = getLineId(lineName, lineLabName, connection);
             if (lineId == null) {
                 throw new ExternalSystemException(
                         "Failed to retrieve id for line '" + lineName +
-                        "' and lab '" + labName + "'.");
+                        "' and lab '" + lineLabName + "'.");
             }
         } finally {
             DbManager.closeResources(null, insertLine, null, LOG);
@@ -512,6 +516,15 @@ public class SageImageDao
                 }
             }
         }
+    }
+
+    private String deriveLineLabName(String imageLabName,
+                                     String lineName) {
+        String lineLabName = imageLabName;
+        if (lineName.startsWith(RUBIN_LAB_LINE_PREFIX)) {
+            lineLabName = RUBIN_LAB_NAME;
+        }
+        return lineLabName;
     }
 
     /** The logger for this class. */

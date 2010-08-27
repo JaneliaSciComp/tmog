@@ -77,7 +77,8 @@ public class SageImageDaoTest
             new SimpleDateFormat("'testLine'yyyyMMddHHmmssSSS");
         sequenceNamespace = namespaceTemplate.format(new Date());
         lineName1 = sequenceNamespace + "-1";
-        lineName2 = sequenceNamespace + "-2";
+        lineName2 = SageImageDao.RUBIN_LAB_LINE_PREFIX +
+                    sequenceNamespace + "-2";
     }
 
     protected void tearDown() throws Exception {
@@ -112,6 +113,7 @@ public class SageImageDaoTest
         Integer testImageId = testImage.getId();
 
         assertNotNull("id not set after add", testImage.getId());
+        verifyLineExists(lineName1, LINE_LAB);
 
         testImage = new Image();
         testImage.setId(testImageId);
@@ -131,6 +133,8 @@ public class SageImageDaoTest
         Integer imageId = dao.getImageId(relativePath);
         assertEquals("invalid id returned for " + relativePath,
                      testImageId, imageId);
+
+        verifyLineExists(lineName2, SageImageDao.RUBIN_LAB_NAME);
 
         testImage = new Image();
         testImage.setId(testImageId);
@@ -242,6 +246,24 @@ public class SageImageDaoTest
 
         specimenNumber = dao.getNextSequenceNumber(sequenceNamespace);
         assertEquals("invalid update number", 2, specimenNumber);
+    }
+
+    private void verifyLineExists(String lineName,
+                                  String lineLabName) throws Exception {
+
+        Connection connection = null;
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
+        try {
+            DbManager dbManager = dao.getDbManager();
+            connection = dbManager.getConnection();
+            Integer lineId = dao.getLineId(lineName, lineLabName, connection);
+            assertNotNull("'" + lineName + "' line not found for '" +
+                          lineLabName + "' lab",
+                          lineId);
+        } finally {
+            DbManager.closeResources(resultSet, statement, connection, LOG);
+        }
     }
 
     private void deleteImage(Integer imageId) throws Exception {
