@@ -14,7 +14,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm4.int.janelia.org|/groups/zlatic]\zlaticlab\Data\results\" />
+            <path path="[\\dm11.isi.janelia.org|/groups/zlatic]\zlaticlab\Data\results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Genotype"/>
@@ -247,7 +247,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm4.int.janelia.org|/groups/zlatic]\zlaticlab\Data\results\" />
+            <path path="[\\dm11.isi.janelia.org|/groups/zlatic]\zlaticlab\Data\results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Genotype"/>
@@ -479,7 +479,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm4.int.janelia.org|/groups/zlatic]\zlaticlab\Data\results\" />
+            <path path="[\\dm11.isi.janelia.org|/groups/zlatic]\zlaticlab\Data\results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Genotype"/>
@@ -711,7 +711,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm4.int.janelia.org|/groups/zlatic]\zlaticlab\Data\results\t1\" />
+            <path path="[\\dm11.isi.janelia.org|/groups/zlatic]\zlaticlab\Data\results\t1\" />
             <renameFieldValue fieldDisplayName="Genotype" prefix="2009_"/>
             <renameFieldValue fieldDisplayName="Effector" prefix="@"/>
             <path path="/"/>
