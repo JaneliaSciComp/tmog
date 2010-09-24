@@ -38,6 +38,7 @@
                 <property name="renamed_by" value="Renamer"/>
                 <property name="class" value="Class"/>
                 <property name="ihc_batch" value="Batch Name"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
@@ -235,6 +236,11 @@
 
             <pluginData displayName="Batch Name" markedForTask="false" />
 
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            markedForTask="false">
+                <validValue value="Glycerol-Based Mounting" default="true"/>
+                <validValue value="DPX Mounting"/>
+            </validValueList>
             <validValueList displayName="UAS Reporter" required="true"
                             markedForTask="false">
                 <validValue displayName="JFRC-IVS-A1" value="JFRC-IVS-A1" default="true"/>
@@ -291,6 +297,7 @@
                 <property name="created_by" value="Imager"/>
                 <property name="renamed_by" value="Renamer"/>
                 <property name="class" value="Class"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
@@ -464,6 +471,15 @@
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
 
+            <!--
+             These values are collected for the nighthawk database but are not
+             included as components of the file name (markedForTask="false").
+             -->
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            markedForTask="false">
+                <validValue value="Glycerol-Based Mounting"/>
+                <validValue value="DPX Mounting" default="true"/>
+            </validValueList>
             <validValueList displayName="UAS Reporter" required="true"
                             markedForTask="false">
                 <validValue displayName="JFRC-IVS-A1" value="JFRC-IVS-A1" default="true"/>
