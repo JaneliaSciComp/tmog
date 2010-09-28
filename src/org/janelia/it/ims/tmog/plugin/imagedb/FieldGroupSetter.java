@@ -1,8 +1,8 @@
 /*
- * Copyright 2009 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
@@ -42,7 +42,10 @@ public class FieldGroupSetter implements ImagePropertySetter {
             String propertyName;
             int groupRowIndex = 1;
             for (List<DataField> groupRow : groupModel.getFieldRows()) {
-                propertyNamePrefix = propertyType + "-" + groupRowIndex + "-";
+                // NOTE: separator must not be '-'
+                //       generation of views (e.g. image_property_vw) may
+                //       fail otherwise.
+                propertyNamePrefix = propertyType + "_" + groupRowIndex + "_";
                 for (DataField groupField : groupRow) {
                     propertyName =
                             propertyNamePrefix +
