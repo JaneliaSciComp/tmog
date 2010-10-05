@@ -74,6 +74,9 @@ public class ImageDataPlugin implements RowListener {
             }
         }
 
+        // always include host name
+        this.propertySetters.add(new HostNameSetter(HostNameSetter.TYPE));
+
         if (StringUtil.isDefined(dbConfigurationKey)) {
 
             if (StringUtil.isDefined(xmlBaseDirectoryName)) {
