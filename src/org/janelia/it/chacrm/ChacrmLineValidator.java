@@ -30,6 +30,10 @@ import java.util.Set;
 public class ChacrmLineValidator
         implements RowValidator {
 
+    /** Name of the property containing the ChaCRM line prefix. */
+    public static final String CHACRM_LINE_PREFIX_PROPERTY_NAME =
+            "chacrmLinePrefix";
+
     /** The logger for this class. */
     private static final Log LOG =
             LogFactory.getLog(ChacrmLineValidator.class);
@@ -95,7 +99,7 @@ public class ChacrmLineValidator
                 this.linePropertyName = configuredLinePropertyName;
             }
             String configuredChacrmLinePrefix =
-                    config.getProperty("chacrmLinePrefix");
+                    config.getProperty(CHACRM_LINE_PREFIX_PROPERTY_NAME);
             if (configuredChacrmLinePrefix != null) {
                 this.chacrmLinePrefix = configuredChacrmLinePrefix;
             } else {

@@ -86,4 +86,40 @@ public class ChacrmLineValidatorTest
             // test passed!
         }
     }
+
+    /**
+     * Tests the validate method.
+     *
+     * @throws Exception
+     *   if any unexpected errors occur.
+     */
+    public void testValidateWithAlternatePrefix() throws Exception {
+
+        final PluginConfiguration pluginConfig = new PluginConfiguration();
+        pluginConfig.setProperty(
+                ChacrmLineValidator.CHACRM_LINE_PREFIX_PROPERTY_NAME, "GL_");
+        ChacrmLineValidator validator = new ChacrmLineValidator();
+        validator.init(pluginConfig);
+
+        VerifiedTextModel field = new VerifiedTextModel();
+        field.setDisplayName("Line");
+        field.setText("GL_15E08_AE_01");
+        DataRow dataRow = new DataRow(new FileTarget(new File("foo")));
+        dataRow.addField(field);
+        RenamePluginDataRow row = new RenamePluginDataRow(new File("bar"),
+                                                          dataRow,
+                                                          new File("."));
+
+        validator.validate(row);
+        // row should be valid (no exception thrown)
+        
+        field.setText("GL_Bad_Name");
+        try {
+            validator.validate(row);
+            fail("invalid transformant id should have caused data exception");
+        } catch (ExternalDataException e) {
+            // test passed!
+        }
+    }
+
 }
