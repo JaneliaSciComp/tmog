@@ -40,6 +40,8 @@ public class ChacrmLineValidator
     /** The name of the property that contains the ChaCRM line. */
     private String linePropertyName;
 
+    /** The prefix used to identify Chacrm lines (default is 'GMR_'). */
+    private String chacrmLinePrefix;
     /**
      * The maximum amount of time (in milliseconds) between cache
      * references before the cache should be cleared.  This is intended to
@@ -91,6 +93,13 @@ public class ChacrmLineValidator
                     config.getProperty("linePropertyName");
             if (configuredLinePropertyName != null) {
                 this.linePropertyName = configuredLinePropertyName;
+            }
+            String configuredChacrmLinePrefix =
+                    config.getProperty("chacrmLinePrefix");
+            if (configuredChacrmLinePrefix != null) {
+                this.chacrmLinePrefix = configuredChacrmLinePrefix;
+            } else {
+                this.chacrmLinePrefix = "GMR_";
             }
             String configuredClearCacheDuration =
                     config.getProperty("clearCacheDuration");
@@ -163,8 +172,11 @@ public class ChacrmLineValidator
     private String getTransformantID(PluginDataRow row) {
         String transformantID = null;
         String line = row.getCoreValue(linePropertyName);
-        if ((line != null) && line.startsWith("GMR_") && (line.length() > 4)) {
-            transformantID = line.substring(4);
+        final int prefixLength = chacrmLinePrefix.length();
+        if ((line != null) &&
+            line.startsWith(chacrmLinePrefix) &&
+            (line.length() > prefixLength)) {
+            transformantID = line.substring(prefixLength);
         }
         return transformantID;
     }
