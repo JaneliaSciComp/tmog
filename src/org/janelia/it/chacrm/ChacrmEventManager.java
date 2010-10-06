@@ -1,15 +1,14 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.chacrm;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import static org.janelia.it.chacrm.Transformant.Status;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
@@ -23,6 +22,8 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import static org.janelia.it.chacrm.Transformant.Status;
 
 /**
  * This class handles events "published" by the image transmogrifier tool.
@@ -357,7 +358,7 @@ public class ChacrmEventManager implements RowValidator, RowListener {
      * @param row the set of transmogrifier tool data fields.
      * @return the corresponding transformant identifier.
      */
-    private static String getTransformantID(RenamePluginDataRow row) {
+    public static String getTransformantID(PluginDataRow row) {
         String transformantID;
         String plate = row.getCoreValue("Plate");
         String well = row.getCoreValue("Well");

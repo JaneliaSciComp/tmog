@@ -30,9 +30,17 @@ import java.util.Set;
 public class ChacrmLineValidator
         implements RowValidator {
 
+    /**
+     * Name of the property that identifies
+     * the name of the data row field that contains the ChaCRM line.
+     */
+    public static final String LINE_FIELD_PROPERTY_NAME = "linePropertyName";
+
     /** Name of the property containing the ChaCRM line prefix. */
-    public static final String CHACRM_LINE_PREFIX_PROPERTY_NAME =
-            "chacrmLinePrefix";
+    public static final String LINE_PREFIX_PROPERTY_NAME = "linePrefix";
+
+    /** Default ChaCRM line prefix value. */
+    public static final String DEFAULT_LINE_PREFIX = "GMR_";
 
     /** The logger for this class. */
     private static final Log LOG =
@@ -41,11 +49,11 @@ public class ChacrmLineValidator
     /** The data access object for retrieving and updating transformant data. */
     private TransformantDao dao;
 
-    /** The name of the property that contains the ChaCRM line. */
-    private String linePropertyName;
+    /** The name of the data row field that contains the ChaCRM line. */
+    private String lineFieldName;
 
     /** The prefix used to identify Chacrm lines (default is 'GMR_'). */
-    private String chacrmLinePrefix;
+    private String linePrefix;
     /**
      * The maximum amount of time (in milliseconds) between cache
      * references before the cache should be cleared.  This is intended to
@@ -75,7 +83,8 @@ public class ChacrmLineValidator
      * {@link org.janelia.it.ims.tmog.config.PluginFactory}.
      */
     public ChacrmLineValidator() {
-        this.linePropertyName = "Line";
+        this.lineFieldName = null;
+        this.linePrefix = DEFAULT_LINE_PREFIX;
         this.clearCacheDuration = 60 * 1000; // one minute
         this.lastCacheAccessTime = System.currentTimeMillis();
         this.validTransformantIds = new HashSet<String>();
@@ -94,16 +103,14 @@ public class ChacrmLineValidator
             setDao();
             dao.checkAvailability();
             String configuredLinePropertyName =
-                    config.getProperty("linePropertyName");
+                    config.getProperty(LINE_FIELD_PROPERTY_NAME);
             if (configuredLinePropertyName != null) {
-                this.linePropertyName = configuredLinePropertyName;
+                this.lineFieldName = configuredLinePropertyName;
             }
             String configuredChacrmLinePrefix =
-                    config.getProperty(CHACRM_LINE_PREFIX_PROPERTY_NAME);
+                    config.getProperty(LINE_PREFIX_PROPERTY_NAME);
             if (configuredChacrmLinePrefix != null) {
-                this.chacrmLinePrefix = configuredChacrmLinePrefix;
-            } else {
-                this.chacrmLinePrefix = "GMR_";
+                this.linePrefix = configuredChacrmLinePrefix;
             }
             String configuredClearCacheDuration =
                     config.getProperty("clearCacheDuration");
@@ -152,7 +159,7 @@ public class ChacrmLineValidator
                     throw new ExternalDataException(
                             "Transformant ID '" + transformantId +
                             "' does not exist in the ChaCRM database.  " +
-                            "Please verify the " + linePropertyName +
+                            "Please verify the " + lineFieldName +
                             " specified for the file " +
                             fileName, e);
                 } catch (ExternalSystemException e) {
@@ -175,12 +182,16 @@ public class ChacrmLineValidator
      */
     private String getTransformantID(PluginDataRow row) {
         String transformantID = null;
-        String line = row.getCoreValue(linePropertyName);
-        final int prefixLength = chacrmLinePrefix.length();
-        if ((line != null) &&
-            line.startsWith(chacrmLinePrefix) &&
-            (line.length() > prefixLength)) {
-            transformantID = line.substring(prefixLength);
+        if (lineFieldName == null) {
+            transformantID = ChacrmEventManager.getTransformantID(row);
+        } else {
+            String line = row.getCoreValue(lineFieldName);
+            final int prefixLength = linePrefix.length();
+            if ((line != null) &&
+                line.startsWith(linePrefix) &&
+                (line.length() > prefixLength)) {
+                transformantID = line.substring(prefixLength);
+            }
         }
         return transformantID;
     }

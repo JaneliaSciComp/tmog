@@ -49,77 +49,138 @@ public class ChacrmLineValidatorTest
     }
 
     /**
-     * Tests the validate method.
+     * Tests the validate method with a default line prefix.
+     * Also verifies that caching is working.
      *
      * @throws Exception
      *   if any unexpected errors occur.
      */
-    public void testValidate() throws Exception {
-
-        final PluginConfiguration pluginConfig = new PluginConfiguration();
-        ChacrmLineValidator validator = new ChacrmLineValidator();
-        validator.init(pluginConfig);
-
-        VerifiedTextModel field = new VerifiedTextModel();
-        field.setDisplayName("Line");
-        field.setText("GMR_15E08_AE_01");
-        DataRow dataRow = new DataRow(new FileTarget(new File("foo")));
-        dataRow.addField(field);
-        RenamePluginDataRow row = new RenamePluginDataRow(new File("bar"),
-                                                          dataRow,
-                                                          new File("."));
-
-        final long startTime = System.currentTimeMillis();
-
-        for (int i = 0; i < 3000; i++) {
-            validator.validate(row);
-            if ((System.currentTimeMillis() - startTime) > 5000) {
-                fail("Cached transformant id checks are taking too long.");
-            }
-        }
-
-        field.setText("GMR_Bad_Name");
-        try {
-            validator.validate(row);
-            fail("invalid transformant id should have caused data exception");
-        } catch (ExternalDataException e) {
-            // test passed!
-        }
+    public void testDefaultValidateAndCaching() throws Exception {
+        verifyValidAndInvalidLineNames(null, 3000);
     }
 
     /**
-     * Tests the validate method.
+     * Tests the validate method with an alternate line prefix.
      *
      * @throws Exception
      *   if any unexpected errors occur.
      */
-    public void testValidateWithAlternatePrefix() throws Exception {
+    public void testAlternatePrefixValidate() throws Exception {
+        verifyValidAndInvalidLineNames("GL_", 1);
+    }
 
-        final PluginConfiguration pluginConfig = new PluginConfiguration();
-        pluginConfig.setProperty(
-                ChacrmLineValidator.CHACRM_LINE_PREFIX_PROPERTY_NAME, "GL_");
+    /**
+     * Tests the validate method with an empty line prefix.
+     *
+     * @throws Exception
+     *   if any unexpected errors occur.
+     */
+    public void testEmptyPrefixValidate() throws Exception {
+        verifyValidAndInvalidLineNames("", 1);
+    }
+
+    /**
+     * Tests the validate method using transformant component fields
+     * (plate, well, ...) instead of a single line name field.
+     *
+     * @throws Exception
+     *   if any unexpected errors occur.
+     */
+    public void testTransformantComponentFieldsValidate()
+            throws Exception {
+
+        PluginConfiguration pluginConfig = new PluginConfiguration();
         ChacrmLineValidator validator = new ChacrmLineValidator();
         validator.init(pluginConfig);
 
-        VerifiedTextModel field = new VerifiedTextModel();
-        field.setDisplayName("Line");
-        field.setText("GL_15E08_AE_01");
         DataRow dataRow = new DataRow(new FileTarget(new File("foo")));
-        dataRow.addField(field);
+        // see ChacrmEventManager.getTransformantID()
+        String[][] fieldData = {
+                {"Plate", PLATE},
+                {"Well", WELL},
+                {"Vector ID", VECTOR},
+                {"Landing Site", INSERTION_SITE}
+        };
+        for (String[] data : fieldData) {
+            VerifiedTextModel field = new VerifiedTextModel();
+            field.setDisplayName(data[0]);
+            field.setText(data[1]);
+            dataRow.addField(field);
+        }
+
         RenamePluginDataRow row = new RenamePluginDataRow(new File("bar"),
                                                           dataRow,
                                                           new File("."));
 
         validator.validate(row);
         // row should be valid (no exception thrown)
-        
-        field.setText("GL_Bad_Name");
+
+        VerifiedTextModel field = (VerifiedTextModel) dataRow.getField(0);
+        field.setText(INVALID_LINE_NAME);
         try {
             validator.validate(row);
-            fail("invalid transformant id should have caused data exception");
+            fail("invalid plate name should have caused data exception");
         } catch (ExternalDataException e) {
             // test passed!
         }
     }
+
+    private void verifyValidAndInvalidLineNames(String linePrefix,
+                                                int numberOfValidChecks)
+            throws Exception {
+
+        final String lineFieldPropertyName = "Line";
+        PluginConfiguration pluginConfig = new PluginConfiguration();
+        pluginConfig.setProperty(
+                ChacrmLineValidator.LINE_FIELD_PROPERTY_NAME,
+                lineFieldPropertyName);
+        if (linePrefix != null) {
+            pluginConfig.setProperty(
+                    ChacrmLineValidator.LINE_PREFIX_PROPERTY_NAME,
+                    linePrefix);
+        }
+        ChacrmLineValidator validator = new ChacrmLineValidator();
+        validator.init(pluginConfig);
+
+        if (linePrefix == null) {
+            linePrefix = ChacrmLineValidator.DEFAULT_LINE_PREFIX;
+        }
+
+        VerifiedTextModel field = new VerifiedTextModel();
+        field.setDisplayName(lineFieldPropertyName);
+        field.setText(linePrefix + VALID_LINE_NAME);
+        DataRow dataRow = new DataRow(new FileTarget(new File("foo")));
+        dataRow.addField(field);
+        RenamePluginDataRow row = new RenamePluginDataRow(new File("bar"),
+                                                          dataRow,
+                                                          new File("."));
+
+        long startTime;
+        for (int i = 0; i < numberOfValidChecks; i++) {
+            startTime = System.currentTimeMillis();
+            validator.validate(row);
+            // row should be valid (no exception thrown)
+            if ((i > 0 ) && ((System.currentTimeMillis() - startTime) > 1000)) {
+                fail("Cached transformant id checks are taking too long.");
+            }
+        }
+
+        String invalidLineName = linePrefix + INVALID_LINE_NAME;
+        field.setText(invalidLineName);
+        try {
+            validator.validate(row);
+            fail("'" + invalidLineName + "' should have caused data exception");
+        } catch (ExternalDataException e) {
+            // test passed!
+        }
+    }
+
+    private static final String PLATE = "15";
+    private static final String WELL = "E08";
+    private static final String VECTOR = "AE";
+    private static final String INSERTION_SITE = "01";
+    private static final String VALID_LINE_NAME =
+            PLATE + WELL + '_' + VECTOR + '_' + INSERTION_SITE;
+    private static final String INVALID_LINE_NAME = "Invalid-Line";
 
 }
