@@ -14,6 +14,7 @@ import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.tmog.config.output.Path;
 import org.janelia.it.ims.tmog.config.output.RenameFieldValue;
 import org.janelia.it.ims.tmog.config.output.SourceFileModificationTime;
+import org.janelia.it.ims.tmog.field.CvTermModel;
 import org.janelia.it.ims.tmog.field.DataFieldGroupModel;
 import org.janelia.it.ims.tmog.field.FileExtensionModel;
 import org.janelia.it.ims.tmog.field.FileModificationTimeModel;
@@ -186,6 +187,8 @@ public class TransmogrifierConfiguration {
         digester.addObjectCreate("*/dataFields", DataFields.class);
         digester.addSetNext("*/dataFields", "setDataFields");
 
+        createSetAndAdd("*/cvTermList",
+                        CvTermModel.class, digester);
         createSetAndAdd("*/date",
                         VerifiedDateModel.class, digester);
         createSetAndAdd("*/decimal",

@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.field;
@@ -80,6 +80,7 @@ public class ValidValueModel extends AbstractListModel
         return markedForTask;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setMarkedForTask(boolean markedForTask) {
         this.markedForTask = markedForTask;
     }
@@ -223,10 +224,12 @@ public class ValidValueModel extends AbstractListModel
         return selectedValue;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setRequired(boolean required) {
         if (isRequired != required) {
             isRequired = required;
@@ -238,6 +241,7 @@ public class ValidValueModel extends AbstractListModel
         }
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setCopyable(boolean copyable) {
         isCopyable = copyable;
     }
@@ -283,22 +287,12 @@ public class ValidValueModel extends AbstractListModel
         return sb.toString();
     }
 
-    public String getLongestDisplayName() {
-        String longestName = "";
-        int longestLength = 0;
-
-        int length;
-        String displayName;
-        for (ValidValue value : validValues) {
-            displayName = value.getDisplayName();
-            if (displayName != null) {
-                length = displayName.length();
-                if (length > longestLength) {
-                    longestName = displayName;
-                    longestLength = length;
-                }
-            }
-        }
-        return longestName;
+    /**
+     * Clears the current list of valid values.
+     * This should only be called if a new set of values is to be loaded.
+     */
+    protected void clearValidValues() {
+        validValues.clear();
+        selectedValue = null;
     }
 }

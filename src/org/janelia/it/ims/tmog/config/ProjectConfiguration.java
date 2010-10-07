@@ -8,6 +8,7 @@
 package org.janelia.it.ims.tmog.config;
 
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
+import org.janelia.it.ims.tmog.field.CvTermModel;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.DefaultValue;
 import org.janelia.it.ims.tmog.field.DefaultValueList;
@@ -193,6 +194,11 @@ public class ProjectConfiguration {
                         defaultField.getDefaultValueList());
             } else if (field instanceof TargetNameModel) {
                 targetDisplayName = field.getDisplayName();
+            }
+
+            if (field instanceof CvTermModel) {
+                CvTermModel cvTermModel = (CvTermModel) field;
+                cvTermModel.retrieveAndSetValidValues();
             }
         }
 

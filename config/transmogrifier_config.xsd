@@ -198,6 +198,8 @@
         <xs:sequence>
             <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
                         minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="staticDefault" type="staticDefaultType"
+                        minOccurs="0" maxOccurs="1"/>
             <xs:element name="pluginDefault" type="pluginDefaultType"
                         minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="validValue" type="validValueType" minOccurs="1" maxOccurs="unbounded"/>
@@ -209,6 +211,26 @@
         <xs:attribute name="copyable" type="xs:boolean"/>
         <xs:attribute name="markedForTask" type="xs:boolean"/>
         <xs:attribute name="sharedForAllSessionFiles" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="cvTermListType">
+        <xs:sequence>
+            <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="staticDefault" type="staticDefaultType"
+                        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="pluginDefault" type="pluginDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="required" type="xs:boolean"/>
+        <xs:attribute name="prefix" type="xs:string"/>
+        <xs:attribute name="suffix" type="xs:string"/>
+        <xs:attribute name="copyable" type="xs:boolean"/>
+        <xs:attribute name="markedForTask" type="xs:boolean"/>
+        <xs:attribute name="sharedForAllSessionFiles" type="xs:boolean"/>
+        <xs:attribute name="serviceUrl" type="xs:string"/>
+        <xs:attribute name="displayNamePrefixedForValues" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="pluginDataType">
@@ -289,8 +311,8 @@
             <xs:element name="text" type="textType"/>
             <xs:element name="date" type="dateType"/>
             <xs:element name="well" type="wellType"/>
-            <xs:element name="validValueList"
-                        type="validValueListType"/>
+            <xs:element name="validValueList" type="validValueListType"/>
+            <xs:element name="cvTermList" type="cvTermListType"/>
         </xs:choice>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="displayWidth" type="xs:positiveInteger"/>
@@ -307,8 +329,8 @@
             <xs:element name="text" type="textType"/>
             <xs:element name="date" type="dateType"/>
             <xs:element name="well" type="wellType"/>
-            <xs:element name="validValueList"
-                        type="validValueListType"/>
+            <xs:element name="validValueList" type="validValueListType"/>
+            <xs:element name="cvTermList" type="cvTermListType"/>
             <xs:element name="pluginData" type="pluginDataType"/>
             <xs:element name="fileModificationTime"
                         type="fileModificationTimeType"/>
