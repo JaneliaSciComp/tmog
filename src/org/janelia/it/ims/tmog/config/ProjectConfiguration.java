@@ -198,7 +198,11 @@ public class ProjectConfiguration {
 
             if (field instanceof CvTermModel) {
                 CvTermModel cvTermModel = (CvTermModel) field;
-                cvTermModel.retrieveAndSetValidValues();
+                try {
+                    cvTermModel.retrieveAndSetValidValues();
+                } catch (Exception e) {
+                    throw new ConfigurationException(e.getMessage(), e);
+                }
             }
         }
 

@@ -60,9 +60,7 @@ public class CvTermModel
 
         if ((serviceUrl == null) || (serviceUrl.length() == 0)) {
             throw new IllegalArgumentException(
-                    "Please specify a serviceUrl attribute " +
-                    "in the configuration for the " +
-                    getDisplayName() + " field.");
+                    "No serviceUrl was specified.  " + getErrorContext());
         }
 
         CvTermSet cvTermSet = retrieveTermSet();
@@ -100,8 +98,8 @@ public class CvTermModel
             responseCode = httpClient.executeMethod(method);
             if (responseCode != HttpURLConnection.HTTP_OK) {
                 throw new IllegalStateException(
-                        "The request for '" + serviceUrl +
-                        "' failed with response code " + responseCode + ".");
+                        "CV term request failed with response code " +
+                        responseCode + ".  " + getErrorContext());
             }
 
             JAXBContext ctx = JAXBContext.newInstance(Cv.class);
@@ -112,12 +110,11 @@ public class CvTermModel
 
         } catch (IOException e) {
             throw new IllegalArgumentException(
-                    "Failed to submit request to '" + serviceUrl +
-                    "'.  Please verify the configured url is accurate and " +
-                    "that the corresponding service is available.", e);
+                    "CV term request failed.  " + getErrorContext(), e);
         } catch (JAXBException e) {
             throw new IllegalStateException(
-                    "Failed to parse response for '" + serviceUrl + "'", e);
+                    "Failed to parse response for CV term request.  " +
+                    getErrorContext(), e);
         } finally {
             if (responseStream != null) {
                 try {
@@ -134,6 +131,13 @@ public class CvTermModel
                  " results for " + serviceUrl);
 
         return cvTermSet;
+    }
+
+    private String getErrorContext() {
+        return "Please verify the serviceUrl '" + serviceUrl +
+               "' configured for the '" + getDisplayName() +
+               "' field is accurate and that the corresponding " +
+               "service is available.";
     }
 
     /** The logger for this class. */
