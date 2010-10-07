@@ -1,13 +1,14 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.config;
 
 import org.janelia.it.ims.tmog.filefilter.LNumberComparator;
+import org.janelia.it.ims.tmog.filefilter.NumberComparator;
 import org.janelia.it.ims.tmog.filefilter.PathComparator;
 import org.janelia.it.ims.tmog.target.FileTarget;
 
@@ -22,14 +23,21 @@ import java.util.Comparator;
  */
 public class InputFileSorter {
 
-    /** Algrotihm name for sorting by L-Numbers. */
+    /** Algorithm name for sorting by numbers. */
+    public static final String NUMBER_NAME = "Number";
+
+    /** Comparator for sorting by numbers. */
+    public static final Comparator<FileTarget> NUMBER_COMPARATOR =
+            new NumberComparator();
+
+    /** Algorithm name for sorting by L-Numbers. */
     public static final String LNUMBER_NAME = "LNumber";
 
     /** Comparator for sorting by L-Numbers. */
     public static final Comparator<FileTarget> LNUMBER_COMPARATOR =
             new LNumberComparator();
 
-    /** Algrotihm name for sorting by path. */
+    /** Algorithm name for sorting by path. */
     public static final String PATH_NAME = "Path";
 
     /** Comparator for sorting by path. */
@@ -46,8 +54,11 @@ public class InputFileSorter {
         return comparator;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setSortAlgorithm(String algorithmName) {
-        if (LNUMBER_NAME.equals(algorithmName)) {
+        if (NUMBER_NAME.equals(algorithmName)) {
+            comparator = NUMBER_COMPARATOR;
+        } else if (LNUMBER_NAME.equals(algorithmName)) {
             comparator = LNUMBER_COMPARATOR;
         } else if (PATH_NAME.equals(algorithmName)) {
             comparator = PATH_COMPARATOR;
