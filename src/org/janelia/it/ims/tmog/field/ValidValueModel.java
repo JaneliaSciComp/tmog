@@ -119,6 +119,9 @@ public class ValidValueModel extends AbstractListModel
         String coreValue;
         if (selectedValue != null) {
             coreValue = selectedValue.getValue();
+            if (coreValue == null) {
+                coreValue = "";
+            }
         } else {
             coreValue = "";
         }
@@ -127,12 +130,18 @@ public class ValidValueModel extends AbstractListModel
 
     public String getFileNameValue() {
         String fileNameValue;
+        String value = null;
+
         if (selectedValue != null) {
+            value = selectedValue.getValue();
+        }
+
+        if ((value != null) && (value.length() > 0)) {
             StringBuilder sb = new StringBuilder(64);
             if (prefix != null) {
                 sb.append(prefix);
             }
-            sb.append(selectedValue.getValue());
+            sb.append(value);
             if (suffix != null) {
                 sb.append(suffix);
             }
@@ -140,6 +149,7 @@ public class ValidValueModel extends AbstractListModel
         } else {
             fileNameValue = "";
         }
+
         return fileNameValue;
     }
 
