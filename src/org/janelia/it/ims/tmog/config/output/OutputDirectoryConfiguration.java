@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.config.output;
@@ -28,6 +28,7 @@ public class OutputDirectoryConfiguration {
 
     private ArrayList<OutputDirectoryComponent> components;
     private boolean derivedFromEarliestModifiedFile;
+    private SourcePath sourcePathComponent;
     private boolean fileModeReadOnly;
 
     /**
@@ -36,6 +37,7 @@ public class OutputDirectoryConfiguration {
     public OutputDirectoryConfiguration() {
         this.components = new ArrayList<OutputDirectoryComponent>();
         this.derivedFromEarliestModifiedFile = false;
+        this.sourcePathComponent = null;
         this.fileModeReadOnly = true;
     }
 
@@ -54,11 +56,37 @@ public class OutputDirectoryConfiguration {
      *
      * @param  derivedFromEarliestModifiedFile  flag value.
      */
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setDerivedFromEarliestModifiedFile(boolean derivedFromEarliestModifiedFile) {
         this.derivedFromEarliestModifiedFile = derivedFromEarliestModifiedFile;
         SourceFileModificationTime modTime = new SourceFileModificationTime();
         modTime.setDatePattern("'" + FILE_SEP + "'yyyyMMdd");
         this.components.add(modTime);
+        // TODO: save this component separately to ensure it is appended last
+        // currently it works because attributes are applied last by Digester
+    }
+
+    /**
+     * @return true if the output directory should be the same as the
+     *         source file directory; otherwise false.
+     */
+    public boolean isDerivedFromSourceFile() {
+        return (sourcePathComponent != null);
+    }
+
+    /**
+     * Sets whether the output directory should be derived from each
+     * source file (for renaming in-place).
+     *
+     * @param  derivedFromSourceFile  flag value.
+     */
+    @SuppressWarnings({"UnusedDeclaration"})
+    public void setDerivedFromSourceFile(boolean derivedFromSourceFile) {
+        if (derivedFromSourceFile) {
+            this.sourcePathComponent = new SourcePath();
+        } else {
+            this.sourcePathComponent = null;
+        }
     }
 
     /**
@@ -75,6 +103,7 @@ public class OutputDirectoryConfiguration {
      *
      * @param  fileModeReadOnly  flag value.
      */
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setFileModeReadOnly(boolean fileModeReadOnly) {
         this.fileModeReadOnly = fileModeReadOnly;
     }
@@ -124,6 +153,7 @@ public class OutputDirectoryConfiguration {
      *
      * @param  basePath  path name to set.
      */
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setBasePath(String basePath) {
         Path path = new Path(basePath);
         components.add(0, path);
@@ -146,7 +176,10 @@ public class OutputDirectoryConfiguration {
                        List<DataField> dataFields)
             throws ConfigurationException {
 
-        if (! isManuallyChosen()) {
+        if (isDerivedFromSourceFile()) {
+            components.clear();
+            components.add(sourcePathComponent);            
+        } else if (! isManuallyChosen()) {
 
             String basePath = getBasePath();
             File baseDirectory = new File(basePath);
