@@ -243,8 +243,8 @@
             </validValueList>
             <validValueList displayName="UAS Reporter" required="true"
                             markedForTask="false">
-                <validValue displayName="JFRC-IVS-A1" value="JFRC-IVS-A1" default="true"/>
-                <validValue displayName="mcd8GFP" value="mcd8GFP"/>
+                <validValue value="UAS_IVS-mCD8_3_0007" default="true"/>
+                <validValue value="UAS_mCD8_2_0006"/>
             </validValueList>
             <validValueList displayName="Imager" required="true"
                             markedForTask="false">
@@ -482,8 +482,8 @@
             </validValueList>
             <validValueList displayName="UAS Reporter" required="true"
                             markedForTask="false">
-                <validValue displayName="JFRC-IVS-A1" value="JFRC-IVS-A1" default="true"/>
-                <validValue displayName="mcd8GFP" value="mcd8GFP"/>
+                <validValue value="UAS_IVS-mCD8_3_0007" default="true"/>
+                <validValue value="UAS_mCD8_2_0006"/>
             </validValueList>
             <validValueList displayName="Imager" required="true"
                             markedForTask="false">
