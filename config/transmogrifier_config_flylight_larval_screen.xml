@@ -7,7 +7,7 @@
 
     <project name="Fly Light: Larval Screen (GL_*)" default="true">
 
-        <inputFileFilter patternString="(?!GL_).*" />
+        <inputFileFilter patternString="(?!GL_).*\.lsm" />
         <inputFileSorter sortAlgorithm="Number"/>
         
         <outputDirectory derivedFromSourceFile="true" fileModeReadOnly="false"/>
@@ -41,7 +41,7 @@
                                        toDatePattern="MMddyy"
                                        matchType="path"/>
             </date>
-            <validValueList displayName="Image Code" required="true">
+            <validValueList displayName="Image Code" required="true" copyable="false">
                 <validValue value="A"/>
                 <validValue value="B"/>
                 <validValue value="C"/>
