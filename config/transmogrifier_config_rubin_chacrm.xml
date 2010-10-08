@@ -152,6 +152,7 @@
             </validValueList>
             <validValueList displayName="Imager" required="true"
                             markedForTask="false">
+                <validValue value="Aljoscha Nern"/>
                 <validValue value="Amanda Cavallaro"/>
                 <validValue value="Arnim Jenett"/>
                 <validValue value="Chris Zugates"/>
@@ -162,6 +163,7 @@
             <validValueList displayName="Renamer" required="true"
                             markedForTask="false"
                             sharedForAllSessionFiles="true">
+                <validValue value="Aljoscha Nern"/>
                 <validValue value="Amanda Cavallaro"/>
                 <validValue value="Arnim Jenett"/>
                 <validValue value="Chris Zugates"/>
@@ -295,6 +297,7 @@
             </validValueList>
             <validValueList displayName="Imager" required="true"
                             markedForTask="false">
+                <validValue value="Aljoscha Nern"/>
                 <validValue value="Amanda Cavallaro"/>
                 <validValue value="Arnim Jenett"/>
                 <validValue value="Chris Zugates"/>
@@ -305,6 +308,7 @@
             <validValueList displayName="Renamer" required="true"
                             markedForTask="false"
                             sharedForAllSessionFiles="true">
+                <validValue value="Aljoscha Nern"/>
                 <validValue value="Amanda Cavallaro"/>
                 <validValue value="Arnim Jenett"/>
                 <validValue value="Chris Zugates"/>
