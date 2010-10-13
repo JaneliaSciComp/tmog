@@ -153,6 +153,7 @@
             <validValueList displayName="Imager" required="true"
                             markedForTask="false">
                 <validValue value="Aljoscha Nern"/>
+                <validValue value="Alma Arnold"/>
                 <validValue value="Amanda Cavallaro"/>
                 <validValue value="Arnim Jenett"/>
                 <validValue value="Chris Zugates"/>
@@ -164,6 +165,7 @@
                             markedForTask="false"
                             sharedForAllSessionFiles="true">
                 <validValue value="Aljoscha Nern"/>
+                <validValue value="Alma Arnold"/>
                 <validValue value="Amanda Cavallaro"/>
                 <validValue value="Arnim Jenett"/>
                 <validValue value="Chris Zugates"/>
@@ -298,6 +300,7 @@
             <validValueList displayName="Imager" required="true"
                             markedForTask="false">
                 <validValue value="Aljoscha Nern"/>
+                <validValue value="Alma Arnold"/>
                 <validValue value="Amanda Cavallaro"/>
                 <validValue value="Arnim Jenett"/>
                 <validValue value="Chris Zugates"/>
@@ -309,6 +312,7 @@
                             markedForTask="false"
                             sharedForAllSessionFiles="true">
                 <validValue value="Aljoscha Nern"/>
+                <validValue value="Alma Arnold"/>
                 <validValue value="Amanda Cavallaro"/>
                 <validValue value="Arnim Jenett"/>
                 <validValue value="Chris Zugates"/>
