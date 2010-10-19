@@ -39,6 +39,7 @@
                 <property name="class" value="Class"/>
                 <property name="ihc_batch" value="Batch Name"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
@@ -145,6 +146,12 @@
                 <validValue value="Glycerol-Based Mounting" default="true"/>
                 <validValue value="DPX Mounting"/>
             </validValueList>
+            <cvTermList displayName="Tissue Orientation" required="true"
+                        markedForTask="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
+                        displayNamePrefixedForValues="false"
+                        sharedForAllSessionFiles="true">
+            </cvTermList>
             <validValueList displayName="UAS Reporter" required="true"
                             markedForTask="false">
                 <validValue value="UAS_IVS-mCD8_3_0007" default="true"/>
@@ -206,6 +213,7 @@
                 <property name="renamed_by" value="Renamer"/>
                 <property name="class" value="Class"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
@@ -292,6 +300,12 @@
                 <validValue value="Glycerol-Based Mounting"/>
                 <validValue value="DPX Mounting" default="true"/>
             </validValueList>
+            <cvTermList displayName="Tissue Orientation" required="true"
+                        markedForTask="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
+                        displayNamePrefixedForValues="false"
+                        sharedForAllSessionFiles="true">
+            </cvTermList>
             <validValueList displayName="UAS Reporter" required="true"
                             markedForTask="false">
                 <validValue value="UAS_IVS-mCD8_3_0007" default="true"/>
