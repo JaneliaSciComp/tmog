@@ -149,8 +149,7 @@
             <cvTermList displayName="Tissue Orientation" required="true"
                         markedForTask="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
-                        displayNamePrefixedForValues="false"
-                        sharedForAllSessionFiles="true">
+                        displayNamePrefixedForValues="false">
             </cvTermList>
             <validValueList displayName="UAS Reporter" required="true"
                             markedForTask="false">
@@ -303,8 +302,7 @@
             <cvTermList displayName="Tissue Orientation" required="true"
                         markedForTask="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
-                        displayNamePrefixedForValues="false"
-                        sharedForAllSessionFiles="true">
+                        displayNamePrefixedForValues="false">
             </cvTermList>
             <validValueList displayName="UAS Reporter" required="true"
                             markedForTask="false">
