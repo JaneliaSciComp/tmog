@@ -155,6 +155,7 @@
                             markedForTask="false">
                 <validValue value="UAS_IVS-mCD8_3_0007" default="true"/>
                 <validValue value="UAS_mCD8_2_0006"/>
+                <validValue value="JFRC19-13XLexOp2-IVS-myr-GFP"/>
             </validValueList>
             <validValueList displayName="Imager" required="true"
                             markedForTask="false">
@@ -310,6 +311,7 @@
                             markedForTask="false">
                 <validValue value="UAS_IVS-mCD8_3_0007" default="true"/>
                 <validValue value="UAS_mCD8_2_0006"/>
+                <validValue value="JFRC19-13XLexOp2-IVS-myr-GFP"/>
             </validValueList>
             <validValueList displayName="Imager" required="true"
                             markedForTask="false">
