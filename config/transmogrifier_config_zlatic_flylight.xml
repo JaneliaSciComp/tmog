@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="2.4.2"/>
+
+    <project name="Zlatic Lab: Peripheral Images" default="true">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <outputDirectory fileModeReadOnly="false">
+            <path path="\\dm11.isi.janelia.org\zlaticimg\peripheralConfocalStacks\" />
+            <renameFieldValue fieldDisplayName="Line"/>
+        </outputDirectory>
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.chacrm.ChacrmLineValidator">
+                <property name="linePropertyName" value="Line"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="nighthawk" />
+                <property name="Image Number" value="urn:lsid:janelia.org:zlatic_lab_peripheral_image:${Line}" />
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="nighthawk"/>
+                <property name="line" value="Line"/>
+                <property name="uas_reporter" value="UAS Reporter"/>
+                <property name="family" value="family"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+            <text displayName="Line" required="true"
+                  pattern="[0-9A-Za-z\-\_]++">
+            </text>
+
+            <separator value="_zp"/>
+
+            <pluginData displayName="Image Number" format="%03d"/>
+
+            <separator value="_"/>
+
+            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+
+            <separator value=".lsm"/>
+
+            <!--
+             These values are collected for the nighthawk database but are not
+             included as components of the file name (markedForTask="false").
+             -->
+             <validValueList displayName="UAS Reporter" required="true"
+                            markedForTask="false">
+                <validValue value="UAS_IVS-mCD8_3_0007" default="true"/>
+                <validValue value="UAS_mCD8_2_0006"/>
+                <validValue value="LexAop_IVS-myr_3_0008"/>
+            </validValueList>
+            <static name="family" value="zlatic-peripheral" markedForTask="false"/>
+
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
