@@ -106,7 +106,6 @@
             </cvTermList>
 
             <static name="family" value="zlatic_peripheral" markedForTask="false"/>
-            <static name="lab" value="zlatic" markedForTask="false"/>
 
         </dataFields>
 
