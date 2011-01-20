@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="2.4.2"/>
+
+    <project name="Zlatic Lab: Hi Res Images"
+             default="true"
+             taskName="rename-without-delete"
+             copyPreviousButtonVisible="false">
+
+        <inputFileFilter patternString=".+\.(tif|jpg)"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <outputDirectory fileModeReadOnly="false">
+            <path path="/groups/zlatic/zlaticimg/hiRes/" />
+            <renameFieldValue fieldDisplayName="Plate"/>
+            <path path="/GMR_"/>
+            <renameFieldValue fieldDisplayName="Line"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Relative Path"/>
+        </outputDirectory>
+
+        <plugins>
+            <rowValidator className="org.janelia.it.chacrm.ChacrmLineValidator">
+                <property name="linePrefix" value=""/>
+                <property name="linePropertyName" value="Line"/>
+            </rowValidator>
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Pre-Line" required="false">
+                <sourceFileDefault pattern="(.*)GL_.*"/>
+                <sourceFileDefault pattern="(.*)GL\d\d[A-H]\d\d_.*"/>
+                <sourceFileDefault pattern="(.*)\d\d[A-H]\d\d_.*"/>
+                <sourceFileDefault pattern="(.*)GL.*"/>
+            </text>
+
+            <separator value="GMR_"/>
+
+            <text displayName="Line" required="true"
+                  pattern="[0-9A-Za-z\-\_]++">
+                <sourceFileDefault pattern=".*GL_(....._.._..)_.*"/>
+                <sourceFileDefault pattern=".*(\d\d[A-H]\d\d_.._..)_.*"/>
+                <sourceFileDefault pattern=".*GL(....._.._..)_.*"/>
+            </text>
+
+            <text displayName="Post-Line" required="true">
+                <sourceFileDefault pattern=".*GL_....._.._..(_.*)"/>
+                <sourceFileDefault pattern=".*\d\d[A-H]\d\d_.._..(_.*)"/>
+                <sourceFileDefault pattern=".*GL....._.._..(_.*)"/>
+                <sourceFileDefault pattern="GL 19C05(_.*)"/>
+            </text>
+
+            <number displayName="Plate" required="true"
+                    minimumValue="9" maximumValue="999"
+                    markedForTask="false">
+                <sourceFileDefault pattern=".*GL_(..)..._.._.._.*"/>
+                <sourceFileDefault pattern=".*(\d\d)[A-H]\d\d_.._.._.*"/>
+                <sourceFileDefault pattern=".*GL(..)..._.._.._.*"/>
+            </number>
+
+            <text displayName="Relative Path" required="false"
+                  markedForTask="false">
+                <sourceFileDefault matchType="path"
+                                   pattern=".*Confocal_63.*/(.*)/.*"/>
+            </text>
+
+            <text displayName="Path" required="false"
+                  markedForTask="false">
+                <sourceFileDefault matchType="path"
+                                   pattern=".*(Confocal_63.*/).*"/>
+            </text>
+
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
