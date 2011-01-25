@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.2.2"/>
+    <global minimumVersion="2.4.5"/>
 
     <project name="Fly Light: Research and Development (RDFL_*)" default="true">
 
@@ -13,6 +13,19 @@
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="nighthawk"/>
+                <property name="family" value="family"/>
+                <property name="promoter" value="Promoter"/>
+                <property name="transcript" value="Transcript"/>
+                <property name="responder" value="Responder"/>
+                <property name="creator_initials" value="Creator Initials"/>
+                <property name="capture_date" value="Capture Date"/>
+                <property name="area" value="Area"/>
+                <property name="l_number" value="L-Number"/>
+                <property name="comment" value="Comment"/>
+                <property name="family" value="family"/>
+            </rowListener>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\RDFL"/>
             </sessionListener>
@@ -40,10 +53,10 @@
                                        fromDatePattern="MMddyy"
                                        toDatePattern="yyMMdd"/>
             </date>
-            <validValueList displayName="Area" required="false" prefix="-">
-                <validValue displayName="br: Brain" value="br"/>
-                <validValue displayName="vnc: Ventral Nerve Cord" value="vnc"/>
-                <validValue displayName="ccx: Central Complex" value="ccx"/>
+            <validValueList displayName="Area" required="true">
+                <validValue displayName="b: Brain" value="b"/>
+                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
+                <validValue displayName="c: Central Complex" value="c"/>
             </validValueList>
             <text displayName="L-Number" required="false" prefix="-L"
                   pattern="[0-9]++" copyable="false">
@@ -55,6 +68,72 @@
             <separator value="_"/>
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
+            <static name="family" value="flylight_rd" markedForTask="false"/>
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light: IMPORT RDFL Data" taskName="collector">
+
+        <inputFileFilter patternString="RDFL_.+\.lsm"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <plugins>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="nighthawk"/>
+                <property name="family" value="family"/>
+                <property name="promoter" value="Promoter"/>
+                <property name="transcript" value="Transcript"/>
+                <property name="responder" value="Responder"/>
+                <property name="creator_initials" value="Creator Initials"/>
+                <property name="capture_date" value="Capture Date"/>
+                <property name="area" value="Area"/>
+                <property name="l_number" value="L-Number"/>
+                <property name="comment" value="Comment"/>
+                <property name="family" value="family"/>
+            </rowListener>
+        </plugins>
+
+        <dataFields>
+            <text displayName="Promoter" required="true"
+                  pattern="[0-9A-Za-z\\-]++">
+                <sourceFileDefault pattern="RDFL_(.*)_.*_.*_.*_.*_20\d{15}\.lsm"/>
+            </text>
+            <text displayName="Transcript" required="true"
+                  pattern="[0-9A-Za-z\\-]++">
+                <sourceFileDefault pattern="RDFL_.*_(.*)_.*_.*_.*_20\d{15}\.lsm"/>
+            </text>
+            <text displayName="Responder" required="true"
+                  pattern="[0-9A-Za-z\\-]++">
+                <sourceFileDefault pattern="RDFL_.*_.*_(.*)_.*_.*_20\d{15}\.lsm"/>
+            </text>
+            <text displayName="Creator Initials" required="true"
+                  pattern="[0-9A-Za-z\\-]++">
+                <sourceFileDefault pattern="RDFL_.*_.*_.*_(.*)_.*_20\d{15}\.lsm"/>
+            </text>
+            <date displayName="Capture Date" required="true"
+                  datePattern="yyMMdd" prefix="_" copyable="false">
+                <sourceFileDateDefault pattern="RDFL_.*_.*_.*_.*_(\d{6}).*_20\d{15}\.lsm"
+                                       fromDatePattern="yyMMdd"
+                                       toDatePattern="yyMMdd"/>
+            </date>
+            <validValueList displayName="Area" required="true">
+                <sourceFileDefault pattern="RDFL_.*_.*_.*_.*_\d{6}-([bvc]).*-L.*_20\d{15}\.lsm"/>
+                <validValue displayName="b: Brain" value="b"/>
+                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
+                <validValue displayName="c: Central Complex" value="c"/>
+            </validValueList>
+            <text displayName="L-Number" required="false" prefix="-L"
+                  pattern="[0-9]++" copyable="false">
+                <sourceFileDefault pattern="RDFL_.*_.*_.*_.*_.*-L([0-9]++).*_20\d{15}\.lsm"/>
+            </text>
+            <text displayName="Comment" required="false" prefix="-"
+                  pattern="[0-9A-Za-z\\-]++">
+                <sourceFileDefault pattern="RDFL_.*_.*_.*_.*_.*-L[0-9]++-(.*)_20\d{15}\.lsm"/>
+            </text>
+            <static name="family" value="flylight_rd" markedForTask="false"/>
         </dataFields>
 
     </project>
