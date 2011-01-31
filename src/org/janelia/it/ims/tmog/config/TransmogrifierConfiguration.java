@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -20,10 +20,12 @@ import org.janelia.it.ims.tmog.field.FileExtensionModel;
 import org.janelia.it.ims.tmog.field.FileModificationTimeModel;
 import org.janelia.it.ims.tmog.field.FileNameModel;
 import org.janelia.it.ims.tmog.field.FileRelativePathModel;
+import org.janelia.it.ims.tmog.field.MappedValue;
 import org.janelia.it.ims.tmog.field.PluginDataModel;
 import org.janelia.it.ims.tmog.field.RunTimeModel;
 import org.janelia.it.ims.tmog.field.SourceFileDateDefaultValue;
 import org.janelia.it.ims.tmog.field.SourceFileDefaultValue;
+import org.janelia.it.ims.tmog.field.SourceFileMappedDefaultValue;
 import org.janelia.it.ims.tmog.field.StaticDataModel;
 import org.janelia.it.ims.tmog.field.StaticDefaultValue;
 import org.janelia.it.ims.tmog.field.TargetNameModel;
@@ -224,6 +226,9 @@ public class TransmogrifierConfiguration {
                         ValidValueModel.class, digester);
         createSetAndAdd("*/well",
                         VerifiedWellModel.class, digester);
+        createSetAndAdd("*/mappedValue",
+                        MappedValue.class,
+                        "addMappedValue", digester);
 
         createSetAndAddDefault("*/sourceFileDefault",
                                SourceFileDefaultValue.class,
@@ -233,6 +238,9 @@ public class TransmogrifierConfiguration {
                                digester);
         createSetAndAddDefault("*/sourceFileDateDefault",
                                SourceFileDateDefaultValue.class,
+                               digester);
+        createSetAndAddDefault("*/sourceFileMappedDefault",
+                               SourceFileMappedDefaultValue.class,
                                digester);
 
         final String pluginDefaultPath = "*/pluginDefault";

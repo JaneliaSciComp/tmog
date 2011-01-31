@@ -96,6 +96,8 @@
         <xs:sequence>
             <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
                         minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="staticDefault" type="staticDefaultType"
                         minOccurs="0" maxOccurs="1"/>
             <xs:element name="pluginDefault" type="pluginDefaultType"
@@ -118,6 +120,8 @@
         <xs:sequence>
             <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
                         minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="staticDefault" type="staticDefaultType"
                         minOccurs="0" maxOccurs="1"/>
             <xs:element name="pluginDefault" type="pluginDefaultType"
@@ -139,6 +143,8 @@
     <xs:complexType name="textType">
         <xs:sequence>
             <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"
                         minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="staticDefault" type="staticDefaultType"
                         minOccurs="0" maxOccurs="1"/>
@@ -199,6 +205,8 @@
         <xs:sequence>
             <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
                         minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="staticDefault" type="staticDefaultType"
                         minOccurs="0" maxOccurs="1"/>
             <xs:element name="pluginDefault" type="pluginDefaultType"
@@ -217,6 +225,8 @@
     <xs:complexType name="cvTermListType">
         <xs:sequence>
             <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"
                         minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="staticDefault" type="staticDefaultType"
                         minOccurs="0" maxOccurs="1"/>
@@ -292,6 +302,20 @@
         <xs:attribute name="matchType" type="matchType"/>
         <xs:attribute name="fromDatePattern" type="xs:string"/>
         <xs:attribute name="toDatePattern" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="mappedValueType">
+        <xs:attribute name="from" type="xs:string"/>
+        <xs:attribute name="to" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="sourceFileMappedDefaultType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="mappedValue" type="mappedValueType"/>
+        </xs:sequence>
+        <xs:attribute name="pattern" type="xs:string"/>
+        <xs:attribute name="patternGroupNumber" type="xs:positiveInteger"/>
+        <xs:attribute name="matchType" type="matchType"/>
     </xs:complexType>
 
     <xs:complexType name="staticDefaultType">

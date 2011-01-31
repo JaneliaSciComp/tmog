@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -41,7 +41,7 @@ public class JaneliaTransmogrifier extends JFrame {
      * app is run from within an IDE (package information can be used
      * when the app is run from a jar file). 
      */
-    public static final String VERSION = "2.4.5";
+    public static final String VERSION = "2.4.6";
     
     /**
      * Set up a thread pool to limit the number of concurrent
