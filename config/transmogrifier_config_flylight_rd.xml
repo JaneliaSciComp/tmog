@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.4.5"/>
+    <global minimumVersion="2.4.6"/>
 
     <project name="Fly Light: Research and Development (RDFL_*)" default="true">
 
@@ -15,16 +15,30 @@
         <plugins>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
-                <property name="family" value="family"/>
                 <property name="promoter" value="Promoter"/>
                 <property name="transcript" value="Transcript"/>
                 <property name="responder" value="Responder"/>
-                <property name="creator_initials" value="Creator Initials"/>
+                <property name="created_by" value="Created By"/>
                 <property name="capture_date" value="Capture Date"/>
                 <property name="area" value="Area"/>
-                <property name="l_number" value="L-Number"/>
                 <property name="comment" value="Comment"/>
                 <property name="family" value="family"/>
+            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="promoter" value="Promoter"/>
+                <property name="transcript" value="Transcript"/>
+                <property name="responder" value="Responder"/>
+                <property name="created_by" value="Created By"/>
+                <property name="capture_date" value="Capture Date"/>
+                <property name="area" value="Area"/>
+                <property name="comment" value="Comment"/>
+                <property name="family" value="family"/>
+                <property name="line" value="line"/>
+                <property name="lab" value="lab"/>
+                <property name="base_url" value="base_url"/>
+                <property name="base_path" value="base_path"/>
+                <property name="image_source" value="image_source"/>
             </rowListener>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\RDFL"/>
@@ -42,8 +56,12 @@
             <text displayName="Responder" required="true"
                   pattern="[0-9A-Za-z\\-]++"/>
             <separator value="_"/>
-            <text displayName="Creator Initials" required="true"
-                  pattern="[0-9A-Za-z\\-]++"/>
+            <validValueList displayName="Created By" required="true"
+                            markedForTask="false">
+                <validValue displayName="Jennifer Jeter" value="jeterj"/>
+                <validValue displayName="Teri Ngo" value="ngot"/>
+                <validValue displayName="Tyler Ofstad" value="ofstadt"/>
+            </validValueList>
             <date displayName="Capture Date" required="true"
                   datePattern="yyMMdd" prefix="_" copyable="false">
                 <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d)_L[0-9]++_Sum\.lsm"
@@ -69,6 +87,11 @@
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
             <static name="family" value="flylight_rd" markedForTask="false"/>
+            <static name="line" value="Not_Applicable" markedForTask="false"/>
+            <static name="lab" value="none" markedForTask="false"/>
+            <static name="base_url" value="http://img.int.janelia.org/rubin-image/fly-light-rd-confocal-data/" markedForTask="false"/>
+            <static name="base_path" value="/groups/rubin/data1/rubinlab/FlyLight/confocalStacks/" markedForTask="false"/>
+            <static name="image_source" value="flylight" markedForTask="false"/>
         </dataFields>
 
     </project>
@@ -83,16 +106,30 @@
         <plugins>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
-                <property name="family" value="family"/>
                 <property name="promoter" value="Promoter"/>
                 <property name="transcript" value="Transcript"/>
                 <property name="responder" value="Responder"/>
-                <property name="creator_initials" value="Creator Initials"/>
+                <property name="created_by" value="Created By"/>
                 <property name="capture_date" value="Capture Date"/>
                 <property name="area" value="Area"/>
-                <property name="l_number" value="L-Number"/>
                 <property name="comment" value="Comment"/>
                 <property name="family" value="family"/>
+            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="promoter" value="Promoter"/>
+                <property name="transcript" value="Transcript"/>
+                <property name="responder" value="Responder"/>
+                <property name="created_by" value="Created By"/>
+                <property name="capture_date" value="Capture Date"/>
+                <property name="area" value="Area"/>
+                <property name="comment" value="Comment"/>
+                <property name="family" value="family"/>
+                <property name="line" value="line"/>
+                <property name="lab" value="lab"/>
+                <property name="base_url" value="base_url"/>
+                <property name="base_path" value="base_path"/>
+                <property name="image_source" value="image_source"/>
             </rowListener>
         </plugins>
 
@@ -109,10 +146,18 @@
                   pattern="[0-9A-Za-z\\-]++">
                 <sourceFileDefault pattern="RDFL_.*_.*_(.*)_.*_.*_20\d{15}\.lsm"/>
             </text>
-            <text displayName="Creator Initials" required="true"
-                  pattern="[0-9A-Za-z\\-]++">
-                <sourceFileDefault pattern="RDFL_.*_.*_.*_(.*)_.*_20\d{15}\.lsm"/>
-            </text>
+            <validValueList displayName="Created By" required="true"
+                            markedForTask="false">
+                <sourceFileMappedDefault pattern="RDFL_.*_.*_.*_(.*)_.*_20\d{15}\.lsm">
+                    <mappedValue from="JJ" to="jeterj"/>
+                    <mappedValue from="tn" to="ngot"/>
+                    <mappedValue from="TN" to="ngot"/>
+                    <mappedValue from="tyler" to="ofstadt"/>
+                </sourceFileMappedDefault>
+                <validValue displayName="Jennifer Jeter" value="jeterj"/>
+                <validValue displayName="Teri Ngo" value="ngot"/>
+                <validValue displayName="Tyler Ofstad" value="ofstadt"/>
+            </validValueList>
             <date displayName="Capture Date" required="true"
                   datePattern="yyMMdd" prefix="_" copyable="false">
                 <sourceFileDateDefault pattern="RDFL_.*_.*_.*_.*_(\d{6}).*_20\d{15}\.lsm"
@@ -125,15 +170,16 @@
                 <validValue displayName="v: Ventral Nerve Cord" value="v"/>
                 <validValue displayName="c: Central Complex" value="c"/>
             </validValueList>
-            <text displayName="L-Number" required="false" prefix="-L"
-                  pattern="[0-9]++" copyable="false">
-                <sourceFileDefault pattern="RDFL_.*_.*_.*_.*_.*-L([0-9]++).*_20\d{15}\.lsm"/>
-            </text>
             <text displayName="Comment" required="false" prefix="-"
                   pattern="[0-9A-Za-z\\-]++">
                 <sourceFileDefault pattern="RDFL_.*_.*_.*_.*_.*-L[0-9]++-(.*)_20\d{15}\.lsm"/>
             </text>
             <static name="family" value="flylight_rd" markedForTask="false"/>
+            <static name="line" value="Not_Applicable" markedForTask="false"/>
+            <static name="lab" value="none" markedForTask="false"/>
+            <static name="base_url" value="http://img.int.janelia.org/rubin-image/fly-light-rd-confocal-data/" markedForTask="false"/>
+            <static name="base_path" value="/groups/rubin/data1/rubinlab/FlyLight/confocalStacks/" markedForTask="false"/>
+            <static name="image_source" value="flylight" markedForTask="false"/>
         </dataFields>
 
     </project>
