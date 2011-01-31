@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -184,6 +184,12 @@ public class ImageDataPlugin implements RowListener {
         ImagePropertySetter propertySetter;
         if (CaptureDateSetter.TYPE.equals(propertyType)) {
             propertySetter = new CaptureDateSetter(fieldName);
+        } else if (BaseUrlSetter.TYPE.equals(propertyType)) {
+            propertySetter = new BaseUrlSetter(fieldName);
+        } else if (BasePathSetter.TYPE.equals(propertyType)) {
+            propertySetter = new BasePathSetter(fieldName);
+        } else if (ImageSourceSetter.TYPE.equals(propertyType)) {
+            propertySetter = new ImageSourceSetter(fieldName);
         } else if (FamilySetter.TYPE.equals(propertyType)) {
             propertySetter = new FamilySetter(fieldName);
         } else if (CreatedBySetter.TYPE.equals(propertyType)) {

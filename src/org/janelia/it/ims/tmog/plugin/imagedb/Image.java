@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -31,6 +31,7 @@ import java.util.Set;
  */
 public class Image {
 
+    public static final String CREATED_BY_PROPERTY = "created_by";
     public static final String LINE_PROPERTY = "line";
     public static final String LAB_PROPERTY = "lab";
     
@@ -40,6 +41,8 @@ public class Image {
     private String source;
     private String family;
     private boolean display;
+    private String baseUrl;
+    private String basePath;
     private Map<String, String> propertyTypeToValueMap;
     private PluginDataRow row;
 
@@ -77,6 +80,52 @@ public class Image {
         this.relativePath = relativePath;
     }
 
+    public String getPath() {
+        String path = null;
+        if (basePath != null) {
+            path = basePath + relativePath;
+        }
+        return path;
+    }
+
+    public void setBasePath(String basePath) {
+        this.basePath = basePath;
+    }
+
+    public void setBasePath(DataField field) {
+        String value = null;
+        if (field != null) {
+            value = field.getCoreValue();
+        }
+
+        if ((value != null) && (value.length() > 0)) {
+            setBasePath(value);
+        }
+    }
+
+    public String getUrl() {
+        String url = null;
+        if (baseUrl != null) {
+            url = baseUrl + relativePath;
+        }
+        return url;
+    }    
+
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    public void setBaseUrl(DataField field) {
+        String value = null;
+        if (field != null) {
+            value = field.getCoreValue();
+        }
+
+        if ((value != null) && (value.length() > 0)) {
+            setBaseUrl(value);
+        }
+    }
+
     public Date getCaptureDate() {
         return captureDate;
     }
@@ -108,6 +157,21 @@ public class Image {
 
     public String getSource() {
         return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public void setSource(DataField field) {
+        String value = null;
+        if (field != null) {
+            value = field.getCoreValue();
+        }
+
+        if ((value != null) && (value.length() > 0)) {
+            setSource(value);
+        }
     }
 
     public String getFamily() {
@@ -152,6 +216,10 @@ public class Image {
         return filteredMap;
     }
 
+    public String getCreatedBy() {
+        return propertyTypeToValueMap.get(CREATED_BY_PROPERTY);
+    }
+
     public String getLineName() {
         return propertyTypeToValueMap.get(LINE_PROPERTY);
     }
@@ -191,8 +259,11 @@ public class Image {
         sb.append("{captureDate=").append(captureDate);
         sb.append(", id=").append(id);
         sb.append(", relativePath='").append(relativePath).append('\'');
+        sb.append(", url='").append(getUrl()).append('\'');
+        sb.append(", path='").append(getPath()).append('\'');
         sb.append(", family='").append(family).append('\'');
         sb.append(", display=").append(display);
+        sb.append(", source='").append(source).append('\'');
         sb.append(", properties=").append(propertyTypeToValueMap);
         sb.append('}');
         return sb.toString();
@@ -204,6 +275,7 @@ public class Image {
     private static final Set<String> SAGE_FILTERED_PROPERTIES;
     static {
         Set<String> set = new HashSet<String>();
+        set.add(CREATED_BY_PROPERTY);
         set.add(LINE_PROPERTY);
         set.add(LAB_PROPERTY);
         SAGE_FILTERED_PROPERTIES = set;

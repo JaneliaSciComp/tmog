@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -263,6 +263,9 @@ public class SageImageDao
             insertImage.setString(5, image.getSource());
             insertImage.setInt(6, lineId);
             insertImage.setBoolean(7, image.isRepresentative());
+            insertImage.setString(8, image.getUrl());
+            insertImage.setString(9, image.getPath());
+            insertImage.setString(10, image.getCreatedBy());
 
             int rowsUpdated = insertImage.executeUpdate();
             if (rowsUpdated != 1) {
@@ -309,6 +312,21 @@ public class SageImageDao
                 sql.append("family_id=(" + SQL_SELECT_FAMILY_ID + "), ");
             }
 
+            String url = image.getUrl();
+            if (url != null) {
+                sql.append("url=?, ");
+            }
+
+            String path = image.getPath();
+            if (path != null) {
+                sql.append("path=?, ");
+            }
+
+            String createdBy = image.getCreatedBy();
+            if (createdBy != null) {
+                sql.append("created_by=?, ");
+            }
+
             // TODO: support update of source name and representative columns
             sql.append("name=?, display=?");
             if (lineId != null) {
@@ -325,6 +343,18 @@ public class SageImageDao
             }
             if (family != null) {
                 updateImage.setString(columnIndex, image.getFamily());
+                columnIndex++;
+            }
+            if (url != null) {
+                updateImage.setString(columnIndex, url);
+                columnIndex++;
+            }
+            if (path != null) {
+                updateImage.setString(columnIndex, path);
+                columnIndex++;
+            }
+            if (createdBy != null) {
+                updateImage.setString(columnIndex, createdBy);
                 columnIndex++;
             }
             updateImage.setString(columnIndex, relativePath);
@@ -543,7 +573,7 @@ public class SageImageDao
 
     private static final String SQL_INSERT_IMAGE =
             "INSERT INTO image (name, capture_date, family_id, display, " +
-            "source_id, line_id, representative) " +
+            "source_id, line_id, representative, url, path, created_by) " +
             "VALUES (" +
             "?, " +                                // 1. relative path
             "?, " +                                // 2. capture date
@@ -551,7 +581,10 @@ public class SageImageDao
             "?, " +                                // 4. display
             "(" + SQL_SELECT_LAB_ID + "), " +      // 5. source
             "?, " +                                // 6. line id
-            "?)";                                  // 7. representative
+            "?, " +                                // 7. representative
+            "?, " +                                // 8. url
+            "?, " +                                // 9. path
+            "?)";                                  // 10. created_by
 
     private static final String SQL_SELECT_IMAGE_ID =
             "SELECT id FROM image WHERE name=?"; // 1. image's relative path
@@ -597,8 +630,7 @@ public class SageImageDao
      */
     private static final String SQL_SELECT_LINE_ID =
             "SELECT id FROM line WHERE name=? AND " +
-            "lab_id=(" + SQL_SELECT_LAB_ID + ") AND " +
-            "organism_id=(" + SQL_SELECT_FLY_ID + ")";
+            "lab_id=(" + SQL_SELECT_LAB_ID + ")";
 
 
     /**
