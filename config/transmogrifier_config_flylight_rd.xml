@@ -34,11 +34,11 @@
                 <property name="area" value="Area"/>
                 <property name="comment" value="Comment"/>
                 <property name="family" value="family"/>
-                <property name="line" value="line"/>
-                <property name="lab" value="lab"/>
-                <property name="base_url" value="base_url"/>
-                <property name="base_path" value="base_path"/>
-                <property name="image_source" value="image_source"/>
+                <property name="line" value="$STATIC:Not_Applicable"/>
+                <property name="lab" value="$STATIC:none"/>
+                <property name="base_url" value="$STATIC:http://img.int.janelia.org/rubin-image/flylight_rd-confocal-data/"/>
+                <property name="base_path" value="$STATIC:/groups/rubin/data1/rubinlab/FlyLight/confocalStacks/"/>
+                <property name="image_source" value="$STATIC:flylight"/>
             </rowListener>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\RDFL"/>
@@ -87,11 +87,6 @@
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
             <static name="family" value="flylight_rd" markedForTask="false"/>
-            <static name="line" value="Not_Applicable" markedForTask="false"/>
-            <static name="lab" value="none" markedForTask="false"/>
-            <static name="base_url" value="http://img.int.janelia.org/rubin-image/fly-light-rd-confocal-data/" markedForTask="false"/>
-            <static name="base_path" value="/groups/rubin/data1/rubinlab/FlyLight/confocalStacks/" markedForTask="false"/>
-            <static name="image_source" value="flylight" markedForTask="false"/>
         </dataFields>
 
     </project>
@@ -125,11 +120,11 @@
                 <property name="area" value="Area"/>
                 <property name="comment" value="Comment"/>
                 <property name="family" value="family"/>
-                <property name="line" value="line"/>
-                <property name="lab" value="lab"/>
-                <property name="base_url" value="base_url"/>
-                <property name="base_path" value="base_path"/>
-                <property name="image_source" value="image_source"/>
+                <property name="line" value="$STATIC:Not_Applicable"/>
+                <property name="lab" value="$STATIC:none"/>
+                <property name="base_url" value="$STATIC:http://img.int.janelia.org/rubin-image/flylight_rd-confocal-data/"/>
+                <property name="base_path" value="$STATIC:/groups/rubin/data1/rubinlab/FlyLight/confocalStacks/"/>
+                <property name="image_source" value="$STATIC:flylight"/>
             </rowListener>
         </plugins>
 
@@ -175,11 +170,6 @@
                 <sourceFileDefault pattern="RDFL_.*_.*_.*_.*_.*-L[0-9]++-(.*)_20\d{15}\.lsm"/>
             </text>
             <static name="family" value="flylight_rd" markedForTask="false"/>
-            <static name="line" value="Not_Applicable" markedForTask="false"/>
-            <static name="lab" value="none" markedForTask="false"/>
-            <static name="base_url" value="http://img.int.janelia.org/rubin-image/fly-light-rd-confocal-data/" markedForTask="false"/>
-            <static name="base_path" value="/groups/rubin/data1/rubinlab/FlyLight/confocalStacks/" markedForTask="false"/>
-            <static name="image_source" value="flylight" markedForTask="false"/>
         </dataFields>
 
     </project>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -45,8 +45,12 @@ public class HostNameSetter
      */
     public void setProperty(PluginDataRow row,
                             Image image) {
-        if (HOSTNAME != null) {
-            image.addProperty(TYPE, HOSTNAME);
+        String value = row.getCoreValue(TYPE);
+        if (value == null) {
+            value = HOSTNAME;
+        }
+        if (value != null) {
+            image.addProperty(TYPE, value);
         }
     }
 

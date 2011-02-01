@@ -7,15 +7,9 @@
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.janelia.it.ims.tmog.field.DataField;
-import org.janelia.it.ims.tmog.field.DatePatternField;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -92,17 +86,6 @@ public class Image {
         this.basePath = basePath;
     }
 
-    public void setBasePath(DataField field) {
-        String value = null;
-        if (field != null) {
-            value = field.getCoreValue();
-        }
-
-        if ((value != null) && (value.length() > 0)) {
-            setBasePath(value);
-        }
-    }
-
     public String getUrl() {
         String url = null;
         if (baseUrl != null) {
@@ -115,44 +98,12 @@ public class Image {
         this.baseUrl = baseUrl;
     }
 
-    public void setBaseUrl(DataField field) {
-        String value = null;
-        if (field != null) {
-            value = field.getCoreValue();
-        }
-
-        if ((value != null) && (value.length() > 0)) {
-            setBaseUrl(value);
-        }
-    }
-
     public Date getCaptureDate() {
         return captureDate;
     }
 
     public void setCaptureDate(Date captureDate) {
         this.captureDate = captureDate;
-    }
-
-    public void setCaptureDate(DataField field) {
-        String value = null;
-        if (field != null) {
-            value = field.getCoreValue();
-        }
-
-        if ((value != null) && (value.length() > 0)) {
-            if (field instanceof DatePatternField) {
-                String pattern = ((DatePatternField) field).getDatePattern();
-                SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-                try {
-                    captureDate = sdf.parse(value);
-                } catch (ParseException e) {
-                    LOG.warn("Unable to parse capture date for '" +
-                             relativePath +
-                             "'.  Continuing processing without the date.", e);
-                }
-            }
-        }
     }
 
     public String getSource() {
@@ -163,34 +114,12 @@ public class Image {
         this.source = source;
     }
 
-    public void setSource(DataField field) {
-        String value = null;
-        if (field != null) {
-            value = field.getCoreValue();
-        }
-
-        if ((value != null) && (value.length() > 0)) {
-            setSource(value);
-        }
-    }
-
     public String getFamily() {
         return family;
     }
 
     public void setFamily(String family) {
         this.family = family;
-    }
-
-    public void setFamily(DataField field) {
-        String value = null;
-        if (field != null) {
-            value = field.getCoreValue();
-        }
-
-        if ((value != null) && (value.length() > 0)) {
-            setFamily(value);
-        }
     }
 
     public boolean isDisplay() {
@@ -268,9 +197,6 @@ public class Image {
         sb.append('}');
         return sb.toString();
     }
-
-    /** The logger for this class. */
-    private static final Log LOG = LogFactory.getLog(Image.class);
 
     private static final Set<String> SAGE_FILTERED_PROPERTIES;
     static {

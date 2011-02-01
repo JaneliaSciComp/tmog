@@ -41,6 +41,7 @@ public class ImageSourceSetter
      */
     public void setProperty(PluginDataRow row,
                             Image image) {
-        image.setSource(row.getDataField(getFieldName()));
+        final String value = deriveValue(row);
+        image.setSource(value);
     }
 }

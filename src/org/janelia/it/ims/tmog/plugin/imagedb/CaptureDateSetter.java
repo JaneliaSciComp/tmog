@@ -1,13 +1,21 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.janelia.it.ims.tmog.field.DataField;
+import org.janelia.it.ims.tmog.field.DatePatternField;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * This class sets the image capture date using a configured field name
@@ -40,6 +48,28 @@ public class CaptureDateSetter extends SimpleSetter {
      */
     public void setProperty(PluginDataRow row,
                             Image image) {
-        image.setCaptureDate(row.getDataField(getFieldName()));
+
+        final String value = deriveValue(row);
+
+        if ((value != null) && (value.length() > 0)) {
+            final DataField field = row.getDataField(getFieldName());
+            if (field instanceof DatePatternField) {
+                String pattern = ((DatePatternField) field).getDatePattern();
+                SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+                Date captureDate;
+                try {
+                    captureDate = sdf.parse(value);
+                    image.setCaptureDate(captureDate);
+                } catch (ParseException e) {
+                    LOG.warn("Unable to parse capture date for '" +
+                             row.getRelativePath() +
+                             "'.  Continuing processing without the date.", e);
+                }
+            }
+        }
     }
+
+    /** The logger for this class. */
+    private static final Log LOG = LogFactory.getLog(CaptureDateSetter.class);
+
 }

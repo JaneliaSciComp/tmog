@@ -1,13 +1,12 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
-import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 
 /**
@@ -41,9 +40,9 @@ public class DisplaySetter extends SimpleSetter {
      */
     public void setProperty(PluginDataRow row,
                             Image image) {
-        DataField field = row.getDataField(getFieldName());
-        if (field != null) {
-            image.setDisplay(Boolean.parseBoolean(field.getCoreValue()));
+        final String value = deriveValue(row);
+        if (value != null) {
+            image.setDisplay(Boolean.parseBoolean(value));
         }
     }
 }

@@ -41,6 +41,7 @@ public class BaseUrlSetter
      */
     public void setProperty(PluginDataRow row,
                             Image image) {
-        image.setBaseUrl(row.getDataField(getFieldName()));
+        final String value = deriveValue(row);
+        image.setBaseUrl(value);
     }
 }

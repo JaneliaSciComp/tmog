@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.4.2"/>
+    <global minimumVersion="2.4.6"/>
 
     <project name="Zlatic Lab: Peripheral Images" default="true">
 
@@ -25,9 +25,9 @@
                 <property name="line" value="Line"/>
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
-                <property name="organ" value="Organ/tissue"/>
+                <property name="area" value="Area$MAP:F=Fillet"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
-                <property name="family" value="family"/>
+                <property name="family" value="$STATIC:zlatic_peripheral"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
@@ -36,9 +36,9 @@
                 <property name="line" value="Line"/>
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
-                <property name="organ" value="Organ/tissue"/>
+                <property name="area" value="Area$MAP:F=Fillet"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
-                <property name="family" value="family"/>
+                <property name="family" value="$STATIC:zlatic_peripheral"/>
             </rowListener>
 
         </plugins>
@@ -88,7 +88,7 @@
                 <validValue displayName="L03: Third Instar" value="L03" default="true"/>
             </validValueList>
 
-            <validValueList displayName="Organ/tissue" required="true"
+            <validValueList displayName="Area" required="true"
                             markedForTask="false">
                 <validValue displayName="F: Fillet" value="F" default="true"/>
             </validValueList>
@@ -104,8 +104,6 @@
                         markedForTask="false">
                 <staticDefault value="rubin"/>                
             </cvTermList>
-
-            <static name="family" value="zlatic_peripheral" markedForTask="false"/>
 
         </dataFields>
 

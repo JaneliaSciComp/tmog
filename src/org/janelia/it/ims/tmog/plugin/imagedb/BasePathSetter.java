@@ -41,6 +41,7 @@ public class BasePathSetter
      */
     public void setProperty(PluginDataRow row,
                             Image image) {
-        image.setBasePath(row.getDataField(getFieldName()));
+        final String value = deriveValue(row);
+        image.setBasePath(value);
     }
 }
