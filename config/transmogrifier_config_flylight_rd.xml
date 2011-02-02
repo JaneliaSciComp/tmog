@@ -14,18 +14,6 @@
 
         <plugins>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="nighthawk"/>
-                <property name="promoter" value="Promoter"/>
-                <property name="transcript" value="Transcript"/>
-                <property name="responder" value="Responder"/>
-                <property name="created_by" value="Created By"/>
-                <property name="capture_date" value="Capture Date"/>
-                <property name="area" value="Area"/>
-                <property name="l_number" value="L-Number"/>
-                <property name="comment" value="Comment"/>
-                <property name="family" value="family"/>
-            </rowListener>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="promoter" value="Promoter"/>
                 <property name="transcript" value="Transcript"/>
@@ -40,7 +28,6 @@
                 <property name="lab" value="$STATIC:none"/>
                 <property name="base_url" value="$STATIC:http://img.int.janelia.org/rubin-image/flylight_rd-confocal-data/"/>
                 <property name="base_path" value="$STATIC:/groups/rubin/data1/rubinlab/FlyLight/confocalStacks/"/>
-                <property name="image_source" value="$STATIC:flylight"/>
             </rowListener>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\RDFL"/>
