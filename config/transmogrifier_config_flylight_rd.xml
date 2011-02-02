@@ -92,34 +92,4 @@
 
     </project>
 
-    <project name="Fly Light: IMPORT L Numbers" taskName="collector">
-
-        <inputFileFilter patternString="RDFL_.+\.lsm"
-                         recursiveSearch="true"/>
-
-        <inputFileSorter sortAlgorithm="Path"/>
-
-        <plugins>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="nighthawk"/>
-                <property name="l_number" value="L-Number"/>
-                <property name="image_source" value="$STATIC:flylight"/>
-            </rowListener>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="sage"/>
-                <property name="l_number" value="L-Number"/>
-                <property name="image_source" value="$STATIC:flylight"/>
-            </rowListener>
-        </plugins>
-
-        <dataFields>
-            <text displayName="L-Number" required="true" prefix="-L"
-                  pattern="[0-9]++" copyable="false">
-                <sourceFileDefault pattern=".*-L([0-9]++)-.*\.lsm"/>
-                <sourceFileDefault pattern=".*-L([0-9]++)_.*\.lsm"/>
-            </text>
-        </dataFields>
-
-    </project>
-
 </transmogrifierConfiguration>
