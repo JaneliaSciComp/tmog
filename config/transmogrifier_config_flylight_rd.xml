@@ -92,34 +92,4 @@
 
     </project>
 
-    <project name="Fly Light: IMPORT Areas" taskName="collector">
-
-        <inputFileFilter patternString="RDFL_.+\.lsm"
-                         recursiveSearch="true"/>
-
-        <inputFileSorter sortAlgorithm="Path"/>
-
-        <plugins>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="sage"/>
-                <property name="area" value="Area"/>
-                <property name="image_source" value="$STATIC:flylight"/>
-            </rowListener>
-        </plugins>
-
-        <dataFields>
-            <validValueList displayName="Area" required="true">
-                <sourceFileMappedDefault pattern="RDFL_.*_.*_.*_.*_\d{6}-([bvc]).*-L.*_20\d{15}\.lsm">
-                    <mappedValue from="b" to="Brain"/>
-                    <mappedValue from="v" to="VNC"/>
-                    <mappedValue from="c" to="Central Complex"/>
-                </sourceFileMappedDefault>
-                <validValue displayName="b: Brain" value="Brain"/>
-                <validValue displayName="v: Ventral Nerve Cord" value="VNC"/>
-                <validValue displayName="c: Central Complex" value="Central Complex"/>
-            </validValueList>
-        </dataFields>
-
-    </project>
-
 </transmogrifierConfiguration>
