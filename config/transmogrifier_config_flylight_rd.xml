@@ -56,8 +56,7 @@
             <text displayName="Responder" required="true"
                   pattern="[0-9A-Za-z\\-]++"/>
             <separator value="_"/>
-            <validValueList displayName="Created By" required="true"
-                            markedForTask="false">
+            <validValueList displayName="Created By" required="true">
                 <validValue displayName="Jennifer Jeter" value="jeterj"/>
                 <validValue displayName="Teri Ngo" value="ngot"/>
                 <validValue displayName="Tyler Ofstad" value="ofstadt"/>
@@ -71,7 +70,7 @@
                                        fromDatePattern="MMddyy"
                                        toDatePattern="yyMMdd"/>
             </date>
-            <validValueList displayName="Area" required="true">
+            <validValueList displayName="Area" required="true" prefix="-">
                 <validValue displayName="b: Brain" value="b"/>
                 <validValue displayName="v: Ventral Nerve Cord" value="v"/>
                 <validValue displayName="c: Central Complex" value="c"/>
