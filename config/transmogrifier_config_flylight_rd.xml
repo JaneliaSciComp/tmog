@@ -23,7 +23,8 @@
                 <property name="area" value="Area$MAP:b=Brain|v=VNC|c=Central Complex"/>
                 <property name="l_number" value="L-Number"/>
                 <property name="comment" value="Comment"/>
-                <property name="family" value="family"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="family" value="$STATIC:flylight_rd"/>
                 <property name="line" value="$STATIC:Not_Applicable"/>
                 <property name="lab" value="$STATIC:none"/>
                 <property name="base_url" value="$STATIC:http://img.int.janelia.org/rubin-image/flylight_rd-confocal-data/"/>
@@ -74,7 +75,11 @@
             <separator value="_"/>
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
-            <static name="family" value="flylight_rd" markedForTask="false"/>
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            markedForTask="false">
+                <validValue value="Glycerol-Based Mounting" default="true"/>
+                <validValue value="DPX Mounting"/>
+            </validValueList>
         </dataFields>
 
     </project>
