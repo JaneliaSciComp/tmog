@@ -48,6 +48,7 @@
             <separator value="_"/>
             <validValueList displayName="Created By" required="true">
                 <validValue displayName="Aljoscha Nern" value="nerna"/>
+                <validValue displayName="Chris Zugates" value="zugatesc"/>
                 <validValue displayName="Jennifer Jeter" value="jeterj"/>
                 <validValue displayName="Teri Ngo" value="ngot"/>
                 <validValue displayName="Tyler Ofstad" value="ofstadt"/>
