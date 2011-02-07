@@ -20,7 +20,7 @@
                 <property name="responder" value="Responder"/>
                 <property name="created_by" value="Created By"/>
                 <property name="capture_date" value="Capture Date"/>
-                <property name="area" value="Area$MAP:b=Brain|v=VNC|c=Central Complex"/>
+                <property name="area" value="Area$MAP:b=Brain|v=Ventral Nerve Cord|c=Central Complex"/>
                 <property name="l_number" value="L-Number"/>
                 <property name="comment" value="Comment"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
