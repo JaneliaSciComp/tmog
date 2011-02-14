@@ -167,6 +167,7 @@
                 <validValue value="Christine Murphy"/>
                 <validValue value="Donald Hall"/>
                 <validValue value="Jennifer Jeter"/>
+                <validValue value="Nirmala Iyer"/>
                 <validValue value="Teri Ngo"/>
             </validValueList>
             <validValueList displayName="Renamer" required="true"
@@ -180,6 +181,7 @@
                 <validValue value="Christine Murphy"/>
                 <validValue value="Donald Hall"/>
                 <validValue value="Jennifer Jeter"/>
+                <validValue value="Nirmala Iyer"/>
                 <validValue value="Teri Ngo"/>
             </validValueList>
             <validValueList displayName="Class" required="false"
@@ -323,6 +325,7 @@
                 <validValue value="Christine Murphy"/>
                 <validValue value="Donald Hall"/>
                 <validValue value="Jennifer Jeter"/>
+                <validValue value="Nirmala Iyer"/>
                 <validValue value="Teri Ngo"/>
             </validValueList>
             <validValueList displayName="Renamer" required="true"
@@ -336,6 +339,7 @@
                 <validValue value="Christine Murphy"/>
                 <validValue value="Donald Hall"/>
                 <validValue value="Jennifer Jeter"/>
+                <validValue value="Nirmala Iyer"/>
                 <validValue value="Teri Ngo"/>
             </validValueList>
             <validValueList displayName="Class" required="false"
