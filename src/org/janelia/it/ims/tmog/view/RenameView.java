@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -357,7 +357,7 @@ public class RenameView implements SessionView, InputSelectionView {
         if (odCfg.isDerivedForSession()) {
             outputDirectory = new File(outputDirectoryField.getText());
             String outputFailureMsg =
-                    OutputDirectoryConfiguration.createAndValidateDirectory(
+                    OutputDirectoryConfiguration.validateDirectory(
                             outputDirectory);
 
             if (outputFailureMsg != null) {
@@ -408,7 +408,7 @@ public class RenameView implements SessionView, InputSelectionView {
                                                                row.getFields());
                     outputDirectory = new File(outputDirectoryPath);
                     String outputFailureMsg =
-                            OutputDirectoryConfiguration.createAndValidateDirectory(
+                            OutputDirectoryConfiguration.validateDirectory(
                                     outputDirectory);
                     if (outputFailureMsg != null) {
                         isValid = false;

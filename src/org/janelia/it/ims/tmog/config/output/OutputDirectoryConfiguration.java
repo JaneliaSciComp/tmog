@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -16,7 +16,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * This class encapsulates configuration information about the
@@ -284,44 +283,31 @@ public class OutputDirectoryConfiguration {
     }
 
     /**
-     * Utility method to create the specified directory and identify
-     * an errors that occur during creation.
+     * Utility method to validate that the specified directory
+     * can be created or modified.
      *
      * @param  outputDirectory  directory to create.
      *
-     * @return an error message if creation fails; otherwise null.
+     * @return an error message if creation is not allowed; otherwise null.
      */
-    public static String createAndValidateDirectory(File outputDirectory) {
+    public static String validateDirectory(File outputDirectory) {
         String outputFailureMsg = null;
 
-        if (!outputDirectory.exists()) {
-            Stack<File> missingDirectories = new Stack<File>();
-            missingDirectories.push(outputDirectory);
-            File parent = outputDirectory.getParentFile();
-            while ((parent != null) && (! parent.exists())) {
-                missingDirectories.push(parent);
-                parent = parent.getParentFile();
-            }
-
-            File missingDirectory = outputDirectory;
-            try {
-                while (! missingDirectories.empty()) {
-                    missingDirectory = missingDirectories.pop();
-                    //noinspection ResultOfMethodCallIgnored
-                    missingDirectory.mkdir();
-                }
-            } catch (Exception e1) {
-                outputFailureMsg =
-                        "Failed to create output directory " +
-                        missingDirectory.getAbsolutePath() + ".";
-                LOG.error(outputFailureMsg, e1);
-            }
+        File directory = outputDirectory;
+        while (! directory.exists()) {
+            directory = directory.getParentFile();
         }
 
-        if (!outputDirectory.isDirectory()) {
+        if (! directory.isDirectory()) {
             outputFailureMsg =
                     "The output directory must be set to a valid directory.";
+        } else if (! directory.canWrite()) {
+            outputFailureMsg =
+                    "You are not allowed to write to the output directory " +
+                    directory.getAbsolutePath() + ".";
+            LOG.error(outputFailureMsg);
         }
+
         return outputFailureMsg;
     }
 
