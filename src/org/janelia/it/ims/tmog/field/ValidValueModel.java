@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -13,6 +13,8 @@ import org.janelia.it.ims.tmog.target.Target;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * This model supports inserting a selected value from a predefined set
@@ -50,6 +52,10 @@ public class ValidValueModel extends AbstractListModel
         if (validValue.isDefault() && (selectedValue == null)) {
             selectedValue = validValue;
         }
+    }
+
+    public void sortValues(Comparator<ValidValue> comparator) {
+        Collections.sort(validValues, comparator);
     }
 
     public DefaultValueList getDefaultValueList() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -20,6 +20,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.util.Comparator;
 
 /**
  * This model supports selecting a controlled vocabulary term from a
@@ -84,6 +85,10 @@ public class CvTermModel
             validValue = new ValidValue(displayName, name);
             addValidValue(validValue);
         }
+
+        if (! displayNamePrefixedForValues) {
+            sortValues(DISPLAY_NAME_COMPARATOR);
+        }
     }
 
     private CvTermSet retrieveTermSet() {
@@ -143,4 +148,28 @@ public class CvTermModel
     /** The logger for this class. */
     private static final Logger LOG = Logger.getLogger(CvTermModel.class);
 
+    private static final Comparator<ValidValue> DISPLAY_NAME_COMPARATOR =
+            new Comparator<ValidValue>() {
+                @Override
+                public int compare(ValidValue o1,
+                                   ValidValue o2) {
+                    int result;
+                    final String displayName1 = o1.getDisplayName();
+                    final String displayName2 = o2.getDisplayName();
+                    if (displayName1 == null) {
+                        if (displayName2 == null) {
+                            final String value1 = o1.getValue();
+                            final String value2 = o2.getValue();
+                            result = value1.compareTo(value2);
+                        } else {
+                            result = -1;
+                        }
+                    } else if (displayName2 == null) {
+                        result = 1;
+                    } else {
+                        result = displayName1.compareTo(displayName2);
+                    }
+                    return result;
+                }
+            };
 }
