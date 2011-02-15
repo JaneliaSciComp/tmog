@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -10,6 +10,9 @@ package org.janelia.it.ims.tmog.field;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Tests the CvTermModel class.
@@ -67,16 +70,23 @@ public class CvTermModelTest
                      valueOf(prefixedModel),
                      modelSize, prefixedModelSize);
 
+        Map<ValidValue, ValidValue> map =
+                new LinkedHashMap<ValidValue, ValidValue>();
         ValidValue value;
         ValidValue prefixedValue;
         String displayName;
         String prefixedDisplayName;
         for (int i = 0; i < modelSize; i++) {
             value = (ValidValue) model.getElementAt(i);
+            map.put(value, value);
+        }
+
+        for (int i = 0; i < prefixedModelSize; i++) {
             prefixedValue = (ValidValue) prefixedModel.getElementAt(i);
-            assertEquals("values should not differ",
-                         value.getValue(),
-                         prefixedValue.getValue());
+            value = map.get(prefixedValue);
+            assertNotNull("prefixed value '" + prefixedValue +
+                          "' missing from " + map.keySet(),
+                         value);
             displayName = value.getDisplayName();
             prefixedDisplayName = prefixedValue.getDisplayName();
             if (! value.getValue().equals(displayName)) {

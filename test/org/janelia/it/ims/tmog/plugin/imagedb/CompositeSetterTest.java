@@ -1,8 +1,8 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
@@ -13,6 +13,7 @@ import junit.framework.TestSuite;
 import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.field.StaticDataModel;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.plugin.PropertyToken;
 import org.janelia.it.ims.tmog.target.FileTarget;
 
 /**
@@ -50,7 +51,6 @@ public class CompositeSetterTest extends TestCase {
      *   if any unexpected errors occur.
      */
     public void testInvalidTokens() throws Exception {
-        CompositeSetter setter = new CompositeSetter("propertyType", "test");
         String[] invalidValues = {
                 "${",
                 "a${foo",
@@ -64,7 +64,7 @@ public class CompositeSetterTest extends TestCase {
         };
         for (String invalidValue : invalidValues) {
             try {
-                setter.parseTokens(invalidValue);
+                PropertyToken.parseTokens(invalidValue);
                 fail("invalid value '" + invalidValue +
                      "' did not cause exception");
             } catch (IllegalArgumentException e) {

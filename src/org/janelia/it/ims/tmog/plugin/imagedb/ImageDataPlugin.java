@@ -11,6 +11,7 @@ import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.plugin.PropertyToken;
 import org.janelia.it.ims.tmog.plugin.RowListener;
 import org.janelia.it.utils.StringUtil;
 
@@ -198,7 +199,7 @@ public class ImageDataPlugin implements RowListener {
             propertySetter = new DisplaySetter(fieldName);
         } else if (FieldGroupSetter.isFieldGroupType(propertyType)) {
             propertySetter = new FieldGroupSetter(propertyType, fieldName);
-        } else if (fieldName.contains(CompositeSetter.TOKEN_ID)) {
+        } else if (fieldName.contains(PropertyToken.TOKEN_ID)) {
             propertySetter = new CompositeSetter(propertyType, fieldName);
         } else {
             propertySetter = new SimpleSetter(propertyType, fieldName);
