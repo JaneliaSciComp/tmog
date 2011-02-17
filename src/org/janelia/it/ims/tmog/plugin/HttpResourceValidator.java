@@ -31,12 +31,6 @@ public class HttpResourceValidator
         implements RowValidator {
 
     /**
-     * Name of the property that identifies the logical name for the
-     * resource being checked.
-     */
-    public static final String LOGICAL_RESOURCE_NAME = "logicalResourceName";
-
-    /**
      * Name of the property that identifies the tokenized query service URL.
      */
     public static final String SERVICE_URL_NAME = "serviceUrl";
@@ -48,6 +42,12 @@ public class HttpResourceValidator
     public static final String TEST_URL_NAME = "testUrl";
 
     /**
+     * Name of the property that identifies the error message template
+     * to use for resources that are not found.
+     */
+    public static final String ERROR_MESSAGE_NAME = "errorMessage";
+
+    /**
      * Name of the property to use for overriding the default clear
      * cache duration (60,000 milliseconds).
      */
@@ -56,11 +56,11 @@ public class HttpResourceValidator
     /** HTTP client for validation requests. */
     private HttpClient httpClient;
 
-    /** Configured logical resource name for error messages. */
-    private String logicalResourceName;
-
     /** Parsed configuration tokens for deriving a row specific URL. */
     private List<PropertyToken> urlTokens;
+
+    /** Parsed configuration tokens for invalid resource error messages. */
+    private List<PropertyToken> errorMessageTokens;
 
     /**
      * The maximum amount of time (in milliseconds) between cache
@@ -98,10 +98,10 @@ public class HttpResourceValidator
      */
     public void init(PluginConfiguration config) throws ExternalSystemException {
 
-        this.logicalResourceName = getRequiredProperty(LOGICAL_RESOURCE_NAME,
-                                                       config);
         final String serviceUrl = getRequiredProperty(SERVICE_URL_NAME, config);
         final String testUrl = getRequiredProperty(TEST_URL_NAME, config);
+        final String errorMessage = getRequiredProperty(ERROR_MESSAGE_NAME,
+                                                        config);
         final String configuredClearCacheDuration =
                 config.getProperty(CLEAR_CACHE_DURATION_NAME);
 
@@ -118,6 +118,9 @@ public class HttpResourceValidator
                         "The " + TEST_URL_NAME + " property '" + testUrl +
                         "' identifies a non-existent resource.");
             }
+
+            this.errorMessageTokens = PropertyToken.parseTokens(errorMessage);
+
         } catch (Exception e) {
             throw new ExternalSystemException(
                     "Failed to initialize ResourceValidator plugin.  " +
@@ -149,10 +152,9 @@ public class HttpResourceValidator
                 if (isResourceFound(url)) {
                     addNameToCache(url);
                 } else {
-                    throw new ExternalDataException(
-                            "The " + logicalResourceName +
-                            " specified for this row is invalid.  " +
-                            "Please verify your entered value(s).");
+                    final String msg =
+                            PropertyToken.deriveString(row, errorMessageTokens);
+                    throw new ExternalDataException(msg);
                 }
             }
         } catch (ExternalDataException e) {

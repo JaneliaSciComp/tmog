@@ -89,7 +89,16 @@ public class PropertyToken {
 
         return tokenList;
     }
-        
+
+    public static String deriveString(PluginDataRow row,
+                                      List<PropertyToken> list) {
+        StringBuilder sb = new StringBuilder();
+        for (PropertyToken token : list) {
+            sb.append(token.getValue(row));
+        }
+        return sb.toString();
+    }
+
     private boolean isLiteral = false;
     private String value;
     private String prefix;

@@ -32,11 +32,7 @@ public class CompositeSetter implements ImagePropertySetter {
     }
 
     public String getValue(PluginDataRow row) {
-        StringBuilder sb = new StringBuilder();
-        for (PropertyToken token : tokens) {
-            sb.append(token.getValue(row));
-        }
-        return sb.toString();
+        return PropertyToken.deriveString(row, tokens);
     }
 
     public void setProperty(PluginDataRow row,
