@@ -94,14 +94,12 @@
 
     <xs:complexType name="numberType">
         <xs:sequence>
-            <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="staticDefault" type="staticDefaultType"
-                        minOccurs="0" maxOccurs="1"/>
-            <xs:element name="pluginDefault" type="pluginDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
+                <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
+                <xs:element name="staticDefault" type="staticDefaultType" />
+                <xs:element name="pluginDefault" type="pluginDefaultType"/>
+            </xs:choice>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="displayWidth" type="xs:positiveInteger"/>
@@ -118,14 +116,12 @@
 
     <xs:complexType name="decimalType">
         <xs:sequence>
-            <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="staticDefault" type="staticDefaultType"
-                        minOccurs="0" maxOccurs="1"/>
-            <xs:element name="pluginDefault" type="pluginDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
+                <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
+                <xs:element name="staticDefault" type="staticDefaultType" />
+                <xs:element name="pluginDefault" type="pluginDefaultType"/>
+            </xs:choice>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="displayWidth" type="xs:positiveInteger"/>
@@ -142,14 +138,12 @@
 
     <xs:complexType name="textType">
         <xs:sequence>
-            <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="staticDefault" type="staticDefaultType"
-                        minOccurs="0" maxOccurs="1"/>
-            <xs:element name="pluginDefault" type="pluginDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
+                <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
+                <xs:element name="staticDefault" type="staticDefaultType" />
+                <xs:element name="pluginDefault" type="pluginDefaultType"/>
+            </xs:choice>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="displayWidth" type="xs:positiveInteger"/>
@@ -203,14 +197,12 @@
 
     <xs:complexType name="validValueListType">
         <xs:sequence>
-            <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="staticDefault" type="staticDefaultType"
-                        minOccurs="0" maxOccurs="1"/>
-            <xs:element name="pluginDefault" type="pluginDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
+                <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
+                <xs:element name="staticDefault" type="staticDefaultType" />
+                <xs:element name="pluginDefault" type="pluginDefaultType"/>
+            </xs:choice>
             <xs:element name="validValue" type="validValueType" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
@@ -224,14 +216,12 @@
 
     <xs:complexType name="cvTermListType">
         <xs:sequence>
-            <xs:element name="sourceFileDefault" type="sourceFileDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="staticDefault" type="staticDefaultType"
-                        minOccurs="0" maxOccurs="1"/>
-            <xs:element name="pluginDefault" type="pluginDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
+                <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
+                <xs:element name="staticDefault" type="staticDefaultType" />
+                <xs:element name="pluginDefault" type="pluginDefaultType"/>
+            </xs:choice>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:boolean"/>
