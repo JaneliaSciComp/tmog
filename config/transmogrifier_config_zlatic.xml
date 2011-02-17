@@ -3,9 +3,9 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.4.2"/>
+    <global minimumVersion="2.4.7"/>
 
-    <project name="Zlatic Lab: ChaCRM verified Lines" default="true"
+    <project name="Zlatic Lab: Screen Pipeline" default="true"
             copyPreviousButtonVisible="false">
 
         <inputFileFilter patternString=".+\.(png|blob|blobs|set|summary)"
@@ -14,7 +14,158 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.isi.janelia.org|/groups/zlatic]\zlaticlab\Data\results_after_20110208\" />
+            <path path="[\\dm11.isi.janelia.org|/groups/zlatic]\zlaticlab\pipeline\interim-screen\tracking-results\" />
+            <renameFieldValue fieldDisplayName="Tracker"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Line"/>
+            <renameFieldValue fieldDisplayName="Effector" prefix="@"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Protocol"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Date"/>
+            <renameFieldValue fieldDisplayName="Time" prefix="_"/>
+        </outputDirectory>
+
+        <plugins>
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/${Line Lab}/${Line}.janelia-sage"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
+                <property name="errorMessage" value="There is no '${Line Lab}' lab line named '${Line}' in the SAGE database."/>
+                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
+            </rowValidator>
+        </plugins>
+
+        <dataFields>
+            <date displayName="Date" required="true"
+                  datePattern="yyyyMMdd">
+                <sourceFileDateDefault pattern=".*[/\\\\](\d{8})_\d{6}[/\\\\].*"
+                                       fromDatePattern="yyyyMMdd"
+                                       toDatePattern="yyyyMMdd"
+                                       matchType="path"/>
+            </date>
+
+            <separator value="_"/>
+
+            <date displayName="Time" required="true"
+                  datePattern="HHmmss">
+                <sourceFileDateDefault pattern=".*[/\\\\]\d{8}_(\d{6})[/\\\\].*"
+                                       fromDatePattern="HHmmss"
+                                       toDatePattern="HHmmss"
+                                       matchType="path"/>
+            </date>
+
+            <separator value="@"/>
+
+            <cvTermList displayName="Line Lab" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/lab"
+                        displayNamePrefixedForValues="false"
+                        markedForTask="false">
+                <sourceFileMappedDefault pattern="^(GMR_).*">
+                    <mappedValue from="GMR_" to="rubin"/>
+                </sourceFileMappedDefault>
+            </cvTermList>
+
+            <text displayName="Line" required="true"
+                  pattern="[0-9A-Za-z\-\_]++">
+                <sourceFileDefault pattern="(.+?)@.+?@.+?@.+?@.+?@.*"/>
+            </text>
+
+            <separator value="@"/>
+
+            <cvTermList displayName="Effector" required="true"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage">
+                <sourceFileMappedDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.*">
+                    <mappedValue from="Ch2r" to="UAS_ChRh2_23_0011" />
+                    <mappedValue from="Ch2" to="UAS_ChRh2_23_0011" />
+                    <mappedValue from="Ch2v" to="UAS_ChRh2_23_0011" />
+                    <mappedValue from="KI2h30" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR24" to="UAS_GAL80ts_Kir21_23_0004" />
+                    <mappedValue from="KIR2" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR2h16" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR2h30" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR2h36" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="Kir36HT4" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR3" to="VDRC_UAS_GAL80ts_Kir21_23_0013" />
+                    <mappedValue from="Kir40h" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="kir40h" to="UAS_GAL80ts_Kir21_23_0004" />
+                    <mappedValue from="Kir48htest" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR48" to="UAS_GAL80ts_Kir21_23_0004" />
+                    <mappedValue from="kir" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="Kir" to="UAS_GAL80ts_Kir21_23_0004" />
+                    <mappedValue from="KIR" to="UAS_GAL80ts_Kir21_23_0004" />
+                    <mappedValue from="Shibire1" to="UAS_Shi_ts1_3_0001" />
+                    <mappedValue from="sHIBIRE" to="UAS_Shi_ts1_3_0001" />
+                    <mappedValue from="Shibire" to="UAS_Shi_ts1_3_0001" />
+                    <mappedValue from="shi" to="UAS_Shi_ts1_3_0001" />
+                    <mappedValue from="SHI" to="UAS_Shi_ts1_3_0001" />
+                    <mappedValue from="TNT" to="UAS_TNT_2_0003" />
+                    <mappedValue from="TrpA1" to="UAS_dTrpA1_2_0012" />
+                    <mappedValue from="TrpA" to="UAS_dTrpA1_2_0012" />
+                </sourceFileMappedDefault>
+                <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.*" />
+            </cvTermList>
+
+            <separator value="@"/>
+
+            <validValueList displayName="Tracker" required="true">
+                <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*"/>
+                <validValue value="t1"/>
+                <validValue value="t2"/>
+                <validValue value="t3"/>
+                <validValue value="t4"/>
+                <validValue value="t5"/>
+                <validValue value="t6"/>
+            </validValueList>
+
+            <separator value="@"/>
+
+            <cvTermList displayName="Protocol" required="true"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/larval_olympiad_protocol.janelia-sage">
+                <sourceFileMappedDefault pattern=".+?@.+?@.+?@.+?@(.+?@.+?@.+?@.+?)@.*">
+                    <mappedValue from="b$25C50hz2V$30s1x30s0s@b$1000hz2V$90s1x30s0s@b$200hz2V$150s20x0.2s5s@n"
+                                 to="b_25C50hz2V_30s1x30s0s#b_1000hz2V_90s1x30s0s#b_200hz2V_150s20x0.2s5s#n@100" />
+                    <mappedValue from="b$50hz2V$30s1x30s0s@b$1000hz2V$90s1x30s0s@b$200hz2V$150s20x0.2s5s@n"
+                                 to="b_50hz2V_30s1x30s0s#b_1000hz2V_90s1x30s0s#b_200hz2V_150s20x0.2s5s#n@100" />
+                    <mappedValue from="b$y1000hz2Vsin$30s1x30s0s@b$y50hz2Vsin$360s1x0.2s0s@b$y500hz2V$380s5x1s5s@n"
+                                 to="b_y1000hz2Vsin_30s1x30s0s#b_y50hz2Vsin_360s1x0.2s0s#b_y500hz2V_380s5x1s5s#n@100" />
+                    <mappedValue from="p$8$45s1x30s0s@p$8$105s10x2s10s@n@n"
+                                 to="p_8_45s1x30s0s#p_8_105s10x2s10s#n#n@100" />
+                    <mappedValue from="r$095dc50$30s1x30s0s@r$095dc50$90s4x5s15s@n@n"
+                                 to="r_095dc50_30s1x30s0s#r_095dc50_90s4x5s15s#n#n@100" />
+                    <mappedValue from="r$2095dc50$30s1x30s0s@r$095dc50$90s4x5s15s@n@n"
+                                 to="r_2095dc50_30s1x30s0s#r_095dc50_90s4x5s15s#n#n@100" />
+                    <mappedValue from="r$halfred1on50tap600$30s1x30s0s@n@n@n"
+                                 to="r_halfred1on50tap600_30s1x30s0s#n#n#n@100" />
+                    <mappedValue from="s$020$0s1x227s0s@n@n@n"
+                                 to="s_020_0s1x227s0s#n#n#n@100" />
+                </sourceFileMappedDefault>
+            </cvTermList>
+
+            <separator value="@"/>
+
+            <text displayName="Suffix" required="false"
+                  copyable="false" pattern="^_\d{5}[\w]??$">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"/>
+            </text>
+
+            <fileExtension/>
+            
+        </dataFields>
+
+    </project>
+
+    <project name="Zlatic Lab: RD Pipeline" default="true"
+            copyPreviousButtonVisible="false">
+
+        <inputFileFilter patternString=".+\.(png|blob|blobs|set|summary)"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <outputDirectory fileModeReadOnly="false">
+            <path path="[\\dm11.isi.janelia.org|/groups/zlatic]\zlaticlab\pipeline\interim-rd\tracking-results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Genotype"/>
@@ -230,238 +381,6 @@
             <text displayName="Suffix" required="false"
                   copyable="false" pattern="^_\d{5}[\w]??$">
                 <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"/>
-            </text>
-
-            <fileExtension/>
-            
-        </dataFields>
-
-    </project>
-
-    <project name="Zlatic Lab: Fix Already Renamed Files"
-             copyPreviousButtonVisible="false">
-
-        <inputFileFilter patternString=".+\.(png|blob|blobs|set|summary)"
-                         recursiveSearch="true"/>
-
-        <inputFileSorter sortAlgorithm="Path"/>
-
-        <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.isi.janelia.org|/groups/zlatic]\zlaticlab\Data\results\" />
-            <renameFieldValue fieldDisplayName="Tracker"/>
-            <path path="/"/>
-            <renameFieldValue fieldDisplayName="Genotype"/>
-            <renameFieldValue fieldDisplayName="Effector" prefix="@"/>
-            <path path="/"/>
-            <renameFieldValue fieldDisplayName="Stimulus 1 Type"/>
-            <renameFieldValue fieldDisplayName="Stimulus 1 Specs" prefix="_"/>
-            <renameFieldValue fieldDisplayName="Stimulus 1 Times" prefix="_"/>
-            <path path="#"/>
-            <renameFieldValue fieldDisplayName="Stimulus 2 Type"/>
-            <renameFieldValue fieldDisplayName="Stimulus 2 Specs" prefix="_"/>
-            <renameFieldValue fieldDisplayName="Stimulus 2 Times" prefix="_"/>
-            <path path="#"/>
-            <renameFieldValue fieldDisplayName="Stimulus 3 Type"/>
-            <renameFieldValue fieldDisplayName="Stimulus 3 Specs" prefix="_"/>
-            <renameFieldValue fieldDisplayName="Stimulus 3 Times" prefix="_"/>
-            <path path="#"/>
-            <renameFieldValue fieldDisplayName="Stimulus 4 Type"/>
-            <renameFieldValue fieldDisplayName="Stimulus 4 Specs" prefix="_"/>
-            <renameFieldValue fieldDisplayName="Stimulus 4 Times" prefix="_"/>
-            <path path="@"/>
-            <renameFieldValue fieldDisplayName="Animal Number"/>
-            <path path="/"/>
-            <renameFieldValue fieldDisplayName="Date"/>
-            <renameFieldValue fieldDisplayName="Time" prefix="_"/>
-        </outputDirectory>
-
-        <plugins>
-            <rowValidator className="org.janelia.it.chacrm.ChacrmLineValidator">
-                <property name="linePropertyName" value="Genotype"/>
-            </rowValidator>
-        </plugins>
-
-        <dataFields>
-            <date displayName="Date" required="true"
-                  datePattern="yyyyMMdd">
-                <sourceFileDateDefault pattern=".*[/\\\\](\d{8})_\d{6}[/\\\\].*"
-                                       fromDatePattern="yyyyMMdd"
-                                       toDatePattern="yyyyMMdd"
-                                       matchType="path"/>
-            </date>
-
-            <separator value="_"/>
-
-            <date displayName="Time" required="true"
-                  datePattern="HHmmss">
-                <sourceFileDateDefault pattern=".*[/\\\\]\d{8}_(\d{6})[/\\\\].*"
-                                       fromDatePattern="HHmmss"
-                                       toDatePattern="HHmmss"
-                                       matchType="path"/>
-            </date>
-
-            <separator value="@"/>
-
-            <text displayName="Genotype" required="true"
-                  pattern="[0-9A-Za-z\-\_]++">
-                <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.+?@.*"/>
-            </text>
-
-            <separator value="@"/>
-
-            <text displayName="Effector" required="true"
-                  pattern="[0-9A-Za-z\-\_]++">
-                <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.+?@.*"/>
-            </text>
-
-            <separator value="@"/>
-
-            <validValueList displayName="Tracker" required="true">
-                <sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.+?@.*"/>
-                <validValue value="t1"/>
-                <validValue value="t2"/>
-                <validValue value="t3"/>
-                <validValue value="t4"/>
-                <validValue value="t5"/>
-                <validValue value="t6"/>
-            </validValueList>
-
-            <separator value="@"/>
-
-            <validValueList displayName="Stimulus 1 Type" required="true">
-                <sourceFileDefault pattern=".*@([^_]+?)_.*#.*#.*#.*@.*"/>
-                <validValue displayName="p: puff" value="p"/>
-                <validValue displayName="b: buzz" value="b"/>
-                <validValue displayName="g: green" value="g"/>
-                <validValue displayName="a: blue" value="a"/>
-                <validValue displayName="l: light" value="l"/>
-                <validValue displayName="i: IR pinch" value="i"/>
-                <validValue displayName="h: hot" value="h"/>
-                <validValue displayName="c: cold" value="c"/>
-                <validValue displayName="t: temperature" value="t"/>
-                <validValue displayName="o: hole" value="o"/>
-                <validValue displayName="s: scratch" value="s"/>
-                <validValue displayName="r: channel rhodopsin" value="r"/>
-                <validValue displayName="y: yeast" value="y"/>
-                <validValue displayName="n: none" value="n" default="true"/>
-            </validValueList>
-
-            <text displayName="Stimulus 1 Specs" required="false"
-                  pattern="[0-9A-Za-z]++" prefix="_">
-                <sourceFileDefault pattern=".*@[^_]+?_([^_]+?)_.*#.*#.*#.*@.*"/>
-            </text>
-
-            <text displayName="Stimulus 1 Times" required="false"
-                  pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
-                  prefix="_">
-                <sourceFileDefault pattern=".*_(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)#.*#.*#.*@.*"/>
-            </text>
-
-            <separator value="#"/>
-
-            <validValueList displayName="Stimulus 2 Type" required="true">
-                <sourceFileDefault pattern=".*#([^_]+?)_.*#.*#.*@.*"/>
-                <validValue displayName="p: puff" value="p"/>
-                <validValue displayName="b: buzz" value="b"/>
-                <validValue displayName="g: green" value="g"/>
-                <validValue displayName="a: blue" value="a"/>
-                <validValue displayName="l: light" value="l"/>
-                <validValue displayName="i: IR pinch" value="i"/>
-                <validValue displayName="h: hot" value="h"/>
-                <validValue displayName="c: cold" value="c"/>
-                <validValue displayName="t: temperature" value="t"/>
-                <validValue displayName="o: hole" value="o"/>
-                <validValue displayName="s: scratch" value="s"/>
-                <validValue displayName="r: channel rhodopsin" value="r"/>
-                <validValue displayName="y: yeast" value="y"/>
-                <validValue displayName="n: none" value="n" default="true"/>
-            </validValueList>
-
-            <text displayName="Stimulus 2 Specs" required="false"
-                  pattern="[0-9A-Za-z]++" prefix="_">
-                <sourceFileDefault pattern=".*#[^_]+?_([^_]+?)_.*#.*#.*@.*"/>
-            </text>
-
-            <text displayName="Stimulus 2 Times" required="false"
-                  pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
-                  prefix="_">
-                <sourceFileDefault pattern=".*#.*_(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)#.*#.*@.*"/>
-            </text>
-
-            <separator value="#"/>
-
-            <validValueList displayName="Stimulus 3 Type" required="true">
-                <sourceFileDefault pattern=".*#.*#([^_]+?)_.*#.*@.*"/>
-                <validValue displayName="p: puff" value="p"/>
-                <validValue displayName="b: buzz" value="b"/>
-                <validValue displayName="g: green" value="g"/>
-                <validValue displayName="a: blue" value="a"/>
-                <validValue displayName="l: light" value="l"/>
-                <validValue displayName="i: IR pinch" value="i"/>
-                <validValue displayName="h: hot" value="h"/>
-                <validValue displayName="c: cold" value="c"/>
-                <validValue displayName="t: temperature" value="t"/>
-                <validValue displayName="o: hole" value="o"/>
-                <validValue displayName="s: scratch" value="s"/>
-                <validValue displayName="r: channel rhodopsin" value="r"/>
-                <validValue displayName="y: yeast" value="y"/>
-                <validValue displayName="n: none" value="n" default="true"/>
-            </validValueList>
-
-            <text displayName="Stimulus 3 Specs" required="false"
-                  pattern="[0-9A-Za-z]++" prefix="_">
-                <sourceFileDefault pattern=".*#.*#[^_]+?_([^_]+?)_.*#.*@.*"/>
-            </text>
-
-            <text displayName="Stimulus 3 Times" required="false"
-                  pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
-                  prefix="_">
-                <sourceFileDefault pattern=".*#.*#.*_(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)#.*@.*"/>
-            </text>
-
-            <separator value="#"/>
-
-            <validValueList displayName="Stimulus 4 Type" required="true">
-                <sourceFileDefault pattern=".*#.*#.*#([^_]+?)_.*@.*"/>
-                <validValue displayName="p: puff" value="p"/>
-                <validValue displayName="b: buzz" value="b"/>
-                <validValue displayName="g: green" value="g"/>
-                <validValue displayName="a: blue" value="a"/>
-                <validValue displayName="l: light" value="l"/>
-                <validValue displayName="i: IR pinch" value="i"/>
-                <validValue displayName="h: hot" value="h"/>
-                <validValue displayName="c: cold" value="c"/>
-                <validValue displayName="t: temperature" value="t"/>
-                <validValue displayName="o: hole" value="o"/>
-                <validValue displayName="s: scratch" value="s"/>
-                <validValue displayName="r: channel rhodopsin" value="r"/>
-                <validValue displayName="y: yeast" value="y"/>
-                <validValue displayName="n: none" value="n" default="true"/>
-            </validValueList>
-
-            <text displayName="Stimulus 4 Specs" required="false"
-                  pattern="[0-9A-Za-z]++" prefix="_">
-                <sourceFileDefault pattern=".*#.*#.*#[^_]+?_([^_]+?)_.*@.*"/>
-            </text>
-
-            <text displayName="Stimulus 4 Times" required="false"
-                  pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
-                  prefix="_">
-                <sourceFileDefault pattern=".*#.*#.*#.*_(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.*"/>
-            </text>
-
-            <separator value="@"/>
-
-            <number displayName="Animal Number" required="true"
-                    minimumValue="0" maximumValue="100">
-                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@(.+?)@.*"/>
-            </number>
-
-            <separator value="@"/>
-
-            <text displayName="Suffix" required="false"
-                  copyable="false" pattern="^_\d{5}[\w]??$">
-                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"/>
             </text>
 
             <fileExtension/>
