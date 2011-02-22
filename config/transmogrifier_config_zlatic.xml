@@ -14,7 +14,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.isi.janelia.org|/groups/zlatic]\zlaticlab\pipeline\interim-screen\tracking-results\" />
+            <path path="[\\dm11.isi.janelia.org|/groups/zlatic]\zlaticlab\pipeline\screen\tracking-results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line"/>
@@ -165,7 +165,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.isi.janelia.org|/groups/zlatic]\zlaticlab\pipeline\interim-rd\tracking-results\" />
+            <path path="[\\dm11.isi.janelia.org|/groups/zlatic]\zlaticlab\pipeline\rd\tracking-results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Genotype"/>
