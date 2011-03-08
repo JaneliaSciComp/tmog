@@ -3,9 +3,78 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.3.5"/>
+    <global minimumVersion="2.4.7"/>
 
-    <project name="Simpson Lab: LexA Lines (JHS_*)" default="true">
+    <project name="Simpson Lab: GAL4 Lines (JHS_*)" default="true">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <outputDirectory>
+            <path path="\\dm10.isln.janelia.org\simpsonmicro\GAL4_confocal_stacks\" />
+            <renameFieldValue fieldDisplayName="Line" />
+            <renameFieldValue fieldDisplayName="Insertion Number" prefix="_" />
+            <path path="-GAL4" />
+        </outputDirectory>
+
+        <plugins>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="nighthawk" />
+                <property name="Specimen Number" value="urn:lsid:janelia.org:simpson_lab_line_specimen:${Line}${'_'Insertion Number}" />
+            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="nighthawk"/>
+                <property name="family" value="$STATIC:GAL4"/>
+                <property name="uas_reporter" value="UAS Reporter"/>
+                <property name="line" value="Line"/>
+            </rowListener>
+
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\dm10.isln.janelia.org\simpsonmicro\tmog\summaries\GAL4"/>
+            </sessionListener>
+        </plugins>
+        <dataFields>
+            <separator value="JHS_"/>
+            <text displayName="Line" required="true" pattern="[0-9A-Za-z]++">
+                <sourceFileDefault pattern="([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"/>
+                <sourceFileDefault pattern=".*[/\\\\]([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"
+                                   matchType="path"/>
+            </text>
+            <text displayName="Insertion Number" required="false"
+                  pattern="[0-9A-Za-z\\-]++" prefix="_">
+                <sourceFileDefault pattern="[0-9A-Za-z]++-(.*)-Gal4-.*\.lsm"/>
+                <sourceFileDefault pattern=".*mdb[/\\\\].*Gal4-(.*)-UAS.*mdb[/\\\\].*\.lsm"
+                                   matchType="path"/>
+            </text>
+            <separator value="-"/>
+            <separator name="Family" value="GAL4"/>
+            <separator value="_"/>
+            <date displayName="Capture Date" required="true"
+                  datePattern="yyyyMMdd" suffix="_">
+                <sourceFileDateDefault pattern=".*[-/\\\\](\d\d?-\d\d?-\d\d){1}.*\.lsm"
+                                       fromDatePattern="MM-dd-yy"
+                                       toDatePattern="yyyyMMdd"
+                                       matchType="path"/>
+            </date>
+            <validValueList displayName="Organ" required="true">
+                <validValue displayName="B: Brain" value="B"/>
+                <validValue displayName="L: Larva" value="L"/>
+                <validValue displayName="T: Thorax" value="T"/>
+            </validValueList>
+            <pluginData displayName="Specimen Number" format="%02d"/>
+            <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+
+            <validValueList displayName="UAS Reporter" required="true"
+                            markedForTask="false">
+                <validValue value="mcd8GFP" default="true"/>
+                <validValue value="JFRC-IVS-A1"/>
+            </validValueList>
+            
+        </dataFields>
+
+    </project>
+
+    <project name="Simpson Lab: LexA Lines (JHS_*)">
 
         <inputFileFilter patternString=".+\.lsm"
                          recursiveSearch="true"/>
@@ -13,13 +82,13 @@
         <inputFileSorter sortAlgorithm="LNumber" />
 
         <outputDirectory>
-            <path path="\\dm8.int.janelia.org\simpsonmicro\Lex_confocal_stacks\" />
+            <path path="\\dm10.isln.janelia.org\simpsonmicro\Lex_confocal_stacks\" />
             <renameFieldValue fieldDisplayName="Line"/>
         </outputDirectory>
 
         <plugins>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm8.int.janelia.org\simpsonmicro\tmog\summaries\LexA"/>
+                <property name="directory" value="\\dm10.isln.janelia.org\simpsonmicro\tmog\summaries\LexA"/>
             </sessionListener>
         </plugins>
 
@@ -48,106 +117,6 @@
             <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
 
             <fileExtension/>
-        </dataFields>
-
-    </project>
-
-    <project name="Simpson Lab: Batch GAL4 Lines (JHS_*)">
-
-        <inputFileSorter sortAlgorithm="LNumber" />
-
-        <outputDirectory>
-            <path path="\\dm8.int.janelia.org\simpsonmicro\GAL4_confocal_stacks\" />
-            <renameFieldValue fieldDisplayName="Line" />
-            <renameFieldValue fieldDisplayName="Insertion Number" prefix="_" />
-            <path path="-GAL4" />
-        </outputDirectory>
-
-        <plugins>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
-                <property name="db.config.key" value="nighthawk" />
-                <property name="Specimen Number" value="urn:lsid:janelia.org:simpson_lab_line_specimen:${Line}${'_'Insertion Number}" />
-            </rowListener>
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm8.int.janelia.org\simpsonmicro\tmog\summaries\GAL4"/>
-            </sessionListener>
-        </plugins>
-
-        <dataFields>
-            <separator value="JHS_"/>
-            <text displayName="Line" required="true" pattern="[0-9A-Za-z]++">
-                <sourceFileDefault pattern="([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"/>
-                <sourceFileDefault pattern=".*[/\\\\]([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"
-                                   matchType="path"/>
-            </text>
-            <text displayName="Insertion Number" required="false"
-                  pattern="[0-9A-Za-z\\-]++" prefix="_">
-                <sourceFileDefault pattern="[0-9A-Za-z]++-(.*)-Gal4-.*\.lsm"/>
-                <sourceFileDefault pattern=".*mdb[/\\\\].*Gal4-(.*)-UAS.*mdb[/\\\\].*\.lsm"
-                                   matchType="path"/>
-            </text>
-            <separator value="-"/>
-            <separator name="Family" value="GAL4"/>
-            <separator value="_"/>
-            <!--<fileModificationTime displayName="Capture Date" datePattern="yyyyMMdd'_'"/>-->
-            <date displayName="Capture Date" required="true"
-                  datePattern="yyyyMMdd" suffix="_">
-                <sourceFileDateDefault pattern=".*[-/\\\\](\d\d?-\d\d?-\d\d){1}.*\.lsm"
-                                       fromDatePattern="MM-dd-yy"
-                                       toDatePattern="yyyyMMdd"
-                                       matchType="path"/>
-            </date>
-            <validValueList displayName="Organ" required="true">
-                <validValue displayName="B: Brain" value="B"/>
-                <validValue displayName="L: Larva" value="L"/>
-                <validValue displayName="T: Thorax" value="T"/>
-            </validValueList>
-            <pluginData displayName="Specimen Number" format="%02d"/>
-            <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
-            <separator value=".lsm"/>
-        </dataFields>
-
-    </project>
-
-    <project name="Simpson Lab: Daily GAL4 Lines (JHS_*)">
-
-        <inputFileSorter sortAlgorithm="LNumber" />
-
-        <outputDirectory>
-            <path path="\\dm8.int.janelia.org\simpsonmicro\GAL4_confocal_stacks\" />
-            <renameFieldValue fieldDisplayName="Line" />
-            <renameFieldValue fieldDisplayName="Insertion Number" prefix="_" />
-            <path path="-GAL4" />
-        </outputDirectory>
-
-        <plugins>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
-                <property name="db.config.key" value="nighthawk" />
-                <property name="Specimen Number" value="urn:lsid:janelia.org:simpson_lab_line_specimen:${Line}${'_'Insertion Number}" />
-            </rowListener>
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm8.int.janelia.org\simpsonmicro\tmog\summaries\GAL4"/>
-            </sessionListener>
-        </plugins>
-        <dataFields>
-            <separator value="JHS_"/>
-            <text displayName="Line" required="true" pattern="[0-9A-Za-z]++">
-            </text>
-            <text displayName="Insertion Number" required="false"
-                  pattern="[0-9A-Za-z\\-]++" prefix="_">
-            </text>
-            <separator value="-"/>
-            <separator name="Family" value="GAL4"/>
-            <separator value="_"/>
-            <fileModificationTime displayName="Capture Date" datePattern="yyyyMMdd'_'"/>
-            <validValueList displayName="Organ" required="true">
-                <validValue displayName="B: Brain" value="B"/>
-                <validValue displayName="L: Larva" value="L"/>
-                <validValue displayName="T: Thorax" value="T"/>
-            </validValueList>
-            <pluginData displayName="Specimen Number" format="%02d"/>
-            <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
-            <separator value=".lsm"/>
         </dataFields>
 
     </project>
