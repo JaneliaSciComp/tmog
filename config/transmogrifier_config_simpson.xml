@@ -5,7 +5,7 @@
 
     <global minimumVersion="2.4.7"/>
 
-    <project name="Simpson Lab: GAL4 Lines (JHS_*)" default="true">
+    <project name="Simpson Lab: GAL4 Lines" default="true">
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
@@ -24,17 +24,18 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
                 <property name="family" value="$STATIC:GAL4"/>
-                <property name="uas_reporter" value="UAS Reporter"/>
                 <property name="line" value="Line"/>
+                <property name="uas_reporter" value="UAS Reporter"/>
+                <property name="landing_site" value="Landing Site"/>
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
                 <property name="directory" value="\\dm10.isln.janelia.org\simpsonmicro\tmog\summaries\GAL4"/>
             </sessionListener>
         </plugins>
+
         <dataFields>
-            <separator value="JHS_"/>
-            <text displayName="Line" required="true" pattern="[0-9A-Za-z]++">
+            <text displayName="Line" required="true" pattern="[0-9A-Za-z_]++">
                 <sourceFileDefault pattern="([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"/>
                 <sourceFileDefault pattern=".*[/\\\\]([0-9A-Za-z]++)-?.*-Gal4-.*\.lsm"
                                    matchType="path"/>
@@ -64,12 +65,22 @@
             <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
             <separator value=".lsm"/>
 
+            <!--
+             These values are collected for the database but are not
+             included as components of the file name (markedForTask="false").
+             -->
             <validValueList displayName="UAS Reporter" required="true"
                             markedForTask="false">
-                <validValue value="mcd8GFP" default="true"/>
-                <validValue value="JFRC-IVS-A1"/>
+                <validValue value="UAS_mCD8_2_0006" default="true"/>
+                <validValue value="UAS_IVS-mCD8_3_0007"/>
             </validValueList>
-            
+
+            <cvTermList displayName="Landing Site" required="false"
+                        markedForTask="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/rubin_crm_landing_site"
+                        displayNamePrefixedForValues="true">
+            </cvTermList>
+
         </dataFields>
 
     </project>
