@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="2.4.7"/>
+
+    <project name="Simpson Lab: LexA Lines (JHS_*)" default="true">
+
+        <inputFileFilter patternString=".+\.lsm"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <outputDirectory>
+            <path path="\\dm10.isln.janelia.org\simpsonmicro\Lex_confocal_stacks\" />
+            <renameFieldValue fieldDisplayName="Line"/>
+        </outputDirectory>
+
+        <plugins>
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\dm10.isln.janelia.org\simpsonmicro\tmog\summaries\LexA"/>
+            </sessionListener>
+        </plugins>
+
+        <dataFields>
+            <separator value="JHS_"/>
+
+            <text displayName="Line" required="true"
+                  pattern="LexA[0-9A-Za-z]++">
+                <sourceFileDefault pattern=".*[/\\\\](LexA[0-9A-Za-z]++)[/\\\\].*\.lsm"
+                                   matchType="path"/>
+            </text>
+
+            <date displayName="Capture Date" required="true"
+                  datePattern="yyyyMMdd" prefix="_">
+                <sourceFileDateDefault pattern="^(\d\d?-\d\d?-\d\d){1}_.*"
+                                       fromDatePattern="MM-dd-yy"
+                                       toDatePattern="yyyyMMdd"/>
+            </date>
+
+            <validValueList displayName="Organ" required="true" prefix="_">
+                <validValue displayName="b: Brain" value="b"/>
+                <validValue displayName="l: Larva" value="l"/>
+                <validValue displayName="t: Thorax" value="t"/>
+            </validValueList>
+
+            <runTime datePattern="'_'yyyyMMddHHmmssSSS"/>
+
+            <fileExtension/>
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
