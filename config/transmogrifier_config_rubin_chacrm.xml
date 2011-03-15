@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.4.5" frameSizePercentage="95"/>
+    <global minimumVersion="2.4.8" frameSizePercentage="95"/>
 
     <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="true">
 
@@ -218,6 +218,10 @@
                 <property name="class" value="Class"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="tissue_orientation" value="Tissue Orientation"/>
+                <property name="dissector" value="Dissector"/>
+                <property name="dissection_date" value="${Dissection Date (yyyy-mm-dd)} 00:00:00"/>
+                <property name="mounter" value="Mounter"/>
+                <property name="mount_date" value="${Mount Date (yyyy-mm-dd)} 00:00:00"/>
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
@@ -347,6 +351,110 @@
                 <validValue displayName="Screening" value="Screening" default="true"/>
                 <validValue displayName="Rework" value="Rework"/>
             </validValueList>
+            <validValueList displayName="Dissector" required="false"
+                            markedForTask="false">
+                <validValue value="Adrianne Enos"/>
+                <validValue value="Allison Sowell"/>
+                <validValue value="Amanda Cavallaro"/>
+                <validValue value="Chris Zugates"/>
+                <validValue value="Dona Fetter"/>
+                <validValue value="Donald Hall"/>
+                <validValue value="Emily Willis"/>
+                <validValue value="Gina DePasquale"/>
+                <validValue value="Hsing-Hsi Li"/>
+                <validValue value="Hua-Peng Liaw"/>
+                <validValue value="Jennifer Jeter"/>
+                <validValue value="Joanna Hausenfluck"/>
+                <validValue value="Kitty Shah"/>
+                <validValue value="Nick Abel"/>
+                <validValue value="Nirmala Iyer"/>
+                <validValue value="Omotara Ogundeyi"/>
+                <validValue value="Phuson Hulamm"/>
+                <validValue value="Susana Tae"/>
+                <validValue value="Teri Ngo"/>
+            </validValueList>
+            <date displayName="Dissection Date (yyyy-mm-dd)"
+                  required="false"
+                  datePattern="yyyy-MM-dd"
+                  markedForTask="false"/>
+            <validValueList displayName="Mounter" required="false"
+                            markedForTask="false">
+                <validValue value="Adrianne Enos"/>
+                <validValue value="Amanda Cavallaro"/>
+                <validValue value="Donald Hall"/>
+                <validValue value="Jennifer Jeter"/>
+                <validValue value="Joanna Hausenfluck"/>
+                <validValue value="Nirmala Iyer"/>
+                <validValue value="Teri Ngo"/>
+            </validValueList>
+            <date displayName="Mount Date (yyyy-mm-dd)"
+                  required="false"
+                  datePattern="yyyy-MM-dd" 
+                  markedForTask="false"/>
+            <static name="family" value="rubin-chacrm" markedForTask="false"/>
+        </dataFields>
+
+    </project>
+
+    <project name="Rubin Lab: Load Batch Data" taskName="collector">
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="nighthawk"/>
+            </rowValidator>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="nighthawk"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="dissector" value="Dissector"/>
+                <property name="dissection_date" value="${Dissection Date (yyyy-mm-dd)} 00:00:00"/>
+                <property name="mounter" value="Mounter"/>
+                <property name="mount_date" value="${Mount Date (yyyy-mm-dd)} 00:00:00"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+            <validValueList displayName="Dissector" required="false"
+                            markedForTask="false">
+                <validValue value="Adrianne Enos"/>
+                <validValue value="Allison Sowell"/>
+                <validValue value="Amanda Cavallaro"/>
+                <validValue value="Chris Zugates"/>
+                <validValue value="Dona Fetter"/>
+                <validValue value="Donald Hall"/>
+                <validValue value="Emily Willis"/>
+                <validValue value="Gina DePasquale"/>
+                <validValue value="Hsing-Hsi Li"/>
+                <validValue value="Hua-Peng Liaw"/>
+                <validValue value="Jennifer Jeter"/>
+                <validValue value="Joanna Hausenfluck"/>
+                <validValue value="Kitty Shah"/>
+                <validValue value="Nick Abel"/>
+                <validValue value="Nirmala Iyer"/>
+                <validValue value="Omotara Ogundeyi"/>
+                <validValue value="Phuson Hulamm"/>
+                <validValue value="Susana Tae"/>
+                <validValue value="Teri Ngo"/>
+            </validValueList>
+            <date displayName="Dissection Date (yyyy-mm-dd)"
+                  required="false"
+                  datePattern="yyyy-MM-dd"
+                  markedForTask="false"/>
+            <validValueList displayName="Mounter" required="false"
+                            markedForTask="false">
+                <validValue value="Adrianne Enos"/>
+                <validValue value="Amanda Cavallaro"/>
+                <validValue value="Donald Hall"/>
+                <validValue value="Jennifer Jeter"/>
+                <validValue value="Joanna Hausenfluck"/>
+                <validValue value="Nirmala Iyer"/>
+                <validValue value="Teri Ngo"/>
+            </validValueList>
+            <date displayName="Mount Date (yyyy-mm-dd)"
+                  required="false"
+                  datePattern="yyyy-MM-dd"
+                  markedForTask="false"/>
             <static name="family" value="rubin-chacrm" markedForTask="false"/>
         </dataFields>
 
