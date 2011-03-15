@@ -294,11 +294,11 @@ public class OutputDirectoryConfiguration {
         String outputFailureMsg = null;
 
         File directory = outputDirectory;
-        while (! directory.exists()) {
+        while ((directory != null) && (! directory.exists())) {
             directory = directory.getParentFile();
         }
 
-        if (! directory.isDirectory()) {
+        if ((directory == null) || (! directory.isDirectory())) {
             outputFailureMsg =
                     "The output directory must be set to a valid directory.";
         } else if (! directory.canWrite()) {
