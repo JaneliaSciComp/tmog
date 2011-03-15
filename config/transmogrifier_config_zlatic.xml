@@ -138,6 +138,8 @@
                                  to="r_2095dc50_30s1x30s0s#r_095dc50_90s4x5s15s#n#n@100" />
                     <mappedValue from="r$halfred1on50tap600$30s1x30s0s@n@n@n"
                                  to="r_halfred1on50tap600_30s1x30s0s#n#n#n@100" />
+                    <mappedValue from="s$010$0s1x227s0s@n@n@n"
+                                 to="s_010_0s1x227s0s#n#n#n@100" />
                     <mappedValue from="s$020$0s1x227s0s@n@n@n"
                                  to="s_020_0s1x227s0s#n#n#n@100" />
                 </sourceFileMappedDefault>
