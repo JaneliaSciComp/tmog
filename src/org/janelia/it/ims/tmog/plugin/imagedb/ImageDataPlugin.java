@@ -56,6 +56,7 @@ public class ImageDataPlugin implements RowListener {
         Map<String, String> props = config.getProperties();
         String dbConfigurationKey = null;
         String xmlBaseDirectoryName = null;
+        HostNameSetter hostNameSetter = new HostNameSetter(HostNameSetter.TYPE);
         String value;
         ImagePropertySetter propertySetter;
         for (String key : props.keySet()) {
@@ -64,6 +65,8 @@ public class ImageDataPlugin implements RowListener {
                 dbConfigurationKey = value;
             } else if ("xml.base.directory".equals(key)) {
                 xmlBaseDirectoryName = value;
+            } else if ("exclude.host.name".equals(key)) {
+                hostNameSetter = null;
             } else {
                 try {
                     propertySetter = getPropertySetter(key, value);
@@ -75,8 +78,10 @@ public class ImageDataPlugin implements RowListener {
             }
         }
 
-        // always include host name
-        this.propertySetters.add(new HostNameSetter(HostNameSetter.TYPE));
+        // include host name setter unless it has been explicitly excluded
+        if (hostNameSetter != null) {
+            this.propertySetters.add(hostNameSetter);
+        }
 
         if (StringUtil.isDefined(dbConfigurationKey)) {
 
