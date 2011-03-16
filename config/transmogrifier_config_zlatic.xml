@@ -128,6 +128,8 @@
                                  to="b_25C50hz2V_30s1x30s0s#b_1000hz2V_90s1x30s0s#b_200hz2V_150s20x0.2s5s#n@100" />
                     <mappedValue from="b$50hz2V$30s1x30s0s@b$1000hz2V$90s1x30s0s@b$200hz2V$150s20x0.2s5s@n"
                                  to="b_50hz2V_30s1x30s0s#b_1000hz2V_90s1x30s0s#b_200hz2V_150s20x0.2s5s#n@100" />
+                    <mappedValue from="b$y1000hz2Vsin$30s1x30s0s@b$y50hz2Vsin$360s1x0.2s0s@b$y500hz2V$380s5x0.2s5s@n"
+                                 to="b_y1000hz2Vsin_30s1x30s0s#b_y50hz2Vsin_360s1x0.2s0s#b_y500hz2V_380s5x0.2s5s#n@100" />
                     <mappedValue from="b$y1000hz2Vsin$30s1x30s0s@b$y50hz2Vsin$360s1x0.2s0s@b$y500hz2V$380s5x1s5s@n"
                                  to="b_y1000hz2Vsin_30s1x30s0s#b_y50hz2Vsin_360s1x0.2s0s#b_y500hz2V_380s5x1s5s#n@100" />
                     <mappedValue from="p$8$45s1x30s0s@p$8$105s10x2s10s@n@n"
