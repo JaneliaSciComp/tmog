@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="2.4.8" frameSizePercentage="95"/>
+
+    <project name="Rubin Lab: Ming's Images (MW_*)" default="true">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <outputDirectory basePath="[\\dm10.isln.janelia.org\rubindata|/groups/rubin/data1/rubinlab]\Ming\confocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/${Line 1}.janelia-sage"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
+                <property name="errorMessage" value="There is no 'rubin' lab line named '${Line 1}' in the SAGE database."/>
+                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
+            </rowValidator>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/${Line 2}.janelia-sage"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
+                <property name="errorMessage" value="There is no 'rubin' lab line named '${Line 2}' in the SAGE database."/>
+                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="family" value="$STATIC:rubin_wu"/>
+                <property name="lab" value="$STATIC:rubin"/>
+                <property name="line" value="${Line 1}"/>
+                <property name="uas_reporter" value="UAS Reporter"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+            <separator value="MW-"/>
+            <text displayName="Line 1" required="true" displayWidth="150"
+                  pattern="GMR_[0-9A-Z\_]++">
+            </text>
+            <separator value="-"/>
+            <text displayName="Line 2" required="true" displayWidth="150"
+                  pattern="GMR_[0-9A-Z\_]++">
+            </text>
+
+            <separator value="-"/>
+            <validValueList displayName="Gender" required="true">
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+            <validValueList displayName="Age" required="true">
+                <validValue displayName="X00: undefined" value="X00"/>
+                <validValue displayName="P01: Prepupa" value="P01"/>
+                <validValue displayName="P02: Pupa" value="P02"/>
+                <validValue displayName="E01: Embryonic Stage 1" value="E01"/>
+                <validValue displayName="E02: Embryonic Stage 2" value="E02"/>
+                <validValue displayName="E03: Embryonic Stage 3" value="E03"/>
+                <validValue displayName="E04: Embryonic Stage 4" value="E04"/>
+                <validValue displayName="E05: Embryonic Stage 5" value="E05"/>
+                <validValue displayName="E06: Embryonic Stage 6" value="E06"/>
+                <validValue displayName="E07: Embryonic Stage 7" value="E07"/>
+                <validValue displayName="E08: Embryonic Stage 8" value="E08"/>
+                <validValue displayName="E09: Embryonic Stage 9" value="E09"/>
+                <validValue displayName="E10: Embryonic Stage 10" value="E10"/>
+                <validValue displayName="E11: Embryonic Stage 11" value="E11"/>
+                <validValue displayName="E12: Embryonic Stage 12" value="E12"/>
+                <validValue displayName="E13: Embryonic Stage 13" value="E13"/>
+                <validValue displayName="E14: Embryonic Stage 14" value="E14"/>
+                <validValue displayName="E15: Embryonic Stage 15" value="E15"/>
+                <validValue displayName="E16: Embryonic Stage 16" value="E16"/>
+                <validValue displayName="E17: Embryonic Stage 17" value="E17"/>
+                <validValue displayName="L01: First Instar" value="L01"/>
+                <validValue displayName="L02: Second Instar" value="L02"/>
+                <validValue displayName="L03: Third Instar" value="L03"/>
+                <validValue displayName="A01: Day 1-5" value="A01"/>
+                <validValue displayName="A02: Day 6-10" value="A02"/>
+                <validValue displayName="A03: Day 11-15" value="A03"/>
+                <validValue displayName="A04: Day 16-20" value="A04"/>
+                <validValue displayName="A05: Day 21-25" value="A05"/>
+                <validValue displayName="A06: Day 26-30" value="A06"/>
+            </validValueList>
+            <validValueList displayName="Area" required="true">
+                <validValue displayName="s: Salivary Gland" value="s"/>
+                <validValue displayName="b: Brain" value="b"/>
+                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
+            </validValueList>
+            <separator value="-"/>
+            <number displayName="Concentration" required="true"
+                    minimumValue="0" maximumValue="5000"  padFormat="40">
+                <sourceFileDefault pattern=".+L\d\d??_.*-(\d+).*#.*"/>                
+            </number>
+            <separator value="-"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+
+            <!--
+             These values are collected for the SAGE database but are not
+             included as components of the file name (markedForTask="false").
+             -->
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            markedForTask="false">
+                <validValue value="Glycerol-Based Mounting" default="true"/>
+                <validValue value="DPX Mounting"/>
+            </validValueList>
+            <cvTermList displayName="Tissue Orientation" required="true"
+                        markedForTask="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
+                        displayNamePrefixedForValues="false">
+            </cvTermList>
+            <validValueList displayName="UAS Reporter" required="true"
+                            markedForTask="false">
+                <validValue value="UAS_IVS-mCD8_3_0007" default="true"/>
+                <validValue value="UAS_mCD8_2_0006"/>
+                <validValue value="LexAop_IVS-myr_3_0008"/>
+            </validValueList>
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
