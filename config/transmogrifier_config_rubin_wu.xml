@@ -21,19 +21,11 @@
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/${Line 2}.janelia-sage"/>
-                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
-                <property name="errorMessage" value="There is no 'rubin' lab line named '${Line 2}' in the SAGE database."/>
-                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
-            </rowValidator>
-
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="family" value="$STATIC:rubin_wu"/>
                 <property name="lab" value="$STATIC:rubin"/>
                 <property name="line" value="${Line 1}"/>
-                <property name="uas_reporter" value="UAS Reporter"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="tissue_orientation" value="Tissue Orientation"/>
             </rowListener>
@@ -46,10 +38,21 @@
                   pattern="GMR_[0-9A-Z\_]++">
             </text>
             <separator value="-"/>
-            <text displayName="Line 2" required="true" displayWidth="150"
-                  pattern="GMR_[0-9A-Z\_]++">
-            </text>
-
+            <validValueList displayName="UAS Reporter 1" required="true">
+                <validValue displayName="r1a: pJFRC12-10XUAS-IVS-myr::GFP at su(Hw)attP5" value="r1a" default="true"/>
+                <validValue displayName="r1b: pJFRC12-10XUAS-IVS-myr::GFP at attP2" value="r1b" />
+            </validValueList>
+            <separator value="-"/>
+            <validValueList displayName="Line 2" required="true">
+                <validValue value="16H08_KD_GS4_P02"/>
+                <validValue value="29C07_KD_GS4_P02"/>
+                <validValue value="29C07_KD_GS4_P40"/>
+                <validValue value="40E09_KD_GS4_P02"/>
+            </validValueList>
+            <separator value="-"/>
+            <validValueList displayName="UAS Reporter 2" required="true">
+                <validValue displayName="r2a: pJFRC-UAS-KDRT-STOP-KDRT-myr::RFP at attP40" value="r2a" default="true"/>
+            </validValueList>
             <separator value="-"/>
             <validValueList displayName="Gender" required="true">
                 <validValue displayName="m: Male" value="m"/>
@@ -88,8 +91,8 @@
                 <validValue displayName="A06: Day 26-30" value="A06"/>
             </validValueList>
             <validValueList displayName="Area" required="true">
-                <validValue displayName="s: Salivary Gland" value="s"/>
                 <validValue displayName="b: Brain" value="b"/>
+                <validValue displayName="s: Salivary Gland" value="s"/>
                 <validValue displayName="v: Ventral Nerve Cord" value="v"/>
             </validValueList>
             <separator value="-"/>
@@ -115,12 +118,6 @@
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
                         displayNamePrefixedForValues="false">
             </cvTermList>
-            <validValueList displayName="UAS Reporter" required="true"
-                            markedForTask="false">
-                <validValue value="UAS_IVS-mCD8_3_0007" default="true"/>
-                <validValue value="UAS_mCD8_2_0006"/>
-                <validValue value="LexAop_IVS-myr_3_0008"/>
-            </validValueList>
         </dataFields>
 
     </project>
