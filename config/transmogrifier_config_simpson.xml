@@ -5,7 +5,7 @@
 
     <global minimumVersion="2.4.7"/>
 
-    <project name="Simpson Lab: GAL4 Lines" default="true">
+    <project name="Simpson Lab: New GAL4 Lines" default="true">
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
@@ -72,6 +72,37 @@
                         displayNamePrefixedForValues="true">
             </cvTermList>
 
+        </dataFields>
+
+    </project>
+
+    <project name="Simpson Lab: Update Existing GAL4 Lines" taskName="collector">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <plugins>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="nighthawk"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="family" value="$STATIC:GAL4"/>
+                <property name="line" value="${Line Source}${Old Line}-GAL4"/>
+                <property name="landing_site" value="Landing Site"/>
+            </rowListener>
+        </plugins>
+
+        <dataFields>
+            <validValueList displayName="Line Source" required="true">
+                <validValue displayName="Simpson Lab" value="JHS_"/>
+                <validValue displayName="External Lab" value="EXT_"/>
+            </validValueList>
+            <text displayName="Old Line" required="true" pattern="[0-9A-Za-z_]++">
+                <sourceFileDefault pattern=".*[/\\\\]([0-9A-Za-z]++)-GAL4[/\\\\].*\.lsm"
+                                   matchType="path"/>
+            </text>
+            <cvTermList displayName="Landing Site" required="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/rubin_crm_landing_site"
+                        displayNamePrefixedForValues="true">
+            </cvTermList>
         </dataFields>
 
     </project>
