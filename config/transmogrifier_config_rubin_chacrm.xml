@@ -568,11 +568,11 @@
              -->
             <validValueList displayName="Tile" required="true"
                             markedForTask="false">
-                <validValue displayName="01: Right Optic Lobe" value="Right Optic Lobe" />
+                <validValue displayName="01: Left Optic Lobe" value="Left Optic Lobe" />
                 <validValue displayName="02: Ventral Brain" value="Ventral Brain"/>
-                <validValue displayName="03: Right Dorsal Brain" value="Right Dorsal Brain"/>
-                <validValue displayName="04: Left Dorsal Brain" value="Left Dorsal Brain"/>
-                <validValue displayName="05: Left Optic Lobe" value="Left Optic Lobe"/>
+                <validValue displayName="03: Left Dorsal Brain" value="Left Dorsal Brain"/>
+                <validValue displayName="04: Right Dorsal Brain" value="Right Dorsal Brain"/>
+                <validValue displayName="05: Right Optic Lobe" value="Right Optic Lobe"/>
                 <validValue displayName="06: Central Brain" value="Central Brain"/>
             </validValueList>
             <number displayName="Tile Group" required="true"
