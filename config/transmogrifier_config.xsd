@@ -178,6 +178,14 @@
     </xs:complexType>
 
     <xs:complexType name="wellType">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
+                <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
+                <xs:element name="staticDefault" type="staticDefaultType" />
+                <xs:element name="pluginDefault" type="pluginDefaultType"/>
+            </xs:choice>
+        </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="displayWidth" type="xs:positiveInteger"/>
         <xs:attribute name="required" type="xs:boolean"/>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -24,6 +24,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Tests the ImageDao class.
@@ -118,7 +119,7 @@ public class SageImageDaoTest
         testImage = new Image();
         testImage.setId(testImageId);
         testImage.setRelativePath(relativePath);
-        testImage.setCaptureDate((Date) null);
+        testImage.setCaptureDate(null);
         testImage.setFamily(FAMILY_2);
         testImage.addProperty(TEST_PROPERTY_1, "updatedValueA");
         testImage.addProperty(TEST_PROPERTY_2, "updatedValueB");
@@ -148,6 +149,13 @@ public class SageImageDaoTest
         relativePath = "missing-relative-path";
         imageId = dao.getImageId(relativePath);
         assertNull("id returned for invalid path: " + relativePath, imageId);
+
+        Map<String, String> imageData =
+                dao.getImageData(FAMILY_2,
+                                 testImage.getRelativePath());
+        assertNotNull("image data not found", imageData);
+        assertEquals("property missing from image data",
+                     "updatedValueC", imageData.get(TEST_PROPERTY_3));        
     }
 
     /**

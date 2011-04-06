@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -21,6 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ import java.util.Set;
  * @author Eric Trautman
  */
 public class ImageDao extends AbstractDao
-        implements ImagePropertyWriter {
+        implements ImageReader, ImagePropertyWriter {
 
     /**
      * Constructs a dao using the default manager and configuration.
@@ -257,6 +258,69 @@ public class ImageDao extends AbstractDao
         LOG.info("getImageId: returning " + imageId + " for " + relativePath);
         
         return imageId;
+    }
+
+    @Override
+    public Map<String, String> getImageData(String family,
+                                            String relativePath)
+            throws ExternalSystemException {
+
+        Map<String, String> data = null;
+
+        Connection connection = null;
+        PreparedStatement select = null;
+        ResultSet resultSet = null;
+        try {
+            DbManager dbManager = getDbManager();
+            connection = dbManager.getConnection();
+
+            // SELECT i.capture_date, i.display, p.type, p.value
+            select = connection.prepareStatement(getSelectImageDataSql());
+            select.setString(1, family);
+            select.setString(2, relativePath);
+            resultSet = select.executeQuery();
+            if (resultSet.next()) {
+                data = new HashMap<String, String>(128);
+                data.put("family", family);
+                data.put("name", relativePath);
+                data.put("capture_date", String.valueOf(resultSet.getObject(1)));
+                data.put("display", String.valueOf(resultSet.getObject(2)));
+
+                String type = resultSet.getString(3);
+                if (type != null) {
+                    data.put(type, resultSet.getString(4));
+                    while (resultSet.next()) {
+                        data.put(resultSet.getString(3),
+                                 resultSet.getString(4));
+                    }
+                }
+            } else {
+                data = new HashMap<String, String>();
+            }
+        } catch (DbConfigException e) {
+            throw new ExternalSystemException(e.getMessage(), e);
+        } catch (SQLException e) {
+            throw new ExternalSystemException(
+                    "Failed to retrieve image data for '" + family +
+                    "' family image '" + relativePath + "'.", e);
+        } finally {
+            DbManager.closeResources(resultSet, select, connection, LOG);
+        }
+
+        if (LOG.isInfoEnabled()) {
+            LOG.info("getImageData: returning " + data.size() +
+                     " properties for " + family + " family image " +
+                     relativePath);
+        }
+
+        return data;
+    }
+
+    protected String getSelectImageDataSql() {
+        return
+            "SELECT i.capture_date, i.display, p.type, p.value " +
+            "FROM image i LEFT JOIN image_property p ON (i.id=p.image_id) " +
+            "WHERE i.family=? AND i.name=?";
     }
 
     private Integer getImageId(String relativePath,

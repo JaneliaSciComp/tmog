@@ -218,6 +218,14 @@ public class SageImageDao
         return imageId;
     }
 
+    @Override
+    protected String getSelectImageDataSql() {
+        return
+            "SELECT i.capture_date, i.display, p.type, p.value " +
+            "FROM image_vw i LEFT JOIN image_property_vw p " +
+            "ON (i.id=p.image_id) WHERE i.family=? AND i.name=?";
+    }
+
     private Integer getImageId(String relativePath,
                                Connection connection)
             throws SQLException, ExternalSystemException {

@@ -625,4 +625,212 @@
 
     </project>
 
+    <project name="Rubin Lab: FIX ChaCRM verified TransformantIDs (GMR_*)">
+
+        <outputDirectory basePath="\\dm10.isln.janelia.org\rubindata\confocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
+
+            <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
+                <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
+            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="nighthawk"/>
+                <property name="family" value="family"/>
+                <property name="uas_reporter" value="UAS Reporter"/>
+                <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
+                <property name="created_by" value="Imager"/>
+                <property name="renamed_by" value="Renamer"/>
+                <property name="class" value="Class"/>
+                <property name="ihc_batch" value="Batch Name"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
+            </rowListener>
+
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\GMR"/>
+            </sessionListener>
+
+        </plugins>
+
+        <dataFields>
+            <separator value="GMR_"/>
+            <number displayName="Plate" required="true"
+                    minimumValue="1" maximumValue="999">
+                <sourceFileDefault pattern="GMR_(\d+).*"/>
+            </number>
+            <well displayName="Well" required="true" formFactor="96">
+                <sourceFileDefault pattern="GMR_\d+([A-Z]\d\d)_.*"/>
+            </well>
+            <separator value="_"/>
+            <cvTermList displayName="Vector ID" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/rubin_crm_vector"
+                        displayNamePrefixedForValues="true">
+                <sourceFileDefault pattern="GMR_[^_]+_([^_]+)_.*"/>
+            </cvTermList>
+            <separator value="_"/>
+            <cvTermList displayName="Landing Site" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/rubin_crm_landing_site"
+                        displayNamePrefixedForValues="true">
+                <sourceFileDefault pattern="GMR_[^_]+_[^_]+_([^_]+)_.*"/>
+            </cvTermList>
+            <pluginData displayName="imageLocationRank" format="_%02d" />
+            <separator value="-"/>
+            <validValueList displayName="Gender" required="true">
+                <sourceFileDefault pattern="GMR_[^\-]+-(.).*"/>
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+            <validValueList displayName="Age" required="true">
+                <sourceFileDefault pattern="GMR_[^\-]+-.(...).*"/>
+                <validValue displayName="X00: undefined" value="X00"/>
+                <validValue displayName="P01: Prepupa" value="P01"/>
+                <validValue displayName="P02: Pupa" value="P02"/>
+                <validValue displayName="E01: Embryonic Stage 1" value="E01"/>
+                <validValue displayName="E02: Embryonic Stage 2" value="E02"/>
+                <validValue displayName="E03: Embryonic Stage 3" value="E03"/>
+                <validValue displayName="E04: Embryonic Stage 4" value="E04"/>
+                <validValue displayName="E05: Embryonic Stage 5" value="E05"/>
+                <validValue displayName="E06: Embryonic Stage 6" value="E06"/>
+                <validValue displayName="E07: Embryonic Stage 7" value="E07"/>
+                <validValue displayName="E08: Embryonic Stage 8" value="E08"/>
+                <validValue displayName="E09: Embryonic Stage 9" value="E09"/>
+                <validValue displayName="E10: Embryonic Stage 10" value="E10"/>
+                <validValue displayName="E11: Embryonic Stage 11" value="E11"/>
+                <validValue displayName="E12: Embryonic Stage 12" value="E12"/>
+                <validValue displayName="E13: Embryonic Stage 13" value="E13"/>
+                <validValue displayName="E14: Embryonic Stage 14" value="E14"/>
+                <validValue displayName="E15: Embryonic Stage 15" value="E15"/>
+                <validValue displayName="E16: Embryonic Stage 16" value="E16"/>
+                <validValue displayName="E17: Embryonic Stage 17" value="E17"/>
+                <validValue displayName="L01: First Instar" value="L01"/>
+                <validValue displayName="L02: Second Instar" value="L02"/>
+                <validValue displayName="L03: Third Instar" value="L03"/>
+                <validValue displayName="A01: Day 1-5" value="A01"/>
+                <validValue displayName="A02: Day 6-10" value="A02"/>
+                <validValue displayName="A03: Day 11-15" value="A03"/>
+                <validValue displayName="A04: Day 16-20" value="A04"/>
+                <validValue displayName="A05: Day 21-25" value="A05"/>
+                <validValue displayName="A06: Day 26-30" value="A06"/>
+            </validValueList>
+            <validValueList displayName="Area" required="true">
+                <sourceFileDefault pattern="GMR_[^\-]+-....(.).*"/>
+                <validValue displayName="s: Salivary Gland" value="s"/>
+                <validValue displayName="b: Brain" value="b"/>
+                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
+            </validValueList>
+            <!--
+            See http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html
+            for datePattern options.
+            -->
+            <separator value="_C"/>
+            <date displayName="Capture Date" datePattern="yyMMdd">
+                <sourceFileDateDefault pattern="GMR_.*_C(\d{6})_.*"
+                                       fromDatePattern="yyMMdd"
+                                       toDatePattern="yyMMdd" />
+            </date>
+            <separator value="_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+
+            <!--
+             These values are collected for the nighthawk database but are not
+             included as components of the file name (markedForTask="false").
+             -->
+            <text displayName="Batch Name" markedForTask="false"
+                  pattern="\d{8}_[a-z]{3,6}">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
+                    <property name="family" value="rubin-chacrm"/>
+                    <property name="image_property" value="ihc_batch"/>
+                </pluginDefault>
+            </text>
+
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
+                    <property name="family" value="rubin-chacrm"/>
+                    <property name="image_property" value="mounting_protocol"/>
+                </pluginDefault>
+                <validValue value="Glycerol-Based Mounting"/>
+                <validValue value="DPX Mounting"/>
+            </validValueList>
+            <cvTermList displayName="Tissue Orientation" required="true"
+                        markedForTask="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
+                        displayNamePrefixedForValues="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
+                    <property name="family" value="rubin-chacrm"/>
+                    <property name="image_property" value="tissue_orientation"/>
+                </pluginDefault>
+            </cvTermList>
+            <validValueList displayName="UAS Reporter" required="true"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
+                    <property name="family" value="rubin-chacrm"/>
+                    <property name="image_property" value="uas_reporter"/>
+                </pluginDefault>
+                <validValue value="UAS_IVS-mCD8_3_0007" default="true"/>
+                <validValue value="UAS_mCD8_2_0006"/>
+                <validValue value="LexAop_IVS-myr_3_0008"/>
+            </validValueList>
+            <validValueList displayName="Imager" required="true"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
+                    <property name="family" value="rubin-chacrm"/>
+                    <property name="image_property" value="created_by"/>
+                </pluginDefault>
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Alma Arnold"/>
+                <validValue value="Amanda Cavallaro"/>
+                <validValue value="Arnim Jenett"/>
+                <validValue value="Chris Zugates"/>
+                <validValue value="Christine Murphy"/>
+                <validValue value="Donald Hall"/>
+                <validValue value="Jennifer Jeter"/>
+                <validValue value="Nirmala Iyer"/>
+                <validValue value="Teri Ngo"/>
+            </validValueList>
+            <validValueList displayName="Renamer" required="true"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
+                    <property name="family" value="rubin-chacrm"/>
+                    <property name="image_property" value="renamed_by"/>
+                </pluginDefault>
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Alma Arnold"/>
+                <validValue value="Amanda Cavallaro"/>
+                <validValue value="Arnim Jenett"/>
+                <validValue value="Chris Zugates"/>
+                <validValue value="Christine Murphy"/>
+                <validValue value="Donald Hall"/>
+                <validValue value="Jennifer Jeter"/>
+                <validValue value="Nirmala Iyer"/>
+                <validValue value="Teri Ngo"/>
+            </validValueList>
+            <validValueList displayName="Class" required="false"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
+                    <property name="family" value="rubin-chacrm"/>
+                    <property name="image_property" value="class"/>
+                </pluginDefault>
+                <validValue displayName="Screening" value="Screening" default="true"/>
+                <validValue displayName="Rework" value="Rework"/>
+            </validValueList>
+
+            <text displayName="hostname" markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
+                    <property name="family" value="rubin-chacrm"/>
+                    <property name="image_property" value="hostname"/>
+                </pluginDefault>
+            </text>
+
+            <static name="family" value="rubin-chacrm" markedForTask="false"/>
+        </dataFields>
+
+    </project>
+
 </transmogrifierConfiguration>

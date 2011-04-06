@@ -1,8 +1,8 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
@@ -24,6 +24,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Tests the ImageDao class.
@@ -108,7 +109,7 @@ public class ImageDaoTest extends TestCase {
         testImage = new Image();
         testImage.setId(testImageId);
         testImage.setRelativePath(relativePath);
-        testImage.setCaptureDate((Date) null);
+        testImage.setCaptureDate(null);
         testImage.setFamily("updatedTestFamily");
         testImage.addProperty("testPropertyA", "updatedValueA");
         testImage.addProperty("testPropertyB", "updatedValueB");
@@ -125,6 +126,13 @@ public class ImageDaoTest extends TestCase {
         relativePath = "missing-relative-path";
         imageId = dao.getImageId(relativePath);
         assertNull("id returned for invalid path: " + relativePath, imageId);
+
+        Map<String, String> imageData =
+                dao.getImageData(testImage.getFamily(),
+                                 testImage.getRelativePath());
+        assertNotNull("image data not found", imageData);
+        assertEquals("property missing from image data",
+                     "valueC", imageData.get("testPropertyC"));
     }
 
     /**
