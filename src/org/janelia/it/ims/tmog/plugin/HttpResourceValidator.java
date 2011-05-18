@@ -20,6 +20,7 @@ import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * This class validates that a resource exists by submitting an
@@ -53,6 +54,11 @@ public class HttpResourceValidator
      */
     public static final String CLEAR_CACHE_DURATION_NAME = "clearCacheDuration";
 
+    /**
+     * Name of the property to use for predefined valid resources.
+     */
+    public static final String VALID_RESOURCES_NAME = "validResources";
+
     /** HTTP client for validation requests. */
     private HttpClient httpClient;
 
@@ -78,6 +84,11 @@ public class HttpResourceValidator
     private Set<String> validNames;
 
     /**
+     * Configured set of resource URLs that are always considered valid.
+     */
+    private Set<String> configuredValidResources;
+
+    /**
      * Empty constructor required by
      * {@link org.janelia.it.ims.tmog.config.PluginFactory}.
      */
@@ -85,6 +96,7 @@ public class HttpResourceValidator
         this.clearCacheDuration = 60 * 1000; // one minute
         this.lastCacheAccessTime = System.currentTimeMillis();
         this.validNames = new HashSet<String>();
+        this.configuredValidResources = new HashSet<String>();
         this.httpClient = new HttpClient();
     }
 
@@ -105,6 +117,9 @@ public class HttpResourceValidator
         final String configuredClearCacheDuration =
                 config.getProperty(CLEAR_CACHE_DURATION_NAME);
 
+        final String configuredValidResourceList =
+                config.getProperty(VALID_RESOURCES_NAME);
+
         try {
             if (configuredClearCacheDuration != null) {
                 this.clearCacheDuration =
@@ -121,6 +136,17 @@ public class HttpResourceValidator
 
             this.errorMessageTokens = PropertyToken.parseTokens(errorMessage);
 
+            if (configuredValidResourceList != null) {
+                String[] urls = CSV_PATTERN.split(configuredValidResourceList);
+                String url;
+                for (String u : urls) {
+                    url = u.trim();
+                    if (url.length() > 0) {
+                        this.configuredValidResources.add(url);
+                        this.validNames.add(url);
+                    }
+                }
+            }
         } catch (Exception e) {
             throw new ExternalSystemException(
                     "Failed to initialize ResourceValidator plugin.  " +
@@ -245,6 +271,7 @@ public class HttpResourceValidator
             LOG.info("clearing cache containing " +
                      validNames.size() + " items");
             validNames.clear();
+            validNames.addAll(configuredValidResources);
         }
 
         lastCacheAccessTime = System.currentTimeMillis();
@@ -261,4 +288,6 @@ public class HttpResourceValidator
 
     private static final Log LOG =
             LogFactory.getLog(HttpResourceValidator.class);
+
+    private static final Pattern CSV_PATTERN = Pattern.compile(",");
 }
