@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -10,6 +10,7 @@ package org.janelia.it.ims.tmog.config;
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.tmog.field.CvTermModel;
 import org.janelia.it.ims.tmog.field.DataField;
+import org.janelia.it.ims.tmog.field.DataFieldGroupModel;
 import org.janelia.it.ims.tmog.field.DefaultValue;
 import org.janelia.it.ims.tmog.field.DefaultValueList;
 import org.janelia.it.ims.tmog.field.DefaultValueModel;
@@ -188,22 +189,7 @@ public class ProjectConfiguration {
     public void initializeAndVerify() throws ConfigurationException {
 
         for (DataField field : dataFields.getFields()) {
-            if (field instanceof DefaultValueModel) {
-                DefaultValueModel defaultField = (DefaultValueModel) field;
-                constructDefaultValuePluginInstances(
-                        defaultField.getDefaultValueList());
-            } else if (field instanceof TargetNameModel) {
-                targetDisplayName = field.getDisplayName();
-            }
-
-            if (field instanceof CvTermModel) {
-                CvTermModel cvTermModel = (CvTermModel) field;
-                try {
-                    cvTermModel.retrieveAndSetValidValues();
-                } catch (Exception e) {
-                    throw new ConfigurationException(e.getMessage(), e);
-                }
-            }
+            initializeAndVerifyField(field);
         }
 
         if (targetDisplayName == null) {
@@ -221,6 +207,38 @@ public class ProjectConfiguration {
 
         if (pluginFactory != null) {
             pluginFactory.constructInstances(name);
+        }
+    }
+
+    private void initializeAndVerifyField(DataField field)
+            throws ConfigurationException {
+
+        if (field instanceof DataFieldGroupModel) {
+            DataFieldGroupModel group = (DataFieldGroupModel) field;
+            for (List<DataField> fieldRows : group.getFieldRows()) {
+                for (DataField f : fieldRows) {
+                    initializeAndVerifyField(f);
+                }
+            }
+        }
+
+        if (field instanceof DefaultValueModel) {
+            DefaultValueModel defaultField = (DefaultValueModel) field;
+            constructDefaultValuePluginInstances(
+                    defaultField.getDefaultValueList());
+        }
+
+        if (field instanceof TargetNameModel) {
+            targetDisplayName = field.getDisplayName();
+        }
+
+        if (field instanceof CvTermModel) {
+            CvTermModel cvTermModel = (CvTermModel) field;
+            try {
+                cvTermModel.retrieveAndSetValidValues();
+            } catch (Exception e) {
+                throw new ConfigurationException(e.getMessage(), e);
+            }
         }
     }
 
