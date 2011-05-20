@@ -215,10 +215,8 @@ public class ProjectConfiguration {
 
         if (field instanceof DataFieldGroupModel) {
             DataFieldGroupModel group = (DataFieldGroupModel) field;
-            for (List<DataField> fieldRows : group.getFieldRows()) {
-                for (DataField f : fieldRows) {
-                    initializeAndVerifyField(f);
-                }
+            for (DataField f : group.getFirstRow()) {
+                initializeAndVerifyField(f);
             }
         }
 

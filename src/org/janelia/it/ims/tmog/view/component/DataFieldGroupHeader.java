@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -9,6 +9,7 @@ package org.janelia.it.ims.tmog.view.component;
 
 import org.janelia.it.ims.tmog.config.preferences.ColumnDefault;
 import org.janelia.it.ims.tmog.config.preferences.ColumnDefaultSet;
+import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.DataFieldGroupModel;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 
 /**
@@ -48,7 +50,13 @@ public class DataFieldGroupHeader extends JPanel implements MouseInputListener {
         this.dataTable = dataTable;
         this.columnDefault = null;
 
-        final JLabel groupNameLabel = new JLabel(groupName);
+        JLabel groupNameLabel;
+        final List<DataField> firstRow = groupModel.getFirstRow();
+        if (firstRow.size() > 1) {
+            groupNameLabel = new JLabel(groupName);
+        } else {
+            groupNameLabel = new JLabel(" ");
+        }
         groupNameLabel.setHorizontalAlignment(JLabel.CENTER);
         groupNameLabel.setFont(this.getFont());
 
