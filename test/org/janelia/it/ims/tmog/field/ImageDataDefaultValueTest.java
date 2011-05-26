@@ -63,8 +63,8 @@ public class ImageDataDefaultValueTest
         dataDefault.init(properties);
 
         final File lsmFile = new File(
-                "20061206",
-                "GMR_9B06_AE_01_28-fA01b_C061206_20070703132054780.lsm");
+                "20070223",
+                "GMR_9B06_AE_01_04-xX00v_C070224_20070414103931413.lsm");
         final FileTarget target = new FileTarget(lsmFile);
 
         String value = dataDefault.getValue(target);
@@ -77,7 +77,7 @@ public class ImageDataDefaultValueTest
 
         value = dataDefault2.getValue(target);
         assertEquals("invalid value",
-                     "Female", value);        
+                     "unknown", value);        
     }
 
     /**
