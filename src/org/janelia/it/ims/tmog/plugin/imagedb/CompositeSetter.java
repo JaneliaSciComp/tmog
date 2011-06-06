@@ -8,9 +8,10 @@
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
-import org.janelia.it.ims.tmog.plugin.PropertyToken;
+import org.janelia.it.ims.tmog.plugin.PropertyTokenList;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class sets the image property using a composite of text and
@@ -21,25 +22,51 @@ import java.util.List;
 public class CompositeSetter implements ImagePropertySetter {
 
     private String propertyType;
-    private List<PropertyToken> tokens;
+    private PropertyTokenList tokens;
 
     public CompositeSetter(String propertyType,
-                           String compositeFieldString)
+                           String compositeFieldString,
+                           Map<String, String> properties)
             throws IllegalArgumentException {
 
         this.propertyType = propertyType;
-        this.tokens = PropertyToken.parseTokens(compositeFieldString);
+        this.tokens = new PropertyTokenList(compositeFieldString,
+                                            properties);
     }
 
+    /**
+     * @param  row  the current data row.
+     *
+     * @return the composite value for the specified row.
+     *         If the composite pattern includes a
+     *         non-concatenated field group, the value
+     *         associated with the first field group
+     *         is returned.
+     */
     public String getValue(PluginDataRow row) {
-        return PropertyToken.deriveString(row, tokens);
+        String value = null;
+        final List<String> values =
+                tokens.deriveValues(row.getDisplayNameToFieldMap(), false);
+        if (values.size() > 0) {
+            value = values.get(0);
+        }
+        return value;
     }
 
     public void setProperty(PluginDataRow row,
                             Image image) {
-        String value = getValue(row);
-        if (value.length() > 0) {
-            image.addProperty(propertyType, value);
+        
+        final List<String> values =
+                tokens.deriveValues(row.getDisplayNameToFieldMap(), false);
+
+        String pType = propertyType;
+        int i = 0;
+        for (String value : values) {
+            if (value.length() > 0) {
+                image.addProperty(pType, value);
+                i++;
+                pType = propertyType + "-" + i;
+            }
         }
     }
 }

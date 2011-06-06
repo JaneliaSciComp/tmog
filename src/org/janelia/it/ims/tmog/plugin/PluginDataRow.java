@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.plugin;
@@ -54,6 +54,13 @@ public class PluginDataRow {
     }
 
     /**
+     * @return map of display names to fields for this row.
+     */
+    public HashMap<String, DataField> getDisplayNameToFieldMap() {
+        return displayNameToFieldMap;
+    }
+
+    /**
      * Returns the field model object value associated with the specified
      * display name or null if no associated model exists.
      *
@@ -62,7 +69,6 @@ public class PluginDataRow {
      * @return the associated field model value or null.
      */
     public String getCoreValue(String fieldDisplayName) {
-        // TODO: add support for nested fields
         String value = null;
         DataField field = displayNameToFieldMap.get(fieldDisplayName);
         if (field != null) {

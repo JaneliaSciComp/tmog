@@ -7,17 +7,13 @@
 
 package org.janelia.it.ims.tmog.plugin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import org.janelia.it.ims.tmog.field.DataField;
+
+import java.util.Map;
 
 /**
  * This class encapsulates a token parsed from a plug-in configuration
- * property.  It's {@link #getValue(PluginDataRow)} method allows
- * dynamic data row values to be retrieved based upon the token name.
- *
- * The {@link #parseTokens(String)} utility method is provided to parse
- * a configuration property value into a list of tokens.
+ * property.
  *
  * @author Eric Trautman
  */
@@ -25,85 +21,19 @@ public class PropertyToken {
 
     public static final String TOKEN_ID = "${";
 
-    public static List<PropertyToken> parseTokens(String tokenString)
-            throws IllegalArgumentException {
-
-        ArrayList<PropertyToken> tokenList = new ArrayList<PropertyToken>();
-
-        if ((tokenString == null) || (tokenString.length() == 0)) {
-            throw new IllegalArgumentException(
-                    INVALID_SYNTAX +
-                    "Empty value configured.");
-        }
-
-        if (tokenString.endsWith(TOKEN_ID)) {
-            throw new IllegalArgumentException(
-                    INVALID_SYNTAX +
-                    "Token start '${' is missing closing '}' in '" +
-                    tokenString + "'.");
-        }
-
-        int start = tokenString.indexOf(TOKEN_ID);
-        Scanner scanner = null;
-        if (start == -1) {
-            tokenList.add(new PropertyToken(true, tokenString));
-        } else if (start == 0) {
-            scanner = new Scanner(tokenString);
-        } else {
-            tokenList.add(new PropertyToken(true,
-                                            tokenString.substring(0, start)));
-            scanner = new Scanner(tokenString.substring(start));
-        }
-
-        if (scanner != null) {
-            scanner.useDelimiter("\\$\\{");
-
-            int stop;
-            String current;
-            while (scanner.hasNext()) {
-                current = scanner.next();
-                stop = current.indexOf('}');
-                if (stop == -1) {
-                    throw new IllegalArgumentException(
-                            INVALID_SYNTAX +
-                            "Token start '${' is missing closing '}' in '" +
-                            tokenString + "'.");
-                } else if (stop == 0) {
-                    throw new IllegalArgumentException(
-                            INVALID_SYNTAX +
-                            "Empty token '${}' specified in '" +
-                            tokenString + "'.");
-                } else {
-                    tokenList.add(
-                            new PropertyToken(false,
-                                              current.substring(0, stop)));
-                    start = stop + 1;
-                    if (start < current.length()) {
-                        tokenList.add(
-                                new PropertyToken(true,
-                                                  current.substring(start)));
-                    }
-                }
-            }
-        }
-
-        return tokenList;
-    }
-
-    public static String deriveString(PluginDataRow row,
-                                      List<PropertyToken> list) {
-        StringBuilder sb = new StringBuilder();
-        for (PropertyToken token : list) {
-            sb.append(token.getValue(row));
-        }
-        return sb.toString();
-    }
-
     private boolean isLiteral = false;
     private String value;
     private String prefix;
     private String suffix;
 
+    /**
+     * Constructs a token for a standard (non-group) field.
+     *  
+     * @param  literal  true if the value is a literal string;
+     *                  false if it identifies a field name.
+     *
+     * @param  value    the token value.
+     */
     public PropertyToken(boolean literal,
                          String value) {
         isLiteral = literal;
@@ -123,7 +53,6 @@ public class PropertyToken {
                     valueStart = prefixStop + 1;
                 } else {
                     throw new IllegalArgumentException(
-                            INVALID_SYNTAX +
                             "Token prefix is missing closing quote for ${" +
                             value + "}.");
                 }
@@ -131,7 +60,6 @@ public class PropertyToken {
 
             if (valueStart == valueStop) {
                 throw new IllegalArgumentException(
-                        INVALID_SYNTAX +
                         "Token is missing in ${" + value + "}.");
             }
 
@@ -143,7 +71,6 @@ public class PropertyToken {
                     valueStop = suffixStart - 1;
                 } else {
                     throw new IllegalArgumentException(
-                            INVALID_SYNTAX +
                             "Token suffix is missing opening quote for ${" +
                             value + "}.");
                 }
@@ -151,7 +78,6 @@ public class PropertyToken {
 
             if (valueStop <= valueStart) {
                 throw new IllegalArgumentException(
-                        INVALID_SYNTAX +
                         "Token is missing in ${" + value + "}.");
             }
 
@@ -159,20 +85,41 @@ public class PropertyToken {
         }
     }
 
+    /**
+     * @return true if this token's value is a literal string;
+     *         false if the token's value identifies a field name.
+     */
     public boolean isLiteral() {
         return isLiteral;
     }
 
+    /**
+     * @return this token's raw value.
+     */
     public String getValue() {
         return value;
     }
 
-    public String getValue(PluginDataRow row) {
-        String derivedValue;
+    /**
+     * @param  nameToFieldMap  map of field names to instances for
+     *                         value derivation.
+     *
+     * @param  index           the row index for the desired value
+     *                         (only relevant for field groups).
+     *
+     * @return the derived value for this token based upon the specified map.
+     *         If the token is literal, the raw value is simply returned.
+     */
+    public String getValue(Map<String, DataField> nameToFieldMap,
+                           int index) {
+        String derivedValue = null;
         if (isLiteral) {
             derivedValue = value;
         } else {
-            derivedValue = row.getCoreValue(value);
+            final DataField field = nameToFieldMap.get(value);
+            if (field != null) {
+                derivedValue = field.getCoreValue();
+            }
             if ((derivedValue != null) && (derivedValue.length() > 0)) {
                 if (prefix != null) {
                     derivedValue = prefix + derivedValue;
@@ -185,7 +132,5 @@ public class PropertyToken {
         return derivedValue;
     }
 
-    private static final String INVALID_SYNTAX =
-            "Invalid composite syntax.  ";
 }
 

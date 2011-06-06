@@ -12,13 +12,13 @@ import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
+import org.janelia.it.ims.tmog.field.DataField;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -63,10 +63,10 @@ public class HttpResourceValidator
     private HttpClient httpClient;
 
     /** Parsed configuration tokens for deriving a row specific URL. */
-    private List<PropertyToken> urlTokens;
+    private PropertyTokenList urlTokens;
 
     /** Parsed configuration tokens for invalid resource error messages. */
-    private List<PropertyToken> errorMessageTokens;
+    private PropertyTokenList errorMessageTokens;
 
     /**
      * The maximum amount of time (in milliseconds) between cache
@@ -126,7 +126,8 @@ public class HttpResourceValidator
                         Long.parseLong(configuredClearCacheDuration);
             }
 
-            this.urlTokens = PropertyToken.parseTokens(serviceUrl);
+            this.urlTokens = new PropertyTokenList(serviceUrl,
+                                                   config.getProperties());
 
             if (! isResourceFound(testUrl)) {
                 throw new IllegalArgumentException(
@@ -134,7 +135,8 @@ public class HttpResourceValidator
                         "' identifies a non-existent resource.");
             }
 
-            this.errorMessageTokens = PropertyToken.parseTokens(errorMessage);
+            this.errorMessageTokens = new PropertyTokenList(errorMessage,
+                                                            config.getProperties());
 
             if (configuredValidResourceList != null) {
                 String[] urls = CSV_PATTERN.split(configuredValidResourceList);
@@ -171,16 +173,22 @@ public class HttpResourceValidator
 
         String url = null;
         try {
-            url = getServiceUrl(row);
+            final Map<String, DataField> fieldMap =
+                    row.getDisplayNameToFieldMap();
+            List<String> urlList = urlTokens.deriveValues(fieldMap, true);
             clearCacheIfStale();
-            boolean isValid = validNames.contains(url);
-            if (! isValid) {
-                if (isResourceFound(url)) {
-                    addNameToCache(url);
-                } else {
-                    final String msg =
-                            PropertyToken.deriveString(row, errorMessageTokens);
-                    throw new ExternalDataException(msg);
+
+            for (int i = 0; i < urlList.size(); i++) {
+                url = urlList.get(i);
+                boolean isValid = validNames.contains(url);
+                if (! isValid) {
+                    if (isResourceFound(url)) {
+                        addNameToCache(url);
+                    } else {
+                        List<String> msgList =
+                                errorMessageTokens.deriveValues(fieldMap, true);
+                        throw new ExternalDataException(msgList.get(i));
+                    }
                 }
             }
         } catch (ExternalDataException e) {
@@ -204,20 +212,6 @@ public class HttpResourceValidator
                     propertyName + "' property must be defined.");
         }
         return value;
-    }
-
-    private String getServiceUrl(PluginDataRow row)
-            throws UnsupportedEncodingException {
-        StringBuilder sb = new StringBuilder();
-        String tokenValue;
-        for (PropertyToken token : urlTokens) {
-            tokenValue = token.getValue(row);
-            if (! token.isLiteral()) {
-                tokenValue = URLEncoder.encode(tokenValue, "UTF-8");
-            }
-            sb.append(tokenValue);
-        }
-        return sb.toString();
     }
 
     private boolean isResourceFound(String url)

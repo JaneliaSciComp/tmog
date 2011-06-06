@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
@@ -75,7 +75,8 @@ public class ImageSequencePlugin implements RowListener {
             fieldNameToNamespaceBuilderMap.put(
                     fieldName,
                     new CompositeSetter(fieldName,
-                                        props.get(fieldName)));
+                                        props.get(fieldName),
+                                        props));
         }
 
         try {

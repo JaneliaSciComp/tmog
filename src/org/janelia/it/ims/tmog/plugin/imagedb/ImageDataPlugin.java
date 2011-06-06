@@ -69,7 +69,7 @@ public class ImageDataPlugin implements RowListener {
                 hostNameSetter = null;
             } else {
                 try {
-                    propertySetter = getPropertySetter(key, value);
+                    propertySetter = getPropertySetter(key, value, props);
                 } catch (IllegalArgumentException e) {
                     throw new ExternalSystemException(
                             INIT_FAILURE_MSG + e.getMessage());
@@ -184,7 +184,8 @@ public class ImageDataPlugin implements RowListener {
     }
 
     private static ImagePropertySetter getPropertySetter(String propertyType,
-                                                         String fieldName)
+                                                         String fieldName,
+                                                         Map<String, String> props)
             throws IllegalArgumentException {
 
         ImagePropertySetter propertySetter;
@@ -205,7 +206,9 @@ public class ImageDataPlugin implements RowListener {
         } else if (FieldGroupSetter.isFieldGroupType(propertyType)) {
             propertySetter = new FieldGroupSetter(propertyType, fieldName);
         } else if (fieldName.contains(PropertyToken.TOKEN_ID)) {
-            propertySetter = new CompositeSetter(propertyType, fieldName);
+            propertySetter = new CompositeSetter(propertyType,
+                                                 fieldName,
+                                                 props);
         } else {
             propertySetter = new SimpleSetter(propertyType, fieldName);
         }
