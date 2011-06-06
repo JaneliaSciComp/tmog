@@ -575,9 +575,9 @@ public class SageImageDao
     private static final String SQL_SELECT_LAB_ID =
             "SELECT id FROM lab_vw WHERE lab=?";  // 1. lab name
 
+    // usage of getCvTermID function supports light_imagery cv_relationships (e.g. to fly)
     private static final String SQL_SELECT_IMAGE_TYPE_ID =
-            "SELECT id FROM cv_term_vw " +
-            "WHERE cv='light_imagery' AND cv_term=?";  // 1. image type name
+            "getCvTermID('light_imagery',?,NULL)";  // 1. image type name
 
     private static final String SQL_INSERT_IMAGE =
             "INSERT INTO image (name, capture_date, family_id, display, " +

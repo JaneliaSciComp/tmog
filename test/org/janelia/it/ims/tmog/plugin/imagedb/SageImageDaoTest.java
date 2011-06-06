@@ -344,7 +344,7 @@ public class SageImageDaoTest
     }
 
     private static final String TEST_PROPERTY_1 = "age";
-    private static final String TEST_PROPERTY_2 = "area";
+    private static final String TEST_PROPERTY_2 = "effector"; // use cv_relationship "inherited" type
     private static final String TEST_PROPERTY_3 = "gender";
     private static final String FAMILY_1 = "baker_lab";
     private static final String FAMILY_2 = "baker_biorad";
