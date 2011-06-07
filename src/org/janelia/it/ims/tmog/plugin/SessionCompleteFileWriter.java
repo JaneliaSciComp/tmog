@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -104,7 +104,7 @@ public class SessionCompleteFileWriter
                                       PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
-        if (RowListener.EventType.END_SUCCESS.equals(eventType)) {
+        if (RowListener.EventType.END_ROW_SUCCESS.equals(eventType)) {
             if (row instanceof RenamePluginDataRow) {
                 final Thread currentThread = Thread.currentThread();
                 Set<File> directorySet =

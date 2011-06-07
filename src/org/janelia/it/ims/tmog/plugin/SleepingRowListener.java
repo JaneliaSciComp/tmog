@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
+ */
+
 package org.janelia.it.ims.tmog.plugin;
 
 import org.apache.log4j.Logger;
@@ -5,8 +12,8 @@ import org.janelia.it.ims.tmog.config.PluginConfiguration;
 
 /**
  * This class sleeps for a configured number of seconds (or a default of
- * 10 seconds) each time a {@link EventType#END_FAIL} or
- * {@link EventType#END_SUCCESS} copy event is received.
+ * 10 seconds) each time a {@link EventType#END_ROW_FAIL} or
+ * {@link EventType#END_ROW_SUCCESS} copy event is received.
  * It was originally intended to be used to simulate long running copies
  * during testing, but could be used for other purposes.
  * To use the class, add the following to the transmogrifier_config.xml file:
@@ -58,13 +65,13 @@ public class SleepingRowListener implements RowListener {
                                       PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
         switch (eventType) {
-            case END_FAIL:
+            case END_ROW_FAIL:
                 sleep();
                 break;
-            case END_SUCCESS:
+            case END_ROW_SUCCESS:
                 sleep();
                 break;
-            case START:
+            case START_ROW:
                 break;
         }
         return row;

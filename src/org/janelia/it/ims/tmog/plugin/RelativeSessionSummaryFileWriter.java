@@ -1,8 +1,8 @@
 /*
- * Copyright 2009 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.plugin;
@@ -69,7 +69,7 @@ public class RelativeSessionSummaryFileWriter extends SessionSummaryFileWriter
     public PluginDataRow processEvent(RowListener.EventType eventType,
                                       PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
-        if (RowListener.EventType.END_SUCCESS.equals(eventType)) {
+        if (RowListener.EventType.END_ROW_SUCCESS.equals(eventType)) {
             if (row instanceof RenamePluginDataRow) {
                 threadToLastSuccessfulFileMap.put(
                         Thread.currentThread(),

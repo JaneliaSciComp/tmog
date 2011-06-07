@@ -154,7 +154,7 @@ public class ImageDataPlugin implements RowListener {
     public PluginDataRow processEvent(EventType eventType,
                                       PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
-        if (EventType.END_SUCCESS.equals(eventType)) {
+        if (EventType.END_ROW_SUCCESS.equals(eventType)) {
             saveImageProperties(row);
         }
         return row;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -170,13 +170,13 @@ public class ChacrmEventManager implements RowValidator, RowListener {
 
         RenamePluginDataRow dataRow = PluginUtil.castRenameRow(row, this);
         switch (eventType) {
-            case END_FAIL:
+            case END_ROW_FAIL:
                 failedCopy(dataRow);
                 break;
-            case END_SUCCESS:
+            case END_ROW_SUCCESS:
                 completedSuccessfulCopy(dataRow);
                 break;
-            case START:
+            case START_ROW:
                 dataRow = startingCopy(dataRow);
                 break;
         }

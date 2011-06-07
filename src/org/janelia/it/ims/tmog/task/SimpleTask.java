@@ -1,8 +1,8 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute. 
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.task;
@@ -299,28 +299,35 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
         int rowIndex = 0;
         final int numberOfRows = modelRows.size();
 
-        boolean isStartNotificationSuccessful;
+        boolean startLoopNotificationSent = false;
+        boolean isStartRowNotificationSuccessful;
         boolean isRowProcessingSuccessful;
         PluginDataRow pluginDataRow;
         TaskProgressInfo progressInfo;
 
         for (DataRow modelRow : modelRows) {
 
-            isStartNotificationSuccessful = false;
+            isStartRowNotificationSuccessful = false;
             isRowProcessingSuccessful = false;
 
             pluginDataRow = getPluginDataRow(modelRow);
             try {
+                if (! startLoopNotificationSent) {
+                    pluginDataRow =
+                            notifyRowListeners(RowListener.EventType.START_LOOP,
+                                               pluginDataRow);
+                    startLoopNotificationSent = true;
+                }
                 pluginDataRow =
-                        notifyRowListeners(RowListener.EventType.START,
+                        notifyRowListeners(RowListener.EventType.START_ROW,
                                            pluginDataRow);
-                isStartNotificationSuccessful = true;
+                isStartRowNotificationSuccessful = true;
             } catch (Exception e) {
                 LOG.error("Failed external start processing for " +
                           pluginDataRow, e);
             }
 
-            if (isStartNotificationSuccessful) {
+            if (isStartRowNotificationSuccessful) {
                 progressInfo = getProgressInfo(rowIndex,
                                                numberOfRows,
                                                modelRow);
@@ -331,11 +338,11 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
                 try {
                     if (isRowProcessingSuccessful) {
                         notifyRowListeners(
-                                RowListener.EventType.END_SUCCESS,
+                                RowListener.EventType.END_ROW_SUCCESS,
                                 pluginDataRow);
                     } else {
                         notifyRowListeners(
-                                RowListener.EventType.END_FAIL,
+                                RowListener.EventType.END_ROW_FAIL,
                                 pluginDataRow);
                     }
                 } catch (Exception e) {

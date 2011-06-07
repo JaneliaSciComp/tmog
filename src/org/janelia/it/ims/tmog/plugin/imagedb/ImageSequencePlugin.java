@@ -106,7 +106,7 @@ public class ImageSequencePlugin implements RowListener {
     public PluginDataRow processEvent(EventType eventType,
                                       PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
-        if (EventType.START.equals(eventType)) {
+        if (EventType.START_ROW.equals(eventType)) {
             row = startingEvent(row);
         }
         return row;

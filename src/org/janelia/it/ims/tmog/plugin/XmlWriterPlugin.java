@@ -1,8 +1,8 @@
 /*
- * Copyright 2009 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.plugin;
@@ -85,7 +85,7 @@ public class XmlWriterPlugin implements RowListener {
 
     /**
      * Writes an XML representation of the specified row for
-     * {@link EventType#END_SUCCESS} events.
+     * {@link EventType#END_ROW_SUCCESS} events.
      *
      * @param  eventType  type of event.
      * @param  row        details about the event.
@@ -100,7 +100,7 @@ public class XmlWriterPlugin implements RowListener {
     public PluginDataRow processEvent(EventType eventType,
                                       PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
-        if (EventType.END_SUCCESS.equals(eventType)) {
+        if (EventType.END_ROW_SUCCESS.equals(eventType)) {
             writeXml(row);
         }
         return row;

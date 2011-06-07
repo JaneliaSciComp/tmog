@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -105,7 +105,7 @@ public class CleanupChacrmManager implements RowListener {
             throws ExternalDataException, ExternalSystemException {
 
         RenamePluginDataRow dataRow = PluginUtil.castRenameRow(row, this);
-        if (EventType.END_SUCCESS.equals(eventType)) {
+        if (EventType.END_ROW_SUCCESS.equals(eventType)) {
             File fromFile = dataRow.getFromFile();
             String fromFileName = fromFile.getAbsolutePath();
             ImageLocation fromFileImageLocation =
