@@ -28,11 +28,20 @@
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.WritableFromFileValidator">
+                <property name="errorMessage"
+                          value="The source file %s must be writable to allow meta data insertion before transfer."/>
+            </rowValidator>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.GroupSequencePlugin">
                 <property name="db.config.key" value="sage" />
                 <property name="groupFieldName" value="Tile Group" />
                 <property name="targetFieldName" value="tile_group" />
                 <property name="namespace" value="urn:lsid:janelia.org:fly_light:tile_group" />
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin" >
+                <property name="line" value="GMR_${Activation Plate}${Activation Well}_${Activation Vector ID}_${Activation Landing Site}+GMR_${Binding Plate}${Binding Well}_${Binding Vector ID}_${Binding Landing Site}"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
@@ -178,11 +187,20 @@
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.WritableFromFileValidator">
+                <property name="errorMessage"
+                          value="The source file %s must be writable to allow meta data insertion before transfer."/>
+            </rowValidator>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.GroupSequencePlugin">
                 <property name="db.config.key" value="sage" />
                 <property name="groupFieldName" value="Tile Group" />
                 <property name="targetFieldName" value="tile_group" />
                 <property name="namespace" value="urn:lsid:janelia.org:fly_light:tile_group" />
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin" >
+                <property name="line" value="GMR_${GAL4 Plate}${GAL4 Well}_${GAL4 Vector ID}_${GAL4 Landing Site}+GMR_${LexA Plate}${LexA Well}_${LexA Vector ID}_${LexA Landing Site}"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
@@ -339,11 +357,20 @@
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.WritableFromFileValidator">
+                <property name="errorMessage"
+                          value="The source file %s must be writable to allow meta data insertion before transfer."/>
+            </rowValidator>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.GroupSequencePlugin">
                 <property name="db.config.key" value="sage" />
                 <property name="groupFieldName" value="Tile Group" />
                 <property name="targetFieldName" value="tile_group" />
                 <property name="namespace" value="urn:lsid:janelia.org:fly_light:tile_group" />
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin" >
+                <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
