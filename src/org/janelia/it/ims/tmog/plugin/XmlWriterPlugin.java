@@ -8,12 +8,8 @@
 package org.janelia.it.ims.tmog.plugin;
 
 import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
-import org.janelia.it.ims.tmog.field.DataField;
-import org.janelia.it.ims.tmog.field.DataFieldGroupModel;
 import org.janelia.it.utils.PathUtil;
-import org.janelia.it.utils.StringUtil;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -109,16 +105,8 @@ public class XmlWriterPlugin implements RowListener {
     private void writeXml(PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
-        StringBuilder xml = new StringBuilder(256);
-        final DataRow dataRow = row.getDataRow();
-        xml.append("<row>\n");
-        for (DataField field : dataRow.getFields()) {
-            // exclude separator fields from xml
-            if (field.getDisplayName() != null) {
-                appendFieldXml(field, "  ", xml);
-            }
-        }
-        xml.append("</row>\n");
+        XmlStringBuilder xml = new XmlStringBuilder("row");
+        xml.setRow(row, null);
 
         final File targetFile = row.getTargetFile();
         final String xmlFileName = targetFile.getName() + ".xml";
@@ -143,58 +131,6 @@ public class XmlWriterPlugin implements RowListener {
 
     }
 
-    private void appendFieldXml(DataField field,
-                                String indent,
-                                StringBuilder xml) {
-        if (field instanceof DataFieldGroupModel) {
-            appendFieldGroupXml((DataFieldGroupModel) field,
-                                indent,
-                                xml);
-        } else {
-            final String elementName =
-                    StringUtil.getXmlElementName(field.getDisplayName());
-            xml.append(indent);
-            xml.append("<");
-            xml.append(elementName);
-            xml.append(">");
-
-            xml.append(StringUtil.getDefinedXmlValue(field.getCoreValue()));
-
-            xml.append("</");
-            xml.append(elementName);
-            xml.append(">\n");
-        }
-    }
-
-    private void appendFieldGroupXml(DataFieldGroupModel group,
-                                     String indent,
-                                     StringBuilder xml) {
-        final String elementName =
-                StringUtil.getXmlElementName(group.getDisplayName());
-        final int rowCount = group.getRowCount();
-        final int colCount = group.getColumnCount();
-        final String groupIndent = indent + "  ";
-        Object value;
-        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-            xml.append(indent);
-            xml.append("<");
-            xml.append(elementName);
-            xml.append(">\n");
-
-            for (int colIndex = 0; colIndex < colCount; colIndex++) {
-                value = group.getValueAt(rowIndex, colIndex);
-                if (value instanceof DataField) {
-                    appendFieldXml((DataField) value, groupIndent, xml);
-                }
-            }
-
-            xml.append(indent);
-            xml.append("</");
-            xml.append(elementName);
-            xml.append(">\n");
-        }
-    }
-    
     /**
      * Utility to close the file writer.
      *
