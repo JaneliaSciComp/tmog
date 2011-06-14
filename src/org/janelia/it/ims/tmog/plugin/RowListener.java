@@ -15,7 +15,7 @@ package org.janelia.it.ims.tmog.plugin;
 public interface RowListener extends Plugin {
 
     public enum EventType {
-        START_LOOP, START_ROW, END_ROW_SUCCESS, END_ROW_FAIL 
+        START_ROW, END_ROW_SUCCESS, END_ROW_FAIL 
     }
 
     /**

@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.6.0" frameSizePercentage="95"/>
+    <global minimumVersion="2.6.1" frameSizePercentage="95"/>
 
     <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="true">
 
@@ -512,14 +512,15 @@
 
             <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
 
-            <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
-                <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
-            </rowListener>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.GroupSequencePlugin">
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.imagedb.GroupSequencePlugin">
                 <property name="db.config.key" value="sage" />
                 <property name="groupFieldName" value="Tile Group" />
                 <property name="targetFieldName" value="tile_group" />
                 <property name="namespace" value="urn:lsid:janelia.org:rubin_chacrm:tile_group" />
+            </sessionListener>
+
+            <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
+                <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
             </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>

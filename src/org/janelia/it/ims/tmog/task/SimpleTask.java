@@ -150,18 +150,14 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
                     failedRowIndices.add(i);
                 }
             } else {
-                processRows();
+                final boolean startSessionNotificationsSuccessfullyCompleted =
+                        startSession();
+                if (startSessionNotificationsSuccessfullyCompleted) {
+                    processRows();
+                }
             }
 
-            // notify any session listeners
-            try {
-                notifySessionListeners(
-                        SessionListener.EventType.END,
-                        taskSummary.toString());
-            } catch (Exception e) {
-                LOG.error("session listener processing failed, " +
-                          "taskSummary is " + taskSummary, e);
-            }
+            endSession();
 
             LOG.debug("finished task");
         } catch (Throwable t) {
@@ -299,7 +295,6 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
         int rowIndex = 0;
         final int numberOfRows = modelRows.size();
 
-        boolean startLoopNotificationSent = false;
         boolean isStartRowNotificationSuccessful;
         boolean isRowProcessingSuccessful;
         PluginDataRow pluginDataRow;
@@ -312,12 +307,6 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
 
             pluginDataRow = getPluginDataRow(modelRow);
             try {
-                if (! startLoopNotificationSent) {
-                    pluginDataRow =
-                            notifyRowListeners(RowListener.EventType.START_LOOP,
-                                               pluginDataRow);
-                    startLoopNotificationSent = true;
-                }
                 pluginDataRow =
                         notifyRowListeners(RowListener.EventType.START_ROW,
                                            pluginDataRow);
@@ -393,22 +382,39 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
     }
 
     /**
-     * Utility method to notify registered listeners about a session event.
+     * Notifies registered listeners that the session has started.
      *
-     * @param eventType the current event type.
-     *
-     * @param message   the event message.
-     *
-     * @throws ExternalDataException
-     *   if a listener detects a data error.
-     * @throws ExternalSystemException
-     *   if a system error occurs within a listener.
+     * @return true if all notifications were successfully sent;
+     *         otherwise false.
      */
-    private void notifySessionListeners(SessionListener.EventType eventType,
-                                        String message)
-            throws ExternalDataException, ExternalSystemException {
-        for (SessionListener listener : sessionListenerList) {
-            listener.processEvent(eventType, message);
+    private boolean startSession() {
+        boolean allNotificationsProcessedSuccessfully = false;
+        DataTableModel model = getModel();
+        List<DataRow> modelRows = model.getRows();
+
+        try {
+            for (SessionListener listener : sessionListenerList) {
+                listener.startSession(modelRows);
+            }
+            allNotificationsProcessedSuccessfully = true;
+        } catch (Exception e) {
+            LOG.error("session listener startSession processing failed", e);
+        }
+        return allNotificationsProcessedSuccessfully;
+    }
+
+    /**
+     * Notifies registered listeners that the session has ended.
+     */
+    private void endSession() {
+        final String message = taskSummary.toString();
+        try {
+            for (SessionListener listener : sessionListenerList) {
+                listener.endSession(message);
+            }
+        } catch (Exception e) {
+            LOG.error("session listener endSession processing failed, " +
+                      "taskSummary is " + message, e);
         }
     }
 

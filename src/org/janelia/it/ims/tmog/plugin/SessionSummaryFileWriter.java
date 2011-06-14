@@ -1,13 +1,14 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.plugin;
 
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.utils.PathUtil;
 
@@ -16,6 +17,7 @@ import java.io.FileWriter;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * This class handles session events "published" by the transmogrifier tool.
@@ -89,35 +91,36 @@ public class SessionSummaryFileWriter implements SessionListener {
         }
     }
 
+    @Override
+    public List<DataRow> startSession(List<DataRow> modelRows)
+            throws ExternalDataException, ExternalSystemException {
+        return null;  // ignored event
+    }
+
     /**
-     * Processes the specified session event.
+     * Writes the summary message to a file.
      *
-     * @param eventType type of session event.
-     * @param message   details about the event.
+     * @param  message  a message summarizing what was processed.
      *
      * @throws ExternalDataException
      *   if a recoverable data error occurs during processing.
      * @throws ExternalSystemException
      *   if a non-recoverable system error occurs during processing.
      */
-    public void processEvent(SessionListener.EventType eventType,
-                             String message)
+    @Override
+    public void endSession(String message)
             throws ExternalDataException, ExternalSystemException {
-        switch (eventType) {
-            case END:
-                File sessionFile = getSessionFile();
-                FileWriter fileWriter = null;
-                try {
-                    fileWriter = new FileWriter(sessionFile);
-                    fileWriter.write(message);
-                    closeWriter(fileWriter, sessionFile);
-                } catch (Throwable t) {
-                    closeWriter(fileWriter, sessionFile);
-                    throw new ExternalSystemException(
-                            "Failed to write session log file: " +
-                            sessionFile.getAbsolutePath(), t);
-                }
-                break;
+        File sessionFile = getSessionFile();
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(sessionFile);
+            fileWriter.write(message);
+            closeWriter(fileWriter, sessionFile);
+        } catch (Throwable t) {
+            closeWriter(fileWriter, sessionFile);
+            throw new ExternalSystemException(
+                    "Failed to write session log file: " +
+                    sessionFile.getAbsolutePath(), t);
         }
     }
 

@@ -8,12 +8,14 @@
 package org.janelia.it.ims.tmog.plugin;
 
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -121,25 +123,27 @@ public class SessionCompleteFileWriter
         return row;
     }
 
+    @Override
+    public List<DataRow> startSession(List<DataRow> modelRows)
+            throws ExternalDataException, ExternalSystemException {
+        return null;  // ignored event
+    }
+
     /**
-     * For session end events, writes an empty file in each directory
+     * Writes an empty file in each directory
      * where successful renamed files were created.
      *
-     * @param eventType type of session event.
-     * @param message   details about the event.
+     * @param  message  a message summarizing what was processed.
      *
      * @throws ExternalDataException
      *   if a recoverable data error occurs during processing.
      * @throws ExternalSystemException
      *   if a non-recoverable system error occurs during processing.
      */
-    public void processEvent(SessionListener.EventType eventType,
-                             String message)
+    @Override
+    public void endSession(String message)
             throws ExternalDataException, ExternalSystemException {
-        switch (eventType) {
-            case END:
                 createCompletionFilesForCurrentThread();
-        }
     }
 
     private void createCompletionFilesForCurrentThread()

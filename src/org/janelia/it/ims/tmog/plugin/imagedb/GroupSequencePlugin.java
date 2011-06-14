@@ -9,16 +9,16 @@ package org.janelia.it.ims.tmog.plugin.imagedb;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
+import org.janelia.it.ims.tmog.field.DataField;
+import org.janelia.it.ims.tmog.field.PluginDataModel;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
-import org.janelia.it.ims.tmog.plugin.PluginDataRow;
-import org.janelia.it.ims.tmog.plugin.PropertyTokenList;
-import org.janelia.it.ims.tmog.plugin.RowListener;
+import org.janelia.it.ims.tmog.plugin.SessionListener;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This plug-in retrieves sequence numbers from the Image database.
@@ -29,7 +29,7 @@ import java.util.Map;
  * @author Eric Trautman
  */
 public class GroupSequencePlugin
-        implements RowListener {
+        implements SessionListener {
 
     /** The data access object for retrieving and updating image data. */
     private ImageDao dao;
@@ -43,21 +43,8 @@ public class GroupSequencePlugin
     /** Name of the field to be populated with the actual sequence number. */
     private String targetFieldName;
 
-    /** Token list for building the namespace identifier. */
-    private PropertyTokenList namespaceIdentifier;
-
-    /**
-     * Map of field values to previously generated sequence numbers.
-     * This map is defined as a thread local variable so that each
-     * concurrent task can manage its own map.
-     */
-    private ThreadLocal<Map<String, Integer>> fieldValueToSequenceLocalMap =
-            new ThreadLocal<Map<String, Integer>>() {
-                @Override
-                protected Map<String, Integer> initialValue() {
-                    return new HashMap<String, Integer>();
-                }
-            };
+    /** The group sequence namespace identifier. */
+    private String namespaceIdentifier;
 
     /**
      * Empty constructor required by
@@ -72,19 +59,16 @@ public class GroupSequencePlugin
      *
      * @param  config  the plugin configuration.
      *
-     * @throws org.janelia.it.ims.tmog.plugin.ExternalSystemException
+     * @throws ExternalSystemException
      *   if the plugin can not be initialized.
      */
+    @Override
     public void init(PluginConfiguration config) throws ExternalSystemException {
-        Map<String, String> props = config.getProperties();
         this.dbConfigurationKey = getRequiredProperty("db.config.key", config);
         this.groupFieldName = getRequiredProperty("groupFieldName", config);
         this.targetFieldName = getRequiredProperty("targetFieldName", config);
-        final String namespacePattern =
-                getRequiredProperty("namespace", config);
+        this.namespaceIdentifier = getRequiredProperty("namespace", config);
         try {
-            this.namespaceIdentifier = new PropertyTokenList(namespacePattern,
-                                                             props);
             setDao();
             dao.checkAvailability();
         } catch (ExternalSystemException e) {
@@ -95,76 +79,108 @@ public class GroupSequencePlugin
         }
     }
 
-    /**
-     * Notifies this plug-in that an event has occurred.
-     *
-     * @param  eventType  type of event.
-     * @param  row        details about the event.
-     *
-     * @return the field row for processing (with any updates from this plugin).
-     *
-     * @throws org.janelia.it.ims.tmog.plugin.ExternalDataException
-     *   if a recoverable data error occurs during processing.
-     * @throws org.janelia.it.ims.tmog.plugin.ExternalSystemException
-     *   if a non-recoverable system error occurs during processing.
-     */
-    public PluginDataRow processEvent(EventType eventType,
-                                      PluginDataRow row)
-            throws ExternalDataException, ExternalSystemException {
-        if (EventType.START_ROW.equals(eventType)) {
-            row = startingEvent(row);
-        } else if (EventType.START_LOOP.equals(eventType)) {
-            Map<String, Integer> map = fieldValueToSequenceLocalMap.get();
-            map.clear();
-        }
-        return row;
-    }
-
-    /**
-     * Processes start event.
-     *
-     * @param  row  the row information for the event.
-     *
-     * @return row information with updated rank.
-     *
-     * @throws org.janelia.it.ims.tmog.plugin.ExternalDataException
-     *   if a recoverable data error occurs during processing.
-     * @throws org.janelia.it.ims.tmog.plugin.ExternalSystemException
-     *   if a non-recoverable system error occurs during processing.
-     */
-    private PluginDataRow startingEvent(PluginDataRow row)
+    @Override
+    public List<DataRow> startSession(List<DataRow> modelRows)
             throws ExternalDataException, ExternalSystemException {
 
+        Integer groupFieldIndex = null;
+        Integer targetFieldIndex = null;
 
-        String namespace = null;
-        try {
-            final String value = row.getCoreValue(groupFieldName);
-            Map<String, Integer> map = fieldValueToSequenceLocalMap.get();
-            Integer seqNumber = map.get(value);
-            if (seqNumber == null) {
-                final List<String> namespaceList =
-                        namespaceIdentifier.deriveValues(
-                                row.getDisplayNameToFieldMap(),
-                                false);
-                namespace = namespaceList.get(0);
-                seqNumber = dao.getNextSequenceNumber(namespace);
-                map.put(value, seqNumber);
-                if (LOG.isInfoEnabled()) {
-                    LOG.info("Retrieved sequence number " + seqNumber +
-                             " for " + namespace + " and value '" +
-                             value +"'.");
+        if (modelRows.size() > 0) {
+            final DataRow firstRow = modelRows.get(0);
+            final int fieldCount = firstRow.getFieldCount();
+            DataField field;
+            String displayName;
+            for (int i = 0; i < fieldCount; i++) {
+                field = firstRow.getField(i);
+                displayName = field.getDisplayName();
+                if (groupFieldName.equals(displayName)) {
+                    groupFieldIndex = i;
+                } else if (targetFieldName.equals(displayName)) {
+                    targetFieldIndex = i;
                 }
             }
 
-            row.setPluginDataValue(targetFieldName, seqNumber);
-
-        } catch (ExternalSystemException e) {
-            throw new ExternalSystemException(
-                    "Failed to retrieve sequence number for " +
-                    namespace + ".  Detailed data is: " + row, e);
+            if (targetFieldIndex != null) {
+                field = firstRow.getField(targetFieldIndex);
+                if (! (field instanceof PluginDataModel)) {
+                    throw new ExternalDataException(
+                            "Target field '" + targetFieldName +
+                            "' is not configured as a pluginData element.  " +
+                            "Please correct your data fields configuration.");
+                }
+            }
         }
 
-        return row;
+        if (groupFieldIndex == null) {
+            throw new ExternalDataException(
+                    "Group field '" + groupFieldName +
+                    "' is missing from rows.  Please correct the " +
+                    "Group Sequence Plugin configuration.");
+        }
+
+        if (targetFieldIndex == null) {
+            throw new ExternalDataException(
+                    "Target field '" + targetFieldName +
+                    "' is missing from rows.  Please correct the " +
+                    "Group Sequence Plugin configuration.");
+        }
+
+        retrieveAndSetSequenceNumbers(modelRows,
+                                      groupFieldIndex,
+                                      targetFieldIndex);
+
+        return modelRows;
+    }
+
+    @Override
+    public void endSession(String message)
+            throws ExternalDataException, ExternalSystemException {
+        // ignore this event
+    }
+
+    private void retrieveAndSetSequenceNumbers(List<DataRow> modelRows,
+                                               Integer groupFieldIndex,
+                                               Integer targetFieldIndex)
+            throws ExternalSystemException {
+        HashMap<String, Integer> sequenceNameToNumberMap =
+                new HashMap<String, Integer>();
+
+        DataField groupNameField;
+        PluginDataModel targetField;
+        String priorTargetFieldValue;
+        String name;
+        Integer number;
+        for (DataRow row : modelRows) {
+
+            groupNameField = row.getField(groupFieldIndex);
+            name = groupNameField.getCoreValue();
+            targetField = (PluginDataModel) row.getField(targetFieldIndex);
+            priorTargetFieldValue = targetField.getCoreValue();
+
+            if (priorTargetFieldValue.length() > 0) {
+
+                LOG.info("keeping previous sequence number " +
+                         priorTargetFieldValue);
+
+            } else if ((name != null) && (name.length() > 0)) {
+
+                number = sequenceNameToNumberMap.get(name);
+
+                if (number == null) {
+                    number = dao.getNextSequenceNumber(namespaceIdentifier);
+                    sequenceNameToNumberMap.put(name, number);
+                    if (LOG.isInfoEnabled()) {
+                        LOG.info("retrieved sequence number " + number +
+                                 " for '" + namespaceIdentifier +
+                                 "' namespace and '" + name + "' group");
+                    }
+                }
+
+                targetField.setValue(number);
+            }
+
+        }
     }
 
     private String getRequiredProperty(String propertyName,
@@ -196,6 +212,6 @@ public class GroupSequencePlugin
     private static final Log LOG = LogFactory.getLog(GroupSequencePlugin.class);
 
     private static final String INIT_FAILURE_MSG =
-            "Failed to initialize Group Sequence Number plug-in.  ";
+            "Failed to initialize the Group Sequence Plugin.  ";
 
 }
