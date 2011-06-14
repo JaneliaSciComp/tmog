@@ -37,7 +37,7 @@
                 <property name="db.config.key" value="sage" />
                 <property name="groupFieldName" value="Tile Group" />
                 <property name="targetFieldName" value="tile_group" />
-                <property name="namespace" value="urn:lsid:janelia.org:fly_light:tile_group" />
+                <property name="namespace" value="urn:lsid:janelia.org:flylight:tile_group" />
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin" >
@@ -47,6 +47,7 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:flylight"/>
+                <property name="family" value="$STATIC:flylight_split"/>
                 <property name="line" value="GMR_${Activation Plate}${Activation Well}_${Activation Vector ID}_${Activation Landing Site}+GMR_${Binding Plate}${Binding Well}_${Binding Vector ID}_${Binding Landing Site}"/>
                 <property name="activation_vial" value="Activation Vial"/>
                 <property name="binding_vial" value="Binding Vial"/>
@@ -56,7 +57,6 @@
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
                 <property name="area" value="Area"/>
-                <property name="family" value="family"/>
             </rowListener>
 
         </plugins>
@@ -158,8 +158,6 @@
                 <validValue value="Brain"/>
                 <validValue value="Ventral Nerve Cord"/>
             </validValueList>
-
-            <static name="family" value="flylight_split" markedForTask="false"/>
         </dataFields>
 
     </project>
@@ -196,7 +194,7 @@
                 <property name="db.config.key" value="sage" />
                 <property name="groupFieldName" value="Tile Group" />
                 <property name="targetFieldName" value="tile_group" />
-                <property name="namespace" value="urn:lsid:janelia.org:fly_light:tile_group" />
+                <property name="namespace" value="urn:lsid:janelia.org:flylight:tile_group" />
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin" >
@@ -206,6 +204,7 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:flylight"/>
+                <property name="family" value="$STATIC:flylight_double"/>
                 <property name="line" value="GMR_${GAL4 Plate}${GAL4 Well}_${GAL4 Vector ID}_${GAL4 Landing Site}+GMR_${LexA Plate}${LexA Well}_${LexA Vector ID}_${LexA Landing Site}"/>
                 <property name="gal4_vial" value="GAL4 Vial"/>
                 <property name="lexa_vial" value="LexA Vial"/>
@@ -215,7 +214,6 @@
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
                 <property name="area" value="Area"/>
-                <property name="family" value="family"/>
             </rowListener>
 
         </plugins>
@@ -335,8 +333,6 @@
                 <validValue value="Brain"/>
                 <validValue value="Ventral Nerve Cord"/>
             </validValueList>
-
-            <static name="family" value="flylight_double" markedForTask="false"/>
         </dataFields>
 
     </project>
@@ -366,7 +362,7 @@
                 <property name="db.config.key" value="sage" />
                 <property name="groupFieldName" value="Tile Group" />
                 <property name="targetFieldName" value="tile_group" />
-                <property name="namespace" value="urn:lsid:janelia.org:fly_light:tile_group" />
+                <property name="namespace" value="urn:lsid:janelia.org:flylight:tile_group" />
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin" >
@@ -376,6 +372,7 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:flylight"/>
+                <property name="family" value="$STATIC:flylight_flip"/>
                 <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
                 <property name="line_vial" value="Vial"/>
                 <property name="effector" value="Effector"/>
@@ -385,7 +382,6 @@
                 <property name="age" value="Age"/>
                 <property name="area" value="Area"/>
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
-                <property name="family" value="family"/>
             </rowListener>
 
         </plugins>
@@ -463,8 +459,6 @@
 
             <decimal displayName="Heat Shock Minutes" required="true"
                      minimumValue="0" markedForTask="false" />
-
-            <static name="family" value="flylight_flip" markedForTask="false"/>
         </dataFields>
 
     </project>
