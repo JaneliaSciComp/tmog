@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.5.0" frameSizePercentage="95"/>
+    <global minimumVersion="2.6.0" frameSizePercentage="95"/>
 
     <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="true">
 
@@ -31,8 +31,21 @@
             </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
-                <property name="family" value="family"/>
+                <property name="family" value="$STATIC:rubin-chacrm"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
+                <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
+                <property name="created_by" value="Imager"/>
+                <property name="renamed_by" value="Renamer"/>
+                <property name="class" value="Class"/>
+                <property name="ihc_batch" value="Batch Name"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
+            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="lab" value="$STATIC:rubin"/>
+                <property name="family" value="$STATIC:rubin_chacrm"/>
+                <property name="effector" value="UAS Reporter"/>
                 <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
                 <property name="created_by" value="Imager"/>
                 <property name="renamed_by" value="Renamer"/>
@@ -191,7 +204,6 @@
                 <validValue displayName="Screening" value="Screening" default="true"/>
                 <validValue displayName="Rework" value="Rework"/>
             </validValueList>
-            <static name="family" value="rubin-chacrm" markedForTask="false"/>
         </dataFields>
 
     </project>
@@ -212,8 +224,24 @@
             </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
-                <property name="family" value="family"/>
+                <property name="family" value="$STATIC:rubin-chacrm"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
+                <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
+                <property name="created_by" value="Imager"/>
+                <property name="renamed_by" value="Renamer"/>
+                <property name="class" value="Class"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
+                <property name="dissector" value="Dissector"/>
+                <property name="dissection_date" value="${Dissection Date (yyyy-mm-dd)} 00:00:00"/>
+                <property name="mounter" value="Mounter"/>
+                <property name="mount_date" value="${Mount Date (yyyy-mm-dd)} 00:00:00"/>
+            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="lab" value="$STATIC:rubin"/>
+                <property name="family" value="$STATIC:rubin_chacrm"/>
+                <property name="effector" value="UAS Reporter"/>
                 <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
                 <property name="created_by" value="Imager"/>
                 <property name="renamed_by" value="Renamer"/>
@@ -396,7 +424,6 @@
                   required="false"
                   datePattern="yyyy-MM-dd" 
                   markedForTask="false"/>
-            <static name="family" value="rubin-chacrm" markedForTask="false"/>
         </dataFields>
 
     </project>
@@ -410,6 +437,15 @@
             </rowValidator>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="dissector" value="Dissector"/>
+                <property name="dissection_date" value="${Dissection Date (yyyy-mm-dd)} 00:00:00"/>
+                <property name="mounter" value="Mounter"/>
+                <property name="mount_date" value="${Mount Date (yyyy-mm-dd)} 00:00:00"/>
+            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="lab" value="$STATIC:rubin"/>
                 <property name="exclude.host.name" value="true"/>
                 <property name="dissector" value="Dissector"/>
                 <property name="dissection_date" value="${Dissection Date (yyyy-mm-dd)} 00:00:00"/>
@@ -461,7 +497,6 @@
                   required="false"
                   datePattern="yyyy-MM-dd"
                   markedForTask="false"/>
-            <static name="family" value="rubin-chacrm" markedForTask="false"/>
         </dataFields>
 
     </project>
@@ -480,15 +515,34 @@
             <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
                 <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
             </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.GroupSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="groupFieldName" value="Tile Group" />
+                <property name="targetFieldName" value="tile_group" />
+                <property name="namespace" value="urn:lsid:janelia.org:rubin_chacrm:tile_group" />
+            </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
-                <property name="family" value="family"/>
+                <property name="family" value="$STATIC:rubin-chacrm"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
                 <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
                 <property name="created_by" value="Imager"/>
                 <property name="renamed_by" value="Renamer"/>
                 <property name="tile" value="Tile"/>
-                <property name="tile_group" value="Tile Group"/>
+                <property name="tile_group" value="tile_group"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
+            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="lab" value="$STATIC:rubin"/>
+                <property name="family" value="$STATIC:rubin_chacrm"/>
+                <property name="effector" value="UAS Reporter"/>
+                <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
+                <property name="created_by" value="Imager"/>
+                <property name="renamed_by" value="Renamer"/>
+                <property name="tile" value="Tile"/>
+                <property name="tile_group" value="tile_group"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="tissue_orientation" value="Tissue Orientation"/>
             </rowListener>
@@ -581,8 +635,10 @@
                 <validValue displayName="05: Right Optic Lobe" value="Right Optic Lobe"/>
                 <validValue displayName="06: Central Brain" value="Central Brain"/>
             </validValueList>
-            <number displayName="Tile Group" required="true"
-                    markedForTask="false" minimumValue="0"/>
+            <text displayName="Tile Group" pattern="[A-Za-z]"
+                  markedForTask="false">
+            </text>
+            <pluginData displayName="tile_group" markedForTask="false"/>
             <validValueList displayName="Tissue Mounting Protocol" required="true"
                             markedForTask="false">
                 <validValue value="Glycerol-Based Mounting" default="true"/>
@@ -628,7 +684,6 @@
                 <validValue value="Phuson Hulamm"/>
                 <validValue value="Teri Ngo"/>
             </validValueList>
-            <static name="family" value="rubin-chacrm" markedForTask="false"/>
         </dataFields>
 
     </project>
@@ -647,8 +702,21 @@
             </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
-                <property name="family" value="family"/>
+                <property name="family" value="$STATIC:rubin-chacrm"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
+                <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
+                <property name="created_by" value="Imager"/>
+                <property name="renamed_by" value="Renamer"/>
+                <property name="class" value="Class"/>
+                <property name="ihc_batch" value="Batch Name"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
+            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="lab" value="$STATIC:rubin"/>
+                <property name="family" value="$STATIC:rubin_chacrm"/>
+                <property name="effector" value="UAS Reporter"/>
                 <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
                 <property name="created_by" value="Imager"/>
                 <property name="renamed_by" value="Renamer"/>
@@ -838,7 +906,6 @@
                 </pluginDefault>
             </text>
 
-            <static name="family" value="rubin-chacrm" markedForTask="false"/>
         </dataFields>
 
     </project>
