@@ -157,6 +157,7 @@
         <xs:attribute name="copyable" type="xs:boolean"/>
         <xs:attribute name="markedForTask" type="xs:boolean"/>
         <xs:attribute name="sharedForAllSessionFiles" type="xs:boolean"/>
+        <xs:attribute name="convertToUpperCase" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="dateType">
