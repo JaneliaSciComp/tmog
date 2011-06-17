@@ -15,16 +15,16 @@
         <plugins>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_${Activation Plate}${Activation Well}_${Activation Vector ID}_${Activation Landing Site}.janelia-sage"/>
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/${Activation Line}.janelia-sage"/>
                 <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
-                <property name="errorMessage" value="There is no Rubin lab line named 'GMR_${Activation Plate}${Activation Well}_${Activation Vector ID}_${Activation Landing Site}' in the SAGE database."/>
+                <property name="errorMessage" value="There is no Rubin lab line named '${Activation Line}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_${Binding Plate}${Binding Well}_${Binding Vector ID}_${Binding Landing Site}.janelia-sage"/>
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/${Binding Line}.janelia-sage"/>
                 <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
-                <property name="errorMessage" value="There is no Rubin lab line named 'GMR_${Binding Plate}${Binding Well}_${Binding Vector ID}_${Binding Landing Site}' in the SAGE database."/>
+                <property name="errorMessage" value="There is no Rubin lab line named '${Binding Line}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
@@ -33,92 +33,39 @@
                           value="The source file %s must be writable to allow meta data insertion before transfer."/>
             </rowValidator>
 
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.imagedb.GroupSequencePlugin">
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
                 <property name="db.config.key" value="sage" />
-                <property name="groupFieldName" value="Tile Group" />
-                <property name="targetFieldName" value="tile_group" />
-                <property name="namespace" value="urn:lsid:janelia.org:flylight:tile_group" />
-            </sessionListener>
+                <property name="image_number" value="urn:lsid:janelia.org:flylight_split:image_number" />
+            </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin" >
-                <property name="line" value="GMR_${Activation Plate}${Activation Well}_${Activation Vector ID}_${Activation Landing Site}+GMR_${Binding Plate}${Binding Well}_${Binding Vector ID}_${Binding Landing Site}"/>
+                <property name="line" value="${Activation Line}+${Binding Line}"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:flylight"/>
                 <property name="family" value="$STATIC:flylight_split"/>
-                <property name="line" value="GMR_${Activation Plate}${Activation Well}_${Activation Vector ID}_${Activation Landing Site}+GMR_${Binding Plate}${Binding Well}_${Binding Vector ID}_${Binding Landing Site}"/>
+                <property name="line" value="${Activation Line}+${Binding Line}"/>
                 <property name="activation_vial" value="Activation Vial"/>
                 <property name="binding_vial" value="Binding Vial"/>
                 <property name="effector" value="Effector"/>
-                <property name="slide_code" value="Slide Code"/>
-                <property name="tile_group" value="tile_group"/>
+                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Position}"/>
+                <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
-                <property name="area" value="Area"/>
+                <property name="area" value="$STATIC:Brain"/>
+                <property name="lamina_percentage" value="Lamina"/>
             </rowListener>
 
         </plugins>
 
         <dataFields>
 
-            <separator value="FLSP+GMR_"/>
-
-            <number displayName="Activation Plate" required="true"
-                    minimumValue="1" maximumValue="999"/>
-            <well displayName="Activation Well" required="true" formFactor="96"/>
+            <separator value="FLSP_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS" />
             <separator value="_"/>
-            <validValueList displayName="Activation Vector ID" required="true">
-                <validValue displayName="BB: pBPp65ADZpUw –SplitAD" value="BB"/>
-                <validValue displayName="BC: pBPp65ADZpw –SplitAD" value="BC"/>
-                <validValue displayName="BD: pBPGADflZpUw" value="BD"/>
-                <validValue displayName="BE: pBPGADflZpw" value="BE"/>
-                <validValue displayName="BF: pBPGADfl_LL_ZpUw" value="BF"/>
-                <validValue displayName="BG: pBPGADfl_LL_Zpw" value="BG"/>
-                <validValue displayName="BH: pBPGADfl_VYLL_ZpUw" value="BH"/>
-                <validValue displayName="BI: pBPGADfl_VYLL_Zpw" value="BI"/>
-                <validValue displayName="BJ: pBPp65ADZpUv–vermillion " value="BJ"/>
-                <validValue displayName="BK: pBPp65ADZpv–vermillion" value="BK"/>
-            </validValueList>
-            <separator value="_"/>
-            <cvTermList displayName="Activation Landing Site" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/rubin_crm_landing_site"
-                        displayNamePrefixedForValues="true">
-                <staticDefault value="01"/>
-            </cvTermList>
-
-            <text displayName="Activation Vial" pattern="^[A-Z]$"
-                  markedForTask="false">
-            </text>
-
-            <separator value="+GMR_"/>
-
-            <number displayName="Binding Plate" required="true"
-                    minimumValue="1" maximumValue="999"/>
-            <well displayName="Binding Well" required="true" formFactor="96"/>
-            <separator value="_"/>
-            <validValueList displayName="Binding Vector ID" required="true">
-                <validValue displayName="AV: pBPZpGdbdUw-SplitDBD" value="AV"/>
-                <validValue displayName="AW: pBPZpGdbdw-SplitDBD" value="AW"/>
-                <validValue displayName="AX: pBPZp_LL_GdbdUw" value="AX"/>
-                <validValue displayName="AY: pBPZp_LL_Gdbdw" value="AY"/>
-                <validValue displayName="AZ: pBPZp_LL_AST_GdbdUw" value="AZ"/>
-                <validValue displayName="BA: pBPZp_LL_AST_Gdbdw" value="BA"/>
-            </validValueList>
-            <separator value="_"/>
-            <cvTermList displayName="Binding Landing Site" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/rubin_crm_landing_site"
-                        displayNamePrefixedForValues="true">
-                <staticDefault value="01"/>
-            </cvTermList>
-
-            <text displayName="Binding Vial" pattern="^[A-Z]$"
-                  markedForTask="false">
-            </text>
-
-            <separator value="+"/>
-            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+            <pluginData displayName="image_number"/>
             <separator value=".lsm"/>
 
             <!--
@@ -126,20 +73,50 @@
              included as components of the file name (markedForTask="false").
              -->
 
+            <text displayName="Activation Line" markedForTask="false">
+            </text>
+
+            <text displayName="Activation Vial" pattern="^[A-Z]$"
+                  markedForTask="false" convertToUpperCase="true">
+            </text>
+
+            <text displayName="Binding Line" markedForTask="false">
+            </text>
+
+            <text displayName="Binding Vial" pattern="^[A-Z]$"
+                  markedForTask="false" convertToUpperCase="true">
+            </text>
+
             <cvTermList displayName="Effector" required="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
             </cvTermList>
 
-            <text displayName="Slide Code" pattern="\d+[A-Z]\d+"
-                  markedForTask="false">
+            <date displayName="Mount Date" required="true"
+                  datePattern="yyyyMMdd" markedForTask="false">
+            </date>
+
+            <number displayName="Slide Number" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="10" />
+
+            <text displayName="Slide Position" pattern="[A-Z]\d+"
+                  markedForTask="false" convertToUpperCase="true">
             </text>
 
-            <text displayName="Tile Group" pattern="[A-Za-z]"
-                  markedForTask="false">
-            </text>
-            <pluginData displayName="tile_group" markedForTask="false"/>
+            <validValueList displayName="Tile" required="true"
+                            markedForTask="false">
+                <validValue displayName="01: Left Optic Lobe" value="Left Optic Lobe" />
+                <validValue displayName="02: Ventral Brain" value="Ventral Brain"/>
+                <validValue displayName="03: Left Dorsal Brain" value="Left Dorsal Brain"/>
+                <validValue displayName="04: Right Dorsal Brain" value="Right Dorsal Brain"/>
+                <validValue displayName="05: Right Optic Lobe" value="Right Optic Lobe"/>
+                <validValue displayName="06: Central Brain" value="Central Brain"/>
+                <validValue displayName="07: Left Central Brain" value="Left Central Brain"/>
+                <validValue displayName="08: Right Central Brain" value="Right Central Brain"/>
+                <validValue displayName="09: Dorsal Brain" value="Dorsal Brain"/>
+            </validValueList>
 
             <validValueList displayName="Gender" required="true"
                             markedForTask="false">
@@ -152,11 +129,10 @@
                         displayNamePrefixedForValues="true"
                         markedForTask="false">
             </cvTermList>
-            <validValueList displayName="Area" required="true"
+            <validValueList displayName="Lamina" required="true"
                             markedForTask="false">
-                <validValue value="Salivary Gland"/>
-                <validValue value="Brain"/>
-                <validValue value="Ventral Nerve Cord"/>
+                <validValue displayName="Yes" value="100"/>
+                <validValue displayName="No" value="" default="true"/>
             </validValueList>
         </dataFields>
 
@@ -172,16 +148,16 @@
         <plugins>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_${GAL4 Plate}${GAL4 Well}_${GAL4 Vector ID}_${GAL4 Landing Site}.janelia-sage"/>
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/${GAL4 Line}.janelia-sage"/>
                 <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
-                <property name="errorMessage" value="There is no Rubin lab line named 'GMR_${GAL4 Plate}${GAL4 Well}_${GAL4 Vector ID}_${GAL4 Landing Site}' in the SAGE database."/>
+                <property name="errorMessage" value="There is no Rubin lab line named '${GAL4 Line}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_${LexA Plate}${LexA Well}_${LexA Vector ID}_${LexA Landing Site}.janelia-sage"/>
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/${LexA Line}.janelia-sage"/>
                 <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
-                <property name="errorMessage" value="There is no Rubin lab line named 'GMR_${LexA Plate}${LexA Well}_${LexA Vector ID}_${LexA Landing Site}' in the SAGE database."/>
+                <property name="errorMessage" value="There is no Rubin lab line named '${LexA Line}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
@@ -190,110 +166,39 @@
                           value="The source file %s must be writable to allow meta data insertion before transfer."/>
             </rowValidator>
 
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.imagedb.GroupSequencePlugin">
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
                 <property name="db.config.key" value="sage" />
-                <property name="groupFieldName" value="Tile Group" />
-                <property name="targetFieldName" value="tile_group" />
-                <property name="namespace" value="urn:lsid:janelia.org:flylight:tile_group" />
-            </sessionListener>
+                <property name="image_number" value="urn:lsid:janelia.org:flylight_double:image_number" />
+            </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin" >
-                <property name="line" value="GMR_${GAL4 Plate}${GAL4 Well}_${GAL4 Vector ID}_${GAL4 Landing Site}+GMR_${LexA Plate}${LexA Well}_${LexA Vector ID}_${LexA Landing Site}"/>
+                <property name="line" value="${GAL4 Line}+${LexA Line}"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:flylight"/>
                 <property name="family" value="$STATIC:flylight_double"/>
-                <property name="line" value="GMR_${GAL4 Plate}${GAL4 Well}_${GAL4 Vector ID}_${GAL4 Landing Site}+GMR_${LexA Plate}${LexA Well}_${LexA Vector ID}_${LexA Landing Site}"/>
+                <property name="line" value="${GAL4 Line}+${LexA Line}"/>
                 <property name="gal4_vial" value="GAL4 Vial"/>
                 <property name="lexa_vial" value="LexA Vial"/>
                 <property name="effector" value="Effector"/>
-                <property name="slide_code" value="Slide Code"/>
-                <property name="tile_group" value="tile_group"/>
+                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Position}"/>
+                <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
-                <property name="area" value="Area"/>
+                <property name="area" value="$STATIC:Brain"/>
+                <property name="lamina_percentage" value="Lamina"/>
             </rowListener>
 
         </plugins>
 
         <dataFields>
 
-            <separator value="FLDS+GMR_"/>
-
-            <number displayName="GAL4 Plate" required="true"
-                    minimumValue="1" maximumValue="999"/>
-            <well displayName="GAL4 Well" required="true" formFactor="96"/>
+            <separator value="FLDS_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS" />
             <separator value="_"/>
-            <validValueList displayName="GAL4 Vector ID" required="true">
-                <validValue displayName="AA: pBPGToyw" value="AA"/>
-                <validValue displayName="AB: pBPGEarw" value="AB"/>
-                <validValue displayName="AC: pBPGDacw" value="AC"/>
-                <validValue displayName="AD: pBPGw" value="AD"/>
-                <validValue displayName="AE: pBPGUw" value="AE"/>
-                <validValue displayName="AF: pBPGUw5-SV40" value="AF"/>
-                <validValue displayName="AG: pBPGw5-SV40" value="AG"/>
-                <validValue displayName="AH: pBPOptGAL4Uw" value="AH"/>
-                <validValue displayName="AI: pBPOptGAL4w" value="AI"/>
-                <validValue displayName="AJ: pBPOptGAL4dUw-deletion" value="AJ"/>
-                <validValue displayName="AK: pBPOptGAL4dw-deletion" value="AK"/>
-                <validValue displayName="AL: pBPGAL4::VP16Uw" value="AL"/>
-                <validValue displayName="AM: pBPGAL4::VP16w" value="AM"/>
-                <validValue displayName="AN: pBPGAL4::p65Uw" value="AN"/>
-                <validValue displayName="AO: pBPGAL4::p65w" value="AO"/>
-                <validValue displayName="AP: pBPGeneSwitchUw" value="AP"/>
-                <validValue displayName="AQ: pBPGeneSwitchw" value="AQ"/>
-                <validValue displayName="AR: pBPGAL4hERUw" value="AR"/>
-                <validValue displayName="AS: pBPGAL4hERw" value="AS"/>
-                <validValue displayName="AT: pBPGUv-vermillion" value="AT"/>
-                <validValue displayName="AU: pBPGv-vermillion" value="AU"/>
-            </validValueList>
-            <separator value="_"/>
-            <cvTermList displayName="GAL4 Landing Site" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/rubin_crm_landing_site"
-                        displayNamePrefixedForValues="true">
-                <staticDefault value="01"/>
-            </cvTermList>
-
-            <text displayName="GAL4 Vial" pattern="^[A-Z]$"
-                  markedForTask="false">
-            </text>
-
-            <separator value="+GMR_"/>
-
-            <number displayName="LexA Plate" required="true"
-                    minimumValue="1" maximumValue="999"/>
-            <well displayName="LexA Well" required="true" formFactor="96"/>
-            <separator value="_"/>
-            <validValueList displayName="LexA Vector ID" required="true">
-                <validValue displayName="LA: pBPLexA::GADdUw-deletion" value="LA"/>
-                <validValue displayName="LB: pBPLexA::GADdw-deletion" value="LB"/>
-                <validValue displayName="LC: pBPLexA::GADflUw" value="LC"/>
-                <validValue displayName="LD: pBPLexA::GADflw" value="LD"/>
-                <validValue displayName="LE: pBPnlsLexA::GADflUw" value="LE"/>
-                <validValue displayName="LF: pBPnlsLexA::GADflw" value="LF"/>
-                <validValue displayName="LG: pBPwtLexA::VP16Uw" value="LG"/>
-                <validValue displayName="LH: pBPLexA::VP16Uw" value="LH"/>
-                <validValue displayName="LI: pBPLexA::VP16w" value="LI"/>
-                <validValue displayName="LJ: pBPLexA::p65Uw" value="LJ"/>
-                <validValue displayName="LK: pBPLexA::p65w" value="LK"/>
-                <validValue displayName="LL: pBPnlsLexA::p65Uw" value="LL"/>
-                <validValue displayName="LM: pBPnlsLexA::p65w" value="LM"/>
-            </validValueList>
-            <separator value="_"/>
-            <cvTermList displayName="LexA Landing Site" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/rubin_crm_landing_site"
-                        displayNamePrefixedForValues="true">
-                <staticDefault value="01"/>
-            </cvTermList>
-
-            <text displayName="LexA Vial" pattern="^[A-Z]$"
-                  markedForTask="false">
-            </text>
-
-            <separator value="+"/>
-            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+            <pluginData displayName="image_number"/>
             <separator value=".lsm"/>
 
             <!--
@@ -301,20 +206,50 @@
              included as components of the file name (markedForTask="false").
              -->
 
+            <text displayName="GAL4 Line" markedForTask="false">
+            </text>
+
+            <text displayName="GAL4 Vial" pattern="^[A-Z]$"
+                  markedForTask="false" convertToUpperCase="true">
+            </text>
+
+            <text displayName="LexA Line" markedForTask="false">
+            </text>
+
+            <text displayName="LexA Vial" pattern="^[A-Z]$"
+                  markedForTask="false" convertToUpperCase="true">
+            </text>
+
             <cvTermList displayName="Effector" required="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
             </cvTermList>
 
-            <text displayName="Slide Code" pattern="\d+[A-Z]\d+"
-                  markedForTask="false">
+            <date displayName="Mount Date" required="true"
+                  datePattern="yyyyMMdd" markedForTask="false">
+            </date>
+
+            <number displayName="Slide Number" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="10" />
+
+            <text displayName="Slide Position" pattern="[A-Z]\d+"
+                  markedForTask="false" convertToUpperCase="true">
             </text>
 
-            <text displayName="Tile Group" pattern="[A-Za-z]"
-                  markedForTask="false">
-            </text>
-            <pluginData displayName="tile_group" markedForTask="false"/>
+            <validValueList displayName="Tile" required="true"
+                            markedForTask="false">
+                <validValue displayName="01: Left Optic Lobe" value="Left Optic Lobe" />
+                <validValue displayName="02: Ventral Brain" value="Ventral Brain"/>
+                <validValue displayName="03: Left Dorsal Brain" value="Left Dorsal Brain"/>
+                <validValue displayName="04: Right Dorsal Brain" value="Right Dorsal Brain"/>
+                <validValue displayName="05: Right Optic Lobe" value="Right Optic Lobe"/>
+                <validValue displayName="06: Central Brain" value="Central Brain"/>
+                <validValue displayName="07: Left Central Brain" value="Left Central Brain"/>
+                <validValue displayName="08: Right Central Brain" value="Right Central Brain"/>
+                <validValue displayName="09: Dorsal Brain" value="Dorsal Brain"/>
+            </validValueList>
 
             <validValueList displayName="Gender" required="true"
                             markedForTask="false">
@@ -327,11 +262,10 @@
                         displayNamePrefixedForValues="true"
                         markedForTask="false">
             </cvTermList>
-            <validValueList displayName="Area" required="true"
+            <validValueList displayName="Lamina" required="true"
                             markedForTask="false">
-                <validValue value="Salivary Gland"/>
-                <validValue value="Brain"/>
-                <validValue value="Ventral Nerve Cord"/>
+                <validValue displayName="Yes" value="100"/>
+                <validValue displayName="No" value="" default="true"/>
             </validValueList>
         </dataFields>
 
@@ -347,9 +281,9 @@
         <plugins>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_${Plate}${Well}_${Vector ID}_${Landing Site}.janelia-sage"/>
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/${GAL4 Line}.janelia-sage"/>
                 <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
-                <property name="errorMessage" value="There is no Rubin lab line named 'GMR_${Plate}${Well}_${Vector ID}_${Landing Site}' in the SAGE database."/>
+                <property name="errorMessage" value="There is no Rubin lab line named '${GAL4 Line}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
@@ -358,29 +292,28 @@
                           value="The source file %s must be writable to allow meta data insertion before transfer."/>
             </rowValidator>
 
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.imagedb.GroupSequencePlugin">
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
                 <property name="db.config.key" value="sage" />
-                <property name="groupFieldName" value="Tile Group" />
-                <property name="targetFieldName" value="tile_group" />
-                <property name="namespace" value="urn:lsid:janelia.org:flylight:tile_group" />
-            </sessionListener>
+                <property name="image_number" value="urn:lsid:janelia.org:flylight_flip:image_number" />
+            </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin" >
-                <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
+                <property name="line" value="${GAL4 Line}"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:flylight"/>
                 <property name="family" value="$STATIC:flylight_flip"/>
-                <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
-                <property name="line_vial" value="Vial"/>
+                <property name="line" value="GAL4 Line"/>
+                <property name="gal4_vial" value="GAL4 Vial"/>
                 <property name="effector" value="Effector"/>
-                <property name="slide_code" value="Slide Code"/>
-                <property name="tile_group" value="tile_group"/>
+                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Position}"/>
+                <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
-                <property name="area" value="Area"/>
+                <property name="area" value="$STATIC:Brain"/>
+                <property name="lamina_percentage" value="Lamina"/>
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
             </rowListener>
 
@@ -388,35 +321,10 @@
 
         <dataFields>
 
-            <separator value="FLFL+GMR_"/>
-
-            <number displayName="Plate" required="true"
-                    minimumValue="1" maximumValue="999"/>
-            <well displayName="Well" required="true" formFactor="96"/>
+            <separator value="FLFL_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS" />
             <separator value="_"/>
-            <validValueList displayName="Vector ID" required="true">
-                <validValue displayName="RA: pBPFlpPESTUw" value="RA"/>
-                <validValue displayName="RB: pBPFlpPESTw" value="RB"/>
-                <validValue displayName="RC: pBPwtFlpG->DUw" value="RC"/>
-                <validValue displayName="RD: pBPwtFlpG->Dw" value="RD"/>
-                <validValue displayName="RE: pBPFlpG->DUw" value="RE"/>
-                <validValue displayName="RF: pBPFlpG->Dw" value="RF"/>
-                <validValue displayName="RG: pBPivsFlpG->D-WPREUw" value="RG"/>
-                <validValue displayName="RH: pBPivsFlpG->D-WPREw" value="RH"/>
-            </validValueList>
-            <separator value="_"/>
-            <cvTermList displayName="Landing Site" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/rubin_crm_landing_site"
-                        displayNamePrefixedForValues="true">
-                <staticDefault value="01"/>
-            </cvTermList>
-
-            <text displayName="Vial" pattern="^[A-Z]$"
-                  markedForTask="false">
-            </text>
-
-            <separator value="+"/>
-            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+            <pluginData displayName="image_number"/>
             <separator value=".lsm"/>
 
             <!--
@@ -424,20 +332,43 @@
              included as components of the file name (markedForTask="false").
              -->
 
+            <text displayName="GAL4 Line" markedForTask="false">
+            </text>
+
+            <text displayName="GAL4 Vial" pattern="^[A-Z]$"
+                  markedForTask="false" convertToUpperCase="true">
+            </text>
+
             <cvTermList displayName="Effector" required="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
             </cvTermList>
 
-            <text displayName="Slide Code" pattern="\d+[A-Z]\d+"
-                  markedForTask="false">
+            <date displayName="Mount Date" required="true"
+                  datePattern="yyyyMMdd" markedForTask="false">
+            </date>
+
+            <number displayName="Slide Number" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="10" />
+
+            <text displayName="Slide Position" pattern="[A-Z]\d+"
+                  markedForTask="false" convertToUpperCase="true">
             </text>
 
-            <text displayName="Tile Group" pattern="[A-Za-z]"
-                  markedForTask="false">
-            </text>
-            <pluginData displayName="tile_group" markedForTask="false"/>
+            <validValueList displayName="Tile" required="true"
+                            markedForTask="false">
+                <validValue displayName="01: Left Optic Lobe" value="Left Optic Lobe" />
+                <validValue displayName="02: Ventral Brain" value="Ventral Brain"/>
+                <validValue displayName="03: Left Dorsal Brain" value="Left Dorsal Brain"/>
+                <validValue displayName="04: Right Dorsal Brain" value="Right Dorsal Brain"/>
+                <validValue displayName="05: Right Optic Lobe" value="Right Optic Lobe"/>
+                <validValue displayName="06: Central Brain" value="Central Brain"/>
+                <validValue displayName="07: Left Central Brain" value="Left Central Brain"/>
+                <validValue displayName="08: Right Central Brain" value="Right Central Brain"/>
+                <validValue displayName="09: Dorsal Brain" value="Dorsal Brain"/>
+            </validValueList>
 
             <validValueList displayName="Gender" required="true"
                             markedForTask="false">
@@ -450,14 +381,13 @@
                         displayNamePrefixedForValues="true"
                         markedForTask="false">
             </cvTermList>
-            <validValueList displayName="Area" required="true"
+            <validValueList displayName="Lamina" required="true"
                             markedForTask="false">
-                <validValue value="Salivary Gland"/>
-                <validValue value="Brain"/>
-                <validValue value="Ventral Nerve Cord"/>
+                <validValue displayName="Yes" value="100"/>
+                <validValue displayName="No" value="" default="true"/>
             </validValueList>
 
-            <decimal displayName="Heat Shock Minutes" required="true"
+            <decimal displayName="Heat Shock Minutes" required="false"
                      minimumValue="0" markedForTask="false" />
         </dataFields>
 
