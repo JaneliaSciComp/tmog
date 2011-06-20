@@ -12,6 +12,7 @@ import loci.common.RandomAccessOutputStream;
 import loci.formats.FormatException;
 import loci.formats.tiff.IFD;
 import loci.formats.tiff.TiffConstants;
+import loci.formats.tiff.TiffIFDEntry;
 import loci.formats.tiff.TiffParser;
 import loci.formats.tiff.TiffSaver;
 import org.apache.commons.logging.Log;
@@ -197,4 +198,17 @@ public class LsmMetaDataPlugin
     /** Tag number reserved by Gene Myers for his tiff formatted files. */
     private static final int TIFF_JF_TAGGER_TAG = 36036;
 
+    public static void main(String[] args) {
+        if (args.length > 0) {
+            try {
+                final String fileName = args[0];
+                final TiffParser parser = new TiffParser(fileName);
+                final TiffIFDEntry entry =
+                        parser.getFirstIFDEntry(TIFF_JF_TAGGER_TAG);
+                System.out.println(parser.getIFDValue(entry));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
