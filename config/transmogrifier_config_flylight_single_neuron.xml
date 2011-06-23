@@ -9,7 +9,7 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/flip/originalData/confocalStacks"
+        <outputDirectory basePath="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/flip/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -131,7 +131,7 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/split/originalData/confocalStacks"
+        <outputDirectory basePath="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/split/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -264,7 +264,7 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/double/originalData/confocalStacks"
+        <outputDirectory basePath="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/double/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
