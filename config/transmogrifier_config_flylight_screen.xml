@@ -9,7 +9,7 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="\\dm10.isln.janelia.org\rubindata\confocalStacks"
+        <outputDirectory basePath="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/screen/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -27,7 +27,7 @@
                 <property name="batchColorFieldName" value="Batch Color"/>
             </rowListener>
             <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
-                <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
+                <property name="labImageSharePattern" value="[/\\]++screen[/\\]++confocalStacks[/\\]++"/>
             </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
@@ -56,7 +56,7 @@
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\GMR"/>
+                <property name="directory" value="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/tmog/summaries/screen"/>
             </sessionListener>
 
         </plugins>
@@ -212,7 +212,7 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="\\dm10.isln.janelia.org\rubindata\confocalStacks"
+        <outputDirectory basePath="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/screen/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -220,7 +220,7 @@
             <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
 
             <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
-                <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
+                <property name="labImageSharePattern" value="[/\\]++screen[/\\]++confocalStacks[/\\]++"/>
             </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
@@ -255,7 +255,7 @@
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\GMR"/>
+                <property name="directory" value="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/tmog/summaries/screen"/>
             </sessionListener>
 
         </plugins>
@@ -505,7 +505,7 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="\\dm10.isln.janelia.org\rubindata\confocalStacks"
+        <outputDirectory basePath="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/screen/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -520,7 +520,7 @@
             </sessionListener>
 
             <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
-                <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
+                <property name="labImageSharePattern" value="[/\\]++screen[/\\]++confocalStacks[/\\]++"/>
             </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
@@ -549,7 +549,7 @@
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\GMR"/>
+                <property name="directory" value="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/tmog/summaries/screen"/>
             </sessionListener>
 
         </plugins>
@@ -691,7 +691,7 @@
 
     <project name="Rubin Lab: FIX ChaCRM verified TransformantIDs (GMR_*)">
 
-        <outputDirectory basePath="\\dm10.isln.janelia.org\rubindata\confocalStacks"
+        <outputDirectory basePath="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/screen/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -699,7 +699,7 @@
             <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
 
             <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
-                <property name="labImageSharePattern" value="[/\\]++rubindata[/\\]++confocalStacks[/\\]++"/>
+                <property name="labImageSharePattern" value="[/\\]++screen[/\\]++confocalStacks[/\\]++"/>
             </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
@@ -728,7 +728,7 @@
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.isln.janelia.org\rubindata\tmog\summaries\GMR"/>
+                <property name="directory" value="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/tmog/summaries/screen"/>
             </sessionListener>
 
         </plugins>
