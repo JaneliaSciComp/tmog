@@ -40,12 +40,14 @@
                 <property name="lab" value="$STATIC:flylight"/>
                 <property name="family" value="$STATIC:flylight_flip"/>
                 <property name="line" value="GAL4 Line"/>
+                <property name="created_by" value="Imager"/>
                 <property name="gal4_vial" value="GAL4 Vial"/>
                 <property name="effector" value="Effector"/>
                 <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Row}${Slide Column}"/>
                 <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
+                <property name="days_after_eclusion" value="Days After Eclusion"/>
                 <property name="area" value="$STATIC:Brain"/>
                 <property name="lamina_percentage" value="Lamina"/>
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
@@ -106,6 +108,10 @@
                 <validValue displayName="07: Left Central Brain" value="Left Central Brain"/>
                 <validValue displayName="08: Right Central Brain" value="Right Central Brain"/>
                 <validValue displayName="09: Dorsal Brain" value="Dorsal Brain"/>
+                <validValue displayName="10: Neck" value="Neck"/>
+                <validValue displayName="11: Thorax" value="Thorax"/>
+                <validValue displayName="12: Abdomen" value="Abdomen"/>
+                <validValue displayName="13: Terminus" value="Terminus"/>
             </validValueList>
 
             <validValueList displayName="Gender" required="true"
@@ -119,6 +125,11 @@
                         displayNamePrefixedForValues="true"
                         markedForTask="false">
             </cvTermList>
+
+            <number displayName="Days After Eclusion" required="false"
+                    markedForTask="false"
+                    minimumValue="0" maximumValue="21" />
+
             <validValueList displayName="Lamina" required="true"
                             markedForTask="false">
                 <validValue displayName="Yes" value="100"/>
@@ -127,6 +138,12 @@
 
             <decimal displayName="Heat Shock Minutes" required="false"
                      minimumValue="0" markedForTask="false" />
+
+            <validValueList displayName="Imager" required="true"
+                            markedForTask="false">
+                <validValue value="Jennifer Jeter"/>
+                <validValue value="Nirmala Iyer"/>
+            </validValueList>
         </dataFields>
 
     </project>
