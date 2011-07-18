@@ -42,7 +42,7 @@
                 <property name="line" value="GAL4 Line"/>
                 <property name="gal4_vial" value="GAL4 Vial"/>
                 <property name="effector" value="Effector"/>
-                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Position}"/>
+                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Row}${Slide Column}"/>
                 <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
@@ -85,11 +85,15 @@
 
             <number displayName="Slide Number" required="true"
                     markedForTask="false"
-                    minimumValue="1" maximumValue="10" />
+                    minimumValue="1" maximumValue="99" />
 
-            <text displayName="Slide Position" pattern="[A-Z]\d+"
+            <text displayName="Slide Row" pattern="[A-Z]" required="true"
                   markedForTask="false" convertToUpperCase="true">
             </text>
+
+            <number displayName="Slide Column" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="99" />
 
             <validValueList displayName="Tile" required="true"
                             markedForTask="false">
@@ -172,7 +176,7 @@
                 <property name="activation_vial" value="Activation Vial"/>
                 <property name="binding_vial" value="Binding Vial"/>
                 <property name="effector" value="Effector"/>
-                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Position}"/>
+                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Row}${Slide Column}"/>
                 <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
@@ -221,11 +225,15 @@
 
             <number displayName="Slide Number" required="true"
                     markedForTask="false"
-                    minimumValue="1" maximumValue="10" />
+                    minimumValue="1" maximumValue="99" />
 
-            <text displayName="Slide Position" pattern="[A-Z]\d+"
+            <text displayName="Slide Row" pattern="[A-Z]" required="true"
                   markedForTask="false" convertToUpperCase="true">
             </text>
+
+            <number displayName="Slide Column" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="99" />
 
             <validValueList displayName="Tile" required="true"
                             markedForTask="false">
@@ -305,7 +313,7 @@
                 <property name="gal4_vial" value="GAL4 Vial"/>
                 <property name="lexa_vial" value="LexA Vial"/>
                 <property name="effector" value="Effector"/>
-                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Position}"/>
+                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Row}${Slide Column}"/>
                 <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
@@ -354,11 +362,15 @@
 
             <number displayName="Slide Number" required="true"
                     markedForTask="false"
-                    minimumValue="1" maximumValue="10" />
+                    minimumValue="1" maximumValue="99" />
 
-            <text displayName="Slide Position" pattern="[A-Z]\d+"
+            <text displayName="Slide Row" pattern="[A-Z]" required="true"
                   markedForTask="false" convertToUpperCase="true">
             </text>
+
+            <number displayName="Slide Column" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="99" />
 
             <validValueList displayName="Tile" required="true"
                             markedForTask="false">
