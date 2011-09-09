@@ -1,8 +1,8 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.config;
@@ -10,6 +10,7 @@ package org.janelia.it.ims.tmog.config;
 import org.janelia.it.ims.tmog.filefilter.FileNamePatternFilter;
 import org.janelia.it.ims.tmog.filefilter.FileNamePatternWithQueryFilter;
 import org.janelia.it.ims.tmog.target.FileTargetNamer;
+import org.janelia.it.ims.tmog.target.TargetDataFile;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -33,6 +34,7 @@ public class InputFileFilter {
     private FileFilter filter;
     private boolean recursiveSearch;
     private boolean filterDuplicates;
+    private TargetDataFile targetDataFile;
 
     public InputFileFilter() {
         this.setPatternString(LSM_PATTERN_STRING);
@@ -40,19 +42,12 @@ public class InputFileFilter {
         this.filterDuplicates = false;
     }
 
-    public String getPatternString() {
-        return patternString;
-    }
-
     public void setPatternString(String patternString) {
         this.patternString = patternString;
         this.filter = new FileNamePatternFilter(patternString);
     }
 
-    public Integer getPatternGroupNumber() {
-        return patternGroupNumber;
-    }
-
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setPatternGroupNumber(Integer patternGroupNumber) {
         if (patternGroupNumber < 1) {
             throw new IllegalArgumentException(
@@ -62,18 +57,12 @@ public class InputFileFilter {
         this.patternGroupNumber = patternGroupNumber;
     }
 
-    public String getExcludeQueryUrl() {
-        return excludeQueryUrl;
-    }
-
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setExcludeQueryUrl(String excludeQueryUrl) {
         this.excludeQueryUrl = excludeQueryUrl;
     }
 
-    public String getIncludeQueryUrl() {
-        return includeQueryUrl;
-    }
-
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setIncludeQueryUrl(String includeQueryUrl) {
         this.includeQueryUrl = includeQueryUrl;
     }
@@ -82,6 +71,7 @@ public class InputFileFilter {
         return recursiveSearch;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setRecursiveSearch(boolean recursiveSearch) {
         this.recursiveSearch = recursiveSearch;
     }
@@ -90,8 +80,34 @@ public class InputFileFilter {
         return filterDuplicates;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setFilterDuplicates(boolean filterDuplicates) {
         this.filterDuplicates = filterDuplicates;
+    }
+
+    public TargetDataFile getTargetDataFile() {
+        return targetDataFile;
+    }
+
+    public boolean hasTargetDataFile() {
+        return (targetDataFile != null);
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    public void setTargetDataFile(TargetDataFile targetDataFile) {
+        this.targetDataFile = targetDataFile;
+    }
+
+    /**
+     * Validates the configured settings.
+     *
+     * @throws ConfigurationException
+     *   if any of the settings are invalid.
+     */
+    public void verify() throws ConfigurationException {
+        if (hasTargetDataFile()) {
+            targetDataFile.verify();
+        }
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -55,8 +55,9 @@ public class CollectorView implements SessionView, InputSelectionView {
     private JScrollPane projectNamePane;
     private JTextArea projectName;
     private JScrollPane rootDirectoryPane;
-    private JTextArea rootDirectoryField;
     private JButton rootDirectoryBtn;
+    private JLabel rootDirectoryLabel;
+    private JTextArea rootDirectoryField;
     private JButton saveBtn;
     private JLabel taskProgressLabel;
     private JProgressBar taskProgressBar;
@@ -82,6 +83,7 @@ public class CollectorView implements SessionView, InputSelectionView {
         this.inputSelectionHandler =
                 new InputSelectionHandler(projectConfig,
                                           defaultDirectory,
+                                          rootDirectoryLabel,
                                           rootDirectoryField,
                                           rootDirectoryBtn,
                                           cancelTargetWorkerButton,

@@ -196,6 +196,8 @@ public class ProjectConfiguration {
             targetDisplayName = "File Name";
         }
 
+        inputFileFilter.verify();
+        
         if (outputDirectoryConfiguration == null) {
             throw new ConfigurationException(
                     "The output directory is not defined for the " +

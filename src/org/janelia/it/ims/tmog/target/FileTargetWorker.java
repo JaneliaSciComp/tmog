@@ -1,16 +1,20 @@
 /*
-* Copyright 2009 Howard Hughes Medical Institute.
-* All rights reserved.
-* Use is subject to Janelia Farm Research Center Software Copyright 1.0
-* license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
-*/
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
+ */
 
 package org.janelia.it.ims.tmog.target;
 
+import org.apache.log4j.Logger;
 import org.janelia.it.utils.BackgroundWorker;
+import org.janelia.it.utils.StringUtil;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,6 +37,8 @@ public class FileTargetWorker
     private Comparator<FileTarget> sortComparator;
     private FileTargetNamer namer;
     private boolean filterDuplicateTargets;
+    private TargetDataFile targetDataFile;
+    private String summary;
 
     /**
      * Constructs a new worker.
@@ -57,13 +63,19 @@ public class FileTargetWorker
      *
      * @param  filterDuplicateTargets  indicates whether targets with the
      *                                 same name should be filtered.
+     *
+     * @param  targetDataFile   if set (non null), parse rootDirectory (file)
+     *                          to derive targets instead of directly accessing
+     *                          file system.
+     *
      */
     public FileTargetWorker(File rootDirectory,
                             FileFilter filter,
                             boolean recursiveSearch,
                             Comparator<FileTarget> sortComparator,
                             FileTargetNamer namer,
-                            boolean filterDuplicateTargets) {
+                            boolean filterDuplicateTargets,
+                            TargetDataFile targetDataFile) {
 
         this.rootDirectory = rootDirectory;
         this.filter = filter;
@@ -71,6 +83,7 @@ public class FileTargetWorker
         this.sortComparator = sortComparator;
         this.namer = namer;
         this.filterDuplicateTargets = filterDuplicateTargets;
+        this.targetDataFile = targetDataFile;
     }
 
     /**
@@ -78,6 +91,20 @@ public class FileTargetWorker
      */
     public File getRootDirectory() {
         return rootDirectory;
+    }
+
+    /**
+     * @return true if a processing summary exists; otherwise false.
+     */
+    public boolean hasSummary() {
+        return StringUtil.isDefined(summary);
+    }
+
+    /**
+     * @return the processing summary or null if no summary exists.
+     */
+    public String getSummary() {
+        return summary;
     }
 
     /**
@@ -90,18 +117,10 @@ public class FileTargetWorker
 
         List<FileTarget> targets;
 
-        if (recursiveSearch) {
-            targets = getAllTargets();
+        if (targetDataFile == null) {
+            targets = getTargetsFromFileSystem();
         } else {
-            final File[] children = rootDirectory.listFiles(filter);
-            if (children != null) {
-                targets = new ArrayList<FileTarget>(children.length);
-                for (File child : children) {
-                    targets.add(new FileTarget(child, rootDirectory, namer));
-                }
-            } else {
-                targets = new ArrayList<FileTarget>(0);
-            }
+            targets = getTargetsFromDataFile();
         }
 
         if (filterDuplicateTargets) {
@@ -152,6 +171,24 @@ public class FileTargetWorker
         return targets;
     }
 
+    private List<FileTarget> getTargetsFromFileSystem() {
+        List<FileTarget> targets;
+        if (recursiveSearch) {
+            targets = getAllTargets();
+        } else {
+            final File[] children = rootDirectory.listFiles(filter);
+            if (children != null) {
+                targets = new ArrayList<FileTarget>(children.length);
+                for (File child : children) {
+                    targets.add(new FileTarget(child, rootDirectory, namer));
+                }
+            } else {
+                targets = new ArrayList<FileTarget>(0);
+            }
+        }
+        return targets;
+    }
+
     private List<FileTarget> getAllTargets() {
         List<FileTarget> targets = new ArrayList<FileTarget>(2048);
         targets = addTargets(rootDirectory,
@@ -182,5 +219,41 @@ public class FileTargetWorker
             process(messages);
         }
     }
+
+    private List<FileTarget> getTargetsFromDataFile()
+            throws IllegalArgumentException {
+        FileInputStream stream;
+        try {
+            stream = new FileInputStream(rootDirectory);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(
+                    "Failed to open " + rootDirectory.getAbsolutePath() + ".",
+                    e);
+        }
+
+        updateStatus("parsing " + rootDirectory.getAbsolutePath());
+
+        TargetList targetList;
+        try {
+            targetList = targetDataFile.getTargets(stream);
+            summary = targetList.getSummary();
+        } catch (Exception e) {
+            throw new IllegalArgumentException(
+                    "Failed to parse " + rootDirectory.getAbsolutePath() + ".",
+                    e);
+        } finally {
+            try {
+                stream.close();
+            } catch (IOException e) {
+                LOG.warn("getTargetsFromDataFile: Failed to close stream for  " +
+                         rootDirectory.getAbsolutePath(), e);
+            }
+        }
+
+        return targetList.getList();
+    }
+
+    private static final Logger LOG =
+            Logger.getLogger(FileTargetWorker.class);
 
 }

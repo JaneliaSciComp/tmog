@@ -55,6 +55,11 @@
         <priority value="INFO"/>
     </category>
 
+    <!-- uncomment to debug Digester -->
+    <!--<category name="org.apache">-->
+        <!--<priority value="DEBUG"/>-->
+    <!--</category>-->
+
     <!-- ======================= -->
     <!-- Setup the Root category -->
     <!-- ======================= -->

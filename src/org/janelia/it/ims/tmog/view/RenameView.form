@@ -18,7 +18,7 @@
           <color color="-65536"/>
         </border>
         <children>
-          <component id="5ffcf" class="javax.swing.JLabel">
+          <component id="5ffcf" class="javax.swing.JLabel" binding="lsmDirectoryLabel">
             <constraints>
               <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="74" height="14"/>

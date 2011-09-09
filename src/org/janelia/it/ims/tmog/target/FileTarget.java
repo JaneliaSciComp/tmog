@@ -1,8 +1,8 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.target;
@@ -18,6 +18,7 @@ public class FileTarget implements Target {
     private File file;
     private File rootPath;
     private FileTargetNamer namer;
+    private TargetProperties properties;
 
     public FileTarget(File file) {
         this(file, null, null);
@@ -34,6 +35,12 @@ public class FileTarget implements Target {
         this.file = file;
         this.rootPath = rootPath;
         this.namer = namer;
+    }
+
+    public FileTarget(File file,
+                      TargetProperties properties) {
+        this(file, null, null);
+        this.properties = properties;
     }
 
     public File getFile() {
@@ -67,6 +74,20 @@ public class FileTarget implements Target {
             }
         }
         return name;
+    }
+
+    /**
+     * @param  propertyName  name of desired property.
+     *
+     * @return the property value for this target
+     *         or null if the property is not defined.
+     */
+    public String getProperty(String propertyName) {
+        String value = null;
+        if (properties != null) {
+            value = properties.getValue(propertyName);
+        }
+        return value;
     }
 
     /**

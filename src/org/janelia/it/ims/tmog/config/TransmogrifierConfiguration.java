@@ -29,6 +29,7 @@ import org.janelia.it.ims.tmog.field.SourceFileMappedDefaultValue;
 import org.janelia.it.ims.tmog.field.StaticDataModel;
 import org.janelia.it.ims.tmog.field.StaticDefaultValue;
 import org.janelia.it.ims.tmog.field.TargetNameModel;
+import org.janelia.it.ims.tmog.field.TargetPropertyDefaultValue;
 import org.janelia.it.ims.tmog.field.ValidValue;
 import org.janelia.it.ims.tmog.field.ValidValueModel;
 import org.janelia.it.ims.tmog.field.VerifiedDateModel;
@@ -36,6 +37,7 @@ import org.janelia.it.ims.tmog.field.VerifiedDecimalModel;
 import org.janelia.it.ims.tmog.field.VerifiedIntegerModel;
 import org.janelia.it.ims.tmog.field.VerifiedTextModel;
 import org.janelia.it.ims.tmog.field.VerifiedWellModel;
+import org.janelia.it.ims.tmog.target.XmlTargetDataFile;
 import org.janelia.it.utils.PathUtil;
 import org.xml.sax.SAXException;
 
@@ -164,9 +166,26 @@ public class TransmogrifierConfiguration {
                         GlobalConfiguration.class, digester);
         createSetAndAdd("*/project",
                         ProjectConfiguration.class, digester);
+
         createSetAndAdd("*/inputFileFilter",
                         InputFileFilter.class,
                         "setInputFileFilter", digester);
+        final String xmlPropertyFilePath = "*/inputFileFilter/xmlPropertyFile";
+        createSetAndAdd(xmlPropertyFilePath,
+                        XmlTargetDataFile.class,
+                        "setTargetDataFile", digester);
+        final String groupPropertyPath = xmlPropertyFilePath + "/groupProperty";
+        digester.addCallMethod(groupPropertyPath,
+                               "addRelativeGroupPropertyPath",
+                               1);
+        digester.addCallParam(groupPropertyPath, 0, "relativePath");
+        final String targetPropertyPath =
+                xmlPropertyFilePath + "/targetProperty";
+        digester.addCallMethod(targetPropertyPath,
+                               "addRelativeTargetPropertyPath",
+                               1);
+        digester.addCallParam(targetPropertyPath, 0, "relativePath");
+                
         createSetAndAdd("*/inputFileSorter",
                         InputFileSorter.class,
                         "setInputFileSorter", digester);
@@ -241,6 +260,9 @@ public class TransmogrifierConfiguration {
                                digester);
         createSetAndAddDefault("*/sourceFileMappedDefault",
                                SourceFileMappedDefaultValue.class,
+                               digester);
+        createSetAndAddDefault("*/targetPropertyDefault",
+                               TargetPropertyDefaultValue.class,
                                digester);
 
         final String pluginDefaultPath = "*/pluginDefault";

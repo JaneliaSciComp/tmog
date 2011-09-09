@@ -9,7 +9,24 @@
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+    <xs:complexType name="targetPropertyType">
+        <xs:attribute name="relativePath" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="xmlPropertyFileType">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="groupProperty" type="targetPropertyType"/>
+            <xs:element name="targetProperty" type="targetPropertyType"/>
+        </xs:choice>
+        <xs:attribute name="targetGroupPath" type="xs:string"/>
+        <xs:attribute name="relativeTargetPath" type="xs:string" use="required"/>
+        <xs:attribute name="relativeTargetNamePath" type="xs:string" use="required"/>
+    </xs:complexType>
+
     <xs:complexType name="inputFileFilterType">
+        <xs:choice minOccurs="0" maxOccurs="1">
+            <xs:element name="xmlPropertyFile" type="xmlPropertyFileType"/>
+        </xs:choice>
         <xs:attribute name="patternString" type="xs:string"/>
         <xs:attribute name="patternGroupNumber" type="xs:positiveInteger"/>
         <xs:attribute name="excludeQueryUrl" type="xs:anyURI"/>
@@ -97,6 +114,7 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
                 <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
+                <xs:element name="targetPropertyDefault" type="targetPropertyDefaultType"/>
                 <xs:element name="staticDefault" type="staticDefaultType" />
                 <xs:element name="pluginDefault" type="pluginDefaultType"/>
             </xs:choice>
@@ -119,6 +137,7 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
                 <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
+                <xs:element name="targetPropertyDefault" type="targetPropertyDefaultType"/>
                 <xs:element name="staticDefault" type="staticDefaultType" />
                 <xs:element name="pluginDefault" type="pluginDefaultType"/>
             </xs:choice>
@@ -141,6 +160,7 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
                 <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
+                <xs:element name="targetPropertyDefault" type="targetPropertyDefaultType"/>
                 <xs:element name="staticDefault" type="staticDefaultType" />
                 <xs:element name="pluginDefault" type="pluginDefaultType"/>
             </xs:choice>
@@ -183,6 +203,7 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
                 <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
+                <xs:element name="targetPropertyDefault" type="targetPropertyDefaultType"/>
                 <xs:element name="staticDefault" type="staticDefaultType" />
                 <xs:element name="pluginDefault" type="pluginDefaultType"/>
             </xs:choice>
@@ -209,6 +230,7 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
                 <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
+                <xs:element name="targetPropertyDefault" type="targetPropertyDefaultType"/>
                 <xs:element name="staticDefault" type="staticDefaultType" />
                 <xs:element name="pluginDefault" type="pluginDefaultType"/>
             </xs:choice>
@@ -228,6 +250,7 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
                 <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
+                <xs:element name="targetPropertyDefault" type="targetPropertyDefaultType"/>
                 <xs:element name="staticDefault" type="staticDefaultType" />
                 <xs:element name="pluginDefault" type="pluginDefaultType"/>
             </xs:choice>
@@ -304,8 +327,8 @@
     </xs:complexType>
 
     <xs:complexType name="mappedValueType">
-        <xs:attribute name="from" type="xs:string"/>
-        <xs:attribute name="to" type="xs:string"/>
+        <xs:attribute name="from" type="xs:string" use="required"/>
+        <xs:attribute name="to" type="xs:string" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="sourceFileMappedDefaultType">
@@ -315,6 +338,13 @@
         <xs:attribute name="pattern" type="xs:string"/>
         <xs:attribute name="patternGroupNumber" type="xs:positiveInteger"/>
         <xs:attribute name="matchType" type="matchType"/>
+    </xs:complexType>
+
+    <xs:complexType name="targetPropertyDefaultType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="mappedValue" type="mappedValueType"/>
+        </xs:sequence>
+        <xs:attribute name="propertyName" type="xs:string" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="staticDefaultType">

@@ -1,8 +1,8 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.view.component;
@@ -239,29 +239,9 @@ public abstract class TaskComponents implements PropertyChangeListener {
             dialogTitle.append(" Summary");
         }
 
-        JTextArea textArea = new JTextArea();
-        textArea.setLayout(new BorderLayout());
-        textArea.setEditable(false);
-        textArea.append(taskSummary);
-        JScrollPane areaScrollPane = new JScrollPane(textArea);
-        areaScrollPane.setPreferredSize(new Dimension(600, 400));
-        areaScrollPane.setWheelScrollingEnabled(true);
-        areaScrollPane.setVerticalScrollBarPolicy(
-                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        areaScrollPane.setHorizontalScrollBarPolicy(
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-        Dimension parentSize = parent.getSize();
-        int dialogWidth = (int) (parentSize.getWidth() * 0.8);
-        int dialogHeight = (int) (parentSize.getHeight() * 0.8);
-        Dimension dialogSize = new Dimension(dialogWidth, dialogHeight);
-
-        JOptionPane jop = new JOptionPane(areaScrollPane,
-                                          JOptionPane.INFORMATION_MESSAGE);
-        jop.setPreferredSize(dialogSize);
-        JDialog jd = jop.createDialog(parent, dialogTitle.toString());
-        jd.setModal(false);
-        jd.setVisible(true);
+        NarrowOptionPane.displaySummaryDialog(dialogTitle.toString(),
+                                              taskSummary,
+                                              parent);
     }
 
 }

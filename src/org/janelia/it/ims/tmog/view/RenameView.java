@@ -52,6 +52,7 @@ public class RenameView implements SessionView, InputSelectionView {
     private JTextArea projectName;
     private JButton lsmDirectoryBtn;
     private JScrollPane lsmDirectoryPane;
+    private JLabel lsmDirectoryLabel;
     private JTextArea lsmDirectoryField;
     private InputSelectionHandler inputSelectionHandler;
     private JButton outputDirectoryBtn;
@@ -87,6 +88,7 @@ public class RenameView implements SessionView, InputSelectionView {
         this.inputSelectionHandler =
                 new InputSelectionHandler(projectConfig,
                                           lsmDirectory,
+                                          lsmDirectoryLabel,
                                           lsmDirectoryField,
                                           lsmDirectoryBtn,
                                           cancelInputSearch,

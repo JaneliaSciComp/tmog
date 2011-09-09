@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -14,6 +14,7 @@ import org.janelia.it.ims.tmog.config.ProjectConfiguration;
 import org.janelia.it.ims.tmog.config.preferences.PathDefault;
 import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
 import org.janelia.it.ims.tmog.config.preferences.ViewDefault;
+import org.janelia.it.ims.tmog.filefilter.FileNamePatternFilter;
 import org.janelia.it.ims.tmog.target.FileTarget;
 import org.janelia.it.ims.tmog.target.FileTargetWorker;
 import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
@@ -54,7 +55,9 @@ public class InputSelectionHandler {
      *
      * @param  projectConfig       configuration for the current project.
      * @param  globalDefaultDirectory  current global default directory.
-     * @param  directoryField      label for displaying the selected directory.
+     * @param  directoryLabel      label for the directory field.
+     * @param  directoryField      text area for displaying the selected
+     *                             directory.
      * @param  setDirectoryButton  button that initiates input selection.
      * @param  cancelButton        button for cancelling input searches.
      * @param  selectionMode       {@link JFileChooser} selection mode that
@@ -66,6 +69,7 @@ public class InputSelectionHandler {
      */
     public InputSelectionHandler(ProjectConfiguration projectConfig,
                                  File globalDefaultDirectory,
+                                 JLabel directoryLabel,
                                  JTextArea directoryField,
                                  JButton setDirectoryButton,
                                  JButton cancelButton,
@@ -74,13 +78,22 @@ public class InputSelectionHandler {
                                  InputSelectionView view) {
         this.projectName = projectConfig.getName();
         this.inputFilter = projectConfig.getInputFileFilter();
+
+        // override normal labels and modes for target data files
+        if (inputFilter.hasTargetDataFile()) {
+            directoryLabel.setText("Source Data File:");
+            this.selectionMode = JFileChooser.FILES_ONLY;
+            this.selectButtonText = "Select Data File";            
+        } else {
+            this.selectionMode = selectionMode;
+            this.selectButtonText = selectButtonText;
+        }
+
         this.inputSorter = projectConfig.getInputFileSorter();
         setDefaultDirectory(globalDefaultDirectory);
         this.directoryField = directoryField;
         this.setDirectoryButton = setDirectoryButton;
         this.cancelButton = cancelButton;
-        this.selectionMode = selectionMode;
-        this.selectButtonText = selectButtonText;
         this.view = view;
         setupInputDirectory();
     }
@@ -141,6 +154,19 @@ public class InputSelectionHandler {
                     }
                 }
                 fileChooser.setFileSelectionMode(selectionMode);
+
+                // when choosing a target data file,
+                // apply file filter to chooser (otherwise leave alone)
+                if (inputFilter.hasTargetDataFile()) {
+                    FileFilter fileFilter = inputFilter.getFilter(null);
+                    if (fileFilter instanceof FileNamePatternFilter) {
+                        FileNamePatternFilter patternFilter =
+                                (FileNamePatternFilter) fileFilter;
+                        patternFilter.setIncludeDirectories(true);
+                        fileChooser.setFileFilter(patternFilter);
+                    }
+                }
+
                 final JPanel appPanel = view.getPanel();
                 setPreferredSize(fileChooser, appPanel, 0.9);
 
@@ -150,7 +176,8 @@ public class InputSelectionHandler {
                 if (choice == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     if ((selectedFile != null) &&
-                        (! selectedFile.isDirectory())) {
+                        (! selectedFile.isDirectory()) &&
+                        (! inputFilter.hasTargetDataFile())) {
                         selectedFile = selectedFile.getParentFile();
                     }
 
@@ -193,7 +220,8 @@ public class InputSelectionHandler {
                                      inputFilter.isRecursiveSearch(),
                                      inputSorter.getComparator(),
                                      inputFilter.getTargetNamer(defaultDirectory),
-                                     inputFilter.isFilterDuplicates());
+                                     inputFilter.isFilterDuplicates(),
+                                     inputFilter.getTargetDataFile());
 
         fileTargetWorker.addPropertyChangeListener(new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
@@ -265,6 +293,13 @@ public class InputSelectionHandler {
                         JOptionPane.ERROR_MESSAGE);
             }
 
+            if (fileTargetWorker.hasSummary()) {
+                NarrowOptionPane.displaySummaryDialog(
+                        "File Retrieval Summary",
+                        fileTargetWorker.getSummary(),
+                        view.getPanel());
+            }
+
             if (targets != null) {
                 final int numTargets = targets.size();
                 if (numTargets > 0) {
@@ -276,8 +311,7 @@ public class InputSelectionHandler {
                     File rootDirectory = fileTargetWorker.getRootDirectory();
                     NarrowOptionPane.showMessageDialog(
                             view.getPanel(),
-                            "No eligible files were found " +
-                            "in the selected directory: " +
+                            "No eligible files were found in: " +
                             rootDirectory.getAbsolutePath(),
                             "No Eligible Files Found",
                             JOptionPane.WARNING_MESSAGE);
@@ -314,8 +348,10 @@ public class InputSelectionHandler {
 
         if ((defaultDirectory == null) ||
             (! defaultDirectory.exists()) ||
-            (! defaultDirectory.canRead()) ||
-            (! defaultDirectory.isDirectory())) {
+            (! defaultDirectory.canRead())) {
+            defaultDirectory = globalDefaultDirectory;
+        } else if (defaultDirectory.isFile() &&
+                   (! inputFilter.hasTargetDataFile())) {
             defaultDirectory = globalDefaultDirectory;
         }
     }
