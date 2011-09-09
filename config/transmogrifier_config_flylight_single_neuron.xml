@@ -47,7 +47,7 @@
                 <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
-                <property name="days_after_eclusion" value="Days After Eclusion"/>
+                <property name="days_after_eclosion" value="Days After Eclosion"/>
                 <property name="area" value="$STATIC:Brain"/>
                 <property name="lamina_percentage" value="Lamina"/>
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
@@ -126,7 +126,7 @@
                         markedForTask="false">
             </cvTermList>
 
-            <number displayName="Days After Eclusion" required="false"
+            <number displayName="Days After Eclosion" required="false"
                     markedForTask="false"
                     minimumValue="0" maximumValue="21" />
 
