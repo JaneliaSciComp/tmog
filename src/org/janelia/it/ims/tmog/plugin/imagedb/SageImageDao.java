@@ -35,6 +35,8 @@ public class SageImageDao
 
     public static final String RUBIN_LAB_LINE_PREFIX = "GMR_";
     public static final String RUBIN_LAB_NAME = "rubin";
+    public static final String NONE_LAB = "none";
+    public static final String NOT_APPLICABLE = "Not_Applicable";
 
     /**
      * Constructs a dao using the default manager and configuration.
@@ -559,7 +561,9 @@ public class SageImageDao
     private String deriveLineLabName(String imageLabName,
                                      String lineName) {
         String lineLabName = imageLabName;
-        if (lineName.startsWith(RUBIN_LAB_LINE_PREFIX)) {
+        if (NOT_APPLICABLE.equals(lineName)) {
+            lineLabName = NONE_LAB;
+        } else if (lineName.startsWith(RUBIN_LAB_LINE_PREFIX)) {
             lineLabName = RUBIN_LAB_NAME;
         }
         return lineLabName;
