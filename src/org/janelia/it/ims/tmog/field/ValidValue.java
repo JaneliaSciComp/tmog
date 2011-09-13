@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.field;
@@ -19,6 +19,7 @@ public class ValidValue {
     private String value;
     private boolean isDefault;
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public ValidValue() {
         this(null, null);
     }
@@ -42,10 +43,20 @@ public class ValidValue {
         this.displayName = displayName;
     }
 
+    public void prefixDisplayName() {
+        if (! value.equals(displayName)) {
+            displayName = value + ": " + displayName;
+        }
+    }
+
     public String getValue() {
         return value;
     }
 
+    public boolean isDefined() {
+        return value != null;
+    }
+    
     public void setValue(String value) {
         this.value = value;
         if (this.displayName == null) {
@@ -57,6 +68,7 @@ public class ValidValue {
         return isDefault;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setDefault(boolean aDefault) {
         isDefault = aDefault;
     }

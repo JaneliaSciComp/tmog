@@ -8,11 +8,10 @@
 package org.janelia.it.ims.tmog.target;
 
 import org.apache.commons.digester.Digester;
-import org.apache.commons.digester.Rule;
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.config.ConfigurationException;
 import org.janelia.it.utils.StringUtil;
-import org.xml.sax.Attributes;
+import org.janelia.it.utils.digester.ElementNameCallParamRule;
 
 import java.io.File;
 import java.io.InputStream;
@@ -266,49 +265,6 @@ public class XmlTargetDataFile
                 digester.addCallParam(path, 1);
             }
 
-        }
-    }
-
-    /**
-     * A call parameter rule that references the current element name.
-     */
-    private class ElementNameCallParamRule extends Rule {
-
-        protected int paramIndex = 0;
-
-        /**
-         * Construct a "call parameter" rule that will save the name of this
-         * element as the parameter value.
-         *
-         * @param  paramIndex  zero-relative parameter number.
-         */
-        public ElementNameCallParamRule(int paramIndex) {
-            this.paramIndex = paramIndex;
-        }
-
-        /**
-         * Process the start of this element.
-         *
-         * @param namespace the namespace URI of the matching element, or an
-         *   empty string if the parser is not namespace aware or the element has
-         *   no namespace
-         * @param name the local name if the parser is namespace aware, or just
-         *   the element name otherwise
-         * @param attributes The attribute list for this element
-         */
-        @Override
-        public void begin(String namespace,
-                          String name,
-                          Attributes attributes) throws Exception {
-            Object parameters[] = (Object[]) digester.peekParams();
-            parameters[paramIndex] = name;
-        }
-
-        @Override
-        public String toString() {
-            return "ElementNameCallParamRule{" +
-                   "paramIndex=" + paramIndex +
-                   '}';
         }
     }
 

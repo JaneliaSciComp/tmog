@@ -8,12 +8,12 @@
 package org.janelia.it.ims.tmog.config;
 
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
-import org.janelia.it.ims.tmog.field.CvTermModel;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.DataFieldGroupModel;
 import org.janelia.it.ims.tmog.field.DefaultValue;
 import org.janelia.it.ims.tmog.field.DefaultValueList;
 import org.janelia.it.ims.tmog.field.DefaultValueModel;
+import org.janelia.it.ims.tmog.field.HttpValidValueModel;
 import org.janelia.it.ims.tmog.field.PluginDefaultValue;
 import org.janelia.it.ims.tmog.field.TargetNameModel;
 import org.janelia.it.ims.tmog.plugin.RowListener;
@@ -232,10 +232,10 @@ public class ProjectConfiguration {
             targetDisplayName = field.getDisplayName();
         }
 
-        if (field instanceof CvTermModel) {
-            CvTermModel cvTermModel = (CvTermModel) field;
+        if (field instanceof HttpValidValueModel) {
+            HttpValidValueModel model = (HttpValidValueModel) field;
             try {
-                cvTermModel.retrieveAndSetValidValues();
+                model.retrieveAndSetValidValues();
             } catch (Exception e) {
                 throw new ConfigurationException(e.getMessage(), e);
             }

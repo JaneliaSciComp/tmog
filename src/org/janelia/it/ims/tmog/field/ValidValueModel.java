@@ -50,12 +50,18 @@ public class ValidValueModel extends AbstractListModel
     }
 
     public void addValidValue(ValidValue validValue) {
-        validValues.add(validValue);
-        if (validValue.isDefault() && (selectedValue == null)) {
-            selectedValue = validValue;
+        if (validValue.isDefined()) {
+            validValues.add(validValue);
+            if (validValue.isDefault() && (selectedValue == null)) {
+                selectedValue = validValue;
+            }
         }
     }
 
+    public int size() {
+        return validValues.size();
+    }
+    
     public void sortValues(Comparator<ValidValue> comparator) {
         Collections.sort(validValues, comparator);
     }

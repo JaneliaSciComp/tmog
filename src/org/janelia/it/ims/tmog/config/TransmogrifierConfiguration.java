@@ -20,6 +20,7 @@ import org.janelia.it.ims.tmog.field.FileExtensionModel;
 import org.janelia.it.ims.tmog.field.FileModificationTimeModel;
 import org.janelia.it.ims.tmog.field.FileNameModel;
 import org.janelia.it.ims.tmog.field.FileRelativePathModel;
+import org.janelia.it.ims.tmog.field.HttpValidValueModel;
 import org.janelia.it.ims.tmog.field.MappedValue;
 import org.janelia.it.ims.tmog.field.PluginDataModel;
 import org.janelia.it.ims.tmog.field.RunTimeModel;
@@ -243,6 +244,8 @@ public class TransmogrifierConfiguration {
                         "addValidValue", digester);
         createSetAndAdd("*/validValueList",
                         ValidValueModel.class, digester);
+        createSetAndAdd("*/webServiceList",
+                        HttpValidValueModel.class, digester);
         createSetAndAdd("*/well",
                         VerifiedWellModel.class, digester);
         createSetAndAdd("*/mappedValue",
