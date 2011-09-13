@@ -238,6 +238,7 @@
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:boolean"/>
+        <xs:attribute name="autoComplete" type="xs:boolean"/>
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
         <xs:attribute name="copyable" type="xs:boolean"/>
@@ -257,6 +258,7 @@
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="required" type="xs:boolean"/>
+        <xs:attribute name="autoComplete" type="xs:boolean"/>
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
         <xs:attribute name="copyable" type="xs:boolean"/>

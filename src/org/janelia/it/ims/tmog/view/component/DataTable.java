@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -13,6 +13,7 @@ import org.janelia.it.ims.tmog.config.preferences.ColumnDefault;
 import org.janelia.it.ims.tmog.config.preferences.ColumnDefaultSet;
 import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
 import org.janelia.it.ims.tmog.config.preferences.ViewDefault;
+import org.janelia.it.ims.tmog.field.AutoCompleteEditor;
 import org.janelia.it.ims.tmog.field.ButtonEditor;
 import org.janelia.it.ims.tmog.field.ButtonRenderer;
 import org.janelia.it.ims.tmog.field.DataField;
@@ -234,6 +235,20 @@ public class DataTable extends JTable {
             dtHeader.updateModel(model);
             resizeAllColumnWidths(model);
             resizeAllRowHeights(model);
+
+            // TODO: assess impact of repeating these calls for nested field groups
+
+            // explicitly set auto complete editor as needed
+            final TableColumnModel columnModel = getColumnModel();
+            TableColumn tableColumn;
+            TableCellEditor editor;
+            for (Integer column : model.getAutoCompleteColumns()) {
+                tableColumn = columnModel.getColumn(column);
+                editor = tableColumn.getCellEditor();
+                if (editor == null) {
+                    tableColumn.setCellEditor(new AutoCompleteEditor());
+                }
+            }
         }
     }
 
@@ -896,7 +911,7 @@ public class DataTable extends JTable {
 
         final Set<Integer> nestedTableColumns =
                 tmogModel.getNestedTableColumns();
-        if ((nestedTableColumns != null) && (nestedTableColumns.size() > 0)) {
+        if (nestedTableColumns.size() > 0) {
             final int numRows = tmogModel.getRowCount();
             for (int rowIndex = 0; rowIndex < numRows; rowIndex++) {
                 resizeRowHeight(rowIndex, nestedTableColumns);

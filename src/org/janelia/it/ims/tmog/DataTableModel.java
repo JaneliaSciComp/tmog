@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -20,7 +20,6 @@ import javax.swing.event.TableModelEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -99,7 +98,6 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         final Target target = row.getTarget();
         DataRow rowInstance = new DataRow(target);
         int columnIndex = 0;
-        Set<Integer> nestedColumns = new LinkedHashSet<Integer>();
         for (DataField field : row.getFields()) {
             if (field.isEditable()) {
                 columnNames.add(field.getDisplayName());
@@ -107,15 +105,10 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
                 fieldToColumnIndexMap.put(columnIndex, columnIndex);
                 DataField fieldInstance = field.getNewInstance(true);
                 rowInstance.addField(fieldInstance);
-                if (fieldInstance instanceof DataFieldGroupModel) {
-                    ((DataFieldGroupModel) fieldInstance).setParent(this);
-                    nestedColumns.add(columnIndex);
-                }
+                markTableColumnIfNecessary(fieldInstance, columnIndex);
                 columnIndex++;
             }
         }
-
-        setNestedTableColumns(nestedColumns);
 
         this.rows = new ArrayList<DataRow>(1);
         this.rows.add(rowInstance);
@@ -166,7 +159,6 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         }
         columnNames.add(targetColumnName);
 
-        Set<Integer> nestedColumns = new LinkedHashSet<Integer>();
         int fieldIndex = 0;
         for (DataField fieldConfig : dataFieldConfigs) {
             if (fieldConfig.isVisible()) {
@@ -174,13 +166,10 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
                 columnNames.add(fieldConfig.getDisplayName());
                 columnToFieldIndexMap.put(columnIndex, fieldIndex);
                 fieldToColumnIndexMap.put(fieldIndex, columnIndex);
-                if (fieldConfig instanceof DataFieldGroupModel) {
-                    nestedColumns.add(columnIndex);
-                }
+                markTableColumnIfNecessary(fieldConfig, columnIndex);
             }
             fieldIndex++;
         }
-        setNestedTableColumns(nestedColumns);
 
         // create the model rows
         this.rows = new ArrayList<DataRow>(targets.size());

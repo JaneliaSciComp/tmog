@@ -1,8 +1,8 @@
 /*
- * Copyright 2009 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog;
@@ -90,7 +90,12 @@ public interface TransmogrifierTableModel extends TableModel {
                          int fromColumnIndex);
 
     /**
-     * @return the indexes of the set of columns that contain nested tables.
+     * @return the indexes of the columns that use an auto complete editor.
+     */
+    public Set<Integer> getAutoCompleteColumns();
+
+    /**
+     * @return the indexes of the columns that contain nested tables.
      */
     public Set<Integer> getNestedTableColumns();
 

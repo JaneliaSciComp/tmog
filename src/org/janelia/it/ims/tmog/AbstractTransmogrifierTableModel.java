@@ -1,14 +1,19 @@
 /*
- * Copyright 2009 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog;
 
+import org.janelia.it.ims.tmog.field.DataField;
+import org.janelia.it.ims.tmog.field.DataFieldGroupModel;
+import org.janelia.it.ims.tmog.field.ValidValueModel;
+
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -21,28 +26,47 @@ public abstract class AbstractTransmogrifierTableModel
         extends AbstractTableModel
         implements TransmogrifierTableModel {
 
+    private Set<Integer> autoCompleteColumns;
     private Set<Integer> nestedTableColumns;
     private Integer errorRow;
     private Integer errorColumn;
     private String errorMessage;
+
+    protected AbstractTransmogrifierTableModel() {
+        this.autoCompleteColumns = new LinkedHashSet<Integer>();
+        this.nestedTableColumns = new LinkedHashSet<Integer>();
+    }
+
+    public Set<Integer> getAutoCompleteColumns() {
+        return autoCompleteColumns;
+    }
 
     public Set<Integer> getNestedTableColumns() {
         return nestedTableColumns;
     }
 
     public boolean isNestedTableColumn(int columnIndex) {
-        return ((nestedTableColumns != null) &&
-                nestedTableColumns.contains(columnIndex));
+        return nestedTableColumns.contains(columnIndex);
     }
 
     /**
-     * Sets the nested table column indexes for this table.
+     * Checks the specified column field and marks it
+     * (as nested, auto complete, ...) if special processing needs to
+     * be performed on the column later.
      *
-     * @param  nestedTableColumns  the indexes of all columns that contain
-     *                             nested data tables.
+     * @param  columnField  field for the column.
+     * @param  columnIndex  index of the column.
      */
-    protected void setNestedTableColumns(Set<Integer> nestedTableColumns) {
-        this.nestedTableColumns = nestedTableColumns;
+    protected void markTableColumnIfNecessary(DataField columnField,
+                                              int columnIndex) {
+        if ((columnField instanceof ValidValueModel) &&
+            ((ValidValueModel) columnField).isAutoComplete()) {
+            autoCompleteColumns.add(columnIndex);
+        }
+        if (columnField instanceof DataFieldGroupModel) {
+            ((DataFieldGroupModel) columnField).setParent(this);
+            nestedTableColumns.add(columnIndex);
+        }
     }
 
     public boolean isTargetColumn(int columnIndex) {
@@ -81,4 +105,15 @@ public abstract class AbstractTransmogrifierTableModel
                                    UPDATE_ROW_HEIGHTS);
     }
 
+    /**
+     * Shallow copies this instance's special column information to
+     * the specified instance.
+     *
+     * @param  that  new instance to which this instance's column
+     *               information should be copied.
+     */
+    protected void shallowCopyColumns(AbstractTransmogrifierTableModel that) {
+        that.autoCompleteColumns = this.autoCompleteColumns;
+        that.nestedTableColumns = this.nestedTableColumns;
+    }
 }

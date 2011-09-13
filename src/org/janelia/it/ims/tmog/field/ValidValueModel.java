@@ -7,12 +7,12 @@
 
 package org.janelia.it.ims.tmog.field;
 
+import ca.odell.glazedlists.BasicEventList;
 import org.janelia.it.ims.tmog.config.preferences.FieldDefault;
 import org.janelia.it.ims.tmog.config.preferences.FieldDefaultSet;
 import org.janelia.it.ims.tmog.target.Target;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -27,7 +27,8 @@ public class ValidValueModel extends AbstractListModel
 
     private String displayName;
     private boolean isRequired;
-    private ArrayList<ValidValue> validValues;
+    private boolean isAutoComplete;
+    private BasicEventList<ValidValue> validValues;
     private ValidValue selectedValue;
     private String errorMessage;
     private String prefix;
@@ -39,7 +40,8 @@ public class ValidValueModel extends AbstractListModel
 
     public ValidValueModel() {
         this.isRequired = false;
-        this.validValues = new ArrayList<ValidValue>();
+        this.isAutoComplete = false;
+        this.validValues = new BasicEventList<ValidValue>();
         this.validValues.add(ValidValue.NONE);
         this.isCopyable = true;
         this.markedForTask = true;
@@ -56,6 +58,15 @@ public class ValidValueModel extends AbstractListModel
 
     public void sortValues(Comparator<ValidValue> comparator) {
         Collections.sort(validValues, comparator);
+    }
+
+    public boolean isAutoComplete() {
+        return isAutoComplete;
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    public void setAutoComplete(boolean autoComplete) {
+        isAutoComplete = autoComplete;
     }
 
     public DefaultValueList getDefaultValueList() {
@@ -109,6 +120,7 @@ public class ValidValueModel extends AbstractListModel
             instance = new ValidValueModel();
             instance.displayName = displayName;
             instance.isRequired = isRequired;
+            instance.isAutoComplete = isAutoComplete;
             instance.validValues = validValues; // shallow copy should be safe
             instance.selectedValue = selectedValue;
             instance.prefix = prefix;
@@ -301,6 +313,10 @@ public class ValidValueModel extends AbstractListModel
         sb.append(", selectedValue=").append(selectedValue);
         sb.append('}');
         return sb.toString();
+    }
+
+    protected BasicEventList<ValidValue> getValidValues() {
+        return validValues;
     }
 
     /**

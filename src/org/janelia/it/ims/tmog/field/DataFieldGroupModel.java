@@ -92,8 +92,13 @@ public class DataFieldGroupModel
     }
 
     public void add(DataField field) {
+        if (field instanceof DataFieldGroupModel) {
+            throw new UnsupportedOperationException(
+                    "nested field groups are not currently supported");
+        }
         List<DataField> firstRow = getFirstRow();
         firstRow.add(field);
+        markTableColumnIfNecessary(field, firstRow.size() - 1);
     }
 
     public void addRow(int rowIndex) {
@@ -115,6 +120,7 @@ public class DataFieldGroupModel
         return displayWidth;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setDisplayWidth(Integer displayWidth) {
         this.displayWidth = displayWidth;
     }
@@ -137,6 +143,7 @@ public class DataFieldGroupModel
 
     public DataFieldGroupModel getNewInstance(boolean isCloneRequired) {
         DataFieldGroupModel instance = new DataFieldGroupModel();
+        shallowCopyColumns(instance);
         instance.setDisplayName(displayName);
         instance.setMinimumRows(minimumRows);
         instance.setMaximumRows(maximumRows);
