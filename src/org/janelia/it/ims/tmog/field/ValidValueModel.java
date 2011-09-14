@@ -326,6 +326,15 @@ public class ValidValueModel extends AbstractListModel
     }
 
     /**
+     * Sets the valid values for this model (shallow copy).
+     *
+     * @param  validValues  new list of values.
+     */
+    protected void setValidValues(BasicEventList<ValidValue> validValues) {
+        this.validValues = validValues;
+    }
+
+    /**
      * Clears the current list of valid values.
      * This should only be called if a new set of values is to be loaded.
      */

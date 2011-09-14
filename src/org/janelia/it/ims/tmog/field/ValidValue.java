@@ -18,6 +18,7 @@ public class ValidValue {
     private String displayName;
     private String value;
     private boolean isDefault;
+    private boolean isDisplayNamePrefixedWithValue;
 
     @SuppressWarnings({"UnusedDeclaration"})
     public ValidValue() {
@@ -33,20 +34,21 @@ public class ValidValue {
         this.displayName = displayName;
         this.value = value;
         this.isDefault = false;
+        this.isDisplayNamePrefixedWithValue = false;
     }
 
     public String getDisplayName() {
-        return displayName;
+        String name = displayName;
+        if ((isDisplayNamePrefixedWithValue) &&
+            (value != null) &&
+            (! value.equals(displayName))) {
+            name = value + ": " + displayName;
+        }
+        return name;
     }
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
-    }
-
-    public void prefixDisplayName() {
-        if (! value.equals(displayName)) {
-            displayName = value + ": " + displayName;
-        }
     }
 
     public String getValue() {
@@ -71,6 +73,10 @@ public class ValidValue {
     @SuppressWarnings({"UnusedDeclaration"})
     public void setDefault(boolean aDefault) {
         isDefault = aDefault;
+    }
+
+    public void setDisplayNamePrefixedWithValue(boolean displayNamePrefixedWithValue) {
+        isDisplayNamePrefixedWithValue = displayNamePrefixedWithValue;
     }
 
     @Override
@@ -100,6 +106,6 @@ public class ValidValue {
 
     @Override
     public String toString() {
-        return displayName;
+        return getDisplayName();
     }
 }

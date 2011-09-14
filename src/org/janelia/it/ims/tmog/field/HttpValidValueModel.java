@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.Comparator;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This model supports selecting a value from a predefined set of values.
@@ -32,6 +34,9 @@ public class HttpValidValueModel
     private String valueCreationPath;
     private String relativeActualValuePath;
     private String relativeValueDisplayNamePath;
+
+    private static Map<String, HttpValidValueModel> urlToModelMap =
+            new ConcurrentHashMap<String, HttpValidValueModel>();
 
     public HttpValidValueModel() {
     }
@@ -100,6 +105,60 @@ public class HttpValidValueModel
         checkRequiredConfigurationParameter("relativeActualValuePath",
                                             relativeActualValuePath);
 
+        final String cacheKey = getCacheKey();
+        HttpValidValueModel cachedModel = urlToModelMap.get(cacheKey);
+        if (cachedModel == null) {
+            setValidValuesFromService();
+            prefixDisplayNamesAndSortAsNeeded();
+            urlToModelMap.put(cacheKey, this);
+        } else {
+            // same config, use cached values directly
+            setValidValues(cachedModel.getValidValues());
+        }
+
+    }
+
+    /**
+     * @return a key for the cache that incorporates all the configuration
+     *         values needed to identify an equivalent configuration
+     *         whose values can be shared from the cache
+     *         (see {@link #prefixDisplayNamesAndSortAsNeeded}).
+     */
+    private String getCacheKey() {
+        return serviceUrl + "|" +
+               isDisplayNamePathDefined() + "|" +
+               displayNamePrefixedForValues;
+    }
+
+    private boolean isDisplayNamePathDefined() {
+        return StringUtil.isDefined(relativeValueDisplayNamePath);
+    }
+
+    private Digester getDigester() {
+
+        Digester digester = new Digester();
+        digester.setValidating(false);
+
+        digester.push(this);
+        digester.addObjectCreate(valueCreationPath,
+                                 ValidValue.class);
+        digester.addSetNext(valueCreationPath, "addValidValue");
+
+        String path = valueCreationPath + "/" + relativeActualValuePath;
+        digester.addCallMethod(path, "setValue", 1);
+        digester.addCallParam(path, 0);
+
+        if (isDisplayNamePathDefined()) {
+            path = valueCreationPath + "/" + relativeValueDisplayNamePath;
+            digester.addCallMethod(path, "setDisplayName", 1);
+            digester.addCallParam(path, 0);
+        }
+
+        return digester;
+    }
+
+    private void setValidValuesFromService() {
+
         clearValidValues();
 
         InputStream responseStream = null;
@@ -141,43 +200,18 @@ public class HttpValidValueModel
 
         LOG.info("retrieved " + this.size() +
                  " results for " + serviceUrl);
+    }
 
+    private void prefixDisplayNamesAndSortAsNeeded() {
         if (isDisplayNamePathDefined()) {
             if (displayNamePrefixedForValues) {
                 for (ValidValue validValue : getValidValues()) {
-                    validValue.prefixDisplayName();
+                    validValue.setDisplayNamePrefixedWithValue(true);
                 }
             } else {
                 sortValues(DISPLAY_NAME_COMPARATOR);
             }
         }
-    }
-
-    private boolean isDisplayNamePathDefined() {
-        return StringUtil.isDefined(relativeValueDisplayNamePath);
-    }
-
-    private Digester getDigester() {
-
-        Digester digester = new Digester();
-        digester.setValidating(false);
-
-        digester.push(this);
-        digester.addObjectCreate(valueCreationPath,
-                                 ValidValue.class);
-        digester.addSetNext(valueCreationPath, "addValidValue");
-
-        String path = valueCreationPath + "/" + relativeActualValuePath;
-        digester.addCallMethod(path, "setValue", 1);
-        digester.addCallParam(path, 0);
-
-        if (isDisplayNamePathDefined()) {
-            path = valueCreationPath + "/" + relativeValueDisplayNamePath;
-            digester.addCallMethod(path, "setDisplayName", 1);
-            digester.addCallParam(path, 0);
-        }
-
-        return digester;
     }
 
     private void checkRequiredConfigurationParameter(String parameterName,
