@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -190,6 +190,7 @@ public class TabbedView implements ActionListener {
                 new HashMap<JMenuItem, ProjectConfiguration>(projectList.size());
         JMenuItem addSessionItem;
         for (ProjectConfiguration project : projectList) {
+            //noinspection NullableProblems
             addSessionItem = createAndAddMenuItem(
                     "Add '" + project.getName() + "' Session",
                     null,
@@ -253,6 +254,8 @@ public class TabbedView implements ActionListener {
                 "Ctrl-D: fill down value from current cell to all cells below it"));
         shortcutsMenu.add(new JMenuItem(
                 "Ctrl-R: copy all values from previous row to current row"));
+        shortcutsMenu.add(new JMenuItem(
+                "Ctrl-V: paste from clipboard (including on Mac OS)"));
     }
 
     private JMenuItem createAndAddMenuItem(String text,
