@@ -19,11 +19,23 @@
                 <property name="family" value="$STATIC:rubin_rd_split"/>
                 <property name="lab" value="$STATIC:none"/>
                 <property name="line" value="$STATIC:Not_Applicable"/>
-                <property name="display" value="$STATIC:false"/>                
+                <property name="display" value="$STATIC:false"/>
+                <property name="base_path" value="$STATIC:/groups/rubin/rubinimg/split-gal4/confocalStacks/"/>
+                <property name="activation_line" value="${AD Line}-p65ADZp-in-${AD Landing Site}"/>
+                <property name="binding_line" value="${DBD Line}-${DBD}-in-${DBD Landing Site}"/>
+                <property name="gender" value="Gender$MAP:m=Male|f=Female|x=unknown"/>
+                <property name="area" value="Area$MAP:b=Brain|v=Ventral Nerve Cord"/>
+                <property name="age" value="Age"/>
+                <property name="l_number" value="L Number"/>
+                <property name="cross_number" value="Cross Number"/>
+                <property name="anatomical_region" value="Brain Region"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="tissue_orientation" value="Tissue Orientation"/>
             </rowListener>
 
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\dm10.isln.janelia.org\rubinimg\tmog\summaries\rd_split"/>
+            </sessionListener>
         </plugins>
 
         <dataFields>
@@ -91,13 +103,12 @@
 
             <validValueList displayName="Area" required="true">
                 <validValue displayName="b: Brain" value="b" default="true"/>
-                <validValue displayName="s: Salivary Gland" value="s"/>
                 <validValue displayName="v: Ventral Nerve Cord" value="v"/>
             </validValueList>
 
             <separator value="_L"/>
 
-            <number displayName="Sample Number"
+            <number displayName="L Number"
                     required="true"
                     minimumValue="1" maximumValue="99"
                     padFormat="20"
@@ -125,6 +136,19 @@
                         displayNamePrefixedForValues="false">
                 <staticDefault value="face_up"/>                
             </cvTermList>
+
+            <text displayName="Cross Number"
+                  required="true"
+                  markedForTask="false">
+            </text>
+
+            <validValueList displayName="Brain Region" required="true"
+                            markedForTask="false">
+                <validValue value="mushroom body"/>
+                <validValue value="central complex"/>
+                <validValue value="optic lobe"/>
+                <validValue value="vlpr"/>
+            </validValueList>
 
         </dataFields>
 
