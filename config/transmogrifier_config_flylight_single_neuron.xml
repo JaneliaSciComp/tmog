@@ -3,9 +3,31 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.6.1" frameSizePercentage="95"/>
+    <global minimumVersion="2.7.0" frameSizePercentage="95"/>
 
     <project name="Fly Light Flip (FLFL*)" default="true">
+
+        <inputFileFilter patternString=".*\.xml">
+            <xmlPropertyFile targetGroupPath="samples/sample"
+                             relativeTargetPath="lsm"
+                             relativeTargetNamePath="FileName">
+
+                <groupProperty relativePath="tmogLine"/>
+                <groupProperty relativePath="tmogCreatedBy"/>
+                <groupProperty relativePath="tmogVial"/>
+                <groupProperty relativePath="tmogEffector"/>
+                <groupProperty relativePath="tmogSlideCode"/>
+                <groupProperty relativePath="tmogGender"/>
+                <groupProperty relativePath="tmogAge"/>
+                <groupProperty relativePath="tmogFullAge"/>
+                <groupProperty relativePath="tmogArea"/>
+                <groupProperty relativePath="tmogCreatedBy"/>
+
+                <targetProperty relativePath="tmogLamina"/>
+                <targetProperty relativePath="tmogTile"/>
+
+            </xmlPropertyFile>
+        </inputFileFilter>
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
@@ -43,12 +65,12 @@
                 <property name="created_by" value="Imager"/>
                 <property name="gal4_vial" value="GAL4 Vial"/>
                 <property name="effector" value="Effector"/>
-                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Row}${Slide Column}"/>
+                <property name="slide_code" value="Slide Code"/>
                 <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
+                <property name="area" value="Area"/>
                 <property name="age" value="Age"/>
-                <property name="days_after_eclosion" value="Days After Eclosion"/>
-                <property name="area" value="$STATIC:Brain"/>
+                <property name="full_age" value="Full Age"/>
                 <property name="lamina_percentage" value="Lamina"/>
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
             </rowListener>
@@ -68,37 +90,34 @@
              included as components of the file name (markedForTask="false").
              -->
 
-            <text displayName="GAL4 Line" markedForTask="false" displayWidth="150">
+            <text displayName="GAL4 Line" required="true"
+                  markedForTask="false"
+                  displayWidth="150">
+                <targetPropertyDefault propertyName="tmogLine"/>
             </text>
 
-            <text displayName="GAL4 Vial" pattern="^[A-Z]$"
-                  markedForTask="false" convertToUpperCase="true">
-            </text>
+            <number displayName="GAL4 Vial" required="true"
+                    minimumValue="0"
+                    markedForTask="false">
+                <targetPropertyDefault propertyName="tmogVial"/>
+            </number>
 
             <cvTermList displayName="Effector" required="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
+                <targetPropertyDefault propertyName="tmogEffector"/>
             </cvTermList>
 
-            <date displayName="Mount Date" required="true"
-                  datePattern="yyyyMMdd" markedForTask="false">
-            </date>
-
-            <number displayName="Slide Number" required="true"
-                    markedForTask="false"
-                    minimumValue="1" maximumValue="99" />
-
-            <text displayName="Slide Row" pattern="[A-Z]" required="true"
-                  markedForTask="false" convertToUpperCase="true">
+            <text displayName="Slide Code" required="true"
+                  pattern="[0-9\.\_]++"
+                  markedForTask="false">
+                <targetPropertyDefault propertyName="tmogSlideCode"/>
             </text>
-
-            <number displayName="Slide Column" required="true"
-                    markedForTask="false"
-                    minimumValue="1" maximumValue="99" />
 
             <validValueList displayName="Tile" required="true"
                             markedForTask="false">
+                <targetPropertyDefault propertyName="tmogTile"/>
                 <validValue displayName="01: Left Optic Lobe" value="Left Optic Lobe" />
                 <validValue displayName="02: Ventral Brain" value="Ventral Brain"/>
                 <validValue displayName="03: Left Dorsal Brain" value="Left Dorsal Brain"/>
@@ -116,31 +135,53 @@
 
             <validValueList displayName="Gender" required="true"
                             markedForTask="false">
+                <targetPropertyDefault propertyName="tmogGender"/>
                 <validValue displayName="m: Male" value="m"/>
                 <validValue displayName="f: Female" value="f"/>
                 <validValue displayName="x: Not Defined" value="x"/>
             </validValueList>
+
+            <validValueList displayName="Area" required="true"
+                            markedForTask="false">
+                <targetPropertyDefault propertyName="tmogArea"/>
+                <validValue value="Brain" default="true"/>
+                <validValue value="VNC"/>
+                <validValue value="CNS"/>
+            </validValueList>
+
             <cvTermList displayName="Age" required="true"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
                         displayNamePrefixedForValues="true"
                         markedForTask="false">
+                <targetPropertyDefault propertyName="tmogAge"/>
             </cvTermList>
 
-            <number displayName="Days After Eclosion" required="false"
-                    markedForTask="false"
-                    minimumValue="0" maximumValue="21" />
+            <text displayName="Full Age" required="false"
+                  markedForTask="false">
+                <targetPropertyDefault propertyName="tmogFullAge"/>
+            </text>
 
             <validValueList displayName="Lamina" required="true"
                             markedForTask="false">
+                <targetPropertyDefault propertyName="tmogLamina">
+                    <mappedValue from="true" to="100" />
+                    <mappedValue from="True" to="100" />
+                    <mappedValue from="TRUE" to="100" />
+                </targetPropertyDefault>
                 <validValue displayName="Yes" value="100"/>
                 <validValue displayName="No" value="" default="true"/>
             </validValueList>
 
             <decimal displayName="Heat Shock Minutes" required="false"
-                     minimumValue="0" markedForTask="false" />
+                     minimumValue="0"
+                     markedForTask="false" />
 
             <validValueList displayName="Imager" required="true"
                             markedForTask="false">
+                <targetPropertyDefault propertyName="tmogCreatedBy">
+                    <mappedValue from="jeterj" to="Jennifer Jeter" />
+                    <mappedValue from="iyern" to="Nirmala Iyer" />
+                </targetPropertyDefault>
                 <validValue value="Jennifer Jeter"/>
                 <validValue value="Nirmala Iyer"/>
             </validValueList>
