@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.4.7"/>
+    <global minimumVersion="2.7.0"/>
 
     <project name="Zlatic Lab: Screen Pipeline" default="true"
             copyPreviousButtonVisible="false">
@@ -158,7 +158,7 @@
 
     </project>
 
-    <project name="Zlatic Lab: RD Pipeline" default="true"
+    <project name="Zlatic Lab: RD Pipeline"
             copyPreviousButtonVisible="false">
 
         <inputFileFilter patternString=".+\.(png|blob|blobs|set|summary)"
@@ -198,6 +198,12 @@
         <plugins>
             <rowValidator className="org.janelia.it.chacrm.ChacrmLineValidator">
                 <property name="linePropertyName" value="Genotype"/>
+            </rowValidator>
+            <rowValidator className="org.janelia.it.mwt.SetFileValidator">
+                <property name="baseFileNamePattern"
+                          value="(.+?)(_\d+k)?\.(png|blob|blobs|set|summary)"/>
+                <property name="baseFileNameGroupIndex"
+                          value="1"/>
             </rowValidator>
         </plugins>
 
@@ -391,7 +397,7 @@
 
     </project>
 
-    <project name="Zlatic Lab: Promote RD to Screen Pipeline" default="true"
+    <project name="Zlatic Lab: Promote RD to Screen Pipeline"
             copyPreviousButtonVisible="false" taskName="rename-without-delete">
 
         <inputFileFilter patternString=".+\.(png|blob|blobs|set|summary)"
