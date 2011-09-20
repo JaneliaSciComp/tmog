@@ -19,6 +19,8 @@ import java.io.File;
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class validates manually entered protocol time specifications
@@ -33,8 +35,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SetFileValidator
         implements RowValidator {
 
-    private MessageFormat timesFieldNameFormat =
-            new MessageFormat("Stimulus {0} Times");
+    private String timesFieldNamePattern = "Stimulus {0} Times";
+    private String baseFileNamePattern =
+            "(.+?)(_\\d+k)?\\.(png|blob|blobs|set|summary)";
+    private int baseFileNameGroupIndex = 1;
+
+    private MessageFormat timesFieldNameFormat;
+    private Pattern compiledBaseFileNamePattern;
 
     // TODO: may need to manage cache cleanup if memory becomes an issue
 
@@ -59,30 +66,65 @@ public class SetFileValidator
      */
     public void init(PluginConfiguration config)
             throws ExternalSystemException {
+
         Map<String, String> props = config.getProperties();
-        String timesFieldNameFormatString =
-                props.get("timesFieldNameFormatString");
-        if (timesFieldNameFormatString != null) {
-            if (! timesFieldNameFormatString.contains("{0}")) {
+
+        final String configuredTimesFieldNamePattern =
+                props.get("timesFieldNamePattern");
+        if (configuredTimesFieldNamePattern != null) {
+            if (! configuredTimesFieldNamePattern.contains("{0}")) {
                 throw new ExternalSystemException(
-                        "Failed to initialize SetFileValidator plug-in.  " +
+                        INIT_FAIL_MSG +
                         "The 'timesFieldNameFormatString' property " +
                         "must contain '{0}' for the stimulus index.");
 
             }
-            timesFieldNameFormat =
-                    new MessageFormat(timesFieldNameFormatString);
+            timesFieldNamePattern = configuredTimesFieldNamePattern;
         }
+
+        timesFieldNameFormat = new MessageFormat(timesFieldNamePattern);
 
         try {
             timesFieldNameFormat.format(new Object[]{1});
         } catch (Exception e) {
             throw new ExternalSystemException(
-                    "Failed to initialize SetFileValidator plug-in.  " +
+                    INIT_FAIL_MSG +
                     "Please verify the 'timesFieldNameFormatString' property " +
-                    "value '" + timesFieldNameFormat.toPattern() + "'.  " +
+                    "value '" + timesFieldNamePattern + "'.  " +
                     "The specific error is: " + e.getMessage(), e);
         }
+
+        final String configuredBaseFileNamePattern =
+                props.get("baseFileNamePattern");
+        if (configuredBaseFileNamePattern != null) {
+            baseFileNamePattern = configuredBaseFileNamePattern;
+        }
+
+        try {
+            compiledBaseFileNamePattern = Pattern.compile(baseFileNamePattern);
+        } catch (Exception e) {
+            throw new ExternalSystemException(
+                    INIT_FAIL_MSG +
+                    "Please verify the 'baseFileNamePattern' property " +
+                    "value '" + baseFileNamePattern + "'.  " +
+                    "The specific error is: " + e.getMessage(), e);
+        }
+
+        final String configuredBaseFileNameGroupIndex =
+                props.get("baseFileNameGroupIndex");
+        if (configuredBaseFileNameGroupIndex != null) {
+            try {
+                baseFileNameGroupIndex =
+                        Integer.parseInt(configuredBaseFileNameGroupIndex);
+            } catch (Exception e) {
+                throw new ExternalSystemException(
+                        INIT_FAIL_MSG +
+                        "Please verify the 'baseFileNameGroupIndex' property " +
+                        "value '" + configuredBaseFileNameGroupIndex + "'.  " +
+                        "The specific error is: " + e.getMessage(), e);
+            }
+        }
+
     }
 
     /**
@@ -102,6 +144,14 @@ public class SetFileValidator
         if (row instanceof RenamePluginDataRow) {
             final File fromFile = ((RenamePluginDataRow) row).getFromFile();
             final String setFileName = getSetFileAbsolutePath(fromFile);
+            if (setFileName == null) {
+                throw new ExternalDataException(
+                        "Validation for " + fromFile.getAbsolutePath() +
+                        " cannot be performed because the set file name " +
+                        "cannot be derived.  The set file name pattern is '" +
+                        baseFileNamePattern + "'.");
+            }
+
             SetFile parsedSetFile = parsedSetFiles.get(setFileName);
             if (parsedSetFile == null) {
                 File setFile = new File(setFileName);
@@ -135,10 +185,15 @@ public class SetFileValidator
     private String getSetFileAbsolutePath(File fromFile) {
         String setFileAbsolutePath = null;
         String fromFileAbsolutePath = fromFile.getAbsolutePath();
-        int lastDot = fromFileAbsolutePath.lastIndexOf('.') + 1;
-        if (lastDot > 0) {
-            setFileAbsolutePath = fromFileAbsolutePath.substring(0, lastDot) +
-                                  "set";
+        Matcher m = compiledBaseFileNamePattern.matcher(fromFileAbsolutePath);
+        if (m.matches() && (m.groupCount() >= baseFileNameGroupIndex)) {
+            setFileAbsolutePath = m.group(baseFileNameGroupIndex) + ".set";
+        } else {
+            LOG.warn("getSetFileAbsolutePath: " +
+                     "failed to derive set file path for " +
+                     fromFileAbsolutePath + ", baseFileNamePattern is '" +
+                     baseFileNamePattern + "', baseFileNameGroupIndex is " +
+                     baseFileNameGroupIndex);
         }
         return setFileAbsolutePath;
     }
@@ -181,4 +236,8 @@ public class SetFileValidator
     }
 
     private static final Logger LOG = Logger.getLogger(SetFileValidator.class);
+
+    private static final String INIT_FAIL_MSG =
+            "Failed to initialize SetFileValidator plug-in.  ";
+
 }

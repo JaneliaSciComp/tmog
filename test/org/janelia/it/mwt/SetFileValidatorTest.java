@@ -69,7 +69,7 @@ public class SetFileValidatorTest
             fail("unexpected exception thrown: " + e.getMessage());
         }
 
-        row = getPluginDataRow(".set",
+        row = getPluginDataRow("_000000k.blobs",
                                "45s1x30s0s",
                                "105s10x0.2s10s");
         try {
@@ -80,15 +80,26 @@ public class SetFileValidatorTest
             fail("unexpected exception thrown: " + e.getMessage());
         }
 
-        row = getPluginDataRow(".blobs",
+        row = getPluginDataRow(".summary",
                                "45s1x30s0s",
                                "bad-time-spec");
         try {
             validator.validate(row);
-            fail("exception should be thrown bad time spec");
+            fail("exception should be thrown for bad time spec");
         } catch (Exception e) {
             // test passed
         }
+
+        row = getPluginDataRow("bad-suffix",
+                               "45s1x30s0s",
+                               "105s10x0.2s10s");
+        try {
+            validator.validate(row);
+            fail("exception should be thrown for bad file name");
+        } catch (Exception e) {
+            // test passed
+        }
+
     }
 
     private RenamePluginDataRow getPluginDataRow(String fromFileSuffix,
