@@ -8,6 +8,7 @@
 package org.janelia.it.mwt;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 
 /**
  * Time information for a stimulus as defined by
@@ -48,6 +49,7 @@ public class StimulusTimes {
 
     private String stimulusName;
     private String onset;
+    private BigDecimal onsetValue;
     private int number;
     private String duration;
     private String interval;
@@ -66,6 +68,7 @@ public class StimulusTimes {
      */
     public void setOnset(String onset) {
         this.onset = scaleValue(onset, ONE_THOUSAND);
+        this.onsetValue = new BigDecimal(this.onset);
     }
 
     /**
@@ -132,6 +135,30 @@ public class StimulusTimes {
                "\", \"timeSpecification\":\"" + getSpecification() +
                "\"}";
     }
+
+    /**
+     * Compares times objects based upon onset time attribute.
+     */
+    public static Comparator<StimulusTimes> ONSET_COMPARATOR =
+            new Comparator<StimulusTimes>() {
+                @Override
+                public int compare(StimulusTimes o1,
+                                   StimulusTimes o2) {
+                    int result = 0;
+                    if (o1.onsetValue == null) {
+                        if (o2.onsetValue != null) {
+                            result = -1;
+                        }
+                    } else if (o2.onsetValue == null) {
+                        if (o1.onsetValue != null) {
+                            result = 1;
+                        }
+                    } else {
+                        result = o1.onsetValue.compareTo(o2.onsetValue);
+                    }
+                    return result;
+                }
+            };
 
     /**
      * Divide and scale the value, trimming off any trailing insignificant
