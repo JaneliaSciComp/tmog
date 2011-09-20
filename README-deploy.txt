@@ -12,22 +12,22 @@ Build and Deployment Instructions:
             to be setup with an appropriate alias and password
             (see build.xml for details).
 
-4. scp dist/JaneliaTransmogrifier__V2.1.6.jar to wiki:/tmp
+4. scp dist/JaneliaTransmogrifier__Va.b.c.jar to wiki:/tmp
    -- NOTE: webstart app is hosted on wiki server,
-            replace jar version number with current version
+            replace jar version number (a.b.c) with current version
 
 5. ssh wiki
 
-   > cd /usr/local/jboss/jbossweb-1.0.0.GA/server/wiki/deploy-apps/webstart.war/tmog
-   > su jboss
-   > cp /tmp/JaneliaTransmogrifier__V2.1.6.jar . # replace jar version number with current version
-   > rm JaneliaTransmogrifier__V2.1.4.jar        # remove n-2 version of jar file (keep n-1 around just in case)
+   > cd /misc/local/tomcat/instances/wiki-2011/webapps/webstart/tmog
+   > su jbossadmin
+   > cp /tmp/JaneliaTransmogrifier__Va.b.c.jar . # replace jar version number with current version
+   > rm JaneliaTransmogrifier__Va.b.c-2.jar      # remove n-2 version of jar file (keep n-1 around just in case)
    > vi transmogrifier.jnlp
      # update jar version number:
-     #   <jar href="JaneliaTransmogrifier.jar" version="2.1.6" main="true" download="eager"/>
+     #   <jar href="JaneliaTransmogrifier.jar" version="a.b.c" main="true" download="eager"/>
 
    > exit
-   > rm /tmp/JaneliaTransmogrifier__V2.1.6.jar # remove temp copy of jar file
+   > rm /tmp/JaneliaTransmogrifier__Va.b.c.jar # remove temp copy of jar file
    > exit
 
 6. Test launch of app from lab share and make sure latest version is loaded.
