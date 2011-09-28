@@ -16,7 +16,6 @@
                 <groupProperty relativePath="tmogCreatedBy"/>
                 <groupProperty relativePath="tmogVial"/>
                 <groupProperty relativePath="tmogEffector"/>
-                <groupProperty relativePath="tmogSlideCode"/>
                 <groupProperty relativePath="tmogGender"/>
                 <groupProperty relativePath="tmogAge"/>
                 <groupProperty relativePath="tmogFullAge"/>
@@ -65,7 +64,7 @@
                 <property name="created_by" value="Imager"/>
                 <property name="gal4_vial" value="GAL4 Vial"/>
                 <property name="effector" value="Effector"/>
-                <property name="slide_code" value="Slide Code"/>
+                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Row}${Slide Column}"/>
                 <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
                 <property name="area" value="Area"/>
@@ -103,19 +102,31 @@
             </number>
 
             <cvTermList displayName="Effector" required="true"
+                        autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
                 <targetPropertyDefault propertyName="tmogEffector"/>
             </cvTermList>
 
-            <text displayName="Slide Code" required="true"
-                  pattern="[0-9\.\_]++"
-                  markedForTask="false">
-                <targetPropertyDefault propertyName="tmogSlideCode"/>
+            <date displayName="Mount Date" required="true"
+                  datePattern="yyyyMMdd" markedForTask="false">
+            </date>
+
+            <number displayName="Slide Number" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="99" />
+
+            <text displayName="Slide Row" pattern="[A-Z]" required="true"
+                  markedForTask="false" convertToUpperCase="true">
             </text>
 
+            <number displayName="Slide Column" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="99" />
+
             <validValueList displayName="Tile" required="true"
+                            autoComplete="true"
                             markedForTask="false">
                 <targetPropertyDefault propertyName="tmogTile"/>
                 <validValue displayName="01: Left Optic Lobe" value="Left Optic Lobe" />
@@ -134,6 +145,7 @@
             </validValueList>
 
             <validValueList displayName="Gender" required="true"
+                            autoComplete="true"
                             markedForTask="false">
                 <targetPropertyDefault propertyName="tmogGender"/>
                 <validValue displayName="m: Male" value="m"/>
@@ -142,6 +154,7 @@
             </validValueList>
 
             <validValueList displayName="Area" required="true"
+                            autoComplete="true"
                             markedForTask="false">
                 <targetPropertyDefault propertyName="tmogArea"/>
                 <validValue value="Brain" default="true"/>
@@ -152,6 +165,7 @@
             <cvTermList displayName="Age" required="true"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
                         displayNamePrefixedForValues="true"
+                        autoComplete="true"
                         markedForTask="false">
                 <targetPropertyDefault propertyName="tmogAge"/>
             </cvTermList>
@@ -162,6 +176,7 @@
             </text>
 
             <validValueList displayName="Lamina" required="true"
+                            autoComplete="true"
                             markedForTask="false">
                 <targetPropertyDefault propertyName="tmogLamina">
                     <mappedValue from="true" to="100" />
@@ -177,6 +192,7 @@
                      markedForTask="false" />
 
             <validValueList displayName="Imager" required="true"
+                            autoComplete="true"
                             markedForTask="false">
                 <targetPropertyDefault propertyName="tmogCreatedBy">
                     <mappedValue from="jeterj" to="Jennifer Jeter" />
