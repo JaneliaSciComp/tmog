@@ -127,10 +127,10 @@
                 <validValue displayName="v: Ventral Nerve Cord" value="v"/>
             </validValueList>
             <separator value="-"/>
-            <number displayName="Concentration" required="true"
-                    minimumValue="0" maximumValue="7000"  padFormat="40">
+            <text displayName="Concentration" required="true"
+                  pattern="[0-9A-Za-z\_]++" padFormat="40">
                 <sourceFileDefault pattern=".+L\d\d??_.*-(\d+).*#.*"/>                
-            </number>
+            </text>
             <separator value="-"/>
             <number displayName="Sample Number" required="true"
                     minimumValue="1" maximumValue="99"  padFormat="20">
