@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.6.0" frameSizePercentage="95"/>
+    <global minimumVersion="2.5.1" frameSizePercentage="95"/>
 
     <project name="Rubin Lab: Ming's Images (MW_*)" default="true">
 
@@ -14,37 +14,17 @@
 
         <plugins>
 
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.MultipleFieldTextValidator">
-                <property name="value" value="${Line 1 (select)}${Line 1 (text)}"/>
-                <property name="required" value="true"/>
-                <property name="errorMessage" value="Please either select or enter a Line 1 value."/>
-            </rowValidator>
-
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.MultipleFieldTextValidator">
-                <property name="value" value="${Line 2 (select)}${Line 2 (text)}"/>
-                <property name="required" value="true"/>
-                <property name="errorMessage" value="Please either select or enter a Line 2 value."/>
-            </rowValidator>
-
             <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/${Line 1 (select)}${Line 1 (text)}.janelia-sage"/>
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/${Line 1}.janelia-sage"/>
                 <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
-                <property name="errorMessage" value="There is no 'rubin' lab line named '${Line 1 (select)}${Line 1 (text)}' in the SAGE database."/>
+                <property name="errorMessage" value="There is no 'rubin' lab line named '${Line 1}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
-                <!--
-                The following resources will always be considered valid
-                (and will not be checked against the service).
-                -->
-                <property name="validResources"
-                          value="http://sage.int.janelia.org/sage-ws/lines/rubin/c155_Elav.janelia-sage,
-                                 http://sage.int.janelia.org/sage-ws/lines/rubin/replace-this-with-another-line-name.janelia-sage,
-                                 http://sage.int.janelia.org/sage-ws/lines/rubin/replace-this-with-another-line-name.janelia-sage"/>
             </rowValidator>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/${Line 2 (select)}${Line 2 (text)}.janelia-sage"/>
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/${Line 2}.janelia-sage"/>
                 <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
-                <property name="errorMessage" value="There is no 'rubin' lab line named '${Line 2 (select)}${Line 2 (text)}' in the SAGE database."/>
+                <property name="errorMessage" value="There is no 'rubin' lab line named '${Line 2}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
                 <!--
                 The following resources will always be considered valid
@@ -55,23 +35,28 @@
                                  http://sage.int.janelia.org/sage-ws/lines/rubin/29C07_KD_GS4_P2.janelia-sage,
                                  http://sage.int.janelia.org/sage-ws/lines/rubin/29C07_KD_GS4_P40.janelia-sage,
                                  http://sage.int.janelia.org/sage-ws/lines/rubin/29C07_KD_GS4_P2_P40.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/rubin/29C07_FLP_sHP8.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/rubin/35B01_KD_GS4_P2.janelia-sage,
                                  http://sage.int.janelia.org/sage-ws/lines/rubin/40E09_KD_GS4_P2.janelia-sage,
                                  http://sage.int.janelia.org/sage-ws/lines/rubin/NP0681.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/rubin/NP1011.janelia-sage,
                                  http://sage.int.janelia.org/sage-ws/lines/rubin/NP1035.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/rubin/NP1320.janelia-sage,
                                  http://sage.int.janelia.org/sage-ws/lines/rubin/NP3045.janelia-sage,
-                                 http://sage.int.janelia.org/sage-ws/lines/rubin/NP6250.janelia-sage,
                                  http://sage.int.janelia.org/sage-ws/lines/rubin/NP6099.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/rubin/NP6250.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/rubin/NP6502.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/rubin/NP6558.janelia-sage,
                                  http://sage.int.janelia.org/sage-ws/lines/rubin/NP7226.janelia-sage,
                                  http://sage.int.janelia.org/sage-ws/lines/rubin/NP7281.janelia-sage,
                                  http://sage.int.janelia.org/sage-ws/lines/rubin/NP7476.janelia-sage"/>
             </rowValidator>
 
-            <!-- TODO: handle Simpson line c155_Elav -->
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="family" value="$STATIC:rubin_wu"/>
                 <property name="lab" value="$STATIC:rubin"/>
-                <property name="line" value="${Line 1 (select)}${Line 1 (text)}"/>
+                <property name="line" value="${Line 1}"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="tissue_orientation" value="Tissue Orientation"/>
             </rowListener>
@@ -80,42 +65,24 @@
 
         <dataFields>
             <separator value="MW-"/>
-            <validValueList displayName="Line 1 (select)">
-                <validValue value="GMR_12H12_AE_01"/>
-                <validValue value="GMR_13D05_AE_01"/>
-                <validValue value="GMR_14A11_AE_01"/>
-                <validValue value="GMR_14A11_LJ_21"/>
-            </validValueList>
-            <text displayName="Line 1 (text)" displayWidth="150">
+            <text displayName="Line 1" required="true" displayWidth="150"
+                  pattern="GMR_[0-9A-Z\_]++">
             </text>
             <separator value="-"/>
             <validValueList displayName="UAS Reporter 1" required="true">
                 <validValue displayName="r1a: pJFRC12-10XUAS-IVS-myr::GFP at su(Hw)attP5" value="r1a" default="true"/>
                 <validValue displayName="r1b: pJFRC12-10XUAS-IVS-myr::GFP at attP2" value="r1b" />
                 <validValue displayName="r1c: pJFRC-13XsulA-IVS-myr::smGFP-V5-DARK at su(Hw)attP8" value="r1c" />
+                <validValue displayName="r1null" value="r1null" />
             </validValueList>
             <separator value="-"/>
-            <validValueList displayName="Line 2 (select)">
-                <validValue value="16H08_KD_GS4_P2"/>
-                <validValue value="29C07_KD_GS4_P2"/>
-                <validValue value="29C07_KD_GS4_P40"/>
-                <validValue value="29C07_KD_GS4_P2_P40"/>
-                <validValue value="40E09_KD_GS4_P2"/>
-                <validValue value="NP0681"/>
-                <validValue value="NP1035"/>
-                <validValue value="NP3045"/>
-                <validValue value="NP6250"/>
-                <validValue value="NP6099"/>
-                <validValue value="NP7226"/>
-                <validValue value="NP7281"/>
-                <validValue value="NP7476"/>
-            </validValueList>
-            <text displayName="Line 2 (text)" displayWidth="150">
+            <text displayName="Line 2" required="true" displayWidth="150">
             </text>
             <separator value="-"/>
             <validValueList displayName="UAS Reporter 2" required="true">
-                <validValue displayName="r2a: pJFRC-UAS-KDRT-STOP-KDRT-myr::RFP at attP40" value="r2a" default="true"/>
+                <validValue displayName="r2a: pJFRC-UAS-KDRT>STOP>KDRT-myr::RFP at attP40" value="r2a" default="true"/>
                 <validValue displayName="r2b: pJFRC-UAS-IVS-myr::smGFP-HA-DARK at attP18" value="r2b" default="true"/>
+                <validValue displayName="r2c: pJFRC-UAS-FRT>STOP>FRT-myr::GFP at attP40" value="r2c" default="true"/>
             </validValueList>
             <separator value="-"/>
             <validValueList displayName="Gender" required="true">
@@ -161,7 +128,7 @@
             </validValueList>
             <separator value="-"/>
             <number displayName="Concentration" required="true"
-                    minimumValue="0" maximumValue="5000"  padFormat="40">
+                    minimumValue="0" maximumValue="7000"  padFormat="40">
                 <sourceFileDefault pattern=".+L\d\d??_.*-(\d+).*#.*"/>                
             </number>
             <separator value="-"/>
