@@ -49,7 +49,7 @@
                   maximumLength="5">
             </text>
 
-            <separator value="-p65ADZp-in-"/>
+            <separator value="-p65ADZp-"/>
 
             <validValueList displayName="AD Landing Site"
                             required="true">
@@ -73,7 +73,7 @@
                 <validValue value="ZpGdbd" default="true"/>
             </validValueList>
 
-            <separator value="-in-"/>
+            <separator value="-"/>
 
             <validValueList displayName="DBD Landing Site"
                             required="true">
