@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.7.2" frameSizePercentage="95"/>
+    <global minimumVersion="2.7.3" frameSizePercentage="95"/>
 
     <project name="Fly Light Flip - manual entry (FLFL*)" default="true">
 
@@ -13,6 +13,14 @@
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Gender"/>
+                <property name="matchesPattern" value="\S+"/>
+                <property name="whenReferenceField" value="Age"/>
+                <property name="matchesReferencePattern" value="^[^L].*"/>
+                <property name="errorMessage" value="Gender value is required when age is ${Age}."/>
+            </rowValidator>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
                 <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/${GAL4 Line}.janelia-sage?lab=flylight&amp;lab=rubin"/>
@@ -77,6 +85,7 @@
             </text>
 
             <cvTermList displayName="Effector" required="true"
+                        autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
@@ -99,6 +108,7 @@
                     minimumValue="1" maximumValue="99" />
 
             <validValueList displayName="Tile" required="true"
+                            autoComplete="true"
                             markedForTask="false">
                 <validValue displayName="01: Left Optic Lobe" value="Left Optic Lobe" />
                 <validValue displayName="02: Ventral Brain" value="Ventral Brain"/>
@@ -115,7 +125,8 @@
                 <validValue displayName="13: Terminus" value="Terminus"/>
             </validValueList>
 
-            <validValueList displayName="Gender" required="true"
+            <validValueList displayName="Gender" required="false"
+                            autoComplete="true"
                             markedForTask="false">
                 <validValue displayName="m: Male" value="m"/>
                 <validValue displayName="f: Female" value="f"/>
@@ -124,6 +135,7 @@
             <cvTermList displayName="Age" required="true"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
                         displayNamePrefixedForValues="true"
+                        autoComplete="true"
                         markedForTask="false">
             </cvTermList>
 
@@ -136,6 +148,7 @@
                     minimumValue="0" maximumValue="21" />
 
             <validValueList displayName="Lamina" required="true"
+                            autoComplete="true"
                             markedForTask="false">
                 <validValue displayName="Yes" value="100"/>
                 <validValue displayName="No" value="" default="true"/>
@@ -145,6 +158,7 @@
                      minimumValue="0" markedForTask="false" />
 
             <validValueList displayName="Imager" required="true"
+                            autoComplete="true"
                             markedForTask="false">
                 <validValue value="Jennifer Jeter"/>
                 <validValue value="Nirmala Iyer"/>
