@@ -23,9 +23,9 @@
             </rowValidator>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/${GAL4 Line}.janelia-sage?lab=flylight&amp;lab=rubin"/>
-                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/GMR_10A01_AE_01.janelia-sage?lab=flylight&amp;lab=rubin"/>
-                <property name="errorMessage" value="There is no Fly Light or Rubin lab line named '${GAL4 Line}' in the SAGE database."/>
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/${GAL4 Line}.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/GMR_10A01_AE_01.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"/>
+                <property name="errorMessage" value="There is no Fly Core, Fly Light, or Rubin lab line named '${GAL4 Line}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
@@ -198,9 +198,9 @@
         <plugins>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/${GAL4 Line}.janelia-sage?lab=flylight&amp;lab=rubin"/>
-                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/GMR_10A01_AE_01.janelia-sage?lab=flylight&amp;lab=rubin"/>
-                <property name="errorMessage" value="There is no Fly Light or Rubin lab line named '${GAL4 Line}' in the SAGE database."/>
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/${GAL4 Line}.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/GMR_10A01_AE_01.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"/>
+                <property name="errorMessage" value="There is no Fly Core, Fly Light, or Rubin lab line named '${GAL4 Line}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
@@ -377,16 +377,16 @@
         <plugins>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/${Activation Line}.janelia-sage?lab=flylight&amp;lab=rubin"/>
-                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/GMR_10A01_AE_01.janelia-sage?lab=flylight&amp;lab=rubin"/>
-                <property name="errorMessage" value="There is no Fly Light or Rubin lab line named '${Activation Line}' in the SAGE database."/>
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/${Activation Line}.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/GMR_10A01_AE_01.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"/>
+                <property name="errorMessage" value="There is no Fly Core, Fly Light, or Rubin lab line named '${Activation Line}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/${Binding Line}.janelia-sage?lab=flylight&amp;lab=rubin"/>
-                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/GMR_10A01_AE_01.janelia-sage?lab=flylight&amp;lab=rubin"/>
-                <property name="errorMessage" value="There is no Fly Light or Rubin lab line named '${Binding Line}' in the SAGE database."/>
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/${Binding Line}.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/GMR_10A01_AE_01.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"/>
+                <property name="errorMessage" value="There is no Fly Core, Fly Light, or Rubin lab line named '${Binding Line}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
@@ -514,16 +514,16 @@
         <plugins>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/${GAL4 Line}.janelia-sage?lab=flylight&amp;lab=rubin"/>
-                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/GMR_10A01_AE_01.janelia-sage?lab=flylight&amp;lab=rubin"/>
-                <property name="errorMessage" value="There is no Fly Light or Rubin lab line named '${GAL4 Line}' in the SAGE database."/>
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/${GAL4 Line}.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/GMR_10A01_AE_01.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"/>
+                <property name="errorMessage" value="There is no Fly Core, Fly Light, or Rubin lab line named '${GAL4 Line}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/${LexA Line}.janelia-sage?lab=flylight&amp;lab=rubin"/>
-                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/GMR_10A01_AE_01.janelia-sage?lab=flylight&amp;lab=rubin"/>
-                <property name="errorMessage" value="There is no Fly Light or Rubin lab line named '${LexA Line}' in the SAGE database."/>
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/${LexA Line}.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/GMR_10A01_AE_01.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"/>
+                <property name="errorMessage" value="There is no Fly Core, Fly Light, or Rubin lab line named '${LexA Line}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 

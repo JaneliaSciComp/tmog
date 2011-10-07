@@ -15,9 +15,9 @@
         <plugins>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/flylight/${Line}.janelia-sage"/>
-                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/flylight/EXT_P_w_mC_ato_GAL4_3_6_14a.janelia-sage"/>
-                <property name="errorMessage" value="There is no Fly Light line named '${Line}' in the SAGE database."/>
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/${Line}.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/EXT_P_w_mC_ato_GAL4_3_6_14a.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"/>
+                <property name="errorMessage" value="There is no Fly Core, Fly Light, or Rubin lab line named '${Line}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
