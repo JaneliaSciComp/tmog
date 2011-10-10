@@ -148,7 +148,7 @@
             <separator value="@"/>
 
             <text displayName="Suffix" required="false"
-                  copyable="false" pattern="^_\d{5}[\w]??$">
+                  copyable="false" pattern="^_?\d{3,}\w+$">
                 <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"/>
             </text>
 
@@ -387,7 +387,7 @@
             <separator value="@"/>
 
             <text displayName="Suffix" required="false"
-                  copyable="false" pattern="^_\d{5}[\w]??$">
+                  copyable="false" pattern="^_?\d{3,}\w+$">
                 <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"/>
             </text>
 
@@ -521,7 +521,7 @@
             <separator value="@"/>
 
             <text displayName="Suffix" required="false"
-                  copyable="false" pattern="^_\d{5}[\w]??$">
+                  copyable="false" pattern="^_?\d{3,}\w+$">
                 <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"/>
             </text>
 
