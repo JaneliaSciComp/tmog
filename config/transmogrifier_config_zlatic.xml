@@ -199,12 +199,12 @@
             <rowValidator className="org.janelia.it.chacrm.ChacrmLineValidator">
                 <property name="linePropertyName" value="Genotype"/>
             </rowValidator>
-            <rowValidator className="org.janelia.it.mwt.SetFileValidator">
-                <property name="baseFileNamePattern"
-                          value="(.+?)(_\d+k)?\.(png|blob|blobs|set|summary)"/>
-                <property name="baseFileNameGroupIndex"
-                          value="1"/>
-            </rowValidator>
+            <!--<rowValidator className="org.janelia.it.mwt.SetFileValidator">-->
+                <!--<property name="baseFileNamePattern"-->
+                          <!--value="(.+?)(_\d+k)?\.(png|blob|blobs|set|summary)"/>-->
+                <!--<property name="baseFileNameGroupIndex"-->
+                          <!--value="1"/>-->
+            <!--</rowValidator>-->
         </plugins>
 
         <dataFields>
