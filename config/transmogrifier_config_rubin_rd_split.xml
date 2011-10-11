@@ -54,6 +54,7 @@
             <validValueList displayName="AD Landing Site"
                             required="true">
                 <validValue value="attP40"/>
+                <validValue value="suHw-attP8"/>
                 <validValue value="VK00027"/>
             </validValueList>
 
