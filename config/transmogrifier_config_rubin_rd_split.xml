@@ -31,6 +31,8 @@
                 <property name="anatomical_region" value="Brain Region"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="tissue_orientation" value="Tissue Orientation"/>
+                <property name="dissection_date" value="${Dissection Date (yyyy-mm-dd)} 00:00:00"/>
+                <property name="mount_date" value="${Mount Date (yyyy-mm-dd)} 00:00:00"/>
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
@@ -150,6 +152,16 @@
                 <validValue value="optic lobe"/>
                 <validValue value="vlpr"/>
             </validValueList>
+
+            <date displayName="Dissection Date (yyyy-mm-dd)"
+                  required="false"
+                  datePattern="yyyy-MM-dd"
+                  markedForTask="false"/>
+
+            <date displayName="Mount Date (yyyy-mm-dd)"
+                  required="false"
+                  datePattern="yyyy-MM-dd"
+                  markedForTask="false"/>
 
         </dataFields>
 
