@@ -33,8 +33,6 @@ import java.util.Set;
 public class SageImageDao
         extends ImageDao {
 
-    public static final String RUBIN_LAB_LINE_PREFIX = "GMR_";
-    public static final String RUBIN_LAB_NAME = "rubin";
     public static final String NONE_LAB = "none";
     public static final String NOT_APPLICABLE = "Not_Applicable";
 
@@ -140,16 +138,15 @@ public class SageImageDao
 
             } else {
 
-                final String lineLabName = deriveLineLabName(image.getLabName(),
-                                                             lineName);
-                if (lineLabName == null) {
-                    throw new ExternalSystemException(
-                            "Lab name must be specified to manage line data.");
-                }
-
-                lineId = getLineId(lineName, lineLabName, connection);
+                final String defaultLineLabName =
+                        deriveLineLabName(image.getLabName(), lineName);
+                lineId = getLineId(lineName, defaultLineLabName, connection);
                 if (lineId == null) {
-                    lineId = addLine(lineName, lineLabName, connection);
+                    if (defaultLineLabName == null) {
+                        throw new ExternalSystemException(
+                                "Lab name must be specified to add new lines.");
+                    }
+                    lineId = addLine(lineName, defaultLineLabName, connection);
                 }
 
             }
@@ -475,26 +472,35 @@ public class SageImageDao
     }
 
     protected Integer getLineId(String lineName,
-                                String lineLabName,
+                                String defaultLineLabName,
                                 Connection connection)
             throws SQLException, ExternalSystemException {
 
         Integer lineId = null;
+        String lab;
 
         PreparedStatement select = null;
         ResultSet resultSet = null;
         try {
             select = connection.prepareStatement(SQL_SELECT_LINE_ID);
             select.setString(1, lineName);
-            select.setString(2, lineLabName);
             resultSet = select.executeQuery();
-            if (resultSet.next()) {
+            int count = 0;
+            while (resultSet.next()) {
                 lineId = resultSet.getInt(1);
-                if (resultSet.next()) {
-                    throw new ExternalSystemException(
-                            "Multiple lines exist with the name '" +
-                            lineName + "' and lab '" + lineLabName + "'.");
+                lab = resultSet.getString(2);
+                if (lab != null && lab.equals(defaultLineLabName)) {
+                    count = 1;
+                    break;
+                } else {
+                    count++;
                 }
+            }
+            if (count > 1) {
+                throw new ExternalSystemException(
+                        "Multiple lines exist with the name '" +
+                        lineName + "' but none of them are owned by the '" +
+                        defaultLineLabName + "' lab.");
             }
         } finally {
             DbManager.closeResources(resultSet, select, null, LOG);
@@ -534,6 +540,9 @@ public class SageImageDao
             DbManager.closeResources(null, insertLine, null, LOG);
         }
 
+        LOG.info("addLine: line id " + lineId + " created for '" +
+                 lineLabName + "' lab line '" + lineName + "'");
+
         return lineId;
     }
 
@@ -563,8 +572,6 @@ public class SageImageDao
         String lineLabName = imageLabName;
         if (NOT_APPLICABLE.equals(lineName)) {
             lineLabName = NONE_LAB;
-        } else if (lineName.startsWith(RUBIN_LAB_LINE_PREFIX)) {
-            lineLabName = RUBIN_LAB_NAME;
         }
         return lineLabName;
     }
@@ -638,12 +645,9 @@ public class SageImageDao
     /**
      * SQL for retrieving an image id.
      *   Parameter 1 is the line name.
-     *   Parameter 2 is the lab name.
      */
     private static final String SQL_SELECT_LINE_ID =
-            "SELECT id FROM line WHERE name=? AND " +
-            "lab_id=(" + SQL_SELECT_LAB_ID + ")";
-
+            "SELECT id, lab FROM line_vw WHERE name=?";
 
     /**
      * SQL for inserting an line.

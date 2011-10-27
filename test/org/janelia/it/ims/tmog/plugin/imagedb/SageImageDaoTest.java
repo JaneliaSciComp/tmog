@@ -13,6 +13,7 @@ import junit.framework.TestSuite;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.janelia.it.ims.tmog.DataRow;
+import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 import org.janelia.it.ims.tmog.target.FileTarget;
@@ -78,8 +79,7 @@ public class SageImageDaoTest
             new SimpleDateFormat("'testLine'yyyyMMddHHmmssSSS");
         sequenceNamespace = namespaceTemplate.format(new Date());
         lineName1 = sequenceNamespace + "-1";
-        lineName2 = SageImageDao.RUBIN_LAB_LINE_PREFIX +
-                    sequenceNamespace + "-2";
+        lineName2 = sequenceNamespace + "-2";
     }
 
     protected void tearDown() throws Exception {
@@ -108,13 +108,13 @@ public class SageImageDaoTest
         testImage.addProperty(TEST_PROPERTY_1, "valueA");
         testImage.addProperty(TEST_PROPERTY_2, "valueB");
         testImage.addProperty(Image.LINE_PROPERTY, lineName1);
-        testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB);
+        testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB_1);
 
         testImage = dao.saveProperties(testImage);
         Integer testImageId = testImage.getId();
 
         assertNotNull("id not set after add", testImage.getId());
-        verifyLineExists(lineName1, LINE_LAB);
+        verifyLineExists(lineName1, LINE_LAB_1);
 
         testImage = new Image();
         testImage.setId(testImageId);
@@ -125,7 +125,7 @@ public class SageImageDaoTest
         testImage.addProperty(TEST_PROPERTY_2, "updatedValueB");
         testImage.addProperty(TEST_PROPERTY_3, "valueC");
         testImage.addProperty(Image.LINE_PROPERTY, lineName2);
-        testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB);
+        testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB_2);
 
         testImage = dao.saveProperties(testImage);
 
@@ -135,16 +135,26 @@ public class SageImageDaoTest
         assertEquals("invalid id returned for " + relativePath,
                      testImageId, imageId);
 
-        verifyLineExists(lineName2, SageImageDao.RUBIN_LAB_NAME);
+        verifyLineExists(lineName2, LINE_LAB_2);
 
         testImage = new Image();
         testImage.setId(testImageId);
         testImage.setRelativePath(relativePath);
         testImage.addProperty(TEST_PROPERTY_3, "updatedValueC");
+        testImage.addProperty(Image.LINE_PROPERTY, lineName1);
+        testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB_2);
 
         testImage = dao.saveProperties(testImage);
 
         assertEquals("id changed after update", testImageId, testImage.getId());
+
+        try {
+            verifyLineExists(lineName1, null);
+        } catch (ExternalSystemException e) {
+            LOG.error("caught exception", e);
+            fail("line '" + lineName1 + "' incorrectly created for '" +
+                 LINE_LAB_2 + "' lab");
+        }
 
         relativePath = "missing-relative-path";
         imageId = dao.getImageId(relativePath);
@@ -170,7 +180,7 @@ public class SageImageDaoTest
         testImage.setCaptureDate(new Date());
         testImage.setFamily(FAMILY_1);
         testImage.addProperty(Image.LINE_PROPERTY, lineName1);
-        testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB);
+        testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB_1);
 
         testImage = dao.saveProperties(testImage);
         Integer testImageId = testImage.getId();
@@ -201,7 +211,7 @@ public class SageImageDaoTest
         testImage.setCaptureDate(new Date());
         testImage.setFamily(FAMILY_1);
         testImage.addProperty(Image.LINE_PROPERTY, lineName1);
-        testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB);
+        testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB_1);
 
         testImage = dao.saveProperties(testImage);
         Integer testImageId = testImage.getId();
@@ -217,7 +227,7 @@ public class SageImageDaoTest
         testImage.setFamily(FAMILY_1);
         // line info required since previous path image get deleted
         testImage.addProperty(Image.LINE_PROPERTY, lineName1);
-        testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB);
+        testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB_1);
 
         File fromFile = new File(previousRelativePath);
         FileTarget target = new FileTarget(new File(relativePath));
@@ -348,7 +358,8 @@ public class SageImageDaoTest
     private static final String TEST_PROPERTY_3 = "gender";
     private static final String FAMILY_1 = "baker_lab";
     private static final String FAMILY_2 = "baker_biorad";
-    private static final String LINE_LAB = "baker";
+    private static final String LINE_LAB_1 = "baker";
+    private static final String LINE_LAB_2 = "rubin";
 
     /**
      * SQL for deleting all properties for an image.
