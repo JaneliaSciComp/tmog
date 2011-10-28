@@ -22,6 +22,7 @@
                 <property name="lab" value="$STATIC:none"/>
                 <property name="line" value="$STATIC:Not_Applicable"/>
                 <property name="base_path" value="$STATIC:/groups/rubin/rubinimg/rubin_lab_2/confocalStacks/"/>
+                <property name="base_url" value="$STATIC:http://img.int.janelia.org/rubin-split-image/rubin_lab_2-confocal-data/"/>
                 <property name="public_line" value="Public Line"/>
                 <property name="gender" value="Gender"/>
                 <property name="area" value="Area"/>
