@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="2.7.5" frameSizePercentage="95"/>
+
+    <project name="Rubin Lab 2: Split Collaboration Images (RL02_*)"
+             taskName="rename-without-delete">
+
+        <outputDirectory>
+            <path path="[\\dm10.isln.janelia.org\rubinimg|/groups/rubin/rubinimg]\rubin_lab_2\confocalStacks" />
+            <renameFieldValue fieldDisplayName="Relative Path"/>
+        </outputDirectory>
+
+        <plugins>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="family" value="$STATIC:rubin_lab_2"/>
+                <property name="lab" value="$STATIC:none"/>
+                <property name="line" value="$STATIC:Not_Applicable"/>
+                <property name="base_path" value="$STATIC:/groups/rubin/rubinimg/rubin_lab_2/confocalStacks/"/>
+                <property name="public_line" value="Public Line"/>
+                <property name="gender" value="Gender"/>
+                <property name="area" value="Area"/>
+                <property name="age" value="Age"/>
+                <property name="l_number" value="L Number"/>
+                <property name="cross_number" value="Cross Number"/>
+                <property name="anatomical_region" value="Brain Region"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
+                <property name="dissection_date" value="${Dissection Date (yyyy-mm-dd)} 00:00:00"/>
+                <property name="mount_date" value="${Mount Date (yyyy-mm-dd)} 00:00:00"/>
+            </rowListener>
+        </plugins>
+
+        <dataFields>
+
+            <separator value="RL02_"/>
+
+            <text displayName="Public Line"
+                  required="true"
+                  pattern="[0-9A-Za-z]++">
+            </text>
+
+            <separator value="_"/>
+
+            <fileName displayName="File ID"
+                      patternString=".*(\d{17})\.lsm$"
+                      patternGroupNumber="1"
+                      visible="false" />
+
+            <separator value=".lsm"/>
+
+            <!--
+             These values are collected for the SAGE database but are not
+             included as components of the file name (markedForTask="false").
+             -->
+
+            <validValueList displayName="Gender"
+                            required="true"
+                            copyable="false"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_rd_split"/>
+                    <property name="image_property" value="gender"/>
+                </pluginDefault>
+                <validValue value="Female"/>
+                <validValue value="Male"/>
+                <validValue value="unknown"/>
+            </validValueList>
+
+            <cvTermList displayName="Age"
+                        required="true"
+                        copyable="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        displayNamePrefixedForValues="false"
+                        markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_rd_split"/>
+                    <property name="image_property" value="age"/>
+                </pluginDefault>
+            </cvTermList>
+
+            <validValueList displayName="Area"
+                            required="true"
+                            copyable="false"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_rd_split"/>
+                    <property name="image_property" value="area"/>
+                </pluginDefault>
+                <validValue value="Brain"/>
+                <validValue value="Ventral Nerve Cord"/>
+            </validValueList>
+
+            <number displayName="L Number"
+                    required="true"
+                    copyable="false"
+                    minimumValue="1" maximumValue="99"
+                    padFormat="20"
+                    markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_rd_split"/>
+                    <property name="image_property" value="l_number"/>
+                </pluginDefault>
+            </number>
+
+            <validValueList displayName="Tissue Mounting Protocol"
+                            required="true"
+                            copyable="false"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_rd_split"/>
+                    <property name="image_property" value="mounting_protocol"/>
+                </pluginDefault>
+                <validValue value="Glycerol-Based Mounting"/>
+                <validValue value="DPX Mounting"/>
+            </validValueList>
+
+            <cvTermList displayName="Tissue Orientation"
+                        required="true"
+                        copyable="false"
+                        markedForTask="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
+                        displayNamePrefixedForValues="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_rd_split"/>
+                    <property name="image_property" value="tissue_orientation"/>
+                </pluginDefault>
+            </cvTermList>
+
+            <text displayName="Cross Number"
+                  required="true"
+                  copyable="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_rd_split"/>
+                    <property name="image_property" value="cross_number"/>
+                </pluginDefault>
+            </text>
+
+            <validValueList displayName="Brain Region"
+                            required="true"
+                            copyable="false"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_rd_split"/>
+                    <property name="image_property" value="anatomical_region"/>
+                </pluginDefault>
+                <validValue value="mushroom body"/>
+                <validValue value="central complex"/>
+                <validValue value="optic lobe"/>
+                <validValue value="vlpr"/>
+            </validValueList>
+
+            <date displayName="Dissection Date (yyyy-mm-dd)"
+                  required="false"
+                  copyable="false"
+                  datePattern="yyyy-MM-dd"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_rd_split"/>
+                    <property name="image_property" value="dissection_date"/>
+                </pluginDefault>
+            </date>
+
+            <date displayName="Mount Date (yyyy-mm-dd)"
+                  required="false"
+                  copyable="false"
+                  datePattern="yyyy-MM-dd"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_rd_split"/>
+                    <property name="image_property" value="mount_date"/>
+                </pluginDefault>
+            </date>
+
+            <text displayName="Relative Path"
+                  required="true"
+                  copyable="false"
+                  markedForTask="false">
+                <sourceFileDefault matchType="path"
+                                   pattern=".*?([^/\\\\]+)[/\\\\][^/\\\\]+.lsm$" />
+            </text>
+
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
