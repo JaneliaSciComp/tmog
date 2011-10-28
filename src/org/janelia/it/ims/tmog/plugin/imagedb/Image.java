@@ -39,6 +39,7 @@ public class Image {
     private String basePath;
     private Map<String, String> propertyTypeToValueMap;
     private PluginDataRow row;
+    private boolean isBeingMoved;
 
     public Image() {
         this.id = null;
@@ -46,6 +47,7 @@ public class Image {
         this.source = "JFRC";
         this.display = true;
         this.row = null;
+        this.isBeingMoved = true;
     }
 
     public Image(PluginDataRow row,
@@ -181,6 +183,15 @@ public class Image {
     protected void setRow(PluginDataRow row) {
         this.row = row;
     }
+
+    public boolean isBeingMoved() {
+        return isBeingMoved;
+    }
+
+    public void setBeingMoved(boolean beingMoved) {
+        isBeingMoved = beingMoved;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
@@ -193,6 +204,7 @@ public class Image {
         sb.append(", family='").append(family).append('\'');
         sb.append(", display=").append(display);
         sb.append(", source='").append(source).append('\'');
+        sb.append(", isBeingMoved=").append(isBeingMoved);
         sb.append(", properties=").append(propertyTypeToValueMap);
         sb.append('}');
         return sb.toString();

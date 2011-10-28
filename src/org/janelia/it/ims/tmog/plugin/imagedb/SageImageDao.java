@@ -92,7 +92,8 @@ public class SageImageDao
             connection.setAutoCommit(false);
 
             String previousRelativePath = image.getPreviousRelativePath();
-            if ((previousRelativePath != null) &&
+            if (image.isBeingMoved() &&
+                (previousRelativePath != null) &&
                 (! relativePath.equals(previousRelativePath))) {
                 deleteImage = connection.prepareStatement(SQL_DELETE_IMAGE);
                 deleteImage.setString(1, previousRelativePath);
@@ -647,7 +648,8 @@ public class SageImageDao
      *   Parameter 1 is the line name.
      */
     private static final String SQL_SELECT_LINE_ID =
-            "SELECT id, lab FROM line_vw WHERE name=?";
+            "SELECT l.id, c.name FROM line l, cv_term c " +
+            "WHERE l.name=? AND c.id=l.lab_id";
 
     /**
      * SQL for inserting an line.

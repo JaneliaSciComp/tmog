@@ -36,6 +36,12 @@ public class ImageDataPlugin implements RowListener {
     List<ImagePropertySetter> propertySetters;
 
     /**
+     * Flag indicating whether existing data should be kept when
+     * an image's relative path changes.
+     */
+    private boolean keepExistingData = false;
+
+    /**
      * Empty constructor required by
      * {@link org.janelia.it.ims.tmog.config.PluginFactory}.
      */
@@ -67,6 +73,8 @@ public class ImageDataPlugin implements RowListener {
                 xmlBaseDirectoryName = value;
             } else if ("exclude.host.name".equals(key)) {
                 hostNameSetter = null;
+            } else if ("keep.existing.data".equals(key)) {
+                keepExistingData = Boolean.parseBoolean(value);                
             } else {
                 try {
                     propertySetter = getPropertySetter(key, value, props);
@@ -175,6 +183,9 @@ public class ImageDataPlugin implements RowListener {
 
         try {
             Image image = new Image(row, propertySetters);
+            if (keepExistingData) {
+                image.setBeingMoved(false);
+            }
             propertyWriter.saveProperties(image);
         } catch (Exception e) {
             throw new ExternalSystemException(

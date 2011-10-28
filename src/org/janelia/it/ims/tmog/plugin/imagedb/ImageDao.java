@@ -91,7 +91,8 @@ public class ImageDao extends AbstractDao
             connection.setAutoCommit(false);
 
             String previousRelativePath = image.getPreviousRelativePath();
-            if (! relativePath.equals(previousRelativePath)) {
+            if (image.isBeingMoved() &&
+                (! relativePath.equals(previousRelativePath))) {
                 deleteImage = connection.prepareStatement(SQL_DELETE_IMAGE);
                 deleteImage.setString(1, previousRelativePath);
                 int rowsUpdated = deleteImage.executeUpdate();
