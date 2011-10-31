@@ -9,7 +9,7 @@
              taskName="rename-without-delete">
 
         <outputDirectory>
-            <path path="[\\dm10.isln.janelia.org\rubinimg|/groups/rubin/rubinimg]\rubin_lab_2\confocalStacks" />
+            <path path="[\\dm10.isln.janelia.org\rubinimg|/groups/rubin/rubinimg]\rubin_lab_2\confocalStacks\" />
             <renameFieldValue fieldDisplayName="Relative Path"/>
         </outputDirectory>
 
@@ -46,12 +46,10 @@
                   pattern="[0-9A-Za-z]++">
             </text>
 
-            <separator value="_"/>
-
             <fileName displayName="File ID"
-                      patternString=".*(\d{17})\.lsm$"
+                      patternString=".*(_r.._....._..._\d{17})\.lsm$"
                       patternGroupNumber="1"
-                      visible="false" />
+                      visible="true" />
 
             <separator value=".lsm"/>
 
