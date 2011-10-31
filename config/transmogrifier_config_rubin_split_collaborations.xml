@@ -35,6 +35,11 @@
                 <property name="dissection_date" value="${Dissection Date (yyyy-mm-dd)} 00:00:00"/>
                 <property name="mount_date" value="${Mount Date (yyyy-mm-dd)} 00:00:00"/>
             </rowListener>
+
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="\\dm10.isln.janelia.org\rubinimg\tmog\summaries\rubin_lab_2"/>
+            </sessionListener>
+
         </plugins>
 
         <dataFields>
