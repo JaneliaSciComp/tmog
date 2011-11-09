@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -45,9 +45,11 @@ public class InputFileSorter {
             new PathComparator();
 
     private Comparator<FileTarget> comparator;
+    private String patternString;
 
     public InputFileSorter() {
         this.comparator = FileTarget.ALPHABETIC_COMPARATOR;
+        this.patternString = null;
     }
 
     public Comparator<FileTarget> getComparator() {
@@ -57,11 +59,23 @@ public class InputFileSorter {
     @SuppressWarnings({"UnusedDeclaration"})
     public void setSortAlgorithm(String algorithmName) {
         if (NUMBER_NAME.equals(algorithmName)) {
-            comparator = NUMBER_COMPARATOR;
+            if (patternString == null) {
+                comparator = NUMBER_COMPARATOR;
+            } else {
+                comparator = new NumberComparator(patternString);
+            }
         } else if (LNUMBER_NAME.equals(algorithmName)) {
             comparator = LNUMBER_COMPARATOR;
         } else if (PATH_NAME.equals(algorithmName)) {
             comparator = PATH_COMPARATOR;
+        }
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    public void setPatternString(String patternString) {
+        this.patternString = patternString;
+        if (comparator == NUMBER_COMPARATOR) {
+            comparator = new NumberComparator(patternString);
         }
     }
 }

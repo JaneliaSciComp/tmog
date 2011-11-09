@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -65,7 +65,32 @@ public class NumberComparatorTest
         };
 
         NumberComparator comparator = new NumberComparator();
+        validateTestData(testData, comparator);
 
+    }
+
+    /**
+     * Tests the compare method.
+     *
+     * @throws Exception
+     *   if any unexpected errors occur.
+     */
+    public void testCompareAlternateLNumber() throws Exception {
+
+        Object testData[][] = {
+                { "B1_T1_20111103_2_R1_L001.lsm", "B1_T1_20111103_2_R1_L002.lsm", -1 },
+                { "B19_T2_20111103_2_R1_L075.lsm", "B1_T1_20111103_2_R1_L002.lsm", 1 },
+                { "B19_T2_20111103_2_R1_L075.lsm", "B19_T2_20111103_2_R1_L076.lsm", -1 },
+         };
+
+        NumberComparator comparator =
+                new NumberComparator(".*_(L)(\\d++)(\\.lsm)");
+        validateTestData(testData, comparator);
+
+    }
+
+    private void validateTestData(Object[][] testData,
+                                  NumberComparator comparator) {
         for (Object[] testRow : testData) {
             String name1 = (String) testRow[0];
             String name2 = (String) testRow[1];
@@ -84,7 +109,6 @@ public class NumberComparatorTest
                        " (should have same sign as " + expectedResult + ")",
                        isValid);
         }
-
     }
 
 }

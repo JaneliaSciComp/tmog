@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -36,8 +36,13 @@ public class NumberComparator implements Comparator<FileTarget> {
      *                        the second group identifies the number,
      *                        and the third group identifies characters
      *                        after the number.
+     *
+     * @throws IllegalArgumentException
+     *   if the specified patternString is invalid.
      */
-    public NumberComparator(String patternString) {
+    public NumberComparator(String patternString)
+            throws IllegalArgumentException {
+        validatePatternString(patternString);
         this.pattern = Pattern.compile(patternString);
     }
 
@@ -77,5 +82,29 @@ public class NumberComparator implements Comparator<FileTarget> {
         }
 
         return compareResult;
+    }
+
+    private void validatePatternString(String patternString)
+            throws IllegalArgumentException {
+        int openCount = 0;
+        int closeCount = 0;
+        final int len = patternString.length();
+        char c;
+        for (int i = 0; i < len; i++) {
+            c = patternString.charAt(i);
+            if (c == '(') {
+                openCount++;
+            } else if (c == ')') {
+                closeCount++;
+            }
+        }
+
+        if ((openCount < 3) || (closeCount < 3)) {
+            throw new IllegalArgumentException(
+                    "The patternString must contain 3 groups: " +
+                    "the first group identifies characters before the number, " +
+                    "the second group identifies the number, and " +
+                    "the third group identifies characters after the number.");
+        }
     }
 }

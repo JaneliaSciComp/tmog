@@ -3,11 +3,12 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.7.4" frameSizePercentage="95"/>
+    <global minimumVersion="2.7.6" frameSizePercentage="95"/>
 
     <project name="Fly Light Flip - manual entry (FLFL*)" default="true">
 
-        <inputFileSorter sortAlgorithm="LNumber" />
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString=".*_(L)(\d++)(\.lsm)"/>
 
         <outputDirectory basePath="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/flip/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
@@ -190,7 +191,8 @@
             </xmlPropertyFile>
         </inputFileFilter>
 
-        <inputFileSorter sortAlgorithm="LNumber" />
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString=".*_(L)(\d++)(\.lsm)"/>
 
         <outputDirectory basePath="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/flip/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
@@ -369,7 +371,8 @@
 
     <project name="Fly Light Split (FLSP*)">
 
-        <inputFileSorter sortAlgorithm="LNumber" />
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString=".*_(L)(\d++)(\.lsm)"/>
 
         <outputDirectory basePath="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/split/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
@@ -506,7 +509,8 @@
 
     <project name="Fly Light Double Staining (FLDS*)">
 
-        <inputFileSorter sortAlgorithm="LNumber" />
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString=".*_(L)(\d++)(\.lsm)"/>
 
         <outputDirectory basePath="[\\dm10.isln.janelia.org|/groups/flylight]/flylight/double/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
