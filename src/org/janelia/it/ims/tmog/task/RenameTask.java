@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -15,10 +15,12 @@ import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 import org.janelia.it.ims.tmog.target.Target;
+import org.janelia.it.utils.filexfer.FileCopyFailedException;
 import org.janelia.it.utils.filexfer.FileTransferUtil;
 import org.janelia.it.utils.filexfer.SafeFileTransfer;
 
 import java.io.File;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
@@ -213,21 +215,9 @@ public class RenameTask extends SimpleTask {
 
         } else {
 
-            // perform the actual copy and rename
+            // perform the actual transfer
             try {
-                if (fileTransferConfig.isNioRequired() &&
-                    (fileTransferUtil != null)) {
-
-                    fileTransferUtil.copyAndValidate(
-                            rowFile,
-                            renamedFile,
-                            fileTransferConfig.isValidationRequired());
-
-                } else {
-
-                    SafeFileTransfer.copy(rowFile, renamedFile, false);
-
-                }
+                transferFile(rowFile, renamedFile);
 
                 if (outputDirConfig.isFileModeReadOnly()) {
                     boolean isReadOnlySet = false;
@@ -305,6 +295,24 @@ public class RenameTask extends SimpleTask {
         appendToSummary("\n");
 
         currentRow = null;
+    }
+
+    protected void transferFile(File rowFile,
+                                File renamedFile)
+            throws IOException, FileCopyFailedException {
+        if (fileTransferConfig.isNioRequired() &&
+            (fileTransferUtil != null)) {
+
+            fileTransferUtil.copyAndValidate(
+                    rowFile,
+                    renamedFile,
+                    fileTransferConfig.isValidationRequired());
+
+        } else {
+
+            SafeFileTransfer.copy(rowFile, renamedFile, false);
+
+        }
     }
 
     protected void deleteFile(File file,

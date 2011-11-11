@@ -25,6 +25,7 @@ import org.janelia.it.ims.tmog.target.FileTarget;
 import org.janelia.it.ims.tmog.target.Target;
 import org.janelia.it.ims.tmog.task.RenameTask;
 import org.janelia.it.ims.tmog.task.RenameWithoutDeleteTask;
+import org.janelia.it.ims.tmog.task.SimpleMoveTask;
 import org.janelia.it.ims.tmog.task.Task;
 import org.janelia.it.ims.tmog.view.component.DataTable;
 import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
@@ -332,19 +333,31 @@ public class RenameView implements SessionView, InputSelectionView {
     }
 
     private Task getNewTaskForView() {
-        if (RenameWithoutDeleteTask.TASK_NAME.equals(
-                projectConfig.getTaskName())) {
+        final String taskName = projectConfig.getTaskName();        
+        if (RenameWithoutDeleteTask.TASK_NAME.equals(taskName)) {
+
             task = new RenameWithoutDeleteTask(
                     tableModel,
                     projectConfig.getOutputDirectory(),
                     projectConfig.getFileTransfer(),
                     outputDirectoryField.getText());
+
+        } else if (SimpleMoveTask.TASK_NAME.equals(taskName)) {
+
+            task = new SimpleMoveTask(tableModel,
+                                      projectConfig.getOutputDirectory(),
+                                      projectConfig.getFileTransfer(),
+                                      outputDirectoryField.getText());
+
         } else {
+
             task = new RenameTask(tableModel,
                                   projectConfig.getOutputDirectory(),
                                   projectConfig.getFileTransfer(),
                                   outputDirectoryField.getText());
+
         }
+
         return task;
     }
 

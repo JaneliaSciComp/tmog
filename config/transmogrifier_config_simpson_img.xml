@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="2.7.7"/>
+
+    <project name="Simpson Lab: Fix GAL4 Line Names" default="true" taskName="simple-move">
+
+        <inputFileFilter patternString="JHS_.*-GAL4.*lsm"
+                         recursiveSearch="true"/>
+        
+        <outputDirectory>
+            <path path="[\\dm10.isln.janelia.org|/groups/simpson]\simpsonimg\GAL4_confocal_stacks\" />
+            <renameFieldValue fieldDisplayName="Line" />
+        </outputDirectory>
+
+        <plugins>
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="nighthawk"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="nighthawk"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="family" value="$STATIC:GAL4"/>
+                <property name="line" value="Line"/>
+                <property name="capture_date" value="Capture Date"/>
+                <property name="organ" value="Organ$MAP:B=Brain|T=Thorax"/>
+                <property name="specimen" value="Specimen"/>
+                <property name="uas_reporter" value="UAS Reporter"/>
+            </rowListener>
+
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="[\\dm10.isln.janelia.org|/groups/simpson]\simpsonimg\tmog\summaries\GAL4"/>
+            </sessionListener>
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Line" required="true" pattern="(JHS|EXT)_[0-9A-Za-z_-]+-GAL4">
+                <sourceFileMappedDefault pattern=".*confocal_stacks[/\\\\](.*)-GAL4[/\\\\].*"
+                                         matchType="path">
+                    <mappedValue from="10980" to="EXT_109-80-GAL4"/>
+                    <mappedValue from="15J2" to="EXT_15J2-GAL4"/>
+                    <mappedValue from="167Y" to="EXT_167Y-GAL4"/>
+                    <mappedValue from="201Y" to="EXT_201Y-GAL4"/>
+                    <mappedValue from="24B" to="EXT_24B-GAL4"/>
+                    <mappedValue from="307" to="EXT_307-GAL4"/>
+                </sourceFileMappedDefault>
+            </text>
+
+            <separator value="_"/>
+
+            <date displayName="Capture Date" required="true"
+                  datePattern="yyyyMMdd">
+                <sourceFileDateDefault pattern=".*_(\d{8})_.*"
+                                       fromDatePattern="yyyyMMdd"
+                                       toDatePattern="yyyyMMdd"/>
+            </date>
+
+            <separator value="_"/>
+
+            <validValueList displayName="Organ" required="true">
+                <sourceFileDefault pattern=".*_\d{8}_([BT]).*"/>
+                <validValue displayName="B: Brain" value="B"/>
+                <validValue displayName="T: Thorax" value="T"/>
+            </validValueList>
+
+            <text displayName="Specimen" required="true"
+                  pattern="\d{2}"
+                  copyable="false">
+                <sourceFileDefault pattern=".*(\d{2})_\d{17}\.lsm$"/>
+            </text>
+
+            <text displayName="File Suffix" required="true"
+                  pattern="_\d{17}\.lsm"
+                  copyable="false">
+                <sourceFileDefault pattern=".*\d{2}(_\d{17}\.lsm)$"/>
+            </text>
+
+            <!--
+             These values are collected for the database but are not
+             included as components of the file name (markedForTask="false").
+             -->
+            <validValueList displayName="UAS Reporter" required="true"
+                            markedForTask="false">
+                <validValue value="UAS_mCD8-GFP" default="true"/>
+            </validValueList>
+
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>

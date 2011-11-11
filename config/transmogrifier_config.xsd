@@ -433,6 +433,7 @@
                 <xs:restriction base="xs:string">
                     <xs:enumeration value="rename"/>
                     <xs:enumeration value="rename-without-delete"/>
+                    <xs:enumeration value="simple-move"/>
                     <xs:enumeration value="collector"/>
                 </xs:restriction>
             </xs:simpleType>
