@@ -22,7 +22,7 @@
                 <property name="display" value="$STATIC:false"/>
                 <property name="base_path" value="$STATIC:/groups/rubin/rubinimg/rubin_wu_split/confocalStacks/"/>
                 <property name="activation_line" value="${AD Line}-p65ADZp-in-${AD Landing Site}"/>
-                <property name="binding_line" value="${DBD Line}-${DBD}-in-${DBD Landing Site}"/>
+                <property name="binding_line" value="${DBD Line}-ZpGdbd-in-${DBD Landing Site}"/>
                 <property name="gender" value="Gender$MAP:m=Male|f=Female|x=unknown"/>
                 <property name="area" value="Area$MAP:b=Brain|v=Ventral Nerve Cord"/>
                 <property name="age" value="Age"/>
@@ -60,7 +60,7 @@
 
             <validValueList displayName="AD Landing Site"
                             required="true">
-                <validValue value="attP40"/>
+                <validValue value="attP40" default="true"/>
                 <validValue value="suHw-attP8"/>
                 <validValue value="VK00027"/>
             </validValueList>
@@ -74,14 +74,7 @@
                   maximumLength="10">
             </text>
 
-            <separator value="-"/>
-
-            <validValueList displayName="DBD"
-                            required="true">
-                <validValue value="ZpGdbd" default="true"/>
-            </validValueList>
-
-            <separator value="-"/>
+            <separator value="-ZpGdbd-"/>
 
             <validValueList displayName="DBD Landing Site"
                             required="true">
@@ -92,7 +85,7 @@
             <validValueList displayName="Reporter"
                             required="true">
                 <validValue displayName="r1a: JFRC12-10XUAS-myr-GFP in attP2" value="r1a"/>
-                <validValue displayName="r1b: pJFRC-IVS- myr-smGFP-HA-DARK in attP18, pJFRC-IVS-myr-smGFP-V5-DARK in su(Hw)attP8" value="r1b"/>
+                <validValue displayName="r1b: pJFRC-IVS- myr-smGFP-HA-DARK in attP18, pJFRC-IVS-myr-smGFP-V5-DARK in su(Hw)attP8" value="r1b" default="true"/>
             </validValueList>
 
             <separator value="_"/>
@@ -107,6 +100,7 @@
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
                         displayNamePrefixedForValues="true"
                         markedForTask="true">
+                <staticDefault value="A02"/>
             </cvTermList>
 
             <validValueList displayName="Area" required="true">
@@ -130,15 +124,15 @@
              -->
             <validValueList displayName="Tissue Mounting Protocol" required="true"
                             markedForTask="false">
-                <validValue value="Glycerol-Based Mounting" default="true"/>
-                <validValue value="DPX Mounting"/>
+                <validValue value="Glycerol-Based Mounting"/>
+                <validValue value="DPX Mounting" default="true"/>
             </validValueList>
 
             <cvTermList displayName="Tissue Orientation" required="true"
                         markedForTask="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
                         displayNamePrefixedForValues="false">
-                <staticDefault value="face_up"/>                
+                <staticDefault value="unknown"/>
             </cvTermList>
 
             <validValueList displayName="Brain Region" required="true"
@@ -146,7 +140,7 @@
                 <validValue value="mushroom body"/>
                 <validValue value="central complex"/>
                 <validValue value="optic lobe"/>
-                <validValue value="vlpr"/>
+                <validValue value="vlpr" default="true"/>
             </validValueList>
 
         </dataFields>
