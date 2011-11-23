@@ -280,7 +280,7 @@ public class RenameTask extends SimpleTask {
 
         if (isSuccessful) {
 
-            appendToSummary("renamed");
+            appendToSummary("renamed ");
 
             // clean up the original file
             deleteFile(rowFile, "succeeded");
