@@ -17,13 +17,14 @@
 
         <plugins>
             <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
-                <property name="db.config.key" value="nighthawk"/>
+                <property name="db.config.key" value="sage"/>
             </rowValidator>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="nighthawk"/>
+                <property name="db.config.key" value="sage"/>
                 <property name="exclude.host.name" value="true"/>
-                <property name="family" value="$STATIC:simpson-lex"/>
+                <property name="family" value="$STATIC:simpson_lex"/>
+                <property name="lab" value="$STATIC:simpson"/>
                 <property name="line" value="Line"/>
                 <property name="capture_date" value="Capture Date"/>
                 <property name="organ" value="Organ$MAP:b=Brain|t=Thorax"/>
@@ -32,20 +33,18 @@
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[\\dm10.isln.janelia.org\simpsonmicro|/groups/simpson/MicroscopeData]\tmog\summaries\simpson-lex"/>
+                <property name="directory" value="[\\dm10.isln.janelia.org\simpsonmicro|/groups/simpson/MicroscopeData]\tmog\summaries\simpson_lex"/>
             </sessionListener>
         </plugins>
 
         <dataFields>
 
             <text displayName="Line" required="true" pattern="(JHS|EXT)_[0-9A-Za-z_-]+-LexA">
-                <sourceFileMappedDefault pattern=".*confocal_stacks[/\\\\](.*)[/\\\\].*"
-                                         matchType="path">
-                    <!-- NOTE: need to remove JHS_ prefix from Phuong's xls -->
-                    <mappedValue from="LexAP001" to="JHS_P001-LexA"/>
-                    <mappedValue from="LexAP004" to="JHS_P004-LexA"/>
-                    <mappedValue from="LexAP005" to="JHS_P005-LexA"/>
-                    <mappedValue from="LexAP009" to="JHS_P009-LexA"/>
+                <sourceFileMappedDefault pattern="(.*)_\d{8}_._\d{17}\.lsm">
+                    <mappedValue from="JHS_LexAP001" to="JHS_P001-LexA"/>
+                    <mappedValue from="JHS_LexAP004" to="JHS_P004-LexA"/>
+                    <mappedValue from="JHS_LexAP005" to="JHS_P005-LexA"/>
+                    <mappedValue from="JHS_LexAP009" to="JHS_P009-LexA"/>
                 </sourceFileMappedDefault>
             </text>
 
@@ -85,8 +84,7 @@
 
     </project>
 
-    <!-- TODO: test this config -->
-    <project name="Simpson Lab: Waffles">
+    <project name="Simpson Lab: Rename Waffles">
 
         <inputFileFilter patternString=".*lsm"
                          recursiveSearch="true"/>
@@ -98,13 +96,21 @@
 
         <plugins>
             <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
-                <property name="db.config.key" value="nighthawk"/>
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathDepth" value="2"/>
             </rowValidator>
 
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="Image Count" value="urn:lsid:janelia.org:simpson_waffles_uid" />
+            </rowListener>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="nighthawk"/>
+                <property name="db.config.key" value="sage"/>
                 <property name="exclude.host.name" value="true"/>
-                <property name="family" value="$STATIC:simpson-waffles"/>
+                <property name="previousRelativePathDepth" value="2"/>
+                <property name="family" value="$STATIC:simpson_waffles"/>
+                <property name="lab" value="$STATIC:simpson"/>
                 <property name="line" value="Line"/>
                 <property name="capture_date" value="Capture Date"/>
                 <property name="organ" value="Organ$MAP:b=Brain|t=Thorax"/>
@@ -113,14 +119,14 @@
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[\\dm10.isln.janelia.org\simpsonmicro|/groups/simpson/MicroscopeData]\tmog\summaries\simpson-waffles"/>
+                <property name="directory" value="[\\dm10.isln.janelia.org\simpsonmicro|/groups/simpson/MicroscopeData]\tmog\summaries\simpson_waffles"/>
             </sessionListener>
         </plugins>
 
         <dataFields>
 
             <text displayName="Line" required="true" pattern="(JHS|EXT)_[0-9A-Za-z_-]+-GAL4">
-                <sourceFileMappedDefault pattern=".*confocal_stacks[/\\\\](.*)[/\\\\].*"
+                <sourceFileMappedDefault pattern=".*confocal_stacks[/\\\\]([^/\\\\]*)[/\\\\].*"
                                          matchType="path">
                     <!-- NOTE: need to remove JHS_ prefix from Phuong's xls -->
                     <mappedValue from="WFL001_4W80_071808" to="JHS_Waffle_001-GAL4"/>
@@ -146,6 +152,12 @@
                 <validValue displayName="t: Thorax" value="t"/>
             </validValueList>
 
+            <separator value="_"/>
+
+            <pluginData displayName="Image Count" format="%05d"/>
+
+            <fileExtension/>
+            
             <!--
              These values are collected for the database but are not
              included as components of the file name (markedForTask="false").
