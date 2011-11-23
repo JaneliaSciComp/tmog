@@ -14,6 +14,7 @@ import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.PluginUtil;
+import org.janelia.it.ims.tmog.plugin.RelativePathUtil;
 import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RowListener;
 import org.janelia.it.ims.tmog.plugin.RowValidator;
@@ -264,7 +265,8 @@ public class ChacrmEventManager implements RowValidator, RowListener {
                                                             false);
             currentStatus = transformant.getStatus();
             transformant.setStatus(Status.imaged);
-            String relativePath = row.getRelativePath();
+            String relativePath =
+                    RelativePathUtil.getRelativePath(row.getRenamedFile());
             Integer rank = (Integer)
                     row.getPluginDataValue(IMAGE_LOCATION_RANK);
             ImageLocation imageLocation = new ImageLocation(relativePath, rank);

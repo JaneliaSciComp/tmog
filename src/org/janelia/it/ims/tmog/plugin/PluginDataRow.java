@@ -15,7 +15,6 @@ import org.janelia.it.ims.tmog.target.Target;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Stack;
 
 /**
  * This class wraps the data collected for a specific target (row) and
@@ -152,19 +151,6 @@ public class PluginDataRow {
     }
     
     /**
-     * @return the relative path (parent directory + file name) for the
-     *         target file or "" if this row's target is not a file.
-     */
-    public String getRelativePath() {
-        String relativePath = "";
-        File targetFile = getTargetFile();
-        if (targetFile != null) {
-            relativePath = getRelativePath(targetFile, 1);
-        }
-        return relativePath;
-    }
-
-    /**
      * @return a string representation of this object.
      */
     @Override
@@ -174,62 +160,6 @@ public class PluginDataRow {
         sb.append("{dataRow=").append(dataRow);
         sb.append('}');
         return sb.toString();
-    }
-
-    public static String getRelativePath(File file) {
-        return getRelativePath(file, 1);
-    }
-
-    /**
-     * @param  file                      file for which relative path
-     *                                   is to be derived.
-     * @param  maximumParentDirectories  maximum number of parent directories
-     *                                   to be included in the relative path.
-     *
-     * @return a relative path for the specified file or null if no
-     *         file is specified.
-     */
-    public static String getRelativePath(File file,
-                                         int maximumParentDirectories) {
-        String relativePath = null;
-
-        if (file != null) {
-
-            Stack<String> nameStack = new Stack<String>();
-            nameStack.push(file.getName());
-
-            File parent = file.getParentFile();
-            String name;
-            while (nameStack.size() <= maximumParentDirectories) {
-
-                if ((parent == null)) {
-                    break;
-                }
-
-                name = parent.getName();
-
-                if (name.equals("..")) {
-                    parent = parent.getParentFile();
-                } else if ((name.length() > 0) && (! name.equals("."))) {
-                    nameStack.push(name);
-                }
-
-                if (parent != null) {
-                    parent = parent.getParentFile();
-                }
-            }
-
-            StringBuilder sb = new StringBuilder();
-            sb.append(nameStack.pop());
-            for (int i = nameStack.size(); i > 0; i--) {
-                sb.append('/');
-                sb.append(nameStack.pop());
-            }
-
-            relativePath = sb.toString();
-        }
-
-        return relativePath;
     }
 
 }

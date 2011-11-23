@@ -11,6 +11,7 @@ import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.plugin.RelativePathUtil;
 import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RowValidator;
 import org.janelia.it.utils.StringUtil;
@@ -110,7 +111,7 @@ public class ImagePathExistsValidator implements RowValidator {
         }
 
         final String relativePath =
-                PluginDataRow.getRelativePath(file, relativePathDepth);
+                RelativePathUtil.getRelativePath(file, relativePathDepth);
         try {
             Integer imageId = dao.getImageId(relativePath);
             if (shouldExist) {

@@ -14,11 +14,11 @@ import junit.framework.TestSuite;
 import java.io.File;
 
 /**
- * Tests the PluginDataRow class.
+ * Tests the RelativePathUtil class.
  *
  * @author Eric Trautman
  */
-public class PluginDataRowTest
+public class RelativePathUtilTest
         extends TestCase {
 
     /**
@@ -26,7 +26,7 @@ public class PluginDataRowTest
      *
      * @param  name  name of the test case.
      */
-    public PluginDataRowTest(String name) {
+    public RelativePathUtilTest(String name) {
         super(name);
     }
 
@@ -39,7 +39,7 @@ public class PluginDataRowTest
      * @return suite of all tests defined in this class.
      */
     public static Test suite() {
-        return new TestSuite(PluginDataRowTest.class);
+        return new TestSuite(RelativePathUtilTest.class);
     }
 
     /**
@@ -69,7 +69,7 @@ public class PluginDataRowTest
             file = new File(testCaseData[0]);
             maxParents = Integer.parseInt(testCaseData[1]);
             expectedRelativePath = testCaseData[2];
-            relativePath = PluginDataRow.getRelativePath(file, maxParents);
+            relativePath = RelativePathUtil.getRelativePath(file, maxParents);
             assertEquals("incorrect relative path returned for '" +
                          file.getAbsolutePath() + "', maxParents=" + maxParents,
                          expectedRelativePath, relativePath);

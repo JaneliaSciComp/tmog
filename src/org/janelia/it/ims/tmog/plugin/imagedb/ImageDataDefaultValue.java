@@ -10,7 +10,7 @@ package org.janelia.it.ims.tmog.plugin.imagedb;
 import org.janelia.it.ims.tmog.config.ConfigurationException;
 import org.janelia.it.ims.tmog.field.PluginDefaultValue;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
-import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.plugin.RelativePathUtil;
 import org.janelia.it.ims.tmog.target.FileTarget;
 import org.janelia.it.ims.tmog.target.Target;
 import org.janelia.it.utils.StringUtil;
@@ -83,7 +83,7 @@ public class ImageDataDefaultValue
             final FileTarget fileTarget = (FileTarget) target;
             final File file = fileTarget.getFile();
             final String relativePath =
-                    PluginDataRow.getRelativePath(file, relativePathDepth);
+                    RelativePathUtil.getRelativePath(file, relativePathDepth);
             value = dataCache.getValue(relativePath, propertyName);
         }
         return value;

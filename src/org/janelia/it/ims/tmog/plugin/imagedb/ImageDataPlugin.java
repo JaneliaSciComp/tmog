@@ -12,6 +12,8 @@ import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.PropertyToken;
+import org.janelia.it.ims.tmog.plugin.RelativePathUtil;
+import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RowListener;
 import org.janelia.it.utils.StringUtil;
 
@@ -40,6 +42,19 @@ public class ImageDataPlugin implements RowListener {
      * an image's relative path changes.
      */
     private boolean keepExistingData = false;
+
+    /**
+     * The number of parent directories to include in each image's
+     * relative path.
+     */
+    private int relativePathDepth = 1;
+
+    /**
+     * The number of parent directories to include in each image's
+     * previous relative path (used for identifying whether an
+     * image already exists).
+     */
+    private int previousRelativePathDepth = 1;
 
     /**
      * Empty constructor required by
@@ -75,6 +90,12 @@ public class ImageDataPlugin implements RowListener {
                 hostNameSetter = null;
             } else if ("keep.existing.data".equals(key)) {
                 keepExistingData = Boolean.parseBoolean(value);                
+            } else if ("relativePathDepth".equals(key)) {
+                relativePathDepth =
+                        getIntValue("relativePathDepth", value);
+            } else if ("previousRelativePathDepth".equals(key)) {
+                previousRelativePathDepth =
+                        getIntValue("previousRelativePathDepth", value);
             } else {
                 try {
                     propertySetter = getPropertySetter(key, value, props);
@@ -181,16 +202,28 @@ public class ImageDataPlugin implements RowListener {
     private void saveImageProperties(PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
+        String relativePath = null;
         try {
-            Image image = new Image(row, propertySetters);
-            if (keepExistingData) {
-                image.setBeingMoved(false);
+            relativePath = RelativePathUtil.getRelativePath(
+                    row.getTargetFile(), relativePathDepth);
+            String previousPath = null;
+            if (row instanceof RenamePluginDataRow) {
+                final RenamePluginDataRow renameRow = (RenamePluginDataRow) row;                
+                previousPath = RelativePathUtil.getRelativePath(
+                        renameRow.getFromFile(),
+                        previousRelativePathDepth);
             }
+
+            Image image = new Image(row,
+                                    propertySetters,
+                                    relativePath,
+                                    previousPath,
+                                    (! keepExistingData));
             propertyWriter.saveProperties(image);
         } catch (Exception e) {
             throw new ExternalSystemException(
                     "Failed to save image properties for " +
-                    row.getRelativePath() + ".  Detailed data is: " + row, e);
+                    relativePath + ".  Detailed data is: " + row, e);
         }
     }
 
@@ -225,6 +258,20 @@ public class ImageDataPlugin implements RowListener {
         }
 
         return propertySetter;
+    }
+
+    private int getIntValue(String propertyName,
+                            String valueString)
+            throws ExternalSystemException {
+        int value;
+        try {
+            value = Integer.parseInt(valueString);
+        } catch (NumberFormatException e) {
+            throw new ExternalSystemException(
+                    INIT_FAILURE_MSG + "Please specify a valid '" +
+                    propertyName + "' value.", e);
+        }
+        return value;
     }
 
     private static final String INIT_FAILURE_MSG =

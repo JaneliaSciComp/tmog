@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.DatePatternField;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.plugin.RelativePathUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -61,8 +62,11 @@ public class CaptureDateSetter extends SimpleSetter {
                     captureDate = sdf.parse(value);
                     image.setCaptureDate(captureDate);
                 } catch (ParseException e) {
+                    final String relativePath =
+                            RelativePathUtil.getRelativePath(
+                                    row.getTargetFile());
                     LOG.warn("Unable to parse capture date for '" +
-                             row.getRelativePath() +
+                             relativePath +
                              "'.  Continuing processing without the date.", e);
                 }
             }

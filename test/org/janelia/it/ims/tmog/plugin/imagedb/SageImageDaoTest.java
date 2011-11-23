@@ -12,14 +12,9 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
-import org.janelia.it.ims.tmog.plugin.PluginDataRow;
-import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
-import org.janelia.it.ims.tmog.target.FileTarget;
 import org.janelia.it.utils.db.DbManager;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -102,7 +97,7 @@ public class SageImageDaoTest
      */
     public void testSaveProperties() throws Exception {
         String relativePath = IMAGE_PATH.format(new Date());
-        testImage.setRelativePath(relativePath);
+        testImage.setRelativePaths(relativePath, null);
         testImage.setCaptureDate(new Date());
         testImage.setFamily(FAMILY_1);
         testImage.addProperty(TEST_PROPERTY_1, "valueA");
@@ -118,7 +113,7 @@ public class SageImageDaoTest
 
         testImage = new Image();
         testImage.setId(testImageId);
-        testImage.setRelativePath(relativePath);
+        testImage.setRelativePaths(relativePath, null);
         testImage.setCaptureDate(null);
         testImage.setFamily(FAMILY_2);
         testImage.addProperty(TEST_PROPERTY_1, "updatedValueA");
@@ -139,7 +134,7 @@ public class SageImageDaoTest
 
         testImage = new Image();
         testImage.setId(testImageId);
-        testImage.setRelativePath(relativePath);
+        testImage.setRelativePaths(relativePath, null);
         testImage.addProperty(TEST_PROPERTY_3, "updatedValueC");
         testImage.addProperty(Image.LINE_PROPERTY, lineName1);
         testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB_2);
@@ -176,7 +171,7 @@ public class SageImageDaoTest
      */
     public void testSaveImageOnly() throws Exception {
         String relativePath = IMAGE_PATH.format(new Date());
-        testImage.setRelativePath(relativePath);
+        testImage.setRelativePaths(relativePath, null);
         testImage.setCaptureDate(new Date());
         testImage.setFamily(FAMILY_1);
         testImage.addProperty(Image.LINE_PROPERTY, lineName1);
@@ -189,7 +184,7 @@ public class SageImageDaoTest
 
         testImage = new Image();
         testImage.setId(testImageId);
-        testImage.setRelativePath(relativePath);
+        testImage.setRelativePaths(relativePath, null);
         testImage.setCaptureDate(new Date());
         testImage.setFamily(FAMILY_2);
 
@@ -207,7 +202,7 @@ public class SageImageDaoTest
      */
     public void testSaveForChangedRelativePath() throws Exception {
         String relativePath = IMAGE_PATH.format(new Date());
-        testImage.setRelativePath(relativePath);
+        testImage.setRelativePaths(relativePath, null);
         testImage.setCaptureDate(new Date());
         testImage.setFamily(FAMILY_1);
         testImage.addProperty(Image.LINE_PROPERTY, lineName1);
@@ -222,20 +217,12 @@ public class SageImageDaoTest
         relativePath = previousRelativePath + "_changed";
         testImage = new Image();
         testImage.setId(testImageId);
-        testImage.setRelativePath(relativePath);
+        testImage.setRelativePaths(relativePath, previousRelativePath);
         testImage.setCaptureDate(new Date());
         testImage.setFamily(FAMILY_1);
         // line info required since previous path image get deleted
         testImage.addProperty(Image.LINE_PROPERTY, lineName1);
         testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB_1);
-
-        File fromFile = new File(previousRelativePath);
-        FileTarget target = new FileTarget(new File(relativePath));
-        DataRow dataRow = new DataRow(target);
-        File outputDirectory = new File(".");
-        PluginDataRow pluginRow =
-                new RenamePluginDataRow(fromFile, dataRow, outputDirectory);
-        testImage.setRow(pluginRow);
 
         testImage = dao.saveProperties(testImage);
 

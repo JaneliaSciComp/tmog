@@ -8,7 +8,6 @@
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
-import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -31,6 +30,7 @@ public class Image {
     
     private Integer id;
     private String relativePath;
+    private String previousRelativePath;
     private Date captureDate;
     private String source;
     private String family;
@@ -38,7 +38,6 @@ public class Image {
     private String baseUrl;
     private String basePath;
     private Map<String, String> propertyTypeToValueMap;
-    private PluginDataRow row;
     private boolean isBeingMoved;
 
     public Image() {
@@ -46,15 +45,18 @@ public class Image {
         this.propertyTypeToValueMap = new LinkedHashMap<String, String>();
         this.source = "JFRC";
         this.display = true;
-        this.row = null;
         this.isBeingMoved = true;
     }
 
     public Image(PluginDataRow row,
-                 List<ImagePropertySetter> propertySetters) {
+                 List<ImagePropertySetter> propertySetters,
+                 String relativePath,
+                 String previousRelativePath,
+                 boolean isBeingMoved) {
         this();
-        this.row = row;
-        this.relativePath = row.getRelativePath();
+        this.relativePath = relativePath;
+        this.previousRelativePath = previousRelativePath;
+        this.isBeingMoved = isBeingMoved;
         for (ImagePropertySetter propertySetter : propertySetters) {
             propertySetter.setProperty(row, this);
         }
@@ -72,8 +74,8 @@ public class Image {
         return relativePath;
     }
 
-    public void setRelativePath(String relativePath) {
-        this.relativePath = relativePath;
+    public String getPreviousRelativePath() {
+        return previousRelativePath;
     }
 
     public String getPath() {
@@ -170,26 +172,8 @@ public class Image {
         }
     }
 
-    public String getPreviousRelativePath() {
-        String previousPath = null;
-        if (row instanceof RenamePluginDataRow) {
-            previousPath =
-                    PluginDataRow.getRelativePath(
-                            ((RenamePluginDataRow)row).getFromFile());
-        }
-        return previousPath;
-    }
-
-    protected void setRow(PluginDataRow row) {
-        this.row = row;
-    }
-
     public boolean isBeingMoved() {
         return isBeingMoved;
-    }
-
-    public void setBeingMoved(boolean beingMoved) {
-        isBeingMoved = beingMoved;
     }
 
     @Override
@@ -199,6 +183,7 @@ public class Image {
         sb.append("{captureDate=").append(captureDate);
         sb.append(", id=").append(id);
         sb.append(", relativePath='").append(relativePath).append('\'');
+        sb.append(", previousRelativePath='").append(previousRelativePath).append('\'');
         sb.append(", url='").append(getUrl()).append('\'');
         sb.append(", path='").append(getPath()).append('\'');
         sb.append(", family='").append(family).append('\'');
@@ -208,6 +193,12 @@ public class Image {
         sb.append(", properties=").append(propertyTypeToValueMap);
         sb.append('}');
         return sb.toString();
+    }
+
+    protected void setRelativePaths(String relativePath,
+                                    String previousRelativePath) {
+        this.relativePath = relativePath;
+        this.previousRelativePath = previousRelativePath;
     }
 
     private static final Set<String> SAGE_FILTERED_PROPERTIES;
