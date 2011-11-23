@@ -28,6 +28,7 @@ import java.util.Map;
  */
 public class SourceFileMappedDefaultValue extends SourceFileDefaultValue {
 
+    private boolean useKeyValueWhenUnmapped;
     private Map<String, String> map;
 
     @SuppressWarnings({"UnusedDeclaration"})
@@ -38,6 +39,7 @@ public class SourceFileMappedDefaultValue extends SourceFileDefaultValue {
     public SourceFileMappedDefaultValue(String pattern,
                                         MatchType matchType) {
         super(pattern, matchType);
+        this.useKeyValueWhenUnmapped = false;
         this.map = new HashMap<String, String>();
     }
 
@@ -46,11 +48,19 @@ public class SourceFileMappedDefaultValue extends SourceFileDefaultValue {
         map.put(mappedValue.getFrom(), mappedValue.getTo());
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
+    public void setUseKeyValueWhenUnmapped(boolean useKeyValueWhenUnmapped) {
+        this.useKeyValueWhenUnmapped = useKeyValueWhenUnmapped;
+    }
+
     public String getValue(Target target) {
         String value = null;
         String key = super.getValue(target);
         if (key != null) {
             value = map.get(key);
+            if (useKeyValueWhenUnmapped && (value == null)) {
+                value = key;
+            }
         }
         return value;
     }
@@ -61,6 +71,7 @@ public class SourceFileMappedDefaultValue extends SourceFileDefaultValue {
                "matchType=" + getMatchType() +
                ", pattern='" + getPattern() + '\'' +
                ", patternGroupNumber=" + getPatternGroupNumber() +
+               ", useKeyValueWhenUnmapped=" + useKeyValueWhenUnmapped +
                ", map=" + map +
                '}';
     }

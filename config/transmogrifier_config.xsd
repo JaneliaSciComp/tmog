@@ -344,6 +344,7 @@
         <xs:attribute name="pattern" type="xs:string"/>
         <xs:attribute name="patternGroupNumber" type="xs:positiveInteger"/>
         <xs:attribute name="matchType" type="matchType"/>
+        <xs:attribute name="useKeyValueWhenUnmapped" type="xs:boolean" default="false"/>
     </xs:complexType>
 
     <xs:complexType name="targetPropertyDefaultType">
