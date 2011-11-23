@@ -74,21 +74,42 @@ public class SimpleMoveTask
         }
     }
 
-    protected void deleteFile(File file,
-                              String status) {
-        // don't delete anything
+    protected void cleanupFiles(File rowFile,
+                                File renamedFile,
+                                boolean isSuccessful) {
+        if (isSuccessful) {
+
+            appendToSummary("moved ");
+
+        } else {
+
+            appendToSummary("ERROR: failed to move ");
+
+            // try to move the renamed file back if it exists
+            if ((renamedFile != null) && renamedFile.exists()) {
+                final boolean moveSucceeded = renamedFile.renameTo(rowFile);
+                String statusMessage;
+                if (moveSucceeded) {
+                    statusMessage = "successfully moved ";
+                } else {
+                    statusMessage = "FAILED to move ";
+                }
+                LOG.error(statusMessage + renamedFile.getAbsolutePath() +
+                          " back to " + rowFile.getAbsolutePath() +
+                          " after failure");
+            }
+        }
+
+        appendToSummary(rowFile.getName());
+        if (renamedFile != null) {
+            appendToSummary(" to ");
+            appendToSummary(renamedFile.getAbsolutePath());
+        }
+        appendToSummary("\n");
     }
 
     protected String getSummaryHeader() {
         return "Moved the following files from ";
-    }
-
-    protected String getSummarySuccessLinePrefix() {
-        return "moved ";
-    }
-
-    protected String getSummaryFailedLinePrefix() {
-        return "ERROR: failed to move ";
     }
 
     private static final Logger LOG = Logger.getLogger(SimpleMoveTask.class);

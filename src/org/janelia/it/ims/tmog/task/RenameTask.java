@@ -259,21 +259,35 @@ public class RenameTask extends SimpleTask {
     protected void cleanupRow(DataRow modelRow,
                               boolean isSuccessful) {
 
-        File rowFile = currentRow.getFromFile();
-        File renamedFile = currentRow.getRenamedFile();
+        final File rowFile = currentRow.getFromFile();
+        final File renamedFile = currentRow.getRenamedFile();
 
-        chunksProcessed += (int) (rowFile.length() / bytesInChunk);
+        long bytesProcessed = 0;
+        if (rowFile.exists()) {
+            bytesProcessed = rowFile.length();
+        } else if (renamedFile.exists()) {
+            bytesProcessed = renamedFile.length();
+        }
+        chunksProcessed += (int) (bytesProcessed / bytesInChunk);
+
+        cleanupFiles(rowFile, renamedFile, isSuccessful);
+        currentRow = null;
+    }
+
+    protected void cleanupFiles(File rowFile,
+                                File renamedFile,
+                                boolean isSuccessful) {
 
         if (isSuccessful) {
 
-            appendToSummary(getSummarySuccessLinePrefix());
+            appendToSummary("renamed");
 
             // clean up the original file
             deleteFile(rowFile, "succeeded");
 
         } else {
 
-            appendToSummary(getSummaryFailedLinePrefix());
+            appendToSummary("ERROR: failed to rename ");
 
             // clean up the copied file if it exists and
             // it isn't the same as the source file
@@ -293,8 +307,6 @@ public class RenameTask extends SimpleTask {
             appendToSummary(renamedFile.getAbsolutePath());
         }
         appendToSummary("\n");
-
-        currentRow = null;
     }
 
     protected void transferFile(File rowFile,
@@ -333,14 +345,6 @@ public class RenameTask extends SimpleTask {
 
     protected String getSummaryHeader() {
         return "Moved and renamed the following files from ";
-    }
-
-    protected String getSummarySuccessLinePrefix() {
-        return "renamed ";
-    }
-
-    protected String getSummaryFailedLinePrefix() {
-        return "ERROR: failed to rename ";
     }
 
     private File getTargetFile(DataRow row) {
