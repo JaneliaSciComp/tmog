@@ -52,6 +52,7 @@ public class SimpleMoveTask
               sessionOutputDirectoryName);
     }
 
+    @Override
     protected void transferFile(File rowFile,
                                 File renamedFile)
             throws IOException, FileCopyFailedException {
@@ -74,9 +75,11 @@ public class SimpleMoveTask
         }
     }
 
+    @Override
     protected void cleanupFiles(File rowFile,
                                 File renamedFile,
-                                boolean isSuccessful) {
+                                boolean isSuccessful,
+                                boolean isOverwriteRequiredForRename) {
         if (isSuccessful) {
 
             appendToSummary("moved ");
@@ -96,18 +99,21 @@ public class SimpleMoveTask
                 }
                 LOG.error(statusMessage + renamedFile.getAbsolutePath() +
                           " back to " + rowFile.getAbsolutePath() +
-                          " after failure");
+                          " after processing failed");
             }
         }
 
         appendToSummary(rowFile.getName());
+
         if (renamedFile != null) {
             appendToSummary(" to ");
             appendToSummary(renamedFile.getAbsolutePath());
         }
+        
         appendToSummary("\n");
     }
 
+    @Override
     protected String getSummaryHeader() {
         return "Moved the following files from ";
     }

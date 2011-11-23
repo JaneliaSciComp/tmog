@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -7,6 +7,7 @@
 
 package org.janelia.it.ims.tmog.task;
 
+import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.config.FileTransferConfiguration;
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
@@ -20,6 +21,9 @@ import java.io.File;
  * @author Eric Trautman
  */
 public class RenameWithoutDeleteTask extends RenameTask {
+
+    private static final Logger LOG =
+            Logger.getLogger(RenameWithoutDeleteTask.class);
 
     /** The name of the task supported by this view. */
     public static final String TASK_NAME = "rename-without-delete";
@@ -43,20 +47,44 @@ public class RenameWithoutDeleteTask extends RenameTask {
               sessionOutputDirectoryName);
     }
 
-    protected void deleteFile(File file,
-                              String status) {
-        // don't delete anything
+    @Override
+    protected void cleanupFiles(File rowFile,
+                                File renamedFile,
+                                boolean isSuccessful,
+                                boolean isOverwriteRequiredForRename) {
+
+        if (isSuccessful) {
+
+            appendToSummary("copied ");
+
+        } else {
+
+            appendToSummary("ERROR: failed to copy ");
+
+            // clean up the copied file if it exists and
+            // it isn't the same as the source file
+            if ((renamedFile != null) &&
+                renamedFile.exists() &&
+                (! renamedFile.equals(rowFile)) &&
+                (! isOverwriteRequiredForRename)) {
+                LOG.warn("Removing " + renamedFile.getAbsolutePath() +
+                         " after copy processing failed.");
+                deleteFile(renamedFile, "failed");
+            }
+        }
+
+        appendToSummary(rowFile.getName());
+
+        if (renamedFile != null) {
+            appendToSummary(" to ");
+            appendToSummary(renamedFile.getAbsolutePath());
+        }
+
+        appendToSummary("\n");
     }
 
+    @Override
     protected String getSummaryHeader() {
         return "Copied the following files from ";
-    }
-
-    protected String getSummarySuccessLinePrefix() {
-        return "copied ";
-    }
-
-    protected String getSummaryFailedLinePrefix() {
-        return "ERROR: failed to copy ";
     }
 }

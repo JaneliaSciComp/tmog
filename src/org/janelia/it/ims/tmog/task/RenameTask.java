@@ -246,8 +246,9 @@ public class RenameTask extends SimpleTask {
 
     /**
      * This method adds summary information for the processed row
-     * and updates progress information.  It also deletes the
-     * source file being renamed if it was renamed successfully.
+     * and updates progress information.  It also calls {@link #cleanupFiles}
+     * to remove any files that should be cleaned up for the row
+     * (based upon the success or failure of row processing).
      *
      * @param  modelRow            the current row being processed.
      *
@@ -270,13 +271,18 @@ public class RenameTask extends SimpleTask {
         }
         chunksProcessed += (int) (bytesProcessed / bytesInChunk);
 
-        cleanupFiles(rowFile, renamedFile, isSuccessful);
+        cleanupFiles(rowFile,
+                     renamedFile,
+                     isSuccessful,
+                     currentRow.isOverwriteRequiredForRename());
+
         currentRow = null;
     }
 
     protected void cleanupFiles(File rowFile,
                                 File renamedFile,
-                                boolean isSuccessful) {
+                                boolean isSuccessful,
+                                boolean isOverwriteRequiredForRename) {
 
         if (isSuccessful) {
 
@@ -293,19 +299,21 @@ public class RenameTask extends SimpleTask {
             // it isn't the same as the source file
             if ((renamedFile != null) &&
                 renamedFile.exists() &&
-                (!renamedFile.equals(rowFile)) &&
-                (! currentRow.isOverwriteRequiredForRename())) {
+                (! renamedFile.equals(rowFile)) &&
+                (! isOverwriteRequiredForRename)) {
                 LOG.warn("Removing " + renamedFile.getAbsolutePath() +
-                         " after rename failed.");
+                         " after rename processing failed.");
                 deleteFile(renamedFile, "failed");
             }
         }
 
         appendToSummary(rowFile.getName());
+
         if (renamedFile != null) {
             appendToSummary(" to ");
             appendToSummary(renamedFile.getAbsolutePath());
         }
+
         appendToSummary("\n");
     }
 
