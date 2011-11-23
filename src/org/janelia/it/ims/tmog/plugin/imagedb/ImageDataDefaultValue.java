@@ -28,9 +28,11 @@ public class ImageDataDefaultValue
         implements PluginDefaultValue {
 
     private String propertyName;
+    private int relativePathDepth;
     private ImageDataCache dataCache;
 
     public ImageDataDefaultValue() {
+        this.relativePathDepth = 1;
     }
 
     public void init(Map<String, String> properties)
@@ -52,6 +54,17 @@ public class ImageDataDefaultValue
                     "plug-in property.");
         }
 
+        String depth = properties.get("relativePathDepth");
+        if (StringUtil.isDefined(depth)) {
+            try {
+                this.relativePathDepth = Integer.parseInt(depth);
+            } catch (NumberFormatException e) {
+                throw new ConfigurationException(
+                        INIT_FAILURE_MSG +
+                        "Please specify a valid value for the " +
+                        "'relative_path_depth' plug-in property.", e);
+            }
+        }
         try {
             this.dataCache = ImageDataCache.getCache(getDbConfigurationKey(),
                                                      family);
@@ -69,7 +82,8 @@ public class ImageDataDefaultValue
         if (target instanceof FileTarget) {
             final FileTarget fileTarget = (FileTarget) target;
             final File file = fileTarget.getFile();
-            final String relativePath = PluginDataRow.getRelativePath(file);
+            final String relativePath =
+                    PluginDataRow.getRelativePath(file, relativePathDepth);
             value = dataCache.getValue(relativePath, propertyName);
         }
         return value;

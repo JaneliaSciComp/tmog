@@ -1,8 +1,8 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
+ * Copyright (c) 2011 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
@@ -28,6 +28,7 @@ public class ImagePathExistsValidator implements RowValidator {
 
     private ImageDao dao;
     private boolean shouldExist;
+    private int relativePathDepth;
 
     /**
      * Empty constructor required by
@@ -35,6 +36,7 @@ public class ImagePathExistsValidator implements RowValidator {
      */
     public ImagePathExistsValidator() {
         this.shouldExist = true;
+        this.relativePathDepth = 1;
     }
 
     /**
@@ -66,6 +68,17 @@ public class ImagePathExistsValidator implements RowValidator {
             if ("false".equalsIgnoreCase(shouldExistValue)) {
                 shouldExist = false;
             }
+
+            String depthString = props.get("relativePathDepth");
+            if (StringUtil.isDefined(depthString)) {
+                try {
+                    this.relativePathDepth = Integer.parseInt(depthString);
+                } catch (NumberFormatException e) {
+                    throw new ExternalSystemException(
+                            INIT_FAILURE_MSG + "Please specify a valid " +
+                            "'relativePathDepth' plug-in property.", e);
+                }
+            }
         } else {
             throw new ExternalSystemException(
                     INIT_FAILURE_MSG +
@@ -89,14 +102,15 @@ public class ImagePathExistsValidator implements RowValidator {
     public void validate(PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
-        String relativePath;
+        File file;
         if (row instanceof RenamePluginDataRow) {
-            File fromFile = ((RenamePluginDataRow) row).getFromFile();
-            relativePath = PluginDataRow.getRelativePath(fromFile);
+            file = ((RenamePluginDataRow) row).getFromFile();
         } else {
-            relativePath = row.getRelativePath();
+            file = row.getTargetFile();
         }
 
+        final String relativePath =
+                PluginDataRow.getRelativePath(file, relativePathDepth);
         try {
             Integer imageId = dao.getImageId(relativePath);
             if (shouldExist) {
