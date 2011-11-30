@@ -11,7 +11,7 @@
                          recursiveSearch="true"/>
 
         <outputDirectory>
-            <path path="[\\dm10.isln.janelia.org\simpsonmicro|/groups/simpson/MicroscopeData]\Lex_confocal_stacks\" />
+            <path path="[\\dm10.janelia.priv\simpsonmicro|/groups/simpson/MicroscopeData]\Lex_confocal_stacks\" />
             <renameFieldValue fieldDisplayName="Line" />
         </outputDirectory>
 
@@ -29,11 +29,10 @@
                 <property name="capture_date" value="Capture Date"/>
                 <property name="organ" value="Organ$MAP:b=Brain|t=Thorax"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
-                <property name="display" value="$STATIC:false"/>
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[\\dm10.isln.janelia.org\simpsonmicro|/groups/simpson/MicroscopeData]\tmog\summaries\simpson_lex"/>
+                <property name="directory" value="[\\dm10.janelia.priv\simpsonmicro|/groups/simpson/MicroscopeData]\tmog\summaries\simpson_lex"/>
             </sessionListener>
         </plugins>
 
@@ -90,7 +89,7 @@
                          recursiveSearch="true"/>
 
         <outputDirectory>
-            <path path="[\\dm10.isln.janelia.org\simpsonmicro|/groups/simpson/MicroscopeData]\Waffles_confocal_stacks\" />
+            <path path="[\\dm10.janelia.priv\simpsonmicro|/groups/simpson/MicroscopeData]\Waffles_confocal_stacks\" />
             <renameFieldValue fieldDisplayName="Line" />
         </outputDirectory>
 
@@ -115,11 +114,10 @@
                 <property name="capture_date" value="Capture Date"/>
                 <property name="organ" value="Organ$MAP:b=Brain|t=Thorax"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
-                <property name="display" value="$STATIC:false"/>
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[\\dm10.isln.janelia.org\simpsonmicro|/groups/simpson/MicroscopeData]\tmog\summaries\simpson_waffles"/>
+                <property name="directory" value="[\\dm10.janelia.priv\simpsonmicro|/groups/simpson/MicroscopeData]\tmog\summaries\simpson_waffles"/>
             </sessionListener>
         </plugins>
 
