@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="2.7.7"/>
+
+    <project name="Larval Olympiad: Screen Pipeline" default="true"
+            copyPreviousButtonVisible="false">
+
+        <inputFileFilter patternString=".+\.(png|blob|blobs|set|summary)"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <outputDirectory fileModeReadOnly="false">
+            <path path="[\\dm11.janelia.priv|/groups/larvalolympiad]\larvalolympiad\pipeline\screen\tracking-results\" />
+            <renameFieldValue fieldDisplayName="Tracker"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Line"/>
+            <renameFieldValue fieldDisplayName="Effector" prefix="@"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Protocol"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Date"/>
+            <renameFieldValue fieldDisplayName="Time" prefix="_"/>
+        </outputDirectory>
+
+        <plugins>
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/${Line Lab}/${Line}.janelia-sage"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
+                <property name="errorMessage" value="There is no '${Line Lab}' lab line named '${Line}' in the SAGE database."/>
+                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
+            </rowValidator>
+        </plugins>
+
+        <dataFields>
+            <date displayName="Date" required="true"
+                  datePattern="yyyyMMdd">
+                <sourceFileDateDefault pattern=".*[/\\\\](\d{8})_\d{6}[/\\\\].*"
+                                       fromDatePattern="yyyyMMdd"
+                                       toDatePattern="yyyyMMdd"
+                                       matchType="path"/>
+            </date>
+
+            <separator value="_"/>
+
+            <date displayName="Time" required="true"
+                  datePattern="HHmmss">
+                <sourceFileDateDefault pattern=".*[/\\\\]\d{8}_(\d{6})[/\\\\].*"
+                                       fromDatePattern="HHmmss"
+                                       toDatePattern="HHmmss"
+                                       matchType="path"/>
+            </date>
+
+            <separator value="@"/>
+
+            <cvTermList displayName="Line Lab" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/lab"
+                        displayNamePrefixedForValues="false"
+                        markedForTask="false">
+                <sourceFileMappedDefault pattern="^(GMR_).*">
+                    <mappedValue from="GMR_" to="rubin"/>
+                </sourceFileMappedDefault>
+            </cvTermList>
+
+            <text displayName="Line" required="true"
+                  pattern="[0-9A-Za-z\-\_]++">
+                <sourceFileDefault pattern="(.+?)@.+?@.+?@.+?@.+?@.*"/>
+            </text>
+
+            <separator value="@"/>
+
+            <cvTermList displayName="Effector" required="true"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage">
+                <sourceFileMappedDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.*">
+                    <mappedValue from="Ch2r" to="UAS_ChRh2_23_0011" />
+                    <mappedValue from="Ch2" to="UAS_ChRh2_23_0011" />
+                    <mappedValue from="Ch2v" to="UAS_ChRh2_23_0011" />
+                    <mappedValue from="KI2h30" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR24" to="UAS_GAL80ts_Kir21_23_0004" />
+                    <mappedValue from="KIR2" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR2h16" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR2h30" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR2h36" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="Kir36HT4" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR3" to="VDRC_UAS_GAL80ts_Kir21_23_0013" />
+                    <mappedValue from="Kir40h" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="kir40h" to="UAS_GAL80ts_Kir21_23_0004" />
+                    <mappedValue from="Kir48htest" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR48" to="UAS_GAL80ts_Kir21_23_0004" />
+                    <mappedValue from="kir" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="Kir" to="UAS_GAL80ts_Kir21_23_0004" />
+                    <mappedValue from="KIR" to="UAS_GAL80ts_Kir21_23_0004" />
+                    <mappedValue from="Shibire1" to="UAS_Shi_ts1_3_0001" />
+                    <mappedValue from="sHIBIRE" to="UAS_Shi_ts1_3_0001" />
+                    <mappedValue from="Shibire" to="UAS_Shi_ts1_3_0001" />
+                    <mappedValue from="shi" to="UAS_Shi_ts1_3_0001" />
+                    <mappedValue from="SHI" to="UAS_Shi_ts1_3_0001" />
+                    <mappedValue from="TNT" to="UAS_TNT_2_0003" />
+                    <mappedValue from="TrpA1" to="UAS_dTrpA1_2_0012" />
+                    <mappedValue from="TrpA" to="UAS_dTrpA1_2_0012" />
+                </sourceFileMappedDefault>
+                <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.*" />
+            </cvTermList>
+
+            <separator value="@"/>
+
+            <validValueList displayName="Tracker" required="true">
+                <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*"/>
+                <validValue value="t11"/>
+            </validValueList>
+
+            <separator value="@"/>
+
+            <cvTermList displayName="Protocol" required="true"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/larval_olympiad_protocol.janelia-sage">
+                <sourceFileMappedDefault pattern=".+?@.+?@.+?@.+?@(.+?@.+?@.+?@.+?)@.*">
+                    <mappedValue from="b$25C50hz2V$30s1x30s0s@b$1000hz2V$90s1x30s0s@b$200hz2V$150s20x0.2s5s@n"
+                                 to="b_25C50hz2V_30s1x30s0s#b_1000hz2V_90s1x30s0s#b_200hz2V_150s20x0.2s5s#n@100" />
+                    <mappedValue from="b$50hz2V$30s1x30s0s@b$1000hz2V$90s1x30s0s@b$200hz2V$150s20x0.2s5s@n"
+                                 to="b_50hz2V_30s1x30s0s#b_1000hz2V_90s1x30s0s#b_200hz2V_150s20x0.2s5s#n@100" />
+                    <mappedValue from="b$y1000hz2Vsin$30s1x30s0s@b$y50hz2Vsin$360s1x0.2s0s@b$y500hz2V$380s5x0.2s5s@n"
+                                 to="b_y1000hz2Vsin_30s1x30s0s#b_y50hz2Vsin_360s1x0.2s0s#b_y500hz2V_380s5x0.2s5s#n@100" />
+                    <mappedValue from="p$8$45s1x30s0s@p$8$105s10x2s10s@n@n"
+                                 to="p_8_45s1x30s0s#p_8_105s10x2s10s#n#n@100" />
+                    <mappedValue from="r$095dc50$30s1x30s0s@r$095dc50$90s4x5s15s@n@n"
+                                 to="r_095dc50_30s1x30s0s#r_095dc50_90s4x5s15s#n#n@100" />
+                    <mappedValue from="r$2095dc50$30s1x30s0s@r$095dc50$90s4x5s15s@n@n"
+                                 to="r_2095dc50_30s1x30s0s#r_095dc50_90s4x5s15s#n#n@100" />
+                    <mappedValue from="r$halfred1on50tap600$30s1x30s0s@n@n@n"
+                                 to="r_halfred1on50tap600_30s1x30s0s#n#n#n@100" />
+                    <mappedValue from="s$010$0s1x227s0s@n@n@n"
+                                 to="s_010_0s1x227s0s#n#n#n@100" />
+                    <mappedValue from="s$020$0s1x227s0s@n@n@n"
+                                 to="s_020_0s1x227s0s#n#n#n@100" />
+                    <mappedValue from="o$ethylbutyrate015m8ul$0s1x360s0s@n@n@n"
+                                 to="o_ethylbutyrate015m8ul_0s1x360s0s#n#n#n@20" />
+                </sourceFileMappedDefault>
+            </cvTermList>
+
+            <separator value="@"/>
+
+            <text displayName="Suffix" required="false"
+                  copyable="false" pattern="^_?\d{3,}\w+$">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"/>
+            </text>
+
+            <fileExtension/>
+            
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
