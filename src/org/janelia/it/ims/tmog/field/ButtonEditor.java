@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -10,6 +10,7 @@ package org.janelia.it.ims.tmog.field;
 import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.TransmogrifierTableModel;
+import org.janelia.it.ims.tmog.target.Target;
 import org.janelia.it.ims.tmog.view.SaveDefaultsDialog;
 import org.janelia.it.ims.tmog.view.component.ButtonPanel;
 import org.janelia.it.ims.tmog.view.component.ButtonPanel.ButtonType;
@@ -21,9 +22,11 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * This class supports the editing of button cells
@@ -73,8 +76,9 @@ public class ButtonEditor extends AbstractCellEditor
 
             if (ButtonType.EXCLUDE_TARGET.equals(buttonType)) {
 
-                stopCellEditing();
-                model.removeRow(row);
+                handleExcludeTargetClick(table,
+                                         row,
+                                         model);
                 
             } else if (ButtonType.COPY_PREVIOUS_ROW.equals(buttonType)) {
 
@@ -184,6 +188,88 @@ public class ButtonEditor extends AbstractCellEditor
         }
 
         return popup;
+    }
+
+    private void handleExcludeTargetClick(JTable table,
+                                          int row,
+                                          TransmogrifierTableModel model) {
+
+        final int[] selectedRows = table.getSelectedRows();
+
+        stopCellEditing();
+
+        // sort selected rows for dialog message
+        TreeSet<Integer> sortedSelectedRows = new TreeSet<Integer>();
+        for (int r : selectedRows) {
+            sortedSelectedRows.add(r);
+        }
+
+        final int selectedRowCount = sortedSelectedRows.size();
+
+        // only process multiple targets if
+        // the clicked button is in a selected row
+        if ((selectedRowCount > 1) &&
+            (sortedSelectedRows.contains(row) &&
+            (model instanceof DataTableModel))) {
+
+            if (model.getRowCount() == selectedRowCount) {
+
+                NarrowOptionPane.showMessageDialog(
+                        dialogParent,
+                        "You have selected all rows for exclusion.  " +
+                        "If you truly want to do this, " +
+                        "please remove or reset your session instead.",
+                        "All Rows Selected",
+                        JOptionPane.ERROR_MESSAGE);
+                
+            } else {
+                // build "Are you sure?" dialog
+                DataTableModel dtm = (DataTableModel) model;
+
+                StringBuilder msg = new StringBuilder();
+                msg.append("Do you wish to exclude the ");
+                msg.append(selectedRowCount);
+                msg.append(" selected items from this session?\n\n");
+                int count = 0;
+                Target target;
+                for (Integer r : sortedSelectedRows) {
+                    msg.append("\n    ");
+                    target = dtm.getTargetForRow(r);
+                    if (target != null) {
+                        msg.append(target.getName());
+                    }
+                    if (count > 8) {
+                        // arbitrary max for dialog so we don't have to worry
+                        // about scrolling large selections (a bit lazy - I know)
+                        msg.append("\n    ...");
+                        break;
+                    }
+                    count++;
+                }
+
+                int choice = NarrowOptionPane.showConfirmDialog(
+                        dialogParent,
+                        msg,
+                        "Exclude Multiple Items from Session",
+                        JOptionPane.YES_NO_OPTION);
+
+
+                if (choice == JOptionPane.YES_OPTION) {
+                    // reverse selected row order for accurate removal
+                    TreeSet<Integer> reverseSelectedRows =
+                            new TreeSet<Integer>(Collections.reverseOrder());
+                    reverseSelectedRows.addAll(sortedSelectedRows);
+                    for (Integer r : reverseSelectedRows) {
+                        model.removeRow(r);
+                    }
+                }
+            }
+
+        } else {
+            // otherwise, simply remove the row whose button was clicked
+            model.removeRow(row);
+        }
+
     }
 
     private JPopupMenu buildFieldGroupMenu(TransmogrifierTableModel model,

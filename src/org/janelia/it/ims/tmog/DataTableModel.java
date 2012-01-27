@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -342,6 +342,16 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
     public void addRow(int rowIndex) {
         throw new UnsupportedOperationException(
                 "dynamic addition of rows not supported for main data table");
+    }
+
+    /**
+     * @param  rowIndex  index for the desired row.
+     * 
+     * @return target for the specified row.
+     */
+    public Target getTargetForRow(int rowIndex) {
+        DataRow row = rows.get(rowIndex);
+        return row.getTarget();
     }
 
     public void removeRow(int rowIndex) {
