@@ -10,7 +10,7 @@
         <inputFileSorter sortAlgorithm="LNumber" />
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="\\dm11.isi.janelia.org\zlaticimg\peripheralConfocalStacks\" />
+            <path path="\\dm11.janelia.priv\zlaticimg\peripheralConfocalStacks\" />
             <renameFieldValue fieldDisplayName="Line"/>
         </outputDirectory>
 

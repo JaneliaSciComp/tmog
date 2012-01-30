@@ -11,7 +11,7 @@
                          recursiveSearch="true"/>
         
         <outputDirectory>
-            <path path="[\\dm10.isln.janelia.org|/groups/simpson]\simpsonimg\GAL4_confocal_stacks\" />
+            <path path="[\\dm10.janelia.priv|/groups/simpson]\simpsonimg\GAL4_confocal_stacks\" />
             <renameFieldValue fieldDisplayName="Line" />
         </outputDirectory>
 
@@ -32,7 +32,7 @@
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[\\dm10.isln.janelia.org|/groups/simpson]\simpsonimg\tmog\summaries\GAL4"/>
+                <property name="directory" value="[\\dm10.janelia.priv|/groups/simpson]\simpsonimg\tmog\summaries\GAL4"/>
             </sessionListener>
         </plugins>
 

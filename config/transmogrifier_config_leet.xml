@@ -10,7 +10,7 @@
         <inputFileSorter sortAlgorithm="LNumber" />
 
         <outputDirectory>
-            <path path="\\dm10.isln.janelia.org\leetconfocal\confocalStacks\" />
+            <path path="\\dm10.janelia.priv\leetconfocal\confocalStacks\" />
             <renameFieldValue fieldDisplayName="Plate" prefix="GMR_"/>
             <renameFieldValue fieldDisplayName="Well" suffix="_"/>
             <renameFieldValue fieldDisplayName="Vector ID" suffix="_"/>
@@ -20,7 +20,7 @@
         <plugins>
             <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.isln.janelia.org\leetconfocal\tmog\summaries\TZL"/>
+                <property name="directory" value="\\dm10.janelia.priv\leetconfocal\tmog\summaries\TZL"/>
             </sessionListener>
         </plugins>
 
