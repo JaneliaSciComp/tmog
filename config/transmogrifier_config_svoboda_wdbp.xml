@@ -15,7 +15,7 @@
                          recursiveSearch="true"/>
 
         <outputDirectory>
-            <path path="\\dm10.isln.janelia.org\wdbp\unprocessed\" />
+            <path path="\\dm10.janelia.priv\wdbp\unprocessed\" />
             <renameFieldValue fieldDisplayName="Experimenter" />
             <path path="/" />
             <renameFieldValue fieldDisplayName="Animal ID" />
@@ -93,6 +93,14 @@
                 <validValue value="no"/>
             </validValueList>
 
+            <validValueList displayName="Parameters File"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue displayName="default.parameters" value="default.parameters"/>
+                <validValue displayName="simon1.parameters" value="simon1.parameters"/>
+            </validValueList>
+
             <validValueList displayName="Experimenter"
                             required="true"
                             sharedForAllSessionFiles="true"
@@ -102,8 +110,11 @@
                 <validValue displayName="Leopoldo Petreanu" value="petreanul"/>
                 <validValue displayName="Simon Peron" value="perons"/>
                 <validValue displayName="Nick Sofroniew" value="sofroniewn"/>
+                <validValue displayName="Diego Gutnisky" value="gutniskyd"/>
                 <validValue displayName="Ning-long Xu" value="xun"/>
                 <validValue displayName="Andrew Hires" value="sahires"/>
+                <validValue displayName="Nuo Li" value="lin"/>
+                <validValue displayName="Zengcai Guo" value="guoz"/>
             </validValueList>
 
             <validValueList displayName="Experiment Location"
