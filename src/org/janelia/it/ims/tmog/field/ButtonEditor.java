@@ -229,11 +229,11 @@ public class ButtonEditor extends AbstractCellEditor
                 StringBuilder msg = new StringBuilder();
                 msg.append("Do you wish to exclude the ");
                 msg.append(selectedRowCount);
-                msg.append(" selected items from this session?\n\n");
+                msg.append(" selected items from this session?\n");
                 int count = 0;
                 Target target;
                 for (Integer r : sortedSelectedRows) {
-                    msg.append("\n    ");
+                    msg.append('\n');
                     target = dtm.getTargetForRow(r);
                     if (target != null) {
                         msg.append(target.getName());
@@ -246,6 +246,7 @@ public class ButtonEditor extends AbstractCellEditor
                     }
                     count++;
                 }
+                msg.append("\n\n");
 
                 int choice = NarrowOptionPane.showConfirmDialog(
                         dialogParent,
