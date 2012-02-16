@@ -5,7 +5,7 @@
 
     <global minimumVersion="2.7.7"/>
 
-    <project name="Larval Olympiad: MMF Files" default="true"
+    <project name="Larval Olympiad: MMF Files" default="true" taskName="rename-without-delete"
             copyPreviousButtonVisible="false">
 
         <inputFileFilter patternString=".+\.(bat|bin|bmp|dat|db|dlg|git|mdat|mmf|speed|txt|notes)"
@@ -73,19 +73,37 @@
                 <sourceFileMappedDefault pattern="^(pBDPGAL4U)@.*">
                     <mappedValue from="pBDPGAL4U" to="simpson"/>
                 </sourceFileMappedDefault>
+                <sourceFileMappedDefault pattern="^ (pBDPGAL4U)@.*">
+                    <mappedValue from="pBDPGAL4U" to="simpson"/>
+                </sourceFileMappedDefault>
+                <sourceFileMappedDefault pattern="^(pBDP-Gal4)@.*">
+                    <mappedValue from="pBDP-Gal4" to="simpson"/>
+                </sourceFileMappedDefault>
+                <sourceFileMappedDefault pattern="^(pBDP)@.*">
+                    <mappedValue from="pBDP" to="simpson"/>
+                </sourceFileMappedDefault>
+
+
+                <sourceFileMappedDefault pattern="^(FCF_attp2_1500062)@.*">
+                    <mappedValue from="FCF_attp2_1500062" to="rubin"/>
+                </sourceFileMappedDefault>
+
+
                 <staticDefault value="none"/>
             </cvTermList>
 
             <text displayName="Line" required="true"
                   pattern="[0-9A-Za-z\-\_]++">
-                <sourceFileMappedDefault pattern="(.+?)@.+?@.+?@.+?@.+?@.*">
+                <sourceFileMappedDefault pattern="(.+?)@.+?@.+?@.+?@.*">
                     <mappedValue from="20C12" to="GMR_20C12_AE_01"/>
                     <mappedValue from="pBDPUASGAL4" to="pBDPGAL4U"/>
                     <mappedValue from="pPBDGAL4U" to="pBDPGAL4U"/>
+                    <mappedValue from=" pBDPGAL4U" to="pBDPGAL4U"/>
+                    <mappedValue from="pBDP-Gal4" to="pBDPGAL4U"/>
                     <mappedValue from="pPBD" to="pBDPGAL4U"/>
                     <mappedValue from="W1118" to="w1118"/>
                 </sourceFileMappedDefault>
-                <sourceFileDefault pattern="(.+?)@.+?@.+?@.+?@.+?@.*"/>
+                <sourceFileDefault pattern="(.+?)@.+?@.+?@.+?@.*"/>
             </text>
 
             <separator value="@"/>
@@ -93,7 +111,7 @@
             <cvTermList displayName="Effector" required="true"
                         displayNamePrefixedForValues="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage">
-                <sourceFileMappedDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.*">
+                <sourceFileMappedDefault pattern=".+?@(.+?)@.+?@.+?@.*">
                     <mappedValue from="Ch2r" to="UAS_ChRh2_23_0011" />
                     <mappedValue from="Ch2" to="UAS_ChRh2_23_0011" />
                     <mappedValue from="Ch2v" to="UAS_ChRh2_23_0011" />
@@ -131,7 +149,7 @@
             <separator value="@"/>
 
             <validValueList displayName="Tracker" required="true">
-                <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*"/>
+                <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@*"/>
                 <validValue value="t7"/>
                 <validValue value="t8"/>
                 <validValue value="t9"/>
@@ -149,15 +167,10 @@
 
             <number displayName="Animal" required="true"
                     minimumValue="0" maximumValue="1000">
-                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@(.+?)@.*"/>
+                <sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.*"/>
             </number>
 
             <separator value="@"/>
-
-            <text displayName="Suffix" required="false"
-                  copyable="false" pattern="^[A-Za-z0-9_\\-]*$">
-                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"/>
-            </text>
 
             <fileExtension/>
 
