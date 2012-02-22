@@ -9,6 +9,7 @@
             copyPreviousButtonVisible="false">
 
         <inputFileFilter patternString=".+\.(bat|bin|bmp|dat|db|dlg|git|mdat|mmf|speed|txt|notes)"
+                         excludeQueryUrl="file://[\\dm11.janelia.priv|/groups/larvalolympiad]\larvalolympiad\tmog\processed-file-lists-bruno"
                          recursiveSearch="true"/>
 
         <inputFileSorter sortAlgorithm="Path"/>
@@ -36,6 +37,10 @@
                 <property name="validResources"
                           value="http://sage.int.janelia.org/sage-ws/lines/none/GH86.janelia-sage,"/>
             </rowValidator>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.SourceNameWriterPlugin">
+                <property name="directory" value="[\\dm11.janelia.priv|/groups/larvalolympiad]\larvalolympiad\tmog\processed-file-lists-bruno"/>
+                <property name="writableByAll" value="true"/>
+            </rowListener>
         </plugins>
 
         <dataFields>
