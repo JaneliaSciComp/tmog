@@ -542,7 +542,7 @@
     </project>
 
     <project name="Zlatic Lab: Promote RD to Screen Pipeline"
-            copyPreviousButtonVisible="false" taskName="rename-without-delete">
+             copyPreviousButtonVisible="false">
 
         <inputFileFilter patternString=".+\.(png|blob|blobs|set|summary)"
                          recursiveSearch="true"/>
