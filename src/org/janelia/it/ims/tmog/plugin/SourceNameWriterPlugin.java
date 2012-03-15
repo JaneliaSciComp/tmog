@@ -15,6 +15,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 
 /**
  * This plug-in writes the source (from) file name for the current
@@ -29,12 +30,36 @@ public class SourceNameWriterPlugin
     //       to a single file instead of creating separate files for
     //       each session
 
+    /**
+     * Indicates how many parent directories should be included in
+     * the relative paths written for each file.
+     */
+    private int pathDepth = 0;
+
     private String fileNamePrefix;
 
     @Override
     public void init(PluginConfiguration config)
             throws ExternalSystemException {
         super.init(config);
+
+        String pathDepthString = config.getProperty("pathDepth");
+        if (pathDepthString != null) {
+            boolean isPathDepthInvalid;
+            try {
+                this.pathDepth = Integer.parseInt(pathDepthString);
+                isPathDepthInvalid = (this.pathDepth < 0);
+            } catch (NumberFormatException e) {
+                isPathDepthInvalid = true;
+            }
+
+            if (isPathDepthInvalid) {
+                throw new ExternalSystemException(
+                        getInitFailureMessage() +
+                        "The pathDepth property '" + pathDepthString +
+                        "' must be a number greater than or equal to zero.");
+            }
+        }
 
         // TODO: consider using UUID class to generate unique file name
 
@@ -53,11 +78,35 @@ public class SourceNameWriterPlugin
 
     @Override
     protected String getRowRepresentation(PluginDataRow row) {
+
         String sourceName = null;
+
         if (row instanceof RenamePluginDataRow) {
+
             final File fromFile = ((RenamePluginDataRow) row).getFromFile();
-            sourceName = fromFile.getName() + "\n";
+
+            LinkedList<String> fileNames = new LinkedList<String>();
+            File parent = fromFile.getParentFile();
+            for (int i = 0; i < pathDepth; i++) {
+                if (parent == null) {
+                    break;
+                } else {
+                    fileNames.push(parent.getName());
+                }
+                parent = parent.getParentFile();
+            }
+
+            StringBuilder sb = new StringBuilder(128);
+            for (String name : fileNames) {
+                sb.append(name);
+                sb.append('/');
+            }
+            sb.append(fromFile.getName());
+            sb.append('\n');
+
+            sourceName = sb.toString();
         }
+
         return sourceName;
     }
 

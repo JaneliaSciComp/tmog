@@ -10,31 +10,164 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.7.0"/>
+    <global minimumVersion="2.7.7"/>
 
-    <project name="Fly Light Split (FLSP*)" default="true">
+    <project name="Larval Olympiad: MMF Files" default="true"
+             taskName="rename-without-delete"
+             copyPreviousButtonVisible="false">
 
-        <inputFileSorter sortAlgorithm="LNumber" />
+        <inputFileFilter patternString=".*/([^/]+(/[^/]+){5}\.(bat|bin|bmp|dat|db|dlg|git|mdat|mmf|speed|txt))"
+                         patternGroupNumber="1"
+                         excludeList="/tmp/processed-file-lists-bruno"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <outputDirectory fileModeReadOnly="false">
+            <path path="/tmp/bar/tracking-results/" />
+            <renameFieldValue fieldDisplayName="Tracker"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Line"/>
+            <renameFieldValue fieldDisplayName="Effector" prefix="@"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Protocol"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Date"/>
+            <renameFieldValue fieldDisplayName="Time" prefix="_"/>
+        </outputDirectory>
 
         <plugins>
-
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/${Line Lab}/${Line}.janelia-sage"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
+                <property name="errorMessage" value="There is no '${Line Lab}' lab line named '${Line}' in the SAGE database."/>
+                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
+                <property name="validResources"
+                          value="http://sage.int.janelia.org/sage-ws/lines/none/GH86.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/none/29C07_KD_GS4_P2.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/none/29C07_KD_GS4_P40.janelia-sage"/>
+            </rowValidator>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.SourceNameWriterPlugin">
+                <property name="directory" value="/tmp/processed-file-lists-bruno"/>
+                <property name="writableByAll" value="true"/>
+                <property name="pathDepth" value="5"/>
+            </rowListener>
         </plugins>
 
         <dataFields>
+            <date displayName="Date" required="true"
+                  datePattern="yyyyMMdd">
+                <sourceFileDateDefault pattern=".*[/\\\\](\d{8})_\d{4}[/\\\\].*"
+                                       fromDatePattern="yyyyMMdd"
+                                       toDatePattern="yyyyMMdd"
+                                       matchType="path"/>
+            </date>
 
-            <separator value="FLSP_"/>
-            <text displayName="Concentration" required="true"
-                  pattern="[0-9A-Za-z_]++" padFormat="40">
-                <sourceFileDefault pattern=".+L\d\d??_.*-(\d+).*#.*"/>
-            </text>
-            <runTime datePattern="yyyyMMddHHmmssSSS" />
             <separator value="_"/>
-            <pluginData displayName="image_number"/>
-            <separator value=".lsm"/>
 
-         </dataFields>
+            <date displayName="Time" required="true"
+                  datePattern="HHmm" suffix="00">
+                <sourceFileDateDefault pattern=".*[/\\\\]\d{8}_(\d{4})[/\\\\].*"
+                                       fromDatePattern="HHmm"
+                                       toDatePattern="HHmm"
+                                       matchType="path"/>
+            </date>
+
+            <separator value="@"/>
+
+            <cvTermList displayName="Line Lab" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/lab"
+                        displayNamePrefixedForValues="false"
+                        markedForTask="false">
+                <sourceFileMappedDefault pattern="^(GMR_).*">
+                    <mappedValue from="GMR_" to="rubin"/>
+                </sourceFileMappedDefault>
+                <sourceFileMappedDefault pattern="^(pBDPGAL4U)@.*">
+                    <mappedValue from="pBDPGAL4U" to="simpson"/>
+                </sourceFileMappedDefault>
+                <staticDefault value="none"/>
+            </cvTermList>
+
+            <text displayName="Line" required="true"
+                  pattern="[0-9A-Za-z\-\_]++">
+                <sourceFileDefault pattern="(.+?)@.+?@.+?@.+?@.+?@.*"/>
+            </text>
+
+            <separator value="@"/>
+
+            <cvTermList displayName="Effector" required="true"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage">
+                <sourceFileMappedDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.*">
+                    <mappedValue from="Ch2r" to="UAS_ChRh2_23_0011" />
+                    <mappedValue from="Ch2" to="UAS_ChRh2_23_0011" />
+                    <mappedValue from="Ch2v" to="UAS_ChRh2_23_0011" />
+                    <mappedValue from="KI2h30" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR24" to="UAS_GAL80ts_Kir21_23_0004" />
+                    <mappedValue from="KIR2" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR2h16" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR2h30" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR2h36" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="Kir36HT4" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR3" to="VDRC_UAS_GAL80ts_Kir21_23_0013" />
+                    <mappedValue from="Kir40h" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="kir40h" to="UAS_GAL80ts_Kir21_23_0004" />
+                    <mappedValue from="Kir48htest" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="KIR48" to="UAS_GAL80ts_Kir21_23_0004" />
+                    <mappedValue from="kir" to="DL_UAS_GAL80ts_Kir21_23_0010" />
+                    <mappedValue from="Kir" to="UAS_GAL80ts_Kir21_23_0004" />
+                    <mappedValue from="KIR" to="UAS_GAL80ts_Kir21_23_0004" />
+                    <mappedValue from="Shibire1" to="UAS_Shi_ts1_3_0001" />
+                    <mappedValue from="sHIBIRE" to="UAS_Shi_ts1_3_0001" />
+                    <mappedValue from="Shibire" to="UAS_Shi_ts1_3_0001" />
+                    <mappedValue from="shi" to="UAS_Shi_ts1_3_0001" />
+                    <mappedValue from="SHI" to="UAS_Shi_ts1_3_0001" />
+                    <mappedValue from="TNT" to="UAS_TNT_2_0003" />
+                    <mappedValue from="TrpA1" to="UAS_dTrpA1_2_0012" />
+                    <mappedValue from="TrpA" to="UAS_dTrpA1_2_0012" />
+                </sourceFileMappedDefault>
+                <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.*" />
+            </cvTermList>
+
+            <separator value="@"/>
+
+            <validValueList displayName="Tracker" required="true">
+                <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*"/>
+                <validValue value="t7"/>
+                <validValue value="t8"/>
+                <validValue value="t9"/>
+                <validValue value="t10"/>
+                <validValue value="t11"/>
+            </validValueList>
+
+            <separator value="@"/>
+
+            <validValueList displayName="Protocol" required="true">
+                <validValue value="n#n#n#n" default="true"/>
+            </validValueList>
+
+            <separator value="@"/>
+
+            <number displayName="Animal" required="true"
+                    minimumValue="0" maximumValue="1000">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@(.+?)@.*"/>
+            </number>
+
+            <separator value="@"/>
+
+            <text displayName="Suffix" required="false"
+                  copyable="false" pattern="^[A-Za-z0-9_\\-]*$">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"/>
+            </text>
+
+            <fileExtension/>
+
+        </dataFields>
 
     </project>
+
+
+
 
     <!--
     <project name="Test Web Service List">

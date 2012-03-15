@@ -12,11 +12,9 @@ import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.target.FileTargetNamer;
-import org.janelia.it.utils.PathUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -47,11 +45,7 @@ public class QueryFilter extends javax.swing.filechooser.FileFilter
         this.targetNamer = targetNamer;
         this.queryResults = new HashSet<String>(1024);
 
-        if (queryUrl.startsWith("file://")) {
-            loadNamesFromFileOrDirectory(queryUrl);
-        } else {
-            executeHttpQuery(queryUrl);
-        }
+        executeHttpQuery(queryUrl);
 
         LOG.info("retrieved " + queryResults.size() +
                  " results from " + queryUrl);
@@ -83,74 +77,6 @@ public class QueryFilter extends javax.swing.filechooser.FileFilter
             isAccepted = ! queryResults.contains(targetName);
         }
         return isAccepted;
-    }
-
-    private void loadNamesFromFileOrDirectory(String queryUrl) {
-
-        // remove leading 'file://'
-        final String fileName =queryUrl.substring(7);
-        final String convertedFileName = PathUtil.convertPath(fileName);
-        final File file = new File(convertedFileName);
-
-        String error = null;
-        if (! file.exists()) {
-            error = "does not exist";
-        } else if (! file.canRead()) {
-            error = "can not be read";
-        }
-        if (error != null) {
-            throw new IllegalArgumentException(
-                    "Query filter file '" + file.getAbsolutePath() + "' " +
-                    error +
-                    ".  Please verify the configured url is accurate.");
-        }
-
-        LOG.info("looking for filter files in " + file.getAbsolutePath());
-
-        if (file.isDirectory()) {
-            int count = 0;
-            for (File fileInDirectory : file.listFiles()) {
-                if (fileInDirectory.isFile() && fileInDirectory.canRead()) {
-                    count++;
-                    loadNamesFromFile(fileInDirectory);
-                }
-            }
-            LOG.info("loaded " + count + " filter files in directory " + 
-                     file.getAbsolutePath());
-        } else {
-            loadNamesFromFile(file);
-        }
-
-        if (queryResults.size() == 0) {
-            LOG.warn("no file names found in " + file.getAbsolutePath());
-        }
-    }
-
-    private void loadNamesFromFile(File file) {
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new FileReader(file));
-
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                this.queryResults.add(inputLine);
-            }
-
-        } catch (Exception e) {
-            throw new IllegalArgumentException(
-                    "Failed to load input filter file names from " +
-                    file.getAbsolutePath() +
-                    "'.  Please verify the configured url is accurate.", e);
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    LOG.error("failed to close file input stream, " +
-                              "ignoring error", e);
-                }
-            }
-        }
     }
 
     private void executeHttpQuery(String queryUrl) {

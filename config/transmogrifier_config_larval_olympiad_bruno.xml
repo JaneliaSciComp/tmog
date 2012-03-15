@@ -3,13 +3,16 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.7.9"/>
+    <global minimumVersion="2.8.0"/>
 
     <project name="Larval Olympiad: MMF Files" default="true" taskName="rename-without-delete"
             copyPreviousButtonVisible="false">
 
-        <inputFileFilter patternString=".+\.(bat|bin|bmp|dat|db|dlg|git|mdat|mmf|speed|txt|notes)"
-                         excludeQueryUrl="file://[\\dm11.janelia.priv|/groups/larvalolympiad]\larvalolympiad\tmog\processed-file-lists-bruno"
+        <!-- Note: path components of patternString (5) need to be 
+                   consistent with  SourceNameWriterPlugin pathDepth
+                   (see definition below) -->
+        <inputFileFilter patternString=".*/([^/]+(/[^/]+){5}\.(bat|bin|bmp|dat|db|dlg|git|mdat|mmf|speed|txt))"
+                         excludeList="[\\dm11.janelia.priv|/groups/larvalolympiad]\larvalolympiad\tmog\processed-file-lists-bruno"
                          recursiveSearch="true"/>
 
         <inputFileSorter sortAlgorithm="Path"/>
@@ -41,6 +44,10 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.SourceNameWriterPlugin">
                 <property name="directory" value="[\\dm11.janelia.priv|/groups/larvalolympiad]\larvalolympiad\tmog\processed-file-lists-bruno"/>
                 <property name="writableByAll" value="true"/>
+                <!-- Note: pathDepth (5) needs to be consistent with
+                           inputFileFilter patternString
+                           (see definition above) -->
+                <property name="pathDepth" value="5"/>
             </rowListener>
         </plugins>
 

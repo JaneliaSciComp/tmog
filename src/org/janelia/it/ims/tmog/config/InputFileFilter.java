@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -7,6 +7,7 @@
 
 package org.janelia.it.ims.tmog.config;
 
+import org.janelia.it.ims.tmog.filefilter.FileListFilter;
 import org.janelia.it.ims.tmog.filefilter.FileNamePatternFilter;
 import org.janelia.it.ims.tmog.filefilter.FileNamePatternWithQueryFilter;
 import org.janelia.it.ims.tmog.target.FileTargetNamer;
@@ -29,8 +30,10 @@ public class InputFileFilter {
 
     private String patternString;
     private Integer patternGroupNumber;
-    private String includeQueryUrl;
     private String excludeQueryUrl;
+    private String includeQueryUrl;
+    private String excludeList;
+    private String includeList;
     private FileFilter filter;
     private boolean recursiveSearch;
     private boolean filterDuplicates;
@@ -65,6 +68,16 @@ public class InputFileFilter {
     @SuppressWarnings({"UnusedDeclaration"})
     public void setIncludeQueryUrl(String includeQueryUrl) {
         this.includeQueryUrl = includeQueryUrl;
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    public void setExcludeList(String excludeList) {
+        this.excludeList = excludeList;
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    public void setIncludeList(String includeList) {
+        this.includeList = includeList;
     }
 
     public boolean isRecursiveSearch() {
@@ -132,7 +145,18 @@ public class InputFileFilter {
                                                         includeQueryUrl,
                                                         true,
                                                         getTargetNamer(rootDirectory));
+        } else if (excludeList != null) {
+            filter = new FileListFilter(excludeList,
+                                        false,
+                                        patternString,
+                                        patternGroupNumber);
+        } else if (includeList != null) {
+            filter = new FileListFilter(includeList,
+                                        true,
+                                        patternString,
+                                        patternGroupNumber);
         }
+
         return filter;
     }
 
