@@ -9,6 +9,8 @@
 
     <project name="Kerr Lab: Multi-Worm Tracker" taskName="collector" default="true">
 
+        <!-- NOTE: root directory no longer removed by FileTargetNamer -->
+        
         <inputFileFilter patternString="(\d{8}_\d{6}){1}(.zip)?"
                          patternGroupNumber="1"
                          excludeQueryUrl="http://wormtracker.int.janelia.org/wormtracker"
