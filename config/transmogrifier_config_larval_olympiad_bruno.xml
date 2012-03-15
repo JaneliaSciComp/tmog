@@ -12,6 +12,7 @@
                    consistent with  SourceNameWriterPlugin pathDepth
                    (see definition below) -->
         <inputFileFilter patternString=".*/([^/]+(/[^/]+){5}\.(bat|bin|bmp|dat|db|dlg|git|mdat|mmf|speed|txt))"
+                         patternGroupNumber="1"
                          excludeList="[\\dm11.janelia.priv|/groups/larvalolympiad]\larvalolympiad\tmog\processed-file-lists-bruno"
                          recursiveSearch="true"/>
 

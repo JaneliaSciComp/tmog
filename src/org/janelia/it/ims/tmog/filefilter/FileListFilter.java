@@ -86,7 +86,7 @@ public class FileListFilter
 
         boolean isAccepted = false;
 
-        String nameToFilter = PathUtil.convertPath(f.getAbsolutePath());
+        String nameToFilter = PathUtil.convertPathToUnix(f.getAbsolutePath());
 
         Matcher matcher = pattern.matcher(nameToFilter);
 
