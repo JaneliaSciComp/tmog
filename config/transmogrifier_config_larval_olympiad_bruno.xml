@@ -137,29 +137,29 @@
                   pattern="[0-9A-Za-z\-\_]++">
                 <sourceFileMappedDefault pattern="(.+?)@.+?@.+?@.+?@.*">
                     <mappedValue from="20C12" to="GMR_20C12_AE_01"/>
+                    <mappedValue from="28E01AE_01" to="GMR_28E01_AE_01"/>
+                    <mappedValue from="attP2" to="FCF_attp2_1500062"/>
+                    <mappedValue from="GMR_496D11_AE_01" to="GMR_49D11_AE_01"/>
+                    <mappedValue from="GMR_496G11_AE_01" to="GMR_49G11_AE_01"/>
+                    <mappedValue from="GMR_61H07_AE_01" to="GMR_61H07_AD_01"/>
+                    <mappedValue from="GMR_65A05+AE_01" to="GMR_65A05_AE_01"/>
+                    <mappedValue from="GMR_74E04_AE_01" to="GMR_74E03_AE_01"/>
+                    <mappedValue from="GMR_90C07_AE_01" to="GMR_90C07_AD_01"/>
+                    <mappedValue from="GMR_F1D12_AE_01" to="GMR_71D12_AE_01"/>
+                    <mappedValue from="pBDP-Gal4" to="pBDPGAL4U"/>
+                    <mappedValue from=" pBDPGAL4U" to="pBDPGAL4U"/>
                     <mappedValue from="pBDPUASGAL4" to="pBDPGAL4U"/>
                     <mappedValue from="pPBDGAL4U" to="pBDPGAL4U"/>
-                    <mappedValue from=" pBDPGAL4U" to="pBDPGAL4U"/>
-                    <mappedValue from="pBDP-Gal4" to="pBDPGAL4U"/>
                     <mappedValue from="pPBD" to="pBDPGAL4U"/>
-                    <mappedValue from="W1118" to="FCF_w1118_1500005"/>
                     <mappedValue from="w1118" to="FCF_w1118_1500005"/>
+                    <mappedValue from="W1118" to="FCF_w1118_1500005"/>
                     <mappedValue from="w1119" to="FCF_w1118_1500005"/>
-                    <mappedValue from="attP2" to="FCF_attp2_1500062"/>
-                    <mappedValue from="GMR_65A05+AE_01" to="GMR_65A05_AE_01"/>
-                    <mappedValue from="GMR_61H07_AE_01" to="GMR_61H07_AD_01"/>
-                    <mappedValue from="GMR_74E04_AE_01" to="GMR_74E03_AE_01"/>
-                    <mappedValue from="28E01AE_01" to="GMR_28E01_AE_01"/>
-                    <mappedValue from="GMR_496G11_AE_01" to="GMR_49G11_AE_01"/>
-                    <mappedValue from="GMR_496D11_AE_01" to="GMR_49D11_AE_01"/>
-                    <mappedValue from="GMR_F1D12_AE_01" to="GMR_71D12_AE_01"/>
-                    <mappedValue from="GMR_90C07_AE_01" to="GMR_90C07_AD_01"/>
-                    <mappedValue from="yw;059059Rh5(2);059059Rh6(1)" to="ywrh5rh6"/>
                     <mappedValue from="yw;059059Rh[5];059059Rh[6]" to="ywrh5rh6"/>
+                    <mappedValue from="yw;059059Rh5(2);059059Rh6(1)" to="ywrh5rh6"/>
                     <mappedValue from="yw;059059Rh5[2];059059Rh6[1]" to="ywrh5rh6"/>
+                    <mappedValue from="yw;059Rh[5];059Rh[6]" to="ywrh5rh6"/>
                     <mappedValue from="yw;059Rh5(2);059Rh6(1)" to="ywrh5rh6"/>
                     <mappedValue from="yw;059Rh5[2];059Rh6[1]" to="ywrh5rh6"/>
-                    <mappedValue from="yw;059Rh[5];059Rh[6]" to="ywrh5rh6"/>
                     <mappedValue from="yw;Rh5(2);Rh6(1)" to="ywrh5rh6"/>
                     <mappedValue from="yw;Rh5[2];Rh6[1]" to="ywrh5rh6"/>
                     <mappedValue from="yw;Rh[5];Rh[6]" to="ywrh5rh6"/>
