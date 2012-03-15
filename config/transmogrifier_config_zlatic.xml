@@ -32,7 +32,9 @@
                 <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
                 <property name="errorMessage" value="There is no '${Line Lab}' lab line named '${Line}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
-            </rowValidator>
+                <property name="validResources"
+                          value="http://sage.int.janelia.org/sage-ws/lines/none/Not_Applicable.janelia-sage"/>
+                </rowValidator>
         </plugins>
 
         <dataFields>
@@ -192,6 +194,8 @@
                 <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
                 <property name="errorMessage" value="There is no '${Line Lab}' lab line named '${Line}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
+                <property name="validResources"
+                          value="http://sage.int.janelia.org/sage-ws/lines/none/Not_Applicable.janelia-sage"/>
             </rowValidator>
         </plugins>
 
@@ -568,6 +572,8 @@
                 <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
                 <property name="errorMessage" value="There is no '${Line Lab}' lab line named '${Line}' in the SAGE database."/>
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
+                <property name="validResources"
+                          value="http://sage.int.janelia.org/sage-ws/lines/none/Not_Applicable.janelia-sage"/>
             </rowValidator>
         </plugins>
 
