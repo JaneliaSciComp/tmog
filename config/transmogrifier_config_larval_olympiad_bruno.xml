@@ -8,10 +8,10 @@
     <project name="Larval Olympiad: MMF Files" default="true" taskName="rename-without-delete"
             copyPreviousButtonVisible="false">
 
-        <!-- Note: path components of patternString (5) need to be 
+        <!-- Note: path components of patternString (7) need to be
                    consistent with  SourceNameWriterPlugin pathDepth
                    (see definition below) -->
-        <inputFileFilter patternString=".*/([^/]+(/[^/]+){5}\.(bat|bin|bmp|dat|db|dlg|git|mdat|mmf|speed|txt))"
+        <inputFileFilter patternString=".*/([^/]+(/[^/]+){7}\.(bat|bin|bmp|dat|db|dlg|git|mdat|mmf|speed|txt))"
                          patternGroupNumber="1"
                          excludeList="[\\dm11.janelia.priv|/groups/larvalolympiad]\larvalolympiad\tmog\processed-file-lists-bruno"
                          recursiveSearch="true"/>
@@ -45,10 +45,10 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.SourceNameWriterPlugin">
                 <property name="directory" value="[\\dm11.janelia.priv|/groups/larvalolympiad]\larvalolympiad\tmog\processed-file-lists-bruno"/>
                 <property name="writableByAll" value="true"/>
-                <!-- Note: pathDepth (5) needs to be consistent with
+                <!-- Note: pathDepth (7) needs to be consistent with
                            inputFileFilter patternString
                            (see definition above) -->
-                <property name="pathDepth" value="5"/>
+                <property name="pathDepth" value="7"/>
             </rowListener>
         </plugins>
 
