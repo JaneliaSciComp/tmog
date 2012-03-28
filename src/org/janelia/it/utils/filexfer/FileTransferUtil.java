@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -8,6 +8,7 @@
 package org.janelia.it.utils.filexfer;
 
 import org.apache.log4j.Logger;
+import org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin;
 
 import java.io.Closeable;
 import java.io.File;
@@ -383,4 +384,31 @@ public class FileTransferUtil {
     }
 
     private static final Logger LOG = Logger.getLogger(FileTransferUtil.class);
+
+    public static void main(String[] args) {
+        if (args.length > 1) {
+            try {
+                final String algorithm = args[0];
+                final FileTransferUtil util = new FileTransferUtil(10000000,
+                                                                   algorithm);
+                final String fileName = args[1];
+                final File file = new File(fileName);
+
+                System.out.println("Reading " + file.getAbsolutePath());
+
+                DigestBytes db = util.calculateDigest(file);
+                System.out.println("TMOG log '" + algorithm + "' digest is: " +
+                                   db.toString());
+                System.out.println("Standard '" + algorithm + "' digest is: " +
+                                   db.toSum());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("\n\nUSAGE: java " +
+                               LsmMetaDataPlugin.class.getName() +
+                               " <digest algorithm> <file name>\n\n");
+        }
+
+    }
 }
