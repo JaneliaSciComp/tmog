@@ -63,8 +63,11 @@
                 <sourceFileMappedDefault pattern="^(GMR_).*">
                     <mappedValue from="GMR_" to="rubin"/>
                 </sourceFileMappedDefault>
-                <sourceFileMappedDefault pattern="^(pBDPGAL4U)@.*">
+                <sourceFileMappedDefault pattern="(.+?)@.+?@.+?@.+?@.+?@.*">
                     <mappedValue from="pBDPGAL4U" to="simpson"/>
+                    <mappedValue from="JHS_or83b_EXT01" to="simpson"/>
+                    <mappedValue from="FCF_attP2_1500062" to="fly"/>
+                    <mappedValue from="FCF_w1118_1500005" to="fly"/>
                 </sourceFileMappedDefault>
             </cvTermList>
 
