@@ -108,6 +108,8 @@ public class LsmMetaDataPluginTest
                    "unless you intend to test metadata insertion",
                    srcFile.exists());
 
+        // copy src file to a test file because the test will change the file
+
         FileTransferUtil util = new FileTransferUtil(100000000,
                                                      DigestAlgorithms.NONE);
 
