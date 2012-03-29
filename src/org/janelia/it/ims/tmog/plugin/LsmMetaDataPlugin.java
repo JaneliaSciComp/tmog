@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -9,9 +9,7 @@ package org.janelia.it.ims.tmog.plugin;
 
 import loci.common.RandomAccessInputStream;
 import loci.common.RandomAccessOutputStream;
-import loci.formats.FormatException;
 import loci.formats.tiff.IFD;
-import loci.formats.tiff.TiffConstants;
 import loci.formats.tiff.TiffIFDEntry;
 import loci.formats.tiff.TiffParser;
 import loci.formats.tiff.TiffSaver;
@@ -19,10 +17,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This plug-in embeds an xml representation of each row's data fields into
@@ -99,7 +101,7 @@ public class LsmMetaDataPlugin
         return row;
     }
 
-    private PluginDataRow insertMetaData(PluginDataRow row)
+    protected PluginDataRow insertMetaData(PluginDataRow row)
             throws ExternalSystemException {
 
         if (row instanceof RenamePluginDataRow) {
@@ -114,10 +116,12 @@ public class LsmMetaDataPlugin
             try {
 
                 TiffParser parser = new TiffParser(fileName);
-                Boolean isLittleEndian = parser.checkHeader();
-                long[] ifdOffsets = parser.getIFDOffsets();
+                final Boolean isLittleEndian = parser.checkHeader();
+                final boolean isBigTiff = parser.isBigTiff();
+                final long[] ifdOffsets = parser.getIFDOffsets();
                 final int firstIFDIndex = 0;
-                long firstIFDOffset = ifdOffsets[firstIFDIndex];
+                final long firstIFDOffset = ifdOffsets[firstIFDIndex];
+                final long secondIFDOffset = ifdOffsets[1];
                 IFD firstIFD = parser.getIFD(firstIFDOffset);
 
                 in = parser.getStream();
@@ -137,17 +141,20 @@ public class LsmMetaDataPlugin
 
                 } else {
 
-                    long next = getNextOffsetLocation(in, firstIFDOffset);
-                    long nextValue = (next & ~0xffffffffL) |
-                                     (in.readInt() & 0xffffffffL);
-
                     firstIFD.put(TIFF_JF_TAGGER_TAG, xml.toString());
                     out.seek(endOfFile);
 
-                    tiffSaver.writeIFD(firstIFD, nextValue);
+                    tiffSaver.writeIFD(firstIFD, secondIFDOffset);
 
-                    out.seek(4);
-                    out.writeInt((int) endOfFile);
+                    if (isBigTiff || (endOfFile >= Integer.MAX_VALUE)) {
+                        LOG.warn(fileName + " has " + endOfFile +
+                                 " bytes, isBigTiff is " + isBigTiff +
+                                 ", leaving header offset alone so meta data " +
+                                 "will not be reachable via IFD traversal");
+                    } else {
+                        out.seek(4);
+                        out.writeInt((int) endOfFile);
+                    }
 
                     LOG.info("added LSM meta data to " + fileName);
                 }
@@ -182,33 +189,175 @@ public class LsmMetaDataPlugin
         return row;
     }
 
-    private long getNextOffsetLocation(RandomAccessInputStream in,
-                                       long offset)
-            throws IOException, FormatException {
-
-        in.seek(offset);
-        int nEntries = in.readUnsignedShort();
-        in.skipBytes(nEntries * TiffConstants.BYTES_PER_ENTRY);
-        return in.getFilePointer();
-    }
-
     /** The logger for this class. */
     private static final Log LOG = LogFactory.getLog(LsmMetaDataPlugin.class);
 
     /** Tag number reserved by Gene Myers for his tiff formatted files. */
     private static final int TIFF_JF_TAGGER_TAG = 36036;
 
-    public static void main(String[] args) {
-        if (args.length > 0) {
-            try {
-                final String fileName = args[0];
-                final TiffParser parser = new TiffParser(fileName);
-                final TiffIFDEntry entry =
-                        parser.getFirstIFDEntry(TIFF_JF_TAGGER_TAG);
-                System.out.println(parser.getIFDValue(entry));
-            } catch (IOException e) {
-                e.printStackTrace();
+    private static final int TIFF_ZEISS_LSM_TAG = 34412;
+
+    /**
+     * @param  fileName  name of tiff file to parse.
+     *                 
+     * @return janelia metadata store in file or null if none can be found.
+     */
+    public static String readMetaData(String fileName) {
+        String metaData = null;
+        try {
+            final TiffParser parser = new TiffParser(fileName);
+            final TiffIFDEntry entry =
+                    parser.getFirstIFDEntry(TIFF_JF_TAGGER_TAG);
+            metaData = String.valueOf(parser.getIFDValue(entry));
+        } catch (Exception e) {
+            LOG.error("failed to retrieve Janelia metadata from " + fileName,
+                      e);
+        }
+        return metaData;
+    }
+
+    /**
+     * @param  fileName  name of tiff file to parse.
+     *                   
+     * @return true if a Zeiss LSM IFD block exists in the file;
+     *         otherwise false.
+     */
+    public static boolean hasZeissLsmDirectory(String fileName) {
+        boolean hasDirectory = false;
+        try {
+            TiffParser parser = new TiffParser(fileName);
+            parser.getFirstIFDEntry(TIFF_ZEISS_LSM_TAG);
+            hasDirectory = true;
+            LOG.info("found Zeiss LSM Tag in " + fileName);
+        } catch (Exception e) {
+            LOG.error("failed to find Ziess LSM Tag in " + fileName, e);
+        }
+        return hasDirectory;
+    }
+
+    /**
+     * Restores the first IFD offset value in the specified tiff file's
+     * header to it's default value of 8.  This will orphan any Janelia
+     * metadata at the end of the file.
+     *
+     * @param  fileName  name of lsm file to restore.
+     *                   
+     * @throws Exception
+     *   if any errors occur during the restoration.
+     */
+    private static void restoreFirstIFDOffset(String fileName)
+            throws Exception {
+
+        RandomAccessOutputStream out = null;
+        try {
+
+            TiffParser parser = new TiffParser(fileName);
+            
+            if (parser.isBigTiff()) {
+                throw new IllegalStateException(
+                        "big tiff format file headers " +
+                        "cannot be restored by this method");
             }
+
+            final Boolean isLittleEndian = parser.checkHeader();
+            TiffSaver tiffSaver = new TiffSaver(fileName);
+            tiffSaver.setLittleEndian(isLittleEndian);
+            out = tiffSaver.getStream();
+            out.seek(4);
+            out.writeInt(8);
+
+        } finally {
+
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    LOG.warn("failed to close output stream for " +
+                             fileName,
+                             e);
+                }
+            }
+
+        }
+    }
+
+    private static boolean confirm(String question) {
+        System.out.print(question + " [y|n] ");
+        BufferedReader br = 
+                new BufferedReader(new InputStreamReader(System.in));
+        boolean isConfirmed = false;
+        try {
+            String r = br.readLine();
+            isConfirmed = "y".equalsIgnoreCase(r);
+        } catch (IOException e) {
+            LOG.error("failed to read response", e);
+        }
+        return isConfirmed;
+    }
+
+    public static void main(String[] args) {
+
+        final String meta = "--meta";
+        final String restore = "--restore";
+        final String zeiss = "--zeiss";
+        final String usage = 
+                "\n\nUSAGE: java " + LsmMetaDataPlugin.class.getName() + 
+                " [" + meta + "] [" + restore + "] [" + zeiss + 
+                "] file [file ...]\n";
+        
+        boolean isMeta = false;
+        boolean isRestore = false;
+        boolean isZeiss = false;
+        Set<String> fileNames = new HashSet<String>();
+        for (String value : args) {
+            if (meta.equals(value)) {
+                isMeta = true;
+            } else if (restore.equals(value)) {
+                isRestore = true;
+            } else if (zeiss.equals(value)) {
+                isZeiss = true;
+            } else {
+                fileNames.add(value);
+            }
+        }
+        
+        String metaData;
+        if ((fileNames.size() > 0) && (isMeta || isRestore || isZeiss)) {
+            for (String fileName : fileNames) {
+
+                if (isZeiss) {
+                    hasZeissLsmDirectory(fileName);
+                }
+
+                if (isMeta) {
+                    metaData = readMetaData(fileName);
+                    if (metaData != null) {
+                        LOG.info("Janelia metadata for " + fileName +
+                                 " is:\n" + metaData);
+                    }
+                }
+
+                if (isRestore) {
+                    boolean hasZeiss = hasZeissLsmDirectory(fileName);
+                    
+                    if ((! hasZeiss) &&
+                        (confirm("Are you sure you wish to restore " +
+                                 fileName + "?"))) {
+                        try {
+                            restoreFirstIFDOffset(fileName);
+                        } catch (Exception e) {
+                            LOG.error("failed to restore " + fileName, e);
+                        }
+
+                        hasZeissLsmDirectory(fileName);
+                    } else {
+                        LOG.info("skipping restore of " + fileName);
+                    }
+                }
+
+            }
+        } else {
+            System.out.println(usage);
         }
     }
 }
