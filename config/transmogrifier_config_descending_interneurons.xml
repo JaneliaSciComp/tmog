@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="2.8.2" frameSizePercentage="95"/>
+
+    <project name="Descending Interneurons" default="true">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <!-- TODO: fix path -->
+
+        <outputDirectory basePath="[\\dm10.janelia.priv|/groups/descending]/descending/confocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+
+        <plugins>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="lab" value="$STATIC:rubin"/>
+                <property name="family" value="$STATIC:descending_cells"/>
+                <property name="effector" value="Effector"/>
+                <property name="line" value="Line"/>
+                <property name="gender" value="Gender$MAP:m=Male|f=Female|x=unknown"/>
+                <property name="age" value="Age"/>
+                <property name="area" value="Area$MAP:b=Brain|v=Ventral Nerve Cord"/>
+                <property name="created_by" value="Imager"/>
+                <property name="renamed_by" value="Renamer"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
+
+                <!-- TODO: fix path
+                <property name="base_url" value="$STATIC:http://img.int.janelia.org/rubin-image/flylight_rd-confocal-data/"/>
+                <property name="base_path" value="$STATIC:/groups/rubin/data1/rubinlab/FlyLight/confocalStacks/"/>
+                -->
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <!--
+               Line response looks like:
+               <lineSet>
+                   ...
+                   <line>
+                       <name>EXT_109_80_GAL4</name>
+                   </line>
+                   ...
+               </lineSet>
+            -->
+            <webServiceList displayName="Line"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/rubin.janelia-sage"
+                            autoComplete="true">
+            </webServiceList>
+
+            <separator value="-"/>
+            <validValueList displayName="Gender" required="true">
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f" default="true" />
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+            <validValueList displayName="Age" required="true">
+                <validValue displayName="X00: undefined" value="X00"/>
+                <validValue displayName="A01: Day 1-5" value="A01"/>
+                <validValue displayName="A02: Day 6-10" value="A02"/>
+                <validValue displayName="A03: Day 11-15" value="A03"/>
+                <validValue displayName="A04: Day 16-20" value="A04"/>
+                <validValue displayName="A05: Day 21-25" value="A05"/>
+                <validValue displayName="A06: Day 26-30" value="A06"/>
+            </validValueList>
+            <validValueList displayName="Area" required="true">
+                <validValue displayName="b: Brain" value="b"/>
+                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
+            </validValueList>
+            <!--
+            See http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html
+            for datePattern options.
+            -->
+            <separator value="_C"/>
+            <fileModificationTime displayName="Capture Date" datePattern="yyMMdd" />
+            <separator value="_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+
+            <!--
+             These values are collected for the SAGE database but are not
+             included as components of the file name (markedForTask="false").
+             -->
+
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            markedForTask="false">
+                <validValue value="Glycerol-Based Mounting" default="true"/>
+                <validValue value="DPX Mounting"/>
+            </validValueList>
+
+            <cvTermList displayName="Tissue Orientation" required="true"
+                        markedForTask="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
+                        displayNamePrefixedForValues="false">
+            </cvTermList>
+
+            <cvTermList displayName="Effector" required="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage">
+                <staticDefault value="tsh_Lex_IVSGAL80_UAS_IVS_2_0032"/>
+            </cvTermList>
+
+            <validValueList displayName="Imager" required="true"
+                            markedForTask="false">
+                <validValue value="Nicholas Abel"/>
+                <validValue value="Phuson Hulamm"/>
+                <validValue value="Ying-Jou Lee"/>
+            </validValueList>
+
+            <validValueList displayName="Renamer" required="true"
+                            markedForTask="false"
+                            sharedForAllSessionFiles="true">
+                <validValue value="Bruce Kimmel"/>
+                <validValue value="Chris Zugates"/>
+                <validValue value="Gerry Rubin"/>
+                <validValue value="Gwyneth Card"/>
+                <validValue value="Michael Dickinson"/>
+                <validValue value="Nicholas Abel"/>
+                <validValue value="Phuson Hulamm"/>
+                <validValue value="Wyatt Korff"/>
+                <validValue value="Ying-Jou Lee"/>
+            </validValueList>
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
