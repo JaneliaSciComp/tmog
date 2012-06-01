@@ -53,12 +53,14 @@
             </webServiceList>
 
             <separator value="-"/>
-            <validValueList displayName="Gender" required="true">
+            <validValueList displayName="Gender" required="true"
+                            autoComplete="true">
                 <validValue displayName="m: Male" value="m"/>
                 <validValue displayName="f: Female" value="f" default="true" />
                 <validValue displayName="x: Not Defined" value="x"/>
             </validValueList>
-            <validValueList displayName="Age" required="true">
+            <validValueList displayName="Age" required="true"
+                    autoComplete="true">
                 <validValue displayName="X00: undefined" value="X00"/>
                 <validValue displayName="A01: Day 1-5" value="A01"/>
                 <validValue displayName="A02: Day 6-10" value="A02"/>
@@ -67,7 +69,8 @@
                 <validValue displayName="A05: Day 21-25" value="A05"/>
                 <validValue displayName="A06: Day 26-30" value="A06"/>
             </validValueList>
-            <validValueList displayName="Area" required="true">
+            <validValueList displayName="Area" required="true"
+                    autoComplete="true">
                 <validValue displayName="b: Brain" value="b"/>
                 <validValue displayName="v: Ventral Nerve Cord" value="v"/>
             </validValueList>
@@ -87,18 +90,21 @@
              -->
 
             <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            autoComplete="true"
                             markedForTask="false">
                 <validValue value="Glycerol-Based Mounting" default="true"/>
                 <validValue value="DPX Mounting"/>
             </validValueList>
 
             <cvTermList displayName="Tissue Orientation" required="true"
+                        autoComplete="true"
                         markedForTask="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
                         displayNamePrefixedForValues="false">
             </cvTermList>
 
             <cvTermList displayName="Effector" required="true"
+                        autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage">
@@ -106,6 +112,7 @@
             </cvTermList>
 
             <validValueList displayName="Imager" required="true"
+                            autoComplete="true"
                             markedForTask="false">
                 <validValue value="Nicholas Abel"/>
                 <validValue value="Phuson Hulamm"/>
@@ -113,6 +120,7 @@
             </validValueList>
 
             <validValueList displayName="Renamer" required="true"
+                            autoComplete="true"
                             markedForTask="false"
                             sharedForAllSessionFiles="true">
                 <validValue value="Bruce Kimmel"/>
