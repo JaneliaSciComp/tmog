@@ -9,18 +9,14 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <!-- TODO: fix path -->
-
-        <outputDirectory basePath="[\\dm10.janelia.priv|/groups/descending]/descending/confocalStacks"
+        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/ditp]/ditp/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
-                <property name="lab" value="$STATIC:rubin"/>
-                <property name="family" value="$STATIC:descending_cells"/>
-                <property name="effector" value="Effector"/>
+                <property name="family" value="$STATIC:descending_interneurons"/>
                 <property name="line" value="Line"/>
                 <property name="gender" value="Gender$MAP:m=Male|f=Female|x=unknown"/>
                 <property name="age" value="Age"/>
@@ -29,11 +25,9 @@
                 <property name="renamed_by" value="Renamer"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="tissue_orientation" value="Tissue Orientation"/>
-
-                <!-- TODO: fix path
-                <property name="base_url" value="$STATIC:http://img.int.janelia.org/rubin-image/flylight_rd-confocal-data/"/>
-                <property name="base_path" value="$STATIC:/groups/rubin/data1/rubinlab/FlyLight/confocalStacks/"/>
-                -->
+                <property name="effector" value="Effector"/>
+                <!-- <property name="base_url" value="$STATIC:http://img.int.janelia.org/ditp-image/ditp-confocal-data/"/> -->
+                <property name="base_path" value="$STATIC:/groups/ditp/ditp/confocalStacks/"/>
             </rowListener>
 
         </plugins>
