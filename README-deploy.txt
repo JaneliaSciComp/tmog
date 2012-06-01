@@ -45,6 +45,7 @@ The following files:
 are deployed for the following lab groups:
 
 /groups/baker/bakerlab/tmog/config
+/groups/ditp/ditp/tmog/config
 /groups/kerr/kerrlab/tmog/config
 /groups/leet/leetconfocal/tmog/config
 /groups/rubin/data1/rubinlab/tmog/config
