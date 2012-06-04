@@ -52,7 +52,9 @@
                             autoComplete="true">
             </webServiceList>
 
-            <separator value="-"/>
+            <!-- set sequence number to 999 so that fly light screen grammar can be reused -->
+            <separator value="_999-"/>
+            
             <validValueList displayName="Gender" required="true"
                             autoComplete="true">
                 <validValue displayName="m: Male" value="m"/>
@@ -123,14 +125,8 @@
                             autoComplete="true"
                             markedForTask="false"
                             sharedForAllSessionFiles="true">
-                <validValue value="Bruce Kimmel"/>
-                <validValue value="Chris Zugates"/>
-                <validValue value="Gerry Rubin"/>
-                <validValue value="Gwyneth Card"/>
-                <validValue value="Michael Dickinson"/>
                 <validValue value="Nicholas Abel"/>
                 <validValue value="Phuson Hulamm"/>
-                <validValue value="Wyatt Korff"/>
                 <validValue value="Ying-Jou Lee"/>
             </validValueList>
         </dataFields>
