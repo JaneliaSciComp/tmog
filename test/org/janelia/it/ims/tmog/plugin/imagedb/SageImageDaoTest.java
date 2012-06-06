@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -12,7 +12,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.utils.db.DbManager;
 
 import java.sql.Connection;
@@ -36,8 +35,6 @@ public class SageImageDaoTest
     private SageImageDao dao;
     private Image testImage;
     private String sequenceNamespace;
-    private String lineName1;
-    private String lineName2;
 
     /**
      * This flag can be used to stop database cleanup in the image test's
@@ -73,15 +70,12 @@ public class SageImageDaoTest
         SimpleDateFormat namespaceTemplate =
             new SimpleDateFormat("'testLine'yyyyMMddHHmmssSSS");
         sequenceNamespace = namespaceTemplate.format(new Date());
-        lineName1 = sequenceNamespace + "-1";
-        lineName2 = sequenceNamespace + "-2";
     }
 
     protected void tearDown() throws Exception {
         if (isImageCleanupNeeded) {
             if (testImage != null) {
                 deleteImage(testImage.getId());
-                deleteLine();
             }
         }
         if (isSequenceCleanupNeeded) {
@@ -102,14 +96,13 @@ public class SageImageDaoTest
         testImage.setFamily(FAMILY_1);
         testImage.addProperty(TEST_PROPERTY_1, "valueA");
         testImage.addProperty(TEST_PROPERTY_2, "valueB");
-        testImage.addProperty(Image.LINE_PROPERTY, lineName1);
+        testImage.addProperty(Image.LINE_PROPERTY, LINE_NAME_1);
         testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB_1);
 
         testImage = dao.saveProperties(testImage);
         Integer testImageId = testImage.getId();
 
         assertNotNull("id not set after add", testImage.getId());
-        verifyLineExists(lineName1, LINE_LAB_1);
 
         testImage = new Image();
         testImage.setId(testImageId);
@@ -119,7 +112,7 @@ public class SageImageDaoTest
         testImage.addProperty(TEST_PROPERTY_1, "updatedValueA");
         testImage.addProperty(TEST_PROPERTY_2, "updatedValueB");
         testImage.addProperty(TEST_PROPERTY_3, "valueC");
-        testImage.addProperty(Image.LINE_PROPERTY, lineName2);
+        testImage.addProperty(Image.LINE_PROPERTY, LINE_NAME_2);
         testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB_2);
 
         testImage = dao.saveProperties(testImage);
@@ -130,26 +123,15 @@ public class SageImageDaoTest
         assertEquals("invalid id returned for " + relativePath,
                      testImageId, imageId);
 
-        verifyLineExists(lineName2, LINE_LAB_2);
-
         testImage = new Image();
         testImage.setId(testImageId);
         testImage.setRelativePaths(relativePath, null);
         testImage.addProperty(TEST_PROPERTY_3, "updatedValueC");
-        testImage.addProperty(Image.LINE_PROPERTY, lineName1);
-        testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB_2);
+        testImage.addProperty(Image.LINE_PROPERTY, LINE_NAME_2);
 
         testImage = dao.saveProperties(testImage);
 
         assertEquals("id changed after update", testImageId, testImage.getId());
-
-        try {
-            verifyLineExists(lineName1, null);
-        } catch (ExternalSystemException e) {
-            LOG.error("caught exception", e);
-            fail("line '" + lineName1 + "' incorrectly created for '" +
-                 LINE_LAB_2 + "' lab");
-        }
 
         relativePath = "missing-relative-path";
         imageId = dao.getImageId(relativePath);
@@ -174,8 +156,7 @@ public class SageImageDaoTest
         testImage.setRelativePaths(relativePath, null);
         testImage.setCaptureDate(new Date());
         testImage.setFamily(FAMILY_1);
-        testImage.addProperty(Image.LINE_PROPERTY, lineName1);
-        testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB_1);
+        testImage.addProperty(Image.LINE_PROPERTY, LINE_NAME_1);
 
         testImage = dao.saveProperties(testImage);
         Integer testImageId = testImage.getId();
@@ -205,8 +186,7 @@ public class SageImageDaoTest
         testImage.setRelativePaths(relativePath, null);
         testImage.setCaptureDate(new Date());
         testImage.setFamily(FAMILY_1);
-        testImage.addProperty(Image.LINE_PROPERTY, lineName1);
-        testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB_1);
+        testImage.addProperty(Image.LINE_PROPERTY, LINE_NAME_1);
 
         testImage = dao.saveProperties(testImage);
         Integer testImageId = testImage.getId();
@@ -221,8 +201,7 @@ public class SageImageDaoTest
         testImage.setCaptureDate(new Date());
         testImage.setFamily(FAMILY_1);
         // line info required since previous path image get deleted
-        testImage.addProperty(Image.LINE_PROPERTY, lineName1);
-        testImage.addProperty(Image.LAB_PROPERTY, LINE_LAB_1);
+        testImage.addProperty(Image.LINE_PROPERTY, LINE_NAME_1);
 
         testImage = dao.saveProperties(testImage);
 
@@ -251,24 +230,6 @@ public class SageImageDaoTest
 
         specimenNumber = dao.getNextSequenceNumber(sequenceNamespace);
         assertEquals("invalid update number", 2, specimenNumber);
-    }
-
-    private void verifyLineExists(String lineName,
-                                  String lineLabName) throws Exception {
-
-        Connection connection = null;
-        ResultSet resultSet = null;
-        PreparedStatement statement = null;
-        try {
-            DbManager dbManager = dao.getDbManager();
-            connection = dbManager.getConnection();
-            Integer lineId = dao.getLineId(lineName, lineLabName, connection);
-            assertNotNull("'" + lineName + "' line not found for '" +
-                          lineLabName + "' lab",
-                          lineId);
-        } finally {
-            DbManager.closeResources(resultSet, statement, connection, LOG);
-        }
     }
 
     private void deleteImage(Integer imageId) throws Exception {
@@ -315,38 +276,15 @@ public class SageImageDaoTest
         }
     }
 
-    private void deleteLine() throws Exception {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            DbManager dbManager = dao.getDbManager();
-            connection = dbManager.getConnection();
-            statement = connection.prepareStatement(SQL_DELETE_LINE);
-            statement.setString(1, lineName1);
-            int rowsUpdated = statement.executeUpdate();
-            LOG.info("deleteLine: removed " + rowsUpdated +
-                     " row(s) for " + lineName1);
-
-            statement.close();
-
-            statement = connection.prepareStatement(SQL_DELETE_LINE);
-            statement.setString(1, lineName2);
-            rowsUpdated = statement.executeUpdate();
-            LOG.info("deleteLine: removed " + rowsUpdated +
-                     " row(s) for " + lineName2);
-
-        } finally {
-            DbManager.closeResources(null, statement, connection, LOG);
-        }
-    }
-
     private static final String TEST_PROPERTY_1 = "age";
     private static final String TEST_PROPERTY_2 = "effector"; // use cv_relationship "inherited" type
     private static final String TEST_PROPERTY_3 = "gender";
     private static final String FAMILY_1 = "baker_lab";
     private static final String FAMILY_2 = "baker_biorad";
     private static final String LINE_LAB_1 = "baker";
+    private static final String LINE_NAME_1 = "10-102";
     private static final String LINE_LAB_2 = "rubin";
+    private static final String LINE_NAME_2 = "GMR_10A01_AE_01";
 
     /**
      * SQL for deleting all properties for an image.
@@ -372,10 +310,4 @@ public class SageImageDaoTest
     private static final String SQL_DELETE_NAMESPACE_SEQUENCE_NUMBER =
             "DELETE FROM namespace_sequence_number WHERE namespace=?";
 
-    /**
-     * SQL for deleting a test line.
-     *   Parameter 1 is the unique line name.
-     */
-    private static final String SQL_DELETE_LINE =
-            "DELETE FROM line WHERE name=?";
 }

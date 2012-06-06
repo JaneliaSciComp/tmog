@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -143,11 +143,8 @@ public class SageImageDao
                         deriveLineLabName(image.getLabName(), lineName);
                 lineId = getLineId(lineName, defaultLineLabName, connection);
                 if (lineId == null) {
-                    if (defaultLineLabName == null) {
-                        throw new ExternalSystemException(
-                                "Lab name must be specified to add new lines.");
-                    }
-                    lineId = addLine(lineName, defaultLineLabName, connection);
+                    throw new ExternalSystemException(
+                            "Line '" + lineName + "' does not exist.");
                 }
 
             }
@@ -510,43 +507,6 @@ public class SageImageDao
         return lineId;
     }
 
-    private Integer addLine(String lineName,
-                            String lineLabName,
-                            Connection connection)
-            throws SQLException, ExternalSystemException {
-
-        Integer lineId = null;
-
-        PreparedStatement insertLine = null;
-        try {
-            insertLine = connection.prepareStatement(SQL_INSERT_LINE);
-            insertLine.setString(1, lineName);
-            insertLine.setString(2, lineLabName);
-
-            int rowsUpdated = insertLine.executeUpdate();
-            if (rowsUpdated != 1) {
-                throw new ExternalSystemException(
-                        "Failed to create line '" + lineName + "' for lab '" +
-                        lineLabName + "'.  Attempted to create " +
-                        rowsUpdated + " rows.");
-            }
-
-            lineId = getLineId(lineName, lineLabName, connection);
-            if (lineId == null) {
-                throw new ExternalSystemException(
-                        "Failed to retrieve id for line '" + lineName +
-                        "' and lab '" + lineLabName + "'.");
-            }
-        } finally {
-            DbManager.closeResources(null, insertLine, null, LOG);
-        }
-
-        LOG.info("addLine: line id " + lineId + " created for '" +
-                 lineLabName + "' lab line '" + lineName + "'");
-
-        return lineId;
-    }
-
     private void validateUpdateCounts(String failureContext,
                                       int expectedNumberOfUpdates,
                                       int[] numUpdates)
@@ -637,28 +597,11 @@ public class SageImageDao
             "DELETE FROM image WHERE name=?";
 
     /**
-     * SQL for retrieving the default fly organism.
-     */
-    private static final String SQL_SELECT_FLY_ID =
-            "SELECT id FROM organism WHERE genus='Drosophila' " +
-            "AND species='melanogaster'";
-
-    /**
      * SQL for retrieving an image id.
      *   Parameter 1 is the line name.
      */
     private static final String SQL_SELECT_LINE_ID =
             "SELECT l.id, c.name FROM line l, cv_term c " +
             "WHERE l.name=? AND c.id=l.lab_id";
-
-    /**
-     * SQL for inserting an line.
-     *   Parameter 1 is the line name.
-     *   Parameter 2 is the lab name.
-     */
-    private static final String SQL_INSERT_LINE =
-            "INSERT INTO line (name, lab_id, organism_id) " +
-            "VALUES " +
-            "(?, (" + SQL_SELECT_LAB_ID + "), (" + SQL_SELECT_FLY_ID +"))";
 
 }
