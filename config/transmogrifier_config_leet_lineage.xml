@@ -1,0 +1,205 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="2.8.2" frameSizePercentage="95"/>
+
+    <project name="Lee Lab: Lineage Images" default="true">
+
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString=".*_(L)(\d++)(\.lsm)"/>
+
+        <outputDirectory fileModeReadOnly="true">
+            <path path="[\\dm10.janelia.priv|/groups/leet]\leetconfocal\" />
+            <renameFieldValue fieldDisplayName="Image Family"/>
+            <path path="/confocalStacks/"/>
+            <renameFieldValue fieldDisplayName="Mount Date"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Slide Number"/>
+        </outputDirectory>
+
+        <plugins>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="image_number" value="urn:lsid:janelia.org:leet_lineage:image_number" />
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="family" value="Image Family"/>
+                <property name="line" value="GAL4 Line"/>
+                <property name="progenitor" value="Progenitor"/>
+                <property name="ts_marcm" value="tsMARCM"/>
+                <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
+                <property name="heat_shock_age" value="Heat Shock Age"/>
+                <property name="age" value="Dissection Age"/>
+                <property name="gender" value="Gender"/>
+                <property name="cross_date" value="Cross Date"/>
+                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Row}${Slide Column}"/>
+                <property name="tile" value="Tile"/>
+                <property name="ihc_protocol" value="TZL-IHC-${IHC Protocol Number}"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
+                <property name="dissector" value="Dissector"/>
+                <property name="created_by" value="Imager"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+            <webServiceList displayName="GAL4 Line"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=rubin&amp;lab=leet"
+                            autoComplete="true">
+            </webServiceList>
+            <separator value="__"/>
+            <decimal displayName="Heat Shock Minutes" required="false"
+                     minimumValue="0" markedForTask="false" />
+            <validValueList displayName="Gender" required="false"
+                            autoComplete="true">
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+
+            <separator value="_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS" />
+            <separator value="_"/>
+            <pluginData displayName="image_number"/>
+            <separator value=".lsm"/>
+
+            <!--
+             These values are collected for storage but are not
+             included as components of the file name (markedForTask="false").
+             -->
+
+            <validValueList displayName="Image Family" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="Central Brain Lineage" value="leet_central_brain_lineage" />
+                <validValue displayName="PAN Lineage" value="leet_pan_lineage"/>
+            </validValueList>
+
+            <validValueList displayName="Progenitor" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="progenitor-01" />
+                <validValue value="progenitor-02"/>
+            </validValueList>
+
+            <validValueList displayName="tsMARCM" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="tsMARCM-01" />
+                <validValue value="tsMARCM-02"/>
+                <validValue value="tsMARCM-03"/>
+            </validValueList>
+
+            <cvTermList displayName="Heat Shock Age" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        displayNamePrefixedForValues="true"
+                        autoComplete="true"
+                        markedForTask="false">
+            </cvTermList>
+
+            <cvTermList displayName="Dissection Age" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        displayNamePrefixedForValues="true"
+                        autoComplete="true"
+                        markedForTask="false">
+            </cvTermList>
+
+            <date displayName="Cross Date" required="true"
+                  datePattern="yyyyMMdd" markedForTask="false">
+            </date>
+
+            <date displayName="Mount Date" required="true"
+                  datePattern="yyyyMMdd" markedForTask="false">
+            </date>
+
+            <number displayName="Slide Number" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="99" />
+
+            <text displayName="Slide Row" pattern="[A-Z]" required="true"
+                  markedForTask="false" convertToUpperCase="true">
+            </text>
+
+            <number displayName="Slide Column" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="99" />
+
+            <validValueList displayName="Tile" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="01: Left Optic Lobe" value="Left Optic Lobe" />
+                <validValue displayName="02: Ventral Brain" value="Ventral Brain"/>
+                <validValue displayName="03: Left Dorsal Brain" value="Left Dorsal Brain"/>
+                <validValue displayName="04: Right Dorsal Brain" value="Right Dorsal Brain"/>
+                <validValue displayName="05: Right Optic Lobe" value="Right Optic Lobe"/>
+                <validValue displayName="06: Central Brain" value="Central Brain"/>
+                <validValue displayName="07: Left Central Brain" value="Left Central Brain"/>
+                <validValue displayName="08: Right Central Brain" value="Right Central Brain"/>
+                <validValue displayName="09: Dorsal Brain" value="Dorsal Brain"/>
+                <validValue displayName="10: Neck" value="Neck"/>
+                <validValue displayName="11: Thorax" value="Thorax"/>
+                <validValue displayName="12: Abdomen" value="Abdomen"/>
+                <validValue displayName="13: Terminus" value="Terminus"/>
+            </validValueList>
+
+            <decimal displayName="IHC Protocol Number" required="true"
+                     minimumValue="0.0" maximumValue="99.9"
+                     markedForTask="false"/>
+
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="Glycerol-Based Mounting" default="true"/>
+                <validValue value="DPX Mounting"/>
+            </validValueList>
+
+            <cvTermList displayName="Tissue Orientation" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
+                        displayNamePrefixedForValues="false">
+            </cvTermList>
+
+            <validValueList displayName="Dissector" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="Haojiang Luan"/>
+                <validValue value="Mark Schroeder"/>
+                <validValue value="Nicholas Abel"/>
+                <validValue value="Rebecca Johnston"/>
+                <validValue value="Rebecca Vorima"/>
+                <validValue value="Susana Tae"/>
+                <validValue value="Takeshi Awasaki"/>
+                <validValue value="Xiaotang Jing"/>
+                <validValue value="Ying-Jou Lee"/>
+                <validValue value="Yu-Chun Wang"/>
+            </validValueList>
+
+            <validValueList displayName="Imager" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="Haojiang Luan"/>
+                <validValue value="Mark Schroeder"/>
+                <validValue value="Nicholas Abel"/>
+                <validValue value="Rebecca Johnston"/>
+                <validValue value="Rebecca Vorima"/>
+                <validValue value="Susana Tae"/>
+                <validValue value="Takeshi Awasaki"/>
+                <validValue value="Xiaotang Jing"/>
+                <validValue value="Ying-Jou Lee"/>
+                <validValue value="Yu-Chun Wang"/>
+            </validValueList>
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
