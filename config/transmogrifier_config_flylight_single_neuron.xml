@@ -163,6 +163,7 @@
                             markedForTask="false">
                 <validValue value="Jennifer Jeter"/>
                 <validValue value="Nirmala Iyer"/>
+                <validValue value="Phuson Hulamm"/>
             </validValueList>
         </dataFields>
 
@@ -364,6 +365,7 @@
                 </targetPropertyDefault>
                 <validValue value="Jennifer Jeter"/>
                 <validValue value="Nirmala Iyer"/>
+                <validValue value="Phuson Hulamm"/>
             </validValueList>
         </dataFields>
 
