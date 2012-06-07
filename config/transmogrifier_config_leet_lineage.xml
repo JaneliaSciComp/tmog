@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.8.2" frameSizePercentage="95"/>
+    <global minimumVersion="2.8.3" frameSizePercentage="95"/>
 
     <project name="Lee Lab: Lineage Images" default="true">
 
@@ -11,7 +11,7 @@
                          patternString=".*_(L)(\d++)(\.lsm)"/>
 
         <outputDirectory fileModeReadOnly="true">
-            <path path="[\\dm10.janelia.priv|/groups/leet]\leetconfocal\" />
+            <path path="[\\dm10.janelia.priv|/groups/leet]\leetconfocal\lineage\" />
             <renameFieldValue fieldDisplayName="Image Family"/>
             <path path="/confocalStacks/"/>
             <renameFieldValue fieldDisplayName="Mount Date"/>
@@ -28,6 +28,7 @@
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
+                <property name="relativePathDepth" value="4"/>
                 <property name="family" value="Image Family"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="progenitor" value="Progenitor"/>
@@ -44,29 +45,15 @@
                 <property name="tissue_orientation" value="Tissue Orientation"/>
                 <property name="dissector" value="Dissector"/>
                 <property name="created_by" value="Imager"/>
+                <property name="base_path" value="$STATIC:/groups/leet/leetconfocal/lineage/"/>
             </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.XmlWriterPlugin" />
 
         </plugins>
 
         <dataFields>
-            <webServiceList displayName="GAL4 Line"
-                            valueCreationPath="*/line"
-                            relativeActualValuePath="name"
-                            relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=rubin&amp;lab=leet"
-                            autoComplete="true">
-            </webServiceList>
-            <separator value="__"/>
-            <decimal displayName="Heat Shock Minutes" required="false"
-                     minimumValue="0" markedForTask="false" />
-            <validValueList displayName="Gender" required="false"
-                            autoComplete="true">
-                <validValue displayName="m: Male" value="m"/>
-                <validValue displayName="f: Female" value="f"/>
-                <validValue displayName="x: Not Defined" value="x"/>
-            </validValueList>
-
-            <separator value="_"/>
+            <separator value="TZLL_"/>
             <runTime datePattern="yyyyMMddHHmmssSSS" />
             <separator value="_"/>
             <pluginData displayName="image_number"/>
@@ -84,6 +71,15 @@
                 <validValue displayName="PAN Lineage" value="leet_pan_lineage"/>
             </validValueList>
 
+            <webServiceList displayName="GAL4 Line"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=rubin&amp;lab=leet"
+                            autoComplete="true"
+                            markedForTask="false">
+            </webServiceList>
+
             <validValueList displayName="Progenitor" required="true"
                             autoComplete="true"
                             markedForTask="false">
@@ -99,12 +95,23 @@
                 <validValue value="tsMARCM-03"/>
             </validValueList>
 
+            <validValueList displayName="Gender" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+
             <cvTermList displayName="Heat Shock Age" required="true"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
                         displayNamePrefixedForValues="true"
                         autoComplete="true"
                         markedForTask="false">
             </cvTermList>
+
+            <decimal displayName="Heat Shock Minutes" required="false"
+                      minimumValue="0" markedForTask="false" />
 
             <cvTermList displayName="Dissection Age" required="true"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
