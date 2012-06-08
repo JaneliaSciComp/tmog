@@ -162,6 +162,7 @@
                             autoComplete="true"
                             markedForTask="false">
                 <validValue value="Jennifer Jeter"/>
+                <validValue value="Joanna Hausenfluck"/>
                 <validValue value="Nirmala Iyer"/>
                 <validValue value="Phuson Hulamm"/>
             </validValueList>
@@ -364,6 +365,7 @@
                     <mappedValue from="iyern" to="Nirmala Iyer" />
                 </targetPropertyDefault>
                 <validValue value="Jennifer Jeter"/>
+                <validValue value="Joanna Hausenfluck"/>
                 <validValue value="Nirmala Iyer"/>
                 <validValue value="Phuson Hulamm"/>
             </validValueList>
