@@ -61,6 +61,7 @@
                 <property name="area" value="$STATIC:Brain"/>
                 <property name="lamina_percentage" value="Lamina"/>
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
+                <property name="annotated_by" value="Annotator"/>
             </rowListener>
 
         </plugins>
@@ -166,6 +167,14 @@
                 <validValue value="Nirmala Iyer"/>
                 <validValue value="Phuson Hulamm"/>
             </validValueList>
+
+            <validValueList displayName="Annotator" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Yoshi Aso"/>
+                <validValue value="Tanya Wolff"/>
+            </validValueList>
         </dataFields>
 
     </project>
@@ -238,6 +247,7 @@
                 <property name="full_age" value="Full Age"/>
                 <property name="lamina_percentage" value="Lamina"/>
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
+                <property name="annotated_by" value="Annotator"/>
             </rowListener>
 
         </plugins>
@@ -369,6 +379,15 @@
                 <validValue value="Nirmala Iyer"/>
                 <validValue value="Phuson Hulamm"/>
             </validValueList>
+
+            <validValueList displayName="Annotator" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Yoshi Aso"/>
+                <validValue value="Tanya Wolff"/>
+            </validValueList>
+
         </dataFields>
 
     </project>
