@@ -49,12 +49,15 @@
             <!-- The old path isn't used for anything, but might help Phuong as she enters other data -->
             <text displayName="Old Path"
                   required="false"
+                  copyable="false"
                   markedForTask="false">
                 <sourceFileDefault pattern=".*[/\\\\]([^/\\\\]*)[/\\\\][^/\\\\]*lsm"
                                    matchType="path"/>
             </text>
 
             <webServiceList displayName="Line"
+                            required="true"
+                            copyable="false"
                             valueCreationPath="*/line"
                             relativeActualValuePath="name"
                             relativeValueDisplayNamePath="name"
@@ -65,10 +68,15 @@
 
             <separator value="_"/>
 
-            <date displayName="Capture Date" required="true"
+            <date displayName="Capture Date"
+                  required="true"
+                  copyable="false"
                   datePattern="yyyyMMdd">
                 <sourceFileDateDefault pattern="(\d\d?-\d\d?-\d\d\d\d).*\.lsm"
                                        fromDatePattern="MM-dd-yyyy"
+                                       toDatePattern="yyyyMMdd"/>
+                <sourceFileDateDefault pattern="(\d\d?-\d\d?-\d\d).*\.lsm"
+                                       fromDatePattern="MM-dd-yy"
                                        toDatePattern="yyyyMMdd"/>
             </date>
 
@@ -88,7 +96,9 @@
              These values are collected for the database but are not
              included as components of the file name (markedForTask="false").
              -->
-            <cvTermList displayName="UAS Reporter" required="true"
+            <cvTermList displayName="UAS Reporter"
+                        required="true"
+                        copyable="false"
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
@@ -133,7 +143,12 @@
 
         <dataFields>
 
-            <text displayName="Line" required="true" pattern="(JHS|EXT)_[0-9A-Za-z_-]+-GAL4">
+            <webServiceList displayName="Line"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/simpson.janelia-sage"
+                            autoComplete="true">
                 <sourceFileMappedDefault pattern=".*confocal_stacks[/\\\\](.*)-GAL4[/\\\\].*"
                                          matchType="path">
                     <mappedValue from="10980" to="EXT_109-80-GAL4"/>
@@ -143,7 +158,7 @@
                     <mappedValue from="24B" to="EXT_24B-GAL4"/>
                     <mappedValue from="307" to="EXT_307-GAL4"/>
                 </sourceFileMappedDefault>
-            </text>
+            </webServiceList>
 
             <separator value="_"/>
 
@@ -178,10 +193,12 @@
              These values are collected for the database but are not
              included as components of the file name (markedForTask="false").
              -->
-            <validValueList displayName="UAS Reporter" required="true"
-                            markedForTask="false">
-                <validValue value="UAS_mCD8-GFP" default="true"/>
-            </validValueList>
+            <cvTermList displayName="UAS Reporter" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
+            </cvTermList>
 
         </dataFields>
 
