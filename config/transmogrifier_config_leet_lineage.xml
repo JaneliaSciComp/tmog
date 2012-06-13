@@ -130,7 +130,7 @@
 
             <number displayName="Slide Number" required="true"
                     markedForTask="false"
-                    minimumValue="1" maximumValue="99" />
+                    minimumValue="1" maximumValue="9999" />
 
             <text displayName="Slide Row" pattern="[A-Z]" required="true"
                   markedForTask="false" convertToUpperCase="true">
