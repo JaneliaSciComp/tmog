@@ -30,7 +30,8 @@
                 <property name="family" value="$STATIC:flylight_split"/>
                 <property name="line" value="${DBD Line}-x-${AD Line}"/>
                 <property name="dissection_date" value="Dissection Date"/>
-                <property name="cross_label" value="${'splitPilot-AJ-'Cross Label}"/>
+                <property name="cross_label" value="Cross Label"/>
+                <property name="area" value="Area$MAP:brain=Brain|VNC=Ventral Nerve Chord"/>
                 <property name="base_path" value="$STATIC:/archive/rubin/data1/rubinlab/aRnim/IMAGE-DATA/Split-Gal4/org-import/"/>
             </rowListener>
         </plugins>
@@ -61,17 +62,24 @@
 
             <date displayName="Dissection Date" required="true"
                   datePattern="yyMMdd">
+                <sourceFileDateDefault pattern=".*D(\d{6}).*"
+                                       matchType="path"
+                                       fromDatePattern="yyMMdd"
+                                       toDatePattern="yyMMdd"/>                
             </date>
 
             <separator value="@"/>
 
-            <number displayName="Cross Label"
-                  required="true"
-                  prefix="splitPilot-AJ-"
-                  padFormat="50"
-                  minimumValue="1"
-                  maximumValue="99999">
-            </number>
+            <text displayName="Cross Label"
+                  required="true"/>
+
+            <separator value="@"/>
+
+            <validValueList displayName="Area" required="false"
+                            autoComplete="true">
+                <validValue value="brain"/>
+                <validValue value="VNC"/>
+            </validValueList>
 
             <separator value="@"/>
 
