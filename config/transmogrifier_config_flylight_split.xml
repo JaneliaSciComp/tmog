@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="2.8.4" frameSizePercentage="95"/>
+
+    <project name="Fly Light: Pilot Split Images" default="true">
+
+        <inputFileFilter patternString=".+\.(jpeg|jpg|lsm|tiff)" />
+
+        <outputDirectory fileModeReadOnly="true">
+            <path path="[\\arch.janelia.priv|/archive]/rubin/data1/rubinlab/aRnim/IMAGE-DATA/Split-Gal4/org-import/" />
+            <renameFieldValue fieldDisplayName="Dissection Date" prefix="D"/>
+        </outputDirectory>
+
+        <plugins>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.CrossLineCreationPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="line" value="${DBD Line}-x-${AD Line}"/>
+                <property name="line-lab" value="flylight"/>
+                <property name="parent-a-line" value="${DBD Line}"/>
+                <property name="parent-a-line-lab" value="rubin"/>
+                <property name="parent-b-line" value="${AD Line}"/>
+                <property name="parent-b-line-lab" value="rubin"/>
+            </rowListener>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="lab" value="$STATIC:flylight"/>
+                <property name="family" value="$STATIC:flylight_split"/>
+                <property name="line" value="${DBD Line}-x-${AD Line}"/>
+                <property name="dissection_date" value="Dissection Date"/>
+                <property name="cross_label" value="${'splitPilot-AJ-'Cross Label}"/>
+                <property name="base_path" value="$STATIC:/archive/rubin/data1/rubinlab/aRnim/IMAGE-DATA/Split-Gal4/org-import/"/>
+            </rowListener>
+        </plugins>
+
+        <dataFields>
+
+            <!-- DNA Binding Domain -->
+            <webServiceList displayName="DBD Line"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=rubin&amp;lab=simpson&amp;lab=truman&amp;lab=baker&amp;lab=leet"
+                            autoComplete="true">
+            </webServiceList>
+
+            <separator value="-x-"/>
+
+            <!-- Activation Domain -->
+            <webServiceList displayName="AD Line"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=rubin&amp;lab=simpson&amp;lab=truman&amp;lab=baker&amp;lab=leet"
+                            autoComplete="true">
+            </webServiceList>
+
+            <separator value="@"/>
+
+            <date displayName="Dissection Date" required="true"
+                  datePattern="yyMMdd">
+            </date>
+
+            <separator value="@"/>
+
+            <number displayName="Cross Label"
+                  required="true"
+                  prefix="splitPilot-AJ-"
+                  padFormat="50"
+                  minimumValue="1"
+                  maximumValue="99999">
+            </number>
+
+            <separator value="@"/>
+
+            <text displayName="Image Name" required="false"
+                  copyable="false">
+                <sourceFileDefault pattern="(.+?)\.(jpeg|jpg|lsm|tiff)"
+                                   patternGroupNumber="1"/>
+            </text>
+
+            <separator value="@"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+
+            <fileExtension/>
+
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>

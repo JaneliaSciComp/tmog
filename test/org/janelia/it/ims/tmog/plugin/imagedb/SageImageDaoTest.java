@@ -35,6 +35,7 @@ public class SageImageDaoTest
     private SageImageDao dao;
     private Image testImage;
     private String sequenceNamespace;
+    private String testLineName;
 
     /**
      * This flag can be used to stop database cleanup in the image test's
@@ -42,6 +43,7 @@ public class SageImageDaoTest
      */
     private boolean isImageCleanupNeeded = true;
     private boolean isSequenceCleanupNeeded = false;
+    private boolean isLineCleanupNeeded = false;
 
     /**
      * Constructs a test case with the given name.
@@ -70,6 +72,7 @@ public class SageImageDaoTest
         SimpleDateFormat namespaceTemplate =
             new SimpleDateFormat("'testLine'yyyyMMddHHmmssSSS");
         sequenceNamespace = namespaceTemplate.format(new Date());
+        testLineName = sequenceNamespace;
     }
 
     protected void tearDown() throws Exception {
@@ -80,6 +83,9 @@ public class SageImageDaoTest
         }
         if (isSequenceCleanupNeeded) {
             deleteTestSequenceNumber();
+        }
+        if (isLineCleanupNeeded) {
+            deleteLine();
         }
     }
 
@@ -232,6 +238,31 @@ public class SageImageDaoTest
         assertEquals("invalid update number", 2, specimenNumber);
     }
 
+    /**
+     * Tests the addLine method.
+     *
+     * @throws Exception
+     *   if any unexpected errors occur.
+     */
+    public void testAddLine() throws Exception {
+        isLineCleanupNeeded = true;
+
+        Line line = new Line(testLineName, "flylight");
+        Line dbdLine = new Line(LINE_NAME_1, LINE_LAB_1);
+        Line adLine = new Line(LINE_NAME_2, LINE_LAB_2);
+        line.setParentA(dbdLine);
+        line.setParentB(adLine);
+
+        Line addedLine = dao.addLine(line);
+
+        assertNotNull("missing line id", addedLine.getId());
+
+        Line secondTryLine = dao.addLine(line);
+
+        assertEquals("multiple ids exist for line",
+                     addedLine.getId(), secondTryLine.getId());
+    }
+
     private void deleteImage(Integer imageId) throws Exception {
         if (imageId != null) {
             Connection connection = null;
@@ -276,6 +307,23 @@ public class SageImageDaoTest
         }
     }
 
+    private void deleteLine() throws Exception {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            DbManager dbManager = dao.getDbManager();
+            connection = dbManager.getConnection();
+            statement = connection.prepareStatement(SQL_DELETE_LINE);
+            statement.setString(1, testLineName);
+            int rowsUpdated = statement.executeUpdate();
+            LOG.info("deleteLine: removed " + rowsUpdated +
+                     " row(s) for " + testLineName);
+
+        } finally {
+            DbManager.closeResources(null, statement, connection, LOG);
+        }
+    }
+
     private static final String TEST_PROPERTY_1 = "age";
     private static final String TEST_PROPERTY_2 = "effector"; // use cv_relationship "inherited" type
     private static final String TEST_PROPERTY_3 = "gender";
@@ -310,4 +358,10 @@ public class SageImageDaoTest
     private static final String SQL_DELETE_NAMESPACE_SEQUENCE_NUMBER =
             "DELETE FROM namespace_sequence_number WHERE namespace=?";
 
+    /**
+     * SQL for deleting a test line.
+     *   Parameter 1 is the unique line name.
+     */
+    private static final String SQL_DELETE_LINE =
+            "DELETE FROM line WHERE name=?";
 }

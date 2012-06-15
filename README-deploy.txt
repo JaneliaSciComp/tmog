@@ -44,6 +44,7 @@ The following files:
 
 are deployed for the following lab groups:
 
+/archive/rubin/data1/rubinlab/tmog/config
 /groups/baker/bakerlab/tmog/config
 /groups/ditp/ditp/tmog/config
 /groups/kerr/kerrlab/tmog/config
