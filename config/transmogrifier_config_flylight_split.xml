@@ -31,7 +31,7 @@
                 <property name="line" value="${DBD Line}-x-${AD Line}"/>
                 <property name="dissection_date" value="Dissection Date"/>
                 <property name="cross_label" value="Cross Label"/>
-                <property name="area" value="Area$MAP:brain=Brain|VNC=Ventral Nerve Chord"/>
+                <property name="area" value="Area$MAP:brain=Brain|VNC=Ventral Nerve Cord"/>
                 <property name="base_path" value="$STATIC:/archive/rubin/data1/rubinlab/aRnim/IMAGE-DATA/Split-Gal4/org-import/"/>
             </rowListener>
         </plugins>
@@ -71,6 +71,7 @@
             <separator value="@"/>
 
             <text displayName="Cross Label"
+                  pattern="[^@]+"
                   required="true"/>
 
             <separator value="@"/>
