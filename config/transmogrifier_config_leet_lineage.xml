@@ -28,7 +28,7 @@
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
-                <property name="relativePathDepth" value="4"/>
+                <property name="relativePathDepth" value="2"/>
                 <property name="family" value="Image Family"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="progenitor" value="Progenitor"/>
