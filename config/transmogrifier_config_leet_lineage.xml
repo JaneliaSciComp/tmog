@@ -33,8 +33,9 @@
                 <property name="line" value="GAL4 Line"/>
                 <property name="progenitor" value="Progenitor"/>
                 <property name="ts_marcm" value="tsMARCM"/>
-                <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
-                <property name="heat_shock_age" value="Heat Shock Age"/>
+                <property name="mutant" value="Mutant"/>
+                <property name="heat_shock_hour" value="Heat Shock Age Hour"/>
+                <property name="heat_shock_interval" value="Heat Shock Age Interval"/>
                 <property name="age" value="Dissection Age"/>
                 <property name="gender" value="Gender"/>
                 <property name="cross_date" value="Cross Date"/>
@@ -95,6 +96,12 @@
                 <validValue value="tsMARCM-03"/>
             </validValueList>
 
+            <validValueList displayName="mutant" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="mutant-01" />
+            </validValueList>
+
             <validValueList displayName="Gender" required="false"
                             autoComplete="true"
                             markedForTask="false">
@@ -103,15 +110,18 @@
                 <validValue displayName="x: Not Defined" value="x"/>
             </validValueList>
 
-            <cvTermList displayName="Heat Shock Age" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
-                        displayNamePrefixedForValues="true"
-                        autoComplete="true"
-                        markedForTask="false">
-            </cvTermList>
+            <decimal displayName="Heat Shock Age Hour"
+                     required="true"
+                     minimumValue="0"
+                     markedForTask="false">
+            </decimal>
 
-            <decimal displayName="Heat Shock Minutes" required="false"
-                      minimumValue="0" markedForTask="false" />
+            <decimal displayName="Heat Shock Age Interval"
+                     required="true"
+                     minimumValue="0"
+                     markedForTask="false">
+                <staticDefault value="2" />
+            </decimal>
 
             <cvTermList displayName="Dissection Age" required="true"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
@@ -188,6 +198,7 @@
                 <validValue value="Takeshi Awasaki"/>
                 <validValue value="Xiaotang Jing"/>
                 <validValue value="Ying-Jou Lee"/>
+                <validValue value="Yisheng Hey"/>
                 <validValue value="Yu-Chun Wang"/>
             </validValueList>
 
