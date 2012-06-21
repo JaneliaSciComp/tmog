@@ -78,6 +78,10 @@
                 <sourceFileDateDefault pattern="(\d\d?-\d\d?-\d\d).*\.lsm"
                                        fromDatePattern="MM-dd-yy"
                                        toDatePattern="yyyyMMdd"/>
+                <sourceFileDateDefault pattern=".*(\d\d?-\d\d?-\d\d).*"
+                                       matchType="path"
+                                       fromDatePattern="MM-dd-yy"
+                                       toDatePattern="yyyyMMdd"/>
             </date>
 
             <separator value="_"/>
