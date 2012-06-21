@@ -14,7 +14,7 @@
             <path path="[\\dm10.janelia.priv|/groups/leet]\leetconfocal\lineage\" />
             <renameFieldValue fieldDisplayName="Image Family"/>
             <path path="/confocalStacks/"/>
-            <renameFieldValue fieldDisplayName="Mount Date"/>
+            <renameFieldValue fieldDisplayName="Cross Date"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Slide Number"/>
         </outputDirectory>
@@ -39,9 +39,10 @@
                 <property name="age" value="Dissection Age"/>
                 <property name="gender" value="Gender"/>
                 <property name="cross_date" value="Cross Date"/>
-                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Row}${Slide Column}"/>
+                <property name="slide_code" value="${Slide Number}_${Slide Row}${Slide Column}"/>
                 <property name="tile" value="Tile"/>
                 <property name="ihc_protocol" value="TZL-IHC-${IHC Protocol Number}"/>
+                <property name="mount_date" value="Mount Date"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="tissue_orientation" value="Tissue Orientation"/>
                 <property name="dissector" value="Dissector"/>
@@ -134,13 +135,14 @@
                   datePattern="yyyyMMdd" markedForTask="false">
             </date>
 
-            <date displayName="Mount Date" required="true"
+            <date displayName="Mount Date" required="false"
                   datePattern="yyyyMMdd" markedForTask="false">
             </date>
 
-            <number displayName="Slide Number" required="true"
-                    markedForTask="false"
-                    minimumValue="1" maximumValue="9999" />
+            <text displayName="Slide Number"
+                  required="true"
+                  markedForTask="false"
+                  pattern="(Hey)?\d{1,4}" />
 
             <text displayName="Slide Row" pattern="[A-Z]" required="true"
                   markedForTask="false" convertToUpperCase="true">
