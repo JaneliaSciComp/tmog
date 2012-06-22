@@ -1,8 +1,8 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.config.output;
@@ -11,6 +11,8 @@ import org.janelia.it.ims.tmog.field.DataField;
 
 import java.io.File;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class encapsulates an output directory path fragment that is
@@ -23,11 +25,15 @@ public class RenameFieldValue implements OutputDirectoryComponent {
     private String fieldDisplayName;
     private String prefix;
     private String suffix;
+    private String pattern;
+    private Integer patternGroupNumber;
+    private Pattern compiledPattern;
 
     /**
      * Empty constructor.
      */
     public RenameFieldValue() {
+        this.patternGroupNumber = 1;
     }
 
     /**
@@ -83,6 +89,25 @@ public class RenameFieldValue implements OutputDirectoryComponent {
         this.suffix = suffix;
     }
 
+    public String getPattern() {
+        return pattern;
+    }
+
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
+        if (pattern != null) {
+            this.compiledPattern = Pattern.compile(pattern);
+        }
+    }
+
+    public Integer getPatternGroupNumber() {
+        return patternGroupNumber;
+    }
+
+    public void setPatternGroupNumber(Integer patternGroupNumber) {
+        this.patternGroupNumber = patternGroupNumber;
+    }
+
     /**
      * Uses the specified source data to derive an output directory
      * path fragment.
@@ -99,6 +124,14 @@ public class RenameFieldValue implements OutputDirectoryComponent {
             for (DataField field : dataFields) {
                 if (fieldDisplayName.equals(field.getDisplayName())) {
                     value = field.getCoreValue();
+                    if (pattern != null) {
+                        Matcher m = compiledPattern.matcher(value);
+                        if (m.matches()) {
+                            if (m.groupCount() >= patternGroupNumber) {
+                                value = m.group(patternGroupNumber);
+                            }
+                        }
+                    }
                     break;
                 }
             }
@@ -132,6 +165,9 @@ public class RenameFieldValue implements OutputDirectoryComponent {
                 sb.append(prefix);
             }
             sb.append("<");
+            if (pattern != null) {
+                sb.append("part of ");
+            }
             sb.append(fieldDisplayName);
             sb.append(">");
             if (suffix != null) {

@@ -80,6 +80,8 @@
         <xs:attribute name="fieldDisplayName" type="xs:string"/>
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
+        <xs:attribute name="pattern" type="xs:string"/>
+        <xs:attribute name="patternGroupNumber" type="xs:positiveInteger"/>
     </xs:complexType>
 
     <xs:complexType name="sourceFileModificationTimeType">
@@ -100,6 +102,7 @@
 
     <xs:complexType name="pluginsType">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="rowUpdater" type="pluginType" />
             <xs:element name="rowValidator" type="pluginType" />
             <xs:element name="rowListener" type="pluginType" />
             <xs:element name="sessionListener" type="pluginType" />
