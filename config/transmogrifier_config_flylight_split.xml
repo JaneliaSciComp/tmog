@@ -9,7 +9,7 @@
 
         <inputFileFilter patternString=".+\.(jpeg|jpg|lsm|tiff)" />
 
-        <outputDirectory>
+        <outputDirectory fileModeReadOnly="true">
             <path path="[\\arch.janelia.priv|/archive]/rubin/data1/rubinlab/aRnim/IMAGE-DATA/Split-Gal4/org-import/" />
             <renameFieldValue fieldDisplayName="Dissection Date" prefix="D"/>
         </outputDirectory>
