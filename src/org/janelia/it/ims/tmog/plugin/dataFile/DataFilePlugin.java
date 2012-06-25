@@ -15,6 +15,7 @@ import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.PropertyTokenList;
 import org.janelia.it.ims.tmog.plugin.RowUpdater;
+import org.janelia.it.utils.PathUtil;
 import org.janelia.it.utils.StringUtil;
 
 import javax.xml.bind.JAXBContext;
@@ -99,7 +100,7 @@ public class DataFilePlugin
 
         checkRequiredProperty(FILE_PROPERTY_NAME, dataFileNameValue);
 
-        final File dataFile = new File(dataFileNameValue);
+        final File dataFile = new File(PathUtil.convertPath(dataFileNameValue));
 
         if (! dataFile.canRead()) {
             throw new ExternalSystemException(
