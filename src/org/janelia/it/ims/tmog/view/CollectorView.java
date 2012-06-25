@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -17,6 +17,7 @@ import org.janelia.it.ims.tmog.config.preferences.ViewDefault;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.plugin.RowUpdater;
 import org.janelia.it.ims.tmog.plugin.RowValidator;
 import org.janelia.it.ims.tmog.target.FileTarget;
 import org.janelia.it.ims.tmog.task.SimpleTask;
@@ -30,6 +31,8 @@ import org.janelia.it.ims.tmog.view.component.TaskComponents;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 
@@ -63,6 +66,7 @@ public class CollectorView implements SessionView, InputSelectionView {
     private JProgressBar taskProgressBar;
     private DataTable dataTable;
     private JButton cancelTargetWorkerButton;
+    private JButton loadMappedDataButton;
 
     private ProjectConfiguration projectConfig;
     private File defaultDirectory;
@@ -98,6 +102,17 @@ public class CollectorView implements SessionView, InputSelectionView {
         rootDirectoryPane.setBorder(null);
 
         setupTaskComponents(parentTabbedPane);
+
+        if (projectConfig.hasRowUpdaters()) {
+            loadMappedDataButton.setVisible(true);
+            loadMappedDataButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    loadMappedData();
+                }
+            });
+        }
+
     }
 
     /**
@@ -192,6 +207,7 @@ public class CollectorView implements SessionView, InputSelectionView {
     public void handleInputRootSelection(File selectedFile) {
         dataTable.setModel(new DefaultTableModel());
         saveBtn.setEnabled(false);
+        loadMappedDataButton.setEnabled(false);
     }
 
     public void handleInputRootReset() {
@@ -249,6 +265,47 @@ public class CollectorView implements SessionView, InputSelectionView {
     private Task getNewTaskForView() {
         task = new SimpleTask(tableModel);
         return task;
+    }
+
+    private void loadMappedData() {
+
+        final int editingRowIndex = dataTable.getEditingRow();
+        final int editingColumnIndex = dataTable.getEditingColumn();
+
+        dataTable.editCellAt(-1, -1); // stop any current editor
+
+        String externalErrorMsg = null;
+        List<DataRow> rows = tableModel.getRows();
+        int rowIndex = 0;
+        for (DataRow row : rows) {
+            try {
+                for (RowUpdater updater : projectConfig.getRowUpdaters()) {
+                    updater.updateRow(new PluginDataRow(row));
+                }
+            } catch (ExternalDataException e) {
+                externalErrorMsg = e.getMessage();
+                LOG.info("external update failed", e);
+            } catch (ExternalSystemException e) {
+                externalErrorMsg = e.getMessage();
+                LOG.error(e.getMessage(), e);
+            }
+
+            dataTable.selectRow(rowIndex);
+
+            if (externalErrorMsg != null) {
+                dataTable.displayErrorDialog(externalErrorMsg);
+                break;
+            }
+
+            rowIndex++;
+        }
+
+        dataTable.repaint();
+
+        if ((editingRowIndex > -1) && (editingColumnIndex > -1)) {
+            dataTable.selectRow(editingRowIndex);
+            dataTable.editCellAt(editingRowIndex, editingColumnIndex);
+        }
     }
 
     private boolean validateAllFields() {
@@ -321,6 +378,11 @@ public class CollectorView implements SessionView, InputSelectionView {
         inputSelectionHandler.setEnabled(true);
         dataTable.setEnabled(true);
         saveBtn.setEnabled(isTaskButtonEnabled);
+        if (loadMappedDataButton.isVisible() &&
+            (loadMappedDataButton.isEnabled() != isTaskButtonEnabled)) {
+            loadMappedDataButton.setEnabled(isTaskButtonEnabled);
+        }
+
     }
 
     /** The logger for this class. */

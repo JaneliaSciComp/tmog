@@ -287,7 +287,8 @@ public class RenameView implements SessionView, InputSelectionView {
             copyAndRenameBtn.setEnabled(isCopyButtonEnabled);
         }
 
-        if (loadMappedDataButton.isEnabled() != isCopyButtonEnabled) {
+        if (loadMappedDataButton.isVisible() &&
+            (loadMappedDataButton.isEnabled() != isCopyButtonEnabled)) {
             loadMappedDataButton.setEnabled(isCopyButtonEnabled);
         }
     }
