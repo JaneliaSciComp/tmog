@@ -22,6 +22,27 @@
 
         <plugins>
 
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
+                <property name="tmog-row.key" value="${Slide ID}" />
+                <property name="data-file.name" value="[\\dm10.janelia.priv|/groups/leet]/leetconfocal/tmog/data/wycSlide.tsv" />
+                <property name="data-file.tsv-key" value="Slide ID" />
+                <property name="Image Family" value="Image Family" />
+                <property name="GAL4 Line" value="GAL4 Line" />
+                <property name="Progenitor" value="Progenitor" />
+                <property name="tsMARCM" value="tsMARCM" />
+                <property name="Gender" value="Gender" />
+                <property name="Heat Shock Age Hour" value="Heat Shock Age Hour" />
+                <property name="Heat Shock Age Interval" value="Heat Shock Age Interval" />
+                <property name="Heat Shock Minutes" value="Heat Shock Minutes" />
+                <property name="Dissection Age" value="Dissection Age" />
+                <property name="Dissector" value="Dissector" />
+                <property name="Cross Date" value="Cross Date" />
+                <property name="Mount Date" value="Mount Date" />
+                <property name="IHC Protocol Number" value="IHC Protocol Number" />
+                <property name="Tissue Mounting Protocol" value="Tissue Mounting Protocol" />
+                <property name="Tissue Orientation" value="Tissue Orientation" />
+            </rowUpdater>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
                 <property name="db.config.key" value="sage" />
                 <property name="image_number" value="urn:lsid:janelia.org:leet_lineage:image_number" />
@@ -37,6 +58,7 @@
                 <property name="mutant" value="Mutant"/>
                 <property name="heat_shock_hour" value="Heat Shock Age Hour"/>
                 <property name="heat_shock_interval" value="Heat Shock Age Interval"/>
+                <property name="heat_shock_minutes" value="Heat Shock Age Interval"/>
                 <property name="age" value="Dissection Age"/>
                 <property name="gender" value="Gender"/>
                 <property name="cross_date" value="Cross Date"/>
@@ -148,6 +170,12 @@
                      minimumValue="0"
                      markedForTask="false">
                 <staticDefault value="2" />
+            </decimal>
+
+            <decimal displayName="Heat Shock Minutes"
+                     required="true"
+                     minimumValue="0"
+                     markedForTask="false">
             </decimal>
 
             <validValueList displayName="Dissector" required="false"
