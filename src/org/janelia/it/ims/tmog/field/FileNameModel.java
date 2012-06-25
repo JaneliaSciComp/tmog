@@ -1,8 +1,8 @@
 /*
- * Copyright 2009 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.field;
@@ -69,15 +69,18 @@ public class FileNameModel implements DataField {
         this.markedForTask = markedForTask;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public String getPatternString() {
         return patternString;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void setPatternString(String patternString) {
         this.patternString = patternString;
         this.compiledPattern = Pattern.compile(patternString);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public Integer getPatternGroupNumber() {
         return patternGroupNumber;
     }
@@ -155,6 +158,11 @@ public class FileNameModel implements DataField {
 
             }
         }
+    }
+
+    @Override
+    public void applyValue(String value) {
+        // single string values do not get applied to this model
     }
 
     public void applyDefault(FieldDefaultSet defaultSet) {

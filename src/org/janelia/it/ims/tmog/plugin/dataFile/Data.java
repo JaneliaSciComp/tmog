@@ -9,6 +9,7 @@ package org.janelia.it.ims.tmog.plugin.dataFile;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,13 @@ public class Data {
             mapItems();
         }
         return keyToItemMap.get(itemName);
+    }
+
+    public void addItem(Item item) {
+        if (items == null) {
+            items = new ArrayList<Item>();
+        }
+        items.add(item);
     }
 
     public String getValue(String itemName,

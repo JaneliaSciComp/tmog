@@ -9,6 +9,7 @@ package org.janelia.it.ims.tmog.plugin.dataFile;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,4 +63,10 @@ public class Item {
         return propertyNameToValueMap.get(propertyName);
     }
 
+    public void addProperty(Property property) {
+        if (properties == null) {
+            properties = new ArrayList<Property>();
+        }
+        properties.add(property);
+    }
 }

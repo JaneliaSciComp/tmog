@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -54,6 +54,7 @@ public abstract class VerifiedFieldModel extends PlainDocument
         return displayWidth;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void setDisplayWidth(Integer displayWidth) {
         this.displayWidth = displayWidth;
     }
@@ -82,10 +83,12 @@ public abstract class VerifiedFieldModel extends PlainDocument
         this.sharedForAllSessionFiles = sharedForAllSessionFiles;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void setMarkedForTask(boolean markedForTask) {
         this.markedForTask = markedForTask;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public String getPadFormat() {
         String padFormat = null;
         if (padFormatter != null) {
@@ -94,6 +97,7 @@ public abstract class VerifiedFieldModel extends PlainDocument
         return padFormat;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void setPadFormat(String padFormat) {
         this.padFormatter = new PadFormatter(padFormat);
     }
@@ -196,15 +200,20 @@ public abstract class VerifiedFieldModel extends PlainDocument
             setText("");
         }
     }
-    
+
+    @Override
+    public void applyValue(String value) {
+        if (value != null) {
+            setText(value);
+        }
+    }
+
     public void applyDefault(FieldDefaultSet defaultSet) {
         final FieldDefault fieldDefault =
                 defaultSet.getFieldDefault(displayName);
         if (fieldDefault != null) {
             final String value = fieldDefault.getValue();
-            if (value != null) {
-                setText(value);
-            }
+            applyValue(value);
         }
     }
 
@@ -226,6 +235,7 @@ public abstract class VerifiedFieldModel extends PlainDocument
         isRequired = required;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void setCopyable(boolean copyable) {
         isCopyable = copyable;
     }

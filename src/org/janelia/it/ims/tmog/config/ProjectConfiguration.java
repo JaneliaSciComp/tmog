@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -17,6 +17,7 @@ import org.janelia.it.ims.tmog.field.HttpValidValueModel;
 import org.janelia.it.ims.tmog.field.PluginDefaultValue;
 import org.janelia.it.ims.tmog.field.TargetNameModel;
 import org.janelia.it.ims.tmog.plugin.RowListener;
+import org.janelia.it.ims.tmog.plugin.RowUpdater;
 import org.janelia.it.ims.tmog.plugin.RowValidator;
 import org.janelia.it.ims.tmog.plugin.SessionListener;
 
@@ -100,6 +101,21 @@ public class ProjectConfiguration {
 
     public FileTransferConfiguration getFileTransfer() {
         return fileTransferConfiguration;
+    }
+
+    public boolean hasRowUpdaters() {
+        final List<RowUpdater> updaters = getRowUpdaters();
+        return updaters.size() > 0;
+    }
+
+    public List<RowUpdater> getRowUpdaters() {
+        List<RowUpdater> updaters;
+        if (pluginFactory != null) {
+            updaters = pluginFactory.getRowUpdaters();
+        } else {
+            updaters = new ArrayList<RowUpdater>();
+        }
+        return updaters;
     }
 
     public List<RowListener> getRowListeners() {

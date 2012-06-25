@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
+ */
+
 package org.janelia.it.ims.tmog.field;
 
 import org.janelia.it.ims.tmog.config.preferences.FieldDefaultSet;
@@ -89,6 +96,11 @@ public class FileExtensionModel implements DataField {
         }
     }
 
+    @Override
+    public void applyValue(String value) {
+        // single string values do not get applied to this model
+    }
+
     public void applyDefault(FieldDefaultSet defaultSet) {
         // defaults do not get applied to this model
     }
@@ -101,6 +113,7 @@ public class FileExtensionModel implements DataField {
         return extension;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void setExtension(String extension) {
         this.extension = extension;
     }

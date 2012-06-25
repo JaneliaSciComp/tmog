@@ -1,8 +1,8 @@
 /*
- * Copyright 2009 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.field;
@@ -95,6 +95,11 @@ public class TargetNameModel implements DataField {
         if (target != null) {
             targetName = target.getName();
         }
+    }
+
+    @Override
+    public void applyValue(String value) {
+        // single string values do not get applied to this model
     }
 
     public void applyDefault(FieldDefaultSet defaultSet) {

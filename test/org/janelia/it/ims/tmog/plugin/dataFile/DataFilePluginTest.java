@@ -15,7 +15,6 @@ import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.field.PluginDataModel;
 import org.janelia.it.ims.tmog.field.StaticDataModel;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
-import org.janelia.it.ims.tmog.plugin.RowListener;
 import org.janelia.it.ims.tmog.target.FileTarget;
 import org.junit.Assert;
 
@@ -83,12 +82,20 @@ public class DataFilePluginTest
         }
     }
 
-    public void testPlugin() throws Exception {
-        final String dataFileName = "data-file-plugin-test.xml";
+    public void testPluginForXmlFile() throws Exception {
+        writeDataAndTestPlugin("data-file-plugin-test.xml", XML_DATA);
+    }
+
+    public void testPluginForTsvFile() throws Exception {
+        writeDataAndTestPlugin("data-file-plugin-test.tsv", TSV_DATA);
+    }
+
+    private void writeDataAndTestPlugin(String dataFileName,
+                                        String data) throws Exception {
         File file = new File(dataFileName);
         try {
             FileWriter fileWriter = new FileWriter(file);
-            fileWriter.write(XML_DATA);
+            fileWriter.write(data);
             fileWriter.close();
 
             PluginDataModel line = new PluginDataModel();
@@ -98,10 +105,12 @@ public class DataFilePluginTest
             age.setDisplayName("Age");
 
             PluginConfiguration config = new PluginConfiguration();
-            config.setProperty(DataFilePlugin.KEY_PROPERTY_NAME,
+            config.setProperty(DataFilePlugin.TMOG_ROW_KEY_PROPERTY_NAME,
                                "${Mount Date}_${Slide Number}");
             config.setProperty(DataFilePlugin.FILE_PROPERTY_NAME,
                                dataFileName);
+            config.setProperty(DataFilePlugin.TSV_FILE_KEY_PROPERTY_NAME,
+                               "slide");
             config.setProperty(line.getDisplayName(), "line");
             config.setProperty(age.getDisplayName(), "age");
 
@@ -113,10 +122,10 @@ public class DataFilePluginTest
             dataRow.addField(age);
             dataRow.addField(new StaticDataModel("Mount Date", "19991122"));
             dataRow.addField(new StaticDataModel("Slide Number", "77"));
-            
+
             PluginDataRow pluginDataRow = new PluginDataRow(dataRow);
 
-            plugin.processEvent(RowListener.EventType.START_ROW, pluginDataRow);
+            plugin.updateRow(pluginDataRow);
 
             Assert.assertEquals("line not properly set",
                                 "GMR_FOO_A", line.getValue());
@@ -154,5 +163,10 @@ public class DataFilePluginTest
             "        <property name=\"line\">GMR_BAR_B</property>\n" +
             "    </item>\n" +
             "</data>\n";
+
+    private static final String TSV_DATA =
+            "slide\tline\tage\tgender\n" +
+            "19991122_77\tGMR_FOO_A\tE12\tf\n" +
+            "19991122_88\tGMR_BAR_B\t\t\n";
 
 }

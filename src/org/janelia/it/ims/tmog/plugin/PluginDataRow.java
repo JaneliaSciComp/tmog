@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -113,6 +113,21 @@ public class PluginDataRow {
                     fieldDisplayName + "' cannot be found in " + this);
         }
         return value;
+    }
+
+    /**
+     * Applies the specified string value to the field with the
+     * specified display name.
+     *
+     * @param  fieldDisplayName  identifies the field to be updated.
+     * @param  value             the new value for the field.
+     */
+    public void applyPluginDataValue(String fieldDisplayName,
+                                     String value) {
+        DataField field = displayNameToFieldMap.get(fieldDisplayName);
+        if (field != null) {
+            field.applyValue(value);
+        }
     }
 
     /**

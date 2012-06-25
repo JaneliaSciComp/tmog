@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -197,30 +197,28 @@ public class ValidValueModel extends AbstractListModel
      * @param  target  the target being processed.
      */
     public void initializeValue(Target target) {
-        String defaultValue = defaultValueList.getValue(target);
-        if (defaultValue != null) {
+        final String defaultValue = defaultValueList.getValue(target);
+        applyValue(defaultValue);
+    }
+
+    @Override
+    public void applyValue(String value) {
+        if (value != null) {
             for (ValidValue validValue : validValues) {
-                if (defaultValue.equals(validValue.getValue())) {
+                if (value.equals(validValue.getValue())) {
                     setSelectedValue(validValue);
                     break;
                 }
             }
         }
     }
-    
+
     public void applyDefault(FieldDefaultSet defaultSet) {
         final FieldDefault fieldDefault =
                 defaultSet.getFieldDefault(displayName);
         if (fieldDefault != null) {
             final String value = fieldDefault.getValue();
-            if (value != null) {
-                for (ValidValue validValue : validValues) {
-                    if (value.equals(validValue.getValue())) {
-                        setSelectedValue(validValue);
-                        break;
-                    }
-                }
-            }
+            applyValue(value);
         }
     }
 

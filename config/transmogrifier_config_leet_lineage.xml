@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.8.3" frameSizePercentage="95"/>
+    <global minimumVersion="2.8.5" frameSizePercentage="95"/>
 
     <project name="Lee Lab: Lineage Images" default="true">
 
@@ -14,9 +14,10 @@
             <path path="[\\dm10.janelia.priv|/groups/leet]\leetconfocal\lineage\" />
             <renameFieldValue fieldDisplayName="Image Family"/>
             <path path="/confocalStacks/"/>
-            <renameFieldValue fieldDisplayName="Cross Date"/>
+            <renameFieldValue fieldDisplayName="Slide ID"
+                              pattern="^(\w\w\w\d\d\d)\d\d"/>
             <path path="/"/>
-            <renameFieldValue fieldDisplayName="Slide Number"/>
+            <renameFieldValue fieldDisplayName="Slide ID"/>
         </outputDirectory>
 
         <plugins>
@@ -39,7 +40,7 @@
                 <property name="age" value="Dissection Age"/>
                 <property name="gender" value="Gender"/>
                 <property name="cross_date" value="Cross Date"/>
-                <property name="slide_code" value="${Slide Number}_${Slide Row}${Slide Column}"/>
+                <property name="slide_code" value="${Slide ID}_${Slide Row}${Slide Column}"/>
                 <property name="tile" value="Tile"/>
                 <property name="ihc_protocol" value="TZL-IHC-${IHC Protocol Number}"/>
                 <property name="mount_date" value="Mount Date"/>
@@ -65,6 +66,27 @@
              These values are collected for storage but are not
              included as components of the file name (markedForTask="false").
              -->
+
+            <text displayName="Slide ID"
+                  required="true"
+                  markedForTask="false"
+                  pattern="(Hey|MDS|WYC)\d{5}" />
+
+            <text displayName="Slide Row" pattern="[A-Z]" required="true"
+                  markedForTask="false" convertToUpperCase="true">
+            </text>
+
+            <number displayName="Slide Column" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="99" />
+
+            <validValueList displayName="Tile" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="06: Central Brain" value="Central Brain"/>
+                <validValue displayName="07: Left Central Brain" value="Left Central Brain"/>
+                <validValue displayName="08: Right Central Brain" value="Right Central Brain"/>
+            </validValueList>
 
             <validValueList displayName="Image Family" required="true"
                             autoComplete="true"
@@ -103,6 +125,10 @@
                 <validValue value="mutant-01" />
             </validValueList>
 
+            <date displayName="Cross Date" required="false"
+                  datePattern="yyyyMMdd" markedForTask="false">
+            </date>
+
             <validValueList displayName="Gender" required="false"
                             autoComplete="true"
                             markedForTask="false">
@@ -124,6 +150,22 @@
                 <staticDefault value="2" />
             </decimal>
 
+            <validValueList displayName="Dissector" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="Haojiang Luan"/>
+                <validValue value="Mark Schroeder"/>
+                <validValue value="Nicholas Abel"/>
+                <validValue value="Rebecca Johnston"/>
+                <validValue value="Rebecca Vorima"/>
+                <validValue value="Susana Tae"/>
+                <validValue value="Takeshi Awasaki"/>
+                <validValue value="Xiaotang Jing"/>
+                <validValue value="Ying-Jou Lee"/>
+                <validValue value="Yisheng Hey"/>
+                <validValue value="Yu-Chun Wang"/>
+            </validValueList>
+
             <cvTermList displayName="Dissection Age" required="true"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
                         displayNamePrefixedForValues="true"
@@ -131,44 +173,9 @@
                         markedForTask="false">
             </cvTermList>
 
-            <date displayName="Cross Date" required="true"
-                  datePattern="yyyyMMdd" markedForTask="false">
-            </date>
-
             <date displayName="Mount Date" required="false"
                   datePattern="yyyyMMdd" markedForTask="false">
             </date>
-
-            <text displayName="Slide Number"
-                  required="true"
-                  markedForTask="false"
-                  pattern="(Hey)?\d{1,4}" />
-
-            <text displayName="Slide Row" pattern="[A-Z]" required="true"
-                  markedForTask="false" convertToUpperCase="true">
-            </text>
-
-            <number displayName="Slide Column" required="true"
-                    markedForTask="false"
-                    minimumValue="1" maximumValue="99" />
-
-            <validValueList displayName="Tile" required="true"
-                            autoComplete="true"
-                            markedForTask="false">
-                <validValue displayName="01: Left Optic Lobe" value="Left Optic Lobe" />
-                <validValue displayName="02: Ventral Brain" value="Ventral Brain"/>
-                <validValue displayName="03: Left Dorsal Brain" value="Left Dorsal Brain"/>
-                <validValue displayName="04: Right Dorsal Brain" value="Right Dorsal Brain"/>
-                <validValue displayName="05: Right Optic Lobe" value="Right Optic Lobe"/>
-                <validValue displayName="06: Central Brain" value="Central Brain"/>
-                <validValue displayName="07: Left Central Brain" value="Left Central Brain"/>
-                <validValue displayName="08: Right Central Brain" value="Right Central Brain"/>
-                <validValue displayName="09: Dorsal Brain" value="Dorsal Brain"/>
-                <validValue displayName="10: Neck" value="Neck"/>
-                <validValue displayName="11: Thorax" value="Thorax"/>
-                <validValue displayName="12: Abdomen" value="Abdomen"/>
-                <validValue displayName="13: Terminus" value="Terminus"/>
-            </validValueList>
 
             <decimal displayName="IHC Protocol Number" required="true"
                      minimumValue="0.0" maximumValue="99.9"
@@ -188,23 +195,7 @@
                         displayNamePrefixedForValues="false">
             </cvTermList>
 
-            <validValueList displayName="Dissector" required="true"
-                            autoComplete="true"
-                            markedForTask="false">
-                <validValue value="Haojiang Luan"/>
-                <validValue value="Mark Schroeder"/>
-                <validValue value="Nicholas Abel"/>
-                <validValue value="Rebecca Johnston"/>
-                <validValue value="Rebecca Vorima"/>
-                <validValue value="Susana Tae"/>
-                <validValue value="Takeshi Awasaki"/>
-                <validValue value="Xiaotang Jing"/>
-                <validValue value="Ying-Jou Lee"/>
-                <validValue value="Yisheng Hey"/>
-                <validValue value="Yu-Chun Wang"/>
-            </validValueList>
-
-            <validValueList displayName="Imager" required="true"
+            <validValueList displayName="Imager" required="false"
                             autoComplete="true"
                             markedForTask="false">
                 <validValue value="Haojiang Luan"/>

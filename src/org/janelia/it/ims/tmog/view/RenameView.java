@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -19,7 +19,9 @@ import org.janelia.it.ims.tmog.config.preferences.ViewDefault;
 import org.janelia.it.ims.tmog.filefilter.DirectoryOnlyFilter;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
+import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
+import org.janelia.it.ims.tmog.plugin.RowUpdater;
 import org.janelia.it.ims.tmog.plugin.RowValidator;
 import org.janelia.it.ims.tmog.target.FileTarget;
 import org.janelia.it.ims.tmog.target.Target;
@@ -73,6 +75,7 @@ public class RenameView implements SessionView, InputSelectionView {
     private JLabel copyProgressLabel;
     private JButton cancelInputSearch;
     private JScrollPane projectNamePane;
+    private JButton loadMappedDataButton;
     private DataTableModel tableModel;
     private ProjectConfiguration projectConfig;
     private RenameTask task;
@@ -105,6 +108,16 @@ public class RenameView implements SessionView, InputSelectionView {
 
         setupOutputDirectory();
         setupTaskComponents(parentTabbedPane);
+
+        if (projectConfig.hasRowUpdaters()) {
+            loadMappedDataButton.setVisible(true);
+            loadMappedDataButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    loadMappedData();
+                }
+            });
+        }
     }
 
     public JPanel getPanel() {
@@ -249,6 +262,7 @@ public class RenameView implements SessionView, InputSelectionView {
                                             projectConfig);
             dataTable.setModelAndColumnDefaults(tableModel);
             copyAndRenameBtn.setEnabled(true);
+            loadMappedDataButton.setEnabled(true);
         } else {
             NarrowOptionPane.showMessageDialog(
                     appPanel,
@@ -271,6 +285,10 @@ public class RenameView implements SessionView, InputSelectionView {
 
         if (copyAndRenameBtn.isEnabled() != isCopyButtonEnabled) {
             copyAndRenameBtn.setEnabled(isCopyButtonEnabled);
+        }
+
+        if (loadMappedDataButton.isEnabled() != isCopyButtonEnabled) {
+            loadMappedDataButton.setEnabled(isCopyButtonEnabled);
         }
     }
 
@@ -397,6 +415,47 @@ public class RenameView implements SessionView, InputSelectionView {
         }
 
         return isReady;
+    }
+
+    private void loadMappedData() {
+
+        final int editingRowIndex = dataTable.getEditingRow();
+        final int editingColumnIndex = dataTable.getEditingColumn();
+
+        dataTable.editCellAt(-1, -1); // stop any current editor
+
+        String externalErrorMsg = null;
+        List<DataRow> rows = tableModel.getRows();
+        int rowIndex = 0;
+        for (DataRow row : rows) {
+            try {
+                for (RowUpdater updater : projectConfig.getRowUpdaters()) {
+                    updater.updateRow(new PluginDataRow(row));
+                }
+            } catch (ExternalDataException e) {
+                externalErrorMsg = e.getMessage();
+                LOG.info("external update failed", e);
+            } catch (ExternalSystemException e) {
+                externalErrorMsg = e.getMessage();
+                LOG.error(e.getMessage(), e);
+            }
+
+            dataTable.selectRow(rowIndex);
+
+            if (externalErrorMsg != null) {
+                dataTable.displayErrorDialog(externalErrorMsg);
+                break;
+            }
+
+            rowIndex++;
+        }
+
+        dataTable.repaint();
+
+        if ((editingRowIndex > -1) && (editingColumnIndex > -1)) {
+            dataTable.selectRow(editingRowIndex);
+            dataTable.editCellAt(editingRowIndex, editingColumnIndex);
+        }
     }
 
     private boolean validateAllFields(File baseOutputDirectory) {

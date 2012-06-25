@@ -1,14 +1,15 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.field;
 
 import org.janelia.it.ims.tmog.config.preferences.FieldDefaultSet;
 import org.janelia.it.ims.tmog.target.Target;
+import org.janelia.it.utils.StringUtil;
 
 import java.util.Formatter;
 
@@ -103,6 +104,13 @@ public class PluginDataModel implements DataField {
         value = null;
     }
 
+    @Override
+    public void applyValue(String value) {
+        if (StringUtil.isDefined(value)) {
+            setValue(value);
+        }
+    }
+
     public void applyDefault(FieldDefaultSet defaultSet) {
         // defaults do not get applied to this model
     }
@@ -115,6 +123,7 @@ public class PluginDataModel implements DataField {
         return value;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public String getFormat() {
         return format;
     }

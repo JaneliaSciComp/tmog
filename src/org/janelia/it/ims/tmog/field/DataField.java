@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.field;
@@ -95,6 +95,14 @@ public interface DataField {
      * @param  target  the target being processed.
      */
     public void initializeValue(Target target);
+
+    /**
+     * If the specified value is not empty, sets this field's core value
+     * the specified value.
+     *
+     * @param  value  value to apply.
+     */
+    public void applyValue(String value);
 
     /**
      * If the specified set of defaults contains a value for this field,

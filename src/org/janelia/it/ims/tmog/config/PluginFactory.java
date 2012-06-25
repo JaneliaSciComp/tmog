@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -10,6 +10,7 @@ package org.janelia.it.ims.tmog.config;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.Plugin;
 import org.janelia.it.ims.tmog.plugin.RowListener;
+import org.janelia.it.ims.tmog.plugin.RowUpdater;
 import org.janelia.it.ims.tmog.plugin.RowValidator;
 import org.janelia.it.ims.tmog.plugin.SessionListener;
 
@@ -19,11 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class constructs configured CopyListener instances.
+ * This class constructs configured plug-in listener instances.
  *
  * @author Eric Trautman
  */
 public class PluginFactory {
+
+    private List<PluginConfiguration> rowUpdaterPlugins;
+    private List<RowUpdater> rowUpdaters;
 
     private List<PluginConfiguration> rowListenerPlugins;
     private List<RowListener> rowListeners;
@@ -35,12 +39,19 @@ public class PluginFactory {
     private List<SessionListener> sessionListeners;
 
     public PluginFactory() {
+        rowUpdaterPlugins = new ArrayList<PluginConfiguration>();
+        rowUpdaters = new ArrayList<RowUpdater>();
         rowListenerPlugins = new ArrayList<PluginConfiguration>();
         rowListeners = new ArrayList<RowListener>();
         rowValidatorPlugins = new ArrayList<PluginConfiguration>();
         rowValidators = new ArrayList<RowValidator>();
         sessionListenerPlugins = new ArrayList<PluginConfiguration>();
         sessionListeners = new ArrayList<SessionListener>();
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    public void addRowUpdaterPlugin(PluginConfiguration plugin) {
+        rowUpdaterPlugins.add(plugin);
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
@@ -56,6 +67,10 @@ public class PluginFactory {
     @SuppressWarnings({"UnusedDeclaration"})
     public void addSessionListenerPlugin(PluginConfiguration plugin) {
         sessionListenerPlugins.add(plugin);
+    }
+
+    public List<RowUpdater> getRowUpdaters() {
+        return rowUpdaters;
     }
 
     public List<RowListener> getRowListeners() {
@@ -74,6 +89,14 @@ public class PluginFactory {
             throws ConfigurationException {
 
         List<Object> pluginInstances =
+                constructInstancesForClass(projectName,
+                                           rowUpdaterPlugins,
+                                           RowUpdater.class);
+        for (Object instance : pluginInstances) {
+            rowUpdaters.add((RowUpdater) instance);
+        }
+
+        pluginInstances =
                 constructInstancesForClass(projectName,
                                            rowListenerPlugins,
                                            RowListener.class);
