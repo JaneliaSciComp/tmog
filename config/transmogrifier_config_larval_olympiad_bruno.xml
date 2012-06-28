@@ -113,6 +113,10 @@
                     <mappedValue from="attP2" to="fly"/>
                 </sourceFileMappedDefault>
 
+                <sourceFileMappedDefault pattern="^(attP2_).*">
+                    <mappedValue from="attP2_" to="fly"/>
+                </sourceFileMappedDefault>
+
                 <sourceFileMappedDefault pattern="^(FCF_w1118_1500005)@.*">
                     <mappedValue from="FCF_w1118_1500005" to="fly"/>
                 </sourceFileMappedDefault>
@@ -137,9 +141,13 @@
             <text displayName="Line" required="true"
                   pattern="[0-9A-Za-z\-\_]++">
                 <sourceFileMappedDefault pattern="(.+?)@.+?@.+?@.+?@.*">
+                    <mappedValue from="GH86_older" to="GH86"/>
+                    <mappedValue from="GH86_younger" to="GH86"/>
                     <mappedValue from="20C12" to="GMR_20C12_AE_01"/>
                     <mappedValue from="28E01AE_01" to="GMR_28E01_AE_01"/>
                     <mappedValue from="attP2" to="FCF_attp2_1500062"/>
+                    <mappedValue from="attP2_younger" to="FCF_attp2_1500062"/>
+                    <mappedValue from="attP2_older" to="FCF_attp2_1500062"/>
                     <mappedValue from="GMR_496D11_AE_01" to="GMR_49D11_AE_01"/>
                     <mappedValue from="GMR_496G11_AE_01" to="GMR_49G11_AE_01"/>
                     <mappedValue from="GMR_61H07_AE_01" to="GMR_61H07_AD_01"/>
@@ -147,6 +155,10 @@
                     <mappedValue from="GMR_74E04_AE_01" to="GMR_74E03_AE_01"/>
                     <mappedValue from="GMR_90C07_AE_01" to="GMR_90C07_AD_01"/>
                     <mappedValue from="GMR_F1D12_AE_01" to="GMR_71D12_AE_01"/>
+                    <mappedValue from="GMR_57H01_AE_01" to="GMR_57H01_AD_01"/>
+                    <mappedValue from="GMR_57B04_AE_01" to="GMR_57B04_AD_01"/>
+                    <mappedValue from="GMR_96A08_AE_01" to="GMR_96A08_AD_01"/>
+                    <mappedValue from="GMR_67G11_AE_01" to="GMR_76G11_AE_01"/>
                     <mappedValue from="pBDP-Gal4" to="pBDPGAL4U"/>
                     <mappedValue from=" pBDPGAL4U" to="pBDPGAL4U"/>
                     <mappedValue from="pBDPUASGAL4" to="pBDPGAL4U"/>
