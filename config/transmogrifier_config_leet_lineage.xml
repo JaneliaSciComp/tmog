@@ -111,9 +111,9 @@
                             autoComplete="true"
                             markedForTask="false">
                 <targetPropertyDefault propertyName="tile"/>
-                <validValue displayName="06: Central Brain" value="Central Brain"/>
-                <validValue displayName="07: Left Central Brain" value="Left Central Brain"/>
-                <validValue displayName="08: Right Central Brain" value="Right Central Brain"/>
+                <validValue value="Left Brain"/>
+                <validValue value="Central Brain"/>
+                <validValue value="Right Brain"/>
             </validValueList>
 
             <validValueList displayName="Image Family" required="true"
