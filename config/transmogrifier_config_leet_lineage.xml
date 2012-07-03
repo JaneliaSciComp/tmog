@@ -92,7 +92,7 @@
             <text displayName="Slide ID"
                   required="true"
                   markedForTask="false"
-                  pattern="(Hey|MDS|WYC)\d{5}">
+                  pattern="(Hey|SSM|MDS|Mut|WYC)\d{5}">
                 <targetPropertyDefault propertyName="slide"/>
             </text>
 
@@ -150,7 +150,9 @@
             <validValueList displayName="mutant" required="false"
                             autoComplete="true"
                             markedForTask="false">
-                <validValue value="mutant-01" />
+                <validValue value="chinmo" />
+                <validValue value="Pdm" />
+                <validValue value="Su(H)" />
             </validValueList>
 
             <date displayName="Cross Date" required="false"
