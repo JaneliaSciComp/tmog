@@ -150,9 +150,9 @@
             <validValueList displayName="mutant" required="false"
                             autoComplete="true"
                             markedForTask="false">
-                <validValue value="chinmo" />
-                <validValue value="Pdm" />
-                <validValue value="Su(H)" />
+                <validValue value="chinmo[1]" />
+                <validValue value="Df(2L)ED773" />
+                <validValue value="Su(H)[delta47]" />
             </validValueList>
 
             <date displayName="Cross Date" required="false"
