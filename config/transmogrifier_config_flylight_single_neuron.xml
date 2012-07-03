@@ -162,6 +162,7 @@
             <validValueList displayName="Imager" required="true"
                             autoComplete="true"
                             markedForTask="false">
+                <validValue value="Chris Zugates"/>
                 <validValue value="Jennifer Jeter"/>
                 <validValue value="Joanna Hausenfluck"/>
                 <validValue value="Nirmala Iyer"/>
@@ -374,6 +375,7 @@
                     <mappedValue from="jeterj" to="Jennifer Jeter" />
                     <mappedValue from="iyern" to="Nirmala Iyer" />
                 </targetPropertyDefault>
+                <validValue value="Chris Zugates"/>
                 <validValue value="Jennifer Jeter"/>
                 <validValue value="Joanna Hausenfluck"/>
                 <validValue value="Nirmala Iyer"/>
