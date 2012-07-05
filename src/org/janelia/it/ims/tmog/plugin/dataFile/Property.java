@@ -34,6 +34,13 @@ public class Property {
         this.value = value;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
+    public void setNameAndValue(String name,
+                                String value) {
+        this.name = name;
+        this.value = value;
+    }
+
     public String getName() {
         return name;
     }

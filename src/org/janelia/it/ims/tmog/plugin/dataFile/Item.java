@@ -69,4 +69,13 @@ public class Item {
         }
         properties.add(property);
     }
+
+    public int size() {
+        int size = 0;
+        if (properties != null) {
+            size = properties.size();
+        }
+        return size;
+    }
+
 }
