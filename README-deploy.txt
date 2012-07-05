@@ -49,6 +49,7 @@ are deployed for the following lab groups:
 /groups/ditp/ditp/tmog/config
 /groups/kerr/kerrlab/tmog/config
 /groups/leet/leetconfocal/tmog/config
+/groups/leet/leetimg/leetlab/tmog/config
 /groups/rubin/data1/rubinlab/tmog/config
 /groups/rubin/rubinimg/tmog
 /groups/simpson/MicroscopeData/tmog/config
