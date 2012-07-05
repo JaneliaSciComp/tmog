@@ -28,7 +28,6 @@ import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This plug-in loads data from an HTTP web service
@@ -98,7 +97,7 @@ public class DataResourcePlugin
         this.lastCacheAccessTime = System.currentTimeMillis();
         this.rowFieldNameToXPathMap = new HashMap<String, String>();
         this.httpClient = new HttpClient();
-        this.urlToItemCache = new ConcurrentHashMap<String, Item>();
+        this.urlToItemCache = new HashMap<String, Item>();
     }
 
     /**
@@ -161,6 +160,8 @@ public class DataResourcePlugin
 
         setDigester(rootXPath);
 
+        addEmptyItemToCache();
+        
         if (testUrl != null) {
             final Item testItem = fetchItem(testUrl);
             if (testItem == null) {
@@ -208,7 +209,7 @@ public class DataResourcePlugin
             Item item = urlToItemCache.get(url);
             if ((item == null) && (! urlToItemCache.containsKey(url))) {
                 item = fetchItem(url);
-                urlToItemCache.put(url, item);
+                cacheItem(url, item);
             }
 
             if (item != null) {
@@ -219,6 +220,11 @@ public class DataResourcePlugin
             }
         }
         return row;
+    }
+
+    private synchronized void cacheItem(String url,
+                                        Item item) {
+        urlToItemCache.put(url, item);
     }
 
     private void checkRequiredProperty(String name,
@@ -257,9 +263,23 @@ public class DataResourcePlugin
             LOG.info("clearing cache containing " +
                      urlToItemCache.size() + " items");
             urlToItemCache.clear();
+            addEmptyItemToCache();
         }
 
         lastCacheAccessTime = System.currentTimeMillis();
+    }
+
+    /**
+     * Adds empty URL to cache so that we don't waste time making a request
+     * for it later.
+     */
+    private void addEmptyItemToCache() {
+        final Map<String, DataField> emptyMap =
+                new HashMap<String, DataField>();
+        final List<String> urlList = urlTokens.deriveValues(emptyMap, true);
+        if (urlList.size() > 0) {
+            urlToItemCache.put(urlList.get(0), null);
+        }
     }
 
     private Item fetchItem(String url)
