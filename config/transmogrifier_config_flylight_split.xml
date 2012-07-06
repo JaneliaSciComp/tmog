@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.8.4" frameSizePercentage="95"/>
+    <global minimumVersion="2.8.6" frameSizePercentage="95"/>
 
     <project name="Fly Light: Pilot Split Images" default="true">
 
@@ -15,22 +15,31 @@
         </outputDirectory>
 
         <plugins>
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumberOrLabel?labelName=${Cross Label}&amp;serialNumber=${Serial Number}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumberOrLabel?labelName=splitPilot-AJ-00001&amp;serialNumber=" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="Line" value="name" />
+                <property name="Cross Label" value="specialCrossLabel" />
+                <property name="ParentA" value="parent1StockName" />
+                <property name="ParentB" value="parent2StockName" />
+            </rowUpdater>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.CrossLineCreationPlugin">
                 <property name="db.config.key" value="sage"/>
-                <property name="line" value="${DBD Line}-x-${AD Line}"/>
+                <property name="line" value="${Line}"/>
                 <property name="line-lab" value="flylight"/>
-                <property name="parent-a-line" value="${DBD Line}"/>
+                <property name="parent-a-line" value="${ParentA}"/>
                 <property name="parent-a-line-lab" value="rubin"/>
-                <property name="parent-b-line" value="${AD Line}"/>
+                <property name="parent-b-line" value="${ParentB}"/>
                 <property name="parent-b-line-lab" value="rubin"/>
             </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:flylight"/>
                 <property name="family" value="$STATIC:flylight_split"/>
-                <property name="line" value="${DBD Line}-x-${AD Line}"/>
-                <property name="dissection_date" value="Dissection Date"/>
-                <property name="cross_label" value="Cross Label"/>
+                <property name="line" value="${Line}"/>
+                <property name="dissection_date" value="${Dissection Date}"/>
+                <property name="cross_label" value="${Cross Label}"/>
                 <property name="area" value="Area$MAP:brain=Brain|VNC=Ventral Nerve Cord"/>
                 <property name="base_path" value="$STATIC:/archive/rubin/data1/rubinlab/aRnim/IMAGE-DATA/Split-Gal4/org-import/"/>
             </rowListener>
@@ -38,25 +47,11 @@
 
         <dataFields>
 
-            <!-- DNA Binding Domain -->
-            <webServiceList displayName="DBD Line"
-                            valueCreationPath="*/line"
-                            relativeActualValuePath="name"
-                            relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=rubin&amp;lab=simpson&amp;lab=truman&amp;lab=baker&amp;lab=leet"
-                            autoComplete="true">
-            </webServiceList>
-
-            <separator value="-x-"/>
-
-            <!-- Activation Domain -->
-            <webServiceList displayName="AD Line"
-                            valueCreationPath="*/line"
-                            relativeActualValuePath="name"
-                            relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=rubin&amp;lab=simpson&amp;lab=truman&amp;lab=baker&amp;lab=leet"
-                            autoComplete="true">
-            </webServiceList>
+            <text displayName="Line" required="true"
+                  displayWidth="200"
+                  editable="false"
+                  pattern=".+-x-.+">
+            </text>
 
             <separator value="@"/>
 
@@ -94,6 +89,9 @@
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
 
             <fileExtension/>
+
+            <pluginData displayName="ParentA" markedForTask="false"/>
+            <pluginData displayName="ParentB" markedForTask="false"/>
 
         </dataFields>
 
