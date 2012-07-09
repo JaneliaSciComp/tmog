@@ -7,10 +7,10 @@
 
     <project name="Fly Light: Pilot Split Images" default="true">
 
-        <inputFileFilter patternString=".+\.(jpeg|jpg|lsm|tiff)" />
+        <inputFileFilter patternString="[^\.].*\.(jpeg|jpg|lsm|tiff)" />
 
         <outputDirectory fileModeReadOnly="true">
-            <path path="[\\arch.janelia.priv|/archive]/rubin/data1/rubinlab/aRnim/IMAGE-DATA/Split-Gal4/org-import/" />
+            <path path="[\\arch.janelia.priv|/archive]/rubin/data1/rubinlab/aRnim/IMAGE-DATA/Split-Gal4/splitPilot120515/" />
             <renameFieldValue fieldDisplayName="Dissection Date" prefix="D"/>
         </outputDirectory>
 
@@ -41,7 +41,7 @@
                 <property name="dissection_date" value="${Dissection Date}"/>
                 <property name="cross_label" value="${Cross Label}"/>
                 <property name="area" value="Area$MAP:brain=Brain|VNC=Ventral Nerve Cord"/>
-                <property name="base_path" value="$STATIC:/archive/rubin/data1/rubinlab/aRnim/IMAGE-DATA/Split-Gal4/org-import/"/>
+                <property name="base_path" value="$STATIC:/archive/rubin/data1/rubinlab/aRnim/IMAGE-DATA/Split-Gal4/splitPilot120515/"/>
             </rowListener>
         </plugins>
 
@@ -79,11 +79,10 @@
 
             <separator value="@"/>
 
-            <text displayName="Image Name" required="false"
-                  copyable="false">
-                <sourceFileDefault pattern="(.+?)\.(jpeg|jpg|lsm|tiff)"
-                                   patternGroupNumber="1"/>
-            </text>
+            <fileName displayName="Image Name"
+                      visible="false"
+                      patternString="(.+?)\.(jpeg|jpg|lsm|tiff)"
+                      patternGroupNumber="1"/>
 
             <separator value="@"/>
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
