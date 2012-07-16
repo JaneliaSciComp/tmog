@@ -41,7 +41,7 @@
                 <property name="IHC Protocol Number" value="IHC Protocol Number" />
                 <property name="Tissue Mounting Protocol" value="Tissue Mounting Protocol" />
                 <property name="Tissue Orientation" value="Tissue Orientation" />
-                <property name="Reference Channel" value="Reference Channel" />
+                <property name="Channel Specification" value="Channel Specification" />
             </rowUpdater>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
@@ -71,7 +71,7 @@
                 <property name="tissue_orientation" value="Tissue Orientation"/>
                 <property name="dissector" value="Dissector"/>
                 <property name="created_by" value="Imager"/>
-                <property name="reference_channel" value="Reference Channel"/>
+                <property name="channel_spec" value="Channel Specification"/>
                 <property name="base_path" value="Image Family$MAP:leet_central_brain_lineage=/groups/leet/leetimg/leetlab/lineage/leet_central_brain_lineage/confocalStacks/|leet_pan_lineage=/groups/leet/leetimg/leetlab/lineage/leet_pan_lineage/confocalStacks/"/>
             </rowListener>
 
@@ -245,11 +245,11 @@
                 <validValue value="Yu-Chun Wang"/>
             </validValueList>
 
-            <number displayName="Reference Channel" required="false"
+            <text displayName="Channel Specification" required="false"
                     markedForTask="false"
-                    minimumValue="0" maximumValue="9">
-                <staticDefault value="3"/>
-            </number>
+                    pattern="s*rs*">
+                <staticDefault value="ssr"/>
+            </text>
 
         </dataFields>
 
