@@ -3,10 +3,11 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.7.5" frameSizePercentage="95"/>
+    <global minimumVersion="2.8.5" frameSizePercentage="95"/>
 
     <project name="Rubin Lab 2: Split Collaboration Images (RL02_*)"
-             taskName="rename-without-delete">
+             taskName="rename-without-delete"
+             default="true">
 
         <outputDirectory>
             <path path="[\\dm10.janelia.priv\rubinimg|/groups/rubin/rubinimg]\rubin_lab_2\confocalStacks\" />
@@ -393,12 +394,14 @@
                 </sourceFileMappedDefault>
             </text>
 
-            <fileName displayName="File ID"
-                      patternString=".*(_r.._....._..._\d{17})\.lsm$"
-                      patternGroupNumber="1"
-                      visible="true" />
+            <text displayName="File ID" required="true"
+                  displayWidth="300"
+                  editable="false"
+                  pattern="_r.._.{3,5}_..._\d{17}">
+                <sourceFileDefault pattern=".*(_r.._.{3,5}_..._\d{17})\.lsm$" />
+            </text>
 
-            <separator value=".lsm"/>
+            <fileExtension/>
 
             <!--
              These values are collected for the SAGE database but are not
