@@ -9,7 +9,7 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="[\\dm10.janelia.priv\rubindata|/groups/rubin/data1/rubinlab]\Ming\confocalStacks"
+        <outputDirectory basePath="[\\arch.janelia.priv|/archive]/rubin/data1/rubinlab/Ming/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
