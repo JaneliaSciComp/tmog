@@ -86,6 +86,8 @@
                             required="true">
                 <validValue displayName="r1a: JFRC12-10XUAS-myr-GFP in attP2" value="r1a"/>
                 <validValue displayName="r1b: pJFRC-IVS- myr-smGFP-HA-DARK in attP18, pJFRC-IVS-myr-smGFP-V5-DARK in su(Hw)attP8" value="r1b" default="true"/>
+                <validValue displayName="r1c: pJFRC2-10XUAS-IVS-mCD8::GFP in VK00005" value="r1c"/>
+                <validValue displayName="r1d: pJFRC101-20XUAS-IVS-Syn21-Shibire-ts1-GFP-p10 in VK00005" value="r1d"/>           
             </validValueList>
 
             <separator value="_"/>
