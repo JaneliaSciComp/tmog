@@ -3,9 +3,9 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.5.1" frameSizePercentage="95"/>
+    <global minimumVersion="2.8.5" frameSizePercentage="95"/>
 
-    <project name="Rubin Lab: Ming's Images (MW_*)" default="true">
+    <project name="Rubin Lab: Ming's Images (MW_*)">
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
@@ -158,6 +158,142 @@
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
                         displayNamePrefixedForValues="false">
                 <staticDefault value="face_up"/>                
+            </cvTermList>
+        </dataFields>
+
+    </project>
+
+    <project name="Rubin Lab: Ming's Images 2 (MW2_*)">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <outputDirectory basePath="[\\arch.janelia.priv|/archive]/rubin/data1/rubinlab/Ming/confocalStacks2"
+                         derivedFromEarliestModifiedFile="true"/>
+
+        <plugins>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="family" value="$STATIC:rubin_wu_2"/>
+                <property name="lab" value="$STATIC:rubin"/>
+                <property name="line" value="${LexAp65}"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <separator value="MW2-"/>
+
+            <validValueList displayName="GAL4" required="true">
+                <validValue displayName="G1a: tub-GAL4 on 3rd" value="G1a" default="true"/>
+                <validValue displayName="G2a: repo-GAL4 on 3rd" value="G2a" />
+                <validValue displayName="G3a: elav[c155]-GAL4 on 1st" value="G3a" />
+                <validValue displayName="G4a: GMR_57C10_AD_01" value="G4a" />
+            </validValueList>
+
+            <separator value="-"/>
+
+            <!-- see http://docs.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html for pattern options -->
+            <text displayName="UAS" required="true" pattern="\w{2}\d{4,5}" />
+
+            <separator value="-"/>
+
+            <webServiceList displayName="LexAp65" required="true"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=rubin"
+                            autoComplete="true">
+                <staticDefault value="GMR_22H02_LJ_21"/>
+            </webServiceList>
+
+            <separator value="-"/>
+
+            <validValueList displayName="LexAop2 Reporter" required="true">
+                <validValue displayName="r1: pJFRC19-13XLexAop2-IVS-myr::GFP at su(Hw)attP8" value="r1" default="true"/>
+            </validValueList>
+
+            <separator value="-"/>
+
+            <validValueList displayName="Temperature" required="true">
+                <validValue displayName="T1: tub-GAL80ts on 3rd, 29C(5d)-29C(4d)" value="T1" default="true"/>
+                <validValue displayName="T2: tub-GAL80ts on 3rd, 18C(10d)-29C(4d)" value="T2"/>
+                <validValue displayName="T3: tub-GAL80ts on 3rd, 29C(5d)-18C(8d)" value="T3"/>
+                <validValue displayName="T4: tub-GAL80ts on 3rd, 18C(10d)-18C(8d)" value="T4"/>
+            </validValueList>
+
+            <separator value="-"/>
+
+            <validValueList displayName="Gender" required="true">
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f" default="true"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+            <validValueList displayName="Age" required="true">
+                <validValue displayName="X00: undefined" value="X00"/>
+                <validValue displayName="P01: Prepupa" value="P01"/>
+                <validValue displayName="P02: Pupa" value="P02"/>
+                <validValue displayName="E01: Embryonic Stage 1" value="E01"/>
+                <validValue displayName="E02: Embryonic Stage 2" value="E02"/>
+                <validValue displayName="E03: Embryonic Stage 3" value="E03"/>
+                <validValue displayName="E04: Embryonic Stage 4" value="E04"/>
+                <validValue displayName="E05: Embryonic Stage 5" value="E05"/>
+                <validValue displayName="E06: Embryonic Stage 6" value="E06"/>
+                <validValue displayName="E07: Embryonic Stage 7" value="E07"/>
+                <validValue displayName="E08: Embryonic Stage 8" value="E08"/>
+                <validValue displayName="E09: Embryonic Stage 9" value="E09"/>
+                <validValue displayName="E10: Embryonic Stage 10" value="E10"/>
+                <validValue displayName="E11: Embryonic Stage 11" value="E11"/>
+                <validValue displayName="E12: Embryonic Stage 12" value="E12"/>
+                <validValue displayName="E13: Embryonic Stage 13" value="E13"/>
+                <validValue displayName="E14: Embryonic Stage 14" value="E14"/>
+                <validValue displayName="E15: Embryonic Stage 15" value="E15"/>
+                <validValue displayName="E16: Embryonic Stage 16" value="E16"/>
+                <validValue displayName="E17: Embryonic Stage 17" value="E17"/>
+                <validValue displayName="L01: First Instar" value="L01"/>
+                <validValue displayName="L02: Second Instar" value="L02"/>
+                <validValue displayName="L03: Third Instar" value="L03"/>
+                <validValue displayName="A01: Day 1-5" value="A01"/>
+                <validValue displayName="A02: Day 6-10" value="A02" default="true"/>
+                <validValue displayName="A03: Day 11-15" value="A03"/>
+                <validValue displayName="A04: Day 16-20" value="A04"/>
+                <validValue displayName="A05: Day 21-25" value="A05"/>
+                <validValue displayName="A06: Day 26-30" value="A06"/>
+            </validValueList>
+            <validValueList displayName="Area" required="true">
+                <validValue displayName="b: Brain" value="b" default="true"/>
+                <validValue displayName="s: Salivary Gland" value="s"/>
+                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
+            </validValueList>
+
+            <separator value="-"/>
+
+            <number displayName="Sample Number" required="true"
+                    minimumValue="1" maximumValue="99"  padFormat="20">
+            </number>
+
+            <separator value="-"/>
+
+            <runTime datePattern="yyyyMMddHHmmssSSS"/>
+            <separator value=".lsm"/>
+
+            <!--
+             These values are collected for the SAGE database but are not
+             included as components of the file name (markedForTask="false").
+             -->
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            markedForTask="false">
+                <validValue value="Glycerol-Based Mounting" default="true"/>
+                <validValue value="DPX Mounting"/>
+            </validValueList>
+            <cvTermList displayName="Tissue Orientation" required="true"
+                        markedForTask="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
+                        displayNamePrefixedForValues="false">
+                <staticDefault value="face_up"/>
             </cvTermList>
         </dataFields>
 
