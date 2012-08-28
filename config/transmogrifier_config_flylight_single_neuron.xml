@@ -59,7 +59,6 @@
                 <property name="full_age" value="Full Age"/>
                 <property name="days_after_eclosion" value="Days After Eclosion"/>
                 <property name="area" value="$STATIC:Brain"/>
-                <property name="lamina_percentage" value="Lamina"/>
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="annotated_by" value="Annotator"/>
             </rowListener>
@@ -149,13 +148,6 @@
                     markedForTask="false"
                     minimumValue="0" maximumValue="21" />
 
-            <validValueList displayName="Lamina" required="true"
-                            autoComplete="true"
-                            markedForTask="false">
-                <validValue displayName="Yes" value="100"/>
-                <validValue displayName="No" value="" default="true"/>
-            </validValueList>
-
             <decimal displayName="Heat Shock Minutes" required="false"
                      minimumValue="0" markedForTask="false" />
 
@@ -197,7 +189,6 @@
                 <groupProperty relativePath="tmogArea"/>
                 <groupProperty relativePath="tmogCreatedBy"/>
 
-                <targetProperty relativePath="tmogLamina"/>
                 <targetProperty relativePath="tmogTile"/>
 
             </xmlPropertyFile>
@@ -246,7 +237,6 @@
                 <property name="area" value="Area"/>
                 <property name="age" value="Age"/>
                 <property name="full_age" value="Full Age"/>
-                <property name="lamina_percentage" value="Lamina"/>
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="annotated_by" value="Annotator"/>
             </rowListener>
@@ -352,18 +342,6 @@
                 <targetPropertyDefault propertyName="tmogFullAge"/>
             </text>
 
-            <validValueList displayName="Lamina" required="true"
-                            autoComplete="true"
-                            markedForTask="false">
-                <targetPropertyDefault propertyName="tmogLamina">
-                    <mappedValue from="true" to="100" />
-                    <mappedValue from="True" to="100" />
-                    <mappedValue from="TRUE" to="100" />
-                </targetPropertyDefault>
-                <validValue displayName="Yes" value="100"/>
-                <validValue displayName="No" value="" default="true"/>
-            </validValueList>
-
             <decimal displayName="Heat Shock Minutes" required="false"
                      minimumValue="0"
                      markedForTask="false" />
@@ -445,7 +423,6 @@
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
                 <property name="area" value="$STATIC:Brain"/>
-                <property name="lamina_percentage" value="Lamina"/>
             </rowListener>
 
         </plugins>
@@ -523,11 +500,6 @@
                         displayNamePrefixedForValues="true"
                         markedForTask="false">
             </cvTermList>
-            <validValueList displayName="Lamina" required="true"
-                            markedForTask="false">
-                <validValue displayName="Yes" value="100"/>
-                <validValue displayName="No" value="" default="true"/>
-            </validValueList>
         </dataFields>
 
     </project>
@@ -583,7 +555,6 @@
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
                 <property name="area" value="$STATIC:Brain"/>
-                <property name="lamina_percentage" value="Lamina"/>
             </rowListener>
 
         </plugins>
@@ -661,11 +632,6 @@
                         displayNamePrefixedForValues="true"
                         markedForTask="false">
             </cvTermList>
-            <validValueList displayName="Lamina" required="true"
-                            markedForTask="false">
-                <validValue displayName="Yes" value="100"/>
-                <validValue displayName="No" value="" default="true"/>
-            </validValueList>
         </dataFields>
 
     </project>
