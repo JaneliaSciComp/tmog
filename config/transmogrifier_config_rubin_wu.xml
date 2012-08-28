@@ -163,7 +163,7 @@
 
     </project>
 
-    <project name="Rubin Lab: Ming's Images 2 (MW2_*)">
+    <project name="Rubin Lab: Ming's Images 2 (MW2_*)" default="true">
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
