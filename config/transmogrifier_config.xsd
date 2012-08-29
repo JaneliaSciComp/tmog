@@ -195,6 +195,7 @@
                         minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="pluginDefault" type="pluginDefaultType"
                         minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="targetPropertyDefault" type="targetPropertyDefaultType"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="displayWidth" type="xs:positiveInteger"/>
@@ -362,6 +363,8 @@
             <xs:element name="mappedValue" type="mappedValueType"/>
         </xs:sequence>
         <xs:attribute name="propertyName" type="xs:string" use="required"/>
+        <xs:attribute name="fromDatePattern" type="xs:string"/>
+        <xs:attribute name="toDatePattern" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="staticDefaultType">
