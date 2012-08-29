@@ -191,11 +191,12 @@
 
     <xs:complexType name="dateType">
         <xs:sequence>
-            <xs:element name="sourceFileDateDefault" type="sourceFileDateDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="pluginDefault" type="pluginDefaultType"
-                        minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="targetPropertyDefault" type="targetPropertyDefaultType"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="sourceFileDateDefault" type="sourceFileDateDefaultType"/>
+                <xs:element name="pluginDefault" type="pluginDefaultType"/>
+                <xs:element name="staticDefault" type="staticDefaultType" />
+                <xs:element name="targetPropertyDefault" type="targetPropertyDefaultType"/>
+            </xs:choice>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="displayWidth" type="xs:positiveInteger"/>
