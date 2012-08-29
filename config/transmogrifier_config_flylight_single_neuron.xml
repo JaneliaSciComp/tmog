@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.8.2" frameSizePercentage="95"/>
+    <global minimumVersion="2.8.7" frameSizePercentage="95"/>
 
     <project name="Fly Light Flip - manual entry (FLFL*)" default="true">
 
@@ -188,6 +188,7 @@
                 <groupProperty relativePath="tmogFullAge"/>
                 <groupProperty relativePath="tmogArea"/>
                 <groupProperty relativePath="tmogCreatedBy"/>
+                <groupProperty relativePath="tmogSlideCode"/>
 
                 <targetProperty relativePath="tmogTile"/>
 
@@ -231,7 +232,7 @@
                 <property name="created_by" value="Imager"/>
                 <property name="gal4_vial" value="GAL4 Vial"/>
                 <property name="effector" value="Effector"/>
-                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Row}${Slide Column}"/>
+                <property name="slide_code" value="${Slide Code}"/>
                 <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
                 <property name="area" value="Area"/>
@@ -276,21 +277,10 @@
                 <targetPropertyDefault propertyName="tmogEffector"/>
             </cvTermList>
 
-            <date displayName="Mount Date" required="true"
-                  datePattern="yyyyMMdd" markedForTask="false">
-            </date>
-
-            <number displayName="Slide Number" required="true"
-                    markedForTask="false"
-                    minimumValue="1" maximumValue="99" />
-
-            <text displayName="Slide Row" pattern="[A-Z]" required="true"
-                  markedForTask="false" convertToUpperCase="true">
-            </text>
-
-            <number displayName="Slide Column" required="true"
-                    markedForTask="false"
-                    minimumValue="1" maximumValue="99" />
+            <text displayName="Slide Code" pattern="201\d{5}_\d\d_\d\d_\d{1,4}_\d{1,4}" required="true"
+                  markedForTask="false">
+                <targetPropertyDefault propertyName="tmogSlideCode"/>
+             </text>
 
             <validValueList displayName="Tile" required="true"
                             autoComplete="true"
@@ -350,8 +340,11 @@
                             autoComplete="true"
                             markedForTask="false">
                 <targetPropertyDefault propertyName="tmogCreatedBy">
+                    <mappedValue from="zugatesc" to="Chris Zugates" />
                     <mappedValue from="jeterj" to="Jennifer Jeter" />
+                    <mappedValue from="hausenfluckj" to="Joanna Hausenfluck" />
                     <mappedValue from="iyern" to="Nirmala Iyer" />
+                    <mappedValue from="hulammp" to="Phuson Hulamm" />
                 </targetPropertyDefault>
                 <validValue value="Chris Zugates"/>
                 <validValue value="Jennifer Jeter"/>
