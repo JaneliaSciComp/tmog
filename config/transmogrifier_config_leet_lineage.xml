@@ -64,7 +64,7 @@
                 <property name="gender" value="Gender"/>
                 <property name="cross_date" value="Cross Date"/>
                 <property name="slide_code" value="${Slide ID}_${Slide Row}${Slide Column}"/>
-                <property name="tile" value="Tile"/>
+                <property name="alignment_algorithm" value="Alignment"/>
                 <property name="ihc_protocol" value="TZL-IHC-${IHC Protocol Number}"/>
                 <property name="mount_date" value="Mount Date"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
@@ -108,15 +108,6 @@
                     minimumValue="1" maximumValue="99">
                 <targetPropertyDefault propertyName="column"/>
             </number>
-
-            <validValueList displayName="Tile" required="false"
-                            autoComplete="true"
-                            markedForTask="false">
-                <targetPropertyDefault propertyName="tile"/>
-                <validValue value="Left Brain"/>
-                <validValue value="Central Brain"/>
-                <validValue value="Right Brain"/>
-            </validValueList>
 
             <validValueList displayName="Image Family" required="true"
                             autoComplete="true"
@@ -250,6 +241,12 @@
                     pattern="s*rs*">
                 <staticDefault value="ssr"/>
             </text>
+
+            <cvTermList displayName="Alignment" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/alignment_algorithm"
+                        autoComplete="true"
+                        markedForTask="false">
+            </cvTermList>
 
         </dataFields>
 
