@@ -277,7 +277,7 @@
                 <targetPropertyDefault propertyName="tmogEffector"/>
             </cvTermList>
 
-            <text displayName="Slide Code" pattern="201\d{5}_\d\d_\d\d_\d{1,4}_\d{1,4}" required="true"
+            <text displayName="Slide Code" pattern="201\d{5}_\d\d(_\d\d)??_\d{1,4}_\d{1,4}" required="true"
                   markedForTask="false">
                 <targetPropertyDefault propertyName="tmogSlideCode"/>
              </text>
