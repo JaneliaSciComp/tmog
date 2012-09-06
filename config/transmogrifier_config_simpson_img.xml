@@ -116,7 +116,7 @@
 
     <project name="Simpson Lab: Fix GAL4 Line Names" taskName="simple-move">
 
-        <inputFileFilter patternString="JHS_.*-GAL4.*lsm"
+        <inputFileFilter patternString=".*-GAL4.*lsm"
                          recursiveSearch="true"/>
         
         <outputDirectory>
