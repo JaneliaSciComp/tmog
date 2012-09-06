@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.4.6"/>
+    <global minimumVersion="2.8.7"/>
 
     <project name="Fly Light: Research and Development (RDFL_*)" default="true">
 
@@ -49,9 +49,13 @@
             <validValueList displayName="Created By" required="true">
                 <validValue displayName="Aljoscha Nern" value="nerna"/>
                 <validValue displayName="Chris Zugates" value="zugatesc"/>
+                <validValue displayName="Gina DePasquale" value="depasqualeg"/>
                 <validValue displayName="Jennifer Jeter" value="jeterj"/>
+                <validValue displayName="Nirmala Iyer" value="iyern"/>
+                <validValue displayName="Phuson Hulamm" value="hulammp"/>
+                <validValue displayName="Rebecca Johnston" value="johnstonr10"/>
+                <validValue displayName="Susana Tae" value="taes"/>
                 <validValue displayName="Teri Ngo" value="ngot"/>
-                <validValue displayName="Tyler Ofstad" value="ofstadt"/>
             </validValueList>
             <date displayName="Capture Date" required="true"
                   datePattern="yyMMdd" prefix="_" copyable="false">

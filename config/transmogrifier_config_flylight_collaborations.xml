@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.8.2" frameSizePercentage="95"/>
+    <global minimumVersion="2.8.7" frameSizePercentage="95"/>
 
     <project name="FlyLight Collaborations" default="true">
 
@@ -135,36 +135,18 @@
                 <validValue value="LexAop_IVS-myr_3_0008"/>
             </validValueList>
 
-            <validValueList displayName="Imager" required="true"
-                            markedForTask="false">
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Alma Arnold"/>
-                <validValue value="Amanda Cavallaro"/>
-                <validValue value="Arnim Jenett"/>
-                <validValue value="Chris Zugates"/>
-                <validValue value="Christine Murphy"/>
-                <validValue value="Donald Hall"/>
-                <validValue value="Jennifer Jeter"/>
-                <validValue value="Nirmala Iyer"/>
-                <validValue value="Phuson Hulamm"/>
-                <validValue value="Teri Ngo"/>
-            </validValueList>
+            <cvTermList displayName="Imager" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+            </cvTermList>
 
-            <validValueList displayName="Renamer" required="true"
-                            markedForTask="false"
-                            sharedForAllSessionFiles="true">
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Alma Arnold"/>
-                <validValue value="Amanda Cavallaro"/>
-                <validValue value="Arnim Jenett"/>
-                <validValue value="Chris Zugates"/>
-                <validValue value="Christine Murphy"/>
-                <validValue value="Donald Hall"/>
-                <validValue value="Jennifer Jeter"/>
-                <validValue value="Nirmala Iyer"/>
-                <validValue value="Phuson Hulamm"/>
-                <validValue value="Teri Ngo"/>
-            </validValueList>
+            <cvTermList displayName="Renamer" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager"
+                        sharedForAllSessionFiles="true">
+            </cvTermList>
 
             <validValueList displayName="Class" required="false"
                             markedForTask="false">

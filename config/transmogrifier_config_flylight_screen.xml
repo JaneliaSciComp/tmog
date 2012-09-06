@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.6.1" frameSizePercentage="95"/>
+    <global minimumVersion="2.8.7" frameSizePercentage="95"/>
 
     <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="true">
 
@@ -170,35 +170,20 @@
                 <validValue value="UAS_mCD8_2_0006"/>
                 <validValue value="LexAop_IVS-myr_3_0008"/>
             </validValueList>
-            <validValueList displayName="Imager" required="true"
-                            markedForTask="false">
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Alma Arnold"/>
-                <validValue value="Amanda Cavallaro"/>
-                <validValue value="Arnim Jenett"/>
-                <validValue value="Chris Zugates"/>
-                <validValue value="Christine Murphy"/>
-                <validValue value="Donald Hall"/>
-                <validValue value="Jennifer Jeter"/>
-                <validValue value="Nirmala Iyer"/>
-                <validValue value="Phuson Hulamm"/>
-                <validValue value="Teri Ngo"/>
-            </validValueList>
-            <validValueList displayName="Renamer" required="true"
-                            markedForTask="false"
-                            sharedForAllSessionFiles="true">
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Alma Arnold"/>
-                <validValue value="Amanda Cavallaro"/>
-                <validValue value="Arnim Jenett"/>
-                <validValue value="Chris Zugates"/>
-                <validValue value="Christine Murphy"/>
-                <validValue value="Donald Hall"/>
-                <validValue value="Jennifer Jeter"/>
-                <validValue value="Nirmala Iyer"/>
-                <validValue value="Phuson Hulamm"/>
-                <validValue value="Teri Ngo"/>
-            </validValueList>
+
+            <cvTermList displayName="Imager" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+            </cvTermList>
+
+            <cvTermList displayName="Renamer" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager"
+                        sharedForAllSessionFiles="true">
+            </cvTermList>
+
             <validValueList displayName="Class" required="false"
                             markedForTask="false">
                 <validValue displayName="Screening" value="Screening" default="true"/>
@@ -349,35 +334,20 @@
                 <validValue value="UAS_mCD8_2_0006"/>
                 <validValue value="LexAop_IVS-myr_3_0008"/>
             </validValueList>
-            <validValueList displayName="Imager" required="true"
-                            markedForTask="false">
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Alma Arnold"/>
-                <validValue value="Amanda Cavallaro"/>
-                <validValue value="Arnim Jenett"/>
-                <validValue value="Chris Zugates"/>
-                <validValue value="Christine Murphy"/>
-                <validValue value="Donald Hall"/>
-                <validValue value="Jennifer Jeter"/>
-                <validValue value="Nirmala Iyer"/>
-                <validValue value="Phuson Hulamm"/>
-                <validValue value="Teri Ngo"/>
-            </validValueList>
-            <validValueList displayName="Renamer" required="true"
-                            markedForTask="false"
-                            sharedForAllSessionFiles="true">
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Alma Arnold"/>
-                <validValue value="Amanda Cavallaro"/>
-                <validValue value="Arnim Jenett"/>
-                <validValue value="Chris Zugates"/>
-                <validValue value="Christine Murphy"/>
-                <validValue value="Donald Hall"/>
-                <validValue value="Jennifer Jeter"/>
-                <validValue value="Nirmala Iyer"/>
-                <validValue value="Phuson Hulamm"/>
-                <validValue value="Teri Ngo"/>
-            </validValueList>
+
+            <cvTermList displayName="Imager" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+            </cvTermList>
+
+            <cvTermList displayName="Renamer" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager"
+                        sharedForAllSessionFiles="true">
+            </cvTermList>
+
             <validValueList displayName="Class" required="false"
                             markedForTask="false">
                 <validValue displayName="Screening" value="Screening" default="true"/>
@@ -656,35 +626,20 @@
                 <validValue value="UAS_mCD8_2_0006"/>
                 <validValue value="LexAop_IVS-myr_3_0008"/>
             </validValueList>
-            <validValueList displayName="Imager" required="true"
-                            markedForTask="false">
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Alma Arnold"/>
-                <validValue value="Amanda Cavallaro"/>
-                <validValue value="Arnim Jenett"/>
-                <validValue value="Chris Zugates"/>
-                <validValue value="Christine Murphy"/>
-                <validValue value="Donald Hall"/>
-                <validValue value="Jennifer Jeter"/>
-                <validValue value="Nirmala Iyer"/>
-                <validValue value="Phuson Hulamm"/>
-                <validValue value="Teri Ngo"/>
-            </validValueList>
-            <validValueList displayName="Renamer" required="true"
-                            markedForTask="false"
-                            sharedForAllSessionFiles="true">
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Alma Arnold"/>
-                <validValue value="Amanda Cavallaro"/>
-                <validValue value="Arnim Jenett"/>
-                <validValue value="Chris Zugates"/>
-                <validValue value="Christine Murphy"/>
-                <validValue value="Donald Hall"/>
-                <validValue value="Jennifer Jeter"/>
-                <validValue value="Nirmala Iyer"/>
-                <validValue value="Phuson Hulamm"/>
-                <validValue value="Teri Ngo"/>
-            </validValueList>
+
+            <cvTermList displayName="Imager" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+            </cvTermList>
+
+            <cvTermList displayName="Renamer" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager"
+                        sharedForAllSessionFiles="true">
+            </cvTermList>
+
         </dataFields>
 
     </project>
@@ -854,42 +809,32 @@
                 <validValue value="UAS_mCD8_2_0006"/>
                 <validValue value="LexAop_IVS-myr_3_0008"/>
             </validValueList>
-            <validValueList displayName="Imager" required="true"
-                            markedForTask="false">
+
+
+            <cvTermList displayName="Imager" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
                     <property name="family" value="rubin-chacrm"/>
                     <property name="image_property" value="created_by"/>
                 </pluginDefault>
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Alma Arnold"/>
-                <validValue value="Amanda Cavallaro"/>
-                <validValue value="Arnim Jenett"/>
-                <validValue value="Chris Zugates"/>
-                <validValue value="Christine Murphy"/>
-                <validValue value="Donald Hall"/>
-                <validValue value="Jennifer Jeter"/>
-                <validValue value="Nirmala Iyer"/>
-                <validValue value="Phuson Hulamm"/>
-                <validValue value="Teri Ngo"/>
-            </validValueList>
-            <validValueList displayName="Renamer" required="true"
-                            markedForTask="false">
+
+            </cvTermList>
+
+            <cvTermList displayName="Renamer" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
                     <property name="family" value="rubin-chacrm"/>
                     <property name="image_property" value="renamed_by"/>
                 </pluginDefault>
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Alma Arnold"/>
-                <validValue value="Amanda Cavallaro"/>
-                <validValue value="Arnim Jenett"/>
-                <validValue value="Chris Zugates"/>
-                <validValue value="Christine Murphy"/>
-                <validValue value="Donald Hall"/>
-                <validValue value="Jennifer Jeter"/>
-                <validValue value="Nirmala Iyer"/>
-                <validValue value="Phuson Hulamm"/>
-                <validValue value="Teri Ngo"/>
-            </validValueList>
+
+            </cvTermList>
+
             <validValueList displayName="Class" required="false"
                             markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">

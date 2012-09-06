@@ -151,15 +151,11 @@
             <decimal displayName="Heat Shock Minutes" required="false"
                      minimumValue="0" markedForTask="false" />
 
-            <validValueList displayName="Imager" required="true"
-                            autoComplete="true"
-                            markedForTask="false">
-                <validValue value="Chris Zugates"/>
-                <validValue value="Jennifer Jeter"/>
-                <validValue value="Joanna Hausenfluck"/>
-                <validValue value="Nirmala Iyer"/>
-                <validValue value="Phuson Hulamm"/>
-            </validValueList>
+            <cvTermList displayName="Imager" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+            </cvTermList>
 
             <validValueList displayName="Annotator" required="false"
                             autoComplete="true"
@@ -336,22 +332,27 @@
                      minimumValue="0"
                      markedForTask="false" />
 
-            <validValueList displayName="Imager" required="true"
-                            autoComplete="true"
-                            markedForTask="false">
+            <cvTermList displayName="Imager" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
                 <targetPropertyDefault propertyName="tmogCreatedBy">
+                    <mappedValue from="nerna" to="Aljoscha Nern" />
+                    <mappedValue from="cavallaroa" to="Amanda Cavallaro" />
+                    <mappedValue from="jenetta" to="Arnim Jenett" />
                     <mappedValue from="zugatesc" to="Chris Zugates" />
+                    <mappedValue from="murphyc" to="Christine Murphy" />
+                    <mappedValue from="halld" to="Donald Hall" />
+                    <mappedValue from="depasqualeg" to="Gina DePasquale" />
                     <mappedValue from="jeterj" to="Jennifer Jeter" />
                     <mappedValue from="hausenfluckj" to="Joanna Hausenfluck" />
                     <mappedValue from="iyern" to="Nirmala Iyer" />
                     <mappedValue from="hulammp" to="Phuson Hulamm" />
+                    <mappedValue from="johnstonr10" to="Rebecca Johnston" />
+                    <mappedValue from="taes" to="Susana Tae" />
+                    <mappedValue from="ngot" to="Teri Ngo" />
                 </targetPropertyDefault>
-                <validValue value="Chris Zugates"/>
-                <validValue value="Jennifer Jeter"/>
-                <validValue value="Joanna Hausenfluck"/>
-                <validValue value="Nirmala Iyer"/>
-                <validValue value="Phuson Hulamm"/>
-            </validValueList>
+            </cvTermList>
 
             <validValueList displayName="Annotator" required="false"
                             autoComplete="true"
