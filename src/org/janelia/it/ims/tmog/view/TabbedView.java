@@ -364,8 +364,9 @@ public class TabbedView implements ActionListener {
             defaultDirectory = currentView.getDefaultDirectory();
         }
         sessionCount++;
-        String newTitle = "Session " + sessionCount;
-        SessionView newView = buildViewForProject(projectConfig,
+        final String newTitle = "Session " + sessionCount;
+        SessionView newView = buildViewForProject(newTitle,
+                                                  projectConfig,
                                                   defaultDirectory);
         sessionList.put(newTitle, newView);
         tabbedPane.addTab(newTitle,
@@ -412,18 +413,21 @@ public class TabbedView implements ActionListener {
         }
     }
 
-    private SessionView buildViewForProject(ProjectConfiguration projectConfig,
+    private SessionView buildViewForProject(String sessionName,
+                                            ProjectConfiguration projectConfig,
                                             File defaultDirectory) {
         SessionView newView;
         if (CollectorView.TASK_NAME.equals(projectConfig.getTaskName())) {
-            newView = new CollectorView(projectConfig,
+            newView = new CollectorView(sessionName,
+                                        projectConfig,
                                         defaultDirectory,
                                         tabbedPane);
         } else {
             // default to rename task and view
-            newView = new RenameView(projectConfig,
-                            defaultDirectory,
-                            tabbedPane);
+            newView = new RenameView(sessionName,
+                                     projectConfig,
+                                     defaultDirectory,
+                                     tabbedPane);
         }
         return newView;
     }

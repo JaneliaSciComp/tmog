@@ -41,6 +41,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -77,14 +78,18 @@ public class RenameView implements SessionView, InputSelectionView {
     private JScrollPane projectNamePane;
     private JButton loadMappedDataButton;
     private DataTableModel tableModel;
+
+    private String sessionName;
     private ProjectConfiguration projectConfig;
     private RenameTask task;
     private TaskComponents taskComponents;
     private String projectNameText;
 
-    public RenameView(ProjectConfiguration projectConfig,
+    public RenameView(String sessionName,
+                      ProjectConfiguration projectConfig,
                       File lsmDirectory,
                       JTabbedPane parentTabbedPane) {
+        this.sessionName = sessionName;
         this.projectConfig = projectConfig;
         this.projectNameText = projectConfig.getName();
         this.projectName.setText(projectNameText);
@@ -468,67 +473,96 @@ public class RenameView implements SessionView, InputSelectionView {
             boolean isOutputDirectoryAlreadyValidated = odCfg.isDerivedForSession();
             File outputDirectory;
             String outputDirectoryPath;
-            List<DataRow> rows = tableModel.getRows();
+            final List<DataRow> rows =
+                    Collections.unmodifiableList(tableModel.getRows());
             int rowIndex = 0;
-            for (DataRow row : rows) {
-                Target rowTarget= row.getTarget();
-                File rowFile = (File) rowTarget.getInstance();
 
-                if (isOutputDirectoryAlreadyValidated) {
-                    outputDirectory = baseOutputDirectory;
-                } else {
-                    // setup and validate the directories for each file
-                    // TODO: add support for nested fields
-                    outputDirectoryPath = odCfg.getDerivedPath(rowFile,
-                                                               row.getFields());
-                    outputDirectory = new File(outputDirectoryPath);
-                    String outputFailureMsg =
-                            OutputDirectoryConfiguration.validateDirectory(
-                                    outputDirectory);
-                    if (outputFailureMsg != null) {
-                        isValid = false;
-                        dataTable.selectRow(rowIndex);
-                        dataTable.displayErrorDialog(outputFailureMsg);
-                    }
+            final List<RowValidator> validators =
+                    projectConfig.getRowValidators();
+
+            // call validators to set-up for session
+            try {
+                for (RowValidator validator : validators) {
+                    validator.startSessionValidation(sessionName, rows);
                 }
-
-                // only perform external validation if output directory validation succeeds
-                if (isValid) {
-                    String externalErrorMsg = null;
-                    try {
-                        for (RowValidator validator : projectConfig.getRowValidators()) {
-                            validator.validate(
-                                    new RenamePluginDataRow(rowFile,
-                                                            row,
-                                                            outputDirectory));
-                        }
-                    } catch (ExternalDataException e) {
-                        externalErrorMsg = e.getMessage();
-                        LOG.info("external validation failed", e);
-                    } catch (ExternalSystemException e) {
-                        externalErrorMsg = e.getMessage();
-                        LOG.error(e.getMessage(), e);
-                    }
-
-                    if (externalErrorMsg != null) {
-                        isValid = false;
-                        dataTable.selectRow(rowIndex);
-                        dataTable.displayErrorDialog(externalErrorMsg);
-                    }
-                }
-
-                if (! isValid) {
-                    break;
-                }
-
-                rowIndex++;
+            } catch (ExternalSystemException e) {
+                isValid = false;
+                dataTable.displayErrorDialog(e.getMessage());
             }
+
+            // only perform row validation
+            // if external start session call succeeded
+            if (isValid) {
+
+                for (DataRow row : rows) {
+                    Target rowTarget= row.getTarget();
+                    File rowFile = (File) rowTarget.getInstance();
+
+                    if (isOutputDirectoryAlreadyValidated) {
+                        outputDirectory = baseOutputDirectory;
+                    } else {
+                        // setup and validate the directories for each file
+                        // TODO: add support for nested fields
+                        outputDirectoryPath = odCfg.getDerivedPath(rowFile,
+                                                                   row.getFields());
+                        outputDirectory = new File(outputDirectoryPath);
+                        String outputFailureMsg =
+                                OutputDirectoryConfiguration.validateDirectory(
+                                        outputDirectory);
+                        if (outputFailureMsg != null) {
+                            isValid = false;
+                            dataTable.selectRow(rowIndex);
+                            dataTable.displayErrorDialog(outputFailureMsg);
+                        }
+                    }
+
+                    // only perform external validation
+                    // if output directory validation succeeds
+                    if (isValid) {
+                        String externalErrorMsg = null;
+                        try {
+                            for (RowValidator validator : validators) {
+                                validator.validate(
+                                        sessionName,
+                                        new RenamePluginDataRow(rowFile,
+                                                                row,
+                                                                outputDirectory));
+                            }
+                        } catch (ExternalDataException e) {
+                            externalErrorMsg = e.getMessage();
+                            LOG.info("external validation failed", e);
+                        } catch (ExternalSystemException e) {
+                            externalErrorMsg = e.getMessage();
+                            LOG.error(e.getMessage(), e);
+                        }
+
+                        if (externalErrorMsg != null) {
+                            isValid = false;
+                            dataTable.selectRow(rowIndex);
+                            dataTable.displayErrorDialog(externalErrorMsg);
+                        }
+                    }
+
+                    if (! isValid) {
+                        break;
+                    }
+
+                    rowIndex++;
+                }
+            }
+
+            // always call validators to clean-up session
+            for (RowValidator validator : validators) {
+                validator.stopSessionValidation(sessionName);
+            }
+
         } else {
 
             dataTable.selectErrorCell();
             dataTable.displayErrorDialog(tableModel.getErrorMessage());
 
         }
+
         return isValid;
     }
 

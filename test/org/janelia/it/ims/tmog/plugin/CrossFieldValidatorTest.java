@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -78,7 +78,7 @@ public class CrossFieldValidatorTest
         PluginDataRow row = getRow("L01", null);
 
         try {
-            validator.validate(row);
+            validator.validate(SESSION_NAME, row);
         } catch (Exception e) {
             fail("non-matching reference without field value failed, " +
                  "error message is " + e.getMessage());
@@ -87,7 +87,7 @@ public class CrossFieldValidatorTest
         row = getRow("L01", "F");
 
         try {
-            validator.validate(row);
+            validator.validate(SESSION_NAME, row);
         } catch (Exception e) {
             fail("non-matching reference with field value failed, " +
                  "error message is " + e.getMessage());
@@ -96,7 +96,7 @@ public class CrossFieldValidatorTest
         row = getRow("A01", null);
 
         try {
-            validator.validate(row);
+            validator.validate(SESSION_NAME, row);
             fail("matching reference without field value passed");
         } catch (Exception e) {
             // test passed!
@@ -105,7 +105,7 @@ public class CrossFieldValidatorTest
         row = getRow("A01", "F");
 
         try {
-            validator.validate(row);
+            validator.validate(SESSION_NAME, row);
         } catch (Exception e) {
             fail("matching reference with field value failed, " +
                  "error message is " + e.getMessage());
@@ -122,4 +122,6 @@ public class CrossFieldValidatorTest
                                              fieldValue));
         return new PluginDataRow(dataRow);
     }
+
+    private static final String SESSION_NAME = "test-session";
 }

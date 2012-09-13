@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -13,7 +13,7 @@ import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RelativePathUtil;
 import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
-import org.janelia.it.ims.tmog.plugin.RowValidator;
+import org.janelia.it.ims.tmog.plugin.SimpleRowValidator;
 import org.janelia.it.utils.StringUtil;
 
 import java.io.File;
@@ -25,7 +25,7 @@ import java.util.Map;
  *
  * @author Eric Trautman
  */
-public class ImagePathExistsValidator implements RowValidator {
+public class ImagePathExistsValidator extends SimpleRowValidator {
 
     private ImageDao dao;
     private boolean shouldExist;
@@ -92,7 +92,8 @@ public class ImagePathExistsValidator implements RowValidator {
      * Validates that the specified row's relative path can be found in
      * the image database.
      *
-     * @param  row  the user supplied information to be validated.
+     * @param  sessionName  unique name for session being validated.
+     * @param  row          the user supplied information to be validated.
      *
      * @throws ExternalDataException
      *   if the data is not valid.
@@ -100,7 +101,8 @@ public class ImagePathExistsValidator implements RowValidator {
      * @throws ExternalSystemException
      *   if any error occurs while validating the data.
      */
-    public void validate(PluginDataRow row)
+    public void validate(String sessionName,
+                         PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
         File file;

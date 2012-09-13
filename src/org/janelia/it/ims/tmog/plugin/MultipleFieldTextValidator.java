@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -20,7 +20,7 @@ import java.util.Map;
  * @author Eric Trautman
  */
 public class MultipleFieldTextValidator
-        implements RowValidator {
+        extends SimpleRowValidator {
 
     /** Parsed configuration tokens for deriving a row specific value. */
     private PropertyTokenList valueTokens;
@@ -77,7 +77,8 @@ public class MultipleFieldTextValidator
     /**
      * Validates derived value(s) for the current row.
      *
-     * @param  row  the user supplied meta-data to be validated.
+     * @param  sessionName  unique name for session being validated.
+     * @param  row          the user supplied information to be validated.
      *
      * @throws ExternalDataException
      *   if the data is not valid.
@@ -85,7 +86,8 @@ public class MultipleFieldTextValidator
      * @throws ExternalSystemException
      *   if any error occurs while validating the data.
      */
-    public void validate(PluginDataRow row)
+    public void validate(String sessionName,
+                         PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
         VerifiedTextModel validationModel = model.getNewInstance(true);

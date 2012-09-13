@@ -34,6 +34,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -68,6 +69,7 @@ public class CollectorView implements SessionView, InputSelectionView {
     private JButton cancelTargetWorkerButton;
     private JButton loadMappedDataButton;
 
+    private String sessionName;
     private ProjectConfiguration projectConfig;
     private File defaultDirectory;
     private InputSelectionHandler inputSelectionHandler;
@@ -77,9 +79,11 @@ public class CollectorView implements SessionView, InputSelectionView {
     private String projectNameText;
 
 
-    public CollectorView(ProjectConfiguration projectConfig,
+    public CollectorView(String sessionName,
+                         ProjectConfiguration projectConfig,
                          File defaultDirectory,
                          JTabbedPane parentTabbedPane) {
+        this.sessionName = sessionName;
         this.projectConfig = projectConfig;
         this.defaultDirectory = defaultDirectory;
         this.projectNameText = projectConfig.getName();
@@ -314,34 +318,58 @@ public class CollectorView implements SessionView, InputSelectionView {
         // only perform external validation if internal validation succeeds
         if (isValid) {
 
-            List<DataRow> rows = tableModel.getRows();
+            final List<DataRow> rows =
+                    Collections.unmodifiableList(tableModel.getRows());
             int rowIndex = 0;
-            for (DataRow row : rows) {
-                String externalErrorMsg = null;
-                try {
-                    for (RowValidator validator :
-                            projectConfig.getRowValidators()) {
-                        validator.validate(new PluginDataRow(row));
+
+            final List<RowValidator> validators =
+                    projectConfig.getRowValidators();
+
+            // call validators to set-up for session
+            try {
+                for (RowValidator validator : validators) {
+                    validator.startSessionValidation(sessionName, rows);
+                }
+            } catch (Exception e) {
+                isValid = false;
+                dataTable.displayErrorDialog(e.getMessage());
+            }
+
+            // only perform row validation
+            // if external start session call succeeded
+            if (isValid) {
+                for (DataRow row : rows) {
+                    String externalErrorMsg = null;
+                    try {
+                        for (RowValidator validator : validators) {
+                            validator.validate(sessionName,
+                                               new PluginDataRow(row));
+                        }
+                    } catch (ExternalDataException e) {
+                        externalErrorMsg = e.getMessage();
+                        LOG.info("external validation failed", e);
+                    } catch (ExternalSystemException e) {
+                        externalErrorMsg = e.getMessage();
+                        LOG.error(e.getMessage(), e);
                     }
-                } catch (ExternalDataException e) {
-                    externalErrorMsg = e.getMessage();
-                    LOG.info("external validation failed", e);
-                } catch (ExternalSystemException e) {
-                    externalErrorMsg = e.getMessage();
-                    LOG.error(e.getMessage(), e);
-                }
 
-                if (externalErrorMsg != null) {
-                    isValid = false;
-                    dataTable.selectRow(rowIndex);
-                    dataTable.displayErrorDialog(externalErrorMsg);
-                }
+                    if (externalErrorMsg != null) {
+                        isValid = false;
+                        dataTable.selectRow(rowIndex);
+                        dataTable.displayErrorDialog(externalErrorMsg);
+                    }
 
-                if (! isValid) {
-                    break;
-                }
+                    if (! isValid) {
+                        break;
+                    }
 
-                rowIndex++;
+                    rowIndex++;
+                }
+            }
+
+            // always call validators to clean-up session
+            for (RowValidator validator : validators) {
+                validator.stopSessionValidation(sessionName);
             }
 
         } else {

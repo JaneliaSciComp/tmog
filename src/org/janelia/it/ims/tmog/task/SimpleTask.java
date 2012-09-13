@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -142,18 +142,14 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
             if (isSessionCancelled()) {
                 LOG.warn("Session cancelled before start.");
                 taskSummary.append("Session cancelled before start.");
-
-                // mark all rows as failed
-                List<DataRow> modelRows = model.getRows();
-                int numberOfRows = modelRows.size();
-                for (int i = 0; i < numberOfRows; i++) {
-                    failedRowIndices.add(i);
-                }
+                markAllRowsAsFailed();
             } else {
                 final boolean startSessionNotificationsSuccessfullyCompleted =
                         startSession();
                 if (startSessionNotificationsSuccessfullyCompleted) {
                     processRows();
+                } else {
+                    markAllRowsAsFailed();
                 }
             }
 
@@ -399,6 +395,7 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
             allNotificationsProcessedSuccessfully = true;
         } catch (Exception e) {
             LOG.error("session listener startSession processing failed", e);
+            taskSummary.append(e.getMessage());
         }
         return allNotificationsProcessedSuccessfully;
     }
@@ -447,6 +444,14 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
             for (int i = rowIndex; i < numberOfRows; i++) {
                 failedRowIndices.add(i);
             }
+        }
+    }
+
+    private void markAllRowsAsFailed() {
+        List<DataRow> modelRows = model.getRows();
+        int numberOfRows = modelRows.size();
+        for (int i = 0; i < numberOfRows; i++) {
+            failedRowIndices.add(i);
         }
     }
 }

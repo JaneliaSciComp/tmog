@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -112,13 +112,13 @@ public class ChacrmLineValidatorTest
                                                           dataRow,
                                                           new File("."));
 
-        validator.validate(row);
+        validator.validate(SESSION_NAME, row);
         // row should be valid (no exception thrown)
 
         VerifiedTextModel field = (VerifiedTextModel) dataRow.getField(0);
         field.setText(INVALID_LINE_NAME);
         try {
-            validator.validate(row);
+            validator.validate(SESSION_NAME, row);
             fail("invalid plate name should have caused data exception");
         } catch (ExternalDataException e) {
             // test passed!
@@ -158,7 +158,7 @@ public class ChacrmLineValidatorTest
         long startTime;
         for (int i = 0; i < numberOfValidChecks; i++) {
             startTime = System.currentTimeMillis();
-            validator.validate(row);
+            validator.validate(SESSION_NAME, row);
             // row should be valid (no exception thrown)
             if ((i > 0 ) && ((System.currentTimeMillis() - startTime) > 1000)) {
                 fail("Cached transformant id checks are taking too long.");
@@ -168,7 +168,7 @@ public class ChacrmLineValidatorTest
         String invalidLineName = linePrefix + INVALID_LINE_NAME;
         field.setText(invalidLineName);
         try {
-            validator.validate(row);
+            validator.validate(SESSION_NAME, row);
             fail("'" + invalidLineName + "' should have caused data exception");
         } catch (ExternalDataException e) {
             // test passed!
@@ -182,5 +182,6 @@ public class ChacrmLineValidatorTest
     private static final String VALID_LINE_NAME =
             PLATE + WELL + '_' + VECTOR + '_' + INSERTION_SITE;
     private static final String INVALID_LINE_NAME = "Invalid-Line";
+    private static final String SESSION_NAME = "test-session";
 
 }

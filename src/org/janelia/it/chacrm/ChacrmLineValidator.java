@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -15,7 +15,7 @@ import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.PluginUtil;
 import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
-import org.janelia.it.ims.tmog.plugin.RowValidator;
+import org.janelia.it.ims.tmog.plugin.SimpleRowValidator;
 
 import java.io.File;
 import java.util.HashSet;
@@ -28,7 +28,7 @@ import java.util.Set;
  * @author Eric Trautman
  */
 public class ChacrmLineValidator
-        implements RowValidator {
+        extends SimpleRowValidator {
 
     /**
      * Name of the property that identifies
@@ -130,7 +130,8 @@ public class ChacrmLineValidator
      * If the row identifies a GMR line, validate that the line
      * exists in ChaCRM.
      *
-     * @param  row  the user supplied meta-data to be validated.
+     * @param  sessionName  unique name for session being validated.
+     * @param  row          the user supplied information to be validated.
      *
      * @throws ExternalDataException
      *   if the data is not valid.
@@ -138,7 +139,8 @@ public class ChacrmLineValidator
      * @throws ExternalSystemException
      *   if any error occurs while validating the data.
      */
-    public void validate(PluginDataRow row)
+    public void validate(String sessionName,
+                         PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
         RenamePluginDataRow dataRow = PluginUtil.castRenameRow(row, this);

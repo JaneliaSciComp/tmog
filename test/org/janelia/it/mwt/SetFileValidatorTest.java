@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -63,7 +63,7 @@ public class SetFileValidatorTest
                                              "45s1x30s0s",
                                              "105s10x0.2s10s");
         try {
-            validator.validate(row);
+            validator.validate(SESSION_NAME, row);
         } catch (Exception e) {
             e.printStackTrace();
             fail("unexpected exception thrown: " + e.getMessage());
@@ -74,7 +74,7 @@ public class SetFileValidatorTest
                                "105s10x0.2s10s");
         try {
             // second call should use cache
-            validator.validate(row);
+            validator.validate(SESSION_NAME, row);
         } catch (Exception e) {
             e.printStackTrace();
             fail("unexpected exception thrown: " + e.getMessage());
@@ -84,7 +84,7 @@ public class SetFileValidatorTest
                                "45s1x30s0s",
                                "bad-time-spec");
         try {
-            validator.validate(row);
+            validator.validate(SESSION_NAME, row);
             fail("exception should be thrown for bad time spec");
         } catch (Exception e) {
             // test passed
@@ -94,7 +94,7 @@ public class SetFileValidatorTest
                                "45s1x30s0s",
                                "105s10x0.2s10s");
         try {
-            validator.validate(row);
+            validator.validate(SESSION_NAME, row);
             fail("exception should be thrown for bad file name");
         } catch (Exception e) {
             // test passed
@@ -123,4 +123,6 @@ public class SetFileValidatorTest
                                        dataRow,
                                        new File("outDirectory"));
     }
+
+    private static final String SESSION_NAME = "test-session";
 }
