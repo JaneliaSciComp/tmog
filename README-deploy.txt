@@ -48,7 +48,7 @@ are deployed for the following lab groups:
 /groups/baker/bakerlab/tmog/config
 /groups/ditp/ditp/tmog/config
 /groups/kerr/kerrlab/tmog/config
-/groups/leet/leetconfocal/tmog/config
+/archive/leet/leetconfocal/tmog/config
 /groups/leet/leetimg/leetlab/tmog/config
 /groups/rubin/data1/rubinlab/tmog/config
 /groups/rubin/rubinimg/tmog
