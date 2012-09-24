@@ -5,12 +5,12 @@
 
     <global minimumVersion="2.8.7" frameSizePercentage="95"/>
 
-    <project name="Fly Light Flip - manual entry (FLFL*)" default="true">
+    <project name="Fly Light Polarity - manual entry (FLPO*)" default="true">
 
         <inputFileSorter sortAlgorithm="Number"
                          patternString=".*_(L)(\d++)(\.lsm)"/>
 
-        <outputDirectory basePath="[\\dm10.janelia.priv|/groups/flylight]/flylight/flip/confocalStacks"
+        <outputDirectory basePath="[\\dm10.janelia.priv|/groups/flylight]/flylight/polarity/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -30,7 +30,7 @@
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
                 <property name="db.config.key" value="sage" />
-                <property name="image_number" value="urn:lsid:janelia.org:flylight_flip:image_number" />
+                <property name="image_number" value="urn:lsid:janelia.org:flylight_polarity:image_number" />
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin" >
@@ -40,7 +40,7 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:flylight"/>
-                <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="family" value="$STATIC:flylight_polarity"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="created_by" value="Imager"/>
                 <property name="gal4_vial" value="GAL4 Vial"/>
@@ -52,7 +52,6 @@
                 <property name="full_age" value="Full Age"/>
                 <property name="days_after_eclosion" value="Days After Eclosion"/>
                 <property name="area" value="$STATIC:Brain"/>
-                <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="annotated_by" value="Annotator"/>
             </rowListener>
 
@@ -60,7 +59,7 @@
 
         <dataFields>
 
-            <separator value="FLFL_"/>
+            <separator value="FLPO_"/>
             <runTime datePattern="yyyyMMddHHmmssSSS" />
             <separator value="_"/>
             <pluginData displayName="image_number"/>
@@ -147,9 +146,6 @@
                     markedForTask="false"
                     minimumValue="0" maximumValue="21" />
 
-            <decimal displayName="Heat Shock Minutes" required="false"
-                     minimumValue="0" markedForTask="false" />
-
             <cvTermList displayName="Imager" required="true"
                         markedForTask="false"
                         autoComplete="true"
@@ -167,7 +163,7 @@
 
     </project>
 
-    <project name="Fly Light Flip - tile curator (FLFL*)">
+    <project name="Fly Light Polarity - tile curator (FLPO*)">
 
         <inputFileFilter patternString=".*\.xml">
             <xmlPropertyFile targetGroupPath="samples/sample"
@@ -193,18 +189,10 @@
         <inputFileSorter sortAlgorithm="Number"
                          patternString=".*_(L)(\d++)(\.lsm)"/>
 
-        <outputDirectory basePath="[\\dm10.janelia.priv|/groups/flylight]/flylight/flip/confocalStacks"
+        <outputDirectory basePath="[\\dm10.janelia.priv|/groups/flylight]/flylight/polarity/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
-
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
-                <property name="validateField" value="Gender"/>
-                <property name="matchesPattern" value="\S+"/>
-                <property name="whenReferenceField" value="Age"/>
-                <property name="matchesReferencePattern" value="^[^L].*"/>
-                <property name="errorMessage" value="Gender value is required when age is ${Age}."/>
-            </rowValidator>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.WritableFromFileValidator">
                 <property name="errorMessage"
@@ -213,7 +201,7 @@
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
                 <property name="db.config.key" value="sage" />
-                <property name="image_number" value="urn:lsid:janelia.org:flylight_flip:image_number" />
+                <property name="image_number" value="urn:lsid:janelia.org:flylight_polarity:image_number" />
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin" >
@@ -223,7 +211,7 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:flylight"/>
-                <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="family" value="$STATIC:flylight_polarity"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="created_by" value="Imager"/>
                 <property name="gal4_vial" value="GAL4 Vial"/>
@@ -234,7 +222,6 @@
                 <property name="area" value="Area"/>
                 <property name="age" value="Age"/>
                 <property name="full_age" value="Full Age"/>
-                <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="annotated_by" value="Annotator"/>
             </rowListener>
 
@@ -242,7 +229,7 @@
 
         <dataFields>
 
-            <separator value="FLFL_"/>
+            <separator value="FLPO_"/>
             <runTime datePattern="yyyyMMddHHmmssSSS" />
             <separator value="_"/>
             <pluginData displayName="image_number"/>
@@ -331,10 +318,6 @@
                   markedForTask="false">
                 <targetPropertyDefault propertyName="tmogFullAge"/>
             </text>
-
-            <decimal displayName="Heat Shock Minutes" required="false"
-                     minimumValue="0"
-                     markedForTask="false" />
 
             <cvTermList displayName="Imager" required="true"
                         markedForTask="false"
