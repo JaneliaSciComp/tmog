@@ -9,6 +9,7 @@ package org.janelia.it.ims.tmog.plugin;
 
 import loci.common.RandomAccessInputStream;
 import loci.common.RandomAccessOutputStream;
+import loci.formats.in.ZeissLSMReader;
 import loci.formats.tiff.IFD;
 import loci.formats.tiff.TiffIFDEntry;
 import loci.formats.tiff.TiffParser;
@@ -295,19 +296,31 @@ public class LsmMetaDataPlugin
         return isConfirmed;
     }
 
+    private static void writeZeiss(String fileName) {
+        ZeissLSMReader zlr = new ZeissLSMReader();
+        try {
+            zlr.initFile(fileName);
+            zlr.printAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
 
         final String meta = "--meta";
         final String restore = "--restore";
         final String zeiss = "--zeiss";
-        final String usage = 
+        final String writeZeiss = "--writeZeiss";
+        final String usage =
                 "\n\nUSAGE: java " + LsmMetaDataPlugin.class.getName() + 
-                " [" + meta + "] [" + restore + "] [" + zeiss + 
-                "] file [file ...]\n";
+                " [" + meta + "] [" + restore + "] [" + zeiss + "] [" +
+                writeZeiss + "] file [file ...]\n";
         
         boolean isMeta = false;
         boolean isRestore = false;
         boolean isZeiss = false;
+        boolean isWriteZeiss = false;
         Set<String> fileNames = new HashSet<String>();
         for (String value : args) {
             if (meta.equals(value)) {
@@ -316,17 +329,23 @@ public class LsmMetaDataPlugin
                 isRestore = true;
             } else if (zeiss.equals(value)) {
                 isZeiss = true;
+            } else if (writeZeiss.equals(value)) {
+                isWriteZeiss = true;
             } else {
                 fileNames.add(value);
             }
         }
         
         String metaData;
-        if ((fileNames.size() > 0) && (isMeta || isRestore || isZeiss)) {
+        if ((fileNames.size() > 0) && (isMeta || isRestore || isZeiss || isWriteZeiss)) {
             for (String fileName : fileNames) {
 
                 if (isZeiss) {
                     hasZeissLsmDirectory(fileName);
+                }
+
+                if (isWriteZeiss) {
+                    writeZeiss(fileName);
                 }
 
                 if (isMeta) {
