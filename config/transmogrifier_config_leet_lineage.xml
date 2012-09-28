@@ -94,7 +94,7 @@
             <text displayName="Slide ID"
                   required="true"
                   markedForTask="false"
-                  pattern="(Hey|SSM|MDS|Mut|WYC)\d{5}">
+                  pattern="(BLM|Hey|SSM|MDS|Mut|WYC)\d{5}">
                 <targetPropertyDefault propertyName="slide"/>
             </text>
 
