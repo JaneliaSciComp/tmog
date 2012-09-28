@@ -11,7 +11,7 @@
                          patternString=".*_(L)(\d++)(\.lsm)"/>
 
         <outputDirectory fileModeReadOnly="true">
-            <path path="[\\dm10.janelia.priv\leetimg|/groups/leet/leetimg/leetlab]\lineage\" />
+            <path path="[\\dm11.janelia.priv\leetimg|/groups/leet/leetimg/leetlab]\lineage\" />
             <renameFieldValue fieldDisplayName="Image Family"/>
             <path path="/confocalStacks/"/>
             <renameFieldValue fieldDisplayName="Slide ID"
@@ -24,7 +24,7 @@
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Slide ID}" />
-                <property name="data-file.name" value="[\\dm10.janelia.priv\leetimg|/groups/leet/leetimg/leetlab]/tmog/data/scopeSlide.tsv" />
+                <property name="data-file.name" value="[\\dm11.janelia.priv\leetimg|/groups/leet/leetimg/leetlab]/tmog/data/scopeSlide.tsv" />
                 <property name="data-file.tsv-key" value="Slide ID" />
                 <property name="Image Family" value="Image Family" />
                 <property name="GAL4 Line" value="GAL4 Line" />
