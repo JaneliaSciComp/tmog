@@ -26,6 +26,7 @@ public class StaticDataModel implements DataField {
 
     public StaticDataModel(String name,
                            String value) {
+        this();
         this.name = name;
         this.value = value;
     }

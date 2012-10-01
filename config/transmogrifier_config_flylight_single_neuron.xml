@@ -56,6 +56,18 @@
                 <property name="annotated_by" value="Annotator"/>
             </rowListener>
 
+            <!--
+                  The companion file listener (for log files) should be the
+                  last defined plug-in to ensure that log files are only
+                  copied if the source lsm processing succeeds.
+            -->
+            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
+                <property name="commonNamePattern" value="(.*)\.lsm"/>
+                <property name="companionSuffix" value=".log.csv"/>
+                <property name="deleteAfterCopy" value="true"/>
+                <property name="testName" value="B4_T1_20120918_1CC_37A12FlpPEST_6Days_R1_L08.lsm"/>
+            </rowListener>
+
         </plugins>
 
         <dataFields>
@@ -236,6 +248,18 @@
                 <property name="full_age" value="Full Age"/>
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="annotated_by" value="Annotator"/>
+            </rowListener>
+
+            <!--
+                  The companion file listener (for log files) should be the
+                  last defined plug-in to ensure that log files are only
+                  copied if the source lsm processing succeeds.
+            -->
+            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
+                <property name="commonNamePattern" value="(.*)\.lsm"/>
+                <property name="companionSuffix" value=".log.csv"/>
+                <property name="deleteAfterCopy" value="true"/>
+                <property name="testName" value="B4_T1_20120918_1CC_37A12FlpPEST_6Days_R1_L08.lsm"/>
             </rowListener>
 
         </plugins>

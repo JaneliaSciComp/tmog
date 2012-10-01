@@ -92,9 +92,13 @@ public class TargetGroupValidator
      */
     @Override
     public void init(PluginConfiguration config) throws ExternalSystemException {
+
+        final PluginPropertyHelper helper =
+                new PluginPropertyHelper(config,
+                                         INIT_FAILURE_MSG);
+
         final String patternString =
-                getRequiredProperty(GROUP_NAME_PATTERN_PROPERTY,
-                                    config);
+                helper.getRequiredProperty(GROUP_NAME_PATTERN_PROPERTY);
         try {
             this.groupNamePattern = Pattern.compile(patternString);
         } catch (Exception e) {
@@ -141,10 +145,9 @@ public class TargetGroupValidator
         }
 
         this.useFullPath = Boolean.parseBoolean(
-                getRequiredProperty(USE_FULL_PATH_PROPERTY, config));
+                helper.getRequiredProperty(USE_FULL_PATH_PROPERTY));
 
-        final String testName = getRequiredProperty(TEST_PROPERTY,
-                                                    config);
+        final String testName = helper.getRequiredProperty(TEST_PROPERTY);
         Matcher m = this.groupNamePattern.matcher(testName);
         if (! m.matches()) {
             throw new ExternalSystemException(
@@ -313,19 +316,6 @@ public class TargetGroupValidator
      */
     public void stopSessionValidation(String sessionName) {
         removeSessionData(sessionName);
-    }
-
-    private String getRequiredProperty(String propertyName,
-                                       PluginConfiguration config)
-            throws ExternalSystemException {
-        String value = config.getProperty(propertyName);
-        if ((value == null) || (value.length() < 1)) {
-            throw new ExternalSystemException(
-                    INIT_FAILURE_MSG +
-                    "Please specify a value for the '" + propertyName +
-                    "' plug-in property.");
-        }
-        return value;
     }
 
     private String getTargetName(Target target) {
