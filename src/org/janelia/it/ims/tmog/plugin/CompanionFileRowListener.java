@@ -13,26 +13,24 @@ import org.janelia.it.utils.filexfer.FileCopyFailedException;
 import org.janelia.it.utils.filexfer.SafeFileTransfer;
 
 import java.io.File;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This plug-in transfers and renames a "companion" file that is related to
- * the primary row file being renamed.  The relationship is derived from a
- * common pattern in the names of both files.  The plug-in was originally
- * developed to transfer/rename Zeiss log files as companions to
- * source lsm files being renamed.
+ * the primary row file being renamed.  The relationship is derived from
+ * both files sharing the same basic name with different extensions/suffixes.
+ * The plug-in was originally developed to transfer/rename Zeiss log files
+ * as companions to source lsm files being renamed.
  *
  * @author Eric Trautman
  */
 public class CompanionFileRowListener
         implements RowListener {
 
-    /** Name of the property that identifies the common name pattern. */
-    public static final String COMMON_NAME_PATTERN_PROPERTY =
-            "commonNamePattern";
+    /** Name of the property that identifies the source file suffix. */
+    public static final String SOURCE_SUFFIX_PROPERTY =
+            "sourceSuffix";
 
-    /** Name of the property that identifies the suffix for companion files. */
+    /** Name of the property that identifies the companion file suffix. */
     public static final String COMPANION_SUFFIX_PROPERTY =
             "companionSuffix";
 
@@ -43,16 +41,10 @@ public class CompanionFileRowListener
     public static final String DELETE_AFTER_RENAME_PROPERTY =
             "deleteAfterCopy";
 
-    /**
-     * Name of the property that identifies a name or path
-     * for testing the group pattern.
-     */
-    public static final String TEST_PROPERTY = "testName";
+    /** Suffix for all source files. */
+    private String sourceSuffix;
 
-    /** Pattern used derive common name for related files. */
-    private Pattern commonNamePattern;
-
-    /** Suffix of companion file. */
+    /** Suffix for all companion files. */
     private String companionSuffix;
 
     /**
@@ -74,43 +66,13 @@ public class CompanionFileRowListener
         final PluginPropertyHelper helper =
                 new PluginPropertyHelper(config,
                                          INIT_FAILURE_MSG);
-
-        final String patternString =
-                helper.getRequiredProperty(COMMON_NAME_PATTERN_PROPERTY);
-        try {
-            this.commonNamePattern = Pattern.compile(patternString);
-        } catch (Exception e) {
-            throw new ExternalSystemException(
-                    INIT_FAILURE_MSG +
-                    "The " + COMMON_NAME_PATTERN_PROPERTY + " value '" +
-                    patternString + "' could not be parsed.  " + e.getMessage(),
-                    e);
-        }
-
+        this.sourceSuffix =
+                helper.getRequiredProperty(SOURCE_SUFFIX_PROPERTY);
         this.companionSuffix =
                 helper.getRequiredProperty(COMPANION_SUFFIX_PROPERTY);
 
         this.isOriginalFileDeletedAfterCopy = Boolean.parseBoolean(
                 helper.getRequiredProperty(DELETE_AFTER_RENAME_PROPERTY));
-
-        final String testName = helper.getRequiredProperty(TEST_PROPERTY);
-        Matcher m = this.commonNamePattern.matcher(testName);
-        if (! m.matches()) {
-            throw new ExternalSystemException(
-                    INIT_FAILURE_MSG +
-                    "The " + TEST_PROPERTY + " value '" + testName +
-                    "' does not match the " + COMMON_NAME_PATTERN_PROPERTY +
-                    " '" + patternString + "'.");
-        }
-
-        if (m.groupCount() == 0) {
-            throw new ExternalSystemException(
-                    INIT_FAILURE_MSG + "The " +
-                    COMMON_NAME_PATTERN_PROPERTY + " '" + patternString +
-                    "' must contain parentheses to identify " +
-                    "the common portion of each file name.");
-        }
-
     }
 
     public PluginDataRow processEvent(EventType eventType,
@@ -125,9 +87,11 @@ public class CompanionFileRowListener
 
     private File getCompanionFile(File file) {
         File companionFile = null;
-        Matcher m = commonNamePattern.matcher(file.getName());
-        if (m.matches() && (m.groupCount() > 0)) {
-            final String companionFileName = m.group(1) + companionSuffix;
+        final String fileName = file.getName();
+        if (fileName.endsWith(sourceSuffix)) {
+            final int stop = fileName.length() - sourceSuffix.length();
+            final String companionFileName = fileName.substring(0, stop) +
+                                             companionSuffix;
             companionFile = new File(file.getParentFile(),
                                      companionFileName);
         }

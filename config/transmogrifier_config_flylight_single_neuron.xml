@@ -62,10 +62,9 @@
                   copied if the source lsm processing succeeds.
             -->
             <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
-                <property name="commonNamePattern" value="(.*)\.lsm"/>
+                <property name="sourceSuffix" value=".lsm"/>
                 <property name="companionSuffix" value=".log.csv"/>
                 <property name="deleteAfterCopy" value="true"/>
-                <property name="testName" value="B4_T1_20120918_1CC_37A12FlpPEST_6Days_R1_L08.lsm"/>
             </rowListener>
 
         </plugins>
@@ -256,10 +255,9 @@
                   copied if the source lsm processing succeeds.
             -->
             <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
-                <property name="commonNamePattern" value="(.*)\.lsm"/>
+                <property name="sourceSuffix" value=".lsm"/>
                 <property name="companionSuffix" value=".log.csv"/>
                 <property name="deleteAfterCopy" value="true"/>
-                <property name="testName" value="B4_T1_20120918_1CC_37A12FlpPEST_6Days_R1_L08.lsm"/>
             </rowListener>
 
         </plugins>

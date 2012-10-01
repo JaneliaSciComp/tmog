@@ -65,7 +65,7 @@ public class CompanionFileRowListenerTest
 
     @Override
     protected void setUp() throws Exception {
-        final String commonNamePattern = "(.*)\\.lsm";
+        final String sourceSuffix = ".lsm";
         final String companionSuffix = ".log.csv";
 
         final File outputDirectory = new File(".");
@@ -113,17 +113,14 @@ public class CompanionFileRowListenerTest
 
             config = new PluginConfiguration();
             config.setProperty(
-                    CompanionFileRowListener.COMMON_NAME_PATTERN_PROPERTY,
-                    commonNamePattern);
+                    CompanionFileRowListener.SOURCE_SUFFIX_PROPERTY,
+                    sourceSuffix);
             config.setProperty(
                     CompanionFileRowListener.COMPANION_SUFFIX_PROPERTY,
                     companionSuffix);
             config.setProperty(
                     CompanionFileRowListener.DELETE_AFTER_RENAME_PROPERTY,
                     "true");
-            config.setProperty(
-                    CompanionFileRowListener.TEST_PROPERTY,
-                    "foo-bar.lsm");
 
             rowListener = new CompanionFileRowListener();
 
@@ -163,39 +160,11 @@ public class CompanionFileRowListenerTest
         verifyProcessException(0, "Failed to rename companion file");
     }    
 
-    public void testMissingCommonNamePattern() throws Exception {
+    public void testMissingSourceSuffixPattern() throws Exception {
         Map<String, String> props = config.getProperties();
-        props.remove(CompanionFileRowListener.COMMON_NAME_PATTERN_PROPERTY);
+        props.remove(CompanionFileRowListener.SOURCE_SUFFIX_PROPERTY);
         verifyInitException(
-                CompanionFileRowListener.COMMON_NAME_PATTERN_PROPERTY);
-    }
-
-    public void testInvalidCommonNamePattern() throws Exception {
-        config.setProperty(CompanionFileRowListener.COMMON_NAME_PATTERN_PROPERTY,
-                           "unclosedParen(");
-        verifyInitException("could not be parsed");
-
-        config.setProperty(CompanionFileRowListener.COMMON_NAME_PATTERN_PROPERTY,
-                           ".*");
-        verifyInitException("must contain parentheses");
-    }
-
-    public void testMissingTestName() throws Exception {
-        Map<String, String> props = config.getProperties();
-        props.remove(CompanionFileRowListener.TEST_PROPERTY);
-        verifyInitException(CompanionFileRowListener.TEST_PROPERTY);
-    }
-
-    public void testInvalidTestNameForGroupPattern() throws Exception {
-        config.setProperty(CompanionFileRowListener.TEST_PROPERTY,
-                           "testNameWithoutAtSymbol.blobs");
-        verifyInitException("does not match the");
-    }
-
-    public void testInvalidTestNameForRequiredPattern() throws Exception {
-        config.setProperty(CompanionFileRowListener.TEST_PROPERTY,
-                           "test-without-valid-suffix.txt");
-        verifyInitException("does not match the");
+                CompanionFileRowListener.SOURCE_SUFFIX_PROPERTY);
     }
 
     private File createTestFile(String name) throws Exception {
