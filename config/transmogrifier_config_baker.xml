@@ -8,7 +8,7 @@
     <project name="Baker Lab: GAL4 Lines (BSB_*)" default="true">
 
         <outputDirectory>
-            <path path="\\dm10.janelia.priv\bakerlab\MicroscopeData\Baker_Confocal_Stacks\" />
+            <path path="[\\dm11.janelia.priv|/groups/baker]\bakerlab\MicroscopeData\Baker_Confocal_Stacks\" />
             <renameFieldValue fieldDisplayName="Line" />
         </outputDirectory>
 
@@ -149,7 +149,7 @@
     <project name="Baker Lab: Fix Data for Existing GAL4 Lines (BSB_*)">
 
         <outputDirectory>
-            <path path="\\dm10.janelia.priv\bakerlab\MicroscopeData\Baker_Confocal_Stacks\" />
+            <path path="[\\dm11.janelia.priv|/groups/baker]\bakerlab\MicroscopeData\Baker_Confocal_Stacks\" />
             <renameFieldValue fieldDisplayName="Line" />
         </outputDirectory>
 
