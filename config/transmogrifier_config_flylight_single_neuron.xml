@@ -63,7 +63,7 @@
             -->
             <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
                 <property name="sourceSuffix" value=".lsm"/>
-                <property name="companionSuffix" value=".log.csv"/>
+                <property name="companionSuffix" value="_log.csv"/>
                 <property name="deleteAfterCopy" value="true"/>
             </rowListener>
 
@@ -256,7 +256,7 @@
             -->
             <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
                 <property name="sourceSuffix" value=".lsm"/>
-                <property name="companionSuffix" value=".log.csv"/>
+                <property name="companionSuffix" value="_log.csv"/>
                 <property name="deleteAfterCopy" value="true"/>
             </rowListener>
 
