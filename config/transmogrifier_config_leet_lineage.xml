@@ -11,7 +11,7 @@
                          patternString=".*_(L)(\d++)(\.lsm)"/>
 
         <outputDirectory fileModeReadOnly="true">
-            <path path="[\\dm11.janelia.priv\leetimg|/groups/leet/leetimg/leetlab]\lineage\" />
+            <path path="[\\arch.janelia.priv|/archive]/leet/leetimg/leetlab/lineage/" />
             <renameFieldValue fieldDisplayName="Image Family"/>
             <path path="/confocalStacks/"/>
             <renameFieldValue fieldDisplayName="Slide ID"
@@ -24,13 +24,14 @@
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Slide ID}" />
-                <property name="data-file.name" value="[\\dm11.janelia.priv\leetimg|/groups/leet/leetimg/leetlab]/tmog/data/scopeSlide.tsv" />
+                <property name="data-file.name" value="[\\arch.janelia.priv|/archive]/leet/leetimg/leetlab/tmog/data/scopeSlide.tsv" />
                 <property name="data-file.tsv-key" value="Slide ID" />
                 <property name="Image Family" value="Image Family" />
                 <property name="GAL4 Line" value="GAL4 Line" />
                 <property name="Progenitor" value="Progenitor" />
                 <property name="tsMARCM" value="tsMARCM" />
                 <property name="Gender" value="Gender" />
+                <property name="Stage Basis" value="Stage Basis" />
                 <property name="Heat Shock Age Hour" value="Heat Shock Age Hour" />
                 <property name="Heat Shock Age Interval" value="Heat Shock Age Interval" />
                 <property name="Heat Shock Minutes" value="Heat Shock Minutes" />
@@ -57,6 +58,7 @@
                 <property name="progenitor" value="Progenitor"/>
                 <property name="ts_marcm" value="tsMARCM"/>
                 <property name="mutant" value="Mutant"/>
+                <property name="stage_basis" value="Stage Basis" />
                 <property name="heat_shock_hour" value="Heat Shock Age Hour"/>
                 <property name="heat_shock_interval" value="Heat Shock Age Interval"/>
                 <property name="heat_shock_minutes" value="Heat Shock Age Interval"/>
@@ -160,6 +162,13 @@
                 <validValue displayName="x: Not Defined" value="x"/>
             </validValueList>
 
+            <validValueList displayName="Stage Basis" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="ALH: after larva hatching" value="ALH" default="true"/>
+                <validValue displayName="APF: after pupa formation" value="APF"/>
+            </validValueList>
+
             <decimal displayName="Heat Shock Age Hour" required="true"
                      minimumValue="0"
                      markedForTask="false">
@@ -179,6 +188,7 @@
             <validValueList displayName="Dissector" required="false"
                             autoComplete="true"
                             markedForTask="false">
+                <validValue value="Ching-Po Yang"/>
                 <validValue value="Haojiang Luan"/>
                 <validValue value="Mark Schroeder"/>
                 <validValue value="Nicholas Abel"/>
@@ -234,6 +244,7 @@
                 <validValue value="Xiaotang Jing"/>
                 <validValue value="Ying-Jou Lee"/>
                 <validValue value="Yu-Chun Wang"/>
+                <validValue value="Yu-Fen Huang"/>
             </validValueList>
 
             <text displayName="Channel Specification" required="false"
