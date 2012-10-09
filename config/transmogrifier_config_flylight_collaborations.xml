@@ -9,7 +9,7 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="[\\dm10.janelia.priv|/groups/flylight]/flylight/collaborations/confocalStacks"
+        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/collaborations/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -53,7 +53,7 @@
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[\\dm10.janelia.priv|/groups/flylight]/flylight/tmog/summaries/collaborations"/>
+                <property name="directory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/summaries/collaborations"/>
             </sessionListener>
 
         </plugins>

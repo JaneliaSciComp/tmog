@@ -9,7 +9,7 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="[\\dm10.janelia.priv\rubinimg|/groups/rubin/rubinimg]\rubin_wu_split\confocalStacks"
+        <outputDirectory basePath="[\\dm11.janelia.priv\rubinimg|/groups/rubin/rubinimg]\rubin_wu_split\confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -33,7 +33,7 @@
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.janelia.priv\rubinimg\tmog\summaries\rubin_wu_split"/>
+                <property name="directory" value="\\dm11.janelia.priv\rubinimg\tmog\summaries\rubin_wu_split"/>
             </sessionListener>
         </plugins>
 

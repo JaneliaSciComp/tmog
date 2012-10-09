@@ -10,7 +10,7 @@
         <inputFileSorter sortAlgorithm="Number"
                          patternString=".*_(L)(\d++)(\.lsm)"/>
 
-        <outputDirectory basePath="[\\dm10.janelia.priv|/groups/flylight]/flylight/polarity/confocalStacks"
+        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/polarity/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -189,7 +189,7 @@
         <inputFileSorter sortAlgorithm="Number"
                          patternString=".*_(L)(\d++)(\.lsm)"/>
 
-        <outputDirectory basePath="[\\dm10.janelia.priv|/groups/flylight]/flylight/polarity/confocalStacks"
+        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/polarity/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>

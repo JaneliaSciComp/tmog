@@ -9,12 +9,12 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="\\dm10.janelia.priv\rubinimg\RDconfocalStacks"
+        <outputDirectory basePath="\\dm11.janelia.priv\rubinimg\RDconfocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.janelia.priv\rubinimg\tmog\summaries\RD"/>
+                <property name="directory" value="\\dm11.janelia.priv\rubinimg\tmog\summaries\RD"/>
             </sessionListener>
         </plugins>
 
@@ -63,12 +63,12 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="\\dm10.janelia.priv\rubinimg\RDconfocalStacks"
+        <outputDirectory basePath="\\dm11.janelia.priv\rubinimg\RDconfocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.janelia.priv\rubinimg\tmog\summaries\RD"/>
+                <property name="directory" value="\\dm11.janelia.priv\rubinimg\tmog\summaries\RD"/>
             </sessionListener>
         </plugins>
 
@@ -112,12 +112,12 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="\\dm10.janelia.priv\rubinimg\RDconfocalStacks"
+        <outputDirectory basePath="\\dm11.janelia.priv\rubinimg\RDconfocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="\\dm10.janelia.priv\rubinimg\tmog\summaries\RD"/>
+                <property name="directory" value="\\dm11.janelia.priv\rubinimg\tmog\summaries\RD"/>
             </sessionListener>
         </plugins>
 

@@ -10,7 +10,7 @@
              default="true">
 
         <outputDirectory>
-            <path path="[\\dm10.janelia.priv\rubinimg|/groups/rubin/rubinimg]\rubin_lab_2\confocalStacks\" />
+            <path path="[\\dm11.janelia.priv\rubinimg|/groups/rubin/rubinimg]\rubin_lab_2\confocalStacks\" />
             <renameFieldValue fieldDisplayName="Relative Path"/>
         </outputDirectory>
 
@@ -38,7 +38,7 @@
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[\\dm10.janelia.priv\rubinimg|/groups/rubin/rubinimg]\tmog\summaries\rubin_lab_2"/>
+                <property name="directory" value="[\\dm11.janelia.priv\rubinimg|/groups/rubin/rubinimg]\tmog\summaries\rubin_lab_2"/>
             </sessionListener>
 
         </plugins>
