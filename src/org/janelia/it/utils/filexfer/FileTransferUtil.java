@@ -52,6 +52,11 @@ public class FileTransferUtil {
     public static final int MAX_TRANSFER_COUNT =
             (64 * 1024 * 1024) - (32 * 1024);
 
+    /**
+     * Number of milliseconds to wait between digest calculation retry attempts.
+     */
+    public static final long DIGEST_CALCULATION_RETRY_WAIT = 1000;
+
     private int bufferSize;
     private String digestAlgorithm;
     private MessageDigest digest;
@@ -242,10 +247,28 @@ public class FileTransferUtil {
      */
     public DigestBytes calculateDigest(File file)
             throws IOException {
+        return calculateDigest(file, 1);
+    }
+
+    /**
+     * Reads and calculates the digest for the specified file using this
+     * instance's digest algorithm.
+     *
+     * @param  file           file to read.
+     * @param  attemptNumber  number of times calculation has been attempted
+     *                        (including this attempt).
+     *
+     * @return the calculated digest for the file or null if
+     *         this instance does not have a digest algorithm.
+
+     * @throws IOException
+     *   if any errors occur reading the file.
+     */
+    private DigestBytes calculateDigest(File file,
+                                        int attemptNumber)
+            throws IOException {
 
         long startTime = System.currentTimeMillis();
-
-        long bytesProcessed = 0;
 
         FileInputStream stream = null;
         try {
@@ -267,16 +290,70 @@ public class FileTransferUtil {
                 digestBytes = new DigestBytes(digest.digest());
             }
 
-            bytesProcessed = channel.size();
+            final long elapsedTime = System.currentTimeMillis() - startTime;
+            stats = new FileTransferStats(channel.size(), elapsedTime);
+
+        } catch (IOException calculationException) {
+            close(stream);
+            stream = null;
+
+            if (isDigestCalculationRetryNeeded(calculationException,
+                                               file,
+                                               attemptNumber)) {
+                calculateDigest(file,
+                                (attemptNumber + 1));
+            } else {
+                throw calculationException;
+            }
 
         } finally {
             close(stream);
         }
 
-        stats = new FileTransferStats(bytesProcessed,
-                                      System.currentTimeMillis() - startTime);
-
         return digestBytes;
+    }
+
+    /**
+     * Checks the specified attempt number to determine whether digest
+     * calculation should be retried.  If a retry is needed, information
+     * about the previous failure is logged and the current thread is
+     * paused for 1 second before returning control to the caller.
+     * This method is defined here so that it can be shared by both
+     * transfer utilities.
+     *
+     * @param  calculationException  exception that caused the previous
+     *                               calculation to fail.
+     * @param  file                  file being checked.
+     * @param  attemptNumber         number of attempts already made to
+     *                               calculate the digest.
+     *
+     * @return true if digest calculation should be retried; otherwise false.
+     */
+    public static boolean isDigestCalculationRetryNeeded(Exception calculationException,
+                                                         File file,
+                                                         int attemptNumber) {
+        boolean isRetryNeeded = false;
+        if (attemptNumber < 4) {
+
+            LOG.warn("isDigestCalculationRetryNeeded: failed attempt " +
+                     attemptNumber + " to calculate digest for " +
+                     file.getAbsolutePath() +
+                     ", will retry calculation in " +
+                     DIGEST_CALCULATION_RETRY_WAIT +
+                     " milliseconds", calculationException);
+
+            try {
+                Thread.sleep(DIGEST_CALCULATION_RETRY_WAIT);
+            } catch (InterruptedException sleepException) {
+                LOG.warn("isDigestCalculationRetryNeeded: failed to " +
+                         "sleep before retrying validation, " +
+                         "ignoring error", sleepException);
+            }
+
+            isRetryNeeded = true;
+        }
+
+        return isRetryNeeded;
     }
 
     @Override

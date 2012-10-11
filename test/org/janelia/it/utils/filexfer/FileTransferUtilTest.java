@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Tests the FileTransferUtil class.
+ * Tests the {@link FileTransferUtil} class.
  *
  * @author Eric Trautman
  */
@@ -100,7 +100,8 @@ public class FileTransferUtilTest {
 
                 validDigest = DigestAlgorithms.getMessageDigest(algorithm);
                 SafeFileTransfer.recursiveHashValidationHelper(sourceFile,
-                                                               validDigest);
+                                                               validDigest,
+                                                               1);
                 validDigestBytes = new DigestBytes(validDigest.digest());
                 Assert.assertEquals("invalid " + algorithm + " digest returned",
                                     validDigestBytes, digestBytes);
@@ -167,6 +168,48 @@ public class FileTransferUtilTest {
         util.copyAndValidate(sourceFile, targetFile, true);
     }
 
+    @Test
+    public void testCalculateDigestRetries() throws Exception {
+        // create file during retry attempts to exercise
+        // both failure and success code
+        Thread fileCreator = new AsynchronousTargetFileCreator();
+        fileCreator.start();
+
+        util.calculateDigest(targetFile);
+    }
+
     private static final SimpleDateFormat SDF =
             new SimpleDateFormat("'transfer-test-'yyyyMMddHHmmssSSS");
+
+    /**
+     * Creates the target file after a short rest.
+     */
+    private class AsynchronousTargetFileCreator extends Thread {
+        @Override
+        public void run() {
+            try {
+
+                LOG.info("AsynchronousTargetFileCreator.run: sleeping");
+
+                try {
+                    sleep(FileTransferUtil.DIGEST_CALCULATION_RETRY_WAIT + 200);
+                } catch (InterruptedException e) {
+                    LOG.warn("failed to sleep before creating " +
+                             targetFile.getAbsolutePath(), e);
+                }
+
+                LOG.info("AsynchronousTargetFileCreator.run: creating " +
+                         targetFile.getAbsolutePath());
+
+                final boolean isCreateSuccessful = targetFile.createNewFile();
+                if (! isCreateSuccessful) {
+                    throw new IOException("createNewFile returned false");
+                }
+
+            } catch (IOException e) {
+                LOG.error("failed to create " + targetFile.getAbsolutePath(),
+                          e);
+            }
+        }
+    }
 }

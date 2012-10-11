@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -194,7 +194,7 @@ public class SafeFileTransfer {
     static private boolean recursiveHashValidation(File srcLocation, byte[] hashValue)
         throws NoSuchAlgorithmException,IOException {
         MessageDigest digest = MessageDigest.getInstance(DIGEST_ALGORITHM);
-        recursiveHashValidationHelper(srcLocation,digest);
+        recursiveHashValidationHelper(srcLocation, digest, 1);
         byte[] digestBytes=digest.digest();
         if (hashValue.length != digestBytes.length) return false;
         for (int i = 0; i < hashValue.length; i++) {
@@ -203,23 +203,49 @@ public class SafeFileTransfer {
         return true;
     }
 
-    static protected void recursiveHashValidationHelper(File srcLocation,MessageDigest digest)
-        throws IOException {
-        if (srcLocation.isDirectory()){
-           File[] files=srcLocation.listFiles();
-            for (File file : files) {
-                recursiveHashValidationHelper(file, digest);
+    static protected void recursiveHashValidationHelper(File srcLocation,
+                                                        MessageDigest digest,
+                                                        int attemptNumber)
+            throws IOException {
+
+        if (srcLocation.isDirectory()) {
+            final File[] files = srcLocation.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    recursiveHashValidationHelper(file, digest, attemptNumber);
+                }
             }
-        }
-        else {
-            InputStream inStream=new DigestInputStream(
-                    new BufferedInputStream(new FileInputStream(srcLocation)),digest);
-            byte[] buffer = new byte[BUFFER_SIZE];
-            int rtnBytes = BUFFER_SIZE;
-            while (rtnBytes > 0) {
-                rtnBytes = inStream.read(buffer);
-             }
-            inStream.close();
+        } else {
+            InputStream inStream = null;
+            try {
+                inStream =
+                        new DigestInputStream(
+                                new BufferedInputStream(
+                                        new FileInputStream(srcLocation)),
+                                digest);
+                byte[] buffer = new byte[BUFFER_SIZE];
+                int rtnBytes = BUFFER_SIZE;
+                while (rtnBytes > 0) {
+                    rtnBytes = inStream.read(buffer);
+                }
+            } catch (IOException calculationException) {
+
+                closeInputStream(inStream);
+                inStream = null;
+
+                if (FileTransferUtil.isDigestCalculationRetryNeeded(calculationException,
+                                                                    srcLocation,
+                                                                    attemptNumber)) {
+                    recursiveHashValidationHelper(srcLocation,
+                                                  digest,
+                                                  (attemptNumber + 1));
+                } else {
+                    throw calculationException;
+                }
+
+            } finally {
+                closeInputStream(inStream);
+            }
         }
     }
 
