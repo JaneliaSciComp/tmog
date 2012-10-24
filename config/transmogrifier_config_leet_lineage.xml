@@ -114,7 +114,7 @@
             <validValueList displayName="Image Family" required="true"
                             autoComplete="true"
                             markedForTask="false">
-                <validValue displayName="Central Brain Lineage" value="leet_central_brain_lineage" />
+                <validValue displayName="Central Brain Lineage" value="leet_central_brain_lineage" default="true"/>
                 <validValue displayName="PAN Lineage" value="leet_pan_lineage"/>
             </validValueList>
 
@@ -130,14 +130,14 @@
             <validValueList displayName="Progenitor" required="true"
                             autoComplete="true"
                             markedForTask="false">
-                <validValue value="progenitor-01" />
+                <validValue value="progenitor-01" default="true"/>
                 <validValue value="progenitor-02"/>
             </validValueList>
 
             <validValueList displayName="tsMARCM" required="true"
                             autoComplete="true"
                             markedForTask="false">
-                <validValue value="tsMARCM-01" />
+                <validValue value="tsMARCM-01" default="true"/>
                 <validValue value="tsMARCM-02"/>
                 <validValue value="tsMARCM-03"/>
             </validValueList>
@@ -158,7 +158,7 @@
                             autoComplete="true"
                             markedForTask="false">
                 <validValue displayName="m: Male" value="m"/>
-                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="f: Female" value="f" default="true"/>
                 <validValue displayName="x: Not Defined" value="x"/>
             </validValueList>
 
@@ -170,18 +170,18 @@
             </validValueList>
 
             <decimal displayName="Heat Shock Age Hour" required="true"
-                     minimumValue="0"
+                     minimumValue="-30"
                      markedForTask="false">
             </decimal>
 
             <decimal displayName="Heat Shock Age Interval" required="true"
-                     minimumValue="0"
+                     minimumValue="-30"
                      markedForTask="false">
                 <staticDefault value="2" />
             </decimal>
 
             <decimal displayName="Heat Shock Minutes" required="true"
-                     minimumValue="0"
+                     minimumValue="-30"
                      markedForTask="false">
             </decimal>
 
@@ -207,6 +207,7 @@
                         displayNamePrefixedForValues="true"
                         autoComplete="true"
                         markedForTask="false">
+                <staticDefault value="A"/>
             </cvTermList>
 
             <date displayName="Mount Date" required="false"
@@ -220,8 +221,8 @@
             <validValueList displayName="Tissue Mounting Protocol" required="true"
                             autoComplete="true"
                             markedForTask="false">
-                <validValue value="Glycerol-Based Mounting" default="true"/>
-                <validValue value="DPX Mounting"/>
+                <validValue value="Glycerol-Based Mounting"/>
+                <validValue value="DPX Mounting" default="true"/>
             </validValueList>
 
             <cvTermList displayName="Tissue Orientation" required="true"
@@ -229,6 +230,7 @@
                         markedForTask="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
                         displayNamePrefixedForValues="false">
+                <staticDefault value="face_down"/>
             </cvTermList>
 
             <validValueList displayName="Imager" required="false"
