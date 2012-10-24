@@ -175,13 +175,13 @@
             </decimal>
 
             <decimal displayName="Heat Shock Age Interval" required="true"
-                     minimumValue="-30"
+                     minimumValue="0"
                      markedForTask="false">
                 <staticDefault value="2" />
             </decimal>
 
             <decimal displayName="Heat Shock Minutes" required="true"
-                     minimumValue="-30"
+                     minimumValue="0"
                      markedForTask="false">
             </decimal>
 
