@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.8.5" frameSizePercentage="95"/>
+    <global minimumVersion="2.9.0" frameSizePercentage="95"/>
 
     <project name="Lee Lab: Lineage Images" default="true">
 
@@ -66,7 +66,7 @@
                 <property name="gender" value="Gender"/>
                 <property name="cross_date" value="Cross Date"/>
                 <property name="slide_code" value="${Slide ID}_${Slide Row}${Slide Column}"/>
-                <property name="alignment_algorithm" value="Alignment"/>
+                <property name="data_set" value="Data Set"/>
                 <property name="ihc_protocol" value="TZL-IHC-${IHC Protocol Number}"/>
                 <property name="mount_date" value="Mount Date"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
@@ -74,7 +74,8 @@
                 <property name="dissector" value="Dissector"/>
                 <property name="created_by" value="Imager"/>
                 <property name="channel_spec" value="Channel Specification"/>
-                <property name="base_path" value="Image Family$MAP:leet_central_brain_lineage=/groups/leet/leetimg/leetlab/lineage/leet_central_brain_lineage/confocalStacks/|leet_pan_lineage=/groups/leet/leetimg/leetlab/lineage/leet_pan_lineage/confocalStacks/"/>
+                <property name="microscope_filename"/>
+                <property name="base_path" value="Image Family$MAP:leet_central_brain_lineage=/archive/leet/leetimg/leetlab/lineage/leet_central_brain_lineage/confocalStacks/|leet_pan_lineage=/archive/leet/leetimg/leetlab/lineage/leet_pan_lineage/confocalStacks/"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.XmlWriterPlugin" />
@@ -255,11 +256,14 @@
                 <staticDefault value="ssr"/>
             </text>
 
-            <cvTermList displayName="Alignment" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/alignment_algorithm"
-                        autoComplete="true"
-                        markedForTask="false">
-            </cvTermList>
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=leetlab&amp;includeOnlySageSync=true"
+                            autoComplete="true">
+            </webServiceList>
 
         </dataFields>
 
