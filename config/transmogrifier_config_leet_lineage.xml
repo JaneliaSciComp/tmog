@@ -260,7 +260,7 @@
                             markedForTask="false"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
-                            relativeValueDisplayNamePath="name"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
                             serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=leetlab&amp;includeOnlySageSync=true"
                             autoComplete="true">
             </webServiceList>
