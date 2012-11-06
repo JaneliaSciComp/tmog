@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.8.8" frameSizePercentage="95"/>
+    <global minimumVersion="2.9.0" frameSizePercentage="95"/>
 
     <project name="Fly Light Flip - manual entry (FLFL*)" default="true">
 
@@ -54,6 +54,8 @@
                 <property name="area" value="$STATIC:Brain"/>
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="annotated_by" value="Annotator"/>
+                <property name="data_set" value="Data Set"/>
+                <property name="microscope_filename"/>
             </rowListener>
 
             <!--
@@ -174,6 +176,16 @@
                 <validValue value="Yoshi Aso"/>
                 <validValue value="Tanya Wolff"/>
             </validValueList>
+
+            <webServiceList displayName="Data Set" required="false"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?includeOnlySageSync=true"
+                            autoComplete="true">
+            </webServiceList>
+
         </dataFields>
 
     </project>
@@ -247,6 +259,8 @@
                 <property name="full_age" value="Full Age"/>
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="annotated_by" value="Annotator"/>
+                <property name="data_set" value="Data Set"/>
+                <property name="microscope_filename"/>
             </rowListener>
 
             <!--
@@ -387,6 +401,15 @@
                 <validValue value="Yoshi Aso"/>
                 <validValue value="Tanya Wolff"/>
             </validValueList>
+
+            <webServiceList displayName="Data Set" required="false"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?includeOnlySageSync=true"
+                            autoComplete="true">
+            </webServiceList>
 
         </dataFields>
 
