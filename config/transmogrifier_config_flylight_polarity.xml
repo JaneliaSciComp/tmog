@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.8.7" frameSizePercentage="95"/>
+    <global minimumVersion="2.9.0" frameSizePercentage="95"/>
 
     <project name="Fly Light Polarity - manual entry (FLPO*)" default="true">
 
@@ -53,6 +53,8 @@
                 <property name="days_after_eclosion" value="Days After Eclosion"/>
                 <property name="area" value="$STATIC:Brain"/>
                 <property name="annotated_by" value="Annotator"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="microscope_filename"/>
             </rowListener>
 
         </plugins>
@@ -159,6 +161,14 @@
                 <validValue value="Yoshi Aso"/>
                 <validValue value="Tanya Wolff"/>
             </validValueList>
+
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            markedForTask="false">
+                <validValue value="DPX Ethanol Mounting"/>
+                <validValue value="DPX PBS Mounting"/>
+                <validValue value="Glycerol-Based Mounting"/>
+            </validValueList>
+
         </dataFields>
 
     </project>
@@ -223,6 +233,8 @@
                 <property name="age" value="Age"/>
                 <property name="full_age" value="Full Age"/>
                 <property name="annotated_by" value="Annotator"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="microscope_filename"/>
             </rowListener>
 
         </plugins>
@@ -349,10 +361,18 @@
                 <validValue value="Tanya Wolff"/>
             </validValueList>
 
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            markedForTask="false">
+                <validValue value="DPX Ethanol Mounting"/>
+                <validValue value="DPX PBS Mounting"/>
+                <validValue value="Glycerol-Based Mounting"/>
+            </validValueList>
+
         </dataFields>
 
     </project>
 
+<!--
     <project name="Fly Light Polarity - Yoshi Fix" taskName="simple-move">
 
         <inputFileFilter patternString=".+\.lsm"
@@ -360,9 +380,6 @@
 
         <inputFileSorter sortAlgorithm="Number"
                          patternString=".*_(L)(\d++)(\.lsm)"/>
-<!--
-        <inputFileSorter sortAlgorithm="Path"/>
--->
 
         <outputDirectory derivedFromSourceFile="true" fileModeReadOnly="false"/>
 
@@ -415,5 +432,6 @@
         </dataFields>
 
     </project>
+-->
 
 </transmogrifierConfiguration>
