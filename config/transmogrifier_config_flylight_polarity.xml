@@ -5,7 +5,153 @@
 
     <global minimumVersion="2.9.0" frameSizePercentage="95"/>
 
-    <project name="Fly Light Polarity - manual entry (FLPO*)" default="true">
+    <project name="Fly Light Polarity - preScreen - scope to dm11">
+
+        <inputFileFilter patternString=".+\.lsm" />
+
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString=".*_(L)(\d++)(\.lsm)"/>
+
+        <outputDirectory>
+            <path path="[\\dm11.janelia.priv|/groups/flylight]/flylight/polarity/preScreen/" />
+            <renameFieldValue fieldDisplayName="Date"/>
+            <path path="_"/>
+            <renameFieldValue fieldDisplayName="Slide"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Magnification"/>
+        </outputDirectory>
+
+        <plugins>
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Line" required="true"
+                  suffix="_"/>
+
+            <number displayName="Serial ID" required="true"
+                  minimumValue="50000" maximumValue="99999" suffix="_">
+            </number>
+
+            <date displayName="Date" required="true"
+                  datePattern="yyyyMMdd" suffix="_">
+                <sourceFileDateDefault pattern=".*_(\d{8})_.*"
+                                       fromDatePattern="yyyyMMdd"
+                                       toDatePattern="yyyyMMdd"/>
+            </date>
+
+            <text displayName="Slide" required="true"
+                  pattern="[A-Za-z]*\d+" suffix="_">
+                <sourceFileDefault pattern=".*_\d{8}_([^_]+)_.*"/>
+            </text>
+
+            <number displayName="Brain" required="true"
+                    minimumValue="1" maximumValue="99" padFormat="20"
+                    prefix="B" suffix="_">
+                <sourceFileDefault pattern="^B(\d+)_.*"/>
+            </number>
+
+            <number displayName="Tile Group" required="true"
+                    minimumValue="1" maximumValue="99" padFormat="20"
+                    prefix="T" suffix="_">
+                <sourceFileDefault pattern=".*_T(\d+)_.*"/>
+            </number>
+
+            <validValueList displayName="Magnification" required="true"
+                            autoComplete="true" suffix="_">
+                <sourceFileDefault pattern=".*_(\d\dX)_.*"/>
+                <validValue value="20X"/>
+                <validValue value="63X"/>
+            </validValueList>
+
+            <text displayName="Suffix" required="true"
+                  pattern="R\d+_L\d+">
+                <sourceFileDefault pattern=".*_(R\d+_L\d+)\.lsm$"/>
+                <sourceFileDefault pattern=".*_(R\d+_L\d+).*"/>
+            </text>
+
+            <separator value="_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS" />
+            <separator value=".lsm"/>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light Polarity - preScreen - dm11 to dm11" taskName="simple-move" default="true">
+
+        <inputFileFilter patternString=".+\.lsm" />
+
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString=".*_(L)(\d++)(\.lsm)"/>
+
+        <outputDirectory>
+            <path path="[\\dm11.janelia.priv|/groups/flylight]/flylight/polarity/preScreen/" />
+            <renameFieldValue fieldDisplayName="Date"/>
+            <path path="_"/>
+            <renameFieldValue fieldDisplayName="Slide"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Magnification"/>
+        </outputDirectory>
+
+        <plugins>
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Line" required="true"
+                  suffix="_"/>
+
+            <number displayName="Serial ID" required="true"
+                  minimumValue="50000" maximumValue="99999" suffix="_">
+            </number>
+
+            <date displayName="Date" required="true"
+                  datePattern="yyyyMMdd" suffix="_">
+                <sourceFileDateDefault pattern=".*_(\d{8})_.*"
+                                       fromDatePattern="yyyyMMdd"
+                                       toDatePattern="yyyyMMdd"/>
+            </date>
+
+            <text displayName="Slide" required="true"
+                  pattern="[A-Za-z]*\d+" suffix="_">
+                <sourceFileDefault pattern=".*_\d{8}_([^_]+)_.*"/>
+            </text>
+
+            <number displayName="Brain" required="true"
+                    minimumValue="1" maximumValue="99" padFormat="20"
+                    prefix="B" suffix="_">
+                <sourceFileDefault pattern="^B(\d+)_.*"/>
+            </number>
+
+            <number displayName="Tile Group" required="true"
+                    minimumValue="1" maximumValue="99" padFormat="20"
+                    prefix="T" suffix="_">
+                <sourceFileDefault pattern=".*_T(\d+)_.*"/>
+            </number>
+
+            <validValueList displayName="Magnification" required="true"
+                            autoComplete="true" suffix="_">
+                <sourceFileDefault pattern=".*_(\d\dX)_.*"/>
+                <validValue value="20X"/>
+                <validValue value="63X"/>
+            </validValueList>
+
+            <text displayName="Suffix" required="true"
+                  pattern="R\d+_L\d+">
+                <sourceFileDefault pattern=".*_(R\d+_L\d+)\.lsm$"/>
+                <sourceFileDefault pattern=".*_(R\d+_L\d+).*"/>
+            </text>
+
+            <separator value="_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS" />
+            <separator value=".lsm"/>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light Polarity - manual entry (FLPO*)">
 
         <inputFileSorter sortAlgorithm="Number"
                          patternString=".*_(L)(\d++)(\.lsm)"/>
@@ -372,66 +518,6 @@
 
     </project>
 
-<!--
-    <project name="Fly Light Polarity - Yoshi Fix" taskName="simple-move">
 
-        <inputFileFilter patternString=".+\.lsm"
-                         recursiveSearch="true"/>
-
-        <inputFileSorter sortAlgorithm="Number"
-                         patternString=".*_(L)(\d++)(\.lsm)"/>
-
-        <outputDirectory derivedFromSourceFile="true" fileModeReadOnly="false"/>
-
-        <plugins>
-        </plugins>
-
-        <dataFields>
-
-            <number displayName="Brain" required="true"
-                    minimumValue="1" maximumValue="99" padFormat="20"
-                    prefix="B" suffix="_">
-                <sourceFileDefault pattern="^B(\d+)_.*"/>
-            </number>
-
-            <number displayName="Tile Group" required="true"
-                    minimumValue="1" maximumValue="99" padFormat="20"
-                    prefix="T" suffix="_">
-                <sourceFileDefault pattern=".*_T(\d+)_.*"/>
-            </number>
-
-            <date displayName="Date" required="true"
-                  datePattern="yyyyMMdd" suffix="_">
-                <sourceFileDateDefault pattern=".*_(\d{8})_.*"
-                                       fromDatePattern="yyyyMMdd"
-                                       toDatePattern="yyyyMMdd"/>
-            </date>
-
-            <text displayName="Slide" required="true"
-                  pattern="[A-Za-z]*\d+" suffix="_">
-                <sourceFileDefault pattern=".*_\d{8}_([^_]+)_.*"/>
-            </text>
-
-            <text displayName="Line" required="true"
-                  suffix="_"/>
-
-            <validValueList displayName="Magnification" required="true"
-                            autoComplete="true" suffix="_">
-                <sourceFileDefault pattern=".*_(\d\dX)_.*"/>
-                <validValue value="20X"/>
-                <validValue value="63X"/>
-            </validValueList>
-
-            <text displayName="Suffix" required="true"
-                  pattern="R\d+_L\d+">
-                <sourceFileDefault pattern=".*_(R\d+_L\d+)\.lsm$"/>
-            </text>
-
-            <separator value=".lsm"/>
-
-        </dataFields>
-
-    </project>
--->
 
 </transmogrifierConfiguration>
