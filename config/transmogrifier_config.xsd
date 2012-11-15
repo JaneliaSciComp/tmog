@@ -168,6 +168,7 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
                 <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
+                <xs:element name="sourceFileSlideLocationDefault" type="sourceFileSlideLocationDefaultType"/>
                 <xs:element name="targetPropertyDefault" type="targetPropertyDefaultType"/>
                 <xs:element name="staticDefault" type="staticDefaultType" />
                 <xs:element name="pluginDefault" type="pluginDefaultType"/>
@@ -243,6 +244,7 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
                 <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
+                <xs:element name="sourceFileSlideLocationDefault" type="sourceFileSlideLocationDefaultType"/>
                 <xs:element name="targetPropertyDefault" type="targetPropertyDefaultType"/>
                 <xs:element name="staticDefault" type="staticDefaultType" />
                 <xs:element name="pluginDefault" type="pluginDefaultType"/>
@@ -264,6 +266,7 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
                 <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
+                <xs:element name="sourceFileSlideLocationDefault" type="sourceFileSlideLocationDefaultType"/>
                 <xs:element name="targetPropertyDefault" type="targetPropertyDefaultType"/>
                 <xs:element name="staticDefault" type="staticDefaultType" />
                 <xs:element name="pluginDefault" type="pluginDefaultType"/>
@@ -357,6 +360,13 @@
         <xs:attribute name="patternGroupNumber" type="xs:positiveInteger"/>
         <xs:attribute name="matchType" type="matchType"/>
         <xs:attribute name="useKeyValueWhenUnmapped" type="xs:boolean" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="sourceFileSlideLocationDefaultType">
+        <xs:attribute name="pattern" type="xs:string"/>
+        <xs:attribute name="patternGroupNumber" type="xs:positiveInteger"/>
+        <xs:attribute name="matchType" type="matchType"/>
+        <xs:attribute name="numberOfSlideColumns" type="xs:positiveInteger"/>
     </xs:complexType>
 
     <xs:complexType name="targetPropertyDefaultType">

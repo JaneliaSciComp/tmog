@@ -27,6 +27,7 @@ import org.janelia.it.ims.tmog.field.RunTimeModel;
 import org.janelia.it.ims.tmog.field.SourceFileDateDefaultValue;
 import org.janelia.it.ims.tmog.field.SourceFileDefaultValue;
 import org.janelia.it.ims.tmog.field.SourceFileMappedDefaultValue;
+import org.janelia.it.ims.tmog.field.SourceFileSlideLocationDefaultValue;
 import org.janelia.it.ims.tmog.field.StaticDataModel;
 import org.janelia.it.ims.tmog.field.StaticDefaultValue;
 import org.janelia.it.ims.tmog.field.TargetNameModel;
@@ -263,6 +264,9 @@ public class TransmogrifierConfiguration {
                                digester);
         createSetAndAddDefault("*/sourceFileMappedDefault",
                                SourceFileMappedDefaultValue.class,
+                               digester);
+        createSetAndAddDefault("*/sourceFileSlideLocationDefault",
+                               SourceFileSlideLocationDefaultValue.class,
                                digester);
         createSetAndAddDefault("*/targetPropertyDefault",
                                TargetPropertyDefaultValue.class,
