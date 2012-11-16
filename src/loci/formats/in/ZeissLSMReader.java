@@ -1017,7 +1017,7 @@ public class ZeissLSMReader {
     }
 
     private void parseApplicationTags() throws IOException {
-//        int blockSize = in.readInt();
+        int blockSize = in.readInt();
         int numEntries = in.readInt();
 
         for (int i=0; i<numEntries; i++) {
