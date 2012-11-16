@@ -31,6 +31,7 @@ public abstract class VerifiedFieldModel extends PlainDocument
     private String prefix;
     private String suffix;
     private boolean isEditable;
+    private boolean isVisible;
     private boolean isCopyable;
     private boolean markedForTask;
     private boolean sharedForAllSessionFiles;
@@ -41,6 +42,7 @@ public abstract class VerifiedFieldModel extends PlainDocument
         super();
         this.defaultValueList = new DefaultValueList();
         this.isEditable = true;
+        this.isVisible = true;
         this.isCopyable = true;
         this.markedForTask = true;
         this.displayWidth = 100;
@@ -66,7 +68,7 @@ public abstract class VerifiedFieldModel extends PlainDocument
     }
 
     public boolean isVisible() {
-        return true;
+        return isVisible;
     }
 
     public boolean isCopyable() {
@@ -114,6 +116,7 @@ public abstract class VerifiedFieldModel extends PlainDocument
         instance.prefix = prefix;
         instance.suffix = suffix;
         instance.isEditable = isEditable;
+        instance.isVisible = isVisible;
         instance.isCopyable = isCopyable;
         instance.markedForTask = markedForTask;
         instance.sharedForAllSessionFiles = sharedForAllSessionFiles;
@@ -241,6 +244,11 @@ public abstract class VerifiedFieldModel extends PlainDocument
     @SuppressWarnings("UnusedDeclaration")
     public void setEditable(boolean editable) {
         isEditable = editable;
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void setVisible(boolean visible) {
+        isVisible = visible;
     }
 
     @SuppressWarnings("UnusedDeclaration")

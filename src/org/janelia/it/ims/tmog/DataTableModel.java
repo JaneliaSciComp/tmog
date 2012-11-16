@@ -305,7 +305,6 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
                 if (! field.verify()) {
                     isValid = false;
 
-                    final int columnIndex = getColumnIndexForField(fieldIndex);
                     final Target rowTarget = row.getTarget();
 
                     StringBuilder message = new StringBuilder();
@@ -314,12 +313,16 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
 
                     if (field instanceof DataFieldGroupModel) {
                         DataFieldGroupModel dfgm = (DataFieldGroupModel) field;
-                        Object nestedErrorField =
-                                dfgm.getValueAt(dfgm.getErrorRow(),
-                                                dfgm.getErrorColumn());
-                        if (nestedErrorField instanceof DataField) {
-                            message.append(": ");
-                            message.append(((DataField) nestedErrorField).getDisplayName());
+                        // column could be null if error field is not visible
+                        final Integer errorColumn = dfgm.getErrorColumn();
+                        if (errorColumn != null) {
+                            Object nestedErrorField =
+                                    dfgm.getValueAt(dfgm.getErrorRow(),
+                                                    errorColumn);
+                            if (nestedErrorField instanceof DataField) {
+                                message.append(": ");
+                                message.append(((DataField) nestedErrorField).getDisplayName());
+                            }
                         }
                     }
                     message.append(" value for ");
@@ -327,7 +330,9 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
                     message.append(" is invalid.  ");
                     message.append(field.getErrorMessage());
                                                                     
-                    setError(rowIndex, columnIndex, message.toString());
+                    setError(rowIndex,
+                             getColumnIndexForField(fieldIndex),
+                             message.toString());
                     break;
                 }
             }
@@ -576,7 +581,7 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         this.fireTableDataChanged();
     }
 
-    private int getColumnIndexForField(int fieldIndex) {
+    private Integer getColumnIndexForField(int fieldIndex) {
         return fieldToColumnIndexMap.get(fieldIndex);
     }
 }

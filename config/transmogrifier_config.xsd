@@ -134,6 +134,7 @@
         <xs:attribute name="suffix" type="xs:string"/>
         <xs:attribute name="padFormat" type="xs:string"/>
         <xs:attribute name="editable" type="xs:boolean"/>
+        <xs:attribute name="visible" type="xs:boolean"/>
         <xs:attribute name="copyable" type="xs:boolean"/>
         <xs:attribute name="markedForTask" type="xs:boolean"/>
         <xs:attribute name="sharedForAllSessionFiles" type="xs:boolean"/>
@@ -158,6 +159,7 @@
         <xs:attribute name="suffix" type="xs:string"/>
         <xs:attribute name="padFormat" type="xs:string"/>
         <xs:attribute name="editable" type="xs:boolean"/>
+        <xs:attribute name="visible" type="xs:boolean"/>
         <xs:attribute name="copyable" type="xs:boolean"/>
         <xs:attribute name="markedForTask" type="xs:boolean"/>
         <xs:attribute name="sharedForAllSessionFiles" type="xs:boolean"/>
@@ -184,6 +186,7 @@
         <xs:attribute name="suffix" type="xs:string"/>
         <xs:attribute name="padFormat" type="xs:string"/>
         <xs:attribute name="editable" type="xs:boolean"/>
+        <xs:attribute name="visible" type="xs:boolean"/>
         <xs:attribute name="copyable" type="xs:boolean"/>
         <xs:attribute name="markedForTask" type="xs:boolean"/>
         <xs:attribute name="sharedForAllSessionFiles" type="xs:boolean"/>
@@ -206,6 +209,7 @@
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
         <xs:attribute name="editable" type="xs:boolean"/>
+        <xs:attribute name="visible" type="xs:boolean"/>
         <xs:attribute name="copyable" type="xs:boolean"/>
         <xs:attribute name="markedForTask" type="xs:boolean"/>
         <xs:attribute name="sharedForAllSessionFiles" type="xs:boolean"/>
@@ -228,6 +232,7 @@
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
         <xs:attribute name="editable" type="xs:boolean"/>
+        <xs:attribute name="visible" type="xs:boolean"/>
         <xs:attribute name="copyable" type="xs:boolean"/>
         <xs:attribute name="markedForTask" type="xs:boolean"/>
         <xs:attribute name="sharedForAllSessionFiles" type="xs:boolean"/>
