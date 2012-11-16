@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2012 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -57,8 +57,8 @@ public class SimpleMoveTask
                                 File renamedFile)
             throws IOException, FileCopyFailedException {
 
-        final String fromFileToFile = rowFile.getAbsolutePath() + " to " +
-                                      renamedFile.getAbsolutePath();
+        final String fromFileToFile = getFromFileToFileText(rowFile,
+                                                            renamedFile);
         LOG.info("starting move of " + fromFileToFile);
 
         File parent = renamedFile.getParentFile();
@@ -69,7 +69,7 @@ public class SimpleMoveTask
 
         final boolean renameSucceeded = rowFile.renameTo(renamedFile);
         if (renameSucceeded) {
-            LOG.info("Successfully moved " + fromFileToFile);
+            handleSuccessfulMove(rowFile, renamedFile);
         } else {
             throw new IOException("failed to move " + fromFileToFile);
         }
@@ -116,6 +116,18 @@ public class SimpleMoveTask
     @Override
     protected String getSummaryHeader() {
         return "Moved the following files from ";
+    }
+
+    protected void handleSuccessfulMove(File rowFile,
+                                        File renamedFile) {
+        LOG.info("Successfully moved " + getFromFileToFileText(rowFile,
+                                                               renamedFile));
+    }
+
+    private String getFromFileToFileText(File rowFile,
+                                           File renamedFile) {
+        return rowFile.getAbsolutePath() + " to " +
+               renamedFile.getAbsolutePath();
     }
 
     private static final Logger LOG = Logger.getLogger(SimpleMoveTask.class);

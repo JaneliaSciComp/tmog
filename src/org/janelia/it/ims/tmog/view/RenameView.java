@@ -25,6 +25,7 @@ import org.janelia.it.ims.tmog.plugin.RowUpdater;
 import org.janelia.it.ims.tmog.plugin.RowValidator;
 import org.janelia.it.ims.tmog.target.FileTarget;
 import org.janelia.it.ims.tmog.target.Target;
+import org.janelia.it.ims.tmog.task.MoveAndLogDigestTask;
 import org.janelia.it.ims.tmog.task.RenameTask;
 import org.janelia.it.ims.tmog.task.RenameWithoutDeleteTask;
 import org.janelia.it.ims.tmog.task.SimpleMoveTask;
@@ -373,6 +374,12 @@ public class RenameView implements SessionView, InputSelectionView {
                                       projectConfig.getFileTransfer(),
                                       outputDirectoryField.getText());
 
+        } else if (MoveAndLogDigestTask.TASK_NAME.equals(taskName)) {
+
+            task = new MoveAndLogDigestTask(tableModel,
+                                            projectConfig.getOutputDirectory(),
+                                            projectConfig.getFileTransfer(),
+                                            outputDirectoryField.getText());
         } else {
 
             task = new RenameTask(tableModel,

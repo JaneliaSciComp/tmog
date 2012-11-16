@@ -127,8 +127,12 @@ public class SafeFileTransfer {
                              (valStartTime - copyStartTime) / 1000.0;
                      final double valDurationSeconds =
                              (valStopTime - valStartTime) / 1000.0;
-                     logCopyStats(hashCode, srcLocation, destLocation,
-                                  copyDurationSeconds, valDurationSeconds);
+                     logTransferStats("copied",
+                                      hashCode,
+                                      srcLocation,
+                                      destLocation,
+                                      copyDurationSeconds,
+                                      valDurationSeconds);
                  }
              } else {
                  destLocation.delete();
@@ -371,20 +375,23 @@ public class SafeFileTransfer {
         }
     }
 
-    private static void logCopyStats(byte[] hashCode,
-                                     File srcLocation,
-                                     File destLocation,
-                                     double copyDurationSeconds,
-                                     double validationDurationSeconds) {
+    public static void logTransferStats(String transferType,
+                                        byte[] hashCode,
+                                        File srcLocation,
+                                        File destLocation,
+                                        double copyDurationSeconds,
+                                        double validationDurationSeconds) {
         StringBuilder sb =
                 new StringBuilder(hashCode.length + 256);
-        sb.append("Successfully copied ");
+        sb.append("Successfully ");
+        sb.append(transferType);
+        sb.append(' ');
         sb.append(srcLocation.getAbsolutePath());
         sb.append(" to ");
         sb.append(destLocation.getAbsolutePath());
         if (! srcLocation.isDirectory()) {
             sb.append(".  A total of ");
-            sb.append(srcLocation.length());
+            sb.append(destLocation.length());
             sb.append(" bytes were copied in ");
             sb.append(copyDurationSeconds);
             sb.append(" seconds");
