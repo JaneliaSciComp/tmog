@@ -26,11 +26,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * This class handles row and session events "published" by the
  * transmogrifier tool.  As renaming is performed, this plug-in
- * records the set of parent directories for the renamed files.
+ * records the set of plugin data for each successfully processed row.
  * Upon completion of session processing, the plug-in creates
- * an empty completion file in each of the recorded parent directories.
- * The completion files can then be used to trigger other external
- * processes.
+ * a "renamed-files-...tsv" file that contains the old and new paths/names
+ * of each successfully processed file.
  * </p>
  *
  * <p>
