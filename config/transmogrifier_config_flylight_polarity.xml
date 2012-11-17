@@ -366,18 +366,9 @@
 
     </project>
 
-    <project name="Fly Light Polarity - preScreen - fix first pass" taskName="move-and-log-digest">
+    <project name="Fly Light Polarity - preScreen - generate Zeiss data files" taskName="collector">
 
         <inputFileFilter patternString=".+\.lsm" recursiveSearch="true" />
-
-        <outputDirectory>
-            <path path="[\\dm11.janelia.priv|/groups/flylight]/flylight/polarity/preScreen/" />
-            <renameFieldValue fieldDisplayName="Mount Date"/>
-            <path path="_"/>
-            <renameFieldValue fieldDisplayName="Slide Number"/>
-            <path path="/"/>
-            <renameFieldValue fieldDisplayName="Magnification"/>
-        </outputDirectory>
 
         <plugins>
 
@@ -389,60 +380,6 @@
         </plugins>
 
         <dataFields>
-
-            <text displayName="Line" required="true"
-                  suffix="_">
-                <sourceFileDefault pattern="(.*)_\d{5}_\d{8}_.*"/>
-            </text>
-
-            <number displayName="Serial ID" required="true"
-                  minimumValue="50000" maximumValue="99999" suffix="_">
-                <sourceFileDefault pattern=".*_(\d{5})_\d{8}_.*"/>
-            </number>
-
-            <date displayName="Mount Date" required="true"
-                  datePattern="yyyyMMdd" suffix="_">
-                <sourceFileDateDefault pattern=".*_(\d{8})_.*"
-                                       fromDatePattern="yyyyMMdd"
-                                       toDatePattern="yyyyMMdd"/>
-            </date>
-
-            <text displayName="Slide Number" required="true"
-                  pattern="[A-Za-z]*\d+" suffix="_">
-                <sourceFileDefault pattern=".*_\d{8}_(\d+)_.*"/>
-            </text>
-
-            <number displayName="Zeiss Brain" required="true"
-                    minimumValue="1" maximumValue="99" padFormat="20"
-                    prefix="zb" suffix="_">
-                <sourceFileDefault pattern=".*_B(\d+)_.*"/>
-            </number>
-
-            <number displayName="Zeiss Tile" required="true"
-                    minimumValue="1" maximumValue="99" padFormat="20"
-                    prefix="zt" suffix="_">
-                <sourceFileDefault pattern=".*_T(\d+)_.*"/>
-            </number>
-
-            <validValueList displayName="Magnification" required="true"
-                            autoComplete="true" suffix="_">
-                <sourceFileDefault pattern=".*_(\d\dX)_.*"/>
-                <validValue value="20X"/>
-                <validValue value="63X"/>
-            </validValueList>
-
-            <text displayName="Suffix" required="true"
-                  pattern="R\d+_L\d+">
-                <sourceFileDefault pattern=".*_(R\d+_L\d+).*"/>
-            </text>
-
-            <separator value="_"/>
-            <text displayName="Run Time" required="true"
-                  pattern="\d{17}">
-                <sourceFileDefault pattern=".*_(\d{17}).*"/>
-            </text>
-            <separator value=".lsm"/>
-
         </dataFields>
 
     </project>
