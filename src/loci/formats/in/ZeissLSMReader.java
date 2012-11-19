@@ -530,6 +530,15 @@ public class ZeissLSMReader {
 
         int positionOffset = ras.readInt();
 
+        // Janelia hack:
+        // Add check for out of range position offset since it was
+        // killing parsing for some LSM files.
+        // This simply skips over the problem since I have no idea what the
+        // real problem is.
+        if (positionOffset > ras.length()) {
+            positionOffset = 0;            
+        }
+
         // read referenced structures
 
         addSeriesMeta("DimensionZ", core.sizeZ);
