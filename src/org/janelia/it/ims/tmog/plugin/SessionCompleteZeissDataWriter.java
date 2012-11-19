@@ -12,6 +12,7 @@ import loci.formats.in.ZeissLSMReader;
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
+import org.janelia.it.ims.tmog.target.FileTarget;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -348,6 +349,41 @@ public class SessionCompleteZeissDataWriter
             return sb.toString();
         }
 
+    }
+
+    public static void main(String[] args) {
+        SessionCompleteZeissDataWriter plugin =
+                new SessionCompleteZeissDataWriter();
+
+        if (args.length < 2) {
+            System.out.println(
+                    "USAGE: java " + SessionCompleteZeissDataWriter.class +
+                    " <baseFileName> <lsmFile> [lsmFile ...]");
+            System.exit(1);
+        }
+
+        PluginConfiguration config = new PluginConfiguration();
+        config.setProperty("baseFileName", args[0]);
+
+        List<PluginDataRow> dataRows = new ArrayList<PluginDataRow>();
+        File file;
+        DataRow dataRow;
+        for (int i = 1; i < args.length; i++) {
+            file = new File(args[i]);
+            if (file.exists()) {
+                dataRow = new DataRow(new FileTarget(file));
+                dataRows.add(new PluginDataRow(dataRow));
+            }
+        }
+        try {
+            plugin.init(config);
+            for (PluginDataRow row : dataRows) {
+                plugin.processEvent(EventType.END_ROW_SUCCESS, row);
+            }
+            plugin.endSession("done!");
+        } catch (Exception e) {
+            LOG.error(e);
+        }
     }
 
     private static final Logger LOG =
