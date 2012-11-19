@@ -30,8 +30,9 @@
         <plugins>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionCompleteZeissDataWriter">
-                <property name="baseFileName" value="0-zeiss-laser-data"/>
-                <property name="key-1" value="Laser.*"/>
+                <property name="baseFileName" value="0-zeiss-data"/>
+                <property name="key-1" value=".*Laser.*(Name|Power).*"/>
+                <property name="key-2" value=".*Illumination.*(Name|Power B).*"/>
             </sessionListener>
 
             <!--
@@ -133,8 +134,9 @@
         <plugins>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionCompleteZeissDataWriter">
-                <property name="baseFileName" value="0-zeiss-laser-data"/>
-                <property name="key-1" value="Laser.*"/>
+                <property name="baseFileName" value="0-zeiss-data"/>
+                <property name="key-1" value=".*Laser.*(Name|Power).*"/>
+                <property name="key-2" value=".*Illumination.*(Name|Power B).*"/>
             </sessionListener>
 
         </plugins>
@@ -162,6 +164,8 @@
 
             <text displayName="Slide Location" required="true"
                   pattern="[A-Z]\d\d?" convertToUpperCase="true" suffix="_">
+                <sourceFileSlideLocationDefault pattern="(?:^|.*_)B(\d+)_.*"
+                                                numberOfSlideColumns="6"/>
             </text>
 
             <number displayName="Zeiss Brain" required="true"
@@ -373,8 +377,9 @@
         <plugins>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionCompleteZeissDataWriter">
-                <property name="baseFileName" value="0-zeiss-laser-data"/>
-                <property name="key-1" value="Laser.*"/>
+                <property name="baseFileName" value="0-zeiss-data"/>
+                <property name="key-1" value=".*Laser.*(Name|Power).*"/>
+                <property name="key-2" value=".*Illumination.*(Name|Power B).*"/>
             </sessionListener>
 
         </plugins>
