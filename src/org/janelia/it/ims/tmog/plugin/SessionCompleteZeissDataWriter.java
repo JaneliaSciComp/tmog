@@ -19,6 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -222,6 +223,11 @@ public class SessionCompleteZeissDataWriter
                     }
                 }
             }
+
+            // sort list in result file order instead of from file order
+            for (List<ZeissData> list : directoryToFileMap.values()) {
+                Collections.sort(list);
+            }
         }
 
         return directoryToFileMap;
@@ -295,7 +301,7 @@ public class SessionCompleteZeissDataWriter
     /**
      * Helper class for working with data parsed from a Zeiss lsm file.
      */
-    private class ZeissData {
+    private class ZeissData implements Comparable<ZeissData> {
 
         private File lsmFile;
         private Set<String> matchingKeys;
@@ -349,6 +355,10 @@ public class SessionCompleteZeissDataWriter
             return sb.toString();
         }
 
+        @Override
+        public int compareTo(ZeissData that) {
+            return lsmFile.compareTo(that.lsmFile);
+        }
     }
 
     public static void main(String[] args) {
