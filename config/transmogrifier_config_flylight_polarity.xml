@@ -47,43 +47,58 @@
                   suffix="_"/>
 
             <number displayName="Serial ID" required="true"
-                  minimumValue="50000" maximumValue="99999" suffix="_">
+                  minimumValue="50000"
+                  maximumValue="99999"
+                  suffix="_">
             </number>
 
             <date displayName="Mount Date" required="true"
-                  datePattern="yyyyMMdd" suffix="_">
+                  datePattern="yyyyMMdd"
+                  suffix="_">
                 <sourceFileDateDefault pattern=".*_(\d{8})_.*"
                                        fromDatePattern="yyyyMMdd"
                                        toDatePattern="yyyyMMdd"/>
             </date>
 
             <text displayName="Slide Number" required="true"
-                  pattern="[A-Za-z]*\d+" suffix="_">
+                  pattern="[A-Za-z]*\d+"
+                  suffix="_">
                 <sourceFileDefault pattern=".*_\d{8}_([^_]+)_.*"/>
             </text>
 
             <text displayName="Slide Location" required="true"
-                  pattern="[A-Z]\d\d?" convertToUpperCase="true" suffix="_">
+                  pattern="[A-Z]\d\d?"
+                  convertToUpperCase="true"
+                  copyable="false"
+                  suffix="_">
                 <sourceFileSlideLocationDefault pattern="(?:^|.*_)B(\d+)_.*"
                                                 numberOfSlideColumns="6"/>
             </text>
 
             <number displayName="Zeiss Brain" required="true"
-                    minimumValue="1" maximumValue="99" padFormat="20"
-                    prefix="zb" suffix="_">
+                    minimumValue="1"
+                    maximumValue="99"
+                    padFormat="20"
+                    copyable="false"
+                    prefix="zb"
+                    suffix="_">
                 <sourceFileDefault pattern=".*_zb(\d+)_.*"/>
                 <sourceFileDefault pattern="(?:^|.*_)B(\d+)_.*"/>
             </number>
 
             <number displayName="Zeiss Tile" required="true"
-                    minimumValue="1" maximumValue="99" padFormat="20"
-                    prefix="zt" suffix="_">
+                    minimumValue="1"
+                    maximumValue="99"
+                    padFormat="20"
+                    prefix="zt"
+                    suffix="_">
                 <sourceFileDefault pattern=".*_zt(\d+)_.*"/>
                 <sourceFileDefault pattern=".*_T(\d+)_.*"/>
             </number>
 
             <validValueList displayName="Magnification" required="true"
-                            autoComplete="true" suffix="_">
+                            autoComplete="true"
+                            suffix="_">
                 <sourceFileDefault pattern=".*_(\d\dX)_.*"/>
                 <validValue value="20X"/>
                 <validValue value="63X"/>
@@ -107,7 +122,8 @@
             </number>
 
             <text displayName="Suffix" required="true"
-                  pattern="R\d+_L\d+">
+                  pattern="R\d+_L\d+"
+                  copyable="false">
                 <sourceFileDefault pattern=".*_(R\d+_L\d+).*"/>
             </text>
 
@@ -150,41 +166,56 @@
                   suffix="_"/>
 
             <number displayName="Serial ID" required="true"
-                  minimumValue="50000" maximumValue="99999" suffix="_">
+                  minimumValue="50000"
+                  maximumValue="99999"
+                  suffix="_">
             </number>
 
             <date displayName="Mount Date" required="true"
-                  datePattern="yyyyMMdd" suffix="_">
+                  datePattern="yyyyMMdd"
+                  suffix="_">
                 <sourceFileDateDefault pattern=".*_(\d{8})_.*"
                                        fromDatePattern="yyyyMMdd"
                                        toDatePattern="yyyyMMdd"/>
             </date>
 
             <text displayName="Slide Number" required="true"
-                  pattern="[A-Za-z]*\d+" suffix="_">
+                  pattern="[A-Za-z]*\d+"
+                  suffix="_">
                 <sourceFileDefault pattern=".*_\d{8}_(\d+)_.*"/>
             </text>
 
             <text displayName="Slide Location" required="true"
-                  pattern="[A-Z]\d\d?" convertToUpperCase="true" suffix="_">
+                  pattern="[A-Z]\d\d?"
+                  convertToUpperCase="true"
+                  copyable="false"
+                  suffix="_">
                 <sourceFileSlideLocationDefault pattern="(?:^|.*_)B(\d+)_.*"
                                                 numberOfSlideColumns="6"/>
             </text>
 
             <number displayName="Zeiss Brain" required="true"
-                    minimumValue="1" maximumValue="99" padFormat="20"
-                    prefix="zb" suffix="_">
+                    minimumValue="1"
+                    maximumValue="99"
+                    padFormat="20"
+                    copyable="false"
+                    prefix="zb"
+                    suffix="_">
                 <sourceFileDefault pattern="(?:^|.*_)B(\d+)_.*"/>
             </number>
 
             <number displayName="Zeiss Tile" required="true"
-                    minimumValue="1" maximumValue="99" padFormat="20"
-                    prefix="zt" suffix="_">
+                    minimumValue="1"
+                    maximumValue="99"
+                    padFormat="20"
+                    prefix="zt"
+                    suffix="_">
                 <sourceFileDefault pattern=".*_T(\d+)_.*"/>
             </number>
 
             <validValueList displayName="Magnification" required="true"
-                            autoComplete="true" suffix="_">
+                            autoComplete="true"
+                            suffix="_">
                 <sourceFileDefault pattern=".*_(\d\dX)_.*"/>
                 <validValue value="20X"/>
                 <validValue value="63X"/>
@@ -208,7 +239,8 @@
             </number>
 
             <text displayName="Suffix" required="true"
-                  pattern="R\d+_L\d+">
+                  pattern="R\d+_L\d+"
+                  copyable="false">
                 <sourceFileDefault pattern=".*_(R\d+_L\d+).*"/>
             </text>
 
@@ -308,8 +340,10 @@
                             autoComplete="true">
             </webServiceList>
 
-            <text displayName="GAL4 Vial" pattern="^[A-Z]$"
-                  markedForTask="false" convertToUpperCase="true">
+            <text displayName="GAL4 Vial"
+                  pattern="^[A-Z]$"
+                  markedForTask="false"
+                  convertToUpperCase="true">
             </text>
 
             <cvTermList displayName="Effector" required="true"
@@ -319,7 +353,9 @@
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
             </cvTermList>
 
-            <text displayName="Slide Code" pattern="\d{8}_\d+_[A-Z]\d+" required="true"
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
                   markedForTask="false">
                 <sourceFileDefault pattern=".*_(\d{8}_\d+_[A-Z]\d+).*"/>
                 <sourceFileDefault pattern=".*_(\d{8}_\d+_).*"/> <!-- for preScreen prior to zeiss brain number standardization -->
@@ -363,7 +399,8 @@
 
             <number displayName="Days After Eclosion" required="false"
                     markedForTask="false"
-                    minimumValue="0" maximumValue="21" />
+                    minimumValue="0"
+                    maximumValue="21" />
 
             <cvTermList displayName="Imager" required="true"
                         markedForTask="false"
