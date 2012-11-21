@@ -21,6 +21,7 @@ import org.janelia.it.ims.tmog.field.FileModificationTimeModel;
 import org.janelia.it.ims.tmog.field.FileNameModel;
 import org.janelia.it.ims.tmog.field.FileRelativePathModel;
 import org.janelia.it.ims.tmog.field.HttpValidValueModel;
+import org.janelia.it.ims.tmog.field.LsmDefaultValue;
 import org.janelia.it.ims.tmog.field.MappedValue;
 import org.janelia.it.ims.tmog.field.PluginDataModel;
 import org.janelia.it.ims.tmog.field.RunTimeModel;
@@ -253,6 +254,9 @@ public class TransmogrifierConfiguration {
                         MappedValue.class,
                         "addMappedValue", digester);
 
+        createSetAndAddDefault("*/lsmDefault",
+                               LsmDefaultValue.class,
+                               digester);
         createSetAndAddDefault("*/sourceFileDefault",
                                SourceFileDefaultValue.class,
                                digester);

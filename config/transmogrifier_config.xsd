@@ -118,6 +118,7 @@
     <xs:complexType name="numberType">
         <xs:sequence>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="lsmDefault" type="lsmDefaultType"/>
                 <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
                 <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
                 <xs:element name="targetPropertyDefault" type="targetPropertyDefaultType"/>
@@ -143,6 +144,7 @@
     <xs:complexType name="decimalType">
         <xs:sequence>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="lsmDefault" type="lsmDefaultType"/>
                 <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
                 <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
                 <xs:element name="targetPropertyDefault" type="targetPropertyDefaultType"/>
@@ -168,6 +170,7 @@
     <xs:complexType name="textType">
         <xs:sequence>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="lsmDefault" type="lsmDefaultType"/>
                 <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
                 <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
                 <xs:element name="sourceFileSlideLocationDefault" type="sourceFileSlideLocationDefaultType"/>
@@ -218,6 +221,7 @@
     <xs:complexType name="wellType">
         <xs:sequence>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="lsmDefault" type="lsmDefaultType"/>
                 <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
                 <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
                 <xs:element name="targetPropertyDefault" type="targetPropertyDefaultType"/>
@@ -247,6 +251,7 @@
     <xs:complexType name="validValueListType">
         <xs:sequence>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="lsmDefault" type="lsmDefaultType"/>
                 <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
                 <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
                 <xs:element name="sourceFileSlideLocationDefault" type="sourceFileSlideLocationDefaultType"/>
@@ -269,6 +274,7 @@
     <xs:complexType name="webServiceListType">
         <xs:sequence>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="lsmDefault" type="lsmDefaultType"/>
                 <xs:element name="sourceFileDefault" type="sourceFileDefaultType"/>
                 <xs:element name="sourceFileMappedDefault" type="sourceFileMappedDefaultType"/>
                 <xs:element name="sourceFileSlideLocationDefault" type="sourceFileSlideLocationDefaultType"/>
@@ -338,6 +344,11 @@
             <xs:enumeration value="path"/>
         </xs:restriction>
     </xs:simpleType>
+
+    <xs:complexType name="lsmDefaultType">
+        <xs:attribute name="propertyName" type="xs:string"/>
+        <xs:attribute name="truncateDecimal" type="xs:boolean"/>
+    </xs:complexType>
 
     <xs:complexType name="sourceFileDefaultType">
         <xs:attribute name="pattern" type="xs:string"/>
