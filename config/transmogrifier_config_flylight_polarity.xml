@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.9.1" frameSizePercentage="95"/>
+    <global minimumVersion="2.9.3" frameSizePercentage="95"/>
 
     <project name="Fly Light Polarity - preScreen - scope to dm11">
 
@@ -392,7 +392,7 @@
 
         <project name="Fly Light Polarity - add channel info" taskName="simple-move">
 
-        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+        <inputFileFilter patternString=".*zb.*\.lsm" recursiveSearch="true"/>
 
         <!-- NOTES:
              - first capturing group must be equal for second capturing group
@@ -441,20 +441,19 @@
 
             <text displayName="Slide Location" required="true"
                   pattern="[A-Z]\d\d?" convertToUpperCase="true" suffix="_">
-                <sourceFileSlideLocationDefault pattern="(?:^|.*_)B(\d+)_.*"
-                                                numberOfSlideColumns="6"/>
+                <sourceFileDefault pattern=".*_\d{8}_\d\d_([A-Z]\d)_zb.*"/>
             </text>
 
             <number displayName="Zeiss Brain" required="true"
                     minimumValue="1" maximumValue="99" padFormat="20"
                     prefix="zb" suffix="_">
-                <sourceFileDefault pattern="(?:^|.*_)B(\d+)_.*"/>
+                <sourceFileDefault pattern=".*_zb(\d+)_.*"/>
             </number>
 
             <number displayName="Zeiss Tile" required="true"
                     minimumValue="1" maximumValue="99" padFormat="20"
                     prefix="zt" suffix="_">
-                <sourceFileDefault pattern=".*_T(\d+)_.*"/>
+                <sourceFileDefault pattern=".*_zt(\d+)_.*"/>
             </number>
 
             <validValueList displayName="Magnification" required="true"
