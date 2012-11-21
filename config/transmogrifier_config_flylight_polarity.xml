@@ -28,6 +28,13 @@
         </outputDirectory>
 
         <plugins>
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Serial ID}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="Line" value="parent1StockName" />
+            </rowUpdater>
+
             <!--
                   The companion file listener (for log files) should be the
                   last defined plug-in to ensure that log files are only
@@ -158,6 +165,13 @@
         </outputDirectory>
 
         <plugins>
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Serial ID}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="Line" value="parent1StockName" />
+            </rowUpdater>
+
         </plugins>
 
         <dataFields>
@@ -268,6 +282,14 @@
 
         <plugins>
 
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Serial ID}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="GAL4 Line" value="parent1StockName" />
+                <property name="Effector" value="reporter" />
+            </rowUpdater>
+
             <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
                 <property name="validateField" value="Gender"/>
                 <property name="matchesPattern" value="\S+"/>
@@ -327,10 +349,20 @@
             <separator value=".lsm"/>
 
             <!--
+             The Serial ID is currently only used to load other data -
+             it is not embedded in the file name, nor is it stored in SAGE.
+            -->
+            <number displayName="Serial ID"
+                    minimumValue="50000"
+                    maximumValue="99999"
+                    markedForTask="false">
+                <sourceFileDefault pattern=".*_(\d{5})_\d{8}_\d{2}_.*" />
+            </number>
+
+            <!--
              These values are collected for storage but are not
              included as components of the file name (markedForTask="false").
              -->
-
             <webServiceList displayName="GAL4 Line" required="true"
                             markedForTask="false"
                             valueCreationPath="*/line"
