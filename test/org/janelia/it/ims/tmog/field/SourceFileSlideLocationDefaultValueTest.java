@@ -53,15 +53,29 @@ public class SourceFileSlideLocationDefaultValueTest
      */
     public void testGetValue() throws Exception {
 
+        final String pattern = "(?:^|.*_)B(\\d+)_.*";
         // default number of columns is 6, so 22 -> D4
         checkDefaultValue("B22_T01_20121029_32_MB381B_20X_R1_L36.lsm",
-                          "(?:^|.*_)B(\\d+)_.*",
+                          pattern,
                           "D4");
 
         // default number of columns is 6, so 2 -> A2
         checkDefaultValue("MB077B_51418_20121029_33_B02_T01_20X_R1_L01_20121113171136381.lsm",
-                          "(?:^|.*_)B(\\d+)_.*",
+                          pattern,
                           "A2");
+
+        final String suffix = "_T1_20121029_32_63X_R1_L032.lsm";
+        for (int i = 1; i < 7; i++) {
+            checkDefaultValue("B" + i + suffix,
+                              pattern,
+                              "A" + i);
+            checkDefaultValue("B" + (i + 6) + suffix,
+                              pattern,
+                              "B" + i);
+            checkDefaultValue("B" + (i + 12) + suffix,
+                              pattern,
+                              "C" + i);
+        }
 
         // missing value should be ignored
         checkDefaultValue("foobar",

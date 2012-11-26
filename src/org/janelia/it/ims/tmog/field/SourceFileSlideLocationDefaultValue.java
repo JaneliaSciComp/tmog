@@ -53,11 +53,12 @@ public class SourceFileSlideLocationDefaultValue
         if (slideSequenceNumberString != null) {
             try {
                 final int sequenceNumber =
-                        Integer.parseInt(slideSequenceNumberString);
+                        Integer.parseInt(slideSequenceNumberString) - 1;
                 final int row = sequenceNumber / numberOfSlideColumns;
                 if (row < 26) {
                     final char rowChar = (char) ((int)'A' + row);
-                    final int column = sequenceNumber % numberOfSlideColumns;
+                    final int column =
+                            (sequenceNumber % numberOfSlideColumns) + 1;
                     value = rowChar + String.valueOf(column);
                 }
             } catch (NumberFormatException e) {
