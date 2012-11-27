@@ -29,10 +29,11 @@
 
         <plugins>
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
-                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Serial ID}" />
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
                 <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
                 <property name="plugin.root-xpath" value="projectCross" />
                 <property name="Line" value="parent1StockName" />
+                <property name="Reporter" value="reporter" />
             </rowUpdater>
 
             <!--
@@ -51,10 +52,10 @@
         <dataFields>
 
             <text displayName="Line" required="true"
-                  suffix="_"/>
+                  suffix="__"/>
 
-            <number displayName="Serial ID" required="true"
-                  minimumValue="50000"
+            <number displayName="Cross Serial Number" required="true"
+                  minimumValue="1"
                   maximumValue="99999"
                   suffix="_">
             </number>
@@ -128,6 +129,11 @@
                             truncateDecimal="true"/>
             </number>
 
+            <text displayName="Reporter"
+                  prefix="_"
+                  suffix="__">
+            </text>
+
             <text displayName="Suffix" required="true"
                   pattern="R\d+_L\d+"
                   copyable="false">
@@ -166,21 +172,21 @@
 
         <plugins>
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
-                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Serial ID}" />
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
                 <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
                 <property name="plugin.root-xpath" value="projectCross" />
                 <property name="Line" value="parent1StockName" />
+                <property name="Reporter" value="reporter" />
             </rowUpdater>
-
         </plugins>
 
         <dataFields>
 
             <text displayName="Line" required="true"
-                  suffix="_"/>
+                  suffix="__"/>
 
-            <number displayName="Serial ID" required="true"
-                  minimumValue="50000"
+            <number displayName="Cross Serial Number" required="true"
+                  minimumValue="1"
                   maximumValue="99999"
                   suffix="_">
             </number>
@@ -252,6 +258,11 @@
                             truncateDecimal="true"/>
             </number>
 
+            <text displayName="Reporter"
+                  prefix="_"
+                  suffix="__">
+            </text>
+
             <text displayName="Suffix" required="true"
                   pattern="R\d+_L\d+"
                   copyable="false">
@@ -283,7 +294,7 @@
         <plugins>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
-                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Serial ID}" />
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
                 <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
                 <property name="plugin.root-xpath" value="projectCross" />
                 <property name="GAL4 Line" value="parent1StockName" />
@@ -309,6 +320,7 @@
                 <property name="lab" value="$STATIC:flylight"/>
                 <property name="family" value="$STATIC:flylight_polarity"/>
                 <property name="line" value="GAL4 Line"/>
+                <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="created_by" value="Imager"/>
                 <property name="gal4_vial" value="GAL4 Vial"/>
                 <property name="effector" value="Effector"/>
@@ -349,20 +361,17 @@
             <separator value=".lsm"/>
 
             <!--
-             The Serial ID is currently only used to load other data -
-             it is not embedded in the file name, nor is it stored in SAGE.
-            -->
-            <number displayName="Serial ID"
-                    minimumValue="50000"
-                    maximumValue="99999"
-                    markedForTask="false">
-                <sourceFileDefault pattern=".*_(\d{5})_\d{8}_\d{2}_.*" />
-            </number>
-
-            <!--
              These values are collected for storage but are not
              included as components of the file name (markedForTask="false").
              -->
+
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="99999"
+                    markedForTask="false">
+                <sourceFileDefault pattern=".*(\d{5})_\d{8}_\d{2}_.*" />
+            </number>
+
             <webServiceList displayName="GAL4 Line" required="true"
                             markedForTask="false"
                             valueCreationPath="*/line"
@@ -442,6 +451,98 @@
                 <validValue value="DPX PBS Mounting"/>
                 <validValue value="Glycerol-Based Mounting"/>
             </validValueList>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light Polarity - generate Zeiss data file" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <plugins>
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionCompleteZeissDataWriter">
+                <property name="baseFileName" value="0-zeiss-data"/>
+                <property name="key-1" value="IlluminationChannel.*"/>
+                <property name="key-2" value="DetectionChannel.*"/>
+            </sessionListener>
+        </plugins>
+
+        <dataFields>
+        <!--
+            <text displayName="Channel 1 Name">
+                <lsmDefault propertyName="IlluminationChannel #1 Name" />
+            </text>
+
+            <number displayName="Channel 1 Power">
+                <lsmDefault propertyName="IlluminationChannel #1 Power B/C 1"
+                            truncateDecimal="true"/>
+            </number>
+
+            <number displayName="Channel 1 Gain">
+                <lsmDefault propertyName="DetectionChannel #1 Detector Gain"
+                            truncateDecimal="true"/>
+            </number>
+        -->
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light Polarity - preScreen - add reporter" taskName="simple-move">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <outputDirectory derivedFromSourceFile="true"/>
+
+        <plugins>
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="Line" value="parent1StockName" />
+                <property name="Reporter" value="reporter" />
+            </rowUpdater>
+
+            <!--
+                  The companion file listener (for log files) should be the
+                  last defined plug-in to ensure that log files are only
+                  copied if the source lsm processing succeeds.
+            -->
+            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
+                <property name="sourceSuffix" value=".lsm"/>
+                <property name="companionSuffix" value="_log.csv"/>
+                <property name="deleteAfterCopy" value="true"/>
+            </rowListener>
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Line" required="true"
+                  suffix="__"/>
+
+            <number displayName="Cross Serial Number" required="true"
+                  minimumValue="1"
+                  maximumValue="99999"
+                  suffix="_">
+                <sourceFileDefault pattern=".*(\d{5})_\d{8}_.*" />
+            </number>
+
+            <text displayName="Middle Fields" required="true">
+                <sourceFileDefault pattern=".*\d{5}_(\d{8}_.*_)R\d+_L\d+.*" />
+            </text>
+
+            <text displayName="Reporter"
+                  prefix="_"
+                  suffix="__">
+            </text>
+
+            <text displayName="Suffix" required="true"
+                  pattern="R\d+_L\d+_\d{17}"
+                  copyable="false">
+                <sourceFileDefault pattern=".*_(R\d+_L\d+_\d{17}).*"/>
+            </text>
+
+            <separator value=".lsm"/>
 
         </dataFields>
 
