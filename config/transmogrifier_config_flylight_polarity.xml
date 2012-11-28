@@ -77,7 +77,6 @@
             <text displayName="Slide Location" required="true"
                   pattern="[A-Z]\d\d?"
                   convertToUpperCase="true"
-                  copyable="false"
                   suffix="_">
                 <sourceFileSlideLocationDefault pattern="(?:^|.*_)B(\d+)_.*"
                                                 numberOfSlideColumns="6"/>
@@ -178,6 +177,17 @@
                 <property name="Line" value="parent1StockName" />
                 <property name="Reporter" value="reporter" />
             </rowUpdater>
+
+            <!--
+                  The companion file listener (for log files) should be the
+                  last defined plug-in to ensure that log files are only
+                  copied if the source lsm processing succeeds.
+            -->
+            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
+                <property name="sourceSuffix" value=".lsm"/>
+                <property name="companionSuffix" value="_log.csv"/>
+                <property name="deleteAfterCopy" value="true"/>
+            </rowListener>
         </plugins>
 
         <dataFields>
@@ -208,7 +218,6 @@
             <text displayName="Slide Location" required="true"
                   pattern="[A-Z]\d\d?"
                   convertToUpperCase="true"
-                  copyable="false"
                   suffix="_">
                 <sourceFileSlideLocationDefault pattern="(?:^|.*_)B(\d+)_.*"
                                                 numberOfSlideColumns="6"/>
@@ -327,12 +336,14 @@
                 <property name="slide_code" value="Slide Code"/>
                 <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
+                <property name="area" value="Area"/>
                 <property name="age" value="Age"/>
                 <property name="full_age" value="Full Age"/>
                 <property name="days_after_eclosion" value="Days After Eclosion"/>
                 <property name="area" value="$STATIC:Brain"/>
                 <property name="annotated_by" value="Annotator"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="microscope_filename"/>
             </rowListener>
 
             <!--
@@ -415,6 +426,14 @@
                 <validValue displayName="f: Female" value="f"/>
                 <validValue displayName="x: Not Defined" value="x"/>
             </validValueList>
+
+            <validValueList displayName="Area" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="Brain"/>
+                <validValue value="VNC"/>
+            </validValueList>
+
             <cvTermList displayName="Age" required="true"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
                         displayNamePrefixedForValues="true"
