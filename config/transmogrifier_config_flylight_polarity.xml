@@ -5,7 +5,7 @@
 
     <global minimumVersion="2.9.4" frameSizePercentage="95"/>
 
-    <project name="Fly Light Polarity - preScreen - scope to dm11">
+    <project name="Fly Light Polarity - preScreen - scope to dm11" default="true">
 
         <inputFileFilter patternString=".+\.lsm" />
 
@@ -147,7 +147,7 @@
 
     </project>
 
-    <project name="Fly Light Polarity - preScreen - dm11 to dm11" taskName="move-and-log-digest" default="true">
+    <project name="Fly Light Polarity - preScreen - dm11 to dm11" taskName="move-and-log-digest">
 
         <inputFileFilter patternString=".+\.lsm" />
 
@@ -340,10 +340,10 @@
                 <property name="age" value="Age"/>
                 <property name="full_age" value="Full Age"/>
                 <property name="days_after_eclosion" value="Days After Eclosion"/>
-                <property name="area" value="$STATIC:Brain"/>
                 <property name="annotated_by" value="Annotator"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="data_set" value="Data Set"/>
+                <property name="channel_spec" value="Channel Specification"/>
                 <property name="microscope_filename"/>
             </rowListener>
 
@@ -485,6 +485,15 @@
                 </sourceFileMappedDefault>
 
             </webServiceList>
+
+            <text displayName="Channel Specification" required="false"
+                    markedForTask="false"
+                    pattern="s*rs*">
+                <sourceFileMappedDefault pattern=".*_(\d\dX)_.*">
+                    <mappedValue from="20X" to="rs"/>
+                    <mappedValue from="63X" to="rss"/>
+                </sourceFileMappedDefault>
+            </text>
 
         </dataFields>
 
