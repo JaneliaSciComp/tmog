@@ -828,6 +828,10 @@ public class ZeissLSMReader {
 //        }
 
         ras.close();
+
+        // TMOG bug fix:
+        // force close so that file can be removed by other processes on Windows 7 
+        in.close();
     }
 
     private static Hashtable<Integer, String> createKeys() {
