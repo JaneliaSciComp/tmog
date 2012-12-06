@@ -14,29 +14,14 @@
 
         <plugins>
 
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/${Line}.janelia-sage?lab=baker&amp;lab=fly&amp;lab=flylight&amp;lab=olympiad&amp;lab=jayaraman&amp;lab=rubin&amp;lab=simpson&amp;lab=leet&amp;lab=truman"/>
-                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/forOneOfManyLabs/EXT_P_w_mC_ato_GAL4_3_6_14a.janelia-sage?lab=baker&amp;lab=fly&amp;lab=flylight&amp;lab=olympiad&amp;lab=jayaraman&amp;lab=rubin&amp;lab=simpson&amp;lab=leet&amp;lab=truman"/>
-                <property name="errorMessage" value="There is no Baker, Fly Core, Fly Light, Fly Olympiad, Jayaraman, Rubin, Simpson, T. Lee, or Truman lab line named '${Line}' in the SAGE database."/>
-                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
-            </rowValidator>
-
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.WritableFromFileValidator">
-                <property name="errorMessage"
-                          value="The source file %s must be writable to allow meta data insertion before transfer."/>
-            </rowValidator>
-
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
                 <property name="db.config.key" value="sage" />
                 <property name="image_number" value="urn:lsid:janelia.org:flylight_collaborations:image_number" />
             </rowListener>
 
-            <rowListener className="org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin" >
-            </rowListener>
-
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
-                <property name="lab" value="$STATIC:flylight"/>
+                <property name="lab" value="Line Lab"/>
                 <property name="family" value="$STATIC:flylight_collaborations"/>
                 <property name="line" value="Line"/>
                 <property name="gender" value="Gender"/>
@@ -71,9 +56,21 @@
              included as components of the file name (markedForTask="false").
              -->
 
-            <text displayName="Line" required="true" displayWidth="150"
-                  markedForTask="false">
-            </text>
+            <cvTermList displayName="Line Lab" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/lab"
+                        displayNamePrefixedForValues="false"
+                        markedForTask="false">
+                <staticDefault value="olympiad" />
+            </cvTermList>
+
+            <webServiceList displayName="Line" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=baker&amp;lab=fly&amp;lab=flylight&amp;lab=olympiad&amp;lab=jayaraman&amp;lab=rubin&amp;lab=simpson&amp;lab=leet&amp;lab=truman"
+                            autoComplete="true">
+            </webServiceList>
 
             <validValueList displayName="Gender" required="true"
                             markedForTask="false">
