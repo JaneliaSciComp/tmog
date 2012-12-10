@@ -111,159 +111,20 @@
                 <validValue value="63X"/>
             </validValueList>
 
-            <text displayName="Channel 1 Name" required="true"
+            <text displayName="Channel 2 Name" required="true"
                   suffix="-">
-                <lsmDefault propertyName="IlluminationChannel #1 Name" />
+                <lsmDefault propertyName="IlluminationChannel #2 Name" />
             </text>
 
-            <number displayName="Channel 1 Power" required="true"
+            <number displayName="Channel 2 Power" required="true"
                     suffix="-">
-                <lsmDefault propertyName="IlluminationChannel #1 Power B/C 1"
+                <lsmDefault propertyName="IlluminationChannel #2 Power B/C 1"
                             truncateDecimal="true"/>
             </number>
 
-            <number displayName="Channel 1 Gain" required="true"
+            <number displayName="Channel 2 Gain" required="true"
                     suffix="_">
-                <lsmDefault propertyName="DetectionChannel #1 Detector Gain"
-                            truncateDecimal="true"/>
-            </number>
-
-            <text displayName="Reporter"
-                  prefix="_"
-                  suffix="__">
-            </text>
-
-            <text displayName="Suffix" required="true"
-                  pattern="R\d+_L\d+"
-                  copyable="false">
-                <sourceFileDefault pattern=".*_(R\d+_L\d+).*"/>
-            </text>
-
-            <separator value="_"/>
-            <runTime datePattern="yyyyMMddHHmmssSSS" />
-            <separator value=".lsm"/>
-
-        </dataFields>
-
-    </project>
-
-    <project name="Fly Light Polarity - preScreen - dm11 to dm11" taskName="move-and-log-digest">
-
-        <inputFileFilter patternString=".+\.lsm" />
-
-        <!-- NOTES:
-             - first capturing group must be equal for second capturing group
-               to be used in numeric sort
-             - third capturing group only used when first and second are equal
-             - '(?: )' identifies a non-capturing group
-        -->
-        <inputFileSorter sortAlgorithm="Number"
-                         patternString="(?:^|.*_)(B)(\d+)(_.*)"/>
-
-        <outputDirectory>
-            <path path="[\\dm11.janelia.priv|/groups/flylight]/flylight/polarity/preScreen/" />
-            <renameFieldValue fieldDisplayName="Mount Date"/>
-            <path path="_"/>
-            <renameFieldValue fieldDisplayName="Slide Number"/>
-            <path path="/"/>
-            <renameFieldValue fieldDisplayName="Magnification"/>
-        </outputDirectory>
-
-        <plugins>
-            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
-                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
-                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
-                <property name="plugin.root-xpath" value="projectCross" />
-                <property name="Line" value="parent1StockName" />
-                <property name="Reporter" value="reporter" />
-            </rowUpdater>
-
-            <!--
-                  The companion file listener (for log files) should be the
-                  last defined plug-in to ensure that log files are only
-                  copied if the source lsm processing succeeds.
-            -->
-            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
-                <property name="sourceSuffix" value=".lsm"/>
-                <property name="companionSuffix" value="_log.csv"/>
-                <property name="deleteAfterCopy" value="true"/>
-            </rowListener>
-        </plugins>
-
-        <dataFields>
-
-            <text displayName="Line" required="true"
-                  suffix="__"/>
-
-            <number displayName="Cross Serial Number" required="true"
-                  minimumValue="1"
-                  maximumValue="99999"
-                  suffix="_">
-            </number>
-
-            <date displayName="Mount Date" required="true"
-                  datePattern="yyyyMMdd"
-                  suffix="_">
-                <sourceFileDateDefault pattern=".*_(\d{8})_.*"
-                                       fromDatePattern="yyyyMMdd"
-                                       toDatePattern="yyyyMMdd"/>
-            </date>
-
-            <text displayName="Slide Number" required="true"
-                  pattern="[A-Za-z]*\d+"
-                  suffix="_">
-                <sourceFileDefault pattern=".*_\d{8}_(\d+)_.*"/>
-            </text>
-
-            <text displayName="Slide Location" required="true"
-                  pattern="[A-Z]\d\d?"
-                  convertToUpperCase="true"
-                  suffix="_">
-                <sourceFileSlideLocationDefault pattern="(?:^|.*_)B(\d+)_.*"
-                                                numberOfSlideColumns="6"/>
-            </text>
-
-            <number displayName="Zeiss Brain" required="true"
-                    minimumValue="1"
-                    maximumValue="99"
-                    padFormat="20"
-                    copyable="false"
-                    prefix="zb"
-                    suffix="_">
-                <sourceFileDefault pattern="(?:^|.*_)B(\d+)_.*"/>
-            </number>
-
-            <number displayName="Zeiss Tile" required="true"
-                    minimumValue="1"
-                    maximumValue="99"
-                    padFormat="20"
-                    prefix="zt"
-                    suffix="_">
-                <sourceFileDefault pattern=".*_T(\d+)_.*"/>
-            </number>
-
-            <validValueList displayName="Magnification" required="true"
-                            autoComplete="true"
-                            suffix="_">
-                <sourceFileDefault pattern=".*_(\d\dX)_.*"/>
-                <validValue value="20X"/>
-                <validValue value="63X"/>
-            </validValueList>
-
-            <text displayName="Channel 1 Name" required="true"
-                  suffix="-">
-                <lsmDefault propertyName="IlluminationChannel #1 Name" />
-            </text>
-
-            <number displayName="Channel 1 Power" required="true"
-                    suffix="-">
-                <lsmDefault propertyName="IlluminationChannel #1 Power B/C 1"
-                            truncateDecimal="true"/>
-            </number>
-
-            <number displayName="Channel 1 Gain" required="true"
-                    suffix="_">
-                <lsmDefault propertyName="DetectionChannel #1 Detector Gain"
+                <lsmDefault propertyName="DetectionChannel #2 Detector Gain"
                             truncateDecimal="true"/>
             </number>
 
@@ -513,17 +374,17 @@
 
         <dataFields>
         <!--
-            <text displayName="Channel 1 Name">
-                <lsmDefault propertyName="IlluminationChannel #1 Name" />
+            <text displayName="Channel 2 Name">
+                <lsmDefault propertyName="IlluminationChannel #2 Name" />
             </text>
 
-            <number displayName="Channel 1 Power">
-                <lsmDefault propertyName="IlluminationChannel #1 Power B/C 1"
+            <number displayName="Channel 2 Power">
+                <lsmDefault propertyName="IlluminationChannel #2 Power B/C 1"
                             truncateDecimal="true"/>
             </number>
 
-            <number displayName="Channel 1 Gain">
-                <lsmDefault propertyName="DetectionChannel #1 Detector Gain"
+            <number displayName="Channel 2 Gain">
+                <lsmDefault propertyName="DetectionChannel #2 Detector Gain"
                             truncateDecimal="true"/>
             </number>
         -->
@@ -629,19 +490,141 @@
                 <validValue value="63X"/>
             </validValueList>
 
-            <text displayName="Channel 1 Name" required="true"
+            <text displayName="Channel 1 or 2 Name" required="true"
                   suffix="-">
                 <sourceFileDefault pattern=".*_\d\dX_([^\-]+).*"/>
             </text>
 
-            <number displayName="Channel 1 Power" required="true"
+            <number displayName="Channel 1 or 2 Power" required="true"
                     suffix="-">
                 <sourceFileDefault pattern=".*_\d\dX_[^\-]+\-([^\-]+).*"/>
             </number>
 
-            <number displayName="Channel 1 Gain" required="true"
+            <number displayName="Channel 1 or 2 Gain" required="true"
                     suffix="_">
                 <sourceFileDefault pattern=".*_\d\dX_[^\-]+\-[^\-]+\-([^\-]+)__.*"/>
+            </number>
+
+            <text displayName="Reporter"
+                  prefix="_"
+                  suffix="__">
+                <sourceFileDefault pattern=".*_\d\dX_[^\-]+\-[^\-]+\-[^\-]+__(.*)__.*"/>
+            </text>
+
+            <text displayName="Suffix" required="true"
+                  pattern="R\d+_L\d+"
+                  copyable="false">
+                <sourceFileDefault pattern=".*_(R\d+_L\d+).*"/>
+            </text>
+
+            <separator value="_"/>
+            <text displayName="tmog ID" required="true"
+                  pattern="\d{17}">
+                <sourceFileDefault pattern=".*_(\d{17}).*"/>
+            </text>
+
+            <separator value=".lsm"/>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light Polarity - preScreen - fix channel info" taskName="simple-move">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <outputDirectory derivedFromSourceFile="true"/>
+
+        <plugins>
+            <!--
+                  The companion file listener (for log files) should be the
+                  last defined plug-in to ensure that log files are only
+                  copied if the source lsm processing succeeds.
+            -->
+            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
+                <property name="sourceSuffix" value=".lsm"/>
+                <property name="companionSuffix" value="_log.csv"/>
+                <property name="deleteAfterCopy" value="true"/>
+            </rowListener>
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Line" required="true"
+                  suffix="__">
+                <sourceFileDefault pattern="^(.*)__\d{5}_.*"/>
+            </text>
+
+            <number displayName="Cross Serial Number" required="true"
+                  minimumValue="1"
+                  maximumValue="99999"
+                  suffix="_">
+                <sourceFileDefault pattern="^.*__(\d{5})_\d{8}_.*"/>
+            </number>
+
+            <date displayName="Mount Date" required="true"
+                  datePattern="yyyyMMdd"
+                  suffix="_">
+                <sourceFileDateDefault pattern=".*_\d{5}_(\d{8})_.*"
+                                       fromDatePattern="yyyyMMdd"
+                                       toDatePattern="yyyyMMdd"/>
+            </date>
+
+            <text displayName="Slide Number" required="true"
+                  pattern="[A-Za-z]*\d+"
+                  suffix="_">
+                <sourceFileDefault pattern=".*_\d{5}_\d{8}_(\d+)_.*"/>
+            </text>
+
+            <text displayName="Slide Location"
+                  pattern="[A-Z]\d\d?"
+                  convertToUpperCase="true"
+                  suffix="_">
+                <sourceFileDefault pattern=".*_\d{5}_\d{8}_\d+_([A-Z]\d\d?).*"/>
+            </text>
+
+            <number displayName="Zeiss Brain" required="true"
+                    minimumValue="1"
+                    maximumValue="99"
+                    padFormat="20"
+                    copyable="false"
+                    prefix="zb"
+                    suffix="_">
+                <sourceFileDefault pattern=".*_zb(\d+)_.*"/>
+            </number>
+
+            <number displayName="Zeiss Tile" required="true"
+                    minimumValue="1"
+                    maximumValue="99"
+                    padFormat="20"
+                    prefix="zt"
+                    suffix="_">
+                <sourceFileDefault pattern=".*_zt(\d+)_.*"/>
+            </number>
+
+            <validValueList displayName="Magnification" required="true"
+                            autoComplete="true"
+                            suffix="_">
+                <sourceFileDefault pattern=".*_(\d\dX)_.*"/>
+                <validValue value="20X"/>
+                <validValue value="63X"/>
+            </validValueList>
+
+            <text displayName="Channel 2 Name" required="true"
+                  suffix="-">
+                <lsmDefault propertyName="IlluminationChannel #2 Name" />
+            </text>
+
+            <number displayName="Channel 2 Power" required="true"
+                    suffix="-">
+                <lsmDefault propertyName="IlluminationChannel #2 Power B/C 1"
+                            truncateDecimal="true"/>
+            </number>
+
+            <number displayName="Channel 2 Gain" required="true"
+                    suffix="_">
+                <lsmDefault propertyName="DetectionChannel #2 Detector Gain"
+                            truncateDecimal="true"/>
             </number>
 
             <text displayName="Reporter"
