@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.9.4" frameSizePercentage="95"/>
+    <global minimumVersion="2.9.6" frameSizePercentage="95"/>
 
     <project name="Fly Light Polarity - preScreen - scope to dm11" default="true">
 
@@ -34,6 +34,13 @@
                 <property name="plugin.root-xpath" value="projectCross" />
                 <property name="Line" value="parent1StockName" />
                 <property name="Reporter" value="reporter" />
+            </rowUpdater>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
+                <property name="plugin-scale" value="0" />
+                <property name="Channel 2 Name" value="IlluminationChannel #2 Name" />
+                <property name="Channel 2 Power" value="IlluminationChannel #2 Power B/C 1" />
+                <property name="Channel 2 Gain" value="DetectionChannel #2 Detector Gain" />
             </rowUpdater>
 
             <!--
@@ -113,19 +120,14 @@
 
             <text displayName="Channel 2 Name" required="true"
                   suffix="-">
-                <lsmDefault propertyName="IlluminationChannel #2 Name" />
             </text>
 
             <number displayName="Channel 2 Power" required="true"
                     suffix="-">
-                <lsmDefault propertyName="IlluminationChannel #2 Power B/C 1"
-                            truncateDecimal="true"/>
             </number>
 
             <number displayName="Channel 2 Gain" required="true"
                     suffix="_">
-                <lsmDefault propertyName="DetectionChannel #2 Detector Gain"
-                            truncateDecimal="true"/>
             </number>
 
             <text displayName="Reporter"
@@ -169,6 +171,20 @@
                 <property name="plugin.root-xpath" value="projectCross" />
                 <property name="GAL4 Line" value="parent1StockName" />
                 <property name="Effector" value="reporter" />
+            </rowUpdater>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
+                <property name="plugin-scale" value="0" />
+                <property name="Channel Specification" value="Recording #1 Number of Channels$MAP:1=r|2=rs|3=rss" />
+                <property name="Channel 1 Name" value="IlluminationChannel #1 Name" />
+                <property name="Channel 1 Power" value="IlluminationChannel #1 Power B/C 1" />
+                <property name="Channel 1 Gain" value="DetectionChannel #1 Detector Gain" />
+                <property name="Channel 2 Name" value="IlluminationChannel #2 Name" />
+                <property name="Channel 2 Power" value="IlluminationChannel #2 Power B/C 1" />
+                <property name="Channel 2 Gain" value="DetectionChannel #2 Detector Gain" />
+                <property name="Channel 3 Name" value="IlluminationChannel #3 Name" />
+                <property name="Channel 3 Power" value="IlluminationChannel #3 Power B/C 1" />
+                <property name="Channel 3 Gain" value="DetectionChannel #3 Detector Gain" />
             </rowUpdater>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
@@ -361,55 +377,46 @@
             <text displayName="Channel 1 Name" required="false"
                   markedForTask="false"
                   editable="false">
-                <lsmDefault propertyName="IlluminationChannel #1 Name" />
             </text>
 
             <decimal displayName="Channel 1 Power" required="false"
                      markedForTask="false"
                      editable="false">
-                <lsmDefault propertyName="IlluminationChannel #1 Power B/C 1"/>
             </decimal>
 
             <decimal displayName="Channel 1 Gain" required="false"
                      markedForTask="false"
                      editable="false">
-                <lsmDefault propertyName="DetectionChannel #1 Detector Gain"/>
             </decimal>
 
             <text displayName="Channel 2 Name" required="false"
                   markedForTask="false"
                   editable="false">
-                <lsmDefault propertyName="IlluminationChannel #2 Name" />
             </text>
 
             <decimal displayName="Channel 2 Power" required="false"
                      markedForTask="false"
                      editable="false">
-                <lsmDefault propertyName="IlluminationChannel #2 Power B/C 1"/>
             </decimal>
 
             <decimal displayName="Channel 2 Gain" required="false"
                      markedForTask="false"
                      editable="false">
-                <lsmDefault propertyName="DetectionChannel #2 Detector Gain"/>
             </decimal>
 
             <text displayName="Channel 3 Name" required="false"
                   markedForTask="false"
                   editable="false">
-                <lsmDefault propertyName="IlluminationChannel #3 Name" />
             </text>
 
             <decimal displayName="Channel 3 Power" required="false"
                      markedForTask="false"
                      editable="false">
-                <lsmDefault propertyName="IlluminationChannel #3 Power B/C 1"/>
             </decimal>
 
             <decimal displayName="Channel 3 Gain" required="false"
                      markedForTask="false"
                      editable="false">
-                <lsmDefault propertyName="DetectionChannel #3 Detector Gain"/>
             </decimal>
 
         </dataFields>

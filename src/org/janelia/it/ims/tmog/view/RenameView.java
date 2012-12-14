@@ -120,7 +120,15 @@ public class RenameView implements SessionView, InputSelectionView {
             loadMappedDataButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    loadMappedData();
+                    SwingWorker worker = new SwingWorker() {
+                        @Override
+                        protected Object doInBackground()
+                                throws Exception {
+                            loadMappedData();
+                            return null;
+                        }
+                    };
+                    worker.execute();
                 }
             });
         }
