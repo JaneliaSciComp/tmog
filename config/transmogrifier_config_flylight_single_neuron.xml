@@ -500,7 +500,7 @@
                 <validValue value="Glycerol-Based Mounting"/>
             </validValueList>
 
-            <webServiceList displayName="Data Set" required="false"
+            <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
@@ -514,7 +514,7 @@
 
             </webServiceList>
 
-            <text displayName="Channel Specification" required="false"
+            <text displayName="Channel Specification" required="true"
                     markedForTask="false"
                     pattern="s*rs*">
             </text>
