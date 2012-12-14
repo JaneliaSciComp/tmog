@@ -216,13 +216,6 @@
                 <property name="Reporter" value="reporter" />
             </rowUpdater>
 
-            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
-                <property name="plugin-scale" value="0" />
-                <property name="Channel 2 Name" value="IlluminationChannel #2 Name" />
-                <property name="Channel 2 Power" value="IlluminationChannel #2 Power B/C 1" />
-                <property name="Channel 2 Gain" value="DetectionChannel #2 Detector Gain" />
-            </rowUpdater>
-
             <!--
                   The companion file listener (for log files) should be the
                   last defined plug-in to ensure that log files are only
@@ -294,21 +287,16 @@
                             autoComplete="true"
                             suffix="_">
                 <sourceFileDefault pattern=".*_(\d\dX)_.*"/>
+                <sourceFileMappedDefault pattern=".*_(\d\dx)_.*">
+                    <mappedValue from="20x" to="20X" />
+                    <mappedValue from="63x" to="63X" />
+                </sourceFileMappedDefault>
                 <validValue value="20X"/>
                 <validValue value="63X"/>
             </validValueList>
 
-            <text displayName="Channel 2 Name" required="true"
-                  suffix="-">
-            </text>
-
-            <number displayName="Channel 2 Power" required="true"
-                    suffix="-">
-            </number>
-
-            <number displayName="Channel 2 Gain" required="true"
-                    suffix="_">
-            </number>
+            <!-- channel information stub -->
+            <separator value="0-0-0_"/>
 
             <text displayName="Reporter"
                   prefix="_"
@@ -354,17 +342,7 @@
             </rowUpdater>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
-                <property name="plugin-scale" value="0" />
                 <property name="Channel Specification" value="Recording #1 Number of Channels$MAP:1=r|2=rs|3=rss" />
-                <property name="Channel 1 Name" value="IlluminationChannel #1 Name" />
-                <property name="Channel 1 Power" value="IlluminationChannel #1 Power B/C 1" />
-                <property name="Channel 1 Gain" value="DetectionChannel #1 Detector Gain" />
-                <property name="Channel 2 Name" value="IlluminationChannel #2 Name" />
-                <property name="Channel 2 Power" value="IlluminationChannel #2 Power B/C 1" />
-                <property name="Channel 2 Gain" value="DetectionChannel #2 Detector Gain" />
-                <property name="Channel 3 Name" value="IlluminationChannel #3 Name" />
-                <property name="Channel 3 Power" value="IlluminationChannel #3 Power B/C 1" />
-                <property name="Channel 3 Gain" value="DetectionChannel #3 Detector Gain" />
             </rowUpdater>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
@@ -400,15 +378,6 @@
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="data_set" value="Data Set"/>
                 <property name="channel_spec" value="Channel Specification"/>
-                <property name="lsm_detection_channel_1_detector_gain" value="Channel 1 Gain"/>
-                <property name="lsm_detection_channel_2_detector_gain" value="Channel 2 Gain"/>
-                <property name="lsm_detection_channel_3_detector_gain" value="Channel 3 Gain"/>
-                <property name="lsm_illumination_channel_1_name" value="Channel 1 Name"/>
-                <property name="lsm_illumination_channel_2_name" value="Channel 2 Name"/>
-                <property name="lsm_illumination_channel_3_name" value="Channel 3 Name"/>
-                <property name="lsm_illumination_channel_1_power_bc_1" value="Channel 1 Power"/>
-                <property name="lsm_illumination_channel_2_power_bc_1" value="Channel 2 Power"/>
-                <property name="lsm_illumination_channel_3_power_bc_1" value="Channel 3 Power"/>
                 <property name="microscope_filename"/>
             </rowListener>
 
@@ -550,51 +519,6 @@
                     pattern="s*rs*">
             </text>
 
-            <text displayName="Channel 1 Name" required="false"
-                  markedForTask="false"
-                  editable="false">
-            </text>
-
-            <decimal displayName="Channel 1 Power" required="false"
-                     markedForTask="false"
-                     editable="false">
-            </decimal>
-
-            <decimal displayName="Channel 1 Gain" required="false"
-                     markedForTask="false"
-                     editable="false">
-            </decimal>
-
-            <text displayName="Channel 2 Name" required="false"
-                  markedForTask="false"
-                  editable="false">
-            </text>
-
-            <decimal displayName="Channel 2 Power" required="false"
-                     markedForTask="false"
-                     editable="false">
-            </decimal>
-
-            <decimal displayName="Channel 2 Gain" required="false"
-                     markedForTask="false"
-                     editable="false">
-            </decimal>
-
-            <text displayName="Channel 3 Name" required="false"
-                  markedForTask="false"
-                  editable="false">
-            </text>
-
-            <decimal displayName="Channel 3 Power" required="false"
-                     markedForTask="false"
-                     editable="false">
-            </decimal>
-
-            <decimal displayName="Channel 3 Gain" required="false"
-                     markedForTask="false"
-                     editable="false">
-            </decimal>
-
         </dataFields>
 
     </project>
@@ -610,7 +534,7 @@
              - '(?: )' identifies a non-capturing group
         -->
         <inputFileSorter sortAlgorithm="Number"
-                         patternString="(?:^|.*_)(zb)(\d+)(_.*)"/>
+                         patternString=".*_(L)(\d++)(\.lsm)"/>
 
         <outputDirectory>
             <path path="[\\dm11.janelia.priv|/groups/flylight]/flylight/flip/preScreen/" />
@@ -628,13 +552,6 @@
                 <property name="plugin.root-xpath" value="projectCross" />
                 <property name="Line" value="parent1StockName" />
                 <property name="Reporter" value="reporter" />
-            </rowUpdater>
-
-            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
-                <property name="plugin-scale" value="0" />
-                <property name="Channel 2 Name" value="IlluminationChannel #2 Name" />
-                <property name="Channel 2 Power" value="IlluminationChannel #2 Power B/C 1" />
-                <property name="Channel 2 Gain" value="DetectionChannel #2 Detector Gain" />
             </rowUpdater>
 
             <!--
@@ -666,7 +583,7 @@
             <date displayName="Mount Date" required="true"
                   datePattern="yyyyMMdd"
                   suffix="_">
-                <sourceFileDateDefault pattern=".*_\d{5}_(\d{8})_.*"
+                <sourceFileDateDefault pattern=".*T._(\d{8})_.*"
                                        fromDatePattern="yyyyMMdd"
                                        toDatePattern="yyyyMMdd"/>
             </date>
@@ -674,14 +591,13 @@
             <text displayName="Slide Number" required="true"
                   pattern="[A-Za-z]*\d+"
                   suffix="_">
-                <sourceFileDefault pattern=".*_\d{5}_\d{8}_(\d+)_.*"/>
+                <sourceFileDefault pattern=".*T._\d{8}_(\d+)_.*"/>
             </text>
 
             <text displayName="Slide Location" required="true"
                   pattern="[A-Z]\d\d?"
                   convertToUpperCase="true"
                   suffix="_">
-                <sourceFileDefault pattern=".*_\d{5}_\d{8}_\d+_([A-Z]\d\d?).*"/>
             </text>
 
             <number displayName="Zeiss Brain" required="true"
@@ -691,7 +607,7 @@
                     copyable="false"
                     prefix="zb"
                     suffix="_">
-                <sourceFileDefault pattern=".*_zb(\d+)_.*"/>
+                <sourceFileDefault pattern="B(\d+)_T.*"/>
             </number>
 
             <number displayName="Zeiss Tile" required="true"
@@ -700,33 +616,22 @@
                     padFormat="20"
                     prefix="zt"
                     suffix="_">
-                <sourceFileDefault pattern=".*_zt(\d+)_.*"/>
+                <sourceFileDefault pattern="B\d+_T(\d+)_.*"/>
             </number>
 
             <validValueList displayName="Magnification" required="true"
                             autoComplete="true"
                             suffix="_">
-                <sourceFileDefault pattern=".*_(\d\dX)_.*"/>
                 <validValue value="20X"/>
                 <validValue value="63X"/>
             </validValueList>
 
-            <text displayName="Channel 2 Name" required="true"
-                  suffix="-">
-            </text>
-
-            <number displayName="Channel 2 Power" required="true"
-                    suffix="-">
-            </number>
-
-            <number displayName="Channel 2 Gain" required="true"
-                    suffix="_">
-            </number>
+            <!-- channel information stub -->
+            <separator value="0-0-0_"/>
 
             <text displayName="Reporter"
                   prefix="_"
                   suffix="__">
-                <sourceFileDefault pattern=".*_\d\dX_[^\-_]+\-[^\-_]+\-[^\-_]+__(.*)__.*"/>
             </text>
 
             <text displayName="Suffix" required="true"
@@ -736,11 +641,7 @@
             </text>
 
             <separator value="_"/>
-            <text displayName="tmog ID" required="true"
-                  pattern="\d{17}">
-                <sourceFileDefault pattern=".*_(\d{17}).*"/>
-            </text>
-
+            <runTime datePattern="yyyyMMddHHmmssSSS" />
             <separator value=".lsm"/>
 
         </dataFields>
