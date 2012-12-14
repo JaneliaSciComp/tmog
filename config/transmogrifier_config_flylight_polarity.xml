@@ -192,7 +192,6 @@
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="created_by" value="Imager"/>
-                <property name="gal4_vial" value="GAL4 Vial"/>
                 <property name="effector" value="Effector"/>
                 <property name="slide_code" value="Slide Code"/>
                 <property name="tile" value="Tile"/>
@@ -205,6 +204,15 @@
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="data_set" value="Data Set"/>
                 <property name="channel_spec" value="Channel Specification"/>
+                <property name="lsm_detection_channel_1_detector_gain" value="Channel 1 Gain"/>
+                <property name="lsm_detection_channel_2_detector_gain" value="Channel 2 Gain"/>
+                <property name="lsm_detection_channel_3_detector_gain" value="Channel 3 Gain"/>
+                <property name="lsm_illumination_channel_1_name" value="Channel 1 Name"/>
+                <property name="lsm_illumination_channel_2_name" value="Channel 2 Name"/>
+                <property name="lsm_illumination_channel_3_name" value="Channel 3 Name"/>
+                <property name="lsm_illumination_channel_1_power_bc_1" value="Channel 1 Power"/>
+                <property name="lsm_illumination_channel_2_power_bc_1" value="Channel 2 Power"/>
+                <property name="lsm_illumination_channel_3_power_bc_1" value="Channel 3 Power"/>
                 <property name="microscope_filename"/>
             </rowListener>
 
@@ -253,12 +261,6 @@
                             serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"
                             autoComplete="true">
             </webServiceList>
-
-            <text displayName="GAL4 Vial"
-                  pattern="^[A-Z]$"
-                  markedForTask="false"
-                  convertToUpperCase="true">
-            </text>
 
             <cvTermList displayName="Effector" required="true"
                         autoComplete="true"
@@ -355,6 +357,60 @@
                     <mappedValue from="63X" to="rss"/>
                 </sourceFileMappedDefault>
             </text>
+
+            <text displayName="Channel 1 Name" required="false"
+                  markedForTask="false"
+                  editable="false">
+                <lsmDefault propertyName="IlluminationChannel #1 Name" />
+            </text>
+
+            <decimal displayName="Channel 1 Power" required="false"
+                     markedForTask="false"
+                     editable="false">
+                <lsmDefault propertyName="IlluminationChannel #1 Power B/C 1"/>
+            </decimal>
+
+            <decimal displayName="Channel 1 Gain" required="false"
+                     markedForTask="false"
+                     editable="false">
+                <lsmDefault propertyName="DetectionChannel #1 Detector Gain"/>
+            </decimal>
+
+            <text displayName="Channel 2 Name" required="false"
+                  markedForTask="false"
+                  editable="false">
+                <lsmDefault propertyName="IlluminationChannel #2 Name" />
+            </text>
+
+            <decimal displayName="Channel 2 Power" required="false"
+                     markedForTask="false"
+                     editable="false">
+                <lsmDefault propertyName="IlluminationChannel #2 Power B/C 1"/>
+            </decimal>
+
+            <decimal displayName="Channel 2 Gain" required="false"
+                     markedForTask="false"
+                     editable="false">
+                <lsmDefault propertyName="DetectionChannel #2 Detector Gain"/>
+            </decimal>
+
+            <text displayName="Channel 3 Name" required="false"
+                  markedForTask="false"
+                  editable="false">
+                <lsmDefault propertyName="IlluminationChannel #3 Name" />
+            </text>
+
+            <decimal displayName="Channel 3 Power" required="false"
+                     markedForTask="false"
+                     editable="false">
+                <lsmDefault propertyName="IlluminationChannel #3 Power B/C 1"/>
+            </decimal>
+
+            <decimal displayName="Channel 3 Gain" required="false"
+                     markedForTask="false"
+                     editable="false">
+                <lsmDefault propertyName="DetectionChannel #3 Detector Gain"/>
+            </decimal>
 
         </dataFields>
 
