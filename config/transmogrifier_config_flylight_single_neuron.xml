@@ -648,7 +648,7 @@
 
     </project>
 
-        <project name="Fly Light Flip - preScreen - fix" taskName="simple-move">
+    <project name="Fly Light Flip - preScreen - fix" taskName="simple-move">
 
         <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
 
