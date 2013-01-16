@@ -307,10 +307,12 @@
     <xs:complexType name="fileModificationTimeType">
         <xs:attribute name="displayName" type="xs:string"/>
         <xs:attribute name="datePattern" type="xs:string"/>
+        <xs:attribute name="markedForTask" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="runTimeType">
         <xs:attribute name="datePattern" type="xs:string"/>
+        <xs:attribute name="markedForTask" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="fileExtensionType">

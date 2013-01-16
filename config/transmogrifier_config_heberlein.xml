@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="2.9.6" frameSizePercentage="95"/>
+
+    <project name="Heberlein - Central Brain (UAHC*)" default="true">
+
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString=".*_(L)(\d++)(\.lsm)"/>
+
+        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/heberlein]/heberleinlab/image/heberlein_central_brain/confocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+
+        <plugins>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="image_number" value="urn:lsid:janelia.org:heberlein_central_brain:image_number" />
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="lab" value="$STATIC:heberlein"/>
+                <property name="family" value="$STATIC:heberlein_central_brain"/>
+                <property name="line" value="Line"/>
+                <property name="effector" value="Effector"/>
+                <property name="tile" value="Tile"/>
+                <property name="condition" value="Condition"/>
+                <property name="data_set" value="Data Set"/>
+                <property name="channel_spec" value="Channel Specification"/>
+                <property name="microscope_filename"/>
+            </rowListener>
+
+            <!--
+                  The companion file listener (for log files) should be the
+                  last defined plug-in to ensure that log files are only
+                  copied if the source lsm processing succeeds.
+            -->
+            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
+                <property name="sourceSuffix" value=".lsm"/>
+                <property name="companionSuffix" value="_log.csv"/>
+                <property name="deleteAfterCopy" value="true"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <separator value="UAHC_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS" />
+            <separator value="_"/>
+            <pluginData displayName="image_number"/>
+            <separator value=".lsm"/>
+
+            <!--
+             These values are collected for storage but are not
+             included as components of the file name (markedForTask="false").
+             -->
+
+            <webServiceList displayName="Line" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=heberlein"
+                            autoComplete="true">
+            </webServiceList>
+
+            <!-- filtered list from http://sage.int.janelia.org/sage-ws/cvs/effector -->
+            <validValueList displayName="Effector" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="57C10Lwt_attp8_3stop1" value="57C10Lwt_attp8_3stop1"/>
+                <validValue displayName="w1118(5905); +; pJFRC12-10XUAS-IVS-myr::GFP (V) $" value="UAS_IVS_myr_3_0009"/>
+            </validValueList>
+
+            <validValueList displayName="Tile" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="Ventral" value="ventral"/>
+                <validValue displayName="Left Dorsal" value="left_dorsal"/>
+                <validValue displayName="Right Dorsal" value="right_dorsal"/>
+            </validValueList>
+
+
+            <validValueList displayName="Condition" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="extracted"/>
+                <validValue value="delineates"/>
+                <validValue value="mated"/>
+                <validValue value="rejected"/>
+            </validValueList>
+
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=heberleinlab&amp;includeOnlySageSync=true"
+                            autoComplete="true">
+            </webServiceList>
+
+            <text displayName="Channel Specification" required="true"
+                  markedForTask="false"
+                  pattern="s*rs*">
+            </text>
+
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
