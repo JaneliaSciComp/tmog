@@ -47,11 +47,15 @@ are deployed for the following lab groups:
 /archive/rubin/data1/rubinlab/tmog/config
 /groups/baker/bakerlab/tmog/config
 /groups/ditp/ditp/tmog/config
+/groups/flylight/flylight/tmog/config
+/archive/flylight_archive/flylight/tmog/config
+/groups/heberlein/heberleinlab/tmog/config
 /groups/kerr/kerrlab/tmog/config
+/groups/larvalolympiad/larvalolympiad/tmog/config
 /archive/leet/leetconfocal/tmog/config
-/groups/leet/leetimg/leetlab/tmog/config
+/archive/leet/leetimg/leetlab/tmog/config
 /groups/rubin/data1/rubinlab/tmog/config
-/groups/rubin/rubinimg/tmog
+/groups/rubin/rubinimg/tmog/config
 /groups/simpson/MicroscopeData/tmog/config
 /groups/simpson/simpsonimg/tmog/config
 /groups/svoboda/wdbp/tmog/config
