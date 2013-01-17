@@ -26,11 +26,13 @@
                 <property name="family" value="$STATIC:heberlein_central_brain"/>
                 <property name="line" value="Line"/>
                 <property name="effector" value="Effector"/>
+                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Location}"/>
                 <property name="tile" value="Tile"/>
                 <property name="condition" value="Condition"/>
                 <property name="data_set" value="Data Set"/>
                 <property name="channel_spec" value="Channel Specification"/>
                 <property name="microscope_filename"/>
+                <property name="base_path" value="$STATIC:/groups/heberlein/heberleinlab/image/heberlein_central_brain/confocalStacks/"/>
             </rowListener>
 
             <!--
@@ -76,6 +78,27 @@
                 <validValue displayName="w1118(5905); +; pJFRC12-10XUAS-IVS-myr::GFP (V) $" value="UAS_IVS_myr_3_0009"/>
             </validValueList>
 
+            <date displayName="Mount Date" required="true"
+                  datePattern="yyyyMMdd"
+                  markedForTask="false">
+                <sourceFileDateDefault pattern=".*_(\d{8})_.*"
+                                       fromDatePattern="yyyyMMdd"
+                                       toDatePattern="yyyyMMdd"/>
+            </date>
+
+            <text displayName="Slide Number" required="true"
+                  pattern="[A-Za-z]*\d+"
+                  markedForTask="false">
+            </text>
+
+            <text displayName="Slide Location" required="true"
+                  pattern="[A-Z]\d\d?"
+                  convertToUpperCase="true"
+                  markedForTask="false">
+                <sourceFileSlideLocationDefault pattern="(?:^|.*_)B(\d+)_.*"
+                                                numberOfSlideColumns="6"/>
+            </text>
+
             <validValueList displayName="Tile" required="true"
                             autoComplete="true"
                             markedForTask="false">
@@ -88,6 +111,7 @@
             <validValueList displayName="Condition" required="true"
                             autoComplete="true"
                             markedForTask="false">
+                <sourceFileDefault pattern=".*_([^_]+)_R\d.*"/>
                 <validValue value="extracted"/>
                 <validValue value="delineates"/>
                 <validValue value="mated"/>
@@ -107,6 +131,65 @@
                   markedForTask="false"
                   pattern="s*rs*">
             </text>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Heberlein - fix SAGE data" taskName="collector">
+
+        <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
+                <property name="plugin-scale" value="0" />
+                <property name="Channels" value="Recording #1 Number of Channels" />
+            </rowUpdater>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
+                <property name="plugin-scale" value="2" />
+                <property name="Voxel Size X" value="VoxelSizeX" />
+                <property name="Voxel Size Y" value="VoxelSizeY" />
+                <property name="Voxel Size Z" value="VoxelSizeZ" />
+            </rowUpdater>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="lab" value="$STATIC:heberlein"/>
+                <property name="family" value="$STATIC:heberlein_central_brain"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="channels" value="Channels"/>
+                <property name="voxel_size_x" value="Voxel Size X"/>
+                <property name="voxel_size_y" value="Voxel Size Y"/>
+                <property name="voxel_size_z" value="Voxel Size Z"/>
+                <property name="slide_code" value="Slide Code"/>
+                <property name="base_path" value="$STATIC:/groups/heberlein/heberleinlab/image/heberlein_central_brain/confocalStacks/"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="heberlein_central_brain"/>
+                    <property name="image_property" value="slide_code"/>
+                </pluginDefault>
+            </text>
+
+            <number displayName="Channels" required="true"
+                    markedForTask="false" />
+            <decimal displayName="Voxel Size X" required="true"
+                     markedForTask="false" />
+            <decimal displayName="Voxel Size Y" required="true"
+                     markedForTask="false" />
+            <decimal displayName="Voxel Size Z" required="true"
+                     markedForTask="false" />
 
         </dataFields>
 
