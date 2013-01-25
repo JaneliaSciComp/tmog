@@ -5,7 +5,8 @@
 
     <global minimumVersion="2.9.6"/>
 
-    <project name="Larval Olympiad: MMF Files (Move)" default="true"
+    <project name="MMF Project Files"
+             default="true"
              copyPreviousButtonVisible="false">
 
         <inputFileFilter patternString=".*\.(bat|bin|bmp|dat|db|dlg|git|mdat|mmf|speed|txt)"
@@ -14,7 +15,9 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.janelia.priv|/groups/larvalolympiad]/larvalolympiad/MMF-files/tracking-results/" />
+            <path path="[\\dm11.janelia.priv|/groups/larvalolympiad]/larvalolympiad/Projects/" />
+            <renameFieldValue fieldDisplayName="Project"/>
+            <path path="/MMF-Files/tracking-results/"/>
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line"/>
@@ -50,6 +53,20 @@
         </plugins>
 
         <dataFields>
+
+            <validValueList displayName="Project" required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+
+                <!-- These should match directories in /groups/larvalolympiad/larvalolympiad/Projects -->
+
+                <validValue value="Circadian"/>
+                <validValue value="LarvalOlympiad"/>
+                <validValue value="Neuromodulators"/>
+                <validValue value="Riddiford"/>
+
+            </validValueList>
+
             <date displayName="Date" required="true"
                   datePattern="yyyyMMdd">
                 <sourceFileDateDefault pattern=".*[\\\\](\d{4}[\\\\]\d{2}[\\\\]\d{2})[\\\\]\d{4}[/\\\\].*"
@@ -107,6 +124,7 @@
                 </sourceFileMappedDefault>
 
                 <staticDefault value="none"/>
+
             </cvTermList>
 
             <text displayName="Line" required="true"
