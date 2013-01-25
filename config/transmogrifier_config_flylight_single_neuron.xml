@@ -177,7 +177,7 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?includeOnlySageSync=true"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=group:flylight&amp;user=user:asoy&amp;includeOnlySageSync=true"
                             autoComplete="true">
             </webServiceList>
 
@@ -505,7 +505,7 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?includeOnlySageSync=true"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;includeOnlySageSync=true"
                             autoComplete="true">
                 <sourceFileMappedDefault pattern=".*_(\d\dX)_.*">
                     <mappedValue from="20X" to="asoy_mb_polarity_20x_1024px"/>
