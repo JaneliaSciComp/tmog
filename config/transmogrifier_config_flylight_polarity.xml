@@ -212,7 +212,7 @@
                 <property name="slide_code" value="Slide Code"/>
                 <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
-                <property name="area" value="Area"/>
+                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_optic_lobe=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_optic_lobe=Brain|ventral=Brain|ventral_nerve_cord=VNC"/>
                 <property name="age" value="Age"/>
                 <property name="full_age" value="Full Age"/>
                 <property name="days_after_eclosion" value="Days After Eclosion"/>
@@ -305,13 +305,6 @@
                 <validValue displayName="m: Male" value="m"/>
                 <validValue displayName="f: Female" value="f"/>
                 <validValue displayName="x: Not Defined" value="x"/>
-            </validValueList>
-
-            <validValueList displayName="Area" required="true"
-                            autoComplete="true"
-                            markedForTask="false">
-                <validValue value="Brain"/>
-                <validValue value="VNC"/>
             </validValueList>
 
             <cvTermList displayName="Age" required="true"
