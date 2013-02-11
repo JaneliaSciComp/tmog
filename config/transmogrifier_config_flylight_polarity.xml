@@ -344,7 +344,7 @@
                 <validValue value="Glycerol-Based Mounting"/>
             </validValueList>
 
-            <webServiceList displayName="Data Set" required="false"
+            <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
@@ -353,9 +353,7 @@
                             autoComplete="true">
                 <sourceFileMappedDefault pattern=".*_(\d\dX)_.*">
                     <mappedValue from="20X" to="asoy_mb_polarity_20x_1024px"/>
-                    <mappedValue from="63X" to="asoy_mb_polarity_63x_1024px"/>
                 </sourceFileMappedDefault>
-
             </webServiceList>
 
             <text displayName="Channel Specification" required="false"
@@ -580,6 +578,231 @@
             </text>
 
             <separator value=".lsm"/>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light Polarity - fix data sets" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <plugins>
+
+            <!--<rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">-->
+                <!--<property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />-->
+                <!--<property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />-->
+                <!--<property name="plugin.root-xpath" value="projectCross" />-->
+                <!--<property name="GAL4 Line" value="parent1StockName" />-->
+                <!--<property name="Effector" value="reporter" />-->
+            <!--</rowUpdater>-->
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+            </rowValidator>
+
+            <!--<rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">-->
+                <!--<property name="validateField" value="Gender"/>-->
+                <!--<property name="matchesPattern" value="\S+"/>-->
+                <!--<property name="whenReferenceField" value="Age"/>-->
+                <!--<property name="matchesReferencePattern" value="^[^L].*"/>-->
+                <!--<property name="errorMessage" value="Gender value is required when age is ${Age}."/>-->
+            <!--</rowValidator>-->
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="lab" value="$STATIC:flylight"/>
+                <property name="family" value="$STATIC:flylight_polarity"/>
+                <!--<property name="line" value="GAL4 Line"/>-->
+                <!--<property name="cross_barcode" value="Cross Serial Number"/>-->
+                <!--<property name="created_by" value="Imager"/>-->
+                <!--<property name="gal4_vial" value="GAL4 Vial"/>-->
+                <!--<property name="effector" value="Effector"/>-->
+                <!--<property name="slide_code" value="Slide Code"/>-->
+                <!--<property name="tile" value="Tile"/>-->
+                <!--<property name="gender" value="Gender"/>-->
+                <!--<property name="area" value="Area"/>-->
+                <!--<property name="age" value="Age"/>-->
+                <!--<property name="full_age" value="Full Age"/>-->
+                <!--<property name="days_after_eclosion" value="Days After Eclosion"/>-->
+                <!--<property name="annotated_by" value="Annotator"/>-->
+                <!--<property name="mounting_protocol" value="Tissue Mounting Protocol"/>-->
+                <property name="data_set" value="Data Set"/>
+                <!--<property name="channel_spec" value="Channel Specification"/>-->
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <!--<number displayName="Cross Serial Number"-->
+                    <!--minimumValue="1"-->
+                    <!--maximumValue="99999"-->
+                    <!--markedForTask="false">-->
+                <!--<pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">-->
+                    <!--<property name="family" value="flylight_polarity"/>-->
+                    <!--<property name="image_property" value="cross_barcode"/>-->
+                <!--</pluginDefault>-->
+            <!--</number>-->
+
+            <!--<webServiceList displayName="GAL4 Line" required="true"-->
+                            <!--markedForTask="false"-->
+                            <!--valueCreationPath="*/line"-->
+                            <!--relativeActualValuePath="name"-->
+                            <!--relativeValueDisplayNamePath="name"-->
+                            <!--serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"-->
+                            <!--autoComplete="true">-->
+            <!--</webServiceList>-->
+
+            <!--<cvTermList displayName="Effector" required="true"-->
+                        <!--autoComplete="true"-->
+                        <!--markedForTask="false"-->
+                        <!--displayNamePrefixedForValues="false"-->
+                        <!--serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">-->
+                <!--<pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">-->
+                    <!--<property name="family" value="flylight_polarity"/>-->
+                    <!--<property name="image_property" value="effector"/>-->
+                <!--</pluginDefault>-->
+            <!--</cvTermList>-->
+
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="slide_code"/>
+                </pluginDefault>
+            </text>
+
+            <text displayName="Microscope Filename" required="false"
+                  copyable="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="microscope_filename"/>
+                </pluginDefault>
+            </text>
+
+            <!--<cvTermList displayName="Tile" required="true"-->
+                        <!--serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"-->
+                        <!--autoComplete="true"-->
+                        <!--markedForTask="false">-->
+                <!--<pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">-->
+                    <!--<property name="family" value="flylight_polarity"/>-->
+                    <!--<property name="image_property" value="tile"/>-->
+                <!--</pluginDefault>-->
+            <!--</cvTermList>-->
+
+            <!--<validValueList displayName="Gender" required="false"-->
+                            <!--autoComplete="true"-->
+                            <!--markedForTask="false">-->
+                <!--<pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">-->
+                    <!--<property name="family" value="flylight_polarity"/>-->
+                    <!--<property name="image_property" value="gender"/>-->
+                <!--</pluginDefault>-->
+                <!--<validValue displayName="m: Male" value="m"/>-->
+                <!--<validValue displayName="f: Female" value="f"/>-->
+                <!--<validValue displayName="x: Not Defined" value="x"/>-->
+            <!--</validValueList>-->
+
+            <!--<validValueList displayName="Area" required="true"-->
+                            <!--autoComplete="true"-->
+                            <!--markedForTask="false">-->
+                <!--<pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">-->
+                    <!--<property name="family" value="flylight_polarity"/>-->
+                    <!--<property name="image_property" value="area"/>-->
+                <!--</pluginDefault>-->
+                <!--<validValue value="Brain"/>-->
+                <!--<validValue value="VNC"/>-->
+            <!--</validValueList>-->
+
+            <!--<cvTermList displayName="Age" required="true"-->
+                        <!--serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"-->
+                        <!--displayNamePrefixedForValues="true"-->
+                        <!--autoComplete="true"-->
+                        <!--markedForTask="false">-->
+                <!--<pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">-->
+                    <!--<property name="family" value="flylight_polarity"/>-->
+                    <!--<property name="image_property" value="age"/>-->
+                <!--</pluginDefault>-->
+            <!--</cvTermList>-->
+
+            <!--<text displayName="Full Age" required="false"-->
+                  <!--markedForTask="false">-->
+                <!--<pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">-->
+                    <!--<property name="family" value="flylight_polarity"/>-->
+                    <!--<property name="image_property" value="full_age"/>-->
+                <!--</pluginDefault>-->
+            <!--</text>-->
+
+            <!--<number displayName="Days After Eclosion" required="false"-->
+                    <!--markedForTask="false"-->
+                    <!--minimumValue="0"-->
+                    <!--maximumValue="21">-->
+                <!--<pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">-->
+                    <!--<property name="family" value="flylight_polarity"/>-->
+                    <!--<property name="image_property" value="days_after_eclosion"/>-->
+                <!--</pluginDefault>-->
+            <!--</number>-->
+
+            <!--<cvTermList displayName="Imager" required="true"-->
+                        <!--markedForTask="false"-->
+                        <!--autoComplete="true"-->
+                        <!--serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">-->
+                <!--<pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">-->
+                    <!--<property name="family" value="flylight_polarity"/>-->
+                    <!--<property name="image_property" value="created_by"/>-->
+                <!--</pluginDefault>-->
+            <!--</cvTermList>-->
+
+            <!--<validValueList displayName="Annotator" required="false"-->
+                            <!--autoComplete="true"-->
+                            <!--markedForTask="false">-->
+                <!--<pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">-->
+                    <!--<property name="family" value="flylight_polarity"/>-->
+                    <!--<property name="image_property" value="annotated_by"/>-->
+                <!--</pluginDefault>-->
+                <!--<validValue value="Aljoscha Nern"/>-->
+                <!--<validValue value="Yoshi Aso"/>-->
+                <!--<validValue value="Tanya Wolff"/>-->
+            <!--</validValueList>-->
+
+            <!--<validValueList displayName="Tissue Mounting Protocol" required="true"-->
+                            <!--markedForTask="false">-->
+                <!--<pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">-->
+                    <!--<property name="family" value="flylight_polarity"/>-->
+                    <!--<property name="image_property" value="mounting_protocol"/>-->
+                <!--</pluginDefault>-->
+                <!--<validValue value="DPX Ethanol Mounting"/>-->
+                <!--<validValue value="DPX PBS Mounting"/>-->
+                <!--<validValue value="Glycerol-Based Mounting"/>-->
+            <!--</validValueList>-->
+
+            <webServiceList displayName="Data Set" required="false"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;includeOnlySageSync=true"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="data_set"/>
+                </pluginDefault>
+
+            </webServiceList>
+
+            <!--<text displayName="Channel Specification" required="false"-->
+                    <!--markedForTask="false"-->
+                    <!--pattern="s*rs*">-->
+                <!--<pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">-->
+                    <!--<property name="family" value="flylight_polarity"/>-->
+                    <!--<property name="image_property" value="channel_spec"/>-->
+                <!--</pluginDefault>-->
+            <!--</text>-->
 
         </dataFields>
 
