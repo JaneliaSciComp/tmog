@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.9.6" frameSizePercentage="95"/>
+    <global minimumVersion="2.9.7" frameSizePercentage="95"/>
 
     <project name="Fly Light Flip - manual entry (FLFL*)" default="true">
 
@@ -333,6 +333,9 @@
 
         <plugins>
 
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.TileSetterPlugin">
+            </rowUpdater>
+
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
                 <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
                 <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
@@ -410,6 +413,19 @@
              These values are collected for storage but are not
              included as components of the file name (markedForTask="false").
              -->
+
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            sharedForAllSessionFiles="true"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;includeOnlySageSync=true"
+                            autoComplete="true">
+                <sourceFileMappedDefault pattern=".*_(\d\dX)_.*">
+                    <mappedValue from="20X" to="asoy_mb_polarity_20x_1024px"/>
+                </sourceFileMappedDefault>
+            </webServiceList>
 
             <number displayName="Cross Serial Number"
                     minimumValue="1"
@@ -492,20 +508,6 @@
                 <validValue value="DPX PBS Mounting"/>
                 <validValue value="Glycerol-Based Mounting"/>
             </validValueList>
-
-            <webServiceList displayName="Data Set" required="true"
-                            markedForTask="false"
-                            valueCreationPath="*/dataSet"
-                            relativeActualValuePath="dataSetIdentifier"
-                            relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;includeOnlySageSync=true"
-                            autoComplete="true">
-                <sourceFileMappedDefault pattern=".*_(\d\dX)_.*">
-                    <mappedValue from="20X" to="asoy_mb_polarity_20x_1024px"/>
-                    <mappedValue from="63X" to="asoy_mb_polarity_63x_1024px"/>
-                </sourceFileMappedDefault>
-
-            </webServiceList>
 
             <text displayName="Channel Specification" required="true"
                     markedForTask="false"
