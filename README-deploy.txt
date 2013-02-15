@@ -18,7 +18,7 @@ Build and Deployment Instructions:
 
 5. ssh wiki
 
-   > cd /misc/local/tomcat/instances/wiki-2011/webapps/webstart/tmog
+   > cd /opt/local/webstart/tmog
    > su jbossadmin
    > cp /tmp/JaneliaTransmogrifier__Va.b.c.jar . # replace jar version number with current version
    > rm JaneliaTransmogrifier__Va.b.c-2.jar      # remove n-2 version of jar file (keep n-1 around just in case)
