@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -82,6 +82,12 @@ public class NumberComparator implements Comparator<FileTarget> {
         }
 
         return compareResult;
+    }
+
+    public boolean isNumberInTargetName(FileTarget target) {
+        final String name = target.getName();
+        final Matcher matcher = pattern.matcher(name);
+        return matcher.matches();
     }
 
     private void validatePatternString(String patternString)

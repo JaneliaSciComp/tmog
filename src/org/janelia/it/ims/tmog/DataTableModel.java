@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -174,7 +174,7 @@ public class DataTableModel extends AbstractTransmogrifierTableModel {
         // create the model rows
         this.rows = new ArrayList<DataRow>(targets.size());
         for (Target target : targets) {
-            DataRow dataRow = new DataRow(target);
+            DataRow dataRow = new DataRow(target, this);
             for (DataField dataFieldConfig : dataFieldConfigs) {
                 DataField newFieldInstance =
                         dataFieldConfig.getNewInstance(false);

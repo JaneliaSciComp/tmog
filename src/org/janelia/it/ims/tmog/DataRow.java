@@ -1,8 +1,8 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog;
@@ -22,10 +22,30 @@ public class DataRow {
 
     private Target target;
     private List<DataField> fields;
+    private DataTableModel dataTableModel;
 
+    /**
+     * Creates a data row for the specified target without any model reference.
+     *
+     * @param  target  target for the data being collected.
+     */
     public DataRow(Target target) {
         this.target = target;
         this.fields = new ArrayList<DataField>();
+        this.dataTableModel = null;
+    }
+
+    /**
+     * Creates a data row for the specified target with a reference to the
+     * model for the entire session.
+     *
+     * @param  target          target for the data being collected.
+     * @param  dataTableModel  model for current session.
+     */
+    public DataRow(Target target,
+                   DataTableModel dataTableModel) {
+        this(target);
+        this.dataTableModel = dataTableModel;
     }
 
     public Target getTarget() {
@@ -51,5 +71,9 @@ public class DataRow {
 
     public int getFieldCount() {
         return fields.size();
+    }
+
+    public DataTableModel getDataTableModel() {
+        return dataTableModel;
     }
 }
