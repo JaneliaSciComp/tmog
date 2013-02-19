@@ -168,10 +168,11 @@
                             markedForTask="false">
                 <validValue displayName="ALH: after larva hatching" value="ALH" default="true"/>
                 <validValue displayName="APF: after pupa formation" value="APF"/>
+                <validValue displayName="BPF: before pupa formation" value="BPF"/>
             </validValueList>
 
             <decimal displayName="Heat Shock Age Hour" required="true"
-                     minimumValue="-30"
+                     minimumValue="0"
                      markedForTask="false">
             </decimal>
 
