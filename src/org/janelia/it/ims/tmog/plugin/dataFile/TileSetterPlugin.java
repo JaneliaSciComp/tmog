@@ -117,22 +117,24 @@ public class TileSetterPlugin implements RowUpdater {
                               dataSetTiles);
 
         dataSetTiles = new DataSetTiles(new String[][] {
-                {ld, ld, rd, rd},
-                {c, c},
-                {v, v, ld, ld, rd, rd},
-                {l, l, v, v, ld, ld, rd, rd, r, r},
-                {l, l, v, v, ld, ld, rd, rd, r, r, pro, pro, meso, meso, meta, meta}
+                {ld, ld, rd, rd},                                                     // (4)  LDRD
+                {c, c},                                                               // (2)  C
+                {v, v, ld, ld, rd, rd},                                               // (6)  VLDRD
+                {v, v, ld, ld, rd, rd, pro, pro, meso, meso, meta, meta},             // (12) VLDRD T1-T3
+                {l, l, v, v, ld, ld, rd, rd, r, r},                                   // (10) Whole Brain
+                {l, l, v, v, ld, ld, rd, rd, r, r, pro, pro, meso, meso, meta, meta}  // (16) Whole CNS
         });
 
         dataSetToTilesMap.put("asoy_mb_polarity_63x_case_1", dataSetTiles);
         dataSetToTilesMap.put("asoy_mb_polarity_63x_case_2", dataSetTiles);
 
         dataSetTiles = new DataSetTiles(new String[][] {
-                {ld, rd},
-                {c},
-                {v, ld, rd},
-                {l, v, ld, rd, r},
-                {l, v, ld, rd, r, pro, meso, meta}
+                {ld, rd},                                                             // (2)  LDRD
+                {c},                                                                  // (1)  C
+                {v, ld, rd},                                                          // (3)  VLDRD
+                {v, ld, rd, pro, meso, meta},                                         // (6)  VLDRD T1-T3
+                {l, v, ld, rd, r},                                                    // (5)  Whole Brain
+                {l, v, ld, rd, r, pro, meso, meta}                                    // (8)  Whole CNS
         });
 
         dataSetToTilesMap.put("asoy_mb_polarity_63x_case_3", dataSetTiles);
