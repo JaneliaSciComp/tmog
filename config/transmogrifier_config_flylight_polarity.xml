@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.9.7" frameSizePercentage="95"/>
+    <global minimumVersion="2.9.9" frameSizePercentage="95"/>
 
     <project name="Fly Light Polarity - preScreen - scope to dm11" default="true">
 
@@ -164,6 +164,11 @@
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.MoveValidator">
+                <property name="fromDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/from"/>
+                <property name="toDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/to"/>
+            </rowValidator>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.TileSetterPlugin">
             </rowUpdater>
@@ -466,6 +471,11 @@
         <outputDirectory derivedFromSourceFile="true"/>
 
         <plugins>
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.MoveValidator">
+                <property name="fromDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/from"/>
+                <property name="toDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/to"/>
+            </rowValidator>
+
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
                 <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
                 <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />

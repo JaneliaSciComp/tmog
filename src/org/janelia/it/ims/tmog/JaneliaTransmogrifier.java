@@ -41,7 +41,7 @@ public class JaneliaTransmogrifier extends JFrame {
      * app is run from within an IDE (package information can be used
      * when the app is run from a jar file). 
      */
-    public static final String VERSION = "2.9.8";
+    public static final String VERSION = "2.9.9";
     
     /**
      * Set up a thread pool to limit the number of concurrent
@@ -118,6 +118,11 @@ public class JaneliaTransmogrifier extends JFrame {
         try {
             String lookAndFeelClassName =
                     UIManager.getSystemLookAndFeelClassName();
+
+            final String userName = System.getProperty("user.name");
+            final String userDir = System.getProperty("user.dir");
+            LOG.info("connected as user '" + userName +
+                     "' with working directory " + userDir );
 
             String osName = System.getProperty("os.name");
             String osVersion = System.getProperty("os.version");
