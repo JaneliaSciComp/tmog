@@ -97,6 +97,7 @@ public class TileSetterPlugin implements RowUpdater {
         final String b = "brain";
         final String c = "central";
 //        final String lc = "left_central";
+        final String dm = "dorsal_medial";
         final String ld = "left_dorsal";
         final String l = "left_optic_lobe";
         final String meso = "mesothorasic";
@@ -130,7 +131,7 @@ public class TileSetterPlugin implements RowUpdater {
 
         dataSetTiles = new DataSetTiles(new String[][] {
                 {ld, rd},                                                             // (2)  LDRD
-                {c},                                                                  // (1)  C
+                {dm},                                                                 // (1)  C?
                 {v, ld, rd},                                                          // (3)  VLDRD
                 {v, ld, rd, pro, meso, meta},                                         // (6)  VLDRD T1-T3
                 {l, v, ld, rd, r},                                                    // (5)  Whole Brain
