@@ -85,6 +85,7 @@
                   pattern="[A-Z]\d\d?"
                   convertToUpperCase="true"
                   suffix="_">
+                <sourceFileDefault pattern="^([^_]+)_ZB.*"/>
                 <sourceFileSlideLocationDefault pattern="(?:^|.*_)B(\d+)_.*"
                                                 numberOfSlideColumns="6"/>
             </text>
@@ -96,7 +97,7 @@
                     copyable="false"
                     prefix="zb"
                     suffix="_">
-                <sourceFileDefault pattern=".*_zb(\d+)_.*"/>
+                <sourceFileDefault pattern=".*_[Zz][Bb](\d+)_.*"/>
                 <sourceFileDefault pattern="(?:^|.*_)B(\d+)_.*"/>
             </number>
 
