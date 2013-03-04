@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.9.7" frameSizePercentage="95"/>
+    <global minimumVersion="3.0.0" frameSizePercentage="95"/>
 
     <project name="Fly Light Flip - manual entry (FLFL*)" default="true">
 
@@ -258,6 +258,7 @@
                   pattern="[A-Z]\d\d?"
                   convertToUpperCase="true"
                   suffix="_">
+                <sourceFileDefault pattern="^([^_]+)_ZB.*"/>
                 <sourceFileSlideLocationDefault pattern="(?:^|.*_)B(\d+)_.*"
                                                 numberOfSlideColumns="6"/>
             </text>
@@ -269,7 +270,7 @@
                     copyable="false"
                     prefix="zb"
                     suffix="_">
-                <sourceFileDefault pattern=".*_zb(\d+)_.*"/>
+                <sourceFileDefault pattern=".*_[Zz][Bb](\d+)_.*"/>
                 <sourceFileDefault pattern="(?:^|.*_)B(\d+)_.*"/>
             </number>
 
@@ -332,6 +333,11 @@
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.MoveValidator">
+                <property name="fromDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/from"/>
+                <property name="toDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/to"/>
+            </rowValidator>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.TileSetterPlugin">
             </rowUpdater>
@@ -541,6 +547,11 @@
         </outputDirectory>
 
         <plugins>
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.MoveValidator">
+                <property name="fromDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/from"/>
+                <property name="toDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/to"/>
+            </rowValidator>
+
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
                 <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
                 <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
@@ -659,6 +670,11 @@
         <outputDirectory derivedFromSourceFile="true"/>
 
         <plugins>
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.MoveValidator">
+                <property name="fromDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/from"/>
+                <property name="toDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/to"/>
+            </rowValidator>
+
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
                 <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
                 <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
