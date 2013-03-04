@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="3.0.0" frameSizePercentage="95"/>
+    <global minimumVersion="3.0.1" frameSizePercentage="95"/>
 
     <project name="Fly Light Flip - manual entry (FLFL*)" default="true">
 
@@ -327,7 +327,7 @@
              - '(?: )' identifies a non-capturing group
         -->
         <inputFileSorter sortAlgorithm="Number"
-                         patternString="(?:.*_)(zb)(\d+)(_.*)"/>
+                         patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
 
         <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/flip/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
@@ -665,7 +665,7 @@
              - '(?: )' identifies a non-capturing group
         -->
         <inputFileSorter sortAlgorithm="Number"
-                         patternString="(?:^|.*_)(zb)(\d+)(_.*)"/>
+                         patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
 
         <outputDirectory derivedFromSourceFile="true"/>
 

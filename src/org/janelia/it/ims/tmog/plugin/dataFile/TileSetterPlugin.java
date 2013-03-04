@@ -11,7 +11,7 @@ import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.field.DataField;
-import org.janelia.it.ims.tmog.filefilter.LNumberComparator;
+import org.janelia.it.ims.tmog.filefilter.NumberComparator;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
@@ -53,7 +53,7 @@ public class TileSetterPlugin implements RowUpdater {
     private int dataSetColumn;
     private int slideCodeColumn;
     private boolean isColumnMappingComplete;
-    private LNumberComparator targetComparator;
+    private NumberComparator targetComparator;
     private Map<String, DataSetTiles> dataSetToTilesMap;
 
     private Map<File, String> targetFileToTileMap;
@@ -73,7 +73,13 @@ public class TileSetterPlugin implements RowUpdater {
         this.slideCodeColumnName = DEFAULT_SLIDE_CODE_COLUMN_NAME;
         this.tileColumnName = DEFAULT_TILE_COLUMN_NAME;
         this.isColumnMappingComplete = false;
-        this.targetComparator = new LNumberComparator();
+
+        String sortPattern = config.getProperty("sortPattern");
+        if ((sortPattern == null) || (sortPattern.length() == 0)) {
+            // use L number if slide code matches
+            sortPattern = ".*_(\\d{8}_\\d{2}_[A-Z]\\d).*_R._L(\\d++)_(.*)";
+        }
+        this.targetComparator = new NumberComparator(sortPattern);
 
         this.targetFileToTileMap = new HashMap<File, String>();
         buildDataSetToTilesMap();
@@ -95,7 +101,7 @@ public class TileSetterPlugin implements RowUpdater {
 
 //        final String a = "abdominal";
         final String b = "brain";
-        final String c = "central";
+//        final String c = "central";
 //        final String lc = "left_central";
         final String dm = "dorsal_medial";
         final String ld = "left_dorsal";
@@ -119,7 +125,7 @@ public class TileSetterPlugin implements RowUpdater {
 
         dataSetTiles = new DataSetTiles(new String[][] {
                 {ld, ld, rd, rd},                                                     // (4)  LDRD
-                {c, c},                                                               // (2)  C
+                {dm, dm},                                                             // (2)  C
                 {v, v, ld, ld, rd, rd},                                               // (6)  VLDRD
                 {v, v, ld, ld, rd, rd, pro, pro, meso, meso, meta, meta},             // (12) VLDRD T1-T3
                 {l, l, v, v, ld, ld, rd, rd, r, r},                                   // (10) Whole Brain
@@ -131,7 +137,7 @@ public class TileSetterPlugin implements RowUpdater {
 
         dataSetTiles = new DataSetTiles(new String[][] {
                 {ld, rd},                                                             // (2)  LDRD
-                {dm},                                                                 // (1)  C?
+                {dm},                                                                 // (1)  C
                 {v, ld, rd},                                                          // (3)  VLDRD
                 {v, ld, rd, pro, meso, meta},                                         // (6)  VLDRD T1-T3
                 {l, v, ld, rd, r},                                                    // (5)  Whole Brain

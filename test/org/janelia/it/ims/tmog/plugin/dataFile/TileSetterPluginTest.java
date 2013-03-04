@@ -25,6 +25,7 @@ import org.junit.Assert;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Tests the {@link TileSetterPlugin} class.
@@ -76,10 +77,15 @@ public class TileSetterPluginTest
         ProjectConfiguration projectConfig = new ProjectConfiguration();
         projectConfig.setDataFields(fields);
 
+        Random random = new Random();
         File file;
         List<FileTarget> fileTargetList = new ArrayList<FileTarget>();
+        int channelName;
         for (int i = 0; i < 10; i++) {
-            file = new File("test_L0" + i + "_R1.lsm");
+            channelName = random.nextInt(500);
+            file = new File("test_20130102_11_H2_" + channelName +
+                            "-71-440__R1_L0" + i + "_9999888.lsm");
+            System.out.println(file.getName());
             fileTargetList.add(new FileTarget(file));
         }
 
