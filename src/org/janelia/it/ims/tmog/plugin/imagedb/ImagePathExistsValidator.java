@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -30,6 +30,7 @@ public class ImagePathExistsValidator extends SimpleRowValidator {
     private ImageDao dao;
     private boolean shouldExist;
     private int relativePathDepth;
+    private String relativePathField;
 
     /**
      * Empty constructor required by
@@ -38,6 +39,7 @@ public class ImagePathExistsValidator extends SimpleRowValidator {
     public ImagePathExistsValidator() {
         this.shouldExist = true;
         this.relativePathDepth = 1;
+        this.relativePathField = null;
     }
 
     /**
@@ -80,6 +82,12 @@ public class ImagePathExistsValidator extends SimpleRowValidator {
                             "'relativePathDepth' plug-in property.", e);
                 }
             }
+
+            String fieldString = props.get("relativePathField");
+            if (StringUtil.isDefined(fieldString)) {
+                this.relativePathField = fieldString;
+            }
+
         } else {
             throw new ExternalSystemException(
                     INIT_FAILURE_MSG +
@@ -112,8 +120,15 @@ public class ImagePathExistsValidator extends SimpleRowValidator {
             file = row.getTargetFile();
         }
 
-        final String relativePath =
+        String relativePath = null;
+        if (relativePathField != null) {
+            relativePath = row.getCoreValue(relativePathField);
+        }
+        if (! StringUtil.isDefined(relativePath)) {
+            relativePath =
                 RelativePathUtil.getRelativePath(file, relativePathDepth);
+        }
+
         try {
             Integer imageId = dao.getImageId(relativePath);
             if (shouldExist) {

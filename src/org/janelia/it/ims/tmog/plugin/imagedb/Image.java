@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -76,6 +76,12 @@ public class Image {
 
     public String getPreviousRelativePath() {
         return previousRelativePath;
+    }
+
+    public void setRelativePaths(String relativePath,
+                                 String previousRelativePath) {
+        this.relativePath = relativePath;
+        this.previousRelativePath = previousRelativePath;
     }
 
     public String getPath() {
@@ -193,12 +199,6 @@ public class Image {
         sb.append(", properties=").append(propertyTypeToValueMap);
         sb.append('}');
         return sb.toString();
-    }
-
-    protected void setRelativePaths(String relativePath,
-                                    String previousRelativePath) {
-        this.relativePath = relativePath;
-        this.previousRelativePath = previousRelativePath;
     }
 
     private static final Set<String> SAGE_FILTERED_PROPERTIES;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -275,24 +275,33 @@ public class ImageDao extends AbstractDao
             DbManager dbManager = getDbManager();
             connection = dbManager.getConnection();
 
-            // SELECT i.capture_date, i.display, p.type, p.value
+            // SELECT i.id, i.name, i.capture_date, i.display, p.type, p.value
             select = connection.prepareStatement(getSelectImageDataSql());
             select.setString(1, family);
             select.setString(2, relativePath);
             resultSet = select.executeQuery();
             if (resultSet.next()) {
+                final Integer originalImageId = resultSet.getInt(1);
+                Integer imageId;
                 data = new HashMap<String, String>(128);
                 data.put("family", family);
-                data.put("name", relativePath);
-                data.put("capture_date", String.valueOf(resultSet.getObject(1)));
-                data.put("display", String.valueOf(resultSet.getObject(2)));
+                data.put("name", resultSet.getString(2));
+                data.put("capture_date", String.valueOf(resultSet.getObject(3)));
+                data.put("display", String.valueOf(resultSet.getObject(4)));
 
-                String type = resultSet.getString(3);
+                String type = resultSet.getString(5);
                 if (type != null) {
-                    data.put(type, resultSet.getString(4));
+                    data.put(type, resultSet.getString(6));
                     while (resultSet.next()) {
-                        data.put(resultSet.getString(3),
-                                 resultSet.getString(4));
+                        imageId = resultSet.getInt(1);
+                        if (! originalImageId.equals(imageId)) {
+                            throw new ExternalSystemException(
+                                    "Multiple images (" + originalImageId +
+                                    ", " + imageId + ") share name '" +
+                                    relativePath + "'.");
+                        }
+                        data.put(resultSet.getString(5),
+                                 resultSet.getString(6));
                     }
                 }
             } else {
@@ -319,9 +328,9 @@ public class ImageDao extends AbstractDao
 
     protected String getSelectImageDataSql() {
         return
-            "SELECT i.capture_date, i.display, p.type, p.value " +
+            "SELECT i.id, i.name, i.capture_date, i.display, p.type, p.value " +
             "FROM image i LEFT JOIN image_property p ON (i.id=p.image_id) " +
-            "WHERE i.family=? AND i.name=?";
+            "WHERE i.family=? AND i.name like ?";
     }
 
     private Integer getImageId(String relativePath,

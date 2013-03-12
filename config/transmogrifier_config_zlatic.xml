@@ -137,6 +137,10 @@
                                  to="p_3gradient1_2s10x60s0s#n#n#n@20" />
                     <mappedValue from="p$3hgradient1control$2s10x60s0s@n@n@n"
                                  to="p_3hgradient1control_2s10x60s0s#n#n#n@20" />
+                    <mappedValue from="p$5gradient2$2s10x60s0s@n@n@n"
+                                 to="p_5gradient2_2s10x60s0s#n#n#n@20" />
+                    <mappedValue from="p$5gradient2control$2s10x60s0s@n@n@n"
+                                 to="p_5gradient2control_2s10x60s0s#n#n#n@20" />
                     <mappedValue from="p$8$45s1x30s0s@p$8$105s10x2s10s@n@n"
                                  to="p_8_45s1x30s0s#p_8_105s10x2s10s#n#n@100" />
                     <mappedValue from="p$8$45s1x30s0s@p$8$105s10x2s10s@s$020$0s1x227s0s@n"

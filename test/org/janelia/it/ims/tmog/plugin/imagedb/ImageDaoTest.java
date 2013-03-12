@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -39,6 +39,7 @@ public class ImageDaoTest extends TestCase {
      * This flag can be used to stop database cleanup in the image test's
      * tearDown method when you need to debug problems in the database.
      */
+    @SuppressWarnings("FieldCanBeLocal")
     private boolean isImageCleanupNeeded = true;
     private boolean isSequenceCleanupNeeded = false;
 
@@ -128,6 +129,16 @@ public class ImageDaoTest extends TestCase {
         assertNotNull("image data not found", imageData);
         assertEquals("property missing from image data",
                      "valueC", imageData.get("testPropertyC"));
+
+        // relativePath = test/file<yyyyMMddHHmmssSSS>
+        final String baseName = '%' + testImage.getRelativePath().substring(5);
+        Map<String, String> imageData2 =
+                dao.getImageData(testImage.getFamily(),
+                                 baseName);
+        assertNotNull("image data not found when searching by base name",
+                      imageData2);
+        assertEquals("base name image data differs from explicit image data",
+                     imageData, imageData2);
     }
 
     /**

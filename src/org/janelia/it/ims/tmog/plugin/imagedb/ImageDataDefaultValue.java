@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -17,6 +17,8 @@ import org.janelia.it.utils.StringUtil;
 
 import java.io.File;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class encapsulates a default field value that is based upon
@@ -29,10 +31,12 @@ public class ImageDataDefaultValue
 
     private String propertyName;
     private int relativePathDepth;
+    private boolean useBaseNameSearch;
     private ImageDataCache dataCache;
 
     public ImageDataDefaultValue() {
         this.relativePathDepth = 1;
+        this.useBaseNameSearch = false;
     }
 
     public void init(Map<String, String> properties)
@@ -65,6 +69,12 @@ public class ImageDataDefaultValue
                         "'relative_path_depth' plug-in property.", e);
             }
         }
+
+        final String baseNameSearch = properties.get("baseNameSearch");
+        if (StringUtil.isDefined(baseNameSearch)) {
+            this.useBaseNameSearch = Boolean.valueOf(baseNameSearch);
+        }
+
         try {
             this.dataCache = ImageDataCache.getCache(getDbConfigurationKey(),
                                                      family);
@@ -80,10 +90,23 @@ public class ImageDataDefaultValue
     public String getValue(Target target) {
         String value = null;
         if (target instanceof FileTarget) {
+
             final FileTarget fileTarget = (FileTarget) target;
             final File file = fileTarget.getFile();
-            final String relativePath =
+
+            String relativePath = null;
+            if (useBaseNameSearch) {
+                Matcher m = BASE_NAME.matcher(file.getName());
+                if (m.matches() && (m.groupCount() == 1)) {
+                    relativePath = '%' + m.group(1) + '%';
+                }
+            }
+
+            if (relativePath == null) {
+                relativePath =
                     RelativePathUtil.getRelativePath(file, relativePathDepth);
+            }
+
             value = dataCache.getValue(relativePath, propertyName);
         }
         return value;
@@ -95,4 +118,7 @@ public class ImageDataDefaultValue
 
     private static final String INIT_FAILURE_MSG =
             "Failed to initialize Image Data Default Value plug-in.  ";
+
+    private static final Pattern BASE_NAME =
+            Pattern.compile(".*([A-Z]+_\\d{17}_\\d+).*");
 }

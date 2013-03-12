@@ -329,7 +329,7 @@
 
     </project>
 
-        <project name="Fly Light Polarity - add channel data to SAGE" taskName="collector">
+    <project name="Fly Light Polarity - add channel data to SAGE" taskName="collector">
 
         <plugins>
 
