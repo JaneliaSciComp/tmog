@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -367,7 +367,7 @@ public class SessionCompleteZeissDataWriter
 
         if (args.length < 2) {
             System.out.println(
-                    "USAGE: java " + SessionCompleteZeissDataWriter.class +
+                    "USAGE: java " + SessionCompleteZeissDataWriter.class.getName() +
                     " <baseFileName> <lsmFile> [lsmFile ...]");
             System.exit(1);
         }
