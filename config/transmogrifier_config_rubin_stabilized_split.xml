@@ -49,6 +49,7 @@
                 <property name="exclude.host.name" value="true"/>
                 <property name="lab" value="$STATIC:rubin"/>
                 <property name="family" value="$STATIC:rubin_ssplit"/>
+                <property name="data_set" value="$STATIC:jenetta_stabilized_split_case_3"/>
                 <property name="line" value="Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="created_by" value="Imager"/>
@@ -60,7 +61,6 @@
                 <property name="age" value="Age"/>
                 <property name="annotated_by" value="Annotator"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
-                <!--<property name="data_set" value="Data Set"/>-->
                 <!--<property name="channel_spec" value="Channel Specification"/>-->
                 <property name="microscope_filename"/>
             </rowListener>
