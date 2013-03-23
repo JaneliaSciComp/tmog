@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="3.0.2"/>
+
+    <project name="Zlatic: Odor" default="true"
+             copyPreviousButtonVisible="false">
+
+        <inputFileFilter patternString="\w.*\.\w.*"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <outputDirectory fileModeReadOnly="false">
+            <path path="[\\dm11.janelia.priv|/groups/zlatic]/zlaticlab/odor/t14/" />
+            <renameFieldValue fieldDisplayName="Line"/>
+            <renameFieldValue fieldDisplayName="Effector" prefix="@"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Relative Path"/>
+        </outputDirectory>
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/${Line Lab}/${Line}.janelia-sage"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
+                <property name="errorMessage" value="There is no '${Line Lab}' lab line named '${Line}' in the SAGE database."/>
+                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
+                <property name="validResources"
+                          value="http://sage.int.janelia.org/sage-ws/lines/none/GH86.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/none/ywrh5rh6.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/none/MB049B.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/none/MB049B_tubby.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/none/tim.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/none/timA3.janelia-sage"/>
+            </rowValidator>
+
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Relative Path" required="true"
+                  copyable="false"
+                  markedForTask="false"
+                  editable="false">
+                <sourceFileDefault pattern=".*[/\\\\]t14[/\\\\][^@/\\\\]+@[^/\\\\]+[/\\\\](([^/\\\\]+[/\\\\])+).*"
+                                   matchType="path"/>
+            </text>
+
+            <cvTermList displayName="Line Lab" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/lab"
+                        displayNamePrefixedForValues="false"
+                        markedForTask="false">
+
+                <sourceFileMappedDefault pattern=".*[/\\\\]t14[/\\\\](GMR_|20C12).*"
+                                         matchType="path">
+                    <mappedValue from="GMR_" to="rubin"/>
+                    <mappedValue from="20C12" to="rubin"/>
+                </sourceFileMappedDefault>
+
+                <sourceFileMappedDefault pattern=".*[/\\\\]t14[/\\\\](p[^@]*)@.*"
+                                         matchType="path">
+                    <mappedValue from="pBDPGAL4U" to="simpson"/>
+                    <mappedValue from="pBDPUASGAL4" to="simpson"/>
+                    <mappedValue from="pBDPGAL4U" to="simpson"/>
+                    <mappedValue from="pBDP-Gal4" to="simpson"/>
+                    <mappedValue from="pBDP" to="simpson"/>
+                    <mappedValue from="pPBD" to="simpson"/>
+                </sourceFileMappedDefault>
+
+                <sourceFileMappedDefault pattern=".*[/\\\\]t14[/\\\\](FCF_|attP2).*"
+                                         matchType="path">
+                    <mappedValue from="FCF_" to="fly"/>
+                    <mappedValue from="attP2" to="fly"/>
+                </sourceFileMappedDefault>
+
+                <sourceFileMappedDefault pattern=".*[/\\\\]t14[/\\\\](iav_).*"
+                                         matchType="path">
+                    <mappedValue from="iav_" to="zlatic"/>
+                </sourceFileMappedDefault>
+
+                <sourceFileMappedDefault pattern=".*[/\\\\]t14[/\\\\][Ww](111)[89]@.*"
+                                         matchType="path">
+                    <mappedValue from="111" to="fly"/>
+                </sourceFileMappedDefault>
+
+                <staticDefault value="none"/>
+            </cvTermList>
+
+            <text displayName="Line" required="true"
+                  pattern="[0-9A-Za-z\-\_]++"
+                  markedForTask="false">
+
+                <sourceFileMappedDefault pattern=".*[/\\\\]t14[/\\\\]([^@/\\\\]+)@.*"
+                                         matchType="path">
+                    <mappedValue from="attp2" to="FCF_attP2_1500062"/>
+                    <mappedValue from="nolarva" to="Do NOT tmog!"/>
+                    <mappedValue from="ppk-gal4" to="MZZ_ppk1d9GAL4"/>
+                    <mappedValue from="ppk1.9" to="MZZ_ppk1d9GAL4"/>
+                    <mappedValue from="ppklexa" to="JHS_ppk_LexAattp40"/>
+                </sourceFileMappedDefault>
+
+                <sourceFileDefault pattern=".*[/\\\\]t14[/\\\\]([^@/\\\\]+)@.*"
+                                   matchType="path"/>
+            </text>
+
+            <cvTermList displayName="Effector" required="true"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage"
+                        markedForTask="false">
+
+                <sourceFileMappedDefault pattern=".*[/\\\\]t14[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
+                                         matchType="path">
+                    <mappedValue from="w118" to="UAS_IVS_myr_3_0009" />
+                    <mappedValue from="none" to="NoEffector_0_9999"/>
+                    <mappedValue from="UAS-ChR2" to="UAS_ChRh2_23_0011" />
+                    <mappedValue from="ChR2" to="UAS_ChRh2_23_0011" />
+                </sourceFileMappedDefault>
+
+                <sourceFileDefault pattern=".*[/\\\\]t14[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
+                                   matchType="path"/>
+
+            </cvTermList>
+
+            <!-- uncomment to see original effector names to build map
+            <text displayName="Original Effector"
+                  markedForTask="false"
+                  copyable="false"
+                  editable="false">
+                <sourceFileDefault pattern=".*[/\\\\]t14[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
+                                   matchType="path"/>
+            </text>
+            -->
+
+            <fileName displayName="File Name" visible="false" />
+
+        </dataFields>
+
+    </project>
+
+    <project name="Zlatic: Odor RD"
+             copyPreviousButtonVisible="false">
+
+        <inputFileFilter patternString="\w.*\.\w.*"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <outputDirectory fileModeReadOnly="false">
+            <path path="[\\dm11.janelia.priv|/groups/zlatic]/zlaticlab/odor-rd/t14/" />
+            <renameFieldValue fieldDisplayName="Line"/>
+            <renameFieldValue fieldDisplayName="Effector" prefix="@"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Relative Path"/>
+        </outputDirectory>
+
+        <plugins>
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Relative Path" required="true"
+                  copyable="false"
+                  markedForTask="false"
+                  editable="false">
+                <sourceFileDefault pattern=".*[/\\\\]t14[/\\\\][^@/\\\\]+@[^/\\\\]+[/\\\\](([^/\\\\]+[/\\\\])+).*"
+                                   matchType="path"/>
+            </text>
+
+            <text displayName="Line" required="true"
+                  pattern="[0-9A-Za-z\-\_]++"
+                  markedForTask="false">
+
+                <sourceFileMappedDefault pattern=".*[/\\\\]t14[/\\\\]([^@/\\\\]+)@.*"
+                                         matchType="path">
+                    <mappedValue from="attp2" to="FCF_attP2_1500062"/>
+                    <mappedValue from="nolarva" to="Do NOT tmog!"/>
+                    <mappedValue from="ppk-gal4" to="MZZ_ppk1d9GAL4"/>
+                    <mappedValue from="ppk1.9" to="MZZ_ppk1d9GAL4"/>
+                    <mappedValue from="ppklexa" to="JHS_ppk_LexAattp40"/>
+                </sourceFileMappedDefault>
+
+                <sourceFileDefault pattern=".*[/\\\\]t14[/\\\\]([^@/\\\\]+)@.*"
+                                   matchType="path"/>
+            </text>
+
+            <text displayName="Effector" required="true"
+                  markedForTask="false">
+
+                <sourceFileMappedDefault pattern=".*[/\\\\]t14[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
+                                         matchType="path">
+                    <mappedValue from="w118" to="UAS_IVS_myr_3_0009" />
+                    <mappedValue from="none" to="NoEffector_0_9999"/>
+                    <mappedValue from="UAS-ChR2" to="UAS_ChRh2_23_0011" />
+                    <mappedValue from="ChR2" to="UAS_ChRh2_23_0011" />
+                </sourceFileMappedDefault>
+
+                <sourceFileDefault pattern=".*[/\\\\]t14[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
+                                   matchType="path"/>
+
+            </text>
+
+            <fileName displayName="File Name" visible="false" />
+
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
