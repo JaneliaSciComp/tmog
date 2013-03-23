@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -39,7 +39,7 @@ public class FileNamePatternFilter extends javax.swing.filechooser.FileFilter
 
     public boolean accept(File pathname) {
         boolean isAccepted = (includeDirectories && pathname.isDirectory());
-        if (! isAccepted) {
+        if ((! isAccepted) && (pathname.isFile())) {
             String fileName = pathname.getName();
             Matcher matcher = pattern.matcher(fileName);
             isAccepted = matcher.matches();
