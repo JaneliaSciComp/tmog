@@ -146,6 +146,7 @@ public class TileSetterPlugin implements RowUpdater {
 
         dataSetToTilesMap.put("asoy_mb_polarity_63x_case_3", dataSetTiles);
         dataSetToTilesMap.put("asoy_mb_polarity_63x_case_4", dataSetTiles);
+        dataSetToTilesMap.put("jenetta_stabilized_split_case_3", dataSetTiles);
     }
 
     /**
