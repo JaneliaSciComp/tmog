@@ -296,8 +296,16 @@
                             valueCreationPath="*/line"
                             relativeActualValuePath="name"
                             relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman"
                             autoComplete="true">
+                <sourceFileMappedDefault pattern=".*(\d{5})_\d{8}_\d{2}_.*">
+                    <mappedValue from="56800" to="RD_NP3253-GAL4"/>
+                    <mappedValue from="56801" to="RD_NP5103-GAL4"/>
+                    <mappedValue from="56803" to="RD_NP5316-GAL4"/>
+                    <mappedValue from="56804" to="RD_NP6107-GAL4"/>
+                    <mappedValue from="56805" to="RD_NP6115-GAL4"/>
+                    <mappedValue from="56806" to="RD_NP7273-GAL4"/>
+                </sourceFileMappedDefault>
             </webServiceList>
 
             <cvTermList displayName="Effector" required="true"
@@ -667,7 +675,7 @@
                             <!--valueCreationPath="*/line"-->
                             <!--relativeActualValuePath="name"-->
                             <!--relativeValueDisplayNamePath="name"-->
-                            <!--serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"-->
+                            <!--serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman"-->
                             <!--autoComplete="true">-->
             <!--</webServiceList>-->
 
