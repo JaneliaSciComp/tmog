@@ -206,4 +206,64 @@
 
     </project>
 
+    <project name="Rubin Stabilized Splits - fix data" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="lab" value="$STATIC:rubin"/>
+                <property name="family" value="$STATIC:rubin_ssplit"/>
+                <!--<property name="line" value="Line"/>-->
+                <!--<property name="cross_barcode" value="Cross Serial Number"/>-->
+                <!--<property name="created_by" value="Imager"/>-->
+                <!--<property name="effector" value="Effector"/>-->
+                <!--<property name="slide_code" value="Slide Code"/>-->
+                <property name="tile" value="Tile"/>
+                <!--<property name="gender" value="Gender"/>-->
+                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_optic_lobe=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_optic_lobe=Brain|ventral=Brain|ventral_nerve_cord=VNC"/>
+                <!--<property name="age" value="Age"/>-->
+                <!--<property name="annotated_by" value="Annotator"/>-->
+                <!--<property name="mounting_protocol" value="Tissue Mounting Protocol"/>-->
+                <!--<property name="channel_spec" value="Channel Specification"/>-->
+                <!--<property name="microscope_filename"/>-->
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <cvTermList displayName="Tile" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        autoComplete="true"
+                        markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_ssplit"/>
+                    <property name="image_property" value="tile"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </cvTermList>
+
+            <text displayName="SAGE Name" required="true"
+                  copyable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_ssplit"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+        </dataFields>
+
+    </project>
+
 </transmogrifierConfiguration>
