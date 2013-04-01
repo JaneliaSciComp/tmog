@@ -120,5 +120,5 @@ public class ImageDataDefaultValue
             "Failed to initialize Image Data Default Value plug-in.  ";
 
     private static final Pattern BASE_NAME =
-            Pattern.compile(".*([A-Z]+_\\d{17}_\\d+).*");
+            Pattern.compile("(?:^.*_|^)([A-Z]+_\\d{17}_\\d+).*");
 }
