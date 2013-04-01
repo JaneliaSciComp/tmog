@@ -429,38 +429,6 @@
 
     </project>
 
-    <project name="Fly Light Polarity - generate Zeiss data file" taskName="collector">
-
-        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
-
-        <plugins>
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionCompleteZeissDataWriter">
-                <property name="baseFileName" value="0-zeiss-data"/>
-                <property name="key-1" value="IlluminationChannel.*"/>
-                <property name="key-2" value="DetectionChannel.*"/>
-            </sessionListener>
-        </plugins>
-
-        <dataFields>
-        <!--
-            <text displayName="Channel 2 Name">
-                <lsmDefault propertyName="IlluminationChannel #2 Name" />
-            </text>
-
-            <number displayName="Channel 2 Power">
-                <lsmDefault propertyName="IlluminationChannel #2 Power B/C 1"
-                            truncateDecimal="true"/>
-            </number>
-
-            <number displayName="Channel 2 Gain">
-                <lsmDefault propertyName="DetectionChannel #2 Detector Gain"
-                            truncateDecimal="true"/>
-            </number>
-        -->
-        </dataFields>
-
-    </project>
-
     <project name="Fly Light Polarity - preScreen - fix" taskName="simple-move">
 
         <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
