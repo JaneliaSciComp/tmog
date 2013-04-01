@@ -251,7 +251,7 @@ public class SageImageDao
     @Override
     protected String getSelectImageDataSql() {
         return
-            "SELECT i.id, i.name, i.capture_date, i.display, p.type, p.value " +
+            "SELECT i.id, i.name, i.capture_date, i.display, p.type, p.value, i.line " +
             "FROM image_vw i LEFT JOIN image_property_vw p " +
             "ON (i.id=p.image_id) WHERE i.family=? AND i.name like ?";
     }

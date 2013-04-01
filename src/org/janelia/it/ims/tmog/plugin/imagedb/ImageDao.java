@@ -18,6 +18,7 @@ import org.janelia.it.utils.db.DbManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -288,6 +289,11 @@ public class ImageDao extends AbstractDao
                 data.put("name", resultSet.getString(2));
                 data.put("capture_date", String.valueOf(resultSet.getObject(3)));
                 data.put("display", String.valueOf(resultSet.getObject(4)));
+
+                final ResultSetMetaData metaData = resultSet.getMetaData();
+                if (metaData.getColumnCount() > 6) {
+                    data.put("line", resultSet.getString(7));
+                }
 
                 String type = resultSet.getString(5);
                 if (type != null) {
