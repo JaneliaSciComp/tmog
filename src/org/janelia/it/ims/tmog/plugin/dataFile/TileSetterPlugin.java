@@ -43,8 +43,7 @@ public class TileSetterPlugin implements RowUpdater {
     public static final String DEFAULT_SLIDE_CODE_COLUMN_NAME = "Slide Code";
     public static final String DEFAULT_TILE_COLUMN_NAME = "Tile";
 
-    public static final String DATA_SET_ASOY_MB_POLARITY_20X_1024PX =
-            "asoy_mb_polarity_20x_1024px";
+    public static final String DEFAULT_20X_DATA_SET = "DEFAULT_20X_DATA_SET";
 
     private String dataSetColumnName;
     private String slideCodeColumnName;
@@ -120,7 +119,7 @@ public class TileSetterPlugin implements RowUpdater {
                 {b, vnc}
         });
 
-        dataSetToTilesMap.put(DATA_SET_ASOY_MB_POLARITY_20X_1024PX,
+        dataSetToTilesMap.put(DEFAULT_20X_DATA_SET,
                               dataSetTiles);
 
         dataSetTiles = new DataSetTiles(new String[][] {
@@ -319,10 +318,14 @@ public class TileSetterPlugin implements RowUpdater {
                                          rowIndex,
                                          slideCodeColumn,
                                          slideCodeColumnName);
-            dataSet = getRequiredValue(model,
-                                       rowIndex,
-                                       dataSetColumn,
-                                       dataSetColumnName);
+            dataSet = getValue(model,
+                               rowIndex,
+                               dataSetColumn);
+
+            // hack to use default 20x data set when one has not been provided
+            if ((dataSet == null) || (dataSet.length() == 0)) {
+                dataSet = DEFAULT_20X_DATA_SET;
+            }
         }
 
         public String getDataSet() {
@@ -352,8 +355,7 @@ public class TileSetterPlugin implements RowUpdater {
                                         int column,
                                         String context)
                 throws ExternalDataException {
-            final DataField f = (DataField) model.getValueAt(rowIndex, column);
-            final String value = f.getCoreValue();
+            final String value = getValue(model, rowIndex, column);
             if ((value == null) || (value.length() == 0)) {
                 throw new ExternalDataException(
                         "To derive tile values, a " + context +
@@ -361,6 +363,14 @@ public class TileSetterPlugin implements RowUpdater {
                         model.getTargetForRow(rowIndex).getName() + ".");
             }
             return value;
+        }
+
+        private String getValue(DataTableModel model,
+                                int rowIndex,
+                                int column)
+                throws ExternalDataException {
+            final DataField f = (DataField) model.getValueAt(rowIndex, column);
+            return f.getCoreValue();
         }
     }
 

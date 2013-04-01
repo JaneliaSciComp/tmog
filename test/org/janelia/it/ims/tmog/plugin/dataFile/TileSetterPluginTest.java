@@ -101,8 +101,10 @@ public class TileSetterPluginTest
         DataField slideCodeField;
         for (int i = 0; i < model.getRowCount(); i++) {
             dataSetField = (DataField) model.getValueAt(i, dataSetIndex);
-            dataSetField.applyValue(
-                    TileSetterPlugin.DATA_SET_ASOY_MB_POLARITY_20X_1024PX);
+            if (i % 2 == 0) {
+                dataSetField.applyValue(
+                        TileSetterPlugin.DEFAULT_20X_DATA_SET);
+            }
             slideCodeField = (DataField) model.getValueAt(i, slideCodeIndex);
 
             if (! isSameSlideLocation(i)) {
@@ -137,13 +139,6 @@ public class TileSetterPluginTest
             Assert.assertEquals("invalid tile value for row " + i,
                                 expectedValue, tileField.getCoreValue());
         }
-    }
-
-    public void testMissingDataSet() throws Exception {
-        verifyExternalDataException("empty data set",
-                                    model.getRowCount() - 1,
-                                    "",
-                                    dataSetIndex);
     }
 
     public void testMultipleDataSets() throws Exception {
