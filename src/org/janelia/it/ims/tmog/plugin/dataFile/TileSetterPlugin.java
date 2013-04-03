@@ -100,7 +100,7 @@ public class TileSetterPlugin implements RowUpdater {
 
 //        final String a = "abdominal";
         final String b = "brain";
-//        final String c = "central";
+        final String c = "central";
 //        final String lc = "left_central";
         final String dm = "dorsal_medial";
         final String ld = "left_dorsal";
@@ -146,6 +146,13 @@ public class TileSetterPlugin implements RowUpdater {
         dataSetToTilesMap.put("asoy_mb_polarity_63x_case_3", dataSetTiles);
         dataSetToTilesMap.put("asoy_mb_polarity_63x_case_4", dataSetTiles);
         dataSetToTilesMap.put("jenetta_stabilized_split_case_3", dataSetTiles);
+
+        dataSetTiles = new DataSetTiles(new String[][] {
+                {c},
+                {ld, rd}
+        });
+
+        dataSetToTilesMap.put("asoy_cell_count", dataSetTiles);
     }
 
     /**

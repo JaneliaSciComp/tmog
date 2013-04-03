@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="3.0.1" frameSizePercentage="95"/>
+    <global minimumVersion="3.0.5" frameSizePercentage="95"/>
 
     <project name="Fly Light Flip - manual entry (FLFL*)" default="true">
 
@@ -320,6 +320,8 @@
 
     <project name="Fly Light Flip - promote preScreen to confocalStacks" taskName="simple-move">
 
+        <inputFileFilter patternString="^((?!FLAG_3_0048__).)*\.lsm$" />
+
         <!-- NOTES:
              - first capturing group must be equal for second capturing group
                to be used in numeric sort
@@ -371,7 +373,7 @@
                 <property name="db.config.key" value="sage"/>
                 <property name="exclude.host.name" value="true"/>
                 <property name="lab" value="$STATIC:flylight"/>
-                <property name="family" value="$STATIC:flylight_polarity"/>
+                <property name="family" value="$STATIC:flylight_flip"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="created_by" value="Imager"/>
@@ -780,6 +782,199 @@
             </text>
 
             <separator value=".lsm"/>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light Cell Count - promote preScreen to confocalStacks" taskName="simple-move">
+
+        <inputFileFilter patternString=".*FLAG_3_0048__.*\.lsm" />
+
+        <!-- NOTES:
+             - first capturing group must be equal for second capturing group
+               to be used in numeric sort
+             - third capturing group only used when first and second are equal
+             - '(?: )' identifies a non-capturing group
+        -->
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
+
+        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/flip/confocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.MoveValidator">
+                <property name="fromDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/from"/>
+                <property name="toDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/to"/>
+            </rowValidator>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.TileSetterPlugin">
+            </rowUpdater>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="GAL4 Line" value="parent1StockName" />
+                <property name="Effector" value="reporter" />
+            </rowUpdater>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Gender"/>
+                <property name="matchesPattern" value="\S+"/>
+                <property name="whenReferenceField" value="Age"/>
+                <property name="matchesReferencePattern" value="^[^L].*"/>
+                <property name="errorMessage" value="Gender value is required when age is ${Age}."/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="image_number" value="urn:lsid:janelia.org:flylight_flip:image_number" />
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="lab" value="$STATIC:flylight"/>
+                <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="line" value="GAL4 Line"/>
+                <property name="cross_barcode" value="Cross Serial Number"/>
+                <property name="created_by" value="Imager"/>
+                <property name="effector" value="Effector"/>
+                <property name="slide_code" value="Slide Code"/>
+                <property name="tile" value="Tile"/>
+                <property name="gender" value="Gender"/>
+                <property name="area" value="$STATIC:Brain"/>
+                <property name="age" value="Age"/>
+                <property name="annotated_by" value="Annotator"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="data_set" value="Data Set"/>
+                <!--<property name="channel_spec" value="Channel Specification"/>-->
+                <property name="microscope_filename"/>
+                <property name="screen_state" value="$STATIC:accepted"/>
+            </rowListener>
+
+            <!--
+                  The companion file listener (for log files) should be the
+                  last defined plug-in to ensure that log files are only
+                  copied if the source lsm processing succeeds.
+            -->
+            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
+                <property name="sourceSuffix" value=".lsm"/>
+                <property name="companionSuffix" value="_log.csv"/>
+                <property name="deleteAfterCopy" value="true"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <separator value="FLFL_"/>
+            <text displayName="Hidden Source File Tmog ID" required="true"
+                  visible="false"
+                  pattern="\d{17}">
+                <sourceFileDefault pattern=".*_(\d{17}).*"/>
+            </text>
+            <separator value="_"/>
+            <pluginData displayName="image_number"/>
+            <separator value=".lsm"/>
+
+            <!--
+             These values are collected for storage but are not
+             included as components of the file name (markedForTask="false").
+             -->
+
+            <text displayName="Data Set" required="true"
+                  editable="false"
+                  markedForTask="false"
+                  sharedForAllSessionFiles="true">
+                <staticDefault value="asoy_cell_count"/>
+            </text>
+
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="99999"
+                    markedForTask="false">
+                <sourceFileDefault pattern=".*(\d{5})_\d{8}_\d{2}_.*" />
+            </number>
+
+            <webServiceList displayName="GAL4 Line" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"
+                            autoComplete="true">
+            </webServiceList>
+
+            <!--
+                 For cell counting, effector should always be UAS_nls_myr-FLAG_3_0048.
+                 This ensures effector loaded from cross serial number is correct.
+            -->
+            <text displayName="Effector" required="true"
+                  pattern="UAS_nls_myr-FLAG_3_0048"
+                  markedForTask="false">
+            </text>
+
+            <!--<cvTermList displayName="Effector" required="true"-->
+                        <!--autoComplete="true"-->
+                        <!--markedForTask="false"-->
+                        <!--displayNamePrefixedForValues="false"-->
+                        <!--serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">-->
+            <!--</cvTermList>-->
+
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  markedForTask="false">
+                <sourceFileDefault pattern=".*_(\d{8}_\d+_[A-Z]\d+).*"/>
+                <sourceFileDefault pattern=".*_(\d{8}_\d+_).*"/> <!-- for preScreen prior to zeiss brain number standardization -->
+            </text>
+
+            <cvTermList displayName="Tile" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        autoComplete="true"
+                        markedForTask="false">
+            </cvTermList>
+
+            <validValueList displayName="Gender" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+
+            <cvTermList displayName="Age" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        displayNamePrefixedForValues="true"
+                        autoComplete="true"
+                        markedForTask="false">
+            </cvTermList>
+
+            <cvTermList displayName="Imager" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+                <staticDefault value="Nirmala Iyer" />
+            </cvTermList>
+
+            <validValueList displayName="Annotator" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Yoshi Aso" default="true"/>
+                <validValue value="Tanya Wolff"/>
+            </validValueList>
+
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            markedForTask="false">
+                <validValue value="DPX Ethanol Mounting" default="true"/>
+                <validValue value="DPX PBS Mounting"/>
+                <validValue value="Glycerol-Based Mounting"/>
+            </validValueList>
 
         </dataFields>
 
