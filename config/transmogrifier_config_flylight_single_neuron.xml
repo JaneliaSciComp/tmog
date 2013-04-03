@@ -390,6 +390,7 @@
                 <property name="data_set" value="Data Set"/>
                 <property name="channel_spec" value="Channel Specification"/>
                 <property name="microscope_filename"/>
+                <property name="screen_state" value="$STATIC:accepted"/>
             </rowListener>
 
             <!--
@@ -428,11 +429,8 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;includeOnlySageSync=true"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman"
                             autoComplete="true">
-                <sourceFileMappedDefault pattern=".*_(\d\dX)_.*">
-                    <mappedValue from="20X" to="asoy_mb_polarity_20x_1024px"/>
-                </sourceFileMappedDefault>
             </webServiceList>
 
             <number displayName="Cross Serial Number"
@@ -517,7 +515,7 @@
                 <validValue value="Glycerol-Based Mounting"/>
             </validValueList>
 
-            <text displayName="Channel Specification" required="true"
+            <text displayName="Channel Specification" required="false"
                     markedForTask="false"
                     pattern="s*rs*">
             </text>

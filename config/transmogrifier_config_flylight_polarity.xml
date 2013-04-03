@@ -375,10 +375,6 @@
             <text displayName="Channel Specification" required="false"
                     markedForTask="false"
                     pattern="s*rs*">
-                <sourceFileMappedDefault pattern=".*_(\d\dX)_.*">
-                    <mappedValue from="20X" to="rs"/>
-                    <mappedValue from="63X" to="rss"/>
-                </sourceFileMappedDefault>
             </text>
 
             <text displayName="Channel 1 Name" required="false"
