@@ -297,12 +297,20 @@
                             serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman"
                             autoComplete="true">
                 <sourceFileMappedDefault pattern=".*(\d{5})_\d{8}_\d{2}_.*">
+                    <mappedValue from="56794" to="RD_NP0035-GAL4"/>
+                    <mappedValue from="56795" to="RD_NP0131-GAL4"/>
+                    <mappedValue from="56796" to="RD_NP0509-GAL4"/>
+                    <mappedValue from="56797" to="RD_NP2001-GAL4"/>
+                    <mappedValue from="56798" to="RD_NP5203-GAL4"/>
+                    <mappedValue from="56799" to="RD_NP6009-GAL4"/>
                     <mappedValue from="56800" to="RD_NP3253-GAL4"/>
                     <mappedValue from="56801" to="RD_NP5103-GAL4"/>
+                    <mappedValue from="56802" to="RD_NP5272-GAL4"/>
                     <mappedValue from="56803" to="RD_NP5316-GAL4"/>
                     <mappedValue from="56804" to="RD_NP6107-GAL4"/>
                     <mappedValue from="56805" to="RD_NP6115-GAL4"/>
                     <mappedValue from="56806" to="RD_NP7273-GAL4"/>
+                    <mappedValue from="56807" to="RD_NP7203-GAL4"/>
                 </sourceFileMappedDefault>
             </webServiceList>
 
