@@ -122,7 +122,7 @@
                 <sourceFileMappedDefault pattern="^[^_]+_[^_]+_[^_]+_([^_]+)_.*">
                     <mappedValue from="A" to="abdominal"/>
                     <mappedValue from="BRN" to="brain"/>
-                    <mappedValue from="C" to="central"/>
+                    <mappedValue from="CEN" to="central"/>
                     <mappedValue from="DM" to="dorsal_medial"/>
                     <mappedValue from="L" to="left_optic_lobe"/>
                     <mappedValue from="LC" to="left_central"/>
