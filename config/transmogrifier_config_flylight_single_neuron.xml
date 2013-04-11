@@ -88,7 +88,7 @@
                             valueCreationPath="*/line"
                             relativeActualValuePath="name"
                             relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman"
                             autoComplete="true">
             </webServiceList>
 
@@ -445,7 +445,7 @@
                             valueCreationPath="*/line"
                             relativeActualValuePath="name"
                             relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman"
                             autoComplete="true">
                 <sourceFileMappedDefault pattern=".*(\d{5})_\d{8}_\d{2}_.*">
                     <mappedValue from="56794" to="RD_NP0035-GAL4"/>
@@ -919,7 +919,7 @@
                             valueCreationPath="*/line"
                             relativeActualValuePath="name"
                             relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman"
                             autoComplete="true">
             </webServiceList>
 
