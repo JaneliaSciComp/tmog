@@ -1,8 +1,8 @@
 /*
- * Copyright 2008 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.field;
@@ -12,6 +12,8 @@ import org.janelia.it.ims.tmog.target.FileTarget;
 import org.janelia.it.ims.tmog.target.Target;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,7 +33,9 @@ public class SourceFileDefaultValue implements DefaultValue {
     public enum MatchType { name, path }
     
     private String pattern;
-    private Integer patternGroupNumber;
+    private String patternGroupSpec;
+    private List<Integer> patternGroupNumberList;
+    private int maxGroupNumber;
     private Pattern compiledPattern;
     private MatchType matchType;
 
@@ -42,8 +46,9 @@ public class SourceFileDefaultValue implements DefaultValue {
     public SourceFileDefaultValue(String pattern,
                                   MatchType matchType) {
         setPattern(pattern);
-        this.patternGroupNumber = 1;
+        this.patternGroupNumberList = null;
         this.matchType = matchType;
+        this.maxGroupNumber = 1;
     }
 
     public String getPattern() {
@@ -57,17 +62,42 @@ public class SourceFileDefaultValue implements DefaultValue {
         }
     }
 
-    public Integer getPatternGroupNumber() {
-        return patternGroupNumber;
+    public String getPatternGroupSpec() {
+        return patternGroupSpec;
     }
 
-    public void setPatternGroupNumber(Integer patternGroupNumber) {
-        if (patternGroupNumber > 0) {
-            this.patternGroupNumber = patternGroupNumber;
-        } else {
+    @SuppressWarnings("UnusedDeclaration")
+    public void setPatternGroupSpec(String patternGroupSpec) {
+
+        this.patternGroupSpec = patternGroupSpec;
+
+        try {
+            final String[] numbers = patternGroupSpec.split(",");
+            this.patternGroupNumberList =
+                    new ArrayList<Integer>(numbers.length);
+            for (String number : numbers) {
+                this.patternGroupNumberList.add(Integer.parseInt(number));
+            }
+        } catch (Exception e) {
             throw new IllegalArgumentException(
-                    "pattern group number (" + patternGroupNumber +
-                    ") must be greater than zero");
+                    "invalid pattern group spec '" + patternGroupSpec +
+                    "'", e);
+        }
+
+        if (this.patternGroupNumberList.size() == 0) {
+            throw new IllegalArgumentException(
+                    "invalid pattern group spec '" + patternGroupSpec +
+                    "', at least one number must be specified");
+        }
+
+        for (Integer number : this.patternGroupNumberList) {
+            if (number < 0) {
+                throw new IllegalArgumentException(
+                        "invalid pattern group spec '" + patternGroupSpec +
+                        "', all numbers must be greater than zero");
+            } else if (number > this.maxGroupNumber) {
+                this.maxGroupNumber = number;
+            }
         }
     }
 
@@ -75,6 +105,7 @@ public class SourceFileDefaultValue implements DefaultValue {
         return matchType.name();
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void setMatchType(String matchTypeName) {
         try {
             this.matchType = MatchType.valueOf(matchTypeName);
@@ -98,8 +129,16 @@ public class SourceFileDefaultValue implements DefaultValue {
             }
             Matcher m = compiledPattern.matcher(textToMatch);
             if (m.matches()) {
-                if (m.groupCount() >= patternGroupNumber) {
-                    value = m.group(patternGroupNumber);
+                if (m.groupCount() >= maxGroupNumber) {
+                    if (patternGroupNumberList == null) {
+                        value = m.group(1);
+                    } else {
+                        StringBuilder sb = new StringBuilder(128);
+                        for (Integer number : patternGroupNumberList) {
+                            sb.append(m.group(number));
+                        }
+                        value = sb.toString();
+                    }
                 }
             }
         }
@@ -111,7 +150,7 @@ public class SourceFileDefaultValue implements DefaultValue {
         return "SourceFileDefaultValue{" +
                "matchType=" + matchType +
                ", pattern='" + pattern + '\'' +
-               ", patternGroupNumber=" + patternGroupNumber +
+               ", patternGroupSpec=" + patternGroupSpec +
                '}';
     }
 

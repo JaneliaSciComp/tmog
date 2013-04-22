@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -70,7 +70,7 @@ public class SourceFileMappedDefaultValue extends SourceFileDefaultValue {
         return "SourceFileMappedDefaultValue{" +
                "matchType=" + getMatchType() +
                ", pattern='" + getPattern() + '\'' +
-               ", patternGroupNumber=" + getPatternGroupNumber() +
+               ", patternGroupSpec=" + getPatternGroupSpec() +
                ", useKeyValueWhenUnmapped=" + useKeyValueWhenUnmapped +
                ", map=" + map +
                '}';
