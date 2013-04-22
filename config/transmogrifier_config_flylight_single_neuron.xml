@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="3.0.5" frameSizePercentage="95"/>
+    <global minimumVersion="3.0.6" frameSizePercentage="95"/>
 
     <project name="Fly Light Flip - manual entry (FLFL*)" default="true">
 
@@ -15,6 +15,24 @@
 
         <plugins>
 
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.TileToDataSetPlugin">
+                <property name="wolfft-01" value="Tanya Wolff:Central Brain,.:wolfft_central_tile,."/>
+                <property name="nerna-01" value="Aljoscha Nern:Left Optic Lobe,.:nerna_optic_lobe_left,."/>
+                <property name="nerna-02" value="Aljoscha Nern:Right Optic Lobe,.:nerna_optic_lobe_right,."/>
+                <property name="nerna-03" value="Aljoscha Nern:Left Optic Lobe,.,Right Optic Lobe,.:nerna_optic_lobe_left,.,nerna_optic_lobe_right,."/>
+                <property name="nerna-04" value="Aljoscha Nern:Left Optic Lobe,.,Ventral Brain,.,Left Dorsal Brain,.,Right Dorsal Brain,.,Right Optic Lobe,.:nerna_whole_brain,.,.,.,.,.,.,.,.,."/>
+                <property name="nerna-05" value="Aljoscha Nern:Left Optic Lobe,.,Left Central Brain,.,Right Central Brain,.,Right Optic Lobe,.:nerna_optic_span,.,.,.,.,.,.,."/>
+                <property name="nerna-06" value="Aljoscha Nern:Left Optic Lobe,.,Central Brain,.,Right Optic Lobe,.:nerna_optic_span,.,.,.,.,."/>
+                <property name="nerna-07" value="Aljoscha Nern:Left Optic Lobe,.,Left Central Brain,.,Right Central Brain,.:nerna_optic_central_border,.,.,.,.,."/>
+                <property name="nerna-08" value="Aljoscha Nern:Left Central Brain,.,Right Central Brain,.,Right Optic Lobe,.:nerna_optic_central_border,.,.,.,.,."/>
+                <property name="nerna-09" value="Aljoscha Nern:Left Dorsal Brain,.,Right Dorsal Brain,.,Right Optic Lobe,.:nerna_optic_central_border,.,.,.,.,."/>
+                <property name="nerna-10" value="Aljoscha Nern:Left Optic Lobe,.,Ventral Brain,.,Left Dorsal Brain,.:nerna_optic_central_border,.,.,.,.,."/>
+                <property name="nerna-11" value="Aljoscha Nern:Left Optic Lobe,.,Left Central Brain,.,Right Optic Lobe,.:nerna_optic_central_border,.,.,.,nerna_optic_lobe_right,."/>
+                <property name="nerna-12" value="Aljoscha Nern:Left Optic Lobe,.,Right Central Brain,.,Right Optic Lobe,.:nerna_optic_lobe_left,.,nerna_optic_central_border,.,.,."/>
+                <property name="nerna-13" value="Aljoscha Nern:Left Optic Lobe,.,Left Central Brain,.:nerna_optic_central_border,.,.,."/>
+                <property name="nerna-14" value="Aljoscha Nern:Right Central Brain,.,Right Optic Lobe,.:nerna_optic_central_border,.,.,."/>
+            </rowUpdater>
+
             <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
                 <property name="validateField" value="Gender"/>
                 <property name="matchesPattern" value="\S+"/>
@@ -23,18 +41,9 @@
                 <property name="errorMessage" value="Gender value is required when age is ${Age}."/>
             </rowValidator>
 
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.WritableFromFileValidator">
-                <property name="errorMessage"
-                          value="The source file %s must be writable to allow meta data insertion before transfer."/>
-            </rowValidator>
-
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
                 <property name="db.config.key" value="sage" />
                 <property name="image_number" value="urn:lsid:janelia.org:flylight_flip:image_number" />
-            </rowListener>
-
-            <rowListener className="org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin" >
-                <property name="line" value="${GAL4 Line}"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
@@ -44,12 +53,11 @@
                 <property name="line" value="GAL4 Line"/>
                 <property name="created_by" value="Imager"/>
                 <property name="effector" value="Effector"/>
-                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Row}${Slide Column}"/>
+                <property name="slide_code" value="Slide Code"/>
                 <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
                 <property name="full_age" value="Full Age"/>
-                <property name="days_after_eclosion" value="Days After Eclosion"/>
                 <property name="area" value="$STATIC:Brain"/>
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="annotated_by" value="Annotator"/>
@@ -99,25 +107,27 @@
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
             </cvTermList>
 
-            <date displayName="Mount Date" required="true"
-                  datePattern="yyyyMMdd" markedForTask="false">
-            </date>
-
-            <number displayName="Slide Number" required="true"
-                    markedForTask="false"
-                    minimumValue="1" maximumValue="99" />
-
-            <text displayName="Slide Row" pattern="[A-Z]" required="true"
-                  markedForTask="false" convertToUpperCase="true">
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  markedForTask="false">
+                <sourceFileDefault pattern="^([A-Z]\d+)_ZB.*_(\d{8}_\d+_).*"
+                                   patternGroupSpec="2,1"/>
             </text>
-
-            <number displayName="Slide Column" required="true"
-                    markedForTask="false"
-                    minimumValue="1" maximumValue="99" />
 
             <validValueList displayName="Tile" required="true"
                             autoComplete="true"
                             markedForTask="false">
+                <sourceFileMappedDefault pattern="^.*_T\d+_([A-Z]+)_\d{8}_\d+_.*">
+                    <mappedValue from="CEN" to="Central Brain"/>
+                    <mappedValue from="L" to="Left Optic Lobe"/>
+                    <mappedValue from="LC" to="Left Central Brain"/>
+                    <mappedValue from="LD" to="Left Dorsal Brain"/>
+                    <mappedValue from="R" to="Right Optic Lobe"/>
+                    <mappedValue from="RC" to="Right Central Brain"/>
+                    <mappedValue from="RD" to="Right Dorsal Brain"/>
+                    <mappedValue from="V" to="Ventral Brain"/>
+                </sourceFileMappedDefault>
                 <validValue displayName="01: Left Optic Lobe" value="Left Optic Lobe" />
                 <validValue displayName="02: Ventral Brain" value="Ventral Brain"/>
                 <validValue displayName="03: Left Dorsal Brain" value="Left Dorsal Brain"/>
@@ -126,11 +136,6 @@
                 <validValue displayName="06: Central Brain" value="Central Brain"/>
                 <validValue displayName="07: Left Central Brain" value="Left Central Brain"/>
                 <validValue displayName="08: Right Central Brain" value="Right Central Brain"/>
-                <validValue displayName="09: Dorsal Brain" value="Dorsal Brain"/>
-                <validValue displayName="10: Neck" value="Neck"/>
-                <validValue displayName="11: Thorax" value="Thorax"/>
-                <validValue displayName="12: Abdomen" value="Abdomen"/>
-                <validValue displayName="13: Terminus" value="Terminus"/>
             </validValueList>
 
             <validValueList displayName="Gender" required="false"
@@ -140,6 +145,7 @@
                 <validValue displayName="f: Female" value="f"/>
                 <validValue displayName="x: Not Defined" value="x"/>
             </validValueList>
+
             <cvTermList displayName="Age" required="true"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
                         displayNamePrefixedForValues="true"
@@ -150,10 +156,6 @@
             <text displayName="Full Age" required="false"
                   markedForTask="false">
             </text>
-
-            <number displayName="Days After Eclosion" required="false"
-                    markedForTask="false"
-                    minimumValue="0" maximumValue="21" />
 
             <decimal displayName="Heat Shock Minutes" required="false"
                      minimumValue="0" markedForTask="false" />
