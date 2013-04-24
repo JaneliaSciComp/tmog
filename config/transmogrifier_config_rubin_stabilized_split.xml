@@ -18,7 +18,7 @@
         <inputFileSorter sortAlgorithm="Number"
                          patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
 
-        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/rubin/data0]/rubinlab/ssplit/data/confocalStacks"
+        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/ssplit/data/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
