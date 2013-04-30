@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="3.0.4" frameSizePercentage="95"/>
+
+    <project name="Fly Light Polarity - update SAGE" taskName="collector" default="true">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="GAL4 Line" value="parent1StockName" />
+                <property name="Effector" value="reporter" />
+            </rowUpdater>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="lab" value="$STATIC:flylight"/>
+                <property name="family" value="$STATIC:flylight_polarity"/>
+                <property name="relative_path" value="SAGE Name"/>
+                <property name="line" value="GAL4 Line"/>
+                <property name="cross_barcode" value="Cross Serial Number"/>
+                <!--<property name="created_by" value="Imager"/>-->
+                <property name="effector" value="Effector"/>
+                <!--<property name="slide_code" value="Slide Code"/>-->
+                <!--<property name="tile" value="Tile"/>-->
+                <!--<property name="gender" value="Gender"/>-->
+                <!--<property name="area" value="Area"/>-->
+                <!--<property name="age" value="Age"/>-->
+                <!--<property name="full_age" value="Full Age"/>-->
+                <!--<property name="days_after_eclosion" value="Days After Eclosion"/>-->
+                <!--<property name="annotated_by" value="Annotator"/>-->
+                <!--<property name="mounting_protocol" value="Tissue Mounting Protocol"/>-->
+                <property name="data_set" value="Data Set"/>
+                <!--<property name="channel_spec" value="Channel Specification"/>-->
+                <property name="screen_state" value="Screen State"/>
+                <property name="display" value="Screen State$MAP:accepted=true|preScreen=false|rejected=false"/>
+                <property name="comment" value="Comment"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;includeOnlySageSync=true"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="data_set"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </webServiceList>
+
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="99999"
+                    markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="cross_barcode"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </number>
+
+            <webServiceList displayName="GAL4 Line" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="line"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </webServiceList>
+
+            <cvTermList displayName="Effector" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="effector"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </cvTermList>
+
+            <validValueList displayName="Screen State" required="true"
+                            markedForTask="false"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="screen_state"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <validValue value="pre_screen"/>
+                <validValue value="accepted"/>
+                <validValue value="accepted_public"/>
+                <validValue value="rejected"/>
+            </validValueList>
+
+            <text displayName="Comment" required="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="comment"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+            <text displayName="SAGE Name" required="true"
+                  copyable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
