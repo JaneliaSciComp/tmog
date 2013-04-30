@@ -46,7 +46,6 @@
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
-                <property name="exclude.host.name" value="true"/>
                 <property name="lab" value="$STATIC:rubin"/>
                 <property name="family" value="$STATIC:rubin_ssplit"/>
                 <property name="data_set" value="$STATIC:jenetta_stabilized_split_case_3"/>
