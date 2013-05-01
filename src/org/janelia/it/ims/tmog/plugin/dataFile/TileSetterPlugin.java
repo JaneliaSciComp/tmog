@@ -133,6 +133,7 @@ public class TileSetterPlugin implements RowUpdater {
 
         dataSetToTilesMap.put("asoy_mb_polarity_63x_case_1", dataSetTiles);
         dataSetToTilesMap.put("asoy_mb_polarity_63x_case_2", dataSetTiles);
+        dataSetToTilesMap.put("asoy_mb_split_mcfo_case_1", dataSetTiles);
 
         dataSetTiles = new DataSetTiles(new String[][] {
                 {ld, rd},                                                             // (2)  LDRD

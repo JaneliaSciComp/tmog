@@ -433,6 +433,7 @@
                             relativeValueDisplayNamePath="dataSetIdentifier"
                             serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;includeOnlySageSync=true"
                             autoComplete="true">
+                <staticDefault value="asoy_mb_split_mcfo_case_1"/>
             </webServiceList>
 
             <number displayName="Cross Serial Number"
@@ -902,12 +903,16 @@
              included as components of the file name (markedForTask="false").
              -->
 
-            <text displayName="Data Set" required="true"
-                  editable="false"
-                  markedForTask="false"
-                  sharedForAllSessionFiles="true">
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            sharedForAllSessionFiles="true"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;includeOnlySageSync=true"
+                            autoComplete="true">
                 <staticDefault value="asoy_cell_count"/>
-            </text>
+            </webServiceList>
 
             <number displayName="Cross Serial Number"
                     minimumValue="1"
