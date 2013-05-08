@@ -79,8 +79,6 @@
                 <property name="gender" value="Gender"/>
                 <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_optic_lobe=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_optic_lobe=Brain|ventral=Brain|ventral_nerve_cord=VNC"/>
                 <property name="age" value="Age"/>
-                <property name="full_age" value="Full Age"/>
-                <property name="days_after_eclosion" value="Days After Eclosion"/>
                 <property name="annotated_by" value="Annotator"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="data_set" value="Data Set"/>
@@ -125,13 +123,14 @@
              included as components of the file name (markedForTask="false").
              -->
 
-            <text displayName="Slide Code" required="true"
-                  pattern="\d{8}_\d+_[A-Z]\d+"
-                  copyable="false"
-                  markedForTask="false">
-                <sourceFileDefault pattern="^([A-Z]\d+)_ZB.*_(\d{8}_\d+_).*"
-                                   patternGroupSpec="2,1"/>
-            </text>
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;includeOnlySageSync=true"
+                            autoComplete="true">
+            </webServiceList>
 
             <cvTermList displayName="Tile" required="true"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
@@ -156,14 +155,13 @@
                 </sourceFileMappedDefault>
             </cvTermList>
 
-            <webServiceList displayName="Data Set" required="true"
-                            markedForTask="false"
-                            valueCreationPath="*/dataSet"
-                            relativeActualValuePath="dataSetIdentifier"
-                            relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;includeOnlySageSync=true"
-                            autoComplete="true">
-            </webServiceList>
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  markedForTask="false">
+                <sourceFileDefault pattern="^([A-Z]\d+)_ZB.*_(\d{8}_\d+_).*"
+                                   patternGroupSpec="2,1"/>
+            </text>
 
             <number displayName="Cross Serial Number"
                     minimumValue="1"
@@ -202,15 +200,6 @@
                         markedForTask="false">
             </cvTermList>
 
-            <text displayName="Full Age" required="false"
-                  markedForTask="false">
-            </text>
-
-            <number displayName="Days After Eclosion" required="false"
-                    markedForTask="false"
-                    minimumValue="0"
-                    maximumValue="21" />
-
             <cvTermList displayName="Imager" required="true"
                         markedForTask="false"
                         autoComplete="true"
@@ -227,6 +216,7 @@
             </validValueList>
 
             <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            sharedForAllSessionFiles="true"
                             markedForTask="false">
                 <validValue value="DPX Ethanol Mounting"/>
                 <validValue value="DPX PBS Mounting"/>
