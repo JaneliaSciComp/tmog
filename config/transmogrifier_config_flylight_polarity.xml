@@ -366,8 +366,6 @@
                 <property name="gender" value="Gender"/>
                 <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_optic_lobe=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_optic_lobe=Brain|ventral=Brain|ventral_nerve_cord=VNC"/>
                 <property name="age" value="Age"/>
-                <property name="full_age" value="Full Age"/>
-                <property name="days_after_eclosion" value="Days After Eclosion"/>
                 <property name="annotated_by" value="Annotator"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="data_set" value="Data Set"/>
@@ -476,15 +474,6 @@
                         autoComplete="true"
                         markedForTask="false">
             </cvTermList>
-
-            <text displayName="Full Age" required="false"
-                  markedForTask="false">
-            </text>
-
-            <number displayName="Days After Eclosion" required="false"
-                    markedForTask="false"
-                    minimumValue="0"
-                    maximumValue="21" />
 
             <cvTermList displayName="Imager" required="true"
                         markedForTask="false"
