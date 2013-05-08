@@ -11,12 +11,19 @@
 
         <plugins>
 
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
+                <property name="tmog-row.key" value="${Cross Serial Number}" />
+                <property name="data-file.name" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.tsv-key" value="Serial" />
+                <property name="GAL4 Line" value="GAL4 Line" />
+            </rowUpdater>
+
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
                 <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
                 <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
                 <property name="plugin.root-xpath" value="projectCross" />
                 <property name="GAL4 Line" value="parent1StockName" />
-                <property name="Effector" value="reporter" />
+                <property name="Reporter" value="reporter" />
             </rowUpdater>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
@@ -34,7 +41,7 @@
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <!--<property name="created_by" value="Imager"/>-->
-                <property name="effector" value="Effector"/>
+                <property name="effector" value="Reporter"/>
                 <!--<property name="slide_code" value="Slide Code"/>-->
                 <!--<property name="tile" value="Tile"/>-->
                 <!--<property name="gender" value="Gender"/>-->
@@ -47,7 +54,7 @@
                 <property name="data_set" value="Data Set"/>
                 <!--<property name="channel_spec" value="Channel Specification"/>-->
                 <property name="screen_state" value="Screen State"/>
-                <property name="display" value="Screen State$MAP:accepted=true|preScreen=false|rejected=false"/>
+                <property name="display" value="Screen State$MAP:accepted=true|pre_screen=false|rejected=false"/>
                 <property name="comment" value="Comment"/>
             </rowListener>
 
@@ -94,7 +101,7 @@
                 </pluginDefault>
             </webServiceList>
 
-            <cvTermList displayName="Effector" required="true"
+            <cvTermList displayName="Reporter" required="true"
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"

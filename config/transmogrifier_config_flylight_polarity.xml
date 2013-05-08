@@ -3,9 +3,9 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="3.0.4" frameSizePercentage="95"/>
+    <global minimumVersion="3.0.7" frameSizePercentage="95"/>
 
-    <project name="Fly Light Polarity - preScreen - scope to dm11" default="true">
+    <project name="Fly Light Polarity - scope to confocalStacks" default="true">
 
         <inputFileFilter patternString=".+\.lsm" />
 
@@ -16,162 +16,18 @@
              - '(?: )' identifies a non-capturing group
         -->
         <inputFileSorter sortAlgorithm="Number"
-                         patternString="(?:^|.*_)(B)(\d+)(_.*)"/>
-
-        <outputDirectory>
-            <path path="[\\dm11.janelia.priv|/groups/flylight]/flylight/polarity/preScreen/" />
-            <renameFieldValue fieldDisplayName="Mount Date"/>
-            <path path="_"/>
-            <renameFieldValue fieldDisplayName="Slide Number"/>
-            <path path="/"/>
-            <renameFieldValue fieldDisplayName="Magnification"/>
-        </outputDirectory>
-
-        <plugins>
-            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
-                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
-                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
-                <property name="plugin.root-xpath" value="projectCross" />
-                <property name="Line" value="parent1StockName" />
-                <property name="Reporter" value="reporter" />
-            </rowUpdater>
-
-            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
-                <property name="plugin-scale" value="0" />
-                <property name="Channel 2 Name" value="IlluminationChannel #2 Name" />
-                <property name="Channel 2 Power" value="IlluminationChannel #2 Power B/C 1" />
-                <property name="Channel 2 Gain" value="DetectionChannel #2 Detector Gain" />
-            </rowUpdater>
-
-            <!--
-                  The companion file listener (for log files) should be the
-                  last defined plug-in to ensure that log files are only
-                  copied if the source lsm processing succeeds.
-            -->
-            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
-                <property name="sourceSuffix" value=".lsm"/>
-                <property name="companionSuffix" value="_log.csv"/>
-                <property name="deleteAfterCopy" value="true"/>
-            </rowListener>
-
-        </plugins>
-
-        <dataFields>
-
-            <text displayName="Line" required="true"
-                  suffix="__"/>
-
-            <number displayName="Cross Serial Number" required="true"
-                  minimumValue="1"
-                  maximumValue="99999"
-                  suffix="_">
-            </number>
-
-            <date displayName="Mount Date" required="true"
-                  datePattern="yyyyMMdd"
-                  suffix="_">
-                <sourceFileDateDefault pattern=".*_(\d{8})_.*"
-                                       fromDatePattern="yyyyMMdd"
-                                       toDatePattern="yyyyMMdd"/>
-            </date>
-
-            <text displayName="Slide Number" required="true"
-                  pattern="[A-Za-z]*\d+"
-                  suffix="_">
-                <sourceFileDefault pattern=".*_\d{8}_([^_]+)_.*"/>
-            </text>
-
-            <text displayName="Slide Location" required="true"
-                  pattern="[A-Z]\d\d?"
-                  convertToUpperCase="true"
-                  suffix="_">
-                <sourceFileDefault pattern="^([^_]+)_ZB.*"/>
-                <sourceFileSlideLocationDefault pattern="(?:^|.*_)B(\d+)_.*"
-                                                numberOfSlideColumns="6"/>
-            </text>
-
-            <number displayName="Zeiss Brain" required="true"
-                    minimumValue="1"
-                    maximumValue="99"
-                    padFormat="20"
-                    copyable="false"
-                    prefix="zb"
-                    suffix="_">
-                <sourceFileDefault pattern=".*_[Zz][Bb](\d+)_.*"/>
-                <sourceFileDefault pattern="(?:^|.*_)B(\d+)_.*"/>
-            </number>
-
-            <number displayName="Zeiss Tile" required="true"
-                    minimumValue="1"
-                    maximumValue="99"
-                    padFormat="20"
-                    prefix="zt"
-                    suffix="_">
-                <sourceFileDefault pattern=".*_zt(\d+)_.*"/>
-                <sourceFileDefault pattern=".*_T(\d+)_.*"/>
-            </number>
-
-            <validValueList displayName="Magnification" required="true"
-                            autoComplete="true"
-                            suffix="_">
-                <sourceFileDefault pattern=".*_(\d\dX)_.*"/>
-                <validValue value="20X"/>
-                <validValue value="63X"/>
-            </validValueList>
-
-            <text displayName="Channel 2 Name" required="true"
-                  suffix="-">
-            </text>
-
-            <number displayName="Channel 2 Power" required="true"
-                    suffix="-">
-            </number>
-
-            <number displayName="Channel 2 Gain" required="true"
-                    suffix="_">
-            </number>
-
-            <text displayName="Reporter"
-                  prefix="_"
-                  suffix="__">
-            </text>
-
-            <text displayName="Suffix" required="true"
-                  pattern="R\d+_L\d+"
-                  copyable="false">
-                <sourceFileDefault pattern=".*_(R\d+_L\d+).*"/>
-            </text>
-
-            <separator value="_"/>
-            <runTime datePattern="yyyyMMddHHmmssSSS" />
-            <separator value=".lsm"/>
-
-        </dataFields>
-
-    </project>
-
-    <project name="Fly Light Polarity - promote preScreen to confocalStacks" taskName="simple-move">
-
-        <!-- NOTES:
-             - first capturing group must be equal for second capturing group
-               to be used in numeric sort
-             - third capturing group only used when first and second are equal
-             - '(?: )' identifies a non-capturing group
-        -->
-        <inputFileSorter sortAlgorithm="Number"
-                         patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
+                         patternString=".*_(L)(\d++)(\.lsm)"/>
 
         <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/polarity/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
 
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.MoveValidator">
-                <property name="fromDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/from"/>
-                <property name="toDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/to"/>
-            </rowValidator>
-
-            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.TileSetterPlugin">
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
+                <property name="tmog-row.key" value="${Cross Serial Number}" />
+                <property name="data-file.name" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.tsv-key" value="Serial" />
+                <property name="GAL4 Line" value="GAL4 Line" />
             </rowUpdater>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
@@ -179,7 +35,7 @@
                 <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
                 <property name="plugin.root-xpath" value="projectCross" />
                 <property name="GAL4 Line" value="parent1StockName" />
-                <property name="Effector" value="reporter" />
+                <property name="Reporter" value="reporter" />
             </rowUpdater>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
@@ -217,7 +73,304 @@
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="created_by" value="Imager"/>
-                <property name="effector" value="Effector"/>
+                <property name="effector" value="Reporter"/>
+                <property name="slide_code" value="Slide Code"/>
+                <property name="tile" value="Tile"/>
+                <property name="gender" value="Gender"/>
+                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_optic_lobe=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_optic_lobe=Brain|ventral=Brain|ventral_nerve_cord=VNC"/>
+                <property name="age" value="Age"/>
+                <property name="full_age" value="Full Age"/>
+                <property name="days_after_eclosion" value="Days After Eclosion"/>
+                <property name="annotated_by" value="Annotator"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="data_set" value="Data Set"/>
+                <property name="channel_spec" value="Channel Specification"/>
+                <property name="lsm_detection_channel_1_detector_gain" value="Channel 1 Gain"/>
+                <property name="lsm_detection_channel_2_detector_gain" value="Channel 2 Gain"/>
+                <property name="lsm_detection_channel_3_detector_gain" value="Channel 3 Gain"/>
+                <property name="lsm_illumination_channel_1_name" value="Channel 1 Name"/>
+                <property name="lsm_illumination_channel_2_name" value="Channel 2 Name"/>
+                <property name="lsm_illumination_channel_3_name" value="Channel 3 Name"/>
+                <property name="lsm_illumination_channel_1_power_bc_1" value="Channel 1 Power"/>
+                <property name="lsm_illumination_channel_2_power_bc_1" value="Channel 2 Power"/>
+                <property name="lsm_illumination_channel_3_power_bc_1" value="Channel 3 Power"/>
+                <property name="microscope_filename"/>
+                <property name="screen_state" value="Screen State"/>
+                <property name="display" value="Screen State$MAP:accepted=true|pre_screen=false|rejected=false"/>
+            </rowListener>
+
+            <!--
+                  The companion file listener (for log files) should be the
+                  last defined plug-in to ensure that log files are only
+                  copied if the source lsm processing succeeds.
+            -->
+            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
+                <property name="sourceSuffix" value=".lsm"/>
+                <property name="companionSuffix" value="_log.csv"/>
+                <property name="deleteAfterCopy" value="true"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <separator value="FLPO_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS" />
+            <separator value="_"/>
+            <pluginData displayName="image_number"/>
+            <separator value=".lsm"/>
+
+            <!--
+             These values are collected for storage but are not
+             included as components of the file name (markedForTask="false").
+             -->
+
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  markedForTask="false">
+                <sourceFileDefault pattern="^([A-Z]\d+)_ZB.*_(\d{8}_\d+_).*"
+                                   patternGroupSpec="2,1"/>
+            </text>
+
+            <cvTermList displayName="Tile" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        autoComplete="true"
+                        markedForTask="false">
+                <sourceFileMappedDefault pattern="^.*_T\d+_([A-Z]+)_\d{8}_\d+_.*">
+                    <mappedValue from="A" to="abdominal"/>
+                    <mappedValue from="BRN" to="brain"/>
+                    <mappedValue from="CEN" to="central"/>
+                    <mappedValue from="DM" to="dorsal_medial"/>
+                    <mappedValue from="L" to="left_optic_lobe"/>
+                    <mappedValue from="LC" to="left_central"/>
+                    <mappedValue from="LD" to="left_dorsal"/>
+                    <mappedValue from="MESO" to="mesothorasic"/>
+                    <mappedValue from="META" to="metathorasic"/>
+                    <mappedValue from="PRO" to="prothorasic"/>
+                    <mappedValue from="R" to="right_optic_lobe"/>
+                    <mappedValue from="RC" to="right_central"/>
+                    <mappedValue from="RD" to="right_dorsal"/>
+                    <mappedValue from="V" to="ventral"/>
+                    <mappedValue from="VNC" to="ventral_nerve_cord"/>
+                </sourceFileMappedDefault>
+            </cvTermList>
+
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;includeOnlySageSync=true"
+                            autoComplete="true">
+            </webServiceList>
+
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="99999"
+                    markedForTask="false">
+            </number>
+
+            <webServiceList displayName="GAL4 Line" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman"
+                            autoComplete="true">
+            </webServiceList>
+
+            <cvTermList displayName="Reporter" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
+            </cvTermList>
+
+            <validValueList displayName="Gender" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+
+            <cvTermList displayName="Age" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        displayNamePrefixedForValues="true"
+                        autoComplete="true"
+                        markedForTask="false">
+            </cvTermList>
+
+            <text displayName="Full Age" required="false"
+                  markedForTask="false">
+            </text>
+
+            <number displayName="Days After Eclosion" required="false"
+                    markedForTask="false"
+                    minimumValue="0"
+                    maximumValue="21" />
+
+            <cvTermList displayName="Imager" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        sharedForAllSessionFiles="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+            </cvTermList>
+
+            <validValueList displayName="Annotator" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Tanya Wolff"/>
+                <validValue value="Yoshi Aso" default="true"/>
+            </validValueList>
+
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            markedForTask="false">
+                <validValue value="DPX Ethanol Mounting"/>
+                <validValue value="DPX PBS Mounting"/>
+                <validValue value="Glycerol-Based Mounting"/>
+            </validValueList>
+
+            <validValueList displayName="Screen State" required="true"
+                            markedForTask="false"
+                            autoComplete="true">
+                <validValue value="pre_screen" default="true"/>
+                <validValue value="accepted"/>
+                <validValue value="accepted_public"/>
+                <validValue value="rejected"/>
+            </validValueList>
+
+            <text displayName="Channel Specification" required="false"
+                    markedForTask="false"
+                    pattern="s*rs*">
+            </text>
+
+            <text displayName="Channel 1 Name" required="false"
+                  markedForTask="false"
+                  editable="false">
+            </text>
+
+            <decimal displayName="Channel 1 Power" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <decimal displayName="Channel 1 Gain" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <text displayName="Channel 2 Name" required="false"
+                  markedForTask="false"
+                  editable="false">
+            </text>
+
+            <decimal displayName="Channel 2 Power" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <decimal displayName="Channel 2 Gain" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <text displayName="Channel 3 Name" required="false"
+                  markedForTask="false"
+                  editable="false">
+            </text>
+
+            <decimal displayName="Channel 3 Power" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <decimal displayName="Channel 3 Gain" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light Polarity - promote preScreen to confocalStacks" taskName="simple-move">
+
+        <!-- NOTES:
+             - first capturing group must be equal for second capturing group
+               to be used in numeric sort
+             - third capturing group only used when first and second are equal
+             - '(?: )' identifies a non-capturing group
+        -->
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
+
+        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/polarity/confocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.MoveValidator">
+                <property name="fromDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/from"/>
+                <property name="toDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/to"/>
+            </rowValidator>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.TileSetterPlugin">
+            </rowUpdater>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
+                <property name="tmog-row.key" value="${Cross Serial Number}" />
+                <property name="data-file.name" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.tsv-key" value="Serial" />
+                <property name="GAL4 Line" value="GAL4 Line" />
+            </rowUpdater>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="GAL4 Line" value="parent1StockName" />
+                <property name="Reporter" value="reporter" />
+            </rowUpdater>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
+                <property name="plugin-scale" value="0" />
+                <property name="Channel Specification" value="Recording #1 Number of Channels$MAP:1=r|2=rs|3=rss" />
+                <property name="Channel 1 Name" value="IlluminationChannel #1 Name" />
+                <property name="Channel 1 Power" value="IlluminationChannel #1 Power B/C 1" />
+                <property name="Channel 1 Gain" value="DetectionChannel #1 Detector Gain" />
+                <property name="Channel 2 Name" value="IlluminationChannel #2 Name" />
+                <property name="Channel 2 Power" value="IlluminationChannel #2 Power B/C 1" />
+                <property name="Channel 2 Gain" value="DetectionChannel #2 Detector Gain" />
+                <property name="Channel 3 Name" value="IlluminationChannel #3 Name" />
+                <property name="Channel 3 Power" value="IlluminationChannel #3 Power B/C 1" />
+                <property name="Channel 3 Gain" value="DetectionChannel #3 Detector Gain" />
+            </rowUpdater>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Gender"/>
+                <property name="matchesPattern" value="\S+"/>
+                <property name="whenReferenceField" value="Age"/>
+                <property name="matchesReferencePattern" value="^[^L].*"/>
+                <property name="errorMessage" value="Gender value is required when age is ${Age}."/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="image_number" value="urn:lsid:janelia.org:flylight_polarity:image_number" />
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="lab" value="$STATIC:flylight"/>
+                <property name="family" value="$STATIC:flylight_polarity"/>
+                <property name="line" value="GAL4 Line"/>
+                <property name="cross_barcode" value="Cross Serial Number"/>
+                <property name="created_by" value="Imager"/>
+                <property name="effector" value="Reporter"/>
                 <property name="slide_code" value="Slide Code"/>
                 <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
@@ -296,25 +449,9 @@
                             relativeValueDisplayNamePath="name"
                             serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman"
                             autoComplete="true">
-                <sourceFileMappedDefault pattern=".*(\d{5})_\d{8}_\d{2}_.*">
-                    <mappedValue from="56794" to="RD_NP0035-GAL4"/>
-                    <mappedValue from="56795" to="RD_NP0131-GAL4"/>
-                    <mappedValue from="56796" to="RD_NP0509-GAL4"/>
-                    <mappedValue from="56797" to="RD_NP2001-GAL4"/>
-                    <mappedValue from="56798" to="RD_NP5203-GAL4"/>
-                    <mappedValue from="56799" to="RD_NP6009-GAL4"/>
-                    <mappedValue from="56800" to="RD_NP3253-GAL4"/>
-                    <mappedValue from="56801" to="RD_NP5103-GAL4"/>
-                    <mappedValue from="56802" to="RD_NP5272-GAL4"/>
-                    <mappedValue from="56803" to="RD_NP5316-GAL4"/>
-                    <mappedValue from="56804" to="RD_NP6107-GAL4"/>
-                    <mappedValue from="56805" to="RD_NP6115-GAL4"/>
-                    <mappedValue from="56806" to="RD_NP7273-GAL4"/>
-                    <mappedValue from="56807" to="RD_NP7203-GAL4"/>
-                </sourceFileMappedDefault>
             </webServiceList>
 
-            <cvTermList displayName="Effector" required="true"
+            <cvTermList displayName="Reporter" required="true"
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
@@ -429,148 +566,6 @@
                      markedForTask="false"
                      editable="false">
             </decimal>
-
-        </dataFields>
-
-    </project>
-
-    <project name="Fly Light Polarity - preScreen - fix" taskName="simple-move">
-
-        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
-
-        <!-- NOTES:
-             - first capturing group must be equal for second capturing group
-               to be used in numeric sort
-             - third capturing group only used when first and second are equal
-             - '(?: )' identifies a non-capturing group
-        -->
-        <inputFileSorter sortAlgorithm="Number"
-                         patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
-
-        <outputDirectory derivedFromSourceFile="true"/>
-
-        <plugins>
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.MoveValidator">
-                <property name="fromDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/from"/>
-                <property name="toDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/to"/>
-            </rowValidator>
-
-            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
-                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
-                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
-                <property name="plugin.root-xpath" value="projectCross" />
-                <property name="Line" value="parent1StockName" />
-                <property name="Reporter" value="reporter" />
-            </rowUpdater>
-
-            <!--
-                  The companion file listener (for log files) should be the
-                  last defined plug-in to ensure that log files are only
-                  copied if the source lsm processing succeeds.
-            -->
-            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
-                <property name="sourceSuffix" value=".lsm"/>
-                <property name="companionSuffix" value="_log.csv"/>
-                <property name="deleteAfterCopy" value="true"/>
-            </rowListener>
-        </plugins>
-
-        <dataFields>
-
-            <text displayName="Line" required="true"
-                  suffix="__">
-                <sourceFileDefault pattern="^(.*)__\d{5}_.*"/>
-            </text>
-
-            <number displayName="Cross Serial Number" required="true"
-                  minimumValue="1"
-                  maximumValue="99999"
-                  suffix="_">
-                <sourceFileDefault pattern="^.*__(\d{5})_\d{8}_.*"/>
-            </number>
-
-            <date displayName="Mount Date" required="true"
-                  datePattern="yyyyMMdd"
-                  suffix="_">
-                <sourceFileDateDefault pattern=".*_\d{5}_(\d{8})_.*"
-                                       fromDatePattern="yyyyMMdd"
-                                       toDatePattern="yyyyMMdd"/>
-            </date>
-
-            <text displayName="Slide Number" required="true"
-                  pattern="[A-Za-z]*\d+"
-                  suffix="_">
-                <sourceFileDefault pattern=".*_\d{5}_\d{8}_(\d+)_.*"/>
-            </text>
-
-            <text displayName="Slide Location" required="true"
-                  pattern="[A-Z]\d\d?"
-                  convertToUpperCase="true"
-                  suffix="_">
-                <sourceFileDefault pattern=".*_\d{5}_\d{8}_\d+_([A-Z]\d\d?).*"/>
-            </text>
-
-            <number displayName="Zeiss Brain" required="true"
-                    minimumValue="1"
-                    maximumValue="99"
-                    padFormat="20"
-                    copyable="false"
-                    prefix="zb"
-                    suffix="_">
-                <sourceFileDefault pattern=".*_zb(\d+)_.*"/>
-            </number>
-
-            <number displayName="Zeiss Tile" required="true"
-                    minimumValue="1"
-                    maximumValue="99"
-                    padFormat="20"
-                    prefix="zt"
-                    suffix="_">
-                <sourceFileDefault pattern=".*_zt(\d+)_.*"/>
-            </number>
-
-            <validValueList displayName="Magnification" required="true"
-                            autoComplete="true"
-                            suffix="_">
-                <sourceFileDefault pattern=".*_(\d\dX)_.*"/>
-                <validValue value="20X"/>
-                <validValue value="63X"/>
-            </validValueList>
-
-            <text displayName="Channel 1 or 2 Name" required="true"
-                  suffix="-">
-                <sourceFileDefault pattern=".*_\d\dX_([^\-_]+).*"/>
-            </text>
-
-            <number displayName="Channel 1 or 2 Power" required="true"
-                    suffix="-">
-                <sourceFileDefault pattern=".*_\d\dX_[^\-_]+\-([^\-_]+).*"/>
-            </number>
-
-            <number displayName="Channel 1 or 2 Gain" required="true"
-                    suffix="_">
-                <sourceFileDefault pattern=".*_\d\dX_[^\-_]+\-[^\-_]+\-([^\-_]+)__.*"/>
-            </number>
-
-            <text displayName="Reporter"
-                  prefix="_"
-                  suffix="__">
-                <sourceFileDefault pattern=".*_\d\dX_[^\-_]+\-[^\-_]+\-[^\-_]+__(.*)__.*"/>
-            </text>
-
-            <text displayName="Suffix" required="true"
-                  pattern="R\d+_L\d+"
-                  copyable="false">
-                <sourceFileDefault pattern=".*_(R\d+_L\d+).*"/>
-            </text>
-
-            <separator value="_"/>
-            <text displayName="tmog ID" required="true"
-                  pattern="\d{17}">
-                <sourceFileDefault pattern=".*_(\d{17}).*"/>
-            </text>
-
-            <separator value=".lsm"/>
 
         </dataFields>
 
