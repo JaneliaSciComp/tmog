@@ -3,6 +3,280 @@
 
     <global minimumVersion="2.9.4" frameSizePercentage="95"/>
 
+    <project name="Fly Light Flip - confocalStacks - fix" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <plugins>
+
+            <!--<rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">-->
+                <!--<property name="plugin-scale" value="0" />-->
+                <!--<property name="Microscope Filename" value="Recording #1 Name" />-->
+            <!--</rowUpdater>-->
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="lab" value="$STATIC:flylight"/>
+                <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="relative_path" value="SAGE Name"/>
+                <!--<property name="line" value="GAL4 Line"/>-->
+                <!--<property name="created_by" value="Imager"/>-->
+                <!--<property name="effector" value="Effector"/>-->
+                <property name="slide_code" value="Slide Code"/>
+                <property name="tile" value="Tile"/>
+                <!--<property name="gender" value="Gender"/>-->
+                <!--<property name="age" value="Age"/>-->
+                <!--<property name="full_age" value="Full Age"/>-->
+                <!--<property name="days_after_eclosion" value="Days After Eclosion"/>-->
+                <!--<property name="area" value="$STATIC:Brain"/>-->
+                <!--<property name="heat_shock_minutes" value="Heat Shock Minutes"/>-->
+                <!--<property name="annotated_by" value="Annotator"/>-->
+                <!--<property name="data_set" value="Data Set"/>-->
+                <!--<property name="microscope_filename" value="Microscope Filename"/>-->
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <webServiceList displayName="GAL4 Line" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman&amp;lab=simpson"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="line"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </webServiceList>
+
+            <!--<text displayName="Microscope Filename" required="true"-->
+                  <!--copyable="false" suffix=".lsm">-->
+                <!--<pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">-->
+                    <!--<property name="family" value="flylight_flip"/>-->
+                    <!--<property name="image_property" value="microscope_filename"/>-->
+                    <!--<property name="baseNameSearch" value="true"/>-->
+                <!--</pluginDefault>-->
+            <!--</text>-->
+
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="slide_code"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+            <validValueList displayName="Tile" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="tile"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <validValue displayName="01: Left Optic Lobe" value="Left Optic Lobe" />
+                <validValue displayName="02: Ventral Brain" value="Ventral Brain"/>
+                <validValue displayName="03: Left Dorsal Brain" value="Left Dorsal Brain"/>
+                <validValue displayName="04: Right Dorsal Brain" value="Right Dorsal Brain"/>
+                <validValue displayName="05: Right Optic Lobe" value="Right Optic Lobe"/>
+                <validValue displayName="06: Central Brain" value="Central Brain"/>
+                <validValue displayName="07: Left Central Brain" value="Left Central Brain"/>
+                <validValue displayName="08: Right Central Brain" value="Right Central Brain"/>
+                <validValue displayName="09: Dorsal Brain" value="Dorsal Brain"/>
+                <validValue displayName="10: Neck" value="Neck"/>
+                <validValue displayName="11: Thorax" value="Thorax"/>
+                <validValue displayName="12: Abdomen" value="Abdomen"/>
+                <validValue displayName="13: Terminus" value="Terminus"/>
+            </validValueList>
+
+            <text displayName="SAGE Name" required="true"
+                  copyable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light Flip - confocalStacks - reject" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="lab" value="$STATIC:flylight"/>
+                <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="relative_path" value="SAGE Name"/>
+                <property name="display" value="Display"/>
+                <property name="comment" value="Comment"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <validValueList displayName="Display" required="true"
+                            markedForTask="false"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="display"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <validValue value="true"/>
+                <validValue value="false"/>
+            </validValueList>
+
+            <text displayName="Comment" required="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="comment"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+            <text displayName="SAGE Name" required="true"
+                  copyable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light Flip - confocalStacks - fix tile 2" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <plugins>
+
+            <!--<rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">-->
+                <!--<property name="plugin-scale" value="0" />-->
+                <!--<property name="Microscope Filename" value="Recording #1 Name" />-->
+            <!--</rowUpdater>-->
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="lab" value="$STATIC:flylight"/>
+                <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="relative_path" value="SAGE Name"/>
+                <!--<property name="line" value="GAL4 Line"/>-->
+                <!--<property name="created_by" value="Imager"/>-->
+                <!--<property name="effector" value="Effector"/>-->
+                <property name="slide_code" value="Slide Code"/>
+                <property name="tile" value="Tile"/>
+                <!--<property name="gender" value="Gender"/>-->
+                <!--<property name="age" value="Age"/>-->
+                <!--<property name="full_age" value="Full Age"/>-->
+                <!--<property name="days_after_eclosion" value="Days After Eclosion"/>-->
+                <!--<property name="area" value="$STATIC:Brain"/>-->
+                <!--<property name="heat_shock_minutes" value="Heat Shock Minutes"/>-->
+                <!--<property name="annotated_by" value="Annotator"/>-->
+                <!--<property name="data_set" value="Data Set"/>-->
+                <!--<property name="microscope_filename" value="Microscope Filename"/>-->
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <webServiceList displayName="GAL4 Line" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman&amp;lab=simpson"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="line"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </webServiceList>
+
+            <!--<text displayName="Microscope Filename" required="true"-->
+                  <!--copyable="false" suffix=".lsm">-->
+                <!--<pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">-->
+                    <!--<property name="family" value="flylight_flip"/>-->
+                    <!--<property name="image_property" value="microscope_filename"/>-->
+                    <!--<property name="baseNameSearch" value="true"/>-->
+                <!--</pluginDefault>-->
+            <!--</text>-->
+
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="slide_code"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+            <cvTermList displayName="Tile" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        autoComplete="true"
+                        markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="tile"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </cvTermList>
+
+            <text displayName="SAGE Name" required="true"
+                  copyable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+        </dataFields>
+
+    </project>
+
     <project name="Fly Light Polarity - simple fix SAGE data" taskName="collector">
 
         <plugins>
@@ -307,7 +581,7 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?includeOnlySageSync=true"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet"
                             autoComplete="true">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_polarity"/>
@@ -376,7 +650,7 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?includeOnlySageSync=true"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet"
                             autoComplete="true">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_polarity"/>

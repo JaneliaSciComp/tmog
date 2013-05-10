@@ -96,7 +96,7 @@
                             <!--valueCreationPath="*/dataSet"-->
                             <!--relativeActualValuePath="dataSetIdentifier"-->
                             <!--relativeValueDisplayNamePath="dataSetIdentifier"-->
-                            <!--serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;includeOnlySageSync=true"-->
+                            <!--serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy"-->
                             <!--autoComplete="true">-->
             <!--</webServiceList>-->
 
