@@ -70,6 +70,7 @@
                 <property name="exclude.host.name" value="true"/>
                 <property name="lab" value="$STATIC:flylight"/>
                 <property name="family" value="$STATIC:flylight_polarity"/>
+                <property name="imaging_project" value="Imaging Project"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="created_by" value="Imager"/>
@@ -232,6 +233,14 @@
                 <validValue value="rejected"/>
             </validValueList>
 
+            <cvTermList displayName="Imaging Project" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imaging_project">
+                <staticDefault value="polarity"/>
+            </cvTermList>
+
             <text displayName="Channel Specification" required="false"
                     markedForTask="false"
                     pattern="s*rs*">
@@ -357,6 +366,7 @@
                 <property name="exclude.host.name" value="true"/>
                 <property name="lab" value="$STATIC:flylight"/>
                 <property name="family" value="$STATIC:flylight_polarity"/>
+                <property name="imaging_project" value="Imaging Project"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="created_by" value="Imager"/>
@@ -495,6 +505,14 @@
                 <validValue value="DPX PBS Mounting"/>
                 <validValue value="Glycerol-Based Mounting"/>
             </validValueList>
+
+            <cvTermList displayName="Imaging Project" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imaging_project">
+                <staticDefault value="polarity"/>
+            </cvTermList>
 
             <text displayName="Channel Specification" required="false"
                     markedForTask="false"

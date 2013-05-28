@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.8.7" frameSizePercentage="95"/>
+    <global minimumVersion="3.0.7" frameSizePercentage="95"/>
 
     <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="true">
 
@@ -32,6 +32,7 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
                 <property name="family" value="$STATIC:rubin-chacrm"/>
+                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
                 <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
                 <property name="created_by" value="Imager"/>
@@ -45,6 +46,7 @@
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:rubin"/>
                 <property name="family" value="$STATIC:rubin_chacrm"/>
+                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
                 <property name="effector" value="UAS Reporter"/>
                 <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
                 <property name="created_by" value="Imager"/>
@@ -210,6 +212,7 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
                 <property name="family" value="$STATIC:rubin-chacrm"/>
+                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
                 <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
                 <property name="created_by" value="Imager"/>
@@ -226,6 +229,7 @@
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:rubin"/>
                 <property name="family" value="$STATIC:rubin_chacrm"/>
+                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
                 <property name="effector" value="UAS Reporter"/>
                 <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
                 <property name="created_by" value="Imager"/>
@@ -499,6 +503,7 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
                 <property name="family" value="$STATIC:rubin-chacrm"/>
+                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
                 <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
                 <property name="created_by" value="Imager"/>
@@ -512,6 +517,7 @@
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:rubin"/>
                 <property name="family" value="$STATIC:rubin_chacrm"/>
+                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
                 <property name="effector" value="UAS Reporter"/>
                 <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
                 <property name="created_by" value="Imager"/>
@@ -663,6 +669,7 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
                 <property name="family" value="$STATIC:rubin-chacrm"/>
+                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
                 <property name="uas_reporter" value="UAS Reporter"/>
                 <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
                 <property name="created_by" value="Imager"/>
@@ -676,6 +683,7 @@
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:rubin"/>
                 <property name="family" value="$STATIC:rubin_chacrm"/>
+                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
                 <property name="effector" value="UAS Reporter"/>
                 <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
                 <property name="created_by" value="Imager"/>

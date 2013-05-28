@@ -48,6 +48,7 @@
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:rubin"/>
                 <property name="family" value="$STATIC:rubin_ssplit"/>
+                <property name="imaging_project" value="Imaging Project"/>
                 <property name="data_set" value="$STATIC:jenetta_stabilized_split_case_3"/>
                 <property name="line" value="Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
@@ -148,7 +149,7 @@
                             valueCreationPath="*/line"
                             relativeActualValuePath="name"
                             relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman&amp;lab=simpson"
                             autoComplete="true">
             </webServiceList>
 
@@ -193,6 +194,13 @@
                     <!--markedForTask="false"-->
                     <!--pattern="s*rs*">-->
             <!--</text>-->
+
+            <cvTermList displayName="Imaging Project" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imaging_project">
+            </cvTermList>
 
             <cvTermList displayName="Effector" required="true"
                         autoComplete="true"

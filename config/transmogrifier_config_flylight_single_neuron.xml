@@ -52,6 +52,7 @@
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:flylight"/>
                 <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="imaging_project" value="Imaging Project"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="created_by" value="Imager"/>
                 <property name="effector" value="Effector"/>
@@ -184,6 +185,14 @@
                             serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=group:flylight&amp;user=user:asoy&amp;user=user:wolfft&amp;user=user:nerna"
                             autoComplete="true">
             </webServiceList>
+
+            <cvTermList displayName="Imaging Project" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imaging_project">
+                <staticDefault value="mcfo"/>
+            </cvTermList>
 
         </dataFields>
 
@@ -385,6 +394,7 @@
                 <property name="exclude.host.name" value="true"/>
                 <property name="lab" value="$STATIC:flylight"/>
                 <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="imaging_project" value="Imaging Project"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="created_by" value="Imager"/>
@@ -531,6 +541,14 @@
                     markedForTask="false"
                     pattern="s*rs*">
             </text>
+
+            <cvTermList displayName="Imaging Project" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imaging_project">
+                <staticDefault value="mcfo"/>
+            </cvTermList>
 
         </dataFields>
 
@@ -849,6 +867,7 @@
                 <property name="exclude.host.name" value="true"/>
                 <property name="lab" value="$STATIC:flylight"/>
                 <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="imaging_project" value="$STATIC:cell_count"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="created_by" value="Imager"/>
