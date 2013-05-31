@@ -68,7 +68,7 @@
                             valueCreationPath="*/line"
                             relativeActualValuePath="name"
                             relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=baker&amp;lab=fly&amp;lab=flylight&amp;lab=olympiad&amp;lab=jayaraman&amp;lab=rubin&amp;lab=simpson&amp;lab=leet&amp;lab=truman"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=baker&amp;lab=fly&amp;lab=flylight&amp;lab=olympiad&amp;lab=jayaraman&amp;lab=rubin&amp;lab=simpson&amp;lab=leet&amp;lab=truman&amp;lab=zlatic"
                             autoComplete="true">
             </webServiceList>
 
