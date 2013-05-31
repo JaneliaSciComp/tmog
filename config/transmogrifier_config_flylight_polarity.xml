@@ -80,6 +80,7 @@
                 <property name="gender" value="Gender"/>
                 <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_optic_lobe=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_optic_lobe=Brain|ventral=Brain|ventral_nerve_cord=VNC"/>
                 <property name="age" value="Age"/>
+                <property name="full_age" value="Full Age"/>
                 <property name="annotated_by" value="Annotator"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="data_set" value="Data Set"/>
@@ -129,7 +130,7 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;user=user:nerna"
                             autoComplete="true">
             </webServiceList>
 
@@ -201,6 +202,10 @@
                         markedForTask="false">
             </cvTermList>
 
+            <text displayName="Full Age" required="false"
+                  markedForTask="false">
+            </text>
+
             <cvTermList displayName="Imager" required="true"
                         markedForTask="false"
                         autoComplete="true"
@@ -210,10 +215,11 @@
 
             <validValueList displayName="Annotator" required="false"
                             autoComplete="true"
+                            sharedForAllSessionFiles="true"
                             markedForTask="false">
                 <validValue value="Aljoscha Nern"/>
                 <validValue value="Tanya Wolff"/>
-                <validValue value="Yoshi Aso" default="true"/>
+                <validValue value="Yoshi Aso"/>
             </validValueList>
 
             <validValueList displayName="Tissue Mounting Protocol" required="true"
@@ -226,8 +232,9 @@
 
             <validValueList displayName="Screen State" required="true"
                             markedForTask="false"
+                            sharedForAllSessionFiles="true"
                             autoComplete="true">
-                <validValue value="pre_screen" default="true"/>
+                <validValue value="pre_screen"/>
                 <validValue value="accepted"/>
                 <validValue value="accepted_public"/>
                 <validValue value="rejected"/>
