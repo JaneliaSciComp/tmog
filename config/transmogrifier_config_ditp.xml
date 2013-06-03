@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.8.2" frameSizePercentage="95"/>
+    <global minimumVersion="3.0.7" frameSizePercentage="95"/>
 
     <project name="Descending Interneurons" default="true">
 
@@ -14,9 +14,19 @@
 
         <plugins>
 
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="Line" value="parent1StockName" />
+                <property name="Effector" value="reporter" />
+            </rowUpdater>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="family" value="$STATIC:descending_interneurons"/>
+                <property name="data_set" value="Data Set"/>
+                <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="line" value="Line"/>
                 <property name="gender" value="Gender$MAP:m=Male|f=Female|x=unknown"/>
                 <property name="age" value="Age"/>
@@ -34,21 +44,27 @@
 
         <dataFields>
 
-            <!--
-               Line response looks like:
-               <lineSet>
-                   ...
-                   <line>
-                       <name>EXT_109_80_GAL4</name>
-                   </line>
-                   ...
-               </lineSet>
-            -->
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=group:ditp"
+                            autoComplete="true">
+            </webServiceList>
+
+            <number displayName="Cross Serial Number"
+                    required="false"
+                    minimumValue="1"
+                    maximumValue="99999"
+                    markedForTask="false">
+            </number>
+
             <webServiceList displayName="Line"
                             valueCreationPath="*/line"
                             relativeActualValuePath="name"
                             relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/rubin.janelia-sage"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman&amp;lab=simpson&amp;lab=leet&amp;lab=zlatic"
                             autoComplete="true">
             </webServiceList>
 
@@ -110,7 +126,6 @@
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage">
-                <staticDefault value="tsh_Lex_IVSGAL80_UAS_IVS_2_0032"/>
             </cvTermList>
 
             <validValueList displayName="Imager" required="true"
@@ -129,175 +144,9 @@
                 <validValue value="Phuson Hulamm"/>
                 <validValue value="Ying-Jou Lee"/>
             </validValueList>
-        </dataFields>
-
-    </project>
-
-    <project name="Move DITP to FlyLight Collaborations">
-
-        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/collaborations/confocalStacks"
-                         derivedFromEarliestModifiedFile="true"/>
-
-        <plugins>
-
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
-                <property name="db.config.key" value="sage" />
-                <property name="image_number" value="urn:lsid:janelia.org:flylight_collaborations:image_number" />
-            </rowListener>
-
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="sage"/>
-                <property name="family" value="$STATIC:flylight_collaborations"/>
-                <property name="line" value="Line"/>
-                <property name="gender" value="Gender$MAP:m=Male|f=Female|x=unknown"/>
-                <property name="age" value="Age"/>
-                <!--<property name="chron_interval" value="Hours After Pupa Formation"/>-->
-                <property name="area" value="Area"/>
-                <!--<property name="stain_antibody" value="Stain Antibody"/>-->
-                <property name="created_by" value="Imager"/>
-                <property name="renamed_by" value="Renamer"/>
-                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
-                <property name="tissue_orientation" value="Tissue Orientation"/>
-                <property name="effector" value="Effector"/>
-                <!--<property name="class" value="Class"/>-->
-            </rowListener>
-
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/summaries/collaborations"/>
-            </sessionListener>
-
-        </plugins>
-
-        <dataFields>
-
-            <separator value="FLCO_"/>
-            <text displayName="Hidden Source File Tmog ID" required="true"
-                  visible="false"
-                  pattern="\d{17}">
-                <sourceFileDefault pattern=".*_(\d{17}).*"/>
-            </text>
-            <separator value="_"/>
-            <pluginData displayName="image_number"/>
-            <separator value=".lsm"/>
-
-            <!--
-             These values are collected for storage but are not
-             included as components of the file name (markedForTask="false").
-             -->
-
-            <webServiceList displayName="Line"
-                            markedForTask="false"
-                            valueCreationPath="*/line"
-                            relativeActualValuePath="name"
-                            relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/rubin.janelia-sage"
-                            autoComplete="true">
-                <!-- not available from plugin default -->
-                <sourceFileDefault pattern="^(.*)_999-.*"/>
-            </webServiceList>
-
-            <validValueList displayName="Gender" required="true"
-                            markedForTask="false"
-                            autoComplete="true">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="descending_interneurons"/>
-                    <property name="image_property" value="gender"/>
-                </pluginDefault>
-                <validValue displayName="m: Male" value="m"/>
-                <validValue displayName="f: Female" value="f" default="true" />
-                <validValue displayName="x: Not Defined" value="x"/>
-            </validValueList>
-
-            <validValueList displayName="Age" required="true"
-                            markedForTask="false"
-                            autoComplete="true">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="descending_interneurons"/>
-                    <property name="image_property" value="age"/>
-                </pluginDefault>
-                <validValue value="undefined"/>
-                <validValue value="Day 1-5"/>
-                <validValue value="Day 6-10"/>
-                <validValue value="Day 11-15"/>
-                <validValue value="Day 16-20"/>
-                <validValue value="Day 21-25"/>
-                <validValue value="Day 26-30"/>
-            </validValueList>
-
-            <validValueList displayName="Area" required="true"
-                            markedForTask="false"
-                            autoComplete="true">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="descending_interneurons"/>
-                    <property name="image_property" value="area"/>
-                </pluginDefault>
-                <validValue value="Brain"/>
-                <validValue value="Ventral Nerve Cord"/>
-            </validValueList>
-
-            <validValueList displayName="Tissue Mounting Protocol" required="true"
-                            autoComplete="true"
-                            markedForTask="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="descending_interneurons"/>
-                    <property name="image_property" value="mounting_protocol"/>
-                </pluginDefault>
-                <validValue value="Glycerol-Based Mounting" default="true"/>
-                <validValue value="DPX Mounting"/>
-            </validValueList>
-
-            <cvTermList displayName="Tissue Orientation" required="true"
-                        autoComplete="true"
-                        markedForTask="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
-                        displayNamePrefixedForValues="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="descending_interneurons"/>
-                    <property name="image_property" value="tissue_orientation"/>
-                </pluginDefault>
-            </cvTermList>
-
-            <cvTermList displayName="Effector" required="true"
-                        autoComplete="true"
-                        markedForTask="false"
-                        displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="descending_interneurons"/>
-                    <property name="image_property" value="effector"/>
-                </pluginDefault>
-            </cvTermList>
-
-            <validValueList displayName="Imager" required="true"
-                            autoComplete="true"
-                            markedForTask="false">
-                <!-- not available from plugin default -->
-                <validValue value="Nicholas Abel"/>
-                <validValue value="Phuson Hulamm"/>
-                <validValue value="Ying-Jou Lee"/>
-            </validValueList>
-
-            <validValueList displayName="Renamer" required="true"
-                            autoComplete="true"
-                            markedForTask="false"
-                            sharedForAllSessionFiles="true">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="descending_interneurons"/>
-                    <property name="image_property" value="renamed_by"/>
-                </pluginDefault>
-                <validValue value="Nicholas Abel"/>
-                <validValue value="Phuson Hulamm"/>
-                <validValue value="Ying-Jou Lee"/>
-            </validValueList>
-
-            <text displayName="hostname" markedForTask="false" required="true">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
-                    <property name="family" value="descending_interneurons"/>
-                    <property name="image_property" value="hostname"/>
-                </pluginDefault>
-            </text>
 
         </dataFields>
+
 
     </project>
 
