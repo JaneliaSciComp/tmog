@@ -202,6 +202,7 @@
                 <validValue value="Ying-Jou Lee"/>
                 <validValue value="Yisheng Hey"/>
                 <validValue value="Yu-Chun Wang"/>
+                <validValue value="Yu-Fen Huang"/>
             </validValueList>
 
             <cvTermList displayName="Dissection Age" required="true"
