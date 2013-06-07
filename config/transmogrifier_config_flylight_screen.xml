@@ -14,21 +14,25 @@
 
         <plugins>
 
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_${Plate}${Well}_${Vector ID}_${Landing Site}.janelia-sage"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
+                <property name="errorMessage" value="There is no rubin lab line named 'GMR_${Plate}${Well}_${Vector ID}_${Landing Site}' in the SAGE database."/>
+                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
+            </rowValidator>
+
             <rowValidator className="org.janelia.it.wip.WipDataPlugin">
                 <property name="batchNameFieldName" value="Batch Name"/>
                 <property name="batchNumberFieldName" value="Batch Number"/>
                 <property name="batchColorFieldName" value="Batch Color"/>
             </rowValidator>
-            <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
 
             <rowListener className="org.janelia.it.wip.WipDataPlugin">
                 <property name="batchNameFieldName" value="Batch Name"/>
                 <property name="batchNumberFieldName" value="Batch Number"/>
                 <property name="batchColorFieldName" value="Batch Color"/>
             </rowListener>
-            <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
-                <property name="labImageSharePattern" value="[/\\]++screen[/\\]++confocalStacks[/\\]++"/>
-            </rowListener>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
                 <property name="family" value="$STATIC:rubin-chacrm"/>
@@ -42,6 +46,7 @@
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="tissue_orientation" value="Tissue Orientation"/>
             </rowListener>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:rubin"/>
@@ -79,8 +84,8 @@
                         displayNamePrefixedForValues="true">
                 <staticDefault value="01"/>
             </cvTermList>
-            <pluginData displayName="imageLocationRank" format="_%02d" />
-            <separator value="-"/>
+            <!-- stub out old ChaCRM imageLocationRank -->
+            <separator value="_99-"/>
             <validValueList displayName="Gender" required="true">
                 <validValue displayName="m: Male" value="m"/>
                 <validValue displayName="f: Female" value="f"/>
@@ -204,11 +209,13 @@
 
         <plugins>
 
-            <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_${Plate}${Well}_${Vector ID}_${Landing Site}.janelia-sage"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
+                <property name="errorMessage" value="There is no rubin lab line named 'GMR_${Plate}${Well}_${Vector ID}_${Landing Site}' in the SAGE database."/>
+                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
+            </rowValidator>
 
-            <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
-                <property name="labImageSharePattern" value="[/\\]++screen[/\\]++confocalStacks[/\\]++"/>
-            </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
                 <property name="family" value="$STATIC:rubin-chacrm"/>
@@ -225,6 +232,7 @@
                 <property name="mounter" value="Mounter"/>
                 <property name="mount_date" value="${Mount Date (yyyy-mm-dd)} 00:00:00"/>
             </rowListener>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:rubin"/>
@@ -265,8 +273,8 @@
                         displayNamePrefixedForValues="true">
                 <staticDefault value="01"/>
             </cvTermList>
-            <pluginData displayName="imageLocationRank" format="_%02d" />
-            <separator value="-"/>
+            <!-- stub out old ChaCRM imageLocationRank -->
+            <separator value="_99-"/>
             <validValueList displayName="Gender" required="true">
                 <validValue displayName="m: Male" value="m"/>
                 <validValue displayName="f: Female" value="f"/>
@@ -479,181 +487,6 @@
 
     </project>
 
-    <project name="Rubin Lab: High Resolution ChaCRM verified TransformantIDs (GMR_*)">
-
-        <inputFileSorter sortAlgorithm="LNumber" />
-
-        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/screen/confocalStacks"
-                         derivedFromEarliestModifiedFile="true"/>
-
-        <plugins>
-
-            <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
-
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.imagedb.GroupSequencePlugin">
-                <property name="db.config.key" value="sage" />
-                <property name="groupFieldName" value="Tile Group" />
-                <property name="targetFieldName" value="tile_group" />
-                <property name="namespace" value="urn:lsid:janelia.org:rubin_chacrm:tile_group" />
-            </sessionListener>
-
-            <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
-                <property name="labImageSharePattern" value="[/\\]++screen[/\\]++confocalStacks[/\\]++"/>
-            </rowListener>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="nighthawk"/>
-                <property name="family" value="$STATIC:rubin-chacrm"/>
-                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
-                <property name="uas_reporter" value="UAS Reporter"/>
-                <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
-                <property name="created_by" value="Imager"/>
-                <property name="renamed_by" value="Renamer"/>
-                <property name="tile" value="Tile"/>
-                <property name="tile_group" value="tile_group"/>
-                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
-                <property name="tissue_orientation" value="Tissue Orientation"/>
-            </rowListener>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="sage"/>
-                <property name="lab" value="$STATIC:rubin"/>
-                <property name="family" value="$STATIC:rubin_chacrm"/>
-                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
-                <property name="effector" value="UAS Reporter"/>
-                <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
-                <property name="created_by" value="Imager"/>
-                <property name="renamed_by" value="Renamer"/>
-                <property name="tile" value="Tile"/>
-                <property name="tile_group" value="tile_group"/>
-                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
-                <property name="tissue_orientation" value="Tissue Orientation"/>
-            </rowListener>
-
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/summaries/screen"/>
-            </sessionListener>
-
-        </plugins>
-
-        <dataFields>
-            <separator value="GMR_"/>
-            <number displayName="Plate" required="true"
-                    minimumValue="1" maximumValue="999"/>
-            <well displayName="Well" required="true" formFactor="96"/>
-            <separator value="_"/>
-            <cvTermList displayName="Vector ID" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/rubin_crm_vector"
-                        displayNamePrefixedForValues="true">
-            </cvTermList>
-            <separator value="_"/>
-            <cvTermList displayName="Landing Site" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/rubin_crm_landing_site"
-                        displayNamePrefixedForValues="true">
-                <staticDefault value="01"/>
-            </cvTermList>
-            <pluginData displayName="imageLocationRank" format="_%02d" />
-            <separator value="-"/>
-            <validValueList displayName="Gender" required="true">
-                <validValue displayName="m: Male" value="m"/>
-                <validValue displayName="f: Female" value="f"/>
-                <validValue displayName="x: Not Defined" value="x"/>
-            </validValueList>
-            <validValueList displayName="Age" required="true">
-                <validValue displayName="X00: undefined" value="X00"/>
-                <validValue displayName="P01: Prepupa" value="P01"/>
-                <validValue displayName="P02: Pupa" value="P02"/>
-                <validValue displayName="E01: Embryonic Stage 1" value="E01"/>
-                <validValue displayName="E02: Embryonic Stage 2" value="E02"/>
-                <validValue displayName="E03: Embryonic Stage 3" value="E03"/>
-                <validValue displayName="E04: Embryonic Stage 4" value="E04"/>
-                <validValue displayName="E05: Embryonic Stage 5" value="E05"/>
-                <validValue displayName="E06: Embryonic Stage 6" value="E06"/>
-                <validValue displayName="E07: Embryonic Stage 7" value="E07"/>
-                <validValue displayName="E08: Embryonic Stage 8" value="E08"/>
-                <validValue displayName="E09: Embryonic Stage 9" value="E09"/>
-                <validValue displayName="E10: Embryonic Stage 10" value="E10"/>
-                <validValue displayName="E11: Embryonic Stage 11" value="E11"/>
-                <validValue displayName="E12: Embryonic Stage 12" value="E12"/>
-                <validValue displayName="E13: Embryonic Stage 13" value="E13"/>
-                <validValue displayName="E14: Embryonic Stage 14" value="E14"/>
-                <validValue displayName="E15: Embryonic Stage 15" value="E15"/>
-                <validValue displayName="E16: Embryonic Stage 16" value="E16"/>
-                <validValue displayName="E17: Embryonic Stage 17" value="E17"/>
-                <validValue displayName="L01: First Instar" value="L01"/>
-                <validValue displayName="L02: Second Instar" value="L02"/>
-                <validValue displayName="L03: Third Instar" value="L03"/>
-                <validValue displayName="A01: Day 1-5" value="A01"/>
-                <validValue displayName="A02: Day 6-10" value="A02"/>
-                <validValue displayName="A03: Day 11-15" value="A03"/>
-                <validValue displayName="A04: Day 16-20" value="A04"/>
-                <validValue displayName="A05: Day 21-25" value="A05"/>
-                <validValue displayName="A06: Day 26-30" value="A06"/>
-            </validValueList>
-            <validValueList displayName="Area" required="true">
-                <validValue displayName="s: Salivary Gland" value="s"/>
-                <validValue displayName="b: Brain" value="b"/>
-                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
-            </validValueList>
-            <!--
-            See http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html
-            for datePattern options.
-            -->
-            <separator value="_C"/>
-            <fileModificationTime displayName="Capture Date" datePattern="yyMMdd" />
-            <separator value="_"/>
-            <runTime datePattern="yyyyMMddHHmmssSSS"/>
-            <separator value=".lsm"/>
-
-            <!--
-             These values are collected for the nighthawk database but are not
-             included as components of the file name (markedForTask="false").
-             -->
-            <validValueList displayName="Tile" required="true"
-                            markedForTask="false">
-                <validValue displayName="01: Left Optic Lobe" value="Left Optic Lobe" />
-                <validValue displayName="02: Ventral Brain" value="Ventral Brain"/>
-                <validValue displayName="03: Left Dorsal Brain" value="Left Dorsal Brain"/>
-                <validValue displayName="04: Right Dorsal Brain" value="Right Dorsal Brain"/>
-                <validValue displayName="05: Right Optic Lobe" value="Right Optic Lobe"/>
-                <validValue displayName="06: Central Brain" value="Central Brain"/>
-            </validValueList>
-            <text displayName="Tile Group" pattern="[A-Za-z]"
-                  markedForTask="false">
-            </text>
-            <pluginData displayName="tile_group" markedForTask="false"/>
-            <validValueList displayName="Tissue Mounting Protocol" required="true"
-                            markedForTask="false">
-                <validValue value="Glycerol-Based Mounting" default="true"/>
-                <validValue value="DPX Mounting"/>
-            </validValueList>
-            <cvTermList displayName="Tissue Orientation" required="true"
-                        markedForTask="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
-                        displayNamePrefixedForValues="false">
-            </cvTermList>
-            <validValueList displayName="UAS Reporter" required="true"
-                            markedForTask="false">
-                <validValue value="UAS_IVS-mCD8_3_0007" default="true"/>
-                <validValue value="UAS_mCD8_2_0006"/>
-                <validValue value="LexAop_IVS-myr_3_0008"/>
-            </validValueList>
-
-            <cvTermList displayName="Imager" required="true"
-                        markedForTask="false"
-                        autoComplete="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
-            </cvTermList>
-
-            <cvTermList displayName="Renamer" required="true"
-                        markedForTask="false"
-                        autoComplete="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager"
-                        sharedForAllSessionFiles="true">
-            </cvTermList>
-
-        </dataFields>
-
-    </project>
-
     <project name="Rubin Lab: FIX ChaCRM verified TransformantIDs (GMR_*)">
 
         <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/screen/confocalStacks"
@@ -661,11 +494,13 @@
 
         <plugins>
 
-            <rowValidator className="org.janelia.it.chacrm.ChacrmEventManager" />
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_${Plate}${Well}_${Vector ID}_${Landing Site}.janelia-sage"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
+                <property name="errorMessage" value="There is no rubin lab line named 'GMR_${Plate}${Well}_${Vector ID}_${Landing Site}' in the SAGE database."/>
+                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
+            </rowValidator>
 
-            <rowListener className="org.janelia.it.chacrm.ChacrmEventManager" >
-                <property name="labImageSharePattern" value="[/\\]++screen[/\\]++confocalStacks[/\\]++"/>
-            </rowListener>
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
                 <property name="family" value="$STATIC:rubin-chacrm"/>
@@ -679,6 +514,7 @@
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="tissue_orientation" value="Tissue Orientation"/>
             </rowListener>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:rubin"/>
@@ -721,8 +557,8 @@
                         displayNamePrefixedForValues="true">
                 <sourceFileDefault pattern="GMR_[^_]+_[^_]+_([^_]+)_.*"/>
             </cvTermList>
-            <pluginData displayName="imageLocationRank" format="_%02d" />
-            <separator value="-"/>
+            <!-- stub out old ChaCRM imageLocationRank -->
+            <separator value="_99-"/>
             <validValueList displayName="Gender" required="true">
                 <sourceFileDefault pattern="GMR_[^\-]+-(.).*"/>
                 <validValue displayName="m: Male" value="m"/>
