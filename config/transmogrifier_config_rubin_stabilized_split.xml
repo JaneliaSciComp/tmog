@@ -135,7 +135,7 @@
                     <mappedValue from="RD" to="right_dorsal"/>
                     <mappedValue from="V" to="ventral"/>
                     <mappedValue from="VNC" to="ventral_nerve_cord"/>
-                    <mappedValue from="VNC-Ad" to="ventral_nerve_cord_adjusted"/>
+                    <mappedValue from="VNC-Adj" to="ventral_nerve_cord_adjusted"/>
                 </sourceFileMappedDefault>
             </cvTermList>
 

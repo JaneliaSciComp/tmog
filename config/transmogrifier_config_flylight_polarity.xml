@@ -138,7 +138,7 @@
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
                         autoComplete="true"
                         markedForTask="false">
-                <sourceFileMappedDefault pattern="^.*_T\d+_([A-Z]+)_\d{8}_\d+_.*">
+                <sourceFileMappedDefault pattern="^[^_]+_[^_]+_[^_]+_([^_]+)_.*">
                     <mappedValue from="A" to="abdominal"/>
                     <mappedValue from="BRN" to="brain"/>
                     <mappedValue from="CEN" to="central"/>
@@ -154,7 +154,7 @@
                     <mappedValue from="RD" to="right_dorsal"/>
                     <mappedValue from="V" to="ventral"/>
                     <mappedValue from="VNC" to="ventral_nerve_cord"/>
-                    <mappedValue from="VNC-Ad" to="ventral_nerve_cord_adjusted"/>
+                    <mappedValue from="VNC-Adj" to="ventral_nerve_cord_adjusted"/>
                 </sourceFileMappedDefault>
             </cvTermList>
 
