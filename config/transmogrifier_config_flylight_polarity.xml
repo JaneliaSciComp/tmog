@@ -76,9 +76,9 @@
                 <property name="created_by" value="Imager"/>
                 <property name="effector" value="Reporter"/>
                 <property name="slide_code" value="Slide Code"/>
-                <property name="tile" value="Tile"/>
+                <property name="tile" value="Tile$MAP:vnc_verify=ventral_nerve_cord" />
+                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_optic_lobe=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_optic_lobe=Brain|ventral=Brain|ventral_nerve_cord=VNC|vnc_verify=VNC-Verify"/>
                 <property name="gender" value="Gender"/>
-                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_optic_lobe=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_optic_lobe=Brain|ventral=Brain|ventral_nerve_cord=VNC"/>
                 <property name="age" value="Age"/>
                 <property name="full_age" value="Full Age"/>
                 <property name="annotated_by" value="Annotator"/>
@@ -154,8 +154,10 @@
                     <mappedValue from="RD" to="right_dorsal"/>
                     <mappedValue from="V" to="ventral"/>
                     <mappedValue from="VNC" to="ventral_nerve_cord"/>
-                    <mappedValue from="VNC-Adj" to="ventral_nerve_cord_adjusted"/>
+                    <mappedValue from="VNC-Adj" to="vnc_verify"/>
+                    <mappedValue from="VNC-Ver" to="vnc_verify"/>
                 </sourceFileMappedDefault>
+                <validValue displayName="VNC-Verify" value="vnc_verify"/>
             </cvTermList>
 
             <text displayName="Slide Code" required="true"
