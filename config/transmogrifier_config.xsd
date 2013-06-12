@@ -282,6 +282,7 @@
                 <xs:element name="staticDefault" type="staticDefaultType" />
                 <xs:element name="pluginDefault" type="pluginDefaultType"/>
             </xs:choice>
+            <xs:element name="validValue" type="validValueType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="displayName" type="xs:string" use="required"/>
         <xs:attribute name="required" type="xs:boolean"/>

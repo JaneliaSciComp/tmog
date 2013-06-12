@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -7,6 +7,7 @@
 
 package org.janelia.it.ims.tmog.field;
 
+import ca.odell.glazedlists.BasicEventList;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -16,7 +17,9 @@ import org.janelia.it.utils.StringUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -35,10 +38,13 @@ public class HttpValidValueModel
     private String relativeActualValuePath;
     private String relativeValueDisplayNamePath;
 
+    private List<ValidValue> staticValues;
+
     private static Map<String, HttpValidValueModel> urlToModelMap =
             new ConcurrentHashMap<String, HttpValidValueModel>();
 
     public HttpValidValueModel() {
+        this.staticValues = null;
     }
 
     public String getServiceUrl() {
@@ -159,6 +165,11 @@ public class HttpValidValueModel
 
     private void setValidValuesFromService() {
 
+        if (staticValues == null) {
+            final BasicEventList<ValidValue> originalValues = getValidValues();
+            staticValues = new ArrayList<ValidValue>(originalValues);
+        }
+
         clearValidValues();
 
         InputStream responseStream = null;
@@ -200,6 +211,12 @@ public class HttpValidValueModel
 
         LOG.info("retrieved " + this.size() +
                  " results for " + serviceUrl);
+
+        // add any static values to the end of the list
+        for (ValidValue value : staticValues) {
+            addValidValue(value);
+        }
+
     }
 
     private void prefixDisplayNamesAndSortAsNeeded() {
