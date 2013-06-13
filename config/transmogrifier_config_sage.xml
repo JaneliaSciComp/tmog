@@ -379,6 +379,50 @@
 
     </project>
 
+    <project name="Fly Light Polarity - fix microscope filename" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
+                <property name="plugin-scale" value="0" />
+                <property name="Microscope Filename" value="Recording #1 Name" />
+            </rowUpdater>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="lab" value="$STATIC:flylight"/>
+                <property name="family" value="$STATIC:flylight_polarity"/>
+                <property name="microscope_filename" value="Microscope Filename"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Microscope Filename" required="true"
+                  copyable="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="microscope_filename"/>
+                </pluginDefault>
+            </text>
+
+        </dataFields>
+
+    </project>
+
     <project name="Fly Light Polarity - fix SAGE data" taskName="collector">
 
         <plugins>
