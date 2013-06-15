@@ -27,6 +27,11 @@
                 <property name="batchColorFieldName" value="Batch Color"/>
             </rowValidator>
 
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="rank" value="urn:lsid:janelia.org:rubin_chacrm:rank_GMR_${Plate}${Well}_${Vector ID}_${Landing Site}" />
+            </rowListener>
+
             <rowListener className="org.janelia.it.wip.WipDataPlugin">
                 <property name="batchNameFieldName" value="Batch Name"/>
                 <property name="batchNumberFieldName" value="Batch Number"/>
@@ -84,8 +89,11 @@
                         displayNamePrefixedForValues="true">
                 <staticDefault value="01"/>
             </cvTermList>
-            <!-- stub out old ChaCRM imageLocationRank -->
-            <separator value="_99-"/>
+
+            <pluginData displayName="rank" format="_%02d"/>
+
+            <separator value="-"/>
+
             <validValueList displayName="Gender" required="true">
                 <validValue displayName="m: Male" value="m"/>
                 <validValue displayName="f: Female" value="f"/>
@@ -216,6 +224,11 @@
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="rank" value="urn:lsid:janelia.org:rubin_chacrm:rank_GMR_${Plate}${Well}_${Vector ID}_${Landing Site}" />
+            </rowListener>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
                 <property name="family" value="$STATIC:rubin-chacrm"/>
@@ -273,8 +286,11 @@
                         displayNamePrefixedForValues="true">
                 <staticDefault value="01"/>
             </cvTermList>
-            <!-- stub out old ChaCRM imageLocationRank -->
-            <separator value="_99-"/>
+
+            <pluginData displayName="rank" format="_%02d"/>
+
+            <separator value="-"/>
+
             <validValueList displayName="Gender" required="true">
                 <validValue displayName="m: Male" value="m"/>
                 <validValue displayName="f: Female" value="f"/>
@@ -501,6 +517,11 @@
                 <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
             </rowValidator>
 
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="rank" value="urn:lsid:janelia.org:rubin_chacrm:rank_GMR_${Plate}${Well}_${Vector ID}_${Landing Site}" />
+            </rowListener>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="nighthawk"/>
                 <property name="family" value="$STATIC:rubin-chacrm"/>
@@ -557,8 +578,11 @@
                         displayNamePrefixedForValues="true">
                 <sourceFileDefault pattern="GMR_[^_]+_[^_]+_([^_]+)_.*"/>
             </cvTermList>
-            <!-- stub out old ChaCRM imageLocationRank -->
-            <separator value="_99-"/>
+
+            <pluginData displayName="rank" format="_%02d"/>
+
+            <separator value="-"/>
+
             <validValueList displayName="Gender" required="true">
                 <sourceFileDefault pattern="GMR_[^\-]+-(.).*"/>
                 <validValue displayName="m: Male" value="m"/>
