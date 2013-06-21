@@ -120,15 +120,17 @@
                         autoComplete="true"
                         markedForTask="false">
                 <sourceFileMappedDefault pattern="^[^_]+_[^_]+_[^_]+_([^_]+)_.*">
-                    <mappedValue from="A" to="abdominal"/>
+                    <mappedValue from="ABD" to="abdominal"/>
                     <mappedValue from="BRN" to="brain"/>
                     <mappedValue from="CEN" to="central"/>
                     <mappedValue from="DM" to="dorsal_medial"/>
                     <mappedValue from="L" to="left_optic_lobe"/>
                     <mappedValue from="LC" to="left_central"/>
                     <mappedValue from="LD" to="left_dorsal"/>
-                    <mappedValue from="MESO" to="mesothorasic"/>
+                    <mappedValue from="MES" to="mesothorasic"/>
                     <mappedValue from="META" to="metathorasic"/>
+                    <mappedValue from="NEC-Ant" to="neck_anterior"/>
+                    <mappedValue from="NEC-Pos" to="neck_posterior"/>
                     <mappedValue from="PRO" to="prothorasic"/>
                     <mappedValue from="R" to="right_optic_lobe"/>
                     <mappedValue from="RC" to="right_central"/>
