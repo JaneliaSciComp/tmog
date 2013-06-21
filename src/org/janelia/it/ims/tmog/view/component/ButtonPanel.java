@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -62,7 +62,6 @@ public class ButtonPanel extends JPanel {
         this.button = getButton(imageUrl, DEFAULT_SIZE);
         final GridBagConstraints centerWithFixedSize = new GridBagConstraints();
         add(this.button, centerWithFixedSize);
-        setBackground(Color.WHITE);
         setToolTipText(buttonType.getToolTip());
     }
 

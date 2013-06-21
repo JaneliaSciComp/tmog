@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -99,10 +99,7 @@ public class CollectorView implements SessionView, InputSelectionView {
                                           "Select Root Directory",
                                           this);
 
-        projectName.setBackground(directoryPanel.getBackground());
         projectNamePane.setBorder(null);
-
-        rootDirectoryField.setBackground(directoryPanel.getBackground());
         rootDirectoryPane.setBorder(null);
 
         setupTaskComponents(parentTabbedPane);

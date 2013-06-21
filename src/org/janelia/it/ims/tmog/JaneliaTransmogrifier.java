@@ -12,6 +12,7 @@ import org.janelia.it.ims.tmog.config.ConfigurationException;
 import org.janelia.it.ims.tmog.config.GlobalConfiguration;
 import org.janelia.it.ims.tmog.config.TransmogrifierConfiguration;
 import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
+import org.janelia.it.ims.tmog.view.ColorScheme;
 import org.janelia.it.ims.tmog.view.TabbedView;
 import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
 
@@ -88,12 +89,19 @@ public class JaneliaTransmogrifier extends JFrame {
                     JOptionPane.WARNING_MESSAGE);
         }
 
-        TabbedView tabbedView = new TabbedView();
+        ColorScheme colorScheme = new ColorScheme();
+        if (tmogPreferences.isDarkColorScheme()) {
+            colorScheme.toggle();
+        }
+
+        colorScheme.addSchemeComponent(this);
+        TabbedView tabbedView = new TabbedView(colorScheme);
         setContentPane(tabbedView.getContentPanel());
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(tabbedView.getWindowListener());
         JMenuBar menuBar = tabbedView.getMenuBar();
         this.setJMenuBar(menuBar);
+        colorScheme.addSchemeComponent(menuBar);
         pack();
 
         TransmogrifierConfiguration config = tabbedView.getTmogConfig();

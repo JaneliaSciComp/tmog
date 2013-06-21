@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -106,10 +106,7 @@ public class RenameView implements SessionView, InputSelectionView {
                                           "Select Source",
                                           this);
 
-        projectName.setBackground(directoryPanel.getBackground());
         projectNamePane.setBorder(null);
-        
-        lsmDirectoryField.setBackground(directoryPanel.getBackground());
         lsmDirectoryPane.setBorder(null);
 
         setupOutputDirectory();
@@ -311,7 +308,6 @@ public class RenameView implements SessionView, InputSelectionView {
         OutputDirectoryConfiguration odCfg = projectConfig.getOutputDirectory();
         boolean isManuallyChosen = odCfg.isManuallyChosen();
         outputDirectoryBtn.setVisible(isManuallyChosen);
-        outputDirectoryField.setBackground(directoryPanel.getBackground());
         outputDirectoryPane.setBorder(null);
 
         if (isManuallyChosen) {

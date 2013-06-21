@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -39,12 +39,15 @@ public class TabbedView implements ActionListener {
     /** The logger for this class. */
     private static final Logger LOG = Logger.getLogger(TabbedView.class);
 
+    private ColorScheme colorScheme;
+
     private JTabbedPane tabbedPane;
     private JMenuBar menuBar;
     private JPanel contentPanel;
     private Map<JMenuItem, ProjectConfiguration> addSessionItems;
     private JMenuItem removeSessionItem;
     private JMenuItem exitItem;
+    private JMenuItem colorSchemeItem;
     private JMenuItem resizeToWindowItem;
     private JMenuItem resizeToDataItem;
     private JMenuItem resizeToPreferencesItem;
@@ -55,7 +58,10 @@ public class TabbedView implements ActionListener {
     private HashMap<String, SessionView> sessionList;
     private int sessionCount;
 
-    public TabbedView() {
+    public TabbedView(ColorScheme colorScheme) {
+
+        this.colorScheme = colorScheme;
+
         this.sessionList = new HashMap<String, SessionView>();
         this.sessionCount = 0;
 
@@ -111,6 +117,8 @@ public class TabbedView implements ActionListener {
             removeSession();
         } else if (source == exitItem) {
             exitApplicationSafely();
+        } else if (source == colorSchemeItem) {
+            colorScheme.toggle();
         } else if (source == resizeToWindowItem) {
             resize(SessionView.ResizeType.WINDOW);
         } else if (source == resizeToDataItem) {
@@ -215,6 +223,12 @@ public class TabbedView implements ActionListener {
     private void createViewMenu() {
         JMenu viewMenu = new JMenu("View");
         viewMenu.setMnemonic(KeyEvent.VK_V);
+
+        colorSchemeItem = createAndAddMenuItem("Toggle Color Scheme",
+                                               KeyEvent.VK_C,
+                                               true,
+                                               viewMenu);
+        viewMenu.addSeparator();
 
         resizeToDataItem = createAndAddMenuItem("Resize to Fit Data",
                                                 KeyEvent.VK_F,

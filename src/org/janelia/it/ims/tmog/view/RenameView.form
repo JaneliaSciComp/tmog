@@ -93,6 +93,7 @@
               <component id="a99d3" class="javax.swing.JTextArea" binding="outputDirectoryField">
                 <constraints/>
                 <properties>
+                  <background swing-color="Label.background"/>
                   <editable value="false"/>
                   <lineWrap value="true"/>
                   <requestFocusEnabled value="false"/>
@@ -114,6 +115,7 @@
               <component id="5da1e" class="javax.swing.JTextArea" binding="lsmDirectoryField">
                 <constraints/>
                 <properties>
+                  <background swing-color="Label.background"/>
                   <editable value="false"/>
                   <lineWrap value="true"/>
                   <requestFocusEnabled value="false"/>
@@ -135,6 +137,7 @@
               <component id="db062" class="javax.swing.JTextArea" binding="projectName">
                 <constraints/>
                 <properties>
+                  <background swing-color="Label.background"/>
                   <editable value="false"/>
                   <lineWrap value="true"/>
                   <rows value="0"/>

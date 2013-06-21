@@ -92,6 +92,7 @@
               <component id="98df" class="javax.swing.JTextArea" binding="rootDirectoryField">
                 <constraints/>
                 <properties>
+                  <background swing-color="Label.background"/>
                   <editable value="false"/>
                   <lineWrap value="true"/>
                   <wrapStyleWord value="true"/>
@@ -112,6 +113,7 @@
               <component id="a8f9e" class="javax.swing.JTextArea" binding="projectName">
                 <constraints/>
                 <properties>
+                  <background swing-color="Label.background"/>
                   <editable value="false"/>
                   <lineWrap value="true"/>
                   <wrapStyleWord value="true"/>

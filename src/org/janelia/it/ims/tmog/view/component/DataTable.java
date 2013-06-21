@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -107,6 +107,7 @@ public class DataTable extends JTable {
     protected DataTable(boolean setDefaultRenderersAndEditors) {
         super();
 
+        setBackground(UIManager.getColor("Label.background"));
         this.columnDefaults = null;
 
         TableColumnModel columnModel = getColumnModel();
@@ -204,6 +205,7 @@ public class DataTable extends JTable {
 
         // resize rows if the event came from a tmog model
         final Object source = e.getSource();
+        //noinspection MagicConstant
         if (e.getType() == TransmogrifierTableModel.UPDATE_ROW_HEIGHTS) {
             if (isEditing()) {
                 // stop editing so that edited cells get resized properly

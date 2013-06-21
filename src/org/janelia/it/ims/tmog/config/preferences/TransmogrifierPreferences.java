@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -91,6 +91,7 @@ public class TransmogrifierPreferences {
     }
 
     private File preferencesFile;
+    private FieldDefaultSet globalPreferences;
     private Map<String, ProjectPreferences> projectNameToPreferencesMap;
     private boolean loaded;
 
@@ -98,9 +99,53 @@ public class TransmogrifierPreferences {
      * Constructs an unloaded empty instance.
      */
     protected TransmogrifierPreferences() {
+        this.globalPreferences = new FieldDefaultSet();
+        this.globalPreferences.setName(GLOBAL_PREFERENCES_NAME);
         this.projectNameToPreferencesMap =
                 new LinkedHashMap<String, ProjectPreferences>();
         this.loaded = false;
+    }
+
+    /**
+     * @return the global preference for the specified name or null if it does not exist.
+     */
+    public String getGlobalPreference(String name) {
+        String value = null;
+        FieldDefault fieldDefault = globalPreferences.getFieldDefault(name);
+        if (fieldDefault != null) {
+            value = fieldDefault.getValue();
+        }
+        return value;
+    }
+
+    /**
+     * @return true if the global preferences identify the dark color scheme; otherwise false.
+     */
+    public boolean isDarkColorScheme() {
+        return Boolean.parseBoolean(getGlobalPreference(DARK_COLOR_SCHEME));
+    }
+
+    /**
+     * Sets the specified global preference.
+     *
+     * @param  name   preference name.
+     * @param  value  preference value.
+     */
+    public void setGlobalPreference(String name,
+                                    String value) {
+        FieldDefault fieldDefault = new FieldDefault();
+        fieldDefault.setName(name);
+        fieldDefault.setValue(value);
+        globalPreferences.addFieldDefault(fieldDefault);
+    }
+
+    /**
+     * Sets the global color scheme preference.
+     *
+     * @param  isDark  if true, indicates the dark color scheme is preferred.
+     */
+    public void setColorScheme(boolean isDark) {
+        setGlobalPreference(DARK_COLOR_SCHEME, String.valueOf(isDark));
     }
 
     /**
@@ -150,6 +195,12 @@ public class TransmogrifierPreferences {
     public String toXml() {
         StringBuilder sb = new StringBuilder();
         sb.append("<transmogrifierPreferences>\n");
+
+        ProjectPreferences globalPreferencesWrapper = new ProjectPreferences();
+        globalPreferencesWrapper.setName(GLOBAL_PREFERENCES_NAME);
+        globalPreferencesWrapper.addFieldDefaultSet(globalPreferences);
+        sb.append(globalPreferencesWrapper.toXml());
+
         for (ProjectPreferences projectPreferences :
                 projectNameToPreferencesMap.values()) {
             sb.append(projectPreferences.toXml());
@@ -268,9 +319,16 @@ public class TransmogrifierPreferences {
             
             ArrayList parsedList = (ArrayList) digester.parse(stream);
             if (parsedList != null) {
+                ProjectPreferences projectPreferences;
                 for (Object element : parsedList) {
                     if (element instanceof ProjectPreferences) {
-                        this.addProjectPreferences((ProjectPreferences) element);
+                        projectPreferences = (ProjectPreferences) element;
+                        if (GLOBAL_PREFERENCES_NAME.equals(projectPreferences.getName())) {
+                            this.globalPreferences =
+                                    projectPreferences.getFieldDefaultSet(GLOBAL_PREFERENCES_NAME);
+                        } else {
+                            this.addProjectPreferences(projectPreferences);
+                        }
                     }
                 }
             }
@@ -351,4 +409,6 @@ public class TransmogrifierPreferences {
             Logger.getLogger(TransmogrifierPreferences.class);
 
     private static final String FILE_NAME = ".tmog-preferences.xml";
+    private static final String GLOBAL_PREFERENCES_NAME = "tmog-global-preferences";
+    private static final String DARK_COLOR_SCHEME = "dark-color-scheme";
 }
