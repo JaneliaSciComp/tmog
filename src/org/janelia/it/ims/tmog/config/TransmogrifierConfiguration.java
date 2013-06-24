@@ -82,10 +82,6 @@ public class TransmogrifierConfiguration {
                     final File alternateConfigFile = new File(alternateFileName);
 
                     if (alternateConfigFile.exists()) {
-
-                        LOG.info("found config file with shortened drive name: " +
-                                 alternateConfigFile.getAbsolutePath());
-
                         throw new ConfigurationException(
                                 "Configuration file " + configFile.getAbsolutePath() +
                                 " does not exist.  Please make sure you have mapped " +
