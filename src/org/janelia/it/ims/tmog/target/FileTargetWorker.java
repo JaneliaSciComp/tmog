@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -39,6 +39,7 @@ public class FileTargetWorker
     private boolean filterDuplicateTargets;
     private TargetDataFile targetDataFile;
     private String summary;
+    private List<File> emptyFiles;
 
     /**
      * Constructs a new worker.
@@ -84,6 +85,8 @@ public class FileTargetWorker
         this.namer = namer;
         this.filterDuplicateTargets = filterDuplicateTargets;
         this.targetDataFile = targetDataFile;
+        this.summary = null;
+        this.emptyFiles = new ArrayList<File>();
     }
 
     /**
@@ -180,12 +183,29 @@ public class FileTargetWorker
             if (children != null) {
                 targets = new ArrayList<FileTarget>(children.length);
                 for (File child : children) {
-                    targets.add(new FileTarget(child, rootDirectory, namer));
+                    if (child.length() == 0) {
+                        emptyFiles.add(child);
+                    } else {
+                        targets.add(new FileTarget(child, rootDirectory, namer));
+                    }
                 }
             } else {
                 targets = new ArrayList<FileTarget>(0);
             }
         }
+
+        if (emptyFiles.size() > 0) {
+            StringBuilder sb = new StringBuilder(1024);
+            sb.append("The following zero length (empty) files ");
+            sb.append("were excluded from processing:\n\n");
+            for (File emptyFile : emptyFiles) {
+                sb.append("   ");
+                sb.append(emptyFile.getAbsolutePath());
+                sb.append('\n');
+            }
+            summary = sb.toString();
+        }
+
         return targets;
     }
 
@@ -200,12 +220,18 @@ public class FileTargetWorker
                                         List<FileTarget> targets) {
         if (! isCancelled()) {
             if ((filter == null) || filter.accept(file)) {
-                targets.add(new FileTarget(file, rootDirectory, namer));
+                if (file.length() == 0) {
+                    emptyFiles.add(file);
+                } else {
+                    targets.add(new FileTarget(file, rootDirectory, namer));
+                }
             } else if (file.isDirectory()) {
                 updateStatus("searching " + file.getName());
                 final File[] children = file.listFiles();
-                for (File child : children) {
-                    targets = addTargets(child, targets);
+                if (children != null) {
+                    for (File child : children) {
+                        targets = addTargets(child, targets);
+                    }
                 }
             }
         }
