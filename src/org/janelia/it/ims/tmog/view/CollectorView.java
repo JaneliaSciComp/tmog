@@ -389,7 +389,11 @@ public class CollectorView implements SessionView, InputSelectionView {
 
     private void processTaskCompletionForView() {
         List<Integer> failedRowIndices = task.getFailedRowIndices();
-        int numberOfFailures = failedRowIndices.size();
+        final int numberOfFailures = failedRowIndices.size();
+
+        // log completion with project name to help track which projects are being used
+        LOG.info("completed '" + projectName.getText() + "' task with " +
+                 numberOfFailures + " failures");
 
         TaskComponents.displaySummaryDialog("Task",
                                             numberOfFailures,

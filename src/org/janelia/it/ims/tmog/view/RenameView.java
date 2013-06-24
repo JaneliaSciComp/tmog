@@ -579,14 +579,18 @@ public class RenameView implements SessionView, InputSelectionView {
 
     private void processTaskCompletionForView() {
         List<Integer> failedRowIndices = task.getFailedRowIndices();
-        int numberOfCopyFailures = failedRowIndices.size();
+        final int numberOfFailures = failedRowIndices.size();
+
+        // log completion with project name to help track which projects are being used
+        LOG.info("completed '" + projectName.getText() + "' task with " +
+                 numberOfFailures + " failures");
 
         TaskComponents.displaySummaryDialog("Rename",
-                                            numberOfCopyFailures,
+                                            numberOfFailures,
                                             task.getTaskSummary(),
                                             appPanel);
 
-        if (numberOfCopyFailures == 0) {
+        if (numberOfFailures == 0) {
             // everything succeeded, so reset the main view
             inputSelectionHandler.resetInputRoot();
         } else {
