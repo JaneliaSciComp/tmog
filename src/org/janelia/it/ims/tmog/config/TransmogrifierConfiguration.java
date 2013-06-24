@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -51,6 +51,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class encapsulates all application configuration information
@@ -65,12 +67,33 @@ public class TransmogrifierConfiguration {
     /**
      * @return the configuration file name.
      */
-    public static String getConfigFileName() {
+    private static String getConfigFileName() throws ConfigurationException {
         if (configFileName == null) {
             String fileName = System.getProperty(CONFIG_FILE_PROPERTY_NAME);
             if (fileName != null) {
                 String convertedFileName = PathUtil.convertPath(fileName);
                 File configFile = new File(convertedFileName);
+
+                if ((! configFile.exists()) && PathUtil.ON_WINDOWS) {
+
+                    final Pattern removalPattern = Pattern.compile("\\.janelia\\.priv");
+                    final Matcher m = removalPattern.matcher(convertedFileName);
+                    final String alternateFileName = m.replaceFirst("");
+                    final File alternateConfigFile = new File(alternateFileName);
+
+                    if (alternateConfigFile.exists()) {
+
+                        LOG.info("found config file with shortened drive name: " +
+                                 alternateConfigFile.getAbsolutePath());
+
+                        throw new ConfigurationException(
+                                "Configuration file " + configFile.getAbsolutePath() +
+                                " does not exist.  Please make sure you have mapped " +
+                                "the network drive using the fully qualified name " +
+                                "( e.g. dm11.janelia.priv ).");
+                    }
+                }
+
                 configFileName = configFile.getAbsolutePath();
             }
         }
