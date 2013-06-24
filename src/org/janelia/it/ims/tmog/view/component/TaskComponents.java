@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -13,6 +13,7 @@ import org.janelia.it.ims.tmog.plugin.RowListener;
 import org.janelia.it.ims.tmog.plugin.SessionListener;
 import org.janelia.it.ims.tmog.task.Task;
 import org.janelia.it.ims.tmog.task.TaskProgressInfo;
+import org.janelia.it.ims.tmog.view.TaskSummaryPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -239,9 +240,27 @@ public abstract class TaskComponents implements PropertyChangeListener {
             dialogTitle.append(" Summary");
         }
 
-        NarrowOptionPane.displaySummaryDialog(dialogTitle.toString(),
-                                              taskSummary,
-                                              parent);
+        boolean isMinimized = false;
+        final Component root = SwingUtilities.getRoot(parent);
+        if (root instanceof JFrame) {
+            final JFrame rootFrame = (JFrame) root;
+            isMinimized = (rootFrame.getExtendedState() == JFrame.ICONIFIED);
+        }
+
+        // if the application window is minimized,
+        if (isMinimized) {
+
+            TaskSummaryPanel taskSummaryPanel = new TaskSummaryPanel(dialogTitle.toString(),
+                                                                     taskSummary,
+                                                                     parent);
+            taskSummaryPanel.display();
+
+        } else {
+
+            NarrowOptionPane.displaySummaryDialog(dialogTitle.toString(),
+                                                  taskSummary,
+                                                  parent);
+        }
     }
 
 }
