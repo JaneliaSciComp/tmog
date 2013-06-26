@@ -326,6 +326,9 @@ public class TransmogrifierPreferences {
                         if (GLOBAL_PREFERENCES_NAME.equals(projectPreferences.getName())) {
                             this.globalPreferences =
                                     projectPreferences.getFieldDefaultSet(GLOBAL_PREFERENCES_NAME);
+                            if (this.globalPreferences == null) {
+                                this.globalPreferences = new FieldDefaultSet();
+                            }
                         } else {
                             this.addProjectPreferences(projectPreferences);
                         }
