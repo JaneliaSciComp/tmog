@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -51,6 +51,8 @@ public class TransmogrifierPreferencesTest extends TestCase {
         TransmogrifierPreferences preferences = new TransmogrifierPreferences();
         String validXml =
                 "<transmogrifierPreferences>\n" +
+                "  <projectPreferences name=\"tmog-global-preferences\">\n" +
+                "  </projectPreferences>\n" +
                 "  <projectPreferences name=\"testProject1\">\n" +
                 "    <fieldDefaultSet name=\"testSetA\">\n" +
                 "      <fieldDefault name=\"f1\">v1</fieldDefault>\n" +
@@ -98,6 +100,8 @@ public class TransmogrifierPreferencesTest extends TestCase {
 
         validXml =
                 "<transmogrifierPreferences>\n" +
+                "  <projectPreferences name=\"tmog-global-preferences\">\n" +
+                "  </projectPreferences>\n" +
                 "</transmogrifierPreferences>\n";
 
         preferences = new TransmogrifierPreferences();
