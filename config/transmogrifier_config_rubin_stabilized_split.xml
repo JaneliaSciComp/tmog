@@ -9,19 +9,17 @@
 
         <inputFileFilter patternString=".+\.lsm" />
 
-        <!-- NOTES:
-             - first capturing group must be equal for second capturing group
-               to be used in numeric sort
-             - third capturing group only used when first and second are equal
-             - '(?: )' identifies a non-capturing group
-        -->
-        <inputFileSorter sortAlgorithm="Number"
-                         patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
-
         <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/ssplit/data/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
+                <property name="tmog-row.key" value="${Cross Serial Number}" />
+                <property name="data-file.name" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.tsv-key" value="Serial" />
+                <property name="Line" value="Line" />
+            </rowUpdater>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
                 <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
@@ -218,11 +216,26 @@
 
     </project>
 
-    <project name="Rubin Stabilized Splits - fix data" taskName="collector">
+    <project name="Rubin Stabilized Splits - update SAGE" taskName="collector">
 
         <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
 
         <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
+                <property name="tmog-row.key" value="${Cross Serial Number}" />
+                <property name="data-file.name" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.tsv-key" value="Serial" />
+                <property name="Line" value="Line" />
+            </rowUpdater>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="Line" value="parent1StockName" />
+                <property name="Reporter" value="reporter" />
+            </rowUpdater>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
                 <property name="db.config.key" value="sage"/>
@@ -235,35 +248,88 @@
                 <property name="keep.existing.data" value="true"/>
                 <property name="lab" value="$STATIC:rubin"/>
                 <property name="family" value="$STATIC:rubin_ssplit"/>
-                <!--<property name="line" value="Line"/>-->
-                <!--<property name="cross_barcode" value="Cross Serial Number"/>-->
+                <property name="relative_path" value="SAGE Name"/>
+                <property name="line" value="Line"/>
+                <property name="cross_barcode" value="Cross Serial Number"/>
                 <!--<property name="created_by" value="Imager"/>-->
-                <!--<property name="effector" value="Effector"/>-->
+                <property name="effector" value="Reporter"/>
                 <!--<property name="slide_code" value="Slide Code"/>-->
-                <property name="tile" value="Tile"/>
+                <!--<property name="tile" value="Tile"/>-->
                 <!--<property name="gender" value="Gender"/>-->
-                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_optic_lobe=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_optic_lobe=Brain|ventral=Brain|ventral_nerve_cord=VNC"/>
+                <!--<property name="area" value="Area"/>-->
                 <!--<property name="age" value="Age"/>-->
+                <!--<property name="full_age" value="Full Age"/>-->
+                <!--<property name="days_after_eclosion" value="Days After Eclosion"/>-->
                 <!--<property name="annotated_by" value="Annotator"/>-->
                 <!--<property name="mounting_protocol" value="Tissue Mounting Protocol"/>-->
+                <!--<property name="data_set" value="Data Set"/>-->
                 <!--<property name="channel_spec" value="Channel Specification"/>-->
-                <!--<property name="microscope_filename"/>-->
+                <property name="screen_state" value="Screen State"/>
+                <property name="display" value="Screen State$MAP:accepted=true|rejected=false"/>
+                <property name="comment" value="Comment"/>
             </rowListener>
 
         </plugins>
 
         <dataFields>
 
-            <cvTermList displayName="Tile" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
-                        autoComplete="true"
-                        markedForTask="false">
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="99999"
+                    markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="rubin_ssplit"/>
-                    <property name="image_property" value="tile"/>
+                    <property name="image_property" value="cross_barcode"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </number>
+
+            <webServiceList displayName="Line" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman&amp;lab=simpson&amp;lab=leet&amp;lab=zlatic"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_ssplit"/>
+                    <property name="image_property" value="line"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </webServiceList>
+
+            <cvTermList displayName="Reporter" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_ssplit"/>
+                    <property name="image_property" value="effector"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
             </cvTermList>
+
+            <validValueList displayName="Screen State" required="true"
+                            markedForTask="false"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_ssplit"/>
+                    <property name="image_property" value="screen_state"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <validValue value="accepted" default="true"/>
+                <validValue value="rejected"/>
+            </validValueList>
+
+            <text displayName="Comment" required="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_ssplit"/>
+                    <property name="image_property" value="comment"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
 
             <text displayName="SAGE Name" required="true"
                   copyable="false">

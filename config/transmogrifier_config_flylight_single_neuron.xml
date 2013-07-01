@@ -9,9 +9,6 @@
 
         <inputFileFilter patternString=".+\.lsm" />
 
-        <inputFileSorter sortAlgorithm="Number"
-                         patternString=".*_(L)(\d++)(\.lsm)"/>
-
         <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/flip/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
@@ -201,15 +198,6 @@
     <project name="Fly Light Flip - preScreen - scope to dm11">
 
         <inputFileFilter patternString=".+\.lsm" />
-
-        <!-- NOTES:
-             - first capturing group must be equal for second capturing group
-               to be used in numeric sort
-             - third capturing group only used when first and second are equal
-             - '(?: )' identifies a non-capturing group
-        -->
-        <inputFileSorter sortAlgorithm="Number"
-                         patternString="(?:^|.*_)(B)(\d+)(_.*)"/>
 
         <outputDirectory>
             <path path="[\\dm11.janelia.priv|/groups/flylight]/flylight/flip/preScreen/" />

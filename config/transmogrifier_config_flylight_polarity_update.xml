@@ -54,7 +54,7 @@
                 <property name="data_set" value="Data Set"/>
                 <!--<property name="channel_spec" value="Channel Specification"/>-->
                 <property name="screen_state" value="Screen State"/>
-                <property name="display" value="Screen State$MAP:accepted=true|pre_screen=false|rejected=false"/>
+                <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
                 <property name="comment" value="Comment"/>
             </rowListener>
 
