@@ -14,6 +14,11 @@
 
         <plugins>
 
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
+                <property name="plugin-scale" value="0" />
+                <property name="Microscope Filename" value="Recording #1 Name" />
+            </rowUpdater>
+
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
                 <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
                 <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
@@ -36,8 +41,10 @@
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="tissue_orientation" value="Tissue Orientation"/>
                 <property name="effector" value="Effector"/>
+                <property name="slide_code" value="Slide Code"/>
                 <!-- <property name="base_url" value="$STATIC:http://img.int.janelia.org/ditp-image/ditp-confocal-data/"/> -->
                 <property name="base_path" value="$STATIC:/groups/ditp/ditp/confocalStacks/"/>
+                <property name="microscope_filename"/>
             </rowListener>
 
         </plugins>
@@ -145,9 +152,61 @@
                 <validValue value="Ying-Jou Lee"/>
             </validValueList>
 
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_.+"
+                  copyable="false"
+                  markedForTask="false">
+                <sourceFileDefault pattern="^(\d{8}_.+)_Sum.lsm"/>
+            </text>
+
+            <text displayName="Microscope Filename" required="true"
+                  editable="false"
+                  copyable="false"
+                  markedForTask="false">
+            </text>
+
         </dataFields>
 
+    </project>
+
+    <project name="Descending Interneurons - add microscope filename" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
+                <property name="plugin-scale" value="0" />
+                <property name="Microscope Filename" value="Recording #1 Name" />
+            </rowUpdater>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="family" value="$STATIC:descending_interneurons"/>
+                <property name="microscope_filename" value="Microscope Filename"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Microscope Filename" required="true"
+                  copyable="false"
+                  markedForTask="false">
+            </text>
+
+        </dataFields>
 
     </project>
+
 
 </transmogrifierConfiguration>
