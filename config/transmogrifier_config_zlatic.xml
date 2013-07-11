@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.8.8"/>
+    <global minimumVersion="3.1.0"/>
 
     <project name="Zlatic Lab: Screen Pipeline" default="true"
             copyPreviousButtonVisible="false">
@@ -27,14 +27,13 @@
         </outputDirectory>
 
         <plugins>
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.TargetGroupValidator">
-                <property name="groupNamePattern" value=".*[/\\](\d{8}_\d{6})[/\\][^/\\]+"/>
-                <property name="requiredMemberPattern1" value=".*\.blob[s]?"/>
-                <property name="requiredMemberPattern2" value=".*\.png"/>
-                <property name="requiredMemberPattern3" value=".*\.set"/>
-                <property name="requiredMemberPattern4" value=".*\.summary"/>
-                <property name="useFullPath" value="true"/>
-                <property name="testName" value="C:\\Results\19991111_222222\GMR_33B03_AE_01@UAS_ChRh2D@t6@100@r$095dc50$30s1x30s0s@r$095dc50$90s4x5s15s@n@n@_00000k.blobs"/>
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
+                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/${Line Lab}/${Line}.janelia-sage"/>
+                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
+                <property name="errorMessage" value="There is no '${Line Lab}' lab line named '${Line}' in the SAGE database."/>
+                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
+                <property name="validResources"
+                          value="http://sage.int.janelia.org/sage-ws/lines/none/Not_Applicable.janelia-sage"/>
             </rowValidator>
         </plugins>
 
@@ -59,14 +58,22 @@
 
             <separator value="@"/>
 
-            <webServiceList displayName="Line" required="true"
-                            valueCreationPath="*/line"
-                            relativeActualValuePath="name"
-                            relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=simpson&amp;lab=zlatic"
-                            autoComplete="true">
+            <cvTermList displayName="Line Lab" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/lab"
+                        displayNamePrefixedForValues="false"
+                        markedForTask="false">
+                <sourceFileMappedDefault pattern="^(GMR_).*">
+                    <mappedValue from="GMR_" to="rubin"/>
+                </sourceFileMappedDefault>
+                <sourceFileMappedDefault pattern="^(FCF_).*">
+                    <mappedValue from="FCF_" to="fly"/>
+                </sourceFileMappedDefault>
+            </cvTermList>
+
+            <text displayName="Line" required="true"
+                  pattern="[0-9A-Za-z\-\_]++">
                 <sourceFileDefault pattern="(.+?)@.+?@.+?@.+?@.+?@.*"/>
-            </webServiceList>
+            </text>
 
             <separator value="@"/>
 
@@ -322,8 +329,7 @@
             <path path="[\\dm11.janelia.priv|/groups/zlatic]\zlaticlab\pipeline\rd\tracking-results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
-            <renameFieldValue fieldDisplayName="Genotype"/>
-            <renameFieldValue fieldDisplayName="Effector" prefix="@"/>
+            <renameFieldValue fieldDisplayName="Line And Effector"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Stimulus 1 Type"/>
             <renameFieldValue fieldDisplayName="Stimulus 1 Specs" prefix="_"/>
@@ -380,17 +386,12 @@
 
             <separator value="@"/>
 
-            <text displayName="Genotype" required="true"
-                  pattern="[0-9A-Za-z\-\_]++">
-                <sourceFileDefault pattern="(.+?)@.+?@.+?@.+?@.+?@.*"/>
-            </text>
-
-            <separator value="@"/>
-
-            <text displayName="Effector" required="true"
-                  pattern="[0-9A-Za-z\-\_]++">
-                <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.*"/>
-            </text>
+            <cvTermList displayName="Line And Effector" required="true"
+                        autoComplete="true"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/zlatic_rd_line_effector">
+                <sourceFileDefault pattern="(.+?@.+?)@.+?@.+?@.+?@.*"/>
+            </cvTermList>
 
             <separator value="@"/>
 
@@ -700,8 +701,7 @@
             <path path="[\\dm11.janelia.priv|/groups/zlatic]\zlaticlab\pipeline\rd\tracking-results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
-            <renameFieldValue fieldDisplayName="Genotype"/>
-            <renameFieldValue fieldDisplayName="Effector" prefix="@"/>
+            <renameFieldValue fieldDisplayName="Line And Effector"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Stimulus 1 Type"/>
             <renameFieldValue fieldDisplayName="Stimulus 1 Specs" prefix="_"/>
@@ -752,17 +752,12 @@
 
             <separator value="@"/>
 
-            <text displayName="Genotype" required="true"
-                  pattern="[0-9A-Za-z\-\_]++">
-                <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.+?@.*"/>
-            </text>
-
-            <separator value="@"/>
-
-            <text displayName="Effector" required="true"
-                  pattern="[0-9A-Za-z\-\_]++">
-                <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.+?@.*"/>
-            </text>
+            <cvTermList displayName="Line And Effector" required="true"
+                        autoComplete="true"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/zlatic_rd_line_effector">
+                <sourceFileDefault pattern="(.+?@.+?)@.+?@.+?@.+?@.*"/>
+            </cvTermList>
 
             <separator value="@"/>
 
@@ -906,116 +901,6 @@
                     minimumValue="0" maximumValue="100">
                 <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@(.+?)@.*"/>
             </number>
-
-            <separator value="@"/>
-
-            <text displayName="Suffix" required="false"
-                  copyable="false" pattern="^_?\d{3,}\w+$">
-                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"/>
-            </text>
-
-            <fileExtension/>
-
-        </dataFields>
-
-    </project>
-
-    <project name="Zlatic Lab: Same Day Demote Screen to RD Pipeline"
-            copyPreviousButtonVisible="false">
-
-        <inputFileFilter patternString=".+\.(png|blob|blobs|set|summary)"
-                         recursiveSearch="true"/>
-
-        <inputFileSorter sortAlgorithm="Path"/>
-
-        <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.janelia.priv|/groups/zlatic]\zlaticlab\pipeline\rd\tracking-results\" />
-            <renameFieldValue fieldDisplayName="Tracker"/>
-            <path path="/"/>
-            <renameFieldValue fieldDisplayName="Line"/>
-            <renameFieldValue fieldDisplayName="Effector" prefix="@"/>
-            <path path="/"/>
-            <renameFieldValue fieldDisplayName="Protocol"/>
-            <path path="/"/>
-            <renameFieldValue fieldDisplayName="Date"/>
-            <renameFieldValue fieldDisplayName="Time" prefix="_"/>
-        </outputDirectory>
-
-        <plugins>
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/${Line Lab}/${Line}.janelia-sage"/>
-                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
-                <property name="errorMessage" value="There is no '${Line Lab}' lab line named '${Line}' in the SAGE database."/>
-                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
-                <property name="validResources"
-                          value="http://sage.int.janelia.org/sage-ws/lines/none/Not_Applicable.janelia-sage"/>
-            </rowValidator>
-        </plugins>
-
-        <dataFields>
-            <date displayName="Date" required="true"
-                  datePattern="yyyyMMdd">
-                <sourceFileDateDefault pattern="(\d{8}).*"
-                                       fromDatePattern="yyyyMMdd"
-                                       toDatePattern="yyyyMMdd"
-                                       matchType="name"/>
-            </date>
-
-            <separator value="_"/>
-
-            <date displayName="Time" required="true"
-                  datePattern="HHmmss">
-                <sourceFileDateDefault pattern="^\d{8}_(\d{6}).*"
-                                       fromDatePattern="HHmmss"
-                                       toDatePattern="HHmmss"
-                                       matchType="name"/>
-            </date>
-
-            <separator value="@"/>
-
-            <cvTermList displayName="Line Lab" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/lab"
-                        displayNamePrefixedForValues="false"
-                        markedForTask="false">
-                <sourceFileMappedDefault pattern=".+?@(GMR_).+?@.+?@.+?@.+?@.+?@.*">
-                    <mappedValue from="GMR_" to="rubin"/>
-                </sourceFileMappedDefault>
-                <sourceFileMappedDefault pattern=".+?@(FCF_).+?@.+?@.+?@.+?@.+?@.*">
-                    <mappedValue from="FCF_" to="fly"/>
-                </sourceFileMappedDefault>
-            </cvTermList>
-
-            <text displayName="Line" required="true"
-                  pattern="[0-9A-Za-z\-\_]++">
-                <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.+?@.*"/>
-            </text>
-
-            <separator value="@"/>
-
-            <text displayName="Effector" required="true"
-                  pattern="[0-9A-Za-z\-\_]++">
-                <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.+?@.*"/>
-            </text>
-
-            <separator value="@"/>
-
-            <validValueList displayName="Tracker" required="true">
-                <sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.+?@.*"/>
-                <validValue value="t1"/>
-                <validValue value="t2"/>
-                <validValue value="t3"/>
-                <validValue value="t4"/>
-                <validValue value="t5"/>
-                <validValue value="t6"/>
-            </validValueList>
-
-            <separator value="@"/>
-
-            <cvTermList displayName="Protocol" required="true"
-                        displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/larval_olympiad_protocol.janelia-sage">
-                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@(.+?@.+?)@.*"/>
-            </cvTermList>
 
             <separator value="@"/>
 
