@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -22,7 +22,10 @@ import loci.formats.tiff.TiffParser;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -73,7 +76,7 @@ public class ZeissLSMReader {
   private static final int RECORDING_DESCRIPTION = 0x10000002;
   private static final int RECORDING_OBJECTIVE = 0x10000004;
   private static final int RECORDING_ZOOM = 0x10000016;
-//  private static final int RECORDING_SAMPLE_0TIME = 0x10000036;
+  private static final int RECORDING_SAMPLE_0TIME = 0x10000036;
   private static final int RECORDING_CAMERA_BINNING = 0x10000052;
 
   private static final int TRACK_ACQUIRE = 0x40000006;
@@ -1157,7 +1160,7 @@ public class ZeissLSMReader {
         public String description;
         public String name;
         public String binning;
-//        public String startTime;
+        public String startTime;
         // Objective data
         public String correction, immersion;
         public Integer magnification;
@@ -1179,6 +1182,26 @@ public class ZeissLSMReader {
 //            if (stamp > 0) {
 //                startTime = DateTools.convertDate(stamp, DateTools.MICROSOFT);
 //            }
+
+            // ==========================================
+            // ETT: begin hack to format MS Access recording time
+            final double recordingSampleTime = getDoubleValue(RECORDING_SAMPLE_0TIME);
+            final int daysSinceDec301899 = (int) recordingSampleTime;
+            if (daysSinceDec301899 > 0) {
+                Calendar c = new GregorianCalendar(1899, 12, 30);
+                c.add(Calendar.DAY_OF_YEAR, daysSinceDec301899);
+
+                final double fractionOfDay = recordingSampleTime - daysSinceDec301899;
+                final double secondsInDay = fractionOfDay * 60.0 * 60.0 * 24.0;
+
+                c.add(Calendar.SECOND, (int) secondsInDay);
+
+                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                startTime = sdf.format(c.getTime());
+                blockData.put(RECORDING_SAMPLE_0TIME, startTime);
+            }
+            // ETT: end hack to format MS Access recording time
+            // ==========================================
 
             double zoom = getDoubleValue(RECORDING_ZOOM);
 
