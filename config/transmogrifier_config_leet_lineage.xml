@@ -521,4 +521,86 @@
 
     </project>
 
+    <project name="Lee Lab: Fix Lineage" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.SlideCodeSetterPlugin">
+            </rowUpdater>
+
+            <!--<rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">-->
+            <!--<property name="Microscope Filename" value="Recording #1 Name" />-->
+            <!--<property name="Capture Date" value="Recording #1 Sample 0Time" />-->
+            <!--</rowUpdater>-->
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="lab" value="$STATIC:leet"/>
+                <property name="family" value="$STATIC:leet_pan_lineage"/>
+                <property name="relative_path" value="SAGE Name"/>
+                <property name="slide_code" value="${Slide ID}_${Slide Row}${Slide Column}"/>
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.XmlWriterPlugin">
+                <property name="directory" value="/Users/trautmane/Desktop/tzumin/fix2"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Slide Code" required="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="leet_pan_lineage"/>
+                    <property name="image_property" value="slide_code"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+            <text displayName="Slide ID"
+                  required="true"
+                  markedForTask="false"
+                  pattern="(BLM|Hey|SSM|MDS|Mut|RQZ|WYC)\d{5}">
+                <sourceFileDefault pattern=".*(RQZ\d{5}).*" matchType="path"/>
+            </text>
+
+            <text displayName="Slide Row" pattern="[A-Z]" required="true"
+                  markedForTask="false" convertToUpperCase="true">
+            </text>
+
+            <number displayName="Slide Column" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="99">
+            </number>
+
+            <text displayName="Tile" required="false"
+                  markedForTask="false">
+            </text>
+
+            <!--<text displayName="Microscope Filename" required="false" markedForTask="false"/>-->
+            <!--<date displayName="Capture Date" required="false" datePattern="yyyy-MM-dd HH:mm:ss" />-->
+
+            <text displayName="SAGE Name" required="true"
+                  copyable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="leet_pan_lineage"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+        </dataFields>
+
+    </project>
+
 </transmogrifierConfiguration>
