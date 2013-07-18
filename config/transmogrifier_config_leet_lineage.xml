@@ -113,9 +113,10 @@
             </number>
 
             <validValueList displayName="Image Family" required="true"
+                            sharedForAllSessionFiles="true"
                             autoComplete="true"
                             markedForTask="false">
-                <validValue displayName="Central Brain Lineage" value="leet_central_brain_lineage" default="true"/>
+                <validValue displayName="Central Brain Lineage" value="leet_central_brain_lineage"/>
                 <validValue displayName="PAN Lineage" value="leet_pan_lineage"/>
             </validValueList>
 
@@ -361,9 +362,10 @@
             </number>
 
             <validValueList displayName="Image Family" required="true"
+                            sharedForAllSessionFiles="true"
                             autoComplete="true"
                             markedForTask="false">
-                <validValue displayName="Central Brain Lineage" value="leet_central_brain_lineage" default="true"/>
+                <validValue displayName="Central Brain Lineage" value="leet_central_brain_lineage"/>
                 <validValue displayName="PAN Lineage" value="leet_pan_lineage"/>
             </validValueList>
 
