@@ -32,11 +32,13 @@ public class ImageDataDefaultValue
     private String propertyName;
     private int relativePathDepth;
     private boolean useBaseNameSearch;
+    private Pattern baseNamePattern;
     private ImageDataCache dataCache;
 
     public ImageDataDefaultValue() {
         this.relativePathDepth = 1;
         this.useBaseNameSearch = false;
+        this.baseNamePattern = DEFAULT_BASE_NAME_PATTERN;
     }
 
     public void init(Map<String, String> properties)
@@ -75,6 +77,18 @@ public class ImageDataDefaultValue
             this.useBaseNameSearch = Boolean.valueOf(baseNameSearch);
         }
 
+        final String baseNamePatternString = properties.get("baseNamePattern");
+        if (StringUtil.isDefined(baseNamePatternString)) {
+            try {
+                this.baseNamePattern = Pattern.compile(baseNamePatternString);
+            } catch (Exception e) {
+                throw new ConfigurationException(
+                        INIT_FAILURE_MSG +
+                        "Please specify a valid value for the " +
+                        "'baseNamePattern' plug-in property.", e);
+            }
+        }
+
         try {
             this.dataCache = ImageDataCache.getCache(getDbConfigurationKey(),
                                                      family);
@@ -96,7 +110,7 @@ public class ImageDataDefaultValue
 
             String relativePath = null;
             if (useBaseNameSearch) {
-                Matcher m = BASE_NAME.matcher(file.getName());
+                Matcher m = baseNamePattern.matcher(file.getName());
                 if (m.matches() && (m.groupCount() == 1)) {
                     relativePath = '%' + m.group(1) + '%';
                 }
@@ -119,6 +133,6 @@ public class ImageDataDefaultValue
     private static final String INIT_FAILURE_MSG =
             "Failed to initialize Image Data Default Value plug-in.  ";
 
-    private static final Pattern BASE_NAME =
+    private static final Pattern DEFAULT_BASE_NAME_PATTERN =
             Pattern.compile("(?:^.*_|^)([A-Z]+_\\d{17}_\\d+).*");
 }
