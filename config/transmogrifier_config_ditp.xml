@@ -43,6 +43,7 @@
                 <property name="effector" value="Effector"/>
                 <property name="slide_code" value="Slide Code"/>
                 <!-- <property name="base_url" value="$STATIC:http://img.int.janelia.org/ditp-image/ditp-confocal-data/"/> -->
+                <property name="channel_spec" value="$STATIC:sr"/>
                 <property name="base_path" value="$STATIC:/groups/ditp/ditp/confocalStacks/"/>
                 <property name="microscope_filename"/>
             </rowListener>
