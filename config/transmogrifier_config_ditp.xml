@@ -208,5 +208,77 @@
 
     </project>
 
+    <project name="DITP: Fix Slides" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <plugins>
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DitpSlideCodeSetterPlugin">
+            </rowUpdater>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <!--<property name="lab" value="$STATIC:ditp"/>-->
+                <property name="family" value="$STATIC:descending_interneurons"/>
+                <property name="relative_path" value="SAGE Name"/>
+                <property name="slide_code" value="${Slide ID}_${Slide Row}${Slide Column}"/>
+                <property name="tile" value="Area$MAP:Brain=brain|Ventral Nerve Cord=ventral_nerve_cord" />
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Slide ID" required="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="descending_interneurons"/>
+                    <property name="image_property" value="slide_code"/>
+                    <property name="baseNameSearch" value="true"/>
+                    <property name="baseNamePattern" value=".*(_\d{17}\.lsm)"/>
+                </pluginDefault>
+            </text>
+
+            <text displayName="Slide Row" pattern="[A-Z]" required="true"
+                  markedForTask="false" convertToUpperCase="true">
+            </text>
+
+            <number displayName="Slide Column" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="99">
+            </number>
+
+            <validValueList displayName="Area" required="true"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="descending_interneurons"/>
+                    <property name="image_property" value="area"/>
+                    <property name="baseNameSearch" value="true"/>
+                    <property name="baseNamePattern" value=".*(_\d{17}\.lsm)"/>
+                </pluginDefault>
+                <validValue value="Brain"/>
+                <validValue value="Ventral Nerve Cord"/>
+            </validValueList>
+
+            <text displayName="SAGE Name" required="true"
+                  copyable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="descending_interneurons"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                    <property name="baseNamePattern" value=".*(_\d{17}\.lsm)"/>
+                </pluginDefault>
+            </text>
+
+        </dataFields>
+
+    </project>
 
 </transmogrifierConfiguration>
