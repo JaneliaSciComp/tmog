@@ -123,6 +123,7 @@
                 <validValue value="t4"/>
                 <validValue value="t5"/>
                 <validValue value="t6"/>
+                <validValue value="t14"/>
             </validValueList>
 
             <separator value="@"/>
@@ -294,6 +295,7 @@
                 <validValue value="t4"/>
                 <validValue value="t5"/>
                 <validValue value="t6"/>
+                <validValue value="t14"/>
             </validValueList>
 
             <separator value="@"/>
@@ -400,6 +402,7 @@
                 <validValue value="t4"/>
                 <validValue value="t5"/>
                 <validValue value="t6"/>
+                <validValue value="t14"/>
             </validValueList>
 
             <separator value="@"/>
@@ -663,6 +666,7 @@
                 <validValue value="t4"/>
                 <validValue value="t5"/>
                 <validValue value="t6"/>
+                <validValue value="t14"/>
             </validValueList>
 
             <separator value="@"/>
@@ -753,7 +757,7 @@
                         autoComplete="true"
                         displayNamePrefixedForValues="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/zlatic_rd_line_effector">
-                <sourceFileDefault pattern="(.+?@.+?)@.+?@.+?@.+?@.*"/>
+                <sourceFileDefault pattern=".+?@(.+?@.+?)@.+?@.+?@.+?@.*"/>
             </cvTermList>
 
             <separator value="@"/>
@@ -766,6 +770,7 @@
                 <validValue value="t4"/>
                 <validValue value="t5"/>
                 <validValue value="t6"/>
+                <validValue value="t14"/>
             </validValueList>
 
             <separator value="@"/>
