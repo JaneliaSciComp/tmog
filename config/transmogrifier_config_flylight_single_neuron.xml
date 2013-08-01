@@ -195,7 +195,7 @@
 
     </project>
 
-    <project name="Fly Light - Split MCFO - scope to confocalStacks">
+    <project name="Fly Light - MCFO - scope to confocalStacks">
 
         <inputFileFilter patternString=".+\.lsm" />
 
@@ -310,7 +310,7 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;user=user:nerna"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;user=user:nerna&amp;user=user:wolfft"
                             autoComplete="true">
             </webServiceList>
 
