@@ -43,6 +43,7 @@
                                  http://sage.int.janelia.org/sage-ws/lines/none/MB049B.janelia-sage,
                                  http://sage.int.janelia.org/sage-ws/lines/none/MB049B_tubby.janelia-sage,
                                  http://sage.int.janelia.org/sage-ws/lines/none/tim.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/none/timA3crygal80.janelia-sage,
                                  http://sage.int.janelia.org/sage-ws/lines/none/timA3.janelia-sage"/>
             </rowValidator>
 
@@ -64,6 +65,7 @@
                 <validValue value="LarvalOlympiad"/>
                 <validValue value="Neuromodulators"/>
                 <validValue value="Riddiford"/>
+                <validValue value="Thermotaxis"/>
 
             </validValueList>
 
@@ -218,9 +220,12 @@
                     <mappedValue from="N" to="NoEffector_0_9999"/>
                     <mappedValue from="UAS-TNT_2_0003" to="UAS_TNT_2_0003"/>
                     <mappedValue from="VDRC_Kir2_1" to="VDRC_UAS_GAL80ts_Kir21_23_0013"/>
+                    <mappedValue from="MN_Kir2_1" to="UAS_FRT_Kir21_3_0024"/>
                 </sourceFileMappedDefault>
 
                 <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.*" />
+
+                <validValue value="ChrimsonRetinal" />
 
             </cvTermList>
 
