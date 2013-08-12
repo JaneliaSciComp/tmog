@@ -39,6 +39,8 @@
                 <property name="ihc_batch" value="Batch Name"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="tissue_orientation" value="Tissue Orientation"/>
+                <property name="vt_id_found" value="VT Found"/>
+                <property name="vt_library_match" value="VT Match"/>
             </rowListener>
 
         </plugins>
@@ -138,6 +140,18 @@
                             markedForTask="false">
                 <validValue displayName="Screening" value="Screening" default="true"/>
                 <validValue displayName="Rework" value="Rework"/>
+            </validValueList>
+
+            <validValueList displayName="VT Found" required="true"
+                            markedForTask="false">
+                <validValue value="Y" default="true"/>
+                <validValue value="N"/>
+            </validValueList>
+
+            <validValueList displayName="VT Match" required="true"
+                            markedForTask="false">
+                <validValue value="Y" default="true"/>
+                <validValue value="N"/>
             </validValueList>
 
         </dataFields>
