@@ -14,11 +14,6 @@
 
         <plugins>
 
-            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
-                <property name="plugin-scale" value="0" />
-                <property name="Microscope Filename" value="Recording #1 Name" />
-            </rowUpdater>
-
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
                 <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
                 <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
@@ -41,7 +36,7 @@
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="tissue_orientation" value="Tissue Orientation"/>
                 <property name="effector" value="Effector"/>
-                <property name="slide_code" value="Slide Code"/>
+                <property name="slide_code" value="${Slide Number}_${Slide Location}"/>
                 <!-- <property name="base_url" value="$STATIC:http://img.int.janelia.org/ditp-image/ditp-confocal-data/"/> -->
                 <property name="channel_spec" value="$STATIC:sr"/>
                 <property name="base_path" value="$STATIC:/groups/ditp/ditp/confocalStacks/"/>
@@ -153,16 +148,15 @@
                 <validValue value="Ying-Jou Lee"/>
             </validValueList>
 
-            <text displayName="Slide Code" required="true"
-                  pattern="\d{8}_.+"
-                  copyable="false"
+            <text displayName="Slide Number" required="true"
+                  pattern="\d{8}_\d{2}"
                   markedForTask="false">
-                <sourceFileDefault pattern="^(\d{8}_.+)_Sum.lsm"/>
+                <sourceFileDefault pattern="^(\d{8}_\d{2}).+_Sum.lsm"/>
             </text>
 
-            <text displayName="Microscope Filename" required="true"
-                  editable="false"
-                  copyable="false"
+            <text displayName="Slide Location" required="true"
+                  pattern="[A-Z][0-9]"
+                  convertToUpperCase="true"
                   markedForTask="false">
             </text>
 
