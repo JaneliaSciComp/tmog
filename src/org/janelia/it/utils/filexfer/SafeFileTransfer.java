@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -13,7 +13,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,58 +36,6 @@ public class SafeFileTransfer {
     public static final int BUFFER_SIZE = 1024 * 1024;
 
     /**
-     * If srcLocation is a directory, the whole directory will be moved.  Pretty much the
-     * equivelent of a recursive copy with a recursive delete after verification that the
-     * copy was successful.
-     * @param srcLocation   source to move
-     * @param destLocation  target for move
-     * @param overWriteExisting - this is applied to the destLoction only.  If set to true,
-     * the destLocation will be deleted before srcLocation is moved to destLocation.  The side-
-     * effect is that files from src will not merge with dest ever as this would be more of a
-     * copy behavior instead of a move behavior
-     * @throws FileMoveFailedException
-     *   if any errors occur during the move.
-     */
-    public static void move (File srcLocation,
-                             File destLocation,
-                             boolean overWriteExisting)
-            throws FileMoveFailedException{
-         try {
-             if (!srcLocation.exists()) throw new FileMoveFailedException("Cannot move non-existant file!");
-             if (!overWriteExisting && destLocation.exists()) throw new FileMoveFailedException("Destination "+destLocation+" exists!");
-             destLocation.getParentFile().mkdirs();
-             if (overWriteExisting && destLocation.exists()) destLocation.delete();
-             boolean success=srcLocation.renameTo(destLocation);
-             if (success) {
-                 LOG.info("Moved successfully");
-                 return;
-             }
-
-             byte[] hashCode=recursiveCopy(srcLocation,destLocation);
-             success=recursiveHashValidation(destLocation, hashCode);
-             if (!success) {
-                 destLocation.delete();
-                 throw new FileMoveFailedException("Cannot move "+srcLocation.getPath()+" to "+
-                         destLocation.getPath()+" and maintain data integrity");
-             }
-             else {
-                 LOG.info("Copied successfully");
-                 if (!recursiveDelete(srcLocation)){
-                    recursiveDelete(destLocation);
-                    throw new FileMoveFailedException("Copy of "+srcLocation.getPath()+" to "+
-                         destLocation.getPath()+" was successful, but cannot delete src location");
-                 }
-                 else {
-                    LOG.info("Deleted src successfully");
-                 }
-             }
-         }
-         catch (Throwable th){
-             throw new FileMoveFailedException("File could not be moved",th);
-         }
-    }
-
-    /**
      * If srcLocation is a directory, the whole directory will be copied. Will not merge
      * files with existing directory like standard copy.  For existing directories, set
      * overWrite to true or get exception.
@@ -101,69 +48,73 @@ public class SafeFileTransfer {
      * @throws FileCopyFailedException
      *   if any errors occur during the copy.
      */
-    public static void copy (File srcLocation,
-                             File destLocation,
-                             boolean overWriteExisting)
-            throws FileCopyFailedException{
+    public static void copy(File srcLocation,
+                            File destLocation,
+                            boolean overWriteExisting)
+            throws FileCopyFailedException {
+
+        final String srcPath = srcLocation.getAbsolutePath();
+        final String destPath = destLocation.getAbsolutePath();
 
         if (LOG.isInfoEnabled()) {
-            LOG.info("starting copy of " + srcLocation.getAbsolutePath() +
-                     " to " + destLocation.getAbsolutePath());
+            LOG.info("starting copy of " + srcPath + " to " + destPath);
         }
 
-         try {
-             if (!srcLocation.exists()) throw new FileMoveFailedException("Cannot copy non-existent file!");
-             if (!overWriteExisting && destLocation.exists()) throw new FileCopyFailedException("Destination "+destLocation+" exists!");
-             destLocation.getParentFile().mkdirs();
-             if (overWriteExisting && destLocation.exists()) destLocation.delete();
-             final long copyStartTime = System.currentTimeMillis();
-             byte[] hashCode=recursiveCopy(srcLocation,destLocation);
-             final long valStartTime = System.currentTimeMillis();
-             boolean success=recursiveHashValidation(destLocation, hashCode);
-             final long valStopTime = System.currentTimeMillis();
-             if (success) {
-                 if (LOG.isInfoEnabled()) {
-                     final double copyDurationSeconds =
-                             (valStartTime - copyStartTime) / 1000.0;
-                     final double valDurationSeconds =
-                             (valStopTime - valStartTime) / 1000.0;
-                     logTransferStats("copied",
-                                      hashCode,
-                                      srcLocation,
-                                      destLocation,
-                                      copyDurationSeconds,
-                                      valDurationSeconds);
-                 }
-             } else {
-                 destLocation.delete();
-                 throw new FileCopyFailedException("Cannot copy "+srcLocation.getPath()+" to "+
-                         destLocation.getPath()+" and maintain data integrity");
-             }
-         }
-         catch (Throwable th){
-             throw new FileCopyFailedException("File could not be copied",th);
-         }
-    }
+        try {
 
-    public static boolean recursiveDelete(File srcLocation)
-        throws FileNotFoundException {
-
-        boolean success=true;
-        if (srcLocation.isDirectory()){
-           File[] files=srcLocation.listFiles();
-            for (File file : files) {
-                success = success & recursiveDelete(file);
+            if (! srcLocation.exists()) {
+                throw new IOException("cannot copy non-existent file " + srcPath);
             }
-            success=success&srcLocation.delete();
 
-        }
-        else {
-            success=srcLocation.delete();
-            return success;
-        }
-        return success;
+            if (destLocation.exists()) {
+                if (overWriteExisting) {
+                    if (! destLocation.delete()) {
+                        throw new IOException("failed to delete existing file " + destPath);
+                    }
+                } else {
+                    throw new IOException("destination " + destPath + " already exists");
+                }
+            } else {
+                createParentDirectoriesIfNecessary(destLocation);
+            }
+
+            final long copyStartTime = System.currentTimeMillis();
+            byte[] hashCode = recursiveCopy(srcLocation, destLocation);
+            final long valStartTime = System.currentTimeMillis();
+            boolean success = recursiveHashValidation(destLocation, hashCode);
+            final long valStopTime = System.currentTimeMillis();
+            if (success) {
+                if (LOG.isInfoEnabled()) {
+                    final double copyDurationSeconds = (valStartTime - copyStartTime) / 1000.0;
+                    final double valDurationSeconds = (valStopTime - valStartTime) / 1000.0;
+                    logTransferStats("copied",
+                                     hashCode,
+                                     srcLocation,
+                                     destLocation,
+                                     copyDurationSeconds,
+                                     valDurationSeconds);
+                }
+            } else {
+                if (! destLocation.delete()) {
+                    LOG.warn("failed to delete " + destPath + " after unsuccessful copy");
+                 }
+                 throw new IOException("failed to copy " + srcPath + " to " + destPath +
+                                       " and maintain data integrity");
+             }
+         } catch (Throwable th) {
+             throw new FileCopyFailedException("failed to copy " + srcPath + " to " + destPath, th);
+         }
     }
 
+    public static void createParentDirectoriesIfNecessary(File file) throws IOException {
+        final File parentDirectory = file.getParentFile();
+        if (! parentDirectory.exists()) {
+            if (! parentDirectory.mkdirs() ) {
+                throw new IOException("failed to create parent directory " +
+                                      parentDirectory.getAbsolutePath());
+            }
+        }
+    }
 
     private static byte[] recursiveCopy(File srcLocation,
                                         File destLocation)
@@ -178,15 +129,16 @@ public class SafeFileTransfer {
                                             MessageDigest digest)
         throws IOException {
         if (srcLocation.isDirectory()){
-           File[] files=srcLocation.listFiles();
-           File destination;
-            for (File file : files) {
-                destination = new File(destLocation, file.getName());
-                recursiveCopyHelper(file, destination, digest);
+            final File[] files = srcLocation.listFiles();
+            if (files != null) {
+                File destination;
+                for (File file : files) {
+                    destination = new File(destLocation, file.getName());
+                    recursiveCopyHelper(file, destination, digest);
+                }
             }
-        }
-        else {
-            destLocation.getParentFile().mkdirs();
+        } else {
+            createParentDirectoriesIfNecessary(destLocation);
             InputStream inStream=new BufferedInputStream(new FileInputStream(srcLocation));
             OutputStream outStream=new BufferedOutputStream(new FileOutputStream(destLocation));
             addInputStreamToOuputStream(inStream,outStream,digest);
@@ -310,26 +262,19 @@ public class SafeFileTransfer {
         }
     }
 
-    private static final SimpleDateFormat SDF =
-            new SimpleDateFormat("yyyy-MM-dd hh:mm:ss'.0'");
-
     public static void main(String[] args) {
         boolean isValid = false;
         boolean isCopy = false;
-        boolean isMove = false;
-        boolean isDigest = false;
         File srcLocation = null;
         File destLocation = null;
         boolean overWrite = false;
         if (args.length > 1) {
             String action = args[0].toLowerCase();
             isCopy = "copy".equals(action);
-            isMove = "move".equals(action);
-            isDigest = "digest".equals(action);
             srcLocation = new File(args[1]);
-            if (isDigest) {
+            if ("digest".equals(action)) {
                 isValid = true;
-            } else if ((isCopy || isMove) && (args.length > 2)) {
+            } else if (isCopy && (args.length > 2)) {
                 destLocation = new File(args[2]);
                 if (args.length > 3) {
                     overWrite = Boolean.valueOf(args[3]);
@@ -349,14 +294,12 @@ public class SafeFileTransfer {
         }
         try {
             long t1=System.currentTimeMillis();
-            if (isMove) {
-                move(srcLocation, destLocation, overWrite);
-            }
-            else if (isCopy) {
+            if (isCopy) {
                 copy(srcLocation, destLocation, overWrite);
-            } else if (isDigest) {
+            } else { // isDigest
                 byte[] digestValue = getDigest(srcLocation);
                 StringBuilder sb = new StringBuilder(512);
+                final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss'.0'");
                 sb.append(SDF.format(new Date()));
                 sb.append(" Recalculated ");
                 sb.append(DIGEST_ALGORITHM);

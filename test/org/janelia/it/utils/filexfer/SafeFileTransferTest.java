@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -66,6 +66,29 @@ public class SafeFileTransferTest {
                 validationUtil.calculateDigest(targetFile);
         Assert.assertEquals("copy and target digests do not match",
                             sourceDigestBytes, copyDigestBytes);
+
+        SafeFileTransfer.copy(sourceFile, targetFile, true);
+
+        final DigestBytes overwriteCopyDigestBytes =
+                validationUtil.calculateDigest(targetFile);
+        Assert.assertEquals("overwrite copy and target digests do not match",
+                            sourceDigestBytes, overwriteCopyDigestBytes);
+
+        try {
+            SafeFileTransfer.copy(sourceFile, targetFile, false);
+            Assert.fail("overwrite of exiting file should have caused exception");
+        } catch (FileCopyFailedException e) {
+            LOG.info("test passed: expected exception thrown for overwrite", e);
+        }
+
+        final File nonExistentSourceFile = new File(".", "this-does-not-exist.txt");
+        try {
+            SafeFileTransfer.copy(nonExistentSourceFile, targetFile, false);
+            Assert.fail("copy of non-existent file should have caused exception");
+        } catch (FileCopyFailedException e) {
+            LOG.info("test passed: expected exception thrown for non-existent file", e);
+        }
+
     }
 
     @Test
