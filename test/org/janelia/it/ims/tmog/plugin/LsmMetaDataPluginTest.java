@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -86,7 +86,7 @@ public class LsmMetaDataPluginTest
      *   if any unexpected errors occur.
      */
     public void testInsertMetaDataIntoSmallFile() throws Exception {
-        internalInsertMetaDataTest("small", "testFileSmall.lsm");
+        runTestIfFileExists("small", "testFileSmall.lsm");
     }
 
     /**
@@ -96,13 +96,23 @@ public class LsmMetaDataPluginTest
      *   if any unexpected errors occur.
      */
     public void testInsertMetaDataIntoBigFile() throws Exception {
-        internalInsertMetaDataTest("big", "testFileBig.lsm");
+        runTestIfFileExists("big", "testFileBig.lsm");
+    }
+
+    private void runTestIfFileExists(String context,
+                                     String srcFileName) throws Exception {
+        final File srcFile = new File(testDirectory, srcFileName);
+        if (srcFile.exists()) {
+            internalInsertMetaDataTest(context, srcFile);
+        } else {
+            System.out.println("skipping " + this.getClass().getName() + " test since " +
+                               srcFile.getAbsolutePath() + " does not exist");
+        }
     }
 
     private void internalInsertMetaDataTest(String context,
-                                            String srcFileName) throws Exception {
+                                            File srcFile) throws Exception {
 
-        File srcFile = new File(testDirectory, srcFileName);
         assertTrue("missing " + context + " source file: " +
                    srcFile.getAbsolutePath() + ", ignore this failure " +
                    "unless you intend to test metadata insertion",
