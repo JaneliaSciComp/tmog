@@ -250,31 +250,6 @@ public class SageImageDaoTest
         assertEquals("invalid update number", 2, specimenNumber);
     }
 
-    /**
-     * Tests the addLine method.
-     *
-     * @throws Exception
-     *   if any unexpected errors occur.
-     */
-    public void testAddLine() throws Exception {
-        isLineCleanupNeeded = true;
-
-        Line line = new Line(testLineName, "flylight");
-        Line dbdLine = new Line(LINE_NAME_1, LINE_LAB_1);
-        Line adLine = new Line(LINE_NAME_2, LINE_LAB_2);
-        line.setParentA(dbdLine);
-        line.setParentB(adLine);
-
-        Line addedLine = dao.addLine(line);
-
-        assertNotNull("missing line id", addedLine.getId());
-
-        Line secondTryLine = dao.addLine(line);
-
-        assertEquals("multiple ids exist for line",
-                     addedLine.getId(), secondTryLine.getId());
-    }
-
     private void deleteImage(Integer imageId) throws Exception {
         if (imageId != null) {
             Connection connection = null;
