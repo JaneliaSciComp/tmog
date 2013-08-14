@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2013 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -8,7 +8,6 @@
 package org.janelia.it.utils.filexfer;
 
 import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin;
 
 import java.io.Closeable;
 import java.io.File;
@@ -483,7 +482,7 @@ public class FileTransferUtil {
             }
         } else {
             System.out.println("\n\nUSAGE: java " +
-                               LsmMetaDataPlugin.class.getName() +
+                               FileTransferUtil.class.getName() +
                                " <digest algorithm> <file name>\n\n");
         }
 
