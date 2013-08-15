@@ -265,6 +265,7 @@
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="data_set" value="Data Set"/>
                 <property name="channel_spec" value="Channel Specification"/>
+                <property name="lamina_percentage" value="Lamina"/>
                 <property name="lsm_detection_channel_1_detector_gain" value="Channel 1 Gain"/>
                 <property name="lsm_detection_channel_2_detector_gain" value="Channel 2 Gain"/>
                 <property name="lsm_detection_channel_3_detector_gain" value="Channel 3 Gain"/>
@@ -434,6 +435,14 @@
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imaging_project">
                 <staticDefault value="mcfo"/>
             </cvTermList>
+
+            <validValueList displayName="Lamina" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="Full" value="100"/>
+                <validValue displayName="Partial" value="50"/>
+                <validValue displayName="None" value="" default="true"/>
+            </validValueList>
 
             <text displayName="Channel Specification" required="false"
                   markedForTask="false"
