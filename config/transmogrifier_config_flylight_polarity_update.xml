@@ -43,7 +43,7 @@
                 <!--<property name="created_by" value="Imager"/>-->
                 <property name="effector" value="Reporter"/>
                 <!--<property name="slide_code" value="Slide Code"/>-->
-                <!--<property name="tile" value="Tile"/>-->
+                <property name="tile" value="Tile"/>
                 <!--<property name="gender" value="Gender"/>-->
                 <!--<property name="area" value="Area"/>-->
                 <!--<property name="age" value="Age"/>-->
@@ -111,6 +111,30 @@
                     <property name="image_property" value="effector"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
+            </cvTermList>
+
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  editable="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="slide_code"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+            <cvTermList displayName="Tile" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        autoComplete="true"
+                        markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="tile"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <validValue displayName="VNC-Verify" value="vnc_verify"/>
             </cvTermList>
 
             <validValueList displayName="Screen State" required="true"
