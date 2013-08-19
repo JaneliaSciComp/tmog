@@ -561,9 +561,10 @@
             </cvTermList>
 
             <text displayName="SAGE Name" required="true"
+                  editable="false"
                   copyable="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="flylight_polarity"/>
+                    <property name="family" value="flylight_flip"/>
                     <property name="image_property" value="name"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
