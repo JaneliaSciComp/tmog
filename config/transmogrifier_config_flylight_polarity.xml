@@ -137,9 +137,12 @@
                     <mappedValue from="DM" to="dorsal_medial"/>
                     <mappedValue from="L" to="left_optic_lobe"/>
                     <mappedValue from="LwLam" to="left_optic_lobe_with_lamina"/>
+                    <mappedValue from="LLam" to="left_lamina"/>
+                    <mappedValue from="RLam" to="right_lamina"/>
+                    <mappedValue from="LamL" to="left_lamina"/>
+                    <mappedValue from="LamR" to="right_lamina"/>
                     <mappedValue from="LC" to="left_central"/>
                     <mappedValue from="LD" to="left_dorsal"/>
-                    <mappedValue from="LLam" to="left_lamina"/>
                     <mappedValue from="MES" to="mesothorasic"/>
                     <mappedValue from="META" to="metathorasic"/>
                     <mappedValue from="NEC-Ant" to="neck_anterior"/>
@@ -149,7 +152,6 @@
                     <mappedValue from="RwLam" to="right_optic_lobe_with_lamina"/>
                     <mappedValue from="RC" to="right_central"/>
                     <mappedValue from="RD" to="right_dorsal"/>
-                    <mappedValue from="RLam" to="right_lamina"/>
                     <mappedValue from="V" to="ventral"/>
                     <mappedValue from="VNC" to="ventral_nerve_cord"/>
                     <mappedValue from="VNC-Adj" to="vnc_verify"/>
