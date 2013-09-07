@@ -527,9 +527,9 @@
                 <!--<property name="mounting_protocol" value="Tissue Mounting Protocol"/>-->
                 <!--<property name="data_set" value="Data Set"/>-->
                 <!--<property name="channel_spec" value="Channel Specification"/>-->
-                <!--<property name="screen_state" value="Screen State"/>-->
-                <!--<property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>-->
-                <!--<property name="comment" value="Comment"/>-->
+                <property name="screen_state" value="Screen State"/>
+                <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
+                <property name="comment" value="Comment"/>
             </rowListener>
 
         </plugins>
@@ -558,6 +558,29 @@
                 </pluginDefault>
                 <validValue displayName="VNC-Verify" value="vnc_verify"/>
             </cvTermList>
+
+            <validValueList displayName="Screen State" required="true"
+                            markedForTask="false"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="screen_state"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <validValue value="pre_screen"/>
+                <validValue value="accepted" default="true"/>
+                <validValue value="accepted_public"/>
+                <validValue value="rejected"/>
+            </validValueList>
+
+            <text displayName="Comment" required="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="comment"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
 
             <text displayName="SAGE Name" required="true"
                   editable="false"
