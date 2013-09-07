@@ -3,6 +3,25 @@
 
     <global minimumVersion="2.9.4" frameSizePercentage="95"/>
 
+    <project name="Test Transfer Rate (no digest)" taskName="rename-without-delete">
+        <inputFileFilter patternString=".+\.lsm" />
+        <fileTransfer digestAlgorithm="none" />
+        <plugins/>
+        <dataFields>
+            <separator value="test_"/>
+            <fileName displayName="name" />
+        </dataFields>
+    </project>
+
+    <project name="Test Transfer Rate (default digest)" taskName="rename-without-delete">
+        <inputFileFilter patternString=".+\.lsm" />
+        <plugins/>
+        <dataFields>
+            <separator value="test_"/>
+            <fileName displayName="name" />
+        </dataFields>
+    </project>
+
     <project name="Fly Light Flip - confocalStacks - fix" taskName="collector">
 
         <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
