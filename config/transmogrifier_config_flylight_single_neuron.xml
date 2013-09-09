@@ -9,7 +9,7 @@
 
         <inputFileFilter patternString=".+\.lsm" />
 
-        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/flip/confocalStacks"
+        <outputDirectory basePath="[\\arch.janelia.priv|/archive]/flylight_archive/flip/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -199,14 +199,14 @@
 
         <inputFileFilter patternString=".+\.lsm" />
 
-        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/flip/confocalStacks"
+        <outputDirectory basePath="[\\arch.janelia.priv|/archive]/flylight_archive/flip/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[\\arch.janelia.priv|/archive]/flylight_archive/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="GAL4 Line" value="GAL4 Line" />
             </rowUpdater>
@@ -596,7 +596,7 @@
 
     </project>
 
-    <project name="Fly Light Flip - promote preScreen to confocalStacks" taskName="simple-move">
+    <project name="Fly Light Flip - promote preScreen to confocalStacks">
 
         <inputFileFilter patternString="^((?!FLAG_3_0048__).)*\.lsm$" />
 
@@ -609,22 +609,17 @@
         <inputFileSorter sortAlgorithm="Number"
                          patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
 
-        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/flip/confocalStacks"
+        <outputDirectory basePath="[\\arch.janelia.priv|/archive]/flylight_archive/flip/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
-
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.MoveValidator">
-                <property name="fromDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/from"/>
-                <property name="toDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/to"/>
-            </rowValidator>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.TileSetterPlugin">
             </rowUpdater>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[\\arch.janelia.priv|/archive]/flylight_archive/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="GAL4 Line" value="GAL4 Line" />
             </rowUpdater>
@@ -819,268 +814,7 @@
 
     </project>
 
-    <project name="Fly Light Flip - preScreen - dm11 to dm11" taskName="move-and-log-digest">
-
-        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
-
-        <!-- NOTES:
-             - first capturing group must be equal for second capturing group
-               to be used in numeric sort
-             - third capturing group only used when first and second are equal
-             - '(?: )' identifies a non-capturing group
-        -->
-        <inputFileSorter sortAlgorithm="Number"
-                         patternString=".*_(L)(\d++)(\.lsm)"/>
-
-        <outputDirectory>
-            <path path="[\\dm11.janelia.priv|/groups/flylight]/flylight/flip/preScreen/" />
-            <renameFieldValue fieldDisplayName="Mount Date"/>
-            <path path="_"/>
-            <renameFieldValue fieldDisplayName="Slide Number"/>
-            <path path="/"/>
-            <renameFieldValue fieldDisplayName="Magnification"/>
-        </outputDirectory>
-
-        <plugins>
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.MoveValidator">
-                <property name="fromDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/from"/>
-                <property name="toDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/to"/>
-            </rowValidator>
-
-            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
-                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
-                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
-                <property name="plugin.root-xpath" value="projectCross" />
-                <property name="Line" value="parent1StockName" />
-                <property name="Reporter" value="reporter" />
-            </rowUpdater>
-
-            <!--
-                  The companion file listener (for log files) should be the
-                  last defined plug-in to ensure that log files are only
-                  copied if the source lsm processing succeeds.
-            -->
-            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
-                <property name="sourceSuffix" value=".lsm"/>
-                <property name="companionSuffix" value="_log.csv"/>
-                <property name="deleteAfterCopy" value="true"/>
-            </rowListener>
-        </plugins>
-
-        <dataFields>
-
-            <text displayName="Line" required="true"
-                  suffix="__">
-                <sourceFileDefault pattern="^(.*)__\d{5}_.*"/>
-            </text>
-
-            <number displayName="Cross Serial Number" required="true"
-                  minimumValue="1"
-                  maximumValue="99999"
-                  suffix="_">
-                <sourceFileDefault pattern="^.*__(\d{5})_\d{8}_.*"/>
-            </number>
-
-            <date displayName="Mount Date" required="true"
-                  datePattern="yyyyMMdd"
-                  suffix="_">
-                <sourceFileDateDefault pattern=".*T._(\d{8})_.*"
-                                       fromDatePattern="yyyyMMdd"
-                                       toDatePattern="yyyyMMdd"/>
-            </date>
-
-            <text displayName="Slide Number" required="true"
-                  pattern="[A-Za-z]*\d+"
-                  suffix="_">
-                <sourceFileDefault pattern=".*T._\d{8}_(\d+)_.*"/>
-            </text>
-
-            <text displayName="Slide Location" required="true"
-                  pattern="[A-Z]\d\d?"
-                  convertToUpperCase="true"
-                  suffix="_">
-            </text>
-
-            <number displayName="Zeiss Brain" required="true"
-                    minimumValue="1"
-                    maximumValue="99"
-                    padFormat="20"
-                    copyable="false"
-                    prefix="zb"
-                    suffix="_">
-                <sourceFileDefault pattern="B(\d+)_T.*"/>
-            </number>
-
-            <number displayName="Zeiss Tile" required="true"
-                    minimumValue="1"
-                    maximumValue="99"
-                    padFormat="20"
-                    prefix="zt"
-                    suffix="_">
-                <sourceFileDefault pattern="B\d+_T(\d+)_.*"/>
-            </number>
-
-            <validValueList displayName="Magnification" required="true"
-                            autoComplete="true"
-                            suffix="_">
-                <validValue value="20X"/>
-                <validValue value="63X"/>
-            </validValueList>
-
-            <!-- channel information stub -->
-            <separator value="0-0-0_"/>
-
-            <text displayName="Reporter"
-                  prefix="_"
-                  suffix="__">
-            </text>
-
-            <text displayName="Suffix" required="true"
-                  pattern="R\d+_L\d+"
-                  copyable="false">
-                <sourceFileDefault pattern=".*_(R\d+_L\d+).*"/>
-            </text>
-
-            <separator value="_"/>
-            <runTime datePattern="yyyyMMddHHmmssSSS" />
-            <separator value=".lsm"/>
-
-        </dataFields>
-
-    </project>
-
-    <project name="Fly Light Flip - preScreen - fix" taskName="simple-move">
-
-        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
-
-        <!-- NOTES:
-             - first capturing group must be equal for second capturing group
-               to be used in numeric sort
-             - third capturing group only used when first and second are equal
-             - '(?: )' identifies a non-capturing group
-        -->
-        <inputFileSorter sortAlgorithm="Number"
-                         patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
-
-        <outputDirectory derivedFromSourceFile="true"/>
-
-        <plugins>
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.MoveValidator">
-                <property name="fromDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/from"/>
-                <property name="toDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/to"/>
-            </rowValidator>
-
-            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
-                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
-                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
-                <property name="plugin.root-xpath" value="projectCross" />
-                <property name="Line" value="parent1StockName" />
-                <property name="Reporter" value="reporter" />
-            </rowUpdater>
-
-            <!--
-                  The companion file listener (for log files) should be the
-                  last defined plug-in to ensure that log files are only
-                  copied if the source lsm processing succeeds.
-            -->
-            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
-                <property name="sourceSuffix" value=".lsm"/>
-                <property name="companionSuffix" value="_log.csv"/>
-                <property name="deleteAfterCopy" value="true"/>
-            </rowListener>
-        </plugins>
-
-        <dataFields>
-
-            <text displayName="Line" required="true"
-                  suffix="__">
-                <sourceFileDefault pattern="^(.*)__\d{5}_.*"/>
-            </text>
-
-            <number displayName="Cross Serial Number" required="true"
-                  minimumValue="1"
-                  maximumValue="99999"
-                  suffix="_">
-                <sourceFileDefault pattern="^.*__(\d{5})_\d{8}_.*"/>
-            </number>
-
-            <date displayName="Mount Date" required="true"
-                  datePattern="yyyyMMdd"
-                  suffix="_">
-                <sourceFileDateDefault pattern=".*_\d{5}_(\d{8})_.*"
-                                       fromDatePattern="yyyyMMdd"
-                                       toDatePattern="yyyyMMdd"/>
-            </date>
-
-            <text displayName="Slide Number" required="true"
-                  pattern="[A-Za-z]*\d+"
-                  suffix="_">
-                <sourceFileDefault pattern=".*_\d{5}_\d{8}_(\d+)_.*"/>
-            </text>
-
-            <text displayName="Slide Location" required="true"
-                  pattern="[A-Z]\d\d?"
-                  convertToUpperCase="true"
-                  suffix="_">
-                <sourceFileDefault pattern=".*_\d{5}_\d{8}_\d+_([A-Z]\d\d?).*"/>
-            </text>
-
-            <number displayName="Zeiss Brain" required="true"
-                    minimumValue="1"
-                    maximumValue="99"
-                    padFormat="20"
-                    copyable="false"
-                    prefix="zb"
-                    suffix="_">
-                <sourceFileDefault pattern=".*_zb(\d+)_.*"/>
-            </number>
-
-            <number displayName="Zeiss Tile" required="true"
-                    minimumValue="1"
-                    maximumValue="99"
-                    padFormat="20"
-                    prefix="zt"
-                    suffix="_">
-                <sourceFileDefault pattern=".*_zt(\d+)_.*"/>
-            </number>
-
-            <validValueList displayName="Magnification" required="true"
-                            autoComplete="true"
-                            suffix="_">
-                <sourceFileDefault pattern=".*_(\d\dX)_.*"/>
-                <validValue value="20X"/>
-                <validValue value="63X"/>
-            </validValueList>
-
-            <!-- channel information stub -->
-            <separator value="0-0-0_"/>
-
-            <text displayName="Reporter"
-                  prefix="_"
-                  suffix="__">
-                <sourceFileDefault pattern=".*_\d\dX_[^\-_]+\-[^\-_]+\-[^\-_]+__(.*)__.*"/>
-            </text>
-
-            <text displayName="Suffix" required="true"
-                  pattern="R\d+_L\d+"
-                  copyable="false">
-                <sourceFileDefault pattern=".*_(R\d+_L\d+).*"/>
-            </text>
-
-            <separator value="_"/>
-            <text displayName="tmog ID" required="true"
-                  editable="false"
-                  pattern="\d{17}">
-                <sourceFileDefault pattern=".*_(\d{17}).*"/>
-            </text>
-
-            <separator value=".lsm"/>
-
-        </dataFields>
-
-    </project>
-
-    <project name="Fly Light Cell Count - promote preScreen to confocalStacks" taskName="simple-move">
+    <project name="Fly Light Cell Count - promote preScreen to confocalStacks">
 
         <inputFileFilter patternString=".*FLAG_3_0048__.*\.lsm" />
 
@@ -1093,15 +827,10 @@
         <inputFileSorter sortAlgorithm="Number"
                          patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
 
-        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/flip/confocalStacks"
+        <outputDirectory basePath="[\\arch.janelia.priv|/archive]/flylight_archive/flip/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
-
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.MoveValidator">
-                <property name="fromDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/from"/>
-                <property name="toDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/to"/>
-            </rowValidator>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.TileSetterPlugin">
             </rowUpdater>

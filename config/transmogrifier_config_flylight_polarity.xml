@@ -9,14 +9,14 @@
 
         <inputFileFilter patternString=".+\.lsm" />
 
-        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/polarity/confocalStacks"
+        <outputDirectory basePath="[\\arch.janelia.priv|/archive]/flylight_archive/polarity/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[\\arch.janelia.priv|/archive]/flylight_archive/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="GAL4 Line" value="GAL4 Line" />
             </rowUpdater>
@@ -305,7 +305,7 @@
 
     </project>
 
-    <project name="Fly Light Polarity - promote preScreen to confocalStacks" taskName="simple-move">
+    <project name="Fly Light Polarity - promote preScreen to confocalStacks">
 
         <!-- NOTES:
              - first capturing group must be equal for second capturing group
@@ -316,22 +316,17 @@
         <inputFileSorter sortAlgorithm="Number"
                          patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
 
-        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/polarity/confocalStacks"
+        <outputDirectory basePath="[\\arch.janelia.priv|/archive]/flylight_archive/polarity/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
-
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.MoveValidator">
-                <property name="fromDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/from"/>
-                <property name="toDirectory" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/move-test/to"/>
-            </rowValidator>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.TileSetterPlugin">
             </rowUpdater>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[\\dm11.janelia.priv|/groups/flylight]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[\\arch.janelia.priv|/archive]/flylight_archive/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="GAL4 Line" value="GAL4 Line" />
             </rowUpdater>
