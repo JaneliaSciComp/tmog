@@ -1188,7 +1188,7 @@ public class ZeissLSMReader {
             final double recordingSampleTime = getDoubleValue(RECORDING_SAMPLE_0TIME);
             final int daysSinceDec301899 = (int) recordingSampleTime;
             if (daysSinceDec301899 > 0) {
-                Calendar c = new GregorianCalendar(1899, 12, 30);
+                Calendar c = new GregorianCalendar(1899, 11, 30); // month value is zero based!
                 c.add(Calendar.DAY_OF_YEAR, daysSinceDec301899);
 
                 final double fractionOfDay = recordingSampleTime - daysSinceDec301899;
