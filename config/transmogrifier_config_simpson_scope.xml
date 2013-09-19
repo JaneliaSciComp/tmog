@@ -218,10 +218,10 @@
                 <property name="tile" value="tile"/>
                 <property name="area" value="area"/>
                 <property name="channel_spec" value="channel_spec"/>
-                <property name="effector" value="effector"/>
-                <property name="gender" value="gender"/>
-                <property name="age" value="age"/>
-                <property name="mounting_protocol" value="mounting_protocol"/>
+                <!--<property name="effector" value="effector"/>-->
+                <!--<property name="gender" value="gender"/>-->
+                <!--<property name="age" value="age"/>-->
+                <!--<property name="mounting_protocol" value="mounting_protocol"/>-->
                 <property name="channels" value="channels"/>
                 <property name="objective" value="objective"/>
                 <property name="voxel_size_x" value="voxel_size_x"/>
@@ -244,11 +244,18 @@
             <text displayName="tile" required="true"><staticDefault value="brain"/></text>
             <text displayName="area" required="true"><staticDefault value="Brain"/></text>
             <text displayName="channel_spec" required="true"><staticDefault value="rs"/></text>
-            <text displayName="sage_line" required="true"><targetPropertyDefault propertyName="sage_line"/></text>
-            <text displayName="effector" required="false"><targetPropertyDefault propertyName="effector"/></text>
-            <text displayName="gender" required="false"><targetPropertyDefault propertyName="gender"/></text>
-            <text displayName="age" required="false"><targetPropertyDefault propertyName="age"/></text>
-            <text displayName="mounting_protocol" required="false"><targetPropertyDefault propertyName="mounting_protocol"/></text>
+            <webServiceList displayName="sage_line" required="true"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman&amp;lab=simpson&amp;lab=leet&amp;lab=zlatic"
+                            autoComplete="true">
+                <targetPropertyDefault propertyName="sage_line"/>
+            </webServiceList>
+            <!--<text displayName="effector" required="false"><targetPropertyDefault propertyName="effector"/></text>-->
+            <!--<text displayName="gender" required="false"><targetPropertyDefault propertyName="gender"/></text>-->
+            <!--<text displayName="age" required="false"><targetPropertyDefault propertyName="age"/></text>-->
+            <!--<text displayName="mounting_protocol" required="false"><targetPropertyDefault propertyName="mounting_protocol"/></text>-->
             <text displayName="channels" required="true"><targetPropertyDefault propertyName="channels"/></text>
             <text displayName="objective" required="true"><targetPropertyDefault propertyName="objective"/></text>
             <text displayName="voxel_size_x" required="true"><targetPropertyDefault propertyName="voxel_size_x"/></text>
