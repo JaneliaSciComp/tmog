@@ -170,5 +170,95 @@
     </project>
 
     <!-- TODO: create Optimizing config -->
-    
+
+    <project name="Simpson: IHC Optimizing from Nighthawk" taskName="collector">
+
+        <inputFileFilter patternString=".*\.xml">
+            <xmlPropertyFile targetGroupPath="data"
+                             relativeTargetPath="row"
+                             relativeTargetNamePath="path">
+
+                <targetProperty relativePath="capture_date"/>
+                <targetProperty relativePath="sage_line"/>
+                <targetProperty relativePath="effector"/>
+                <targetProperty relativePath="gender"/>
+                <targetProperty relativePath="age"/>
+                <targetProperty relativePath="mounting_protocol"/>
+                <targetProperty relativePath="channels"/>
+                <targetProperty relativePath="objective"/>
+                <targetProperty relativePath="voxel_size_x"/>
+                <targetProperty relativePath="voxel_size_y"/>
+                <targetProperty relativePath="voxel_size_z"/>
+                <targetProperty relativePath="dimension_x"/>
+                <targetProperty relativePath="dimension_y"/>
+                <targetProperty relativePath="dimension_z"/>
+            </xmlPropertyFile>
+        </inputFileFilter>
+
+        <inputFileSorter sortAlgorithm="LNumber"/>
+
+        <plugins>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="sample_number" value="urn:lsid:janelia.org:simpson_ihc_optimizing:sample_number" />
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="lab" value="$STATIC:simpson"/>
+                <property name="family" value="$STATIC:simpson_ihc_optimizing"/>
+                <property name="relativePathDepth" value="3"/>
+                <property name="line" value="sage_line"/>
+                <property name="capture_date" value="capture_date"/>
+                <property name="data_set" value="data_set"/>
+                <property name="slide_code" value="ihc_sample_${sample_number}"/>
+                <property name="tile" value="tile"/>
+                <property name="area" value="area"/>
+                <property name="channel_spec" value="channel_spec"/>
+                <property name="effector" value="effector"/>
+                <property name="gender" value="gender"/>
+                <property name="age" value="age"/>
+                <property name="mounting_protocol" value="mounting_protocol"/>
+                <property name="channels" value="channels"/>
+                <property name="objective" value="objective"/>
+                <property name="voxel_size_x" value="voxel_size_x"/>
+                <property name="voxel_size_y" value="voxel_size_y"/>
+                <property name="voxel_size_z" value="voxel_size_z"/>
+                <property name="dimension_x" value="dimension_x"/>
+                <property name="dimension_y" value="dimension_y"/>
+                <property name="dimension_z" value="dimension_z"/>
+                <property name="base_path" value="$STATIC:/groups/simpson/MicroscopeData/Immunohistochemistry_Optimizing/"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+            <pluginData displayName="sample_number" format="%06d"/>
+            <date displayName="capture_date" required="true" datePattern="yyyy-MM-dd HH:mm:ss">
+                <targetPropertyDefault propertyName="capture_date"/>
+            </date>
+            <text displayName="data_set" required="true"><staticDefault value="knappj_ihc_optimizing"/></text>
+            <text displayName="tile" required="true"><staticDefault value="brain"/></text>
+            <text displayName="area" required="true"><staticDefault value="Brain"/></text>
+            <text displayName="channel_spec" required="true"><staticDefault value="rs"/></text>
+            <text displayName="sage_line" required="true"><targetPropertyDefault propertyName="sage_line"/></text>
+            <text displayName="effector" required="false"><targetPropertyDefault propertyName="effector"/></text>
+            <text displayName="gender" required="false"><targetPropertyDefault propertyName="gender"/></text>
+            <text displayName="age" required="false"><targetPropertyDefault propertyName="age"/></text>
+            <text displayName="mounting_protocol" required="false"><targetPropertyDefault propertyName="mounting_protocol"/></text>
+            <text displayName="channels" required="true"><targetPropertyDefault propertyName="channels"/></text>
+            <text displayName="objective" required="true"><targetPropertyDefault propertyName="objective"/></text>
+            <text displayName="voxel_size_x" required="true"><targetPropertyDefault propertyName="voxel_size_x"/></text>
+            <text displayName="voxel_size_y" required="true"><targetPropertyDefault propertyName="voxel_size_y"/></text>
+            <text displayName="voxel_size_z" required="true"><targetPropertyDefault propertyName="voxel_size_z"/></text>
+            <text displayName="dimension_x" required="true"><targetPropertyDefault propertyName="dimension_x"/></text>
+            <text displayName="dimension_y" required="true"><targetPropertyDefault propertyName="dimension_y"/></text>
+            <text displayName="dimension_z" required="true"><targetPropertyDefault propertyName="dimension_z"/></text>
+        </dataFields>
+
+    </project>
+
 </transmogrifierConfiguration>
