@@ -512,10 +512,10 @@
                 <property name="lab" value="$STATIC:flylight"/>
                 <property name="family" value="$STATIC:flylight_flip"/>
                 <property name="relative_path" value="SAGE Name"/>
-                <!--<property name="line" value="GAL4 Line"/>-->
-                <!--<property name="cross_barcode" value="Cross Serial Number"/>-->
+                <property name="line" value="GAL4 Line"/>
+                <property name="cross_barcode" value="Cross Serial Number"/>
                 <!--<property name="created_by" value="Imager"/>-->
-                <!--<property name="effector" value="Reporter"/>-->
+                <property name="effector" value="Reporter"/>
                 <property name="slide_code" value="Slide Code"/>
                 <property name="tile" value="Tile"/>
                 <!--<property name="gender" value="Gender"/>-->
@@ -535,6 +535,43 @@
         </plugins>
 
         <dataFields>
+
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="99999"
+                    markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="cross_barcode"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </number>
+
+            <webServiceList displayName="GAL4 Line"
+                            markedForTask="false"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman&amp;lab=simpson&amp;lab=leet&amp;lab=zlatic&amp;lab=dickson"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="line"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </webServiceList>
+
+            <cvTermList displayName="Reporter"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="effector"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </cvTermList>
 
             <text displayName="Slide Code" required="true"
                   pattern="\d{8}_\d+_[A-Z]\d+"
