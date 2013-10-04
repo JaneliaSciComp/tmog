@@ -41,6 +41,7 @@
                 <property name="tissue_orientation" value="Tissue Orientation"/>
                 <property name="vt_id_found" value="VT Found"/>
                 <property name="vt_library_match" value="VT Match"/>
+                <!--<property name="channel_spec" value="$STATIC:sr"/>-->
             </rowListener>
 
         </plugins>
@@ -153,6 +154,84 @@
                 <validValue value="Y" default="true"/>
                 <validValue value="N"/>
             </validValueList>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Dickson - update SAGE" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="sample_number" value="urn:lsid:janelia.org:dickson_vt:sample_number" />
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="lab" value="$STATIC:dickson"/>
+                <property name="family" value="$STATIC:dickson"/>
+                <property name="relative_path" value="SAGE Name"/>
+                <!--<property name="line" value="GAL4 Line"/>-->
+                <!--<property name="cross_barcode" value="Cross Serial Number"/>-->
+                <!--<property name="created_by" value="Imager"/>-->
+                <!--<property name="effector" value="Reporter"/>-->
+                <!--<property name="slide_code" value="Slide Code"/>-->
+                <property name="slide_code" value="sample_BJD${sample_number}"/>
+                <!--<property name="tile" value="Tile"/>-->
+                <!--<property name="gender" value="Gender"/>-->
+                <!--<property name="area" value="Area"/>-->
+                <!--<property name="age" value="Age"/>-->
+                <!--<property name="full_age" value="Full Age"/>-->
+                <!--<property name="days_after_eclosion" value="Days After Eclosion"/>-->
+                <!--<property name="annotated_by" value="Annotator"/>-->
+                <!--<property name="mounting_protocol" value="Tissue Mounting Protocol"/>-->
+                <property name="data_set" value="Data Set"/>
+                <property name="channel_spec" value="$STATIC:sr"/>
+                <!--<property name="screen_state" value="Screen State"/>-->
+                <!--<property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>-->
+                <!--<property name="comment" value="Comment"/>-->
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=group:dicksonlab"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="dickson"/>
+                    <property name="image_property" value="data_set"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </webServiceList>
+
+            <pluginData displayName="sample_number" format="%06d"
+                        markedForTask="false"/>
+
+            <text displayName="SAGE Name" required="true"
+                  copyable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="dickson"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
 
         </dataFields>
 
