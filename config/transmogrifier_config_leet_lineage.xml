@@ -523,4 +523,129 @@
 
     </project>
 
+    <project name="Lee Lab: fix line names" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="family" value="Image Family"/>
+                <property name="relative_path" value="SAGE Name"/>
+                <property name="relativePathDepth" value="2"/>
+                <property name="line" value="GAL4 Line"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <webServiceList displayName="GAL4 Line" required="true"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=rubin&amp;lab=leet"
+                            autoComplete="true"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="leet_central_brain_lineage"/>
+                    <property name="image_property" value="line"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="leet_pan_lineage"/>
+                    <property name="image_property" value="line"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </webServiceList>
+
+            <text displayName="SAGE Name" required="true"
+                  copyable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="leet_central_brain_lineage"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="leet_pan_lineage"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Lee Lab: fix gender" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="family" value="Image Family"/>
+                <property name="relative_path" value="SAGE Name"/>
+                <property name="relativePathDepth" value="2"/>
+                <property name="gender" value="Gender"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <validValueList displayName="Gender" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="leet_central_brain_lineage"/>
+                    <property name="image_property" value="gender"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="leet_pan_lineage"/>
+                    <property name="image_property" value="gender"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f" default="true"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+
+            <text displayName="SAGE Name" required="true"
+                  copyable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="leet_central_brain_lineage"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="leet_pan_lineage"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+        </dataFields>
+
+    </project>
+
 </transmogrifierConfiguration>
