@@ -14,6 +14,14 @@
 
         <plugins>
 
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="Line" value="parent1StockName" />
+                <property name="UAS Reporter" value="reporter" />
+            </rowUpdater>
+
             <rowValidator className="org.janelia.it.wip.WipDataPlugin">
                 <property name="batchNameFieldName" value="Batch Name"/>
                 <property name="batchNumberFieldName" value="Batch Number"/>
@@ -24,6 +32,11 @@
                 <property name="batchNameFieldName" value="Batch Name"/>
                 <property name="batchNumberFieldName" value="Batch Number"/>
                 <property name="batchColorFieldName" value="Batch Color"/>
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="sample_number" value="urn:lsid:janelia.org:dickson_vt:sample_number" />
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
@@ -41,12 +54,23 @@
                 <property name="tissue_orientation" value="Tissue Orientation"/>
                 <property name="vt_id_found" value="VT Found"/>
                 <property name="vt_library_match" value="VT Match"/>
-                <!--<property name="channel_spec" value="$STATIC:sr"/>-->
+                <property name="cross_barcode" value="Cross Serial Number"/>
+                <property name="slide_code" value="sample_BJD${sample_number}"/>
+                <property name="tile" value="Area$MAP:b=brain|v=ventral_nerve_cord"/>
+                <property name="area" value="Area$MAP:b=Brain|v=Ventral Nerve Cord"/>
+                <property name="data_set" value="$STATIC:dicksonlab_vt_gal4_screen"/>
+                <property name="channel_spec" value="$STATIC:sr"/>
             </rowListener>
 
         </plugins>
 
         <dataFields>
+
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="99999"
+                    markedForTask="false">
+            </number>
 
             <!-- lines should all start with BJD -->
             <webServiceList displayName="Line" required="true"
@@ -69,7 +93,7 @@
             <separator value="A00"/>
 
             <validValueList displayName="Area" required="true">
-                <validValue displayName="s: Salivary Gland" value="s"/>
+                <!--<validValue displayName="s: Salivary Gland" value="s"/>-->
                 <validValue displayName="b: Brain" value="b"/>
                 <validValue displayName="v: Ventral Nerve Cord" value="v"/>
             </validValueList>
@@ -155,6 +179,9 @@
                 <validValue value="N"/>
             </validValueList>
 
+            <pluginData displayName="sample_number" format="%06d"
+                        markedForTask="false"/>
+
         </dataFields>
 
     </project>
@@ -182,47 +209,25 @@
                 <property name="lab" value="$STATIC:dickson"/>
                 <property name="family" value="$STATIC:dickson"/>
                 <property name="relative_path" value="SAGE Name"/>
-                <!--<property name="line" value="GAL4 Line"/>-->
-                <!--<property name="cross_barcode" value="Cross Serial Number"/>-->
-                <!--<property name="created_by" value="Imager"/>-->
-                <!--<property name="effector" value="Reporter"/>-->
-                <!--<property name="slide_code" value="Slide Code"/>-->
                 <property name="slide_code" value="sample_BJD${sample_number}"/>
-                <!--<property name="tile" value="Tile"/>-->
-                <!--<property name="gender" value="Gender"/>-->
-                <!--<property name="area" value="Area"/>-->
-                <!--<property name="age" value="Age"/>-->
-                <!--<property name="full_age" value="Full Age"/>-->
-                <!--<property name="days_after_eclosion" value="Days After Eclosion"/>-->
-                <!--<property name="annotated_by" value="Annotator"/>-->
-                <!--<property name="mounting_protocol" value="Tissue Mounting Protocol"/>-->
-                <property name="data_set" value="Data Set"/>
+                <property name="tile" value="Area$MAP:b=brain|v=ventral_nerve_cord"/>
+                <property name="area" value="Area$MAP:b=Brain|v=Ventral Nerve Cord"/>
+                <property name="data_set" value="$STATIC:dicksonlab_vt_gal4_screen"/>
                 <property name="channel_spec" value="$STATIC:sr"/>
-                <!--<property name="screen_state" value="Screen State"/>-->
-                <!--<property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>-->
-                <!--<property name="comment" value="Comment"/>-->
             </rowListener>
 
         </plugins>
 
         <dataFields>
 
-            <webServiceList displayName="Data Set" required="true"
-                            markedForTask="false"
-                            valueCreationPath="*/dataSet"
-                            relativeActualValuePath="dataSetIdentifier"
-                            relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=group:dicksonlab"
-                            autoComplete="true">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="dickson"/>
-                    <property name="image_property" value="data_set"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-            </webServiceList>
-
             <pluginData displayName="sample_number" format="%06d"
                         markedForTask="false"/>
+
+            <validValueList displayName="Area" required="true">
+                <sourceFileDefault pattern=".*A0\d(b|v).*" />
+                <validValue displayName="b: Brain" value="b"/>
+                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
+            </validValueList>
 
             <text displayName="SAGE Name" required="true"
                   copyable="false">
