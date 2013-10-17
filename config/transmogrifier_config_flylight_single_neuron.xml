@@ -257,7 +257,7 @@
                 <property name="effector" value="Reporter"/>
                 <property name="slide_code" value="Slide Code"/>
                 <property name="tile" value="Tile$MAP:vnc_verify=ventral_nerve_cord" />
-                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|brain_with_lamina=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_lamina=Brain|left_optic_lobe=Brain|left_optic_lobe_with_lamina=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_lamina=Brain|right_optic_lobe=Brain|right_optic_lobe_with_lamina=Brain|ventral=Brain|ventral_nerve_cord=VNC|vnc_verify=VNC-Verify"/>
+                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|brain_with_lamina=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_lamina=Brain|left_optic_lobe=Brain|left_optic_lobe_with_lamina=Brain|left_ventral=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_lamina=Brain|right_optic_lobe=Brain|right_optic_lobe_with_lamina=Brain|right_ventral=Brain|ventral=Brain|ventral_nerve_cord=VNC|vnc_verify=VNC-Verify"/>
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
                 <property name="full_age" value="Full Age"/>
@@ -332,6 +332,7 @@
                     <mappedValue from="LamR" to="right_lamina"/>
                     <mappedValue from="LC" to="left_central"/>
                     <mappedValue from="LD" to="left_dorsal"/>
+                    <mappedValue from="LV" to="left_ventral"/>
                     <mappedValue from="MES" to="mesothorasic"/>
                     <mappedValue from="META" to="metathorasic"/>
                     <mappedValue from="NEC-Ant" to="neck_anterior"/>
@@ -341,6 +342,7 @@
                     <mappedValue from="RwLam" to="right_optic_lobe_with_lamina"/>
                     <mappedValue from="RC" to="right_central"/>
                     <mappedValue from="RD" to="right_dorsal"/>
+                    <mappedValue from="RV" to="right_ventral"/>
                     <mappedValue from="V" to="ventral"/>
                     <mappedValue from="VNC" to="ventral_nerve_cord"/>
                     <mappedValue from="VNC-Adj" to="vnc_verify"/>
@@ -714,7 +716,7 @@
                 <property name="slide_code" value="Slide Code"/>
                 <property name="tile" value="Tile"/>
                 <property name="gender" value="Gender"/>
-                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|brain_with_lamina=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_lamina=Brain|left_optic_lobe=Brain|left_optic_lobe_with_lamina=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_lamina=Brain|right_optic_lobe=Brain|right_optic_lobe_with_lamina=Brain|ventral=Brain|ventral_nerve_cord=VNC|vnc_verify=VNC-Verify"/>
+                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|brain_with_lamina=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_lamina=Brain|left_optic_lobe=Brain|left_optic_lobe_with_lamina=Brain|left_ventral=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_lamina=Brain|right_optic_lobe=Brain|right_optic_lobe_with_lamina=Brain|right_ventral=Brain|ventral=Brain|ventral_nerve_cord=VNC|vnc_verify=VNC-Verify"/>
                 <property name="age" value="Age"/>
                 <property name="full_age" value="Full Age"/>
                 <property name="days_after_eclosion" value="Days After Eclosion"/>
