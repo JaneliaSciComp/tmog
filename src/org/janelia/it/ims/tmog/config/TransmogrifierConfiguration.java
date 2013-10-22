@@ -69,10 +69,17 @@ public class TransmogrifierConfiguration {
      */
     private static String getConfigFileName() throws ConfigurationException {
         if (configFileName == null) {
+
             String fileName = System.getProperty(CONFIG_FILE_PROPERTY_NAME);
             if (fileName == null) {
                 fileName = System.getProperty(SECURE_CONFIG_FILE_PROPERTY_NAME);
+                LOG.info("getConfigFileName: " + SECURE_CONFIG_FILE_PROPERTY_NAME +
+                         " property is '" + fileName + "'");
+            } else {
+                LOG.info("getConfigFileName: " + CONFIG_FILE_PROPERTY_NAME +
+                         " property is '" + fileName + "'");
             }
+
             if (fileName != null) {
                 String convertedFileName = PathUtil.convertPath(fileName);
                 File configFile = new File(convertedFileName);
