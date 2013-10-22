@@ -11,7 +11,6 @@ import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.field.DataField;
-import org.janelia.it.ims.tmog.filefilter.NumberComparator;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
@@ -21,13 +20,12 @@ import org.janelia.it.ims.tmog.target.FileTarget;
 import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Derives slide code values using slide id and L-number.
+ * Derives slide code values using slide id and current model ordering.
  * Requires slide id to be defined for all session images.
  *
  * @author Eric Trautman
@@ -45,7 +43,6 @@ public class SlideCodeSetterPlugin
 
     private int slideIdColumn;
     private boolean isColumnMappingComplete;
-    private NumberComparator targetComparator;
 
     private Map<File, SlideData> targetFileToSlideDataMap;
 
@@ -70,13 +67,6 @@ public class SlideCodeSetterPlugin
         this.slideRowColumnName = DEFAULT_SLIDE_ROW_COLUMN_NAME;
         this.slideColumnColumnName = DEFAULT_SLIDE_COLUMN_COLUMN_NAME;
         this.isColumnMappingComplete = false;
-
-        String sortPattern = config.getProperty("sortPattern");
-        if ((sortPattern == null) || (sortPattern.length() == 0)) {
-            // use L number if slide id matches
-            sortPattern = "(.*)_L(\\d++)[\\._]++(.*)";
-        }
-        this.targetComparator = new NumberComparator(sortPattern);
 
         this.targetFileToSlideDataMap = new HashMap<File, SlideData>();
     }
@@ -191,18 +181,6 @@ public class SlideCodeSetterPlugin
         for (String key : slideIdToTargetListMap.keySet()) {
 
             targetList = slideIdToTargetListMap.get(key);
-
-            for (FileTarget ft : targetList) {
-                if (! targetComparator.isNumberInTargetName(ft)) {
-                    clearDerivedTilesAndThrowException(
-                            "The file '" + ft.getName() +
-                            "' does not contain a Zeiss L-Number which " +
-                            "is required to derive slide code values.");
-                }
-            }
-
-            // sort by L-Number
-            Collections.sort(targetList, targetComparator);
 
             char currentRowChar = 'A';
             int currentColumn = 0;
