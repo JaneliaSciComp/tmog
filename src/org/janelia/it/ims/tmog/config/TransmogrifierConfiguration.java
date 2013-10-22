@@ -70,6 +70,9 @@ public class TransmogrifierConfiguration {
     private static String getConfigFileName() throws ConfigurationException {
         if (configFileName == null) {
             String fileName = System.getProperty(CONFIG_FILE_PROPERTY_NAME);
+            if (fileName == null) {
+                fileName = System.getProperty(SECURE_CONFIG_FILE_PROPERTY_NAME);
+            }
             if (fileName != null) {
                 String convertedFileName = PathUtil.convertPath(fileName);
                 File configFile = new File(convertedFileName);
@@ -384,5 +387,6 @@ public class TransmogrifierConfiguration {
     private static final Logger LOG =
             Logger.getLogger(TransmogrifierConfiguration.class);
 
-    private static final String CONFIG_FILE_PROPERTY_NAME = "configFile";    
+    private static final String CONFIG_FILE_PROPERTY_NAME = "configFile";
+    private static final String SECURE_CONFIG_FILE_PROPERTY_NAME = "jnlp.configFile";
 }
