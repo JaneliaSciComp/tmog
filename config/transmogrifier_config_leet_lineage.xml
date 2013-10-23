@@ -54,6 +54,7 @@
                 <property name="db.config.key" value="sage"/>
                 <property name="relativePathDepth" value="2"/>
                 <property name="family" value="Image Family"/>
+                <property name="lab" value="Line Lab (optional)"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="progenitor" value="Progenitor"/>
                 <property name="ts_marcm" value="tsMARCM"/>
@@ -119,6 +120,12 @@
                 <validValue displayName="Central Brain Lineage" value="leet_central_brain_lineage"/>
                 <validValue displayName="PAN Lineage" value="leet_pan_lineage"/>
             </validValueList>
+
+            <cvTermList displayName="Line Lab (optional)" required="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/lab"
+                        displayNamePrefixedForValues="false"
+                        markedForTask="false">
+            </cvTermList>
 
             <webServiceList displayName="GAL4 Line" required="true"
                             valueCreationPath="*/line"
