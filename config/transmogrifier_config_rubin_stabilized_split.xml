@@ -47,7 +47,7 @@
                 <property name="lab" value="$STATIC:rubin"/>
                 <property name="family" value="$STATIC:rubin_ssplit"/>
                 <property name="imaging_project" value="Imaging Project"/>
-                <property name="data_set" value="$STATIC:jenetta_stabilized_split_case_3"/>
+                <property name="data_set" value="Imaging Project$MAP:mcfo=wolfft_mcfo_ssplit_case_1|polarity=wolfft_polarity_ssplit_case_3"/>
                 <property name="line" value="Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="created_by" value="Imager"/>
