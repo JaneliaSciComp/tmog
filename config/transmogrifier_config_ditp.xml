@@ -32,7 +32,7 @@
                 <property name="gender" value="Gender$MAP:m=Male|f=Female|x=unknown"/>
                 <property name="age" value="Age"/>
                 <property name="tile" value="Tile$MAP:vnc_verify=ventral_nerve_cord" />
-                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|brain_with_lamina=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_lamina=Brain|left_optic_lobe=Brain|left_optic_lobe_with_lamina=Brain|left_ventral=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_lamina=Brain|right_optic_lobe=Brain|right_optic_lobe_with_lamina=Brain|right_ventral=Brain|ventral=Brain|ventral_nerve_cord=VNC|vnc_verify=VNC-Verify"/>
+                <property name="area" value="Area$MAP:b=Brain|v=Ventral Nerve Cord"/>
                 <property name="created_by" value="Imager"/>
                 <property name="annotated_by" value="Annotator"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
@@ -67,6 +67,7 @@
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
                             serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=group:ditp"
+                            sharedForAllSessionFiles="true"
                             autoComplete="true">
             </webServiceList>
 
@@ -151,6 +152,13 @@
             </validValueList>
             <validValueList displayName="Area" required="true"
                     autoComplete="true">
+                <sourceFileMappedDefault pattern="^[^_]+_[^_]+_[^_]+_([^_]+)_.*">
+
+                    <mappedValue from="VNC" to="v"/>
+                    <mappedValue from="VNC-Adj" to="v"/>
+                    <mappedValue from="VNC-Ver" to="v"/>
+                </sourceFileMappedDefault>
+                <staticDefault value="b"/>
                 <validValue displayName="b: Brain" value="b"/>
                 <validValue displayName="v: Ventral Nerve Cord" value="v"/>
             </validValueList>
@@ -176,11 +184,21 @@
                 <validValue value="DPX Mounting"/>
             </validValueList>
 
+            <!--
+            Typical Orientation Values (from Rebecca and Phuson):
+
+            Glycerol + 510 = face up (antennal lobes up....close to the objective)
+            DPX + 510 = face down (antennal lobes down.....far from the objective)
+
+            Glycerol + 710 = face up (antennal lobes up....close to the objective)
+            DPX +710 = face down (antennal lobes down.....far from the objective)
+            -->
             <cvTermList displayName="Tissue Orientation" required="true"
                         autoComplete="true"
                         markedForTask="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
                         displayNamePrefixedForValues="false">
+                <staticDefault value="face_up"/>
             </cvTermList>
 
             <cvTermList displayName="Reporter" required="true"
@@ -195,6 +213,7 @@
                         autoComplete="true"
                         sharedForAllSessionFiles="true"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+                <staticDefault value="Shigehiro Namiki"/>
             </cvTermList>
 
             <validValueList displayName="Annotator" required="false"
