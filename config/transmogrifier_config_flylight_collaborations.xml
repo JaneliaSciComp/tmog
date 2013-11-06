@@ -181,7 +181,7 @@
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
                 <property name="plugin-scale" value="0" />
-                <property name="Channel Specification" value="Recording #1 Number of Channels$MAP:1=r|2=rs|3=rss" />
+                <property name="Channel Specification" value="Recording #1 Number of Channels$MAP:1=r|2=rs|3=rss|4=rsss" />
                 <property name="Channel 1 Name" value="IlluminationChannel #1 Name" />
                 <property name="Channel 1 Power" value="IlluminationChannel #1 Power B/C 1" />
                 <property name="Channel 1 Gain" value="DetectionChannel #1 Detector Gain" />
@@ -254,7 +254,7 @@
 
         <dataFields>
 
-            <separator value="FLFL_"/>
+            <separator value="FLCO_"/>
             <runTime datePattern="yyyyMMddHHmmssSSS" />
             <separator value="_"/>
             <pluginData displayName="image_number"/>
