@@ -180,8 +180,9 @@
             <validValueList displayName="Tissue Mounting Protocol" required="true"
                             autoComplete="true"
                             markedForTask="false">
-                <validValue value="Glycerol-Based Mounting" default="true"/>
-                <validValue value="DPX Mounting"/>
+                <validValue value="DPX Ethanol Mounting"/>
+                <validValue value="DPX PBS Mounting" default="true"/>
+                <validValue value="Glycerol-Based Mounting"/>
             </validValueList>
 
             <!--
@@ -198,10 +199,10 @@
                         markedForTask="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
                         displayNamePrefixedForValues="false">
-                <staticDefault value="face_up"/>
+                <staticDefault value="face_down"/>
             </cvTermList>
 
-            <cvTermList displayName="Reporter" required="true"
+            <cvTermList displayName="Reporter" required="false"
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
