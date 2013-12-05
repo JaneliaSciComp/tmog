@@ -370,7 +370,6 @@
                         displayNamePrefixedForValues="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/zlatic_rd_line_effector">
                 <sourceFileMappedDefault pattern=".+?@(.+?@.+?)@.+?@.+?@.+?@.*">
-                    <mappedValue from="ttP2_1500062@tsh_Lex_IVSGAL80_UAS_DSCP_23_0067" to="FCF_attP2_1500062@old_tsh_Lex_IVSGAL80_UAS_DSCP_23_0067" />
                     <mappedValue from="GMR_26D12_AE_01@tsh_Lex_IVSGAL80_UAS_DSCP_23_0067" to="GMR_26D12_AE_01@old_tsh_Lex_IVSGAL80_UAS_DSCP_23_0067" />
                     <mappedValue from="GMR_40D06_AE_01@tsh_Lex_IVSGAL80_UAS_DSCP_23_0067" to="GMR_40D06_AE_01@old_tsh_Lex_IVSGAL80_UAS_DSCP_23_0067" />
                     <mappedValue from="GMR_68B05_AE_01@tsh_Lex_IVSGAL80_UAS_DSCP_23_0067" to="GMR_68B05_AE_01@old_tsh_Lex_IVSGAL80_UAS_DSCP_23_0067" />
