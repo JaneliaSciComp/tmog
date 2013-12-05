@@ -536,7 +536,7 @@
 
     <project name="Lee Lab: fix line names" taskName="collector">
 
-        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+        <inputFileFilter patternString=".+\.(lsm|bz2)" recursiveSearch="true"/>
 
         <plugins>
 
@@ -598,7 +598,7 @@
 
     <project name="Lee Lab: fix gender" taskName="collector">
 
-        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+        <inputFileFilter patternString=".+\.(lsm|bz2)" recursiveSearch="true"/>
 
         <plugins>
 
@@ -642,6 +642,67 @@
             </validValueList>
 
             <text displayName="SAGE Name" required="true"
+                  copyable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="leet_central_brain_lineage"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="leet_pan_lineage"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Lee Lab: fix slide code" taskName="collector">
+
+        <inputFileFilter patternString=".+\.(lsm|bz2)" recursiveSearch="true"/>
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="relative_path" value="SAGE Name"/>
+                <property name="relativePathDepth" value="2"/>
+                <property name="slide_code" value="Slide Code"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Slide Code"
+                  required="true"
+                  markedForTask="false"
+                  pattern="(BLM|Hey|SSM|MDS|Mut|RQZ|WYC)\d{5}_[A-Z]\d\d+">
+
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="leet_central_brain_lineage"/>
+                    <property name="image_property" value="slide_code"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="leet_pan_lineage"/>
+                    <property name="image_property" value="slide_code"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+
+            </text>
+
+            <text displayName="SAGE Name" required="true"
+                  editable="false"
                   copyable="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="leet_central_brain_lineage"/>
