@@ -542,7 +542,7 @@
                 <!--<property name="days_after_eclosion" value="Days After Eclosion"/>-->
                 <!--<property name="annotated_by" value="Annotator"/>-->
                 <!--<property name="mounting_protocol" value="Tissue Mounting Protocol"/>-->
-                <!--<property name="data_set" value="Data Set"/>-->
+                <property name="data_set" value="Data Set"/>
                 <!--<property name="channel_spec" value="Channel Specification"/>-->
                 <property name="screen_state" value="Screen State"/>
                 <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
@@ -552,6 +552,20 @@
         </plugins>
 
         <dataFields>
+
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;user=user:nerna&amp;user=user:wolfft"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="data_set"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </webServiceList>
 
             <number displayName="Cross Serial Number"
                     minimumValue="1"
