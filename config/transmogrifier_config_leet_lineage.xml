@@ -661,7 +661,8 @@
 
     <project name="Lee Lab: fix slide code" taskName="collector">
 
-        <inputFileFilter patternString=".+\.(lsm|bz2)" recursiveSearch="true"/>
+        <!-- don't allow slide code changes for compressed (bz2) files -->
+        <inputFileFilter patternString=".+\.(lsm)" recursiveSearch="true"/>
 
         <plugins>
 
@@ -686,7 +687,7 @@
             <text displayName="Slide Code"
                   required="true"
                   markedForTask="false"
-                  pattern="(BLM|Hey|SSM|MDS|Mut|RQZ|WYC)\d{5}_[A-Z]\d\d+">
+                  pattern="(BLM|Hey|SSM|MDS|Mut|RQZ|WYC)\d{5}_[A-Z]\d\d?">
 
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="leet_central_brain_lineage"/>
