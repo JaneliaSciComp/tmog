@@ -9,13 +9,13 @@
              default="true"
              copyPreviousButtonVisible="false">
 
-        <inputFileFilter patternString=".*\.(bat|bin|bmp|dat|db|dlg|git|mdat|mmf|speed|txt)"
+        <inputFileFilter patternString=".*\.(bat|bin|bmp|dat|db|dlg|git|mdat|mmf|notes|speed|txt)"
                          recursiveSearch="true"/>
 
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.janelia.priv|/groups/larvalolympiad]/larvalolympiad/Projects/" />
+            <path path="[//dm11.janelia.priv|/groups/larvalolympiad]/larvalolympiad/Projects/" />
             <renameFieldValue fieldDisplayName="Project"/>
             <path path="/MMF-Files/tracking-results/"/>
             <renameFieldValue fieldDisplayName="Tracker"/>
@@ -44,7 +44,8 @@
                                  http://sage.int.janelia.org/sage-ws/lines/none/MB049B_tubby.janelia-sage,
                                  http://sage.int.janelia.org/sage-ws/lines/none/tim.janelia-sage,
                                  http://sage.int.janelia.org/sage-ws/lines/none/timA3crygal80.janelia-sage,
-                                 http://sage.int.janelia.org/sage-ws/lines/none/timA3.janelia-sage"/>
+                                 http://sage.int.janelia.org/sage-ws/lines/none/timA3.janelia-sage,
+                                 http://sage.int.janelia.org/sage-ws/lines/none/ppk.janelia-sage"/>
             </rowValidator>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionCompleteRenameWriter">
@@ -66,6 +67,7 @@
                 <validValue value="Neuromodulators"/>
                 <validValue value="Riddiford"/>
                 <validValue value="Thermotaxis"/>
+                <validValue value="ThermoChrimson"/>
 
             </validValueList>
 
@@ -226,6 +228,7 @@
                 <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.*" />
 
                 <validValue value="ChrimsonRetinal" />
+                <validValue value="Chrimson" />
 
             </cvTermList>
 
@@ -242,10 +245,10 @@
 
             <separator value="@"/>
 
-            <validValueList displayName="Protocol" required="true">
-                <!-- Bruno LOOK HERE -->
-                <validValue value="n#n#n#n" default="true"/>
-            </validValueList>
+            <text displayName="Protocol" required="true"
+                  pattern="[0-9A-Za-z\-\_]+#[0-9A-Za-z\-\_]+#[0-9A-Za-z\-\_]+#[0-9A-Za-z\-\_]+">
+                <sourceFileDefault pattern="[^@]+?@.+?@.+?@([^@]+)@.*"/>
+            </text>
 
             <separator value="@"/>
 
