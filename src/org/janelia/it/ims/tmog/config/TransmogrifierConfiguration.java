@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -62,46 +62,42 @@ import java.util.regex.Pattern;
  */
 public class TransmogrifierConfiguration {
 
-    private static String configFileName = null;
-
     /**
      * @return the configuration file name.
      */
-    private static String getConfigFileName() throws ConfigurationException {
-        if (configFileName == null) {
+    public static String getConfigFileName() throws ConfigurationException {
+        String configFileName = null;
+        String fileName = System.getProperty(CONFIG_FILE_PROPERTY_NAME);
+        if (fileName == null) {
+            fileName = System.getProperty(SECURE_CONFIG_FILE_PROPERTY_NAME);
+            LOG.info("getConfigFileName: " + SECURE_CONFIG_FILE_PROPERTY_NAME +
+                     " property is '" + fileName + "'");
+        } else {
+            LOG.info("getConfigFileName: " + CONFIG_FILE_PROPERTY_NAME +
+                     " property is '" + fileName + "'");
+        }
 
-            String fileName = System.getProperty(CONFIG_FILE_PROPERTY_NAME);
-            if (fileName == null) {
-                fileName = System.getProperty(SECURE_CONFIG_FILE_PROPERTY_NAME);
-                LOG.info("getConfigFileName: " + SECURE_CONFIG_FILE_PROPERTY_NAME +
-                         " property is '" + fileName + "'");
-            } else {
-                LOG.info("getConfigFileName: " + CONFIG_FILE_PROPERTY_NAME +
-                         " property is '" + fileName + "'");
-            }
+        if (fileName != null) {
+            String convertedFileName = PathUtil.convertPath(fileName);
+            File configFile = new File(convertedFileName);
 
-            if (fileName != null) {
-                String convertedFileName = PathUtil.convertPath(fileName);
-                File configFile = new File(convertedFileName);
+            if ((! configFile.exists()) && PathUtil.ON_WINDOWS) {
 
-                if ((! configFile.exists()) && PathUtil.ON_WINDOWS) {
+                final Pattern removalPattern = Pattern.compile("\\.janelia\\.priv");
+                final Matcher m = removalPattern.matcher(convertedFileName);
+                final String alternateFileName = m.replaceFirst("");
+                final File alternateConfigFile = new File(alternateFileName);
 
-                    final Pattern removalPattern = Pattern.compile("\\.janelia\\.priv");
-                    final Matcher m = removalPattern.matcher(convertedFileName);
-                    final String alternateFileName = m.replaceFirst("");
-                    final File alternateConfigFile = new File(alternateFileName);
-
-                    if (alternateConfigFile.exists()) {
-                        throw new ConfigurationException(
-                                "Configuration file " + configFile.getAbsolutePath() +
-                                " does not exist.  Please make sure you have mapped " +
-                                "the network drive using the fully qualified name " +
-                                "( e.g. dm11.janelia.priv ).");
-                    }
+                if (alternateConfigFile.exists()) {
+                    throw new ConfigurationException(
+                            "Configuration file " + configFile.getAbsolutePath() +
+                            " does not exist.  Please make sure you have mapped " +
+                            "the network drive using the fully qualified name " +
+                            "( e.g. dm11.janelia.priv ).");
                 }
-
-                configFileName = configFile.getAbsolutePath();
             }
+
+            configFileName = configFile.getAbsolutePath();
         }
         return configFileName;
     }
@@ -143,39 +139,27 @@ public class TransmogrifierConfiguration {
      * @throws ConfigurationException
      *   if an error occurs locating or parsing the configuration file.
      */
-    public void load() throws ConfigurationException {
-
-        String convertedFileName = getConfigFileName();
-        if (convertedFileName != null) {
-            File configFile = new File(convertedFileName);
-            InputStream stream;
-            try {
-                stream = new FileInputStream(configFile);
-            } catch (FileNotFoundException e) {
-                throw new ConfigurationException(
-                        "Configuration file " + configFileName +
-                        " does not exist.  Please verify the configFile " +
-                        "property which was specified as '" +
-                        System.getProperty(CONFIG_FILE_PROPERTY_NAME) + "'.",
-                        e);
-            }
-
-            LOG.info("attempting to load configuration from " +
-                     configFileName);
-            try {
-                load(stream);
-            } catch (ConfigurationException e) {
-                throw new ConfigurationException(
-                        e.getMessage() +
-                        "  Configuration information was read from " +
-                        configFileName + ".", e);
-            }
-        } else {
+    public void load(File configFile) throws ConfigurationException {
+        final String configFileName = configFile.getAbsolutePath();
+        InputStream stream;
+        try {
+            stream = new FileInputStream(configFile);
+        } catch (FileNotFoundException e) {
             throw new ConfigurationException(
-                    "The configFile property has not been specified.  " +
-                    "Please use the '-DconfigFile=<path_to_file>' " +
-                    "command line option to identify the configuration " +
-                    "file location.");
+                    "Configuration file " + configFileName +
+                    " does not exist.",
+                    e);
+        }
+
+        LOG.info("attempting to load configuration from " +
+                 configFileName);
+        try {
+            load(stream);
+        } catch (ConfigurationException e) {
+            throw new ConfigurationException(
+                    e.getMessage() +
+                    "  Configuration information was read from " +
+                    configFileName + ".", e);
         }
     }
 

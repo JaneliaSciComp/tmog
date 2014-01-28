@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -12,8 +12,10 @@ import org.janelia.it.ims.tmog.config.ConfigurationException;
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
 import org.janelia.it.ims.tmog.config.TransmogrifierConfiguration;
 import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
+import org.janelia.it.ims.tmog.filefilter.FileNamePatternFilter;
 import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
 import org.janelia.it.utils.LoggingUtils;
+import org.janelia.it.utils.PathUtil;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -73,7 +75,16 @@ public class TabbedView implements ActionListener {
 
         tmogConfig = new TransmogrifierConfiguration();
         try {
-            tmogConfig.load();
+            final String configFileName =
+                    TransmogrifierConfiguration.getConfigFileName();
+            File configFile;
+            if (configFileName != null) {
+                configFile = new File(configFileName);
+            } else {
+                configFile = selectConfigFile();
+            }
+
+            tmogConfig.load(configFile);
         } catch (ConfigurationException e) {
             LOG.error("Configuration Error", e);
             NarrowOptionPane.showMessageDialog(contentPanel,
@@ -444,6 +455,50 @@ public class TabbedView implements ActionListener {
                                      tabbedPane);
         }
         return newView;
+    }
+
+    private File selectConfigFile()
+            throws ConfigurationException {
+
+        final String chooserDirectoryName = "configFileChooserDirectory";
+        TransmogrifierPreferences tmogPreferences =
+                TransmogrifierPreferences.getInstance();
+
+        File chooserDirectory = null;
+        if (tmogPreferences.areLoaded()) {
+            String preferredDirectory =
+                    tmogPreferences.getGlobalPreference(chooserDirectoryName);
+            if (preferredDirectory != null) {
+                chooserDirectory =
+                        new File(PathUtil.convertPath(preferredDirectory));
+            }
+        }
+
+        final FileNamePatternFilter xmlFileFilter =
+                new FileNamePatternFilter(".*\\.xml");
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.addChoosableFileFilter(xmlFileFilter);
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setCurrentDirectory(chooserDirectory);
+
+        fileChooser.showDialog(contentPanel, "Select Config File");
+
+        final File selectedFile = fileChooser.getSelectedFile();
+
+        if (selectedFile == null) {
+            throw new ConfigurationException(
+                    "A configuration file must be selected.");
+        }
+        if (tmogPreferences.areLoaded()) {
+            chooserDirectory = fileChooser.getCurrentDirectory();
+            tmogPreferences.setGlobalPreference(
+                    chooserDirectoryName,
+                    chooserDirectory.getAbsolutePath());
+            tmogPreferences.save();
+        }
+
+        return selectedFile;
     }
 }
 
