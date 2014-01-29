@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.config;
@@ -46,6 +46,7 @@ public class PluginConfiguration {
      *
      * @param className the plugin class name.
      */
+    @SuppressWarnings("UnusedDeclaration")
     public void setClassName(String className) {
         this.className = className;
     }
@@ -76,4 +77,14 @@ public class PluginConfiguration {
                             String value) {
         this.properties.put(name, value);
     }
+
+    /**
+     * Removes the specified property from this object.
+     *
+     * @param name  name of the property.
+     */
+    public void removeProperty(String name) {
+        this.properties.remove(name);
+    }
+
 }
