@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -88,39 +88,38 @@ public class PluginFactory {
     public void constructInstances(String projectName)
             throws ConfigurationException {
 
-        List<Object> pluginInstances =
+        // construct instances based upon configured classes
+        List<Object> constructedInstances = new ArrayList<Object>();
+        constructedInstances.addAll(
                 constructInstancesForClass(projectName,
                                            rowUpdaterPlugins,
-                                           RowUpdater.class);
-        for (Object instance : pluginInstances) {
-            rowUpdaters.add((RowUpdater) instance);
-        }
-
-        pluginInstances =
+                                           RowUpdater.class));
+        constructedInstances.addAll(
                 constructInstancesForClass(projectName,
                                            rowListenerPlugins,
-                                           RowListener.class);
-        for (Object instance : pluginInstances) {
-            rowListeners.add((RowListener) instance);
-        }
-
-        pluginInstances =
+                                           RowListener.class));
+        constructedInstances.addAll(
                 constructInstancesForClass(projectName,
                                            rowValidatorPlugins,
-                                           RowValidator.class);
-        for (Object instance : pluginInstances) {
-            rowValidators.add((RowValidator) instance);
-        }
-
-        pluginInstances =
+                                           RowValidator.class));
+        constructedInstances.addAll(
                 constructInstancesForClass(projectName,
                                            sessionListenerPlugins,
-                                           SessionListener.class);
-        for (Object instance : pluginInstances) {
-            sessionListeners.add((SessionListener) instance);
-            // TODO: fix hack for adding session listeners that are also row listeners
+                                           SessionListener.class));
+
+        // add constructed instances to appropriate list(s)
+        for (Object instance : constructedInstances) {
+            if (instance instanceof RowUpdater) {
+                rowUpdaters.add((RowUpdater) instance);
+            }
             if (instance instanceof RowListener) {
                 rowListeners.add((RowListener) instance);
+            }
+            if (instance instanceof RowValidator) {
+                rowValidators.add((RowValidator) instance);
+            }
+            if (instance instanceof SessionListener) {
+                sessionListeners.add((SessionListener) instance);
             }
         }
     }
