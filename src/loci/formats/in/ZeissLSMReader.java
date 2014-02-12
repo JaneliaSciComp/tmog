@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -174,16 +174,16 @@ public class ZeissLSMReader {
             throws FormatException, IOException {
         // get TIF_CZ_LSMINFO structure
         short[] s = ifd.getIFDShortArray(ZEISS_ID);
-        if (s == null) {
-            // TODO: handle this
-        }
-        byte[] cz = new byte[s.length];
-        for (int i=0; i<s.length; i++) {
-            cz[i] = (byte) s[i];
+        RandomAccessInputStream ras = null;
+        if (s != null) {
+            byte[] cz = new byte[s.length];
+            for (int i=0; i<s.length; i++) {
+                cz[i] = (byte) s[i];
+            }
+            ras = new RandomAccessInputStream(cz);
+            ras.order(littleEndian);
         }
 
-        RandomAccessInputStream ras = new RandomAccessInputStream(cz);
-        ras.order(littleEndian);
         return ras;
     }
 
