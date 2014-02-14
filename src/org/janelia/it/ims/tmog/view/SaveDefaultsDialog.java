@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -37,9 +37,9 @@ public class SaveDefaultsDialog
     private JPanel buttonPanel;
     @SuppressWarnings({"UnusedDeclaration"})
     private JPanel dataPanel;
-    private JComboBox existingSetsComboBox;
+    private JComboBox<String> existingSetsComboBox;
     private DataTableModel defaultsModel;
-    private ComboBoxModel existingSetsModel;
+    private ComboBoxModel<String> existingSetsModel;
 
     /**
      * Displays a modal dialog using the specified model.
@@ -77,7 +77,7 @@ public class SaveDefaultsDialog
         Set<String> setNames = defaultsModel.getFieldDefaultSetNames();
         String[] setNamesArray = new String[setNames.size()];
         setNamesArray = setNames.toArray(setNamesArray);
-        existingSetsModel = new DefaultComboBoxModel(setNamesArray);
+        existingSetsModel = new DefaultComboBoxModel<String>(setNamesArray);
         existingSetsModel.setSelectedItem(null);
         existingSetsComboBox.setModel(existingSetsModel);
         existingSetsComboBox.addActionListener(new AbstractAction() {

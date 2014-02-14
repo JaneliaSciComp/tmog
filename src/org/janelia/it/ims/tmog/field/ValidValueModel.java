@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -22,8 +22,8 @@ import java.util.Comparator;
  *
  * @author Eric Trautman
  */
-public class ValidValueModel extends AbstractListModel
-        implements ComboBoxModel, DataField, DefaultValueModel {
+public class ValidValueModel extends AbstractListModel<ValidValue>
+        implements ComboBoxModel<ValidValue>, DataField, DefaultValueModel {
 
     private String displayName;
     private boolean isRequired;
@@ -304,12 +304,13 @@ public class ValidValueModel extends AbstractListModel
         return validValues.size();
     }
 
-    public Object getElementAt(int index) {
+    public ValidValue getElementAt(int index) {
         return validValues.get(index);
     }
 
     @Override
     public String toString() {
+        @SuppressWarnings("StringBufferReplaceableByString")
         final StringBuilder sb = new StringBuilder();
         sb.append("ValidValueModel");
         sb.append("{displayName='").append(displayName).append('\'');

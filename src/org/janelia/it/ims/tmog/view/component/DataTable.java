@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -21,6 +21,7 @@ import org.janelia.it.ims.tmog.field.DataFieldGroupEditor;
 import org.janelia.it.ims.tmog.field.DataFieldGroupModel;
 import org.janelia.it.ims.tmog.field.DataFieldGroupRenderer;
 import org.janelia.it.ims.tmog.field.TargetRenderer;
+import org.janelia.it.ims.tmog.field.ValidValue;
 import org.janelia.it.ims.tmog.field.ValidValueEditor;
 import org.janelia.it.ims.tmog.field.ValidValueModel;
 import org.janelia.it.ims.tmog.field.ValidValueRenderer;
@@ -849,7 +850,8 @@ public class DataTable extends JTable {
             } else {
 
                 if (value instanceof ValidValueModel) {
-                    component = new JComboBox((ValidValueModel)value);
+                    final ValidValueModel validValueModel = (ValidValueModel) value;
+                    component = new JComboBox<ValidValue>(validValueModel);
                     foundPreferredSize = true;
                 } else {
                     renderer = getCellRenderer(0, columnIndex);
