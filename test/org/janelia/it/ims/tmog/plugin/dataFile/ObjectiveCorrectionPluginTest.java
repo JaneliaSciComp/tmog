@@ -168,7 +168,7 @@ public class ObjectiveCorrectionPluginTest
                  "data_set",  "tile",  "can't-parse-this",       "foo.lsm",  "A core value (e.g. 20x or 63x) cannot be parsed"},
 
                 {"recorded core does not match fixed core",
-                 "data_set",  "tile",  "recorded-20x-objective", "foo.lsm",  "A 63x objective value is required"}
+                 "data_set",  "tile",  "recorded-20x-objective", "foo.lsm",  "a 63x value is expected"}
         };
 
         String testDescription;
@@ -184,8 +184,9 @@ public class ObjectiveCorrectionPluginTest
                 fail(testDescription + " should have caused exception");
             } catch (ExternalDataException e) {
                 actualMessage = e.getMessage();
-                assertTrue(testDescription + " exception message '" + actualMessage + "' should contain '" +
-                           exceptionMessage + "'",
+                assertTrue("The '" + testDescription + "' test returned an invalid exception message.\n" +
+                           "The exception message should contain '" + exceptionMessage + "'\n" +
+                           "but the actual message is:\n" + actualMessage + "\n",
                            actualMessage.contains(exceptionMessage));
             }
         }
