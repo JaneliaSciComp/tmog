@@ -35,7 +35,7 @@ public class SageLoaderPluginTest
     private static final Log LOG =
             LogFactory.getLog(SageLoaderPluginTest.class);
 
-    private static final String BASE_URL = "http://trautmane-ws1:8180/rest-v1";
+    private static final String BASE_URL = "http://jacs.int.janelia.org:8180/rest-v1";
 
     private SageLoaderPlugin plugin = new SageLoaderPlugin();
 
