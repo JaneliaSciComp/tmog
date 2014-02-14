@@ -7,15 +7,10 @@
 
 package org.janelia.it.ims.tmog.view;
 
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.config.ConfigurationException;
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
 import org.janelia.it.ims.tmog.config.TransmogrifierConfiguration;
 import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
-import org.janelia.it.ims.tmog.filefilter.FileNamePatternFilter;
 import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
-import org.janelia.it.utils.LoggingUtils;
-import org.janelia.it.utils.PathUtil;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -38,9 +33,6 @@ import java.util.Map;
  */
 public class TabbedView implements ActionListener {
 
-    /** The logger for this class. */
-    private static final Logger LOG = Logger.getLogger(TabbedView.class);
-
     private ColorScheme colorScheme;
 
     private JTabbedPane tabbedPane;
@@ -55,46 +47,19 @@ public class TabbedView implements ActionListener {
     private JMenuItem resizeToPreferencesItem;
     private JMenuItem savePreferencesItem;
     private JMenuItem deletePreferencesItem;
-    private TransmogrifierConfiguration tmogConfig;
 
     private HashMap<String, SessionView> sessionList;
     private int sessionCount;
 
-    public TabbedView(ColorScheme colorScheme) {
+    public TabbedView(ColorScheme colorScheme,
+                      TransmogrifierConfiguration tmogConfig) {
 
         this.colorScheme = colorScheme;
 
         this.sessionList = new HashMap<String, SessionView>();
         this.sessionCount = 0;
 
-        LoggingUtils.setLoggingContext();
-        Runnable setContextInDispatchThread = new Runnable() {
-            public void run() { LoggingUtils.setLoggingContext(); }
-        };
-        SwingUtilities.invokeLater(setContextInDispatchThread);
-
-        tmogConfig = new TransmogrifierConfiguration();
-        try {
-            final String configFileName =
-                    TransmogrifierConfiguration.getConfigFileName();
-            File configFile;
-            if (configFileName != null) {
-                configFile = new File(configFileName);
-            } else {
-                configFile = selectConfigFile();
-            }
-
-            tmogConfig.load(configFile);
-        } catch (ConfigurationException e) {
-            LOG.error("Configuration Error", e);
-            NarrowOptionPane.showMessageDialog(contentPanel,
-                                               e.getMessage(),
-                                               "Configuration Error",
-                                               JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        }
-
-        createMenuBar();
+        createMenuBar(tmogConfig);
         ProjectConfiguration defaultProject =
                 tmogConfig.getDefaultProjectConfiguration();
         if (defaultProject != null) {
@@ -116,10 +81,6 @@ public class TabbedView implements ActionListener {
                 exitApplicationSafely();
             }
         };
-    }
-
-    public TransmogrifierConfiguration getTmogConfig() {
-        return tmogConfig;
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -193,13 +154,13 @@ public class TabbedView implements ActionListener {
         return (numberOfTasksInProgress > 0);
     }
 
-    private void createMenuBar() {
-        createSessionMenu();
+    private void createMenuBar(TransmogrifierConfiguration tmogConfig) {
+        createSessionMenu(tmogConfig);
         createViewMenu();
         createHelpMenu();
     }
 
-    private void createSessionMenu() {
+    private void createSessionMenu(TransmogrifierConfiguration tmogConfig) {
         JMenu sessionMenu = new JMenu("Session");
         sessionMenu.setMnemonic(KeyEvent.VK_S);
         menuBar.add(sessionMenu);
@@ -455,50 +416,6 @@ public class TabbedView implements ActionListener {
                                      tabbedPane);
         }
         return newView;
-    }
-
-    private File selectConfigFile()
-            throws ConfigurationException {
-
-        final String chooserDirectoryName = "configFileChooserDirectory";
-        TransmogrifierPreferences tmogPreferences =
-                TransmogrifierPreferences.getInstance();
-
-        File chooserDirectory = null;
-        if (tmogPreferences.areLoaded()) {
-            String preferredDirectory =
-                    tmogPreferences.getGlobalPreference(chooserDirectoryName);
-            if (preferredDirectory != null) {
-                chooserDirectory =
-                        new File(PathUtil.convertPath(preferredDirectory));
-            }
-        }
-
-        final FileNamePatternFilter xmlFileFilter =
-                new FileNamePatternFilter(".*\\.xml");
-
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.addChoosableFileFilter(xmlFileFilter);
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setCurrentDirectory(chooserDirectory);
-
-        fileChooser.showDialog(contentPanel, "Select Config File");
-
-        final File selectedFile = fileChooser.getSelectedFile();
-
-        if (selectedFile == null) {
-            throw new ConfigurationException(
-                    "A configuration file must be selected.");
-        }
-        if (tmogPreferences.areLoaded()) {
-            chooserDirectory = fileChooser.getCurrentDirectory();
-            tmogPreferences.setGlobalPreference(
-                    chooserDirectoryName,
-                    chooserDirectory.getAbsolutePath());
-            tmogPreferences.save();
-        }
-
-        return selectedFile;
     }
 }
 

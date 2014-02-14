@@ -26,6 +26,8 @@ import java.util.List;
  */
 public class PluginFactory {
 
+    private ConfigurationLoader loader;
+
     private List<PluginConfiguration> rowUpdaterPlugins;
     private List<RowUpdater> rowUpdaters;
 
@@ -47,6 +49,10 @@ public class PluginFactory {
         rowValidators = new ArrayList<RowValidator>();
         sessionListenerPlugins = new ArrayList<PluginConfiguration>();
         sessionListeners = new ArrayList<SessionListener>();
+    }
+
+    public void setLoader(ConfigurationLoader loader) {
+        this.loader = loader;
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
@@ -136,6 +142,7 @@ public class PluginFactory {
             if (basePluginClass.isInstance(newInstance)) {
                 Plugin plugin = (Plugin) newInstance;
                 try {
+                    loader.publishMessage("  initializing " + className.substring(className.lastIndexOf('.')+1));
                     plugin.init(pluginConfig);
                 } catch (ExternalSystemException e) {
                     throw new ConfigurationException(e.getMessage(), e);

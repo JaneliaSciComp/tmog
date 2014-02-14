@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -43,6 +43,7 @@ public class ProjectConfiguration {
     private OutputDirectoryConfiguration outputDirectoryConfiguration;
     private FileTransferConfiguration fileTransferConfiguration;
     private PluginFactory pluginFactory;
+    private ConfigurationLoader loader;
 
     public ProjectConfiguration() {
         this.isDefault = false;
@@ -197,6 +198,11 @@ public class ProjectConfiguration {
         this.pluginFactory = pluginFactory;
     }
 
+    public void setLoader(ConfigurationLoader loader) {
+        this.loader = loader;
+        pluginFactory.setLoader(loader);
+    }
+
     /**
      * Initializes and verifies the configured project.
      *
@@ -251,6 +257,7 @@ public class ProjectConfiguration {
         if (field instanceof HttpValidValueModel) {
             HttpValidValueModel model = (HttpValidValueModel) field;
             try {
+                loader.publishMessage("  loading values from " + model.getServiceUrl());
                 model.retrieveAndSetValidValues();
             } catch (Exception e) {
                 throw new ConfigurationException(e.getMessage(), e);
@@ -278,6 +285,7 @@ public class ProjectConfiguration {
                                                         name);
                 if (newInstance instanceof PluginDefaultValue) {
                     pluginValue = (PluginDefaultValue) newInstance;
+                    loader.publishMessage("  initializing " + className.substring(className.lastIndexOf('.')+1));
                     pluginValue.init(config.getProperties());
                 } else {
                     throw new ConfigurationException(

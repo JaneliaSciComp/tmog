@@ -9,12 +9,15 @@ package org.janelia.it.ims.tmog;
 
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.config.ConfigurationException;
+import org.janelia.it.ims.tmog.config.ConfigurationLoadCompletionHandler;
+import org.janelia.it.ims.tmog.config.ConfigurationLoader;
 import org.janelia.it.ims.tmog.config.GlobalConfiguration;
 import org.janelia.it.ims.tmog.config.TransmogrifierConfiguration;
 import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
 import org.janelia.it.ims.tmog.view.ColorScheme;
 import org.janelia.it.ims.tmog.view.TabbedView;
 import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
+import org.janelia.it.utils.LoggingUtils;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -29,7 +32,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @author Eric Trautman
  * @author Peter Davies
  */
-public class JaneliaTransmogrifier extends JFrame {
+public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCompletionHandler {
 
     /** The logger for this class. */
     private static final Logger LOG =
@@ -64,13 +67,17 @@ public class JaneliaTransmogrifier extends JFrame {
     private static final ImageIcon APP_ICON =
             new ImageIcon(APP_IMAGE_URL, "Janelia Transmogrifier");
 
-    private Integer frameSizePercentage;
-
     /**
      * Construct the application
      */
     public JaneliaTransmogrifier() {
         super("Janelia Transmogrifier " + VERSION);
+
+        LoggingUtils.setLoggingContext();
+        final Runnable setContextInDispatchThread = new Runnable() {
+            public void run() { LoggingUtils.setLoggingContext(); }
+        };
+        SwingUtilities.invokeLater(setContextInDispatchThread);
 
         // attempt to load preferences
         TransmogrifierPreferences tmogPreferences =
@@ -82,20 +89,35 @@ public class JaneliaTransmogrifier extends JFrame {
 
             NarrowOptionPane.showMessageDialog(
                     this,
-                    e.getMessage() +
-                    "  Consequently, all preferences related features " +
-                    "will be disabled.",
+                    e.getMessage() + "  Consequently, all preferences related features will be disabled.",
                     "Preferences Features Disabled",
                     JOptionPane.WARNING_MESSAGE);
         }
+
+        try {
+            final URL configUrl = ConfigurationLoader.getConfigUrl();
+            final ConfigurationLoader loader = new ConfigurationLoader(configUrl, this);
+            loader.execute();
+        } catch (Exception e) {
+            LOG.error("Configuration Error", e);
+            ConfigurationLoader.showConfigurationErrorDialog(this, e);
+            System.exit(1);
+        }
+
+    }
+
+    @Override
+    public void handleConfigurationLoadSuccess(TransmogrifierConfiguration config) {
+        TransmogrifierPreferences tmogPreferences =
+                TransmogrifierPreferences.getInstance();
 
         ColorScheme colorScheme = new ColorScheme();
         if (tmogPreferences.isDarkColorScheme()) {
             colorScheme.toggle();
         }
-
         colorScheme.addSchemeComponent(this);
-        TabbedView tabbedView = new TabbedView(colorScheme);
+
+        TabbedView tabbedView = new TabbedView(colorScheme, config);
         setContentPane(tabbedView.getContentPanel());
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(tabbedView.getWindowListener());
@@ -104,13 +126,48 @@ public class JaneliaTransmogrifier extends JFrame {
         colorScheme.addSchemeComponent(menuBar);
         pack();
 
-        TransmogrifierConfiguration config = tabbedView.getTmogConfig();
-        GlobalConfiguration globalConfig = config.getGlobalConfiguration();
-        this.frameSizePercentage = globalConfig.getFrameSizePercentage();
+        // size the window
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension frameSize = getSize();
+
+        final GlobalConfiguration globalConfig = config.getGlobalConfiguration();
+        Integer frameSizePct = globalConfig.getFrameSizePercentage();
+        final int minPct = 40;
+        final int defaultPct = 80;
+        final int maxPct = 99;
+        if (frameSizePct == null) {
+            frameSizePct = defaultPct;
+        } else if (frameSizePct < minPct) {
+            frameSizePct = minPct;
+        } else if (frameSizePct > maxPct) {
+            frameSizePct = maxPct;
+        }
+
+        @SuppressWarnings({"RedundantCast"})
+        final double frameSizeFactor = (double) frameSizePct / 100;
+        frameSize.height = (int) (screenSize.height * frameSizeFactor);
+        frameSize.width = (int) (screenSize.width * frameSizeFactor);
+
+        // hack for dual screens
+        final int maxWidth = (int) (1920 * frameSizeFactor);
+        if (frameSize.width > maxWidth) {
+            frameSize.width = maxWidth;
+        }
+
+        setSize(frameSize.width, frameSize.height);
+        setPreferredSize(frameSize);
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                setVisible(true);
+            }
+        });
     }
 
-    public Integer getFrameSizePercentage() {
-        return frameSizePercentage;
+    @Override
+    public void handleConfigurationLoadFailure(Exception failure) {
+        System.exit(1);
     }
 
     /**
@@ -172,38 +229,6 @@ public class JaneliaTransmogrifier extends JFrame {
 
         JaneliaTransmogrifier frame = new JaneliaTransmogrifier();
         frame.setIconImage(APP_ICON.getImage());
-
-        // size the window
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension frameSize = frame.getSize();
-
-        Integer frameSizePct = frame.getFrameSizePercentage();
-        final int minPct = 40;
-        final int defaultPct = 80;
-        final int maxPct = 99;
-        if (frameSizePct == null) {
-            frameSizePct = defaultPct;
-        } else if (frameSizePct < minPct) {
-            frameSizePct = minPct;
-        } else if (frameSizePct > maxPct) {
-            frameSizePct = maxPct;
-        }
-
-        @SuppressWarnings({"RedundantCast"})
-        final double frameSizeFactor = (double) frameSizePct / 100;
-        frameSize.height = (int) (screenSize.height * frameSizeFactor);
-        frameSize.width = (int) (screenSize.width * frameSizeFactor);
-
-        // hack for dual screens
-        final int maxWidth = (int) (1920 * frameSizeFactor);
-        if (frameSize.width > maxWidth) {
-            frameSize.width = maxWidth;
-        }
-
-        frame.setSize(frameSize.width, frameSize.height);
-        frame.setPreferredSize(frameSize);
-
-        frame.setVisible(true);
     }
 
 }
