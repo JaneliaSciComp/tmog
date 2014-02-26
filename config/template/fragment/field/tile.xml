@@ -1,0 +1,40 @@
+            <cvTermList displayName="Tile" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        autoComplete="true"
+                        markedForTask="false">@sage-data-default@
+                <sourceFileMappedDefault pattern="^[^_]+_[^_]+_[^_]+_([^_]+)_.*">
+                    <mappedValue from="ABD" to="abdominal"/>
+                    <mappedValue from="BRN" to="brain"/>
+                    <mappedValue from="BRNwLam" to="brain_with_lamina"/>
+                    <mappedValue from="CEN" to="central"/>
+                    <mappedValue from="DM" to="dorsal_medial"/>
+                    <mappedValue from="L" to="left_optic_lobe"/>
+                    <mappedValue from="L1" to="left_optic_lobe_part_1"/>
+                    <mappedValue from="L2" to="left_optic_lobe_part_2"/>
+                    <mappedValue from="LwLam" to="left_optic_lobe_with_lamina"/>
+                    <mappedValue from="LLam" to="left_lamina"/>
+                    <mappedValue from="RLam" to="right_lamina"/>
+                    <mappedValue from="LamL" to="left_lamina"/>
+                    <mappedValue from="LamR" to="right_lamina"/>
+                    <mappedValue from="LC" to="left_central"/>
+                    <mappedValue from="LD" to="left_dorsal"/>
+                    <mappedValue from="LV" to="left_ventral"/>
+                    <mappedValue from="MES" to="mesothorasic"/>
+                    <mappedValue from="META" to="metathorasic"/>
+                    <mappedValue from="NEC-Ant" to="neck_anterior"/>
+                    <mappedValue from="NEC-Pos" to="neck_posterior"/>
+                    <mappedValue from="PRO" to="prothorasic"/>
+                    <mappedValue from="R" to="right_optic_lobe"/>
+                    <mappedValue from="R1" to="right_optic_lobe_part_1"/>
+                    <mappedValue from="R2" to="right_optic_lobe_part_2"/>
+                    <mappedValue from="RwLam" to="right_optic_lobe_with_lamina"/>
+                    <mappedValue from="RC" to="right_central"/>
+                    <mappedValue from="RD" to="right_dorsal"/>
+                    <mappedValue from="RV" to="right_ventral"/>
+                    <mappedValue from="V" to="ventral"/>
+                    <mappedValue from="VNC" to="ventral_nerve_cord"/>
+                    <mappedValue from="VNC-Adj" to="vnc_verify"/>
+                    <mappedValue from="VNC-Ver" to="vnc_verify"/>
+                </sourceFileMappedDefault>
+                <validValue displayName="VNC-Verify" value="vnc_verify"/>
+            </cvTermList>

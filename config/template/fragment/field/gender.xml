@@ -1,0 +1,7 @@
+            <validValueList displayName="Gender" required="false"
+                            autoComplete="true"
+                            markedForTask="false">@sage-data-default@
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>

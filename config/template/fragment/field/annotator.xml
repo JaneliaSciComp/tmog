@@ -1,0 +1,9 @@
+            <validValueList displayName="Annotator" required="false"
+                            autoComplete="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">@sage-data-default@
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Barry Dickson"/>
+                <validValue value="Tanya Wolff"/>
+                <validValue value="Yoshi Aso"/>
+            </validValueList>

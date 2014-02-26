@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="build_configuration_files" default="build-config" basedir=".">
+
+    <macrodef name="init-sage-data-default">
+        <attribute name="sageFamily"/>
+        <attribute name="sageProperty"/>
+        <sequential>
+            <loadfile property="plugin-default-@{sageFamily}-@{sageProperty}"
+                      srcFile="config/template/fragment/plugin/sage-data-default.xml">
+            <filterchain>
+                    <replacetokens>
+                        <token key="family" value="@{sageFamily}"/>
+                        <token key="image_property" value="@{sageProperty}"/>
+                    </replacetokens>
+                </filterchain>
+            </loadfile>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="load-fragment">
+        <attribute name="name"/>
+        <attribute name="path"/>
+        <element name="filterchain" implicit="true" optional="true"/>
+        <sequential>
+            <!--suppress AntResolveInspection -->
+            <loadfile property="config-fragment-@{name}" srcFile="config/template/fragment/@{path}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="load-filtered-fragment">
+        <attribute name="name"/>
+        <attribute name="path"/>
+        <attribute name="key"/>
+        <attribute name="value"/>
+        <sequential>
+            <!--suppress AntResolveInspection -->
+            <loadfile property="config-fragment-@{name}" srcFile="config/template/fragment/@{path}">
+                <filterchain><replacetokens><token key="@{key}" value="@{value}"/></replacetokens></filterchain>
+            </loadfile>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="load-field-fragment-with-default">
+        <attribute name="name"/>
+        <attribute name="family"/>
+        <sequential>
+            <init-sage-data-default sageFamily="@{family}" sageProperty="@{name}"/>
+            <!--suppress AntResolveInspection -->
+            <load-filtered-fragment name="@{name}-with-@{family}-default"
+                                    path="field/@{name}.xml"
+                                    key="sage-data-default"
+                                    value="${plugin-default-@{family}-@{name}}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="load-field-fragment">
+        <attribute name="name"/>
+        <sequential>
+            <load-filtered-fragment name="@{name}" path="field/@{name}.xml" key="sage-data-default" value=""/>
+            <load-field-fragment-with-default name="@{name}" family="flylight_flip"/>
+            <load-field-fragment-with-default name="@{name}" family="flylight_polarity"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="init-sage-data-defaults-for-family">
+        <attribute name="sageFamily"/>
+        <sequential>
+            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="data_set"/>
+            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="cross_barcode"/>
+            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="line"/>
+            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="effector"/>
+            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="slide_code"/>
+            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="tile"/>
+            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="screen_state"/>
+            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="comment"/>
+            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="name"/>
+        </sequential>
+    </macrodef>
+
+    <target name="build-config" description="Builds configuration files.">
+
+        <!-- top level fragments -->
+        <load-fragment          name="global"           path="global.xml"/>
+        <load-fragment          name="lsm-input"        path="lsm-input.xml"/>
+        <load-filtered-fragment name="output-flip"      path="output.xml" key="family_directory" value="flip"/>
+        <load-filtered-fragment name="output-polarity"  path="output.xml" key="family_directory" value="polarity"/>
+        <load-fragment          name="tmog-begin"       path="tmog-begin.xml"/>
+        <load-fragment          name="tmog-end"         path="tmog-end.xml"/>
+
+        <!-- field fragments -->
+        <load-field-fragment    name="age" />
+        <load-field-fragment    name="annotator" />
+        <load-fragment          name="channel-data"             path="field/channel-data.xml"/>
+        <load-field-fragment    name="comment" />
+        <load-field-fragment    name="cross_barcode" />
+        <load-field-fragment    name="data_set" />
+        <load-field-fragment    name="effector" />
+        <load-fragment          name="file-name-suffix"         path="field/file-name-suffix.xml"/>
+        <load-field-fragment    name="full_age" />
+        <load-field-fragment    name="gender" />
+        <load-fragment          name="hidden-file-name-suffix"  path="field/hidden-file-name-suffix.xml"/>
+        <load-field-fragment    name="imager" />
+        <load-filtered-fragment name="imaging_project-mcfo"     path="field/imaging_project.xml" key="default_project" value="mcfo"/>
+        <load-filtered-fragment name="imaging_project-polarity" path="field/imaging_project.xml" key="default_project" value="polarity"/>
+        <load-field-fragment    name="line" />
+        <load-field-fragment    name="name" />
+        <load-field-fragment    name="screen_state" />
+        <load-field-fragment    name="slide_code" />
+        <load-field-fragment    name="tile" />
+        <load-field-fragment    name="tissue_mounting_protocol" />
+
+        <!-- plug-in fragments -->
+        <load-fragment          name="common-image-data-properties" path="plugin/common-image-data-properties.xml"/>
+        <load-fragment          name="copy-zeiss-log-files"         path="plugin/copy-zeiss-log-files.xml"/>
+        <load-filtered-fragment name="image-sequence-flip"          path="plugin/image-sequence.xml" key="family" value="flylight_flip"/>
+        <load-filtered-fragment name="image-sequence-polarity"      path="plugin/image-sequence.xml" key="family" value="flylight_polarity"/>
+        <load-fragment          name="update-mapped-serial-data"    path="plugin/update-mapped-serial-data.xml"/>
+        <load-fragment          name="update-project-cross-data"    path="plugin/update-project-cross-data.xml"/>
+        <load-fragment          name="update-zeiss-lsm-data"        path="plugin/update-zeiss-lsm-data.xml"/>
+        <load-fragment          name="validate-gender-and-age"      path="plugin/validate-gender-and-age.xml"/>
+
+        <property name="consolidated-config-fragment-properties-file" value="dist/config-fragment.properties" />
+
+        <echoproperties prefix="config-fragment-" destfile="${consolidated-config-fragment-properties-file}" />
+
+        <copy todir="config" overwrite="true" force="true">
+            <mappedresources>
+                <fileset dir="config/template" includes="*.xml"/>
+                <globmapper from="*" to="transmogrifier_config_*"/>
+            </mappedresources>
+            <filterchain>
+                <replacetokens propertiesresource="${consolidated-config-fragment-properties-file}" />
+            </filterchain>
+        </copy>
+
+    </target>
+
+</project>

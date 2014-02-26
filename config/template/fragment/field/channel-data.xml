@@ -1,0 +1,49 @@
+            <text displayName="Channel Specification" required="false"
+                    markedForTask="false"
+                    pattern="s*rs*">
+            </text>
+
+            <text displayName="Channel 1 Name" required="false"
+                  markedForTask="false"
+                  editable="false">
+            </text>
+
+            <decimal displayName="Channel 1 Power" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <decimal displayName="Channel 1 Gain" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <text displayName="Channel 2 Name" required="false"
+                  markedForTask="false"
+                  editable="false">
+            </text>
+
+            <decimal displayName="Channel 2 Power" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <decimal displayName="Channel 2 Gain" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <text displayName="Channel 3 Name" required="false"
+                  markedForTask="false"
+                  editable="false">
+            </text>
+
+            <decimal displayName="Channel 3 Power" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <decimal displayName="Channel 3 Gain" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>

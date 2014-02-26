@@ -1,0 +1,118 @@
+@config-fragment-tmog-begin@
+@config-fragment-global@
+    <project name="Fly Light Polarity - scope to confocalStacks" default="true">
+
+@config-fragment-lsm-input@
+@config-fragment-output-polarity@
+        <plugins>
+
+@config-fragment-update-mapped-serial-data@
+@config-fragment-update-project-cross-data@
+@config-fragment-update-zeiss-lsm-data@
+@config-fragment-validate-gender-and-age@
+@config-fragment-image-sequence-polarity@
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+@config-fragment-common-image-data-properties@
+                <property name="display" value="Screen State$MAP:accepted=true|pre_screen=false|rejected=false"/>
+                <property name="family" value="$STATIC:flylight_polarity"/>
+                <property name="screen_state" value="Screen State"/>
+            </rowListener>
+
+@config-fragment-copy-zeiss-log-files@
+        </plugins>
+
+        <dataFields>
+
+            <separator value="FLPO_"/>
+@config-fragment-file-name-suffix@
+@config-fragment-data_set@
+@config-fragment-tile@
+@config-fragment-slide_code@
+@config-fragment-cross_barcode@
+@config-fragment-line@
+@config-fragment-effector@
+@config-fragment-gender@
+@config-fragment-age@
+@config-fragment-full_age@
+@config-fragment-imager@
+@config-fragment-annotator@
+@config-fragment-tissue_mounting_protocol@
+@config-fragment-screen_state@
+@config-fragment-imaging_project-polarity@
+@config-fragment-channel-data@
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light Polarity - promote preScreen to confocalStacks">
+
+        <!-- NOTES:
+             - first capturing group must be equal for second capturing group
+               to be used in numeric sort
+             - third capturing group only used when first and second are equal
+             - '(?: )' identifies a non-capturing group
+        -->
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
+
+@config-fragment-output-polarity@
+        <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.TileSetterPlugin">
+            </rowUpdater>
+
+@config-fragment-update-mapped-serial-data@
+@config-fragment-update-project-cross-data@
+@config-fragment-update-zeiss-lsm-data@
+@config-fragment-validate-gender-and-age@
+@config-fragment-image-sequence-polarity@
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+@config-fragment-common-image-data-properties@
+                <property name="exclude.host.name" value="true"/>
+                <property name="family" value="$STATIC:flylight_polarity"/>
+                <property name="screen_state" value="$STATIC:accepted"/>
+            </rowListener>
+
+@config-fragment-copy-zeiss-log-files@
+        </plugins>
+
+        <dataFields>
+
+            <separator value="FLPO_"/>
+@config-fragment-hidden-file-name-suffix@
+@config-fragment-data_set@
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="99999"
+                    markedForTask="false">
+                <sourceFileDefault pattern=".*(\d{5})_\d{8}_\d{2}_.*" />
+            </number>
+
+@config-fragment-line@
+@config-fragment-effector@
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  markedForTask="false">
+                <sourceFileDefault pattern=".*_(\d{8}_\d+_[A-Z]\d+).*"/>
+                <sourceFileDefault pattern=".*_(\d{8}_\d+_).*"/> <!-- for preScreen prior to zeiss brain number standardization -->
+            </text>
+
+            <cvTermList displayName="Tile" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        autoComplete="true"
+                        markedForTask="false">
+            </cvTermList>
+
+@config-fragment-gender@
+@config-fragment-age@
+@config-fragment-imager@
+@config-fragment-annotator@
+@config-fragment-tissue_mounting_protocol@
+@config-fragment-imaging_project-polarity@
+@config-fragment-channel-data@
+        </dataFields>
+
+    </project>
+
+@config-fragment-tmog-end@

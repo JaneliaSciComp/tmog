@@ -1,0 +1,392 @@
+@config-fragment-tmog-begin@
+@config-fragment-global@
+    <project name="Fly Light Flip - manual entry (FLFL*)" default="true">
+
+@config-fragment-lsm-input@
+@config-fragment-output-flip@
+        <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.TileToDataSetPlugin">
+                <property name="wolfft-01" value="Tanya Wolff:Central Brain,.:wolfft_central_tile,."/>
+                <property name="nerna-01" value="Aljoscha Nern:Left Optic Lobe,.:nerna_optic_lobe_left,."/>
+                <property name="nerna-02" value="Aljoscha Nern:Right Optic Lobe,.:nerna_optic_lobe_right,."/>
+                <property name="nerna-03" value="Aljoscha Nern:Left Optic Lobe,.,Right Optic Lobe,.:nerna_optic_lobe_left,.,nerna_optic_lobe_right,."/>
+                <property name="nerna-04" value="Aljoscha Nern:Left Optic Lobe,.,Ventral Brain,.,Left Dorsal Brain,.,Right Dorsal Brain,.,Right Optic Lobe,.:nerna_whole_brain,.,.,.,.,.,.,.,.,."/>
+                <property name="nerna-05" value="Aljoscha Nern:Left Optic Lobe,.,Left Central Brain,.,Right Central Brain,.,Right Optic Lobe,.:nerna_optic_span,.,.,.,.,.,.,."/>
+                <property name="nerna-06" value="Aljoscha Nern:Left Optic Lobe,.,Central Brain,.,Right Optic Lobe,.:nerna_optic_span,.,.,.,.,."/>
+                <property name="nerna-07" value="Aljoscha Nern:Left Optic Lobe,.,Left Central Brain,.,Right Central Brain,.:nerna_optic_central_border,.,.,.,.,."/>
+                <property name="nerna-08" value="Aljoscha Nern:Left Central Brain,.,Right Central Brain,.,Right Optic Lobe,.:nerna_optic_central_border,.,.,.,.,."/>
+                <property name="nerna-09" value="Aljoscha Nern:Left Dorsal Brain,.,Right Dorsal Brain,.,Right Optic Lobe,.:nerna_optic_central_border,.,.,.,.,."/>
+                <property name="nerna-10" value="Aljoscha Nern:Left Optic Lobe,.,Ventral Brain,.,Left Dorsal Brain,.:nerna_optic_central_border,.,.,.,.,."/>
+                <property name="nerna-11" value="Aljoscha Nern:Left Optic Lobe,.,Left Central Brain,.,Right Optic Lobe,.:nerna_optic_central_border,.,.,.,nerna_optic_lobe_right,."/>
+                <property name="nerna-12" value="Aljoscha Nern:Left Optic Lobe,.,Right Central Brain,.,Right Optic Lobe,.:nerna_optic_lobe_left,.,nerna_optic_central_border,.,.,."/>
+                <property name="nerna-13" value="Aljoscha Nern:Left Optic Lobe,.,Left Central Brain,.:nerna_optic_central_border,.,.,."/>
+                <property name="nerna-14" value="Aljoscha Nern:Right Central Brain,.,Right Optic Lobe,.:nerna_optic_central_border,.,.,."/>
+            </rowUpdater>
+
+@config-fragment-validate-gender-and-age@
+@config-fragment-image-sequence-flip@
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="lab" value="$STATIC:flylight"/>
+                <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="imaging_project" value="Imaging Project"/>
+                <property name="line" value="GAL4 Line"/>
+                <property name="created_by" value="Imager"/>
+                <property name="effector" value="Reporter"/>
+                <property name="slide_code" value="Slide Code"/>
+                <property name="tile" value="Tile"/>
+                <property name="gender" value="Gender"/>
+                <property name="age" value="Age"/>
+                <property name="full_age" value="Full Age"/>
+                <property name="area" value="$STATIC:Brain"/>
+                <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
+                <property name="annotated_by" value="Annotator"/>
+                <property name="data_set" value="Data Set"/>
+                <property name="microscope_filename"/>
+            </rowListener>
+
+@config-fragment-copy-zeiss-log-files@
+        </plugins>
+
+        <dataFields>
+
+            <separator value="FLFL_"/>
+@config-fragment-file-name-suffix@
+@config-fragment-line@
+@config-fragment-effector@
+@config-fragment-slide_code@
+            <validValueList displayName="Tile" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <sourceFileMappedDefault pattern="^.*_T\d+_([A-Z]+)_\d{8}_\d+_.*">
+                    <mappedValue from="CEN" to="Central Brain"/>
+                    <mappedValue from="L" to="Left Optic Lobe"/>
+                    <mappedValue from="LC" to="Left Central Brain"/>
+                    <mappedValue from="LD" to="Left Dorsal Brain"/>
+                    <mappedValue from="R" to="Right Optic Lobe"/>
+                    <mappedValue from="RC" to="Right Central Brain"/>
+                    <mappedValue from="RD" to="Right Dorsal Brain"/>
+                    <mappedValue from="V" to="Ventral Brain"/>
+                </sourceFileMappedDefault>
+                <validValue displayName="01: Left Optic Lobe" value="Left Optic Lobe" />
+                <validValue displayName="02: Ventral Brain" value="Ventral Brain"/>
+                <validValue displayName="03: Left Dorsal Brain" value="Left Dorsal Brain"/>
+                <validValue displayName="04: Right Dorsal Brain" value="Right Dorsal Brain"/>
+                <validValue displayName="05: Right Optic Lobe" value="Right Optic Lobe"/>
+                <validValue displayName="06: Central Brain" value="Central Brain"/>
+                <validValue displayName="07: Left Central Brain" value="Left Central Brain"/>
+                <validValue displayName="08: Right Central Brain" value="Right Central Brain"/>
+            </validValueList>
+
+@config-fragment-gender@
+@config-fragment-age@
+@config-fragment-full_age@
+            <decimal displayName="Heat Shock Minutes" required="false"
+                     minimumValue="0" markedForTask="false" />
+
+@config-fragment-imager@
+@config-fragment-annotator@
+            <webServiceList displayName="Data Set" required="false"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=group:flylight&amp;user=user:asoy&amp;user=user:wolfft&amp;user=user:nerna"
+                            autoComplete="true">
+            </webServiceList>
+
+            <cvTermList displayName="Imaging Project" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imaging_project">
+                <staticDefault value="mcfo"/>
+            </cvTermList>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light - MCFO - scope to confocalStacks">
+
+@config-fragment-lsm-input@
+@config-fragment-output-flip@
+        <plugins>
+
+@config-fragment-update-mapped-serial-data@
+@config-fragment-update-project-cross-data@
+@config-fragment-update-zeiss-lsm-data@
+@config-fragment-validate-gender-and-age@
+@config-fragment-image-sequence-flip@
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+@config-fragment-common-image-data-properties@
+                <property name="display" value="Screen State$MAP:accepted=true|pre_screen=false|rejected=false"/>
+                <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="screen_state" value="Screen State"/>
+            </rowListener>
+
+@config-fragment-copy-zeiss-log-files@
+        </plugins>
+
+        <dataFields>
+
+            <separator value="FLFL_"/>
+@config-fragment-file-name-suffix@
+@config-fragment-data_set@
+@config-fragment-tile@
+@config-fragment-slide_code@
+@config-fragment-cross_barcode@
+@config-fragment-line@
+@config-fragment-effector@
+@config-fragment-gender@
+@config-fragment-age@
+@config-fragment-full_age@
+@config-fragment-imager@
+@config-fragment-annotator@
+@config-fragment-tissue_mounting_protocol@
+@config-fragment-screen_state@
+@config-fragment-imaging_project-mcfo@
+@config-fragment-channel-data@
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light - MCFO - fix data" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <plugins>
+
+@config-fragment-update-mapped-serial-data@
+@config-fragment-update-project-cross-data@
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+@config-fragment-common-image-data-properties@
+                <property name="comment" value="Comment"/>
+                <property name="display" value="Screen State$MAP:accepted=true|pre_screen=false|rejected=false"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="relative_path" value="SAGE Name"/>
+                <property name="screen_state" value="Screen State"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+@config-fragment-data_set-with-flylight_flip-default@
+@config-fragment-cross_barcode-with-flylight_flip-default@
+@config-fragment-line-with-flylight_flip-default@
+@config-fragment-effector-with-flylight_flip-default@
+@config-fragment-slide_code-with-flylight_flip-default@
+@config-fragment-tile-with-flylight_flip-default@
+@config-fragment-screen_state-with-flylight_flip-default@
+@config-fragment-comment-with-flylight_flip-default@
+@config-fragment-name-with-flylight_flip-default@
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light Flip - promote preScreen to confocalStacks">
+
+        <inputFileFilter patternString="^((?!FLAG_3_0048__).)*\.lsm$" />
+
+        <!-- NOTES:
+             - first capturing group must be equal for second capturing group
+               to be used in numeric sort
+             - third capturing group only used when first and second are equal
+             - '(?: )' identifies a non-capturing group
+        -->
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
+
+@config-fragment-output-flip@
+        <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.TileSetterPlugin">
+            </rowUpdater>
+
+@config-fragment-update-mapped-serial-data@
+@config-fragment-update-project-cross-data@
+@config-fragment-update-zeiss-lsm-data@
+@config-fragment-validate-gender-and-age@
+@config-fragment-image-sequence-flip@
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+@config-fragment-common-image-data-properties@
+                <property name="days_after_eclosion" value="Days After Eclosion"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="screen_state" value="$STATIC:accepted"/>
+            </rowListener>
+
+@config-fragment-copy-zeiss-log-files@
+        </plugins>
+
+        <dataFields>
+
+            <separator value="FLFL_"/>
+@config-fragment-hidden-file-name-suffix@
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            sharedForAllSessionFiles="true"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy"
+                            autoComplete="true">
+                <staticDefault value="asoy_mb_split_mcfo_case_1"/>
+            </webServiceList>
+
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="99999"
+                    markedForTask="false">
+                <sourceFileDefault pattern=".*(\d{5})_\d{8}_\d{2}_.*" />
+            </number>
+
+@config-fragment-line@
+@config-fragment-effector@
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  markedForTask="false">
+                <sourceFileDefault pattern=".*_(\d{8}_\d+_[A-Z]\d+).*"/>
+                <sourceFileDefault pattern=".*_(\d{8}_\d+_).*"/> <!-- for preScreen prior to zeiss brain number standardization -->
+            </text>
+
+            <cvTermList displayName="Tile" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        autoComplete="true"
+                        markedForTask="false">
+            </cvTermList>
+
+@config-fragment-gender@
+@config-fragment-age@
+@config-fragment-full_age@
+            <number displayName="Days After Eclosion" required="false"
+                    markedForTask="false"
+                    minimumValue="0"
+                    maximumValue="21" />
+
+@config-fragment-imager@
+@config-fragment-annotator@
+@config-fragment-tissue_mounting_protocol@
+            <text displayName="Channel Specification" required="false"
+                  markedForTask="false"
+                  pattern="s*rs*">
+            </text>
+
+@config-fragment-imaging_project-mcfo@
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light Cell Count - promote preScreen to confocalStacks">
+
+        <inputFileFilter patternString=".*FLAG_3_0048__.*\.lsm" />
+
+        <!-- NOTES:
+             - first capturing group must be equal for second capturing group
+               to be used in numeric sort
+             - third capturing group only used when first and second are equal
+             - '(?: )' identifies a non-capturing group
+        -->
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
+
+@config-fragment-output-flip@
+        <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.TileSetterPlugin">
+            </rowUpdater>
+
+@config-fragment-update-project-cross-data@
+@config-fragment-validate-gender-and-age@
+@config-fragment-image-sequence-flip@
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+@config-fragment-common-image-data-properties@
+                <property name="area" value="$STATIC:Brain"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="imaging_project" value="$STATIC:cell_count"/>
+                <property name="screen_state" value="$STATIC:accepted"/>
+            </rowListener>
+
+@config-fragment-copy-zeiss-log-files@
+        </plugins>
+
+        <dataFields>
+
+            <separator value="FLFL_"/>
+@config-fragment-hidden-file-name-suffix@
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            sharedForAllSessionFiles="true"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy"
+                            autoComplete="true">
+                <staticDefault value="asoy_cell_count"/>
+            </webServiceList>
+
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="99999"
+                    markedForTask="false">
+                <sourceFileDefault pattern=".*(\d{5})_\d{8}_\d{2}_.*" />
+            </number>
+
+@config-fragment-line@
+            <!--
+                 For cell counting, effector should always be UAS_nls_myr-FLAG_3_0048.
+                 This ensures effector loaded from cross serial number is correct.
+            -->
+            <text displayName="Effector" required="true"
+                  pattern="UAS_nls_myr-FLAG_3_0048"
+                  markedForTask="false">
+            </text>
+
+            <!--<cvTermList displayName="Effector" required="true"-->
+            <!--autoComplete="true"-->
+            <!--markedForTask="false"-->
+            <!--displayNamePrefixedForValues="false"-->
+            <!--serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">-->
+            <!--</cvTermList>-->
+
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  markedForTask="false">
+                <sourceFileDefault pattern=".*_(\d{8}_\d+_[A-Z]\d+).*"/>
+                <sourceFileDefault pattern=".*_(\d{8}_\d+_).*"/> <!-- for preScreen prior to zeiss brain number standardization -->
+            </text>
+
+            <cvTermList displayName="Tile" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        autoComplete="true"
+                        markedForTask="false">
+            </cvTermList>
+
+@config-fragment-gender@
+@config-fragment-age@
+            <cvTermList displayName="Imager" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+                <staticDefault value="Nirmala Iyer" />
+            </cvTermList>
+
+@config-fragment-annotator@
+@config-fragment-tissue_mounting_protocol@
+        </dataFields>
+
+    </project>
+
+@config-fragment-tmog-end@

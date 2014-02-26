@@ -1,0 +1,6 @@
+
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="@family@"/>
+                    <property name="image_property" value="@image_property@"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>

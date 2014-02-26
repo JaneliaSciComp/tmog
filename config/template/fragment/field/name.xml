@@ -1,0 +1,4 @@
+            <text displayName="SAGE Name" required="true"
+                  editable="false"
+                  copyable="false">@sage-data-default@
+            </text>
