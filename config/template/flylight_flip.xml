@@ -1,6 +1,6 @@
 @config-fragment-tmog-begin@
 @config-fragment-global@
-    <project name="Fly Light Flip - manual entry (FLFL*)" default="true">
+    <project name="Fly Light Flip - manual entry (FLFL*)">
 
 @config-fragment-lsm-input@
 @config-fragment-output-flip@
@@ -108,7 +108,7 @@
 
     </project>
 
-    <project name="Fly Light - MCFO - scope to confocalStacks">
+    <project name="Fly Light - MCFO - scope to confocalStacks" default="true">
 
 @config-fragment-lsm-input@
 @config-fragment-output-flip@
@@ -190,6 +190,7 @@
 @config-fragment-tile-with-flylight_flip-default@
 @config-fragment-screen_state-with-flylight_flip-default@
 @config-fragment-comment-with-flylight_flip-default@
+@config-fragment-gender-with-flylight_flip-default@
 @config-fragment-name-with-flylight_flip-default@
         </dataFields>
 

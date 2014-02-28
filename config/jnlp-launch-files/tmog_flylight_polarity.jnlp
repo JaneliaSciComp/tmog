@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jnlp codebase="http://apps.int.janelia.org/webstart/tmog4/" href="flylight_polarity.jnlp">
+<jnlp codebase="http://apps.int.janelia.org/webstart/tmog4/" href="tmog_flylight_polarity.jnlp">
     <information>
         <title>Janelia Transmogrifier</title>
         <vendor>Janelia Farm Scientific Computing</vendor>

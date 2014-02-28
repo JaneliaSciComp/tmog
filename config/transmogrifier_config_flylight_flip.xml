@@ -5,7 +5,7 @@
 
     <global minimumVersion="4.0.0" frameSizePercentage="95"/>
 
-    <project name="Fly Light Flip - manual entry (FLFL*)" default="true">
+    <project name="Fly Light Flip - manual entry (FLFL*)">
 
         <inputFileFilter patternString=".+\.lsm" />
 
@@ -198,7 +198,7 @@
 
     </project>
 
-    <project name="Fly Light - MCFO - scope to confocalStacks">
+    <project name="Fly Light - MCFO - scope to confocalStacks" default="true">
 
         <inputFileFilter patternString=".+\.lsm" />
 
@@ -719,6 +719,19 @@
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
             </text>
+
+            <validValueList displayName="Gender" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="gender"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
 
             <text displayName="SAGE Name" required="true"
                   editable="false"

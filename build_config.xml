@@ -141,6 +141,7 @@
 
     <macrodef name="build-jnlp-launch-file">
         <attribute name="name"/>
+        <attribute name="full-jnlp-name" default="tmog_@{name}.jnlp"/>
         <attribute name="config-resource-dir"/>
         <attribute name="config-resource" default="@{config-resource-dir}/tmog/config/transmogrifier_config_@{name}.xml"/>
         <attribute name="initial-heap-size" default="264m"/>
@@ -151,11 +152,11 @@
             <copy todir="config/jnlp-launch-files" overwrite="true" force="true">
                 <mappedresources>
                     <fileset dir="config/JNLP-INF" includes="APPLICATION_TEMPLATE.JNLP"/>
-                    <globmapper from="*" to="@{name}.jnlp"/>
+                    <globmapper from="*" to="@{full-jnlp-name}"/>
                 </mappedresources>
                 <filterchain>
                     <replacestring from='codebase="*" href="*"'
-                                   to='codebase="http://${codebase-host}/webstart/tmog4/" href="@{name}.jnlp"'/>
+                                   to='codebase="http://${codebase-host}/webstart/tmog4/" href="@{full-jnlp-name}"'/>
                     <replacestring from='initial-heap-size="*" max-heap-size="*"'
                                    to='initial-heap-size="@{initial-heap-size}" max-heap-size="@{max-heap-size}"'/>
                     <replacestring from='&lt;argument&gt;*&lt;/argument&gt;'
