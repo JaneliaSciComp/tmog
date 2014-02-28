@@ -3,20 +3,20 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="3.0.7" frameSizePercentage="95"/>
+    <global minimumVersion="4.0.0" frameSizePercentage="95"/>
 
     <project name="Fly Light Polarity - scope to confocalStacks" default="true">
 
         <inputFileFilter patternString=".+\.lsm" />
 
-        <outputDirectory basePath="[\\arch.janelia.priv|/archive]/flylight_archive/polarity/confocalStacks"
+        <outputDirectory basePath="[//arch.janelia.priv|/archive]/flylight_archive/polarity/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[\\arch.janelia.priv|/archive]/flylight_archive/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[//arch.janelia.priv|/archive]/flylight_archive/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="GAL4 Line" value="GAL4 Line" />
             </rowUpdater>
@@ -58,9 +58,7 @@
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
-                <property name="exclude.host.name" value="true"/>
                 <property name="lab" value="$STATIC:flylight"/>
-                <property name="family" value="$STATIC:flylight_polarity"/>
                 <property name="imaging_project" value="Imaging Project"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
@@ -86,8 +84,9 @@
                 <property name="lsm_illumination_channel_2_power_bc_1" value="Channel 2 Power"/>
                 <property name="lsm_illumination_channel_3_power_bc_1" value="Channel 3 Power"/>
                 <property name="microscope_filename"/>
-                <property name="screen_state" value="Screen State"/>
                 <property name="display" value="Screen State$MAP:accepted=true|pre_screen=false|rejected=false"/>
+                <property name="family" value="$STATIC:flylight_polarity"/>
+                <property name="screen_state" value="Screen State"/>
             </rowListener>
 
             <!--
@@ -118,10 +117,11 @@
 
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
+                            sharedForAllSessionFiles="true"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;user=user:nerna"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;user=group:dicksonlab&amp;user=user:nerna&amp;user=user:wolfft"
                             autoComplete="true">
             </webServiceList>
 
@@ -227,6 +227,7 @@
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
                 <validValue value="Aljoscha Nern"/>
+                <validValue value="Barry Dickson"/>
                 <validValue value="Tanya Wolff"/>
                 <validValue value="Yoshi Aso"/>
             </validValueList>
@@ -244,7 +245,7 @@
                             sharedForAllSessionFiles="true"
                             autoComplete="true">
                 <validValue value="pre_screen"/>
-                <validValue value="accepted"/>
+                <validValue value="accepted" default="true"/>
                 <validValue value="accepted_public"/>
                 <validValue value="rejected"/>
             </validValueList>
@@ -322,7 +323,7 @@
         <inputFileSorter sortAlgorithm="Number"
                          patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
 
-        <outputDirectory basePath="[\\arch.janelia.priv|/archive]/flylight_archive/polarity/confocalStacks"
+        <outputDirectory basePath="[//arch.janelia.priv|/archive]/flylight_archive/polarity/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -332,7 +333,7 @@
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[\\arch.janelia.priv|/archive]/flylight_archive/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[//arch.janelia.priv|/archive]/flylight_archive/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="GAL4 Line" value="GAL4 Line" />
             </rowUpdater>
@@ -374,19 +375,18 @@
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
-                <property name="exclude.host.name" value="true"/>
                 <property name="lab" value="$STATIC:flylight"/>
-                <property name="family" value="$STATIC:flylight_polarity"/>
                 <property name="imaging_project" value="Imaging Project"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="created_by" value="Imager"/>
                 <property name="effector" value="Reporter"/>
                 <property name="slide_code" value="Slide Code"/>
-                <property name="tile" value="Tile"/>
+                <property name="tile" value="Tile$MAP:vnc_verify=ventral_nerve_cord" />
+                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|brain_with_lamina=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_lamina=Brain|left_optic_lobe=Brain|left_optic_lobe_part_1=Brain|left_optic_lobe_part_2=Brain|left_optic_lobe_with_lamina=Brain|left_ventral=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_lamina=Brain|right_optic_lobe=Brain|right_optic_lobe_part_1=Brain|right_optic_lobe_part_2=Brain|right_optic_lobe_with_lamina=Brain|right_ventral=Brain|ventral=Brain|ventral_nerve_cord=VNC|vnc_verify=VNC-Verify"/>
                 <property name="gender" value="Gender"/>
-                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|brain_with_lamina=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_lamina=Brain|left_optic_lobe=Brain|left_optic_lobe_with_lamina=Brain|left_ventral=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_lamina=Brain|right_optic_lobe=Brain|right_optic_lobe_with_lamina=Brain|right_ventral=Brain|ventral=Brain|ventral_nerve_cord=VNC|vnc_verify=VNC-Verify"/>
                 <property name="age" value="Age"/>
+                <property name="full_age" value="Full Age"/>
                 <property name="annotated_by" value="Annotator"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="data_set" value="Data Set"/>
@@ -401,6 +401,8 @@
                 <property name="lsm_illumination_channel_2_power_bc_1" value="Channel 2 Power"/>
                 <property name="lsm_illumination_channel_3_power_bc_1" value="Channel 3 Power"/>
                 <property name="microscope_filename"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="family" value="$STATIC:flylight_polarity"/>
                 <property name="screen_state" value="$STATIC:accepted"/>
             </rowListener>
 
@@ -440,7 +442,7 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;user=group:dicksonlab&amp;user=user:nerna&amp;user=user:wolfft"
                             autoComplete="true">
             </webServiceList>
 
@@ -499,18 +501,22 @@
             <cvTermList displayName="Imager" required="true"
                         markedForTask="false"
                         autoComplete="true"
+                        sharedForAllSessionFiles="true"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
             </cvTermList>
 
             <validValueList displayName="Annotator" required="false"
                             autoComplete="true"
+                            sharedForAllSessionFiles="true"
                             markedForTask="false">
                 <validValue value="Aljoscha Nern"/>
-                <validValue value="Yoshi Aso"/>
+                <validValue value="Barry Dickson"/>
                 <validValue value="Tanya Wolff"/>
+                <validValue value="Yoshi Aso"/>
             </validValueList>
 
             <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            sharedForAllSessionFiles="true"
                             markedForTask="false">
                 <validValue value="DPX Ethanol Mounting"/>
                 <validValue value="DPX PBS Mounting"/>

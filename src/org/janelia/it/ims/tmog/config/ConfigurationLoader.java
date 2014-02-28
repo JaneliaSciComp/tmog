@@ -394,50 +394,63 @@ public class ConfigurationLoader
     /**
      * @return the configuration data URL.
      */
-    public static URL getConfigUrl() throws ConfigurationException {
+    public static URL getConfigUrl(String configResource) throws ConfigurationException {
         URL configUrl;
-        String configPath = System.getProperty(CONFIG_FILE_PROPERTY_NAME);
-        if (configPath == null) {
-            configPath = System.getProperty(SECURE_CONFIG_FILE_PROPERTY_NAME);
-            LOG.info("getConfigUrl: " + SECURE_CONFIG_FILE_PROPERTY_NAME +
-                     " property is '" + configPath + "'");
-        } else {
-            LOG.info("getConfigUrl: " + CONFIG_FILE_PROPERTY_NAME +
-                     " property is '" + configPath + "'");
-        }
+        LOG.info("getConfigUrl: configResource is '" + configResource + "'");
 
         try {
-            if (configPath == null) {
+            if (configResource == null) {
                 final File file = selectConfigFile();
-                configPath = file.getAbsolutePath();
+                configResource = file.getAbsolutePath();
                 configUrl = file.toURI().toURL();
-            } else if (configPath.startsWith("http")) {
-                configUrl = new URL(configPath);
+            } else if (configResource.startsWith("http")) {
+                configUrl = new URL(configResource);
             } else {
-                String convertedFileName = PathUtil.convertPath(configPath);
+                String convertedFileName = PathUtil.convertPath(configResource);
                 File configFile = new File(convertedFileName);
 
-                if ((! configFile.exists()) && PathUtil.ON_WINDOWS) {
+                if (! configFile.exists()) {
 
-                    final Pattern removalPattern = Pattern.compile("\\.janelia\\.priv");
-                    final Matcher m = removalPattern.matcher(convertedFileName);
-                    final String alternateFileName = m.replaceFirst("");
-                    final File alternateConfigFile = new File(alternateFileName);
+                    if (PathUtil.ON_WINDOWS) {
 
-                    if (alternateConfigFile.exists()) {
-                        throw new ConfigurationException(
-                                "Configuration file " + configFile.getAbsolutePath() +
-                                " does not exist.  Please make sure you have mapped " +
-                                "the network drive using the fully qualified name " +
-                                "( e.g. dm11.janelia.priv ).");
+                        final Pattern removalPattern = Pattern.compile("\\.janelia\\.priv");
+                        final Matcher m = removalPattern.matcher(convertedFileName);
+                        final String alternateFileName = m.replaceFirst("");
+                        final File alternateConfigFile = new File(alternateFileName);
+
+                        if (alternateConfigFile.exists()) {
+                            final String fullDriveSuffix = ".janelia.priv";
+                            final int driveEnd = convertedFileName.indexOf(fullDriveSuffix) + fullDriveSuffix.length();
+                            final String expectedDriveName = convertedFileName.substring(0, driveEnd);
+                            throw new ConfigurationException(
+                                    "The configuration file is expected to be loaded from " +
+                                    configFile.getAbsolutePath() +
+                                    " but was found instead at " + alternateConfigFile.getAbsolutePath() +
+                                    ".  Please map the network drive using the fully qualified name '" +
+                                    expectedDriveName + "' to ensure that all paths declared within the " +
+                                    "configuration file are properly resolved.");
+                        }
+
                     }
+
+                    final String message = "The default configuration file\n\n" + configFile.getAbsolutePath() +
+                                           "\n\ncould not be found.\n\n";
+                    NarrowOptionPane.showMessageDialog(null,
+                                                       message,
+                                                       "Default Configuration Missing",
+                                                       JOptionPane.WARNING_MESSAGE);
+                    final File file = selectConfigFile();
+                    configResource = file.getAbsolutePath();
+                    configUrl = file.toURI().toURL();
+
+                } else {
+                    configUrl = new File(configFile.getAbsolutePath()).toURI().toURL();
                 }
 
-                configUrl = new File(configFile.getAbsolutePath()).toURI().toURL();
             }
         } catch (MalformedURLException e) {
             throw new ConfigurationException("Failed to load configuration from " +
-                                             configPath + ".", e);
+                                             configResource + ".", e);
         }
 
         return configUrl;
@@ -497,6 +510,4 @@ public class ConfigurationLoader
     }
 
     private static final Logger LOG = Logger.getLogger(ConfigurationLoader.class);
-    private static final String CONFIG_FILE_PROPERTY_NAME = "configFile";
-    private static final String SECURE_CONFIG_FILE_PROPERTY_NAME = "jnlp.configFile";
 }

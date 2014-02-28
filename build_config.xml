@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="build_configuration_files" default="build-config" basedir=".">
 
+    <property name="codebase-host" value="apps.int.janelia.org"/>
+
     <macrodef name="init-sage-data-default">
         <attribute name="sageFamily"/>
         <attribute name="sageProperty"/>
@@ -133,6 +135,41 @@
             </filterchain>
         </copy>
 
+    </target>
+
+    <macrodef name="build-jnlp-launch-file">
+        <attribute name="name"/>
+        <attribute name="config-resource-dir"/>
+        <attribute name="config-resource" default="@{config-resource-dir}/tmog/config/transmogrifier_config_@{name}.xml"/>
+        <attribute name="initial-heap-size" default="264m"/>
+        <attribute name="max-heap-size" default="1024m"/>
+
+
+        <sequential>
+            <copy todir="config/jnlp-launch-files" overwrite="true" force="true">
+                <mappedresources>
+                    <fileset dir="config/JNLP-INF" includes="APPLICATION_TEMPLATE.JNLP"/>
+                    <globmapper from="*" to="@{name}.jnlp"/>
+                </mappedresources>
+                <filterchain>
+                    <replacestring from='codebase="*" href="*"'
+                                   to='codebase="http://${codebase-host}/webstart/tmog4/" href="@{name}.jnlp"'/>
+                    <replacestring from='initial-heap-size="*" max-heap-size="*"'
+                                   to='initial-heap-size="@{initial-heap-size}" max-heap-size="@{max-heap-size}"'/>
+                    <replacestring from='&lt;argument&gt;*&lt;/argument&gt;'
+                                   to='&lt;argument&gt;@{config-resource}&lt;/argument&gt;'/>
+                </filterchain>
+            </copy>
+        </sequential>
+    </macrodef>
+
+    <target name="build-jnlp-launch-files" description="Builds jnlp launch files.">
+        <build-jnlp-launch-file name="flylight_polarity"
+                                config-resource-dir="[//arch.janelia.priv|/archive]/flylight_archive"/>
+        <build-jnlp-launch-file name="flylight_flip"
+                                config-resource-dir="[//arch.janelia.priv|/archive]/flylight_archive"/>
+        <build-jnlp-launch-file name="zlatic"
+                                config-resource-dir="[//dm11.janelia.priv|/groups/zlatic]/zlaticlab"/>
     </target>
 
 </project>

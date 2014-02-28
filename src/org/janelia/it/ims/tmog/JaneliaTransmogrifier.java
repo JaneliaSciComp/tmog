@@ -17,7 +17,6 @@ import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
 import org.janelia.it.ims.tmog.view.ColorScheme;
 import org.janelia.it.ims.tmog.view.TabbedView;
 import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
-import org.janelia.it.utils.LoggingUtils;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -45,7 +44,7 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
      * app is run from within an IDE (package information can be used
      * when the app is run from a jar file). 
      */
-    public static final String VERSION = "3.1.8";
+    public static final String VERSION = "4.0.0";
     
     /**
      * Set up a thread pool to limit the number of concurrent
@@ -70,14 +69,8 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
     /**
      * Construct the application
      */
-    public JaneliaTransmogrifier() {
+    public JaneliaTransmogrifier(String configResource) {
         super("Janelia Transmogrifier " + VERSION);
-
-        LoggingUtils.setLoggingContext();
-        final Runnable setContextInDispatchThread = new Runnable() {
-            public void run() { LoggingUtils.setLoggingContext(); }
-        };
-        SwingUtilities.invokeLater(setContextInDispatchThread);
 
         // attempt to load preferences
         TransmogrifierPreferences tmogPreferences =
@@ -95,7 +88,7 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
         }
 
         try {
-            final URL configUrl = ConfigurationLoader.getConfigUrl();
+            final URL configUrl = ConfigurationLoader.getConfigUrl(configResource);
             final ConfigurationLoader loader = new ConfigurationLoader(configUrl, this);
             loader.execute();
         } catch (Exception e) {
@@ -227,7 +220,11 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
         LOG.info("starting Janelia Transmogrifier version " + VERSION +
                  ", revision " + revision);
 
-        JaneliaTransmogrifier frame = new JaneliaTransmogrifier();
+        String configPath = null;
+        if (args.length > 0) {
+            configPath = args[0];
+        }
+        JaneliaTransmogrifier frame = new JaneliaTransmogrifier(configPath);
         frame.setIconImage(APP_ICON.getImage());
     }
 
