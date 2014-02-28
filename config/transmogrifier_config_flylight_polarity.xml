@@ -31,6 +31,7 @@
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
                 <property name="plugin-scale" value="0" />
+                <property name="Objective" value="Recording #1 Objective" />
                 <property name="Channel Specification" value="Recording #1 Number of Channels$MAP:1=r|2=rs|3=rss" />
                 <property name="Channel 1 Name" value="IlluminationChannel #1 Name" />
                 <property name="Channel 1 Power" value="IlluminationChannel #1 Power B/C 1" />
@@ -41,6 +42,11 @@
                 <property name="Channel 3 Name" value="IlluminationChannel #3 Name" />
                 <property name="Channel 3 Power" value="IlluminationChannel #3 Power B/C 1" />
                 <property name="Channel 3 Gain" value="DetectionChannel #3 Detector Gain" />
+            </rowUpdater>
+
+            <!-- Make sure this plug-in is listed after the ZeissLsmDataPlugin -->
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ObjectiveCorrectionPlugin">
+                <property name="show-confirmation-dialog" value="true"/>
             </rowUpdater>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
@@ -74,6 +80,7 @@
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="data_set" value="Data Set"/>
                 <property name="channel_spec" value="Channel Specification"/>
+                <property name="objective" value="Objective"/>
                 <property name="lsm_detection_channel_1_detector_gain" value="Channel 1 Gain"/>
                 <property name="lsm_detection_channel_2_detector_gain" value="Channel 2 Gain"/>
                 <property name="lsm_detection_channel_3_detector_gain" value="Channel 3 Gain"/>
@@ -258,6 +265,11 @@
                 <staticDefault value="polarity"/>
             </cvTermList>
 
+            <text displayName="Objective" required="true"
+                  markedForTask="false"
+                  editable="false">
+            </text>
+
             <text displayName="Channel Specification" required="false"
                     markedForTask="false"
                     pattern="s*rs*">
@@ -348,6 +360,7 @@
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
                 <property name="plugin-scale" value="0" />
+                <property name="Objective" value="Recording #1 Objective" />
                 <property name="Channel Specification" value="Recording #1 Number of Channels$MAP:1=r|2=rs|3=rss" />
                 <property name="Channel 1 Name" value="IlluminationChannel #1 Name" />
                 <property name="Channel 1 Power" value="IlluminationChannel #1 Power B/C 1" />
@@ -358,6 +371,11 @@
                 <property name="Channel 3 Name" value="IlluminationChannel #3 Name" />
                 <property name="Channel 3 Power" value="IlluminationChannel #3 Power B/C 1" />
                 <property name="Channel 3 Gain" value="DetectionChannel #3 Detector Gain" />
+            </rowUpdater>
+
+            <!-- Make sure this plug-in is listed after the ZeissLsmDataPlugin -->
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ObjectiveCorrectionPlugin">
+                <property name="show-confirmation-dialog" value="true"/>
             </rowUpdater>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
@@ -391,6 +409,7 @@
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="data_set" value="Data Set"/>
                 <property name="channel_spec" value="Channel Specification"/>
+                <property name="objective" value="Objective"/>
                 <property name="lsm_detection_channel_1_detector_gain" value="Channel 1 Gain"/>
                 <property name="lsm_detection_channel_2_detector_gain" value="Channel 2 Gain"/>
                 <property name="lsm_detection_channel_3_detector_gain" value="Channel 3 Gain"/>
@@ -530,6 +549,11 @@
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imaging_project">
                 <staticDefault value="polarity"/>
             </cvTermList>
+
+            <text displayName="Objective" required="true"
+                  markedForTask="false"
+                  editable="false">
+            </text>
 
             <text displayName="Channel Specification" required="false"
                     markedForTask="false"

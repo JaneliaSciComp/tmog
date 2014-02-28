@@ -1,5 +1,6 @@
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
                 <property name="plugin-scale" value="0" />
+                <property name="Objective" value="Recording #1 Objective" />
                 <property name="Channel Specification" value="Recording #1 Number of Channels$MAP:1=r|2=rs|3=rss" />
                 <property name="Channel 1 Name" value="IlluminationChannel #1 Name" />
                 <property name="Channel 1 Power" value="IlluminationChannel #1 Power B/C 1" />

@@ -117,6 +117,7 @@
 @config-fragment-update-mapped-serial-data@
 @config-fragment-update-project-cross-data@
 @config-fragment-update-zeiss-lsm-data@
+@config-fragment-correct-objective@
 @config-fragment-validate-gender-and-age@
 @config-fragment-image-sequence-flip@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
@@ -147,6 +148,7 @@
 @config-fragment-tissue_mounting_protocol@
 @config-fragment-screen_state@
 @config-fragment-imaging_project-mcfo@
+@config-fragment-objective@
 @config-fragment-channel-data@
         </dataFields>
 
@@ -215,6 +217,7 @@
 @config-fragment-update-mapped-serial-data@
 @config-fragment-update-project-cross-data@
 @config-fragment-update-zeiss-lsm-data@
+@config-fragment-correct-objective@
 @config-fragment-validate-gender-and-age@
 @config-fragment-image-sequence-flip@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
@@ -282,6 +285,7 @@
                   pattern="s*rs*">
             </text>
 
+@config-fragment-objective@
 @config-fragment-imaging_project-mcfo@
         </dataFields>
 

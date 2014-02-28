@@ -1,0 +1,4 @@
+            <!-- Make sure this plug-in is listed after the ZeissLsmDataPlugin -->
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ObjectiveCorrectionPlugin">
+                <property name="show-confirmation-dialog" value="true"/>
+            </rowUpdater>

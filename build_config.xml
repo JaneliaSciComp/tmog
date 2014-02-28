@@ -106,6 +106,7 @@
         <load-filtered-fragment name="imaging_project-polarity" path="field/imaging_project.xml" key="default_project" value="polarity"/>
         <load-field-fragment    name="line" />
         <load-field-fragment    name="name" />
+        <load-field-fragment    name="objective" />
         <load-field-fragment    name="screen_state" />
         <load-field-fragment    name="slide_code" />
         <load-field-fragment    name="tile" />
@@ -114,6 +115,7 @@
         <!-- plug-in fragments -->
         <load-fragment          name="common-image-data-properties" path="plugin/common-image-data-properties.xml"/>
         <load-fragment          name="copy-zeiss-log-files"         path="plugin/copy-zeiss-log-files.xml"/>
+        <load-fragment          name="correct-objective"            path="plugin/correct-objective.xml"/>
         <load-filtered-fragment name="image-sequence-flip"          path="plugin/image-sequence.xml" key="family" value="flylight_flip"/>
         <load-filtered-fragment name="image-sequence-polarity"      path="plugin/image-sequence.xml" key="family" value="flylight_polarity"/>
         <load-fragment          name="update-mapped-serial-data"    path="plugin/update-mapped-serial-data.xml"/>
