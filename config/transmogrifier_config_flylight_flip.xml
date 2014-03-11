@@ -1136,20 +1136,13 @@
             </webServiceList>
 
             <!--
-                 For cell counting, effector should always be UAS_nls_myr-FLAG_3_0048.
-                 This ensures effector loaded from cross serial number is correct.
+                 For cell counting, reporter should always be UAS_nls_myr-FLAG_3_0048.
+                 This ensures reporter loaded from cross serial number is correct.
             -->
-            <text displayName="Effector" required="true"
+            <text displayName="Reporter" required="true"
                   pattern="UAS_nls_myr-FLAG_3_0048"
                   markedForTask="false">
             </text>
-
-            <!--<cvTermList displayName="Effector" required="true"-->
-            <!--autoComplete="true"-->
-            <!--markedForTask="false"-->
-            <!--displayNamePrefixedForValues="false"-->
-            <!--serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">-->
-            <!--</cvTermList>-->
 
             <text displayName="Slide Code" required="true"
                   pattern="\d{8}_\d+_[A-Z]\d+"
