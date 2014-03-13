@@ -1239,8 +1239,9 @@ public class ZeissLSMReader {
 
             immersion = next < tokens.length ? tokens[next++] : "Unknown";
             iris = Boolean.FALSE;
-            if (next < tokens.length) {
-                iris = tokens[next+1].trim().equalsIgnoreCase("iris");
+            final int nextPlusOne = next + 1;
+            if (nextPlusOne < tokens.length) {
+                iris = tokens[nextPlusOne].trim().equalsIgnoreCase("iris");
             }
         }
     }
