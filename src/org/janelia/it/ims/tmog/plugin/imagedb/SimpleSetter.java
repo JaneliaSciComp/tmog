@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -34,6 +34,7 @@ public class SimpleSetter implements ImagePropertySetter {
     private String fieldName;
     private String staticValue;
     private Map<String, String> coreValueToDbValueMap;
+    private String mapDefaultValue;
 
     /**
      * Value constructor.
@@ -50,6 +51,7 @@ public class SimpleSetter implements ImagePropertySetter {
         this.fieldName = fieldName;
         this.staticValue = null;
         this.coreValueToDbValueMap = null;
+        this.mapDefaultValue = null;
 
         final int staticStart = fieldName.indexOf(FIELD_STATIC_IDENTIFIER);
         if (staticStart > -1) {
@@ -85,7 +87,11 @@ public class SimpleSetter implements ImagePropertySetter {
                     if ((keyEnd > 0) && (valueStart < pair.length())) {
                         key = pair.substring(0, keyEnd);
                         value = pair.substring(valueStart);
-                        this.coreValueToDbValueMap.put(key, value);
+                        if (MAP_DEFAULT_KEY.equals(key)) {
+                            this.mapDefaultValue = value;
+                        } else {
+                            this.coreValueToDbValueMap.put(key, value);
+                        }
                     } else {
                         throw new IllegalArgumentException(
                                 "The property type name '" + propertyType +
@@ -142,7 +148,9 @@ public class SimpleSetter implements ImagePropertySetter {
 
             if (coreValueToDbValueMap != null) {
                 final String mappedValue = coreValueToDbValueMap.get(value);
-                if (mappedValue != null) {
+                if (mappedValue == null) {
+                    value = mapDefaultValue;
+                } else {
                     value = mappedValue;
                 }
             }
@@ -165,6 +173,7 @@ public class SimpleSetter implements ImagePropertySetter {
                           value);
     }
 
-    private static final String FIELD_STATIC_IDENTIFIER = "$STATIC:";
-    private static final String FIELD_MAP_IDENTIFIER = "$MAP:";
+    protected static final String FIELD_STATIC_IDENTIFIER = "$STATIC:";
+    protected static final String FIELD_MAP_IDENTIFIER = "$MAP:";
+    protected static final String MAP_DEFAULT_KEY = "MAP_DEFAULT";
 }
