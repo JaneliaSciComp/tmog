@@ -173,7 +173,10 @@
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
                         autoComplete="true"
                         markedForTask="false">
-                <staticDefault value="brain"/>
+                <sourceFileMappedDefault pattern=".*_DPX_(\d\d)X_.*">
+                    <mappedValue from="20" to="brain"/>
+                    <mappedValue from="63" to="central"/>
+                </sourceFileMappedDefault>
             </cvTermList>
 
             <text displayName="Channel Specification" required="true"
