@@ -3,173 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="2.7.7"/>
-
-    <project name="Simpson Lab: Fix LexA Line Names" default="true" taskName="simple-move">
-
-        <inputFileFilter patternString="JHS_Lex.*lsm"
-                         recursiveSearch="true"/>
-
-        <outputDirectory>
-            <path path="[\\dm11.janelia.priv\simpsonmicro|/groups/simpson/MicroscopeData]\Lex_confocal_stacks\" />
-            <renameFieldValue fieldDisplayName="Line" />
-        </outputDirectory>
-
-        <plugins>
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
-                <property name="db.config.key" value="sage"/>
-            </rowValidator>
-
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="sage"/>
-                <property name="exclude.host.name" value="true"/>
-                <property name="family" value="$STATIC:simpson_lex"/>
-                <property name="lab" value="$STATIC:simpson"/>
-                <property name="line" value="Line"/>
-                <property name="capture_date" value="Capture Date"/>
-                <property name="organ" value="Organ$MAP:b=Brain|t=Thorax"/>
-                <property name="uas_reporter" value="UAS Reporter"/>
-            </rowListener>
-
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[\\dm11.janelia.priv\simpsonmicro|/groups/simpson/MicroscopeData]\tmog\summaries\simpson_lex"/>
-            </sessionListener>
-        </plugins>
-
-        <dataFields>
-
-            <text displayName="Line" required="true" pattern="(JHS|EXT)_[0-9A-Za-z_-]+-LexA">
-                <sourceFileMappedDefault pattern="(.*)_\d{8}_._\d{17}\.lsm">
-                    <mappedValue from="JHS_LexAP001" to="JHS_P001-LexA"/>
-                    <mappedValue from="JHS_LexAP004" to="JHS_P004-LexA"/>
-                    <mappedValue from="JHS_LexAP005" to="JHS_P005-LexA"/>
-                    <mappedValue from="JHS_LexAP009" to="JHS_P009-LexA"/>
-                </sourceFileMappedDefault>
-            </text>
-
-            <separator value="_"/>
-
-            <date displayName="Capture Date" required="true"
-                  datePattern="yyyyMMdd">
-                <sourceFileDateDefault pattern=".*_(\d{8})_.*"
-                                       fromDatePattern="yyyyMMdd"
-                                       toDatePattern="yyyyMMdd"/>
-            </date>
-
-            <separator value="_"/>
-
-            <validValueList displayName="Organ" required="true">
-                <sourceFileDefault pattern=".*_\d{8}_([bt]).*"/>
-                <validValue displayName="b: Brain" value="b"/>
-                <validValue displayName="t: Thorax" value="t"/>
-            </validValueList>
-
-            <text displayName="File Suffix" required="true"
-                  pattern="_\d{17}\.lsm"
-                  copyable="false">
-                <sourceFileDefault pattern=".*(_\d{17}\.lsm)$"/>
-            </text>
-
-            <!--
-             These values are collected for the database but are not
-             included as components of the file name (markedForTask="false").
-             -->
-            <validValueList displayName="UAS Reporter" required="true"
-                            markedForTask="false">
-                <validValue value="pBDP-LexAop-CD2-GFP" default="true"/>
-            </validValueList>
-
-        </dataFields>
-
-    </project>
-
-    <project name="Simpson Lab: Rename Waffles">
-
-        <inputFileFilter patternString=".*lsm"
-                         recursiveSearch="true"/>
-
-        <outputDirectory>
-            <path path="[\\dm11.janelia.priv\simpsonmicro|/groups/simpson/MicroscopeData]\Waffles_confocal_stacks\" />
-            <renameFieldValue fieldDisplayName="Line" />
-        </outputDirectory>
-
-        <plugins>
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
-                <property name="db.config.key" value="sage"/>
-                <property name="relativePathDepth" value="2"/>
-            </rowValidator>
-
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
-                <property name="db.config.key" value="sage" />
-                <property name="Image Count" value="urn:lsid:janelia.org:simpson_waffles_uid" />
-            </rowListener>
-
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="sage"/>
-                <property name="exclude.host.name" value="true"/>
-                <property name="previousRelativePathDepth" value="2"/>
-                <property name="family" value="$STATIC:simpson_waffles"/>
-                <property name="lab" value="$STATIC:simpson"/>
-                <property name="line" value="Line"/>
-                <property name="capture_date" value="Capture Date"/>
-                <property name="organ" value="Organ$MAP:b=Brain|t=Thorax"/>
-                <property name="uas_reporter" value="UAS Reporter"/>
-            </rowListener>
-
-            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[\\dm11.janelia.priv\simpsonmicro|/groups/simpson/MicroscopeData]\tmog\summaries\simpson_waffles"/>
-            </sessionListener>
-        </plugins>
-
-        <dataFields>
-
-            <text displayName="Line" required="true" pattern="(JHS|EXT)_[0-9A-Za-z_-]+-GAL4">
-                <sourceFileMappedDefault pattern=".*confocal_stacks[/\\\\]([^/\\\\]*)[/\\\\].*"
-                                         matchType="path">
-                    <!-- NOTE: need to remove JHS_ prefix from Phuong's xls -->
-                    <mappedValue from="WFL001_4W80_071808" to="JHS_Waffle_001-GAL4"/>
-                    <mappedValue from="WFL003_4W80_071508" to="JHS_Waffle_003-GAL4"/>
-                    <mappedValue from="WFL004_4W80_080108" to="JHS_Waffle_004-GAL4"/>
-                </sourceFileMappedDefault>
-            </text>
-
-            <separator value="_"/>
-
-            <date displayName="Capture Date" required="true"
-                  datePattern="yyyyMMdd">
-                <sourceFileDateDefault pattern=".*(\d{6})\.mdb.*"
-                                       matchType="path"
-                                       fromDatePattern="MMddyy"
-                                       toDatePattern="yyyyMMdd"/>
-            </date>
-
-            <separator value="_"/>
-
-            <validValueList displayName="Organ" required="true">
-                <validValue displayName="b: Brain" value="b"/>
-                <validValue displayName="t: Thorax" value="t"/>
-            </validValueList>
-
-            <separator value="_"/>
-
-            <pluginData displayName="Image Count" format="%05d"/>
-
-            <fileExtension/>
-            
-            <!--
-             These values are collected for the database but are not
-             included as components of the file name (markedForTask="false").
-             -->
-            <validValueList displayName="UAS Reporter" required="true"
-                            markedForTask="false">
-                <validValue value="UAS_mCD8-GFP" default="true"/>
-            </validValueList>
-
-        </dataFields>
-
-    </project>
-
-    <!-- TODO: create Optimizing config -->
+    <global minimumVersion="4.0.1"/>
 
     <project name="Simpson: IHC Optimizing from Nighthawk" taskName="collector">
 
@@ -264,6 +98,89 @@
             <text displayName="dimension_x" required="true"><targetPropertyDefault propertyName="dimension_x"/></text>
             <text displayName="dimension_y" required="true"><targetPropertyDefault propertyName="dimension_y"/></text>
             <text displayName="dimension_z" required="true"><targetPropertyDefault propertyName="dimension_z"/></text>
+        </dataFields>
+
+    </project>
+
+    <project name="Simpson: Sensory Descending Alignment" taskName="collector" default="true">
+
+        <inputFileFilter patternString=".+\.lsm" />
+
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString="\d{8}_(.*AD)_DPX_(\d\d)X_L(\d\d)\.lsm"
+                         patternGroupIndexes="1,3,2" />
+
+        <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
+                <property name="Channel Specification" value="Recording #1 Number of Channels$MAP:1=r|2=sr|3=srr" />
+            </rowUpdater>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="lab" value="$STATIC:simpson"/>
+                <property name="family" value="$STATIC:simpson_descending"/>
+                <property name="relativePathDepth" value="4"/> <!-- Steffi/Grooming/ConfocalData/Alignment -->
+                <property name="line" value="Line"/>
+                <property name="data_set" value="$STATIC:simpsonlab_sensory_descending_alignment"/>
+                <property name="slide_code" value="JHS_SDA_${Sample Date}_${Sample Number}${Sample Extension}"/>
+                <property name="tile" value="Tile"/>
+                <property name="area" value="Tile$MAP:MAP_DEFAULT=Brain|abdominal=VNC|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|ventral_nerve_cord=VNC|vnc_verify=VNC-Verify"/>
+                <property name="channel_spec" value="Channel Specification"/>
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.SageLoaderPlugin">
+                <property name="serviceUrl" value="http://jacs-data2.int.janelia.org:8180/rest-v1/sageLoader"/>
+                <property name="owner" value="system"/>
+                <property name="config" value="/groups/scicomp/informatics/data/flylightflip_light_imagery-config.xml"/>
+                <property name="grammar" value="/usr/local/pipeline/grammar/simpson_descending.gra"/>
+                <property name="lab" value="simpson"/>
+                <property name="debug" value="true"/>
+                <property name="testUrl" value="http://jacs-data2.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
+                <property name="relativePathDepth" value="4"/> <!-- Steffi/Grooming/ConfocalData/Alignment -->
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <date displayName="Sample Date" required="true"
+                  markedForTask="false"
+                  sharedForAllSessionFiles="true"
+                  datePattern="yyyyMMdd">
+            </date>
+
+            <text displayName="Sample Number" required="true"
+                  markedForTask="false"
+                  pattern="L\d\d">
+                <sourceFileDefault pattern=".*X_(L\d\d).*" />
+            </text>
+
+            <text displayName="Sample Extension" required="false"
+                  markedForTask="false"/>
+
+            <webServiceList displayName="Line" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=rubin&amp;lab=simpson"
+                            autoComplete="true">
+            </webServiceList>
+
+            <cvTermList displayName="Tile" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        autoComplete="true"
+                        markedForTask="false">
+                <staticDefault value="brain"/>
+            </cvTermList>
+
+            <text displayName="Channel Specification" required="true"
+                  markedForTask="false"
+                  pattern="s*rs*">
+            </text>
+
         </dataFields>
 
     </project>
