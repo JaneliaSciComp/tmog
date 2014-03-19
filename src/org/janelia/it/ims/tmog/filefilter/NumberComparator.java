@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -23,27 +23,59 @@ import java.util.regex.Pattern;
 public class NumberComparator implements Comparator<FileTarget> {
 
     private Pattern pattern;
+    private int primaryGroup;
+    private int numberGroup;
+    private int secondaryGroup;
 
     public NumberComparator() {
         this("(.*)(\\d++)\\.(.*)");
     }
 
     /**
-     * Constructs a comparator using the specified pattern string.
+     * Constructs a comparator using the specified pattern string and default group indexes.
      *
-     * @param  patternString  pattern with 3 groups: the first group
-     *                        identifies characters before the number,
-     *                        the second group identifies the number,
-     *                        and the third group identifies characters
-     *                        after the number.
+     * @param  patternString  pattern with 3 groups.
      *
      * @throws IllegalArgumentException
      *   if the specified patternString is invalid.
      */
     public NumberComparator(String patternString)
             throws IllegalArgumentException {
+        this(patternString, 1, 2, 3);
+    }
+
+    /**
+     * Constructs a comparator using the specified pattern string and group indexes.
+     *
+     * @param  patternString   pattern with 3 groups.
+     * @param  primaryGroup    index of group that identifies common names to be sorted by number.
+     * @param  numberGroup     index of group that identifies the number.
+     * @param  secondaryGroup  index of group that identifies characters to use for sorting names
+     *                         with the same primary name and number.
+     *
+     * @throws IllegalArgumentException
+     *   if the any arguments are invalid.
+     */
+    public NumberComparator(String patternString,
+                            int primaryGroup,
+                            int numberGroup,
+                            int secondaryGroup)
+            throws IllegalArgumentException {
+
         validatePatternString(patternString);
         this.pattern = Pattern.compile(patternString);
+
+        validateGroupIndexRange("primary", primaryGroup);
+        validateGroupIndexRange("number", numberGroup);
+        validateGroupIndexRange("secondary", secondaryGroup);
+
+        validateUniqueGroupIndex("primary", primaryGroup, numberGroup);
+        validateUniqueGroupIndex("primary", primaryGroup, secondaryGroup);
+        validateUniqueGroupIndex("number", numberGroup, secondaryGroup);
+
+        this.primaryGroup = primaryGroup;
+        this.numberGroup = numberGroup;
+        this.secondaryGroup = secondaryGroup;
     }
 
     public int compare(FileTarget o1, FileTarget o2) {
@@ -58,19 +90,19 @@ public class NumberComparator implements Comparator<FileTarget> {
         Matcher matcher1 = pattern.matcher(name1);
 
         if (matcher1.matches()) {
-            final String prefix1 = matcher1.group(1);
-            final int number1 = Integer.parseInt(matcher1.group(2));
+            final String prefix1 = matcher1.group(primaryGroup);
+            final int number1 = Integer.parseInt(matcher1.group(numberGroup));
             Matcher matcher2 = pattern.matcher(name2);
             if (matcher2.matches()) {
                 isNumberInBothFileNames = true;
-                final String prefix2 = matcher2.group(1);
+                final String prefix2 = matcher2.group(primaryGroup);
                 compareResult = prefix1.compareTo(prefix2);
                 if (compareResult == 0) {
-                    final int number2 = Integer.parseInt(matcher2.group(2));
+                    final int number2 = Integer.parseInt(matcher2.group(numberGroup));
                     compareResult = number1 - number2;
                     if (compareResult == 0) {
-                        final String suffix1 = matcher1.group(3);
-                        final String suffix2 = matcher2.group(3);
+                        final String suffix1 = matcher1.group(secondaryGroup);
+                        final String suffix2 = matcher2.group(secondaryGroup);
                         compareResult = suffix1.compareTo(suffix2);
                     }
                 }
@@ -108,9 +140,30 @@ public class NumberComparator implements Comparator<FileTarget> {
         if ((openCount < 3) || (closeCount < 3)) {
             throw new IllegalArgumentException(
                     "The patternString must contain 3 groups: " +
-                    "the first group identifies characters before the number, " +
-                    "the second group identifies the number, and " +
-                    "the third group identifies characters after the number.");
+                    "a primary group that identifies common names to be sorted by number, " +
+                    "a number group that identifies the number, and " +
+                    "a secondary group that identifies characters to use for sorting names " +
+                    "with the same primary name and number.");
         }
     }
+
+    private void validateGroupIndexRange(String context,
+                                         int indexToValidate)
+            throws IllegalArgumentException {
+
+        if ((indexToValidate < 1) || (indexToValidate > 3)) {
+            throw new IllegalArgumentException("The " + context + " index must be an integer value between 1 and 3.");
+        }
+    }
+
+    private void validateUniqueGroupIndex(String context,
+                                          int index1,
+                                          int index2)
+            throws IllegalArgumentException {
+
+        if (index1 == index2) {
+            throw new IllegalArgumentException("The " + context + " index must differ from all other indexes.");
+        }
+    }
+
 }

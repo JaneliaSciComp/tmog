@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -85,6 +85,27 @@ public class NumberComparatorTest
 
         NumberComparator comparator =
                 new NumberComparator(".*_(L)(\\d++)(\\.lsm)");
+        validateTestData(testData, comparator);
+
+    }
+
+    /**
+     * Tests the compare method.
+     *
+     * @throws Exception
+     *   if any unexpected errors occur.
+     */
+    public void testCompareLNumberWithUncommonGroupIndexes() throws Exception {
+
+        Object testData[][] = {
+                { "20140312_26B12DBD_24C08AD_DPX_20X_L01.lsm", "20140312_26B12DBD_24C08AD_DPX_20X_L02.lsm", -1 },
+                { "20140312_26B12DBD_24C08AD_DPX_20X_L01.lsm", "20140313_26B12DBD_24C08AD_DPX_63X_L01.lsm", -1 },
+                { "20140312_26B12DBD_24C08AD_DPX_20X_L01.lsm", "20140312_00B12DBD_24C08AD_DPX_20X_L01.lsm", 1 }
+        };
+
+        NumberComparator comparator =
+                new NumberComparator("\\d{8}_(.*AD)_DPX_(\\d\\d)X_L(\\d\\d)\\.lsm",
+                                     1,3,2);
         validateTestData(testData, comparator);
 
     }
