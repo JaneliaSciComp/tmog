@@ -50,7 +50,31 @@ public class SimpleSetterTest
      * @throws Exception
      *   if any unexpected errors occur.
      */
-    public void testDeriveValue() throws Exception {
+    public void testDeriveValueWithoutMapDefault() throws Exception {
+
+        final String fieldName = "tile";
+
+        final String explicitlyMappedValue = "vnc_verify";
+        final String explicitlyMappedResult = "ventral_nerve_cord";
+        final String unmappedValue = "left_optic_lobe";
+
+        final String configuredPropertyValue = fieldName + SimpleSetter.FIELD_MAP_IDENTIFIER +
+                                               explicitlyMappedValue + '=' + explicitlyMappedResult;
+
+        final SimpleSetter setterWithMap = new SimpleSetter("propertyName", configuredPropertyValue);
+
+
+        validateMappedValue(setterWithMap, fieldName, explicitlyMappedValue, explicitlyMappedResult);
+        validateMappedValue(setterWithMap, fieldName, unmappedValue, unmappedValue);
+    }
+
+    /**
+     * Tests the {@link SimpleSetter#deriveValue} method.
+     *
+     * @throws Exception
+     *   if any unexpected errors occur.
+     */
+    public void testDeriveValueWithMapDefault() throws Exception {
 
         final String fieldName = "tile";
 

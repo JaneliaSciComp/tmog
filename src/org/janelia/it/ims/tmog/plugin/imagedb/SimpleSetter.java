@@ -149,7 +149,9 @@ public class SimpleSetter implements ImagePropertySetter {
             if (coreValueToDbValueMap != null) {
                 final String mappedValue = coreValueToDbValueMap.get(value);
                 if (mappedValue == null) {
-                    value = mapDefaultValue;
+                    if (mapDefaultValue != null) {
+                        value = mapDefaultValue;
+                    }
                 } else {
                     value = mappedValue;
                 }
