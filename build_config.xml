@@ -116,12 +116,13 @@
         <load-fragment          name="common-image-data-properties" path="plugin/common-image-data-properties.xml"/>
         <load-fragment          name="copy-zeiss-log-files"         path="plugin/copy-zeiss-log-files.xml"/>
         <load-fragment          name="correct-objective"            path="plugin/correct-objective.xml"/>
+        <load-fragment          name="image-path-exists"            path="plugin/image-path-exists.xml"/>
         <load-filtered-fragment name="image-sequence-flip"          path="plugin/image-sequence.xml" key="family" value="flylight_flip"/>
         <load-filtered-fragment name="image-sequence-polarity"      path="plugin/image-sequence.xml" key="family" value="flylight_polarity"/>
         <load-fragment          name="update-mapped-serial-data"    path="plugin/update-mapped-serial-data.xml"/>
         <load-fragment          name="update-project-cross-data"    path="plugin/update-project-cross-data.xml"/>
         <load-fragment          name="update-zeiss-lsm-data"        path="plugin/update-zeiss-lsm-data.xml"/>
-        <load-fragment          name="validate-gender-and-age"      path="plugin/validate-gender-and-age.xml"/>
+        <load-fragment          name="validate-common-fields"       path="plugin/validate-common-fields.xml"/>
 
         <property name="consolidated-config-fragment-properties-file" value="dist/config-fragment.properties" />
 

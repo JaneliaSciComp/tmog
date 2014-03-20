@@ -1,7 +1,0 @@
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
-                <property name="validateField" value="Gender"/>
-                <property name="matchesPattern" value="\S+"/>
-                <property name="whenReferenceField" value="Age"/>
-                <property name="matchesReferencePattern" value="^[^L].*"/>
-                <property name="errorMessage" value="Gender value is required when age is ${Age}."/>
-            </rowValidator>

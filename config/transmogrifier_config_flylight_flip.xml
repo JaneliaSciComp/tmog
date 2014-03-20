@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="4.0.0" frameSizePercentage="95"/>
+    <global minimumVersion="4.0.2" frameSizePercentage="95"/>
 
     <project name="Fly Light Flip - manual entry (FLFL*)">
 
@@ -38,6 +38,14 @@
                 <property name="whenReferenceField" value="Age"/>
                 <property name="matchesReferencePattern" value="^[^L].*"/>
                 <property name="errorMessage" value="Gender value is required when age is ${Age}."/>
+            </rowValidator>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Channel Specification"/>
+                <property name="matchesPattern" value="sr"/>
+                <property name="whenReferenceField" value="Data Set"/>
+                <property name="matchesReferencePattern" value="^(dicksonlab|nerna)_split_screen$"/>
+                <property name="errorMessage" value="Channel Specification must be 'sr' when Data Set is ${Data Set}."/>
             </rowValidator>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
@@ -250,6 +258,14 @@
                 <property name="errorMessage" value="Gender value is required when age is ${Age}."/>
             </rowValidator>
 
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Channel Specification"/>
+                <property name="matchesPattern" value="sr"/>
+                <property name="whenReferenceField" value="Data Set"/>
+                <property name="matchesReferencePattern" value="^(dicksonlab|nerna)_split_screen$"/>
+                <property name="errorMessage" value="Channel Specification must be 'sr' when Data Set is ${Data Set}."/>
+            </rowValidator>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
                 <property name="db.config.key" value="sage" />
                 <property name="image_number" value="urn:lsid:janelia.org:flylight_flip:image_number" />
@@ -284,7 +300,7 @@
                 <property name="lsm_illumination_channel_2_power_bc_1" value="Channel 2 Power"/>
                 <property name="lsm_illumination_channel_3_power_bc_1" value="Channel 3 Power"/>
                 <property name="microscope_filename"/>
-                <property name="display" value="Screen State$MAP:accepted=true|pre_screen=false|rejected=false"/>
+                <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
                 <property name="family" value="$STATIC:flylight_flip"/>
                 <property name="screen_state" value="Screen State"/>
             </rowListener>
@@ -573,7 +589,7 @@
                 <property name="lsm_illumination_channel_3_power_bc_1" value="Channel 3 Power"/>
                 <property name="microscope_filename"/>
                 <property name="comment" value="Comment"/>
-                <property name="display" value="Screen State$MAP:accepted=true|pre_screen=false|rejected=false"/>
+                <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
                 <property name="exclude.host.name" value="true"/>
                 <property name="family" value="$STATIC:flylight_flip"/>
                 <property name="keep.existing.data" value="true"/>
@@ -811,6 +827,14 @@
                 <property name="errorMessage" value="Gender value is required when age is ${Age}."/>
             </rowValidator>
 
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Channel Specification"/>
+                <property name="matchesPattern" value="sr"/>
+                <property name="whenReferenceField" value="Data Set"/>
+                <property name="matchesReferencePattern" value="^(dicksonlab|nerna)_split_screen$"/>
+                <property name="errorMessage" value="Channel Specification must be 'sr' when Data Set is ${Data Set}."/>
+            </rowValidator>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
                 <property name="db.config.key" value="sage" />
                 <property name="image_number" value="urn:lsid:janelia.org:flylight_flip:image_number" />
@@ -1035,6 +1059,14 @@
                 <property name="whenReferenceField" value="Age"/>
                 <property name="matchesReferencePattern" value="^[^L].*"/>
                 <property name="errorMessage" value="Gender value is required when age is ${Age}."/>
+            </rowValidator>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Channel Specification"/>
+                <property name="matchesPattern" value="sr"/>
+                <property name="whenReferenceField" value="Data Set"/>
+                <property name="matchesReferencePattern" value="^(dicksonlab|nerna)_split_screen$"/>
+                <property name="errorMessage" value="Channel Specification must be 'sr' when Data Set is ${Data Set}."/>
             </rowValidator>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">

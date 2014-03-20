@@ -24,7 +24,7 @@
                 <property name="nerna-14" value="Aljoscha Nern:Right Central Brain,.,Right Optic Lobe,.:nerna_optic_central_border,.,.,."/>
             </rowUpdater>
 
-@config-fragment-validate-gender-and-age@
+@config-fragment-validate-common-fields@
 @config-fragment-image-sequence-flip@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
@@ -118,11 +118,11 @@
 @config-fragment-update-project-cross-data@
 @config-fragment-update-zeiss-lsm-data@
 @config-fragment-correct-objective@
-@config-fragment-validate-gender-and-age@
+@config-fragment-validate-common-fields@
 @config-fragment-image-sequence-flip@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@
-                <property name="display" value="Screen State$MAP:accepted=true|pre_screen=false|rejected=false"/>
+                <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
                 <property name="family" value="$STATIC:flylight_flip"/>
                 <property name="screen_state" value="Screen State"/>
             </rowListener>
@@ -162,15 +162,11 @@
 
 @config-fragment-update-mapped-serial-data@
 @config-fragment-update-project-cross-data@
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
-                <property name="db.config.key" value="sage"/>
-                <property name="relativePathField" value="SAGE Name"/>
-            </rowValidator>
-
+@config-fragment-image-path-exists@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@
                 <property name="comment" value="Comment"/>
-                <property name="display" value="Screen State$MAP:accepted=true|pre_screen=false|rejected=false"/>
+                <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
                 <property name="exclude.host.name" value="true"/>
                 <property name="family" value="$STATIC:flylight_flip"/>
                 <property name="keep.existing.data" value="true"/>
@@ -219,7 +215,7 @@
 @config-fragment-update-project-cross-data@
 @config-fragment-update-zeiss-lsm-data@
 @config-fragment-correct-objective@
-@config-fragment-validate-gender-and-age@
+@config-fragment-validate-common-fields@
 @config-fragment-image-sequence-flip@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@
@@ -312,7 +308,7 @@
             </rowUpdater>
 
 @config-fragment-update-project-cross-data@
-@config-fragment-validate-gender-and-age@
+@config-fragment-validate-common-fields@
 @config-fragment-image-sequence-flip@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@

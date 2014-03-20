@@ -10,11 +10,11 @@
 @config-fragment-update-project-cross-data@
 @config-fragment-update-zeiss-lsm-data@
 @config-fragment-correct-objective@
-@config-fragment-validate-gender-and-age@
+@config-fragment-validate-common-fields@
 @config-fragment-image-sequence-polarity@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@
-                <property name="display" value="Screen State$MAP:accepted=true|pre_screen=false|rejected=false"/>
+                <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
                 <property name="family" value="$STATIC:flylight_polarity"/>
                 <property name="screen_state" value="Screen State"/>
             </rowListener>
@@ -46,16 +46,49 @@
 
     </project>
 
+    <project name="Fly Light - Polarity - fix data" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+
+        <plugins>
+
+@config-fragment-update-mapped-serial-data@
+@config-fragment-update-project-cross-data@
+@config-fragment-image-path-exists@
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+@config-fragment-common-image-data-properties@
+                <property name="comment" value="Comment"/>
+                <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="family" value="$STATIC:flylight_polarity"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="relative_path" value="SAGE Name"/>
+                <property name="screen_state" value="Screen State"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+@config-fragment-data_set-with-flylight_polarity-default@
+@config-fragment-cross_barcode-with-flylight_polarity-default@
+@config-fragment-line-with-flylight_polarity-default@
+@config-fragment-effector-with-flylight_polarity-default@
+@config-fragment-slide_code-with-flylight_polarity-default@
+@config-fragment-tile-with-flylight_polarity-default@
+@config-fragment-screen_state-with-flylight_polarity-default@
+@config-fragment-comment-with-flylight_polarity-default@
+@config-fragment-gender-with-flylight_polarity-default@
+@config-fragment-name-with-flylight_polarity-default@
+        </dataFields>
+
+    </project>
+
     <project name="Fly Light Polarity - promote preScreen to confocalStacks">
 
-        <!-- NOTES:
-             - first capturing group must be equal for second capturing group
-               to be used in numeric sort
-             - third capturing group only used when first and second are equal
-             - '(?: )' identifies a non-capturing group
-        -->
         <inputFileSorter sortAlgorithm="Number"
-                         patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
+                         patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"
+                         patternGroupIndexes="1,2,3" />
 
 @config-fragment-output-polarity@
         <plugins>
@@ -67,7 +100,7 @@
 @config-fragment-update-project-cross-data@
 @config-fragment-update-zeiss-lsm-data@
 @config-fragment-correct-objective@
-@config-fragment-validate-gender-and-age@
+@config-fragment-validate-common-fields@
 @config-fragment-image-sequence-polarity@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@

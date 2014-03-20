@@ -1,0 +1,15 @@
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Gender"/>
+                <property name="matchesPattern" value="\S+"/>
+                <property name="whenReferenceField" value="Age"/>
+                <property name="matchesReferencePattern" value="^[^L].*"/>
+                <property name="errorMessage" value="Gender value is required when age is ${Age}."/>
+            </rowValidator>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Channel Specification"/>
+                <property name="matchesPattern" value="sr"/>
+                <property name="whenReferenceField" value="Data Set"/>
+                <property name="matchesReferencePattern" value="^(dicksonlab|nerna)_split_screen$"/>
+                <property name="errorMessage" value="Channel Specification must be 'sr' when Data Set is ${Data Set}."/>
+            </rowValidator>

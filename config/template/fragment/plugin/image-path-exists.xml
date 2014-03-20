@@ -1,0 +1,4 @@
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
