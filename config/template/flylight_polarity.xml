@@ -46,7 +46,7 @@
 
     </project>
 
-    <project name="Fly Light - Polarity - fix data" taskName="collector">
+    <project name="Fly Light Polarity - fix data" taskName="collector">
 
         <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
 
