@@ -9,6 +9,11 @@
 
         <inputFileFilter patternString=".+\.lsm" />
 
+        <!-- standard scope file name pattern is: A1_ZB1_T1_BRN_20130604_33_20X_R1_L01 -->
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString="([A-Z])(\d++)_.*_(L\d++)[\._].*"
+                         patternGroupIndexes="1,2,3"/>
+
         <outputDirectory basePath="[//arch.janelia.priv|/archive]/flylight_archive/polarity/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
@@ -334,7 +339,12 @@
 
     <project name="Fly Light Polarity - fix data" taskName="collector">
 
-        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+        <inputFileFilter patternString=".+\.lsm"/>
+
+        <!-- standard scope file name pattern is: A1_ZB1_T1_BRN_20130604_33_20X_R1_L01 -->
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString="([A-Z])(\d++)_.*_(L\d++)[\._].*"
+                         patternGroupIndexes="1,2,3"/>
 
         <plugins>
 

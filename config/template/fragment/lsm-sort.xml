@@ -1,0 +1,4 @@
+        <!-- standard scope file name pattern is: A1_ZB1_T1_BRN_20130604_33_20X_R1_L01 -->
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString="([A-Z])(\d++)_.*_(L\d++)[\._].*"
+                         patternGroupIndexes="1,2,3"/>

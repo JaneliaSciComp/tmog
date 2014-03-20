@@ -111,6 +111,7 @@
     <project name="Fly Light - MCFO - scope to confocalStacks" default="true">
 
 @config-fragment-lsm-input@
+@config-fragment-lsm-sort@
 @config-fragment-output-flip@
         <plugins>
 
@@ -156,8 +157,9 @@
 
     <project name="Fly Light - MCFO - fix data" taskName="collector">
 
-        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
+        <inputFileFilter patternString=".+\.lsm"/>
 
+@config-fragment-lsm-sort@
         <plugins>
 
 @config-fragment-update-mapped-serial-data@
