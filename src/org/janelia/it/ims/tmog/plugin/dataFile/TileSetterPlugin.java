@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -131,8 +131,8 @@ public class TileSetterPlugin implements RowUpdater {
                 {l, l, v, v, ld, ld, rd, rd, r, r, pro, pro, meso, meso, meta, meta}  // (16) Whole CNS
         });
 
-        dataSetToTilesMap.put("asoy_mb_polarity_63x_case_1", dataSetTiles);
-        dataSetToTilesMap.put("asoy_mb_polarity_63x_case_2", dataSetTiles);
+        dataSetToTilesMap.put("asoy_mb_polarity_case_1", dataSetTiles);
+        dataSetToTilesMap.put("asoy_mb_polarity_case_2", dataSetTiles);
         dataSetToTilesMap.put("asoy_mb_split_mcfo_case_1", dataSetTiles);
 
         dataSetTiles = new DataSetTiles(new String[][] {
@@ -144,8 +144,8 @@ public class TileSetterPlugin implements RowUpdater {
                 {l, v, ld, rd, r, pro, meso, meta}                                    // (8)  Whole CNS
         });
 
-        dataSetToTilesMap.put("asoy_mb_polarity_63x_case_3", dataSetTiles);
-        dataSetToTilesMap.put("asoy_mb_polarity_63x_case_4", dataSetTiles);
+        dataSetToTilesMap.put("asoy_mb_polarity_case_3", dataSetTiles);
+        dataSetToTilesMap.put("asoy_mb_polarity_case_4", dataSetTiles);
         dataSetToTilesMap.put("jenetta_stabilized_split_case_3", dataSetTiles);
 
         dataSetTiles = new DataSetTiles(new String[][] {
