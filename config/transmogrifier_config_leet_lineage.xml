@@ -62,7 +62,7 @@
                 <property name="stage_basis" value="Stage Basis" />
                 <property name="heat_shock_hour" value="Heat Shock Age Hour"/>
                 <property name="heat_shock_interval" value="Heat Shock Age Interval"/>
-                <property name="heat_shock_minutes" value="Heat Shock Age Interval"/>
+                <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="age" value="Dissection Age"/>
                 <property name="gender" value="Gender"/>
                 <property name="cross_date" value="Cross Date"/>
@@ -319,7 +319,7 @@
                 <property name="stage_basis" value="Stage Basis" />
                 <property name="heat_shock_hour" value="Heat Shock Age Hour"/>
                 <property name="heat_shock_interval" value="Heat Shock Age Interval"/>
-                <property name="heat_shock_minutes" value="Heat Shock Age Interval"/>
+                <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="age" value="Dissection Age"/>
                 <property name="gender" value="Gender"/>
                 <property name="cross_date" value="Cross Date"/>
