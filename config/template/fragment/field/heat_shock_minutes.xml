@@ -1,0 +1,4 @@
+            <text displayName="Heat Shock Minutes" required="false"
+                  pattern="^(0|5|[1-9]0|[1-9]5)$"
+                  markedForTask="false">@sage-data-default@
+            </text>

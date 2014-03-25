@@ -101,6 +101,7 @@
         <load-fragment          name="file-name-suffix"         path="field/file-name-suffix.xml"/>
         <load-field-fragment    name="full_age" />
         <load-field-fragment    name="gender" />
+        <load-field-fragment    name="heat_shock_minutes" />
         <load-fragment          name="hidden-file-name-suffix"  path="field/hidden-file-name-suffix.xml"/>
         <load-field-fragment    name="imager" />
         <load-filtered-fragment name="imaging_project-mcfo"     path="field/imaging_project.xml" key="default_project" value="mcfo"/>

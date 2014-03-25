@@ -42,6 +42,7 @@
 @config-fragment-screen_state@
 @config-fragment-imaging_project-mcfo@
 @config-fragment-objective@
+@config-fragment-heat_shock_minutes@
 @config-fragment-channel-data@
         </dataFields>
 

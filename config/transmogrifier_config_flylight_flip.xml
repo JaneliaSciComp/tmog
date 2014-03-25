@@ -103,6 +103,7 @@
                 <property name="lsm_illumination_channel_1_power_bc_1" value="Channel 1 Power"/>
                 <property name="lsm_illumination_channel_2_power_bc_1" value="Channel 2 Power"/>
                 <property name="lsm_illumination_channel_3_power_bc_1" value="Channel 3 Power"/>
+                <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="microscope_filename"/>
                 <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
                 <property name="family" value="$STATIC:flylight_flip"/>
@@ -283,6 +284,11 @@
                   editable="false">
             </text>
 
+            <text displayName="Heat Shock Minutes" required="false"
+                  pattern="^(0|5|[1-9]0|[1-9]5)$"
+                  markedForTask="false">
+            </text>
+
             <text displayName="Channel Specification" required="false"
                     markedForTask="false"
                     pattern="s*rs*">
@@ -396,6 +402,7 @@
                 <property name="lsm_illumination_channel_1_power_bc_1" value="Channel 1 Power"/>
                 <property name="lsm_illumination_channel_2_power_bc_1" value="Channel 2 Power"/>
                 <property name="lsm_illumination_channel_3_power_bc_1" value="Channel 3 Power"/>
+                <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="microscope_filename"/>
                 <property name="comment" value="Comment"/>
                 <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
@@ -677,6 +684,7 @@
                 <property name="lsm_illumination_channel_1_power_bc_1" value="Channel 1 Power"/>
                 <property name="lsm_illumination_channel_2_power_bc_1" value="Channel 2 Power"/>
                 <property name="lsm_illumination_channel_3_power_bc_1" value="Channel 3 Power"/>
+                <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="microscope_filename"/>
                 <property name="days_after_eclosion" value="Days After Eclosion"/>
                 <property name="exclude.host.name" value="true"/>
@@ -911,6 +919,7 @@
                 <property name="lsm_illumination_channel_1_power_bc_1" value="Channel 1 Power"/>
                 <property name="lsm_illumination_channel_2_power_bc_1" value="Channel 2 Power"/>
                 <property name="lsm_illumination_channel_3_power_bc_1" value="Channel 3 Power"/>
+                <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="microscope_filename"/>
                 <property name="area" value="$STATIC:Brain"/>
                 <property name="exclude.host.name" value="true"/>
