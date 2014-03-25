@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
- * All rights reserved.  
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0 
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
+ * All rights reserved.
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.field;
@@ -18,6 +18,7 @@ public class VerifiedTextModel extends VerifiedFieldModel {
     private Integer minimumLength;
     private Integer maximumLength;
     private String pattern;
+    private String patternMatchFailureMessage;
     private boolean convertToUpperCase;
 
     public VerifiedTextModel() {
@@ -46,9 +47,11 @@ public class VerifiedTextModel extends VerifiedFieldModel {
             } else if (pattern != null) {
                 if (! value.matches(pattern)) {
                     isValid = false;
-                    setErrorMessage(
-                            "This field should contain a value that " +
-                            "matches the pattern: " + pattern);
+                    if (patternMatchFailureMessage == null) {
+                        setErrorMessage("This field should contain a value that matches the pattern: " + pattern);
+                    } else {
+                        setErrorMessage(patternMatchFailureMessage);
+                    }
                 }
             }
 
@@ -68,6 +71,7 @@ public class VerifiedTextModel extends VerifiedFieldModel {
             instance.minimumLength = minimumLength;
             instance.maximumLength = maximumLength;
             instance.pattern = pattern;
+            instance.patternMatchFailureMessage = patternMatchFailureMessage;
             instance.convertToUpperCase = convertToUpperCase;
         }
         return instance;
@@ -85,6 +89,10 @@ public class VerifiedTextModel extends VerifiedFieldModel {
         return pattern;
     }
 
+    public String getPatternMatchFailureMessage() {
+        return patternMatchFailureMessage;
+    }
+
     public boolean getConvertToUpperCase() {
         return convertToUpperCase;
     }
@@ -99,6 +107,10 @@ public class VerifiedTextModel extends VerifiedFieldModel {
 
     public void setPattern(String pattern) {
         this.pattern = pattern;
+    }
+
+    public void setPatternMatchFailureMessage(String patternMatchFailureMessage) {
+        this.patternMatchFailureMessage = patternMatchFailureMessage;
     }
 
     public void setConvertToUpperCase(boolean convertToUpperCase) {

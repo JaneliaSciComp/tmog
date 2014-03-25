@@ -1,8 +1,8 @@
 /*
- * Copyright 2007 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
- * Use is subject to Janelia Farm Research Center Software Copyright 1.0
- * license terms (http://license.janelia.org/license/jfrc_copyright_1_0.html).
+ * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
+ * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
  */
 
 package org.janelia.it.ims.tmog.field;
@@ -102,6 +102,7 @@ public class VerifiedTextModelTest extends TestCase {
         model.setMinimumLength(2);
         model.setMaximumLength(3);
         model.setPattern("pattern");
+        model.setPatternMatchFailureMessage("pattern does not match");
         model.setConvertToUpperCase(true);
 
         VerifiedTextModel newInstance = model.getNewInstance(false);
@@ -114,6 +115,7 @@ public class VerifiedTextModelTest extends TestCase {
                 {"MinimumLength", model.getMinimumLength(), newInstance.getMinimumLength() },
                 {"MaximumLength", model.getMaximumLength(), newInstance.getMaximumLength() },
                 {"Pattern", model.getPattern(), newInstance.getPattern() },
+                {"Pattern", model.getPatternMatchFailureMessage(), newInstance.getPatternMatchFailureMessage() },
                 {"ConvertToUpperCase", model.getConvertToUpperCase(), newInstance.getConvertToUpperCase() },
         };
         for (Object[] attribute : attributes) {

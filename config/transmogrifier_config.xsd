@@ -186,6 +186,7 @@
         <xs:attribute name="minimumLength" type="xs:integer"/>
         <xs:attribute name="maximumLength" type="xs:integer"/>
         <xs:attribute name="pattern" type="xs:string"/>
+        <xs:attribute name="patternMatchFailureMessage" type="xs:string"/>
         <xs:attribute name="prefix" type="xs:string"/>
         <xs:attribute name="suffix" type="xs:string"/>
         <xs:attribute name="padFormat" type="xs:string"/>
