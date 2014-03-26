@@ -3,13 +3,15 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="3.0.7" frameSizePercentage="95"/>
+    <global minimumVersion="4.0.5" frameSizePercentage="95"/>
 
     <project name="Fly Light: Dickson Images (BJD_*)" default="true">
 
+        <inputFileFilter patternString=".+\.lsm" />
+
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/flylight]/flylight/dickson/confocalStacks"
+        <outputDirectory basePath="[//arch.janelia.priv|/archive]/flylight_archive/dickson/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -58,7 +60,7 @@
                 <property name="slide_code" value="sample_BJD${sample_number}"/>
                 <property name="tile" value="Area$MAP:b=brain|v=ventral_nerve_cord"/>
                 <property name="area" value="Area$MAP:b=Brain|v=Ventral Nerve Cord"/>
-                <property name="data_set" value="$STATIC:dicksonlab_vt_gal4_screen"/>
+                <property name="data_set" value="UAS Reporter$MAP:UAS_IVS-mCD8_3_0007=dicksonlab_vt_gal4_screen|LexAop_IVS-myr_3_0008=dicksonlab_vt_lexa_screen"/>
                 <property name="channel_spec" value="$STATIC:sr"/>
             </rowListener>
 
@@ -144,7 +146,6 @@
             <validValueList displayName="UAS Reporter" required="true"
                             markedForTask="false">
                 <validValue value="UAS_IVS-mCD8_3_0007" default="true"/>
-                <validValue value="UAS_mCD8_2_0006"/>
                 <validValue value="LexAop_IVS-myr_3_0008"/>
             </validValueList>
 
@@ -181,62 +182,6 @@
 
             <pluginData displayName="sample_number" format="%06d"
                         markedForTask="false"/>
-
-        </dataFields>
-
-    </project>
-
-    <project name="Dickson - update SAGE" taskName="collector">
-
-        <inputFileFilter patternString=".+\.lsm" recursiveSearch="true"/>
-
-        <plugins>
-
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
-                <property name="db.config.key" value="sage"/>
-                <property name="relativePathField" value="SAGE Name"/>
-            </rowValidator>
-
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
-                <property name="db.config.key" value="sage" />
-                <property name="sample_number" value="urn:lsid:janelia.org:dickson_vt:sample_number" />
-            </rowListener>
-
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="sage"/>
-                <property name="exclude.host.name" value="true"/>
-                <property name="keep.existing.data" value="true"/>
-                <property name="lab" value="$STATIC:dickson"/>
-                <property name="family" value="$STATIC:dickson"/>
-                <property name="relative_path" value="SAGE Name"/>
-                <property name="slide_code" value="sample_BJD${sample_number}"/>
-                <property name="tile" value="Area$MAP:b=brain|v=ventral_nerve_cord"/>
-                <property name="area" value="Area$MAP:b=Brain|v=Ventral Nerve Cord"/>
-                <property name="data_set" value="$STATIC:dicksonlab_vt_gal4_screen"/>
-                <property name="channel_spec" value="$STATIC:sr"/>
-            </rowListener>
-
-        </plugins>
-
-        <dataFields>
-
-            <pluginData displayName="sample_number" format="%06d"
-                        markedForTask="false"/>
-
-            <validValueList displayName="Area" required="true">
-                <sourceFileDefault pattern=".*A0\d(b|v).*" />
-                <validValue displayName="b: Brain" value="b"/>
-                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
-            </validValueList>
-
-            <text displayName="SAGE Name" required="true"
-                  copyable="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="dickson"/>
-                    <property name="image_property" value="name"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-            </text>
 
         </dataFields>
 
