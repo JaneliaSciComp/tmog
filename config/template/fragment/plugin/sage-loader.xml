@@ -1,0 +1,9 @@
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.SageLoaderPlugin">
+                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/sageLoader"/>
+                <property name="owner" value="system"/>
+                <property name="config" value="/groups/scicomp/informatics/data/flylightflip_light_imagery-config.xml"/>
+                <property name="grammar" value="/usr/local/pipeline/grammar/@grammar-file@"/>
+                <property name="lab" value="flylight"/>
+                <property name="debug" value="true"/>
+                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
+            </rowListener>

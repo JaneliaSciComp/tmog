@@ -121,6 +121,8 @@
         <load-fragment          name="image-path-exists"            path="plugin/image-path-exists.xml"/>
         <load-filtered-fragment name="image-sequence-flip"          path="plugin/image-sequence.xml" key="family" value="flylight_flip"/>
         <load-filtered-fragment name="image-sequence-polarity"      path="plugin/image-sequence.xml" key="family" value="flylight_polarity"/>
+        <load-filtered-fragment name="sage-loader-flip"             path="plugin/sage-loader.xml" key="grammar-file" value="flylightflip.gra"/>
+        <load-filtered-fragment name="sage-loader-polarity"         path="plugin/sage-loader.xml" key="grammar-file" value="flylightpolarity.gra"/>
         <load-fragment          name="update-mapped-serial-data"    path="plugin/update-mapped-serial-data.xml"/>
         <load-fragment          name="update-project-cross-data"    path="plugin/update-project-cross-data.xml"/>
         <load-fragment          name="update-zeiss-lsm-data"        path="plugin/update-zeiss-lsm-data.xml"/>

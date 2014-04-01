@@ -110,6 +110,16 @@
                 <property name="screen_state" value="Screen State"/>
             </rowListener>
 
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.SageLoaderPlugin">
+                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/sageLoader"/>
+                <property name="owner" value="system"/>
+                <property name="config" value="/groups/scicomp/informatics/data/flylightflip_light_imagery-config.xml"/>
+                <property name="grammar" value="/usr/local/pipeline/grammar/flylightflip.gra"/>
+                <property name="lab" value="flylight"/>
+                <property name="debug" value="true"/>
+                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
+            </rowListener>
+
             <!--
                   The companion file listener (for log files) should be the
                   last defined plug-in to ensure that log files are only
@@ -691,6 +701,16 @@
                 <property name="screen_state" value="$STATIC:accepted"/>
             </rowListener>
 
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.SageLoaderPlugin">
+                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/sageLoader"/>
+                <property name="owner" value="system"/>
+                <property name="config" value="/groups/scicomp/informatics/data/flylightflip_light_imagery-config.xml"/>
+                <property name="grammar" value="/usr/local/pipeline/grammar/flylightflip.gra"/>
+                <property name="lab" value="flylight"/>
+                <property name="debug" value="true"/>
+                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
+            </rowListener>
+
             <!--
                   The companion file listener (for log files) should be the
                   last defined plug-in to ensure that log files are only
@@ -925,6 +945,16 @@
                 <property name="family" value="$STATIC:flylight_flip"/>
                 <property name="imaging_project" value="$STATIC:cell_count"/>
                 <property name="screen_state" value="$STATIC:accepted"/>
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.SageLoaderPlugin">
+                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/sageLoader"/>
+                <property name="owner" value="system"/>
+                <property name="config" value="/groups/scicomp/informatics/data/flylightflip_light_imagery-config.xml"/>
+                <property name="grammar" value="/usr/local/pipeline/grammar/flylightflip.gra"/>
+                <property name="lab" value="flylight"/>
+                <property name="debug" value="true"/>
+                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
             </rowListener>
 
             <!--

@@ -30,6 +30,7 @@
                 <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
             </rowListener>
 
+@config-fragment-sage-loader-polarity@
 @config-fragment-copy-zeiss-log-files@
         </plugins>
 
@@ -121,6 +122,7 @@
                 <property name="screen_state" value="$STATIC:accepted"/>
             </rowListener>
 
+@config-fragment-sage-loader-polarity@
 @config-fragment-copy-zeiss-log-files@
         </plugins>
 

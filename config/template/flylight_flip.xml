@@ -20,6 +20,7 @@
                 <property name="screen_state" value="Screen State"/>
             </rowListener>
 
+@config-fragment-sage-loader-flip@
 @config-fragment-copy-zeiss-log-files@
         </plugins>
 
@@ -120,6 +121,7 @@
                 <property name="screen_state" value="$STATIC:accepted"/>
             </rowListener>
 
+@config-fragment-sage-loader-flip@
 @config-fragment-copy-zeiss-log-files@
         </plugins>
 
@@ -214,6 +216,7 @@
                 <property name="screen_state" value="$STATIC:accepted"/>
             </rowListener>
 
+@config-fragment-sage-loader-flip@
 @config-fragment-copy-zeiss-log-files@
         </plugins>
 
