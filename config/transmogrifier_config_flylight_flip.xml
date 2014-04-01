@@ -263,7 +263,6 @@
 
             <validValueList displayName="Screen State" required="true"
                             markedForTask="false"
-                            sharedForAllSessionFiles="true"
                             autoComplete="true">
                 <validValue value="pre_screen"/>
                 <validValue value="accepted" default="true"/>
@@ -531,7 +530,6 @@
 
             <validValueList displayName="Screen State" required="true"
                             markedForTask="false"
-                            sharedForAllSessionFiles="true"
                             autoComplete="true">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_flip"/>
