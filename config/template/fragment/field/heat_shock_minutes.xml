@@ -1,4 +1,4 @@
             <number displayName="Heat Shock Minutes" required="false"
-                    minimumValue="0" maximumValue="99"
+                    minimumValue="1" maximumValue="99"
                     markedForTask="false">@sage-data-default@
             </number>
