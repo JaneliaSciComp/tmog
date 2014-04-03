@@ -51,8 +51,7 @@
 
     <project name="Fly Light - MCFO - fix data" taskName="collector">
 
-        <inputFileFilter patternString=".+\.lsm"/>
-
+@config-fragment-lsm-input@
 @config-fragment-lsm-sort@
         <plugins>
 
@@ -278,6 +277,35 @@
 
 @config-fragment-annotator@
 @config-fragment-tissue_mounting_protocol@
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light - MCFO - run sageLoader" taskName="collector">
+
+@config-fragment-lsm-input@
+        <plugins>
+
+@config-fragment-image-path-exists@
+@config-fragment-sage-loader-flip@
+        </plugins>
+
+        <dataFields>
+
+@config-fragment-data_set-with-flylight_flip-default@
+@config-fragment-slide_code-with-flylight_flip-default@
+@config-fragment-tile-with-flylight_flip-default@
+            <text displayName="Capture Date" required="false"
+                  markedForTask="false"
+                  editable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="capture_date"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+@config-fragment-name-with-flylight_flip-default@
         </dataFields>
 
     </project>

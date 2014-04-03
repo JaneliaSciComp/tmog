@@ -1,6 +1,5 @@
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
-                            sharedForAllSessionFiles="true"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"

@@ -148,7 +148,6 @@
 
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
-                            sharedForAllSessionFiles="true"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
@@ -354,7 +353,7 @@
 
     <project name="Fly Light - MCFO - fix data" taskName="collector">
 
-        <inputFileFilter patternString=".+\.lsm"/>
+        <inputFileFilter patternString=".+\.lsm" />
 
         <!-- standard scope file name pattern is: A1_ZB1_T1_BRN_20130604_33_20X_R1_L01 -->
         <inputFileSorter sortAlgorithm="Number"
@@ -428,7 +427,6 @@
 
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
-                            sharedForAllSessionFiles="true"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
@@ -1085,6 +1083,128 @@
                 <validValue value="DPX PBS Mounting"/>
                 <validValue value="Glycerol-Based Mounting"/>
             </validValueList>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Fly Light - MCFO - run sageLoader" taskName="collector">
+
+        <inputFileFilter patternString=".+\.lsm" />
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.SageLoaderPlugin">
+                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/sageLoader"/>
+                <property name="owner" value="system"/>
+                <property name="config" value="/groups/scicomp/informatics/data/flylightflip_light_imagery-config.xml"/>
+                <property name="grammar" value="/usr/local/pipeline/grammar/flylightflip.gra"/>
+                <property name="lab" value="flylight"/>
+                <property name="debug" value="true"/>
+                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;user=group:dicksonlab&amp;user=user:nerna&amp;user=user:wolfft"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="data_set"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </webServiceList>
+
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="slide_code"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <sourceFileDefault pattern="^([A-Z]\d+)_ZB.*_(\d{8}_\d+_).*"
+                                   patternGroupSpec="2,1"/>
+            </text>
+
+            <cvTermList displayName="Tile" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        autoComplete="true"
+                        markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="tile"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <sourceFileMappedDefault pattern="^[^_]+_[^_]+_[^_]+_([^_]+)_.*">
+                    <mappedValue from="ABD" to="abdominal"/>
+                    <mappedValue from="BRN" to="brain"/>
+                    <mappedValue from="BRNwLam" to="brain_with_lamina"/>
+                    <mappedValue from="CEN" to="central"/>
+                    <mappedValue from="DM" to="dorsal_medial"/>
+                    <mappedValue from="L" to="left_optic_lobe"/>
+                    <mappedValue from="L1" to="left_optic_lobe_part_1"/>
+                    <mappedValue from="L2" to="left_optic_lobe_part_2"/>
+                    <mappedValue from="LwLam" to="left_optic_lobe_with_lamina"/>
+                    <mappedValue from="LLam" to="left_lamina"/>
+                    <mappedValue from="RLam" to="right_lamina"/>
+                    <mappedValue from="LamL" to="left_lamina"/>
+                    <mappedValue from="LamR" to="right_lamina"/>
+                    <mappedValue from="LC" to="left_central"/>
+                    <mappedValue from="LD" to="left_dorsal"/>
+                    <mappedValue from="LV" to="left_ventral"/>
+                    <mappedValue from="MES" to="mesothorasic"/>
+                    <mappedValue from="META" to="metathorasic"/>
+                    <mappedValue from="NEC-Ant" to="neck_anterior"/>
+                    <mappedValue from="NEC-Pos" to="neck_posterior"/>
+                    <mappedValue from="PRO" to="prothorasic"/>
+                    <mappedValue from="R" to="right_optic_lobe"/>
+                    <mappedValue from="R1" to="right_optic_lobe_part_1"/>
+                    <mappedValue from="R2" to="right_optic_lobe_part_2"/>
+                    <mappedValue from="RwLam" to="right_optic_lobe_with_lamina"/>
+                    <mappedValue from="RC" to="right_central"/>
+                    <mappedValue from="RD" to="right_dorsal"/>
+                    <mappedValue from="RV" to="right_ventral"/>
+                    <mappedValue from="V" to="ventral"/>
+                    <mappedValue from="VNC" to="ventral_nerve_cord"/>
+                    <mappedValue from="VNC-Adj" to="vnc_verify"/>
+                    <mappedValue from="VNC-Ver" to="vnc_verify"/>
+                </sourceFileMappedDefault>
+                <validValue displayName="VNC-Verify" value="vnc_verify"/>
+            </cvTermList>
+
+            <text displayName="Capture Date" required="false"
+                  markedForTask="false"
+                  editable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="capture_date"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+            <text displayName="SAGE Name" required="true"
+                  editable="false"
+                  copyable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
 
         </dataFields>
 

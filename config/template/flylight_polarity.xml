@@ -50,8 +50,7 @@
 
     <project name="Fly Light Polarity - fix data" taskName="collector">
 
-        <inputFileFilter patternString=".+\.lsm"/>
-
+@config-fragment-lsm-input@
 @config-fragment-lsm-sort@
         <plugins>
 
@@ -152,6 +151,59 @@
 @config-fragment-imaging_project-polarity@
 @config-fragment-objective@
 @config-fragment-channel-data@
+        </dataFields>
+
+    </project>
+
+    <project name="Nern Split Screen - scope to confocalStacks">
+
+@config-fragment-lsm-input@
+@config-fragment-lsm-sort@
+@config-fragment-output-polarity@
+        <plugins>
+
+@config-fragment-update-mapped-serial-data@
+@config-fragment-update-project-cross-data@
+@config-fragment-update-zeiss-lsm-data@
+@config-fragment-correct-objective@
+@config-fragment-image-sequence-polarity@
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+@config-fragment-common-image-data-properties@
+                <property name="display" value="$STATIC:true"/>
+                <property name="family" value="$STATIC:flylight_polarity"/>
+                <property name="screen_state" value="$STATIC:accepted"/>
+                <property name="gender" value="$STATIC:f"/>
+                <property name="age" value="$STATIC:A"/>
+                <property name="annotated_by" value="$STATIC:Aljoscha Nern"/>
+                <property name="mounting_protocol" value="$STATIC:DPX PBS Mounting"/>
+                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
+                <property name="channel_spec" value="$STATIC:sr"/>
+            </rowListener>
+
+@config-fragment-sage-loader-polarity@
+@config-fragment-copy-zeiss-log-files@
+        </plugins>
+
+        <dataFields>
+
+            <separator value="FLPO_"/>
+@config-fragment-file-name-suffix@
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:nerna"
+                            autoComplete="true">
+                <staticDefault value="nerna_split_screen"/>
+            </webServiceList>
+
+@config-fragment-tile@
+@config-fragment-slide_code@
+@config-fragment-cross_barcode@
+@config-fragment-line@
+@config-fragment-objective@
+
         </dataFields>
 
     </project>
