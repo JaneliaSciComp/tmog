@@ -176,7 +176,7 @@
                 <property name="age" value="$STATIC:A"/>
                 <property name="annotated_by" value="$STATIC:Aljoscha Nern"/>
                 <property name="mounting_protocol" value="$STATIC:DPX PBS Mounting"/>
-                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
+                <property name="imaging_project" value="$STATIC:screen"/>
                 <property name="channel_spec" value="$STATIC:sr"/>
             </rowListener>
 
