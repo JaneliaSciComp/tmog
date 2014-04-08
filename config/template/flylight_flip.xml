@@ -37,8 +37,8 @@
 @config-fragment-gender@
 @config-fragment-age@
 @config-fragment-full_age@
-@config-fragment-imager@
-@config-fragment-annotator@
+@config-fragment-created_by@
+@config-fragment-annotated_by@
 @config-fragment-tissue_mounting_protocol@
 @config-fragment-screen_state@
 @config-fragment-imaging_project-mcfo@
@@ -83,8 +83,8 @@
 @config-fragment-comment-with-flylight_flip-default@
 @config-fragment-gender-with-flylight_flip-default@
 @config-fragment-age-with-flylight_flip-default@
-@config-fragment-imager-with-flylight_flip-default@
-@config-fragment-annotator-with-flylight_flip-default@
+@config-fragment-created_by-with-flylight_flip-default@
+@config-fragment-annotated_by-with-flylight_flip-default@
 @config-fragment-heat_shock_minutes-with-flylight_flip-default@
 @config-fragment-name-with-flylight_flip-default@
         </dataFields>
@@ -174,8 +174,8 @@
                     minimumValue="0"
                     maximumValue="21" />
 
-@config-fragment-imager@
-@config-fragment-annotator@
+@config-fragment-created_by@
+@config-fragment-annotated_by@
 @config-fragment-tissue_mounting_protocol@
             <text displayName="Channel Specification" required="false"
                   markedForTask="false"
@@ -278,7 +278,7 @@
                 <staticDefault value="Nirmala Iyer" />
             </cvTermList>
 
-@config-fragment-annotator@
+@config-fragment-annotated_by@
 @config-fragment-tissue_mounting_protocol@
         </dataFields>
 

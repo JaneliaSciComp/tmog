@@ -99,9 +99,10 @@
 
         <!-- field fragments -->
         <load-field-fragment    name="age" />
-        <load-field-fragment    name="annotator" />
+        <load-field-fragment    name="annotated_by" />
         <load-fragment          name="channel-data"             path="field/channel-data.xml"/>
         <load-field-fragment    name="comment" />
+        <load-field-fragment    name="created_by" />
         <load-field-fragment    name="cross_barcode" />
         <load-field-fragment    name="data_set" />
         <load-field-fragment    name="effector" />
@@ -110,7 +111,6 @@
         <load-field-fragment    name="gender" />
         <load-field-fragment    name="heat_shock_minutes" />
         <load-fragment          name="hidden-file-name-suffix"  path="field/hidden-file-name-suffix.xml"/>
-        <load-field-fragment    name="imager" />
         <load-filtered-fragment name="imaging_project-mcfo"     path="field/imaging_project.xml" key="default_project" value="mcfo"/>
         <load-filtered-fragment name="imaging_project-polarity" path="field/imaging_project.xml" key="default_project" value="polarity"/>
         <load-field-fragment    name="line" />

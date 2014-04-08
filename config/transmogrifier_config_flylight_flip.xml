@@ -590,7 +590,7 @@
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_flip"/>
-                    <property name="image_property" value="imager"/>
+                    <property name="image_property" value="created_by"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
             </cvTermList>
@@ -601,7 +601,7 @@
                             markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_flip"/>
-                    <property name="image_property" value="annotator"/>
+                    <property name="image_property" value="annotated_by"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
                 <validValue value="Aljoscha Nern"/>
