@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -289,15 +289,16 @@ public class ImageDao extends AbstractDao
                 data.put("name", resultSet.getString(2));
                 data.put("capture_date", String.valueOf(resultSet.getObject(3)));
                 data.put("display", String.valueOf(resultSet.getObject(4)));
+                data.put("created_by", String.valueOf(resultSet.getObject(5)));
 
                 final ResultSetMetaData metaData = resultSet.getMetaData();
-                if (metaData.getColumnCount() > 6) {
-                    data.put("line", resultSet.getString(7));
+                if (metaData.getColumnCount() > 7) {
+                    data.put("line", resultSet.getString(8));
                 }
 
-                String type = resultSet.getString(5);
+                String type = resultSet.getString(6);
                 if (type != null) {
-                    data.put(type, resultSet.getString(6));
+                    data.put(type, resultSet.getString(7));
                     while (resultSet.next()) {
                         imageId = resultSet.getInt(1);
                         if (! originalImageId.equals(imageId)) {
@@ -306,8 +307,8 @@ public class ImageDao extends AbstractDao
                                     ", " + imageId + ") share name '" +
                                     relativePath + "'.");
                         }
-                        data.put(resultSet.getString(5),
-                                 resultSet.getString(6));
+                        data.put(resultSet.getString(6),
+                                 resultSet.getString(7));
                     }
                 }
             } else {
@@ -334,7 +335,7 @@ public class ImageDao extends AbstractDao
 
     protected String getSelectImageDataSql() {
         return
-            "SELECT i.id, i.name, i.capture_date, i.display, p.type, p.value " +
+            "SELECT i.id, i.name, i.capture_date, i.display, null, p.type, p.value " +
             "FROM image i LEFT JOIN image_property p ON (i.id=p.image_id) " +
             "WHERE i.family=? AND i.name like ?";
     }
