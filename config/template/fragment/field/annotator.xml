@@ -1,6 +1,6 @@
             <validValueList displayName="Annotator" required="false"
                             autoComplete="true"
-                            sharedForAllSessionFiles="true"
+                            sharedForAllSessionFiles="@is-shareable@"
                             markedForTask="false">@sage-data-default@
                 <validValue value="Aljoscha Nern"/>
                 <validValue value="Barry Dickson"/>

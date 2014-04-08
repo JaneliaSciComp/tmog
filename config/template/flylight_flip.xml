@@ -82,6 +82,9 @@
 @config-fragment-screen_state-with-flylight_flip-default@
 @config-fragment-comment-with-flylight_flip-default@
 @config-fragment-gender-with-flylight_flip-default@
+@config-fragment-age-with-flylight_flip-default@
+@config-fragment-imager-with-flylight_flip-default@
+@config-fragment-annotator-with-flylight_flip-default@
 @config-fragment-heat_shock_minutes-with-flylight_flip-default@
 @config-fragment-name-with-flylight_flip-default@
         </dataFields>

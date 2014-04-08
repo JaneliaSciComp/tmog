@@ -566,6 +566,45 @@
                 <validValue displayName="x: Not Defined" value="x"/>
             </validValueList>
 
+            <cvTermList displayName="Age" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        displayNamePrefixedForValues="true"
+                        autoComplete="true"
+                        markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="age"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </cvTermList>
+
+            <cvTermList displayName="Imager" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        sharedForAllSessionFiles="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="imager"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </cvTermList>
+
+            <validValueList displayName="Annotator" required="false"
+                            autoComplete="true"
+                            sharedForAllSessionFiles="false"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="annotator"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Barry Dickson"/>
+                <validValue value="Tanya Wolff"/>
+                <validValue value="Yoshi Aso"/>
+            </validValueList>
+
             <text displayName="SAGE Name" required="true"
                   editable="false"
                   copyable="false">

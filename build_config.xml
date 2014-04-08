@@ -34,10 +34,16 @@
         <attribute name="path"/>
         <attribute name="key"/>
         <attribute name="value"/>
+        <attribute name="is-shareable" default="true"/>
         <sequential>
             <!--suppress AntResolveInspection -->
             <loadfile property="config-fragment-@{name}" srcFile="config/template/fragment/@{path}">
-                <filterchain><replacetokens><token key="@{key}" value="@{value}"/></replacetokens></filterchain>
+                <filterchain>
+                    <replacetokens>
+                        <token key="@{key}" value="@{value}"/>
+                        <token key="is-shareable" value="@{is-shareable}"/>
+                    </replacetokens>
+                </filterchain>
             </loadfile>
         </sequential>
     </macrodef>
@@ -51,7 +57,8 @@
             <load-filtered-fragment name="@{name}-with-@{family}-default"
                                     path="field/@{name}.xml"
                                     key="sage-data-default"
-                                    value="${plugin-default-@{family}-@{name}}"/>
+                                    value="${plugin-default-@{family}-@{name}}"
+                                    is-shareable="false"/>
         </sequential>
     </macrodef>
 

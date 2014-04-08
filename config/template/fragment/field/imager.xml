@@ -1,6 +1,6 @@
             <cvTermList displayName="Imager" required="true"
                         markedForTask="false"
                         autoComplete="true"
-                        sharedForAllSessionFiles="true"
+                        sharedForAllSessionFiles="@is-shareable@"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">@sage-data-default@
             </cvTermList>
