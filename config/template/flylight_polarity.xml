@@ -211,7 +211,7 @@
 
     </project>
 
-    <project name="Fly Light - Polarity - run sageLoader" taskName="collector">
+    <project name="Fly Light Polarity - run sageLoader" taskName="collector">
 
 @config-fragment-lsm-input@
         <plugins>
