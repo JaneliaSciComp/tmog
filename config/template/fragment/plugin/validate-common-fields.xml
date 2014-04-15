@@ -10,6 +10,6 @@
                 <property name="validateField" value="Channel Specification"/>
                 <property name="matchesPattern" value="sr"/>
                 <property name="whenReferenceField" value="Data Set"/>
-                <property name="matchesReferencePattern" value="^(dicksonlab|nerna)_split_screen$"/>
+                <property name="matchesReferencePattern" value="^.*(split_screen|case_4)$"/>
                 <property name="errorMessage" value="Channel Specification must be 'sr' when Data Set is ${Data Set}."/>
             </rowValidator>

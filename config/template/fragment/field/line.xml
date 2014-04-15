@@ -3,6 +3,6 @@
                             valueCreationPath="*/line"
                             relativeActualValuePath="name"
                             relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman&amp;lab=simpson&amp;lab=leet&amp;lab=zlatic&amp;lab=dickson"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=simpson&amp;lab=rubin&amp;lab=zlatic"
                             autoComplete="true">@sage-data-default@
             </webServiceList>

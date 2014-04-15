@@ -211,4 +211,33 @@
 
     </project>
 
+    <project name="Fly Light - Polarity - run sageLoader" taskName="collector">
+
+@config-fragment-lsm-input@
+        <plugins>
+
+@config-fragment-image-path-exists@
+@config-fragment-sage-loader-polarity@
+        </plugins>
+
+        <dataFields>
+
+@config-fragment-data_set-with-flylight_polarity-default@
+@config-fragment-slide_code-with-flylight_polarity-default@
+@config-fragment-tile-with-flylight_polarity-default@
+            <text displayName="Capture Date" required="false"
+                  markedForTask="false"
+                  editable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="capture_date"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+@config-fragment-name-with-flylight_polarity-default@
+        </dataFields>
+
+    </project>
+
 @config-fragment-tmog-end@
