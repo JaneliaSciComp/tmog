@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -12,11 +12,12 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.utils.db.DbManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -38,12 +39,14 @@ public class SageImageDaoTest
     private String testLineName;
 
     /**
-     * This flag can be used to stop database cleanup in the image test's
+     * These flags can be used to stop database cleanup in the image test's
      * tearDown method when you need to debug problems in the database.
      */
     @SuppressWarnings("FieldCanBeLocal")
     private boolean isImageCleanupNeeded = true;
+    @SuppressWarnings("FieldCanBeLocal")
     private boolean isSequenceCleanupNeeded = false;
+    @SuppressWarnings("FieldCanBeLocal")
     private boolean isLineCleanupNeeded = false;
 
     /**
@@ -250,10 +253,42 @@ public class SageImageDaoTest
         assertEquals("invalid update number", 2, specimenNumber);
     }
 
+    /**
+     * Tests the getLineId method.
+     *
+     * @throws Exception
+     *   if any unexpected errors occur.
+     */
+    public void testGetLineId() throws Exception {
+        Connection connection = null;
+        try {
+            DbManager dbManager = dao.getDbManager();
+            connection = dbManager.getConnection();
+            validateLineId("unique line", "GMR_10A01_AE_01", null, 1, connection);
+            validateLineId("unique line", "GMR_10A01_AE_01", "rubin", 1, connection);
+            validateLineId("NON-unique line", "FCF_pBDPGAL4U_1500437", "olympiad", 13276, connection);
+            validateLineId("NON-unique line", "FCF_pBDPGAL4U_1500437", "fly", 13554, connection);
+            validateLineId("NON-unique line", "FCF_pBDPGAL4U_1500437", "flylight", 13554, connection);
+        } finally {
+            DbManager.closeResources(null, null, connection, LOG);
+        }
+    }
+
+    private void validateLineId(String context,
+                                String lineName,
+                                String defaultLineLabName,
+                                Integer expectedLineId,
+                                Connection connection)
+            throws SQLException, ExternalSystemException {
+        final Integer lineId = dao.getLineId(lineName, defaultLineLabName, connection);
+        assertEquals("invalid id returned for " + context + " line '" + lineName +
+                     "' with '" + defaultLineLabName + "' defaultLineLabName",
+                     expectedLineId, lineId);
+    }
+
     private void deleteImage(Integer imageId) throws Exception {
         if (imageId != null) {
             Connection connection = null;
-            ResultSet resultSet = null;
             PreparedStatement statement = null;
             try {
                 DbManager dbManager = dao.getDbManager();
@@ -271,14 +306,13 @@ public class SageImageDaoTest
                 LOG.info("deleteImage: removed " + rowsUpdated +
                          " image row(s) for image id " + imageId);
             } finally {
-                DbManager.closeResources(resultSet, statement, connection, LOG);
+                DbManager.closeResources(null, statement, connection, LOG);
             }
         }
     }
 
     private void deleteTestSequenceNumber() throws Exception {
         Connection connection = null;
-        ResultSet resultSet = null;
         PreparedStatement statement = null;
         try {
             DbManager dbManager = dao.getDbManager();
@@ -290,7 +324,7 @@ public class SageImageDaoTest
             LOG.info("deleteTestSequenceNumber: completed, " + rowsUpdated +
                      " row(s) updated");
         } finally {
-            DbManager.closeResources(resultSet, statement, connection, LOG);
+            DbManager.closeResources(null, statement, connection, LOG);
         }
     }
 

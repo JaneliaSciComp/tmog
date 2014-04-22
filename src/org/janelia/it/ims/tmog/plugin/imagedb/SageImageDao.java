@@ -20,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -484,22 +485,42 @@ public class SageImageDao
             select.setString(1, lineName);
             resultSet = select.executeQuery();
             int count = 0;
+
+            Map<String, Integer> labToLineNameMap = new LinkedHashMap<String, Integer>();
+
             while (resultSet.next()) {
                 lineId = resultSet.getInt(1);
                 lab = resultSet.getString(2);
-                if (lab != null && lab.equals(defaultLineLabName)) {
-                    count = 1;
-                    break;
+                labToLineNameMap.put(lab, lineId);
+                count++;
+            }
+
+            if (count > 1) {
+                if (labToLineNameMap.containsKey(defaultLineLabName)) {
+                    lineId = labToLineNameMap.get(defaultLineLabName);
                 } else {
-                    count++;
+                    lab = null;
+                    for (String orderedLabName : LINE_LAB_PRECEDENCE) {
+                        if (labToLineNameMap.containsKey(orderedLabName)) {
+                            lab = orderedLabName;
+                            lineId = labToLineNameMap.get(orderedLabName);
+                            break;
+                        }
+                    }
+                    if (lab == null) {
+                        //noinspection LoopStatementThatDoesntLoop
+                        for (String retrievedLabName : labToLineNameMap.keySet()) {
+                            lab = retrievedLabName;
+                            lineId = labToLineNameMap.get(lab);
+                            break;
+                        }
+                    }
+                    LOG.warn("Multiple lines exist with the name '" + lineName +
+                             "' but none of them are owned by the '" + defaultLineLabName + "' lab.  " +
+                             "Selected the instance owned by the '" + lab + "' lab.");
                 }
             }
-            if (count > 1) {
-                throw new ExternalSystemException(
-                        "Multiple lines exist with the name '" +
-                        lineName + "' but none of them are owned by the '" +
-                        defaultLineLabName + "' lab.");
-            }
+
         } finally {
             DbManager.closeResources(resultSet, select, null, LOG);
         }
@@ -603,5 +624,10 @@ public class SageImageDao
     private static final String SQL_SELECT_LINE_ID =
             "SELECT l.id, c.name FROM line l, cv_term c " +
             "WHERE l.name=? AND c.id=l.lab_id";
+
+    /** Order of precedence for identifying lines associated with multiple labs. */
+    private static final String[] LINE_LAB_PRECEDENCE = {
+            "fly", "flylight", "rubin", "simpson", "zlatic", "baker", "heiberlein", "riddiford", "olympiad"
+    };
 
 }
