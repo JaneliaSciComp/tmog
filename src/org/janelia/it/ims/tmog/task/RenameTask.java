@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -174,7 +174,8 @@ public class RenameTask extends SimpleTask {
         File fromFile = currentRow.getFromFile();
         File toFile = currentRow.getRenamedFile();
 
-        StringBuilder sb = new StringBuilder();
+        @SuppressWarnings("StringBufferReplaceableByString")
+        StringBuilder sb = new StringBuilder(1024);
         sb.append("copying file ");
         sb.append((lastRowProcessed + 1));
         sb.append(" of ");
@@ -206,12 +207,13 @@ public class RenameTask extends SimpleTask {
         boolean renameSuccessful = false;
         File rowFile = currentRow.getFromFile();
         File renamedFile = currentRow.getRenamedFile();
+        String errorMsg;
 
         if (currentRow.isOverwriteRequiredForRename()) {
 
-            LOG.error(renamedFile.getAbsolutePath() +
-                      " already exists.  Skipping copy of " +
-                      rowFile.getAbsolutePath());
+            errorMsg = renamedFile.getAbsolutePath() + " already exists.";
+            appendToSummary("ERROR: " + errorMsg + "\n");
+            LOG.error(errorMsg + "  Skipping copy of " + rowFile.getAbsolutePath());
 
         } else {
 
@@ -237,6 +239,7 @@ public class RenameTask extends SimpleTask {
             } catch (Exception e) {
                 LOG.error("Failed to copy " + rowFile.getAbsolutePath() +
                           " to " + renamedFile.getAbsolutePath(), e);
+                appendOriginalErrorMessageToSummary(e);
             }
 
         }

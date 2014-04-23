@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -35,6 +35,7 @@ import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
 import org.janelia.it.ims.tmog.view.component.SessionIcon;
 import org.janelia.it.ims.tmog.view.component.TaskButtonText;
 import org.janelia.it.ims.tmog.view.component.TaskComponents;
+import org.janelia.it.utils.FileUtil;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -240,14 +241,10 @@ public class RenameView implements SessionView, InputSelectionView {
             File derivedOutputDir = new File(outputPath);
             boolean outputDirExists = derivedOutputDir.exists();
             if (outputDirExists) {
-                acceptSelectedFile =
-                        derivedOutputDir.canWrite();
+                acceptSelectedFile = FileUtil.canWriteToDirectory(derivedOutputDir);
             } else {
-                File outputBaseDir =
-                        derivedOutputDir.getParentFile();
-                acceptSelectedFile =
-                        (outputBaseDir != null) &&
-                        outputBaseDir.canWrite();
+                File outputBaseDir = derivedOutputDir.getParentFile();
+                acceptSelectedFile = FileUtil.canWriteToDirectory(outputBaseDir);
             }
 
             if (! acceptSelectedFile) {

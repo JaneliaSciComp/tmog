@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -85,6 +85,24 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
      */
     protected void appendToSummary(Object o) {
         taskSummary.append(o);
+    }
+
+    /**
+     * Appends the error message from the original (root cause) of the specified
+     * {@link java.lang.Throwable} to this task's text summary.
+     *
+     * @param  t  throwable with message.
+     */
+    protected void appendOriginalErrorMessageToSummary(Throwable t) {
+        Throwable original = t;
+        Throwable cause = original.getCause();
+        while (cause != null) {
+            original = cause;
+            cause = original.getCause();
+        }
+        taskSummary.append("ERROR: ");
+        taskSummary.append(original.getMessage());
+        taskSummary.append('\n');
     }
 
     /**
@@ -189,6 +207,7 @@ public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements T
                                                int totalRowsToProcess,
                                                DataRow modelRow) {
 
+        @SuppressWarnings("StringBufferReplaceableByString")
         StringBuilder sb = new StringBuilder();
         sb.append("processing ");
         sb.append((lastRowProcessed + 1));
