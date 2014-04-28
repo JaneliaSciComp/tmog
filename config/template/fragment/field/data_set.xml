@@ -3,6 +3,6 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;user=group:dicksonlab&amp;user=user:nerna&amp;user=user:wolfft"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;user=group:dicksonlab&amp;user=group:ditp&amp;user=user:nerna&amp;user=user:wolfft"
                             autoComplete="true">@sage-data-default@
             </webServiceList>
