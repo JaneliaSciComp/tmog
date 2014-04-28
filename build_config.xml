@@ -71,21 +71,6 @@
         </sequential>
     </macrodef>
 
-    <macrodef name="init-sage-data-defaults-for-family">
-        <attribute name="sageFamily"/>
-        <sequential>
-            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="data_set"/>
-            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="cross_barcode"/>
-            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="line"/>
-            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="effector"/>
-            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="slide_code"/>
-            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="tile"/>
-            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="screen_state"/>
-            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="comment"/>
-            <init-sage-data-default sageFamily="@{sageFamily}" sageProperty="name"/>
-        </sequential>
-    </macrodef>
-
     <target name="build-config" description="Builds configuration files.">
 
         <!-- top level fragments -->
@@ -111,8 +96,16 @@
         <load-field-fragment    name="gender" />
         <load-field-fragment    name="heat_shock_minutes" />
         <load-fragment          name="hidden-file-name-suffix"  path="field/hidden-file-name-suffix.xml"/>
-        <load-filtered-fragment name="imaging_project-mcfo"     path="field/imaging_project.xml" key="default_project" value="mcfo"/>
-        <load-filtered-fragment name="imaging_project-polarity" path="field/imaging_project.xml" key="default_project" value="polarity"/>
+        <load-field-fragment    name="imaging_project" />
+
+        <!-- hack to override sage-data-default with static default -->
+        <load-filtered-fragment name="imaging_project-mcfo"     path="field/imaging_project.xml"
+                                key="sage-data-default"
+                                value="&#10;                &lt;staticDefault value=&quot;mcfo&quot;/&gt;"/>
+        <load-filtered-fragment name="imaging_project-polarity" path="field/imaging_project.xml"
+                                key="sage-data-default"
+                                value="&#10;                &lt;staticDefault value=&quot;polarity&quot;/&gt;"/>
+
         <load-field-fragment    name="line" />
         <load-field-fragment    name="name" />
         <load-field-fragment    name="objective" />

@@ -82,8 +82,11 @@
 @config-fragment-comment-with-flylight_polarity-default@
 @config-fragment-gender-with-flylight_polarity-default@
 @config-fragment-age-with-flylight_polarity-default@
+@config-fragment-full_age-with-flylight_polarity-default@
 @config-fragment-created_by-with-flylight_polarity-default@
 @config-fragment-annotated_by-with-flylight_polarity-default@
+@config-fragment-tissue_mounting_protocol-with-flylight_polarity-default@
+@config-fragment-imaging_project-with-flylight_polarity-default@
 @config-fragment-name-with-flylight_polarity-default@
         </dataFields>
 

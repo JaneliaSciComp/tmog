@@ -2,6 +2,5 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imaging_project">
-                <staticDefault value="@default_project@"/>
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imaging_project">@sage-data-default@
             </cvTermList>

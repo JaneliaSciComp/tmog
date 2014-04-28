@@ -83,8 +83,11 @@
 @config-fragment-comment-with-flylight_flip-default@
 @config-fragment-gender-with-flylight_flip-default@
 @config-fragment-age-with-flylight_flip-default@
+@config-fragment-full_age-with-flylight_flip-default@
 @config-fragment-created_by-with-flylight_flip-default@
 @config-fragment-annotated_by-with-flylight_flip-default@
+@config-fragment-tissue_mounting_protocol-with-flylight_flip-default@
+@config-fragment-imaging_project-with-flylight_flip-default@
 @config-fragment-heat_shock_minutes-with-flylight_flip-default@
 @config-fragment-name-with-flylight_flip-default@
         </dataFields>

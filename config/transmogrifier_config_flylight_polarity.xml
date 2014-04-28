@@ -578,6 +578,15 @@
                 </pluginDefault>
             </cvTermList>
 
+            <text displayName="Full Age" required="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="full_age"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
             <cvTermList displayName="Imager" required="true"
                         markedForTask="false"
                         autoComplete="true"
@@ -604,6 +613,31 @@
                 <validValue value="Tanya Wolff"/>
                 <validValue value="Yoshi Aso"/>
             </validValueList>
+
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            sharedForAllSessionFiles="false"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="tissue_mounting_protocol"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <validValue value="DPX Ethanol Mounting"/>
+                <validValue value="DPX PBS Mounting"/>
+                <validValue value="Glycerol-Based Mounting"/>
+            </validValueList>
+
+            <cvTermList displayName="Imaging Project" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imaging_project">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_polarity"/>
+                    <property name="image_property" value="imaging_project"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </cvTermList>
 
             <text displayName="SAGE Name" required="true"
                   editable="false"
