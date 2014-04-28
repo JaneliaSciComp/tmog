@@ -39,7 +39,7 @@
 @config-fragment-full_age@
 @config-fragment-created_by@
 @config-fragment-annotated_by@
-@config-fragment-tissue_mounting_protocol@
+@config-fragment-mounting_protocol@
 @config-fragment-screen_state@
 @config-fragment-imaging_project-mcfo@
 @config-fragment-objective@
@@ -86,7 +86,7 @@
 @config-fragment-full_age-with-flylight_flip-default@
 @config-fragment-created_by-with-flylight_flip-default@
 @config-fragment-annotated_by-with-flylight_flip-default@
-@config-fragment-tissue_mounting_protocol-with-flylight_flip-default@
+@config-fragment-mounting_protocol-with-flylight_flip-default@
 @config-fragment-imaging_project-with-flylight_flip-default@
 @config-fragment-heat_shock_minutes-with-flylight_flip-default@
 @config-fragment-name-with-flylight_flip-default@
@@ -179,7 +179,7 @@
 
 @config-fragment-created_by@
 @config-fragment-annotated_by@
-@config-fragment-tissue_mounting_protocol@
+@config-fragment-mounting_protocol@
             <text displayName="Channel Specification" required="false"
                   markedForTask="false"
                   pattern="s*rs*">
@@ -282,7 +282,7 @@
             </cvTermList>
 
 @config-fragment-annotated_by@
-@config-fragment-tissue_mounting_protocol@
+@config-fragment-mounting_protocol@
         </dataFields>
 
     </project>

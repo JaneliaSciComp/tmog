@@ -107,12 +107,12 @@
                                 value="&#10;                &lt;staticDefault value=&quot;polarity&quot;/&gt;"/>
 
         <load-field-fragment    name="line" />
+        <load-field-fragment    name="mounting_protocol" />
         <load-field-fragment    name="name" />
         <load-field-fragment    name="objective" />
         <load-field-fragment    name="screen_state" />
         <load-field-fragment    name="slide_code" />
         <load-field-fragment    name="tile" />
-        <load-field-fragment    name="tissue_mounting_protocol" />
 
         <!-- plug-in fragments -->
         <load-fragment          name="common-image-data-properties" path="plugin/common-image-data-properties.xml"/>

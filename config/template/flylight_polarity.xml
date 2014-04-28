@@ -39,7 +39,7 @@
 @config-fragment-full_age@
 @config-fragment-created_by@
 @config-fragment-annotated_by@
-@config-fragment-tissue_mounting_protocol@
+@config-fragment-mounting_protocol@
 @config-fragment-screen_state@
 @config-fragment-imaging_project-polarity@
 @config-fragment-objective@
@@ -85,7 +85,7 @@
 @config-fragment-full_age-with-flylight_polarity-default@
 @config-fragment-created_by-with-flylight_polarity-default@
 @config-fragment-annotated_by-with-flylight_polarity-default@
-@config-fragment-tissue_mounting_protocol-with-flylight_polarity-default@
+@config-fragment-mounting_protocol-with-flylight_polarity-default@
 @config-fragment-imaging_project-with-flylight_polarity-default@
 @config-fragment-name-with-flylight_polarity-default@
         </dataFields>
@@ -153,7 +153,7 @@
 @config-fragment-age@
 @config-fragment-created_by@
 @config-fragment-annotated_by@
-@config-fragment-tissue_mounting_protocol@
+@config-fragment-mounting_protocol@
 @config-fragment-imaging_project-polarity@
 @config-fragment-objective@
 @config-fragment-channel-data@

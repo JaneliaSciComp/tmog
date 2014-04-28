@@ -619,7 +619,7 @@
                             markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_polarity"/>
-                    <property name="image_property" value="tissue_mounting_protocol"/>
+                    <property name="image_property" value="mounting_protocol"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
                 <validValue value="DPX Ethanol Mounting"/>
