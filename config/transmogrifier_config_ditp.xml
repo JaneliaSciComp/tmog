@@ -34,7 +34,7 @@
                 <property name="tile" value="Tile$MAP:vnc_verify=ventral_nerve_cord" />
                 <property name="area" value="Area$MAP:b=Brain|v=Ventral Nerve Cord"/>
                 <property name="created_by" value="Imager"/>
-                <property name="annotated_by" value="Annotator"/>
+                <property name="annotated_by" value="$STATIC:Shigehiro Namiki"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
                 <property name="tissue_orientation" value="Tissue Orientation"/>
                 <property name="effector" value="Reporter"/>
@@ -44,6 +44,16 @@
                 <property name="screen_state" value="$STATIC:accepted"/>
                 <property name="display" value="$STATIC:true"/>
                 <property name="microscope_filename"/>
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.SageLoaderPlugin">
+                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/sageLoader"/>
+                <property name="owner" value="system"/>
+                <property name="config" value="/groups/scicomp/informatics/data/rubin_light_imagery-config.xml"/>
+                <property name="grammar" value="/usr/local/pipeline/grammar/ditp.gra"/>
+                <property name="lab" value="flylight"/>
+                <property name="debug" value="true"/>
+                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
             </rowListener>
 
             <!--
@@ -127,7 +137,7 @@
                             valueCreationPath="*/line"
                             relativeActualValuePath="name"
                             relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman&amp;lab=simpson&amp;lab=leet&amp;lab=zlatic&amp;lab=dickson"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=simpson&amp;lab=rubin&amp;lab=zlatic"
                             autoComplete="true">
             </webServiceList>
 
@@ -217,12 +227,219 @@
                 <staticDefault value="Shigehiro Namiki"/>
             </cvTermList>
 
-            <validValueList displayName="Annotator" required="false"
-                            autoComplete="true"
-                            sharedForAllSessionFiles="true"
-                            markedForTask="false">
-                <validValue value="Shigehiro Namiki" default="true"/>
+        </dataFields>
+
+    </project>
+
+    <project name="Descending Interneurons - fix data">
+
+        <inputFileFilter patternString=".+\.lsm" />
+
+        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/ditp]/ditp/confocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+
+        <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="Line" value="parent1StockName" />
+                <property name="Reporter" value="reporter" />
+            </rowUpdater>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="family" value="$STATIC:descending_interneurons"/>
+                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
+                <property name="data_set" value="Data Set"/>
+                <property name="cross_barcode" value="Cross Serial Number"/>
+                <property name="line" value="Line"/>
+                <property name="gender" value="Gender$MAP:m=Male|f=Female|x=unknown"/>
+                <property name="age" value="Age"/>
+                <property name="tile" value="Tile$MAP:vnc_verify=ventral_nerve_cord" />
+                <property name="area" value="Area$MAP:b=Brain|v=Ventral Nerve Cord"/>
+                <property name="created_by" value="Imager"/>
+                <property name="annotated_by" value="$STATIC:Shigehiro Namiki"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
+                <property name="effector" value="Reporter"/>
+                <property name="slide_code" value="Slide Code"/>
+                <property name="channel_spec" value="$STATIC:sr"/>
+                <property name="base_path" value="$STATIC:/groups/ditp/ditp/confocalStacks/"/>
+                <property name="screen_state" value="$STATIC:accepted"/>
+                <property name="display" value="$STATIC:true"/>
+                <property name="microscope_filename" value="Microscope Filename"/>
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.SageLoaderPlugin">
+                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/sageLoader"/>
+                <property name="owner" value="system"/>
+                <property name="config" value="/groups/scicomp/informatics/data/rubin_light_imagery-config.xml"/>
+                <property name="grammar" value="/usr/local/pipeline/grammar/ditp.gra"/>
+                <property name="lab" value="flylight"/>
+                <property name="debug" value="true"/>
+                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
+            </rowListener>
+
+            <!--
+                  The companion file listener (for log files) should be the
+                  last defined plug-in to ensure that log files are only
+                  copied if the source lsm processing succeeds.
+            -->
+            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
+                <property name="sourceSuffix" value=".lsm"/>
+                <property name="companionSuffix" value="_log.csv"/>
+                <property name="deleteAfterCopy" value="true"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=group:ditp"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="descending_interneurons"/>
+                    <property name="image_property" value="data_set"/>
+                </pluginDefault>
+            </webServiceList>
+
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="descending_interneurons"/>
+                    <property name="image_property" value="slide_code"/>
+                </pluginDefault>
+            </text>
+
+            <cvTermList displayName="Tile" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        autoComplete="true"
+                        markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="descending_interneurons"/>
+                    <property name="image_property" value="tile"/>
+                </pluginDefault>
+                <validValue displayName="VNC-Verify" value="vnc_verify"/>
+            </cvTermList>
+
+            <number displayName="Cross Serial Number"
+                    required="false"
+                    minimumValue="1"
+                    maximumValue="99999"
+                    markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="descending_interneurons"/>
+                    <property name="image_property" value="cross_barcode"/>
+                </pluginDefault>
+            </number>
+
+            <webServiceList displayName="Line"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin&amp;lab=jayaraman&amp;lab=simpson&amp;lab=leet&amp;lab=zlatic&amp;lab=dickson"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="descending_interneurons"/>
+                    <property name="image_property" value="line"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </webServiceList>
+
+            <!-- set sequence number to 999 so that fly light screen grammar can be reused -->
+            <separator value="_999-"/>
+
+            <validValueList displayName="Gender" required="true"
+                            autoComplete="true">
+                <sourceFileDefault pattern=".*([mfx])...[bv]_C\d{6}_\d{17}\.lsm$" />
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f" />
+                <validValue displayName="x: Not Defined" value="x"/>
             </validValueList>
+            <validValueList displayName="Age" required="true"
+                            autoComplete="true">
+                <sourceFileDefault pattern=".*[mfx]([AX]\d\d)[bv]_C\d{6}_\d{17}\.lsm$" />
+                <validValue displayName="X00: undefined" value="X00"/>
+                <validValue displayName="A01: Day 1-5" value="A01"/>
+                <validValue displayName="A02: Day 6-10" value="A02"/>
+                <validValue displayName="A03: Day 11-15" value="A03"/>
+                <validValue displayName="A04: Day 16-20" value="A04"/>
+                <validValue displayName="A05: Day 21-25" value="A05"/>
+                <validValue displayName="A06: Day 26-30" value="A06"/>
+            </validValueList>
+            <validValueList displayName="Area" required="true"
+                            autoComplete="true">
+                <sourceFileDefault pattern=".*([bv])_C\d{6}_\d{17}\.lsm$" />
+                <validValue displayName="b: Brain" value="b"/>
+                <validValue displayName="v: Ventral Nerve Cord" value="v"/>
+            </validValueList>
+
+            <text displayName="File Suffix" required="true"
+                  editable="false"
+                  copyable="false">
+                <sourceFileDefault pattern=".*(_C\d{6}_\d{17}\.lsm)$"/>
+            </text>
+
+            <!--
+             These values are collected for the SAGE database but are not
+             included as components of the file name (markedForTask="false").
+             -->
+
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="descending_interneurons"/>
+                    <property name="image_property" value="mounting_protocol"/>
+                </pluginDefault>
+                <validValue value="DPX Ethanol Mounting"/>
+                <validValue value="DPX PBS Mounting"/>
+                <validValue value="Glycerol-Based Mounting"/>
+            </validValueList>
+
+            <cvTermList displayName="Reporter" required="false"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="descending_interneurons"/>
+                    <property name="image_property" value="effector"/>
+                </pluginDefault>
+            </cvTermList>
+
+            <cvTermList displayName="Imager" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="descending_interneurons"/>
+                    <property name="image_property" value="created_by"/>
+                </pluginDefault>
+            </cvTermList>
+
+            <text displayName="Microscope Filename" required="false"
+                  editable="false"
+                  copyable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="descending_interneurons"/>
+                    <property name="image_property" value="microscope_filename"/>
+                </pluginDefault>
+            </text>
 
         </dataFields>
 
