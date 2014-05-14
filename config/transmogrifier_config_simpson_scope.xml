@@ -128,6 +128,7 @@
                 <property name="tile" value="Tile"/>
                 <property name="area" value="Tile$MAP:MAP_DEFAULT=Brain|abdominal=VNC|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|ventral_nerve_cord=VNC|vnc_verify=VNC-Verify"/>
                 <property name="channel_spec" value="Channel Specification"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.SageLoaderPlugin">
@@ -183,6 +184,14 @@
                   markedForTask="false"
                   pattern="s*rs*">
             </text>
+
+            <cvTermList displayName="Tissue Orientation" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
+                        displayNamePrefixedForValues="false">
+                <staticDefault value="face_up"/>
+            </cvTermList>
 
         </dataFields>
 
