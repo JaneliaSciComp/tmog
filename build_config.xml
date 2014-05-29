@@ -184,6 +184,8 @@
                                 config-resource-dir="[//arch.janelia.priv|/archive]/flylight_archive"/>
         <build-jnlp-launch-file name="flylight_screen"
                                 config-resource-dir="[//dm11.janelia.priv|/groups/flylight]/flylight"/>
+        <build-jnlp-launch-file name="larval_olympiad"
+                                config-resource-dir="[//dm11.janelia.priv|/groups/larvalolympiad]/larvalolympiad"/>
         <build-jnlp-launch-file name="leet_lineage"
                                 config-resource-dir="[//arch.janelia.priv|/archive]/leet/leetimg/leetlab"/>
         <build-jnlp-launch-file name="simpson_scope"
