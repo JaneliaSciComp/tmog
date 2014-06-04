@@ -14,7 +14,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.janelia.priv|/groups/larvalolympiad]\larvalolympiad\pipeline\screen\tracking-results\" />
+            <path path="[//dm11.janelia.priv|/groups/larvalolympiad]/larvalolympiad/pipeline/screen/tracking-results/" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line"/>
@@ -62,6 +62,9 @@
                         markedForTask="false">
                 <sourceFileMappedDefault pattern="^(GMR_).*">
                     <mappedValue from="GMR_" to="rubin"/>
+                </sourceFileMappedDefault>
+                <sourceFileMappedDefault pattern="^(MZZ_).*">
+                    <mappedValue from="MZZ_" to="zlatic"/>
                 </sourceFileMappedDefault>
                 <sourceFileMappedDefault pattern="(.+?)@.+?@.+?@.+?@.+?@.*">
                     <mappedValue from="pBDPGAL4U" to="simpson"/>
