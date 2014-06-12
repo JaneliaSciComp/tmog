@@ -11,7 +11,7 @@
                          patternString=".*_(L)(\d++)(\.lsm)"/>
 
         <outputDirectory fileModeReadOnly="true">
-            <path path="[\\arch.janelia.pddriv|/archive]/leet/leetimg/leetlab/lineage/" />
+            <path path="[\\arch.janelia.priv|/archive]/leet/leetimg/leetlab/lineage/" />
             <renameFieldValue fieldDisplayName="Image Family"/>
             <path path="/confocalStacks/"/>
             <renameFieldValue fieldDisplayName="Slide ID"
