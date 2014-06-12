@@ -11,7 +11,7 @@
                          patternString=".*_(L)(\d++)(\.lsm)"/>
 
         <outputDirectory fileModeReadOnly="true">
-            <path path="[\\arch.janelia.priv|/archive]/leet/leetimg/leetlab/lineage/" />
+            <path path="[\\arch.janelia.pddriv|/archive]/leet/leetimg/leetlab/lineage/" />
             <renameFieldValue fieldDisplayName="Image Family"/>
             <path path="/confocalStacks/"/>
             <renameFieldValue fieldDisplayName="Slide ID"
@@ -98,7 +98,7 @@
             <text displayName="Slide ID"
                   required="true"
                   markedForTask="false"
-                  pattern="(BLM|Hey|SSM|MDS|Mut|RQZ|WYC)\d{5}">
+                  pattern="(BLM|Hey|SSM|MDS|Mut|RQZ|VND|WYC)\d{5}">
                 <targetPropertyDefault propertyName="slide"/>
             </text>
 
@@ -355,7 +355,7 @@
             <text displayName="Slide ID"
                   required="true"
                   markedForTask="false"
-                  pattern="(BLM|Hey|SSM|MDS|Mut|RQZ|WYC)\d{5}">
+                  pattern="(BLM|Hey|SSM|MDS|Mut|RQZ|VND|WYC)\d{5}">
                 <targetPropertyDefault propertyName="slide"/>
             </text>
 
@@ -687,7 +687,7 @@
             <text displayName="Slide Code"
                   required="true"
                   markedForTask="false"
-                  pattern="(BLM|Hey|SSM|MDS|Mut|RQZ|WYC)\d{5}_[A-Z]\d\d?">
+                  pattern="(BLM|Hey|SSM|MDS|Mut|RQZ|VND|WYC)\d{5}_[A-Z]\d\d?">
 
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="leet_central_brain_lineage"/>
