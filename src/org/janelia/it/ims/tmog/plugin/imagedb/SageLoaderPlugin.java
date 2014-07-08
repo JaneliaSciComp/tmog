@@ -104,7 +104,7 @@ public class SageLoaderPlugin
             } else if (TEST_URL_NAME.equals(key)) {
                 testUrl = value;
             } else {
-                if (! value.startsWith(PropertyTokenList.TOKEN_ID)) {
+                if (! value.contains(PropertyTokenList.TOKEN_ID)) {
                     value = getEncodedValue(value);
                 }
                 serviceQueryParameters.put(key, value);
