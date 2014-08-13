@@ -1,0 +1,222 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <!-- frameSizePercentage default is 80, min is 40, and max is 99 --> 
+    <global minimumVersion="2.4.3" frameSizePercentage="95"/>
+
+    <project name="Magee Whisker-Dependent Behavior Project"
+             default="true"
+             taskName="rename-without-delete"
+             copyPreviousButtonVisible="false">
+
+        <inputFileFilter patternString=".+\.(seq|mp4|avi)"
+                         recursiveSearch="true"/>
+
+        <outputDirectory>
+            <path path="[\\dm11.janelia.priv|/groups/magee]\mageelab\Justin\clustRuns\unprocessed\" />
+            <renameFieldValue fieldDisplayName="Experimenter" />
+            <path path="/" />
+            <renameFieldValue fieldDisplayName="Animal ID" />
+            <path path="/" />
+            <renameFieldValue fieldDisplayName="Experiment Date" suffix="-" />
+            <renameFieldValue fieldDisplayName="Session ID" />
+        </outputDirectory>
+
+        <fileTransfer bufferSize="10000000"
+                      digestAlgorithm="adler32"
+                      validationRequired="false"/>
+
+        <plugins>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.XmlWriterPlugin" />
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionCompleteFileWriter">
+                <property name="fileName" value="transfer-complete"/>
+            </sessionListener>
+        </plugins>
+
+        <dataFields>
+
+            <!-- The following fields are collected
+                 AND included in the file name. -->
+
+            <separator value="WDBP_"/>
+
+            <text displayName="Animal ID"
+                  required="true"
+                  sharedForAllSessionFiles="true"
+                  suffix="-">
+                <sourceFileDefault pattern=".*[/\\\\]([0-9A-Za-z]++)[/\\\\]\d{4}[x_]\d{2}[x_]\d{2}.*"
+                                   matchType="path"/>
+                <sourceFileDefault pattern="^[A-Za-z]*[_]?([0-9]++)[_-].*"
+                                   matchType="name"/>
+            </text>
+
+            <date displayName="Experiment Date"
+                  required="true"
+                  datePattern="yyyy_MM_dd"
+                  sharedForAllSessionFiles="true"
+                  suffix="-">
+                <sourceFileDateDefault pattern=".*[-/\\\\](\d{4}x\d{2}x\d{2}).*"
+                                       fromDatePattern="yyyy'x'MM'x'dd"
+                                       toDatePattern="yyyy_MM_dd"
+                                       matchType="path"/>
+                <sourceFileDateDefault pattern=".*[-/\\\\](\d{4}_\d{2}_\d{2}).*"
+                                       fromDatePattern="yyyy_MM_dd"
+                                       toDatePattern="yyyy_MM_dd"
+                                       matchType="path"/>
+                <sourceFileDateDefault pattern=".*[_-](\d{4}_\d{2}_\d{2})[_-].*"
+                                       fromDatePattern="yyyy_MM_dd"
+                                       toDatePattern="yyyy_MM_dd"
+                                       matchType="name"/>
+            </date>
+
+            <text displayName="Session ID"
+                  required="true"
+                  sharedForAllSessionFiles="false"
+                  suffix="_">
+                <sourceFileDefault pattern=".*[_-]\d{4}_\d{2}_\d{2}[_-].*"
+                                   matchType="name"/>
+                <staticDefault value="1"/>
+            </text>
+
+            <fileName displayName="Trial Number"
+                      patternString=".*_(\d{4})(\.seq|_\d+\.mp4|_\d+_bksub\.mp4|_\d+\.avi)"
+                      patternGroupNumber="1"
+                      visible="true" />
+
+            <runTime datePattern="_yyyyMMddHHmmssSSS"/>
+            <fileExtension/>
+
+            <!-- The following fields are collected but
+                 NOT included in the file name (markedForTask == false). -->
+
+            <validValueList displayName="Autodelete SEQ files"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue value="yes"/>
+                <validValue value="no"/>
+            </validValueList>
+
+            <validValueList displayName="Parameters File"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue displayName="default.parameters" value="default.parameters"/>
+                <validValue displayName="simon1.parameters" value="simon1.parameters"/>
+            </validValueList>
+
+            <validValueList displayName="Experimenter"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">        
+
+		<validValue displayName="Nattar Ranganathan, Gayathri" value="ranganathang"/>
+		<validValue displayName="Little, Justin" value="littlej"/>
+            </validValueList>
+
+            <validValueList displayName="Experiment Location"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue value="rig 1 in 2W.387"/>
+                <validValue value="rig 2 in 2W.333"/>
+		<validValue value="rig 3 in 2C.373"/>
+            </validValueList>
+
+            
+            <text displayName="Whiskers Present"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="Min Whisker Length"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="Max Follicle Y"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="Polynomial Max Follicle Y"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="Polynomial Distance From Face"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="Polynomial Offset"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="Kappa Position"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="Bar Template Trial"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="BarT Frame Number"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="BarT Center"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="BarT WH"
+                  required="true"
+                  markedForTask="false"/>
+
+            <number displayName="Number of Whiskers"
+                    required="true"
+                    minimumValue="0"
+                    markedForTask="false"/>
+
+            <validValueList displayName="Stimulation Protocol"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue value="go/nogo"/>
+                <validValue value="go/nogo with multiple go positions"/>
+            </validValueList>
+
+            <number displayName="Frame Rate"
+                    required="true"
+                    minimumValue="0"
+                    sharedForAllSessionFiles="true"
+                    markedForTask="false"/>
+
+            <validValueList displayName="Face Parameter"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue displayName="top" value="top"/>
+                <validValue displayName="bottom" value="bottom"/>
+                <validValue displayName="left" value="left"/>
+                <validValue displayName="right" value="right"/>
+            </validValueList>
+
+            <decimal displayName="Px2mm"
+                     required="true"
+                     minimumValue="0.00"
+                     sharedForAllSessionFiles="true"
+                     markedForTask="false">
+            </decimal>
+
+            <text displayName="Limit Parameter"
+                  required="false"
+                  markedForTask="false"/>
+
+            <text displayName="Follicle Parameter"
+                  required="false"
+                  markedForTask="false"/>
+
+            
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
