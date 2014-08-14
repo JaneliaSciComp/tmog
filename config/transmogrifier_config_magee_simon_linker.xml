@@ -81,7 +81,7 @@
             </text>
 
             <fileName displayName="Trial Number"
-                      patternString=".*_(\d{4})(\.seq|_\d+\.mp4|_\d+_bksub\.mp4|_\d+\.avi)"
+                      patternString=".*_(\d{4})(\.seq|_\d+\.mp4|_\d+_bksub\.mp4|\.avi)"
                       patternGroupNumber="1"
                       visible="true" />
 
