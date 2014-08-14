@@ -11,7 +11,7 @@
                          patternString=".*_(L)(\d++)(\.lsm)"/>
 
         <outputDirectory fileModeReadOnly="true">
-            <path path="[\\arch.janelia.priv|/archive]/leet/leetimg/leetlab/lineage/" />
+            <path path="[//tier2.hhmi.org|/tier2]/leet/leetimg/leetlab/lineage/" />
             <renameFieldValue fieldDisplayName="Image Family"/>
             <path path="/confocalStacks/"/>
             <renameFieldValue fieldDisplayName="Slide ID"
@@ -24,7 +24,7 @@
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Slide ID}" />
-                <property name="data-file.name" value="[\\arch.janelia.priv|/archive]/leet/leetimg/leetlab/tmog/data/scopeSlide.tsv" />
+                <property name="data-file.name" value="[//tier2.hhmi.org|/tier2]/leet/leetimg/leetlab/tmog/data/scopeSlide.tsv" />
                 <property name="data-file.tsv-key" value="Slide ID" />
                 <property name="Image Family" value="Image Family" />
                 <property name="GAL4 Line" value="GAL4 Line" />
@@ -76,7 +76,7 @@
                 <property name="created_by" value="Imager"/>
                 <property name="channel_spec" value="Channel Specification"/>
                 <property name="microscope_filename"/>
-                <property name="base_path" value="Image Family$MAP:leet_central_brain_lineage=/archive/leet/leetimg/leetlab/lineage/leet_central_brain_lineage/confocalStacks/|leet_pan_lineage=/archive/leet/leetimg/leetlab/lineage/leet_pan_lineage/confocalStacks/"/>
+                <property name="base_path" value="Image Family$MAP:leet_central_brain_lineage=/tier2/leet/leetimg/leetlab/lineage/leet_central_brain_lineage/confocalStacks/|leet_pan_lineage=/tier2/leet/leetimg/leetlab/lineage/leet_pan_lineage/confocalStacks/"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.XmlWriterPlugin" />
@@ -300,7 +300,7 @@
                          patternString=".*_(L)(\d++)(\.lsm)"/>
 
         <outputDirectory fileModeReadOnly="true">
-            <path path="[\\arch.janelia.priv|/archive]/leet/leetimg/leetlab/lineage/" />
+            <path path="[//tier2.hhmi.org|/tier2]/leet/leetimg/leetlab/lineage/" />
             <renameFieldValue fieldDisplayName="Image Family"/>
             <path path="/confocalStacks/"/>
             <renameFieldValue fieldDisplayName="Slide ID"
@@ -344,7 +344,7 @@
                 <property name="created_by" value="Imager"/>
                 <property name="channel_spec" value="Channel Specification"/>
                 <property name="microscope_filename"/>
-                <property name="base_path" value="Image Family$MAP:leet_central_brain_lineage=/archive/leet/leetimg/leetlab/lineage/leet_central_brain_lineage/confocalStacks/|leet_pan_lineage=/archive/leet/leetimg/leetlab/lineage/leet_pan_lineage/confocalStacks/"/>
+                <property name="base_path" value="Image Family$MAP:leet_central_brain_lineage=/tier2/leet/leetimg/leetlab/lineage/leet_central_brain_lineage/confocalStacks/|leet_pan_lineage=/tier2/leet/leetimg/leetlab/lineage/leet_pan_lineage/confocalStacks/"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.XmlWriterPlugin" />
