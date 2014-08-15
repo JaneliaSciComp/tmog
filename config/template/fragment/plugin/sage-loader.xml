@@ -6,4 +6,5 @@
                 <property name="lab" value="flylight"/>
                 <property name="debug" value="true"/>
                 <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
+                <property name="relativePathDepth" value="@relative-path-depth@"/>
             </rowListener>

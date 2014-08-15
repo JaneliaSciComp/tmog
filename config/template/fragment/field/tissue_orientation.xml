@@ -1,0 +1,6 @@
+            <cvTermList displayName="Tissue Orientation" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation">@sage-data-default@
+            </cvTermList>

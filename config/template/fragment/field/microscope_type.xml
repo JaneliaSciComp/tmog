@@ -1,0 +1,7 @@
+            <cvTermList displayName="Microscope Type" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        sharedForAllSessionFiles="@is-shareable@"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/microscope_type">@sage-data-default@
+            </cvTermList>
