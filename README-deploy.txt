@@ -48,12 +48,12 @@ are deployed for the following lab groups:
 /groups/baker/bakerlab/tmog/config
 /groups/ditp/ditp/tmog/config
 /groups/flylight/flylight/tmog/config
-/archive/flylight_archive/flylight/tmog/config
+/tier2/flylight/tmog/config
 /groups/heberlein/heberleinlab/tmog/config
 /groups/kerr/kerrlab/tmog/config
 /groups/larvalolympiad/larvalolympiad/tmog/config
-/archive/leet/leetconfocal/tmog/config
-/archive/leet/leetimg/leetlab/tmog/config
+/tier2/leet/leetconfocal/tmog/config
+/tier2/leet/leetimg/leetlab/tmog/config
 /groups/rubin/data1/rubinlab/tmog/config
 /groups/rubin/rubinimg/tmog/config
 /groups/simpson/MicroscopeData/tmog/config

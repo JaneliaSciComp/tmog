@@ -19,6 +19,6 @@
         <jar href="JaneliaTransmogrifier.jar" main="true" download="eager"/>
     </resources>
     <application-desc main-class="org.janelia.it.ims.tmog.JaneliaTransmogrifier">
-        <argument>[//arch.janelia.priv|/archive]/flylight_archive/tmog/config/transmogrifier_config_flylight_dickson.xml</argument>
+        <argument>[//tier2.hhmi.org|/tier2]/flylight/tmog/config/transmogrifier_config_flylight_dickson.xml</argument>
     </application-desc>
 </jnlp>

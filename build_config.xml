@@ -185,13 +185,13 @@
         <build-jnlp-launch-file name="ditp"
                                 config-resource-dir="[//dm11.janelia.priv|/groups/ditp]/ditp"/>
         <build-jnlp-launch-file name="flylight_collaborations"
-                                config-resource-dir="[//arch.janelia.priv|/archive]/flylight_archive"/>
+                                config-resource-dir="[//tier2.hhmi.org|/tier2]/flylight"/>
         <build-jnlp-launch-file name="flylight_dickson"
-                                config-resource-dir="[//arch.janelia.priv|/archive]/flylight_archive"/>
+                                config-resource-dir="[//tier2.hhmi.org|/tier2]/flylight"/>
         <build-jnlp-launch-file name="flylight_flip"
-                                config-resource-dir="[//arch.janelia.priv|/archive]/flylight_archive"/>
+                                config-resource-dir="[//tier2.hhmi.org|/tier2]/flylight"/>
         <build-jnlp-launch-file name="flylight_polarity"
-                                config-resource-dir="[//arch.janelia.priv|/archive]/flylight_archive"/>
+                                config-resource-dir="[//tier2.hhmi.org|/tier2]/flylight"/>
         <build-jnlp-launch-file name="flylight_screen"
                                 config-resource-dir="[//dm11.janelia.priv|/groups/flylight]/flylight"/>
         <build-jnlp-launch-file name="larval_olympiad"

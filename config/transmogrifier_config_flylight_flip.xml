@@ -14,14 +14,14 @@
                          patternString="([A-Z])(\d++)_.*_(L\d++)[\._].*"
                          patternGroupIndexes="1,2,3"/>
 
-        <outputDirectory basePath="[//arch.janelia.priv|/archive]/flylight_archive/flip/confocalStacks"
+        <outputDirectory basePath="[//tier2.hhmi.org|/tier2]/flylight/flip/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[//arch.janelia.priv|/archive]/flylight_archive/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[//tier2.hhmi.org|/tier2]/flylight/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="GAL4 Line" value="GAL4 Line" />
             </rowUpdater>
@@ -366,7 +366,7 @@
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[//arch.janelia.priv|/archive]/flylight_archive/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[//tier2.hhmi.org|/tier2]/flylight/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="GAL4 Line" value="GAL4 Line" />
             </rowUpdater>
@@ -684,7 +684,7 @@
         <inputFileSorter sortAlgorithm="Number"
                          patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
 
-        <outputDirectory basePath="[//arch.janelia.priv|/archive]/flylight_archive/flip/confocalStacks"
+        <outputDirectory basePath="[//tier2.hhmi.org|/tier2]/flylight/flip/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -694,7 +694,7 @@
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[//arch.janelia.priv|/archive]/flylight_archive/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[//tier2.hhmi.org|/tier2]/flylight/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="GAL4 Line" value="GAL4 Line" />
             </rowUpdater>
@@ -958,7 +958,7 @@
         <inputFileSorter sortAlgorithm="Number"
                          patternString=".*_(\d{8}_\d\d_[A-Z]\d).*_R._L(\d++)_(.*)"/>
 
-        <outputDirectory basePath="[//arch.janelia.priv|/archive]/flylight_archive/flip/confocalStacks"
+        <outputDirectory basePath="[//tier2.hhmi.org|/tier2]/flylight/flip/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>

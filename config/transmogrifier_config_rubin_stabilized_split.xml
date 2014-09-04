@@ -9,14 +9,14 @@
 
         <inputFileFilter patternString=".+\.lsm" />
 
-        <outputDirectory basePath="[\\arch.janelia.priv|/archive]/flylight_archive/ssplit/data/confocalStacks"
+        <outputDirectory basePath="[\\arch.janelia.priv|/archive]/flylight/ssplit/data/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[\\arch.janelia.priv|/archive]/flylight_archive/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[\\arch.janelia.priv|/archive]/flylight/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="Line" value="Line" />
             </rowUpdater>
@@ -233,7 +233,7 @@
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[\\arch.janelia.priv|/archive]/flylight_archive/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[\\arch.janelia.priv|/archive]/flylight/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="Line" value="Line" />
             </rowUpdater>

@@ -1,2 +1,2 @@
-        <outputDirectory basePath="[//arch.janelia.priv|/archive]/flylight_archive/@family_directory@/confocalStacks"
+        <outputDirectory basePath="[//tier2.hhmi.org|/tier2]/flylight/@family_directory@/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
