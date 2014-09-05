@@ -205,6 +205,8 @@
                                 config-resource-dir="[//dm11.janelia.priv|/groups/larvalolympiad]/larvalolympiad"/>
         <build-jnlp-launch-file name="projtechres"
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/projtechres"/>
+        <build-jnlp-launch-file name="rubin_rd"
+                                config-resource-dir="[//tier2.hhmi.org|/tier2]/rubin/data1/rubinlab"/>
         <build-jnlp-launch-file name="simpson_scope"
                                 config-resource-dir="[//dm11.janelia.priv/simpsonmicro|/groups/simpson/MicroscopeData]"/>
         <build-jnlp-launch-file name="zlatic"

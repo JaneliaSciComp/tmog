@@ -3,20 +3,30 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
+    <!--
+
+    =======================================================================================================
+    NOTE: This configuration is no longer deployed since aRnim left in 2013.
+          I'm keeping it around in case we need to resurrect it.
+          -Eric
+    =======================================================================================================
+
+    -->
+
     <global minimumVersion="3.0.2" frameSizePercentage="95"/>
 
     <project name="Rubin Stabilized Splits - scope registration (GRSS_*)" default="true">
 
         <inputFileFilter patternString=".+\.lsm" />
 
-        <outputDirectory basePath="[\\arch.janelia.priv|/archive]/flylight/ssplit/data/confocalStacks"
+        <outputDirectory basePath="[//tier2.hhmi.org|/tier2]/flylight/ssplit/data/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[\\arch.janelia.priv|/archive]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[//tier2.hhmi.org|/tier2]/flylight/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="Line" value="Line" />
             </rowUpdater>
@@ -233,7 +243,7 @@
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[\\arch.janelia.priv|/archive]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[//tier2.hhmi.org|/tier2]/flylight/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="Line" value="Line" />
             </rowUpdater>
