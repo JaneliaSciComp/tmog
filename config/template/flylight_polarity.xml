@@ -50,7 +50,7 @@
 
     <project name="Fly Light Polarity - fix data" taskName="collector">
 
-@config-fragment-lsm-input@
+@config-fragment-lsm-bz2-input@
 @config-fragment-lsm-sort@
         <plugins>
 
@@ -216,7 +216,7 @@
 
     <project name="Fly Light Polarity - run sageLoader" taskName="collector">
 
-@config-fragment-lsm-input@
+@config-fragment-lsm-bz2-input@
         <plugins>
 
 @config-fragment-image-path-exists@

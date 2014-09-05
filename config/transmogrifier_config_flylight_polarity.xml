@@ -350,7 +350,7 @@
 
     <project name="Fly Light Polarity - fix data" taskName="collector">
 
-        <inputFileFilter patternString=".+\.lsm" />
+        <inputFileFilter patternString=".+\.(lsm|lsm\.bz2)" />
 
         <!-- standard scope file name pattern is: A1_ZB1_T1_BRN_20130604_33_20X_R1_L01 -->
         <inputFileSorter sortAlgorithm="Number"
@@ -1174,7 +1174,7 @@
 
     <project name="Fly Light Polarity - run sageLoader" taskName="collector">
 
-        <inputFileFilter patternString=".+\.lsm" />
+        <inputFileFilter patternString=".+\.(lsm|lsm\.bz2)" />
 
         <plugins>
 

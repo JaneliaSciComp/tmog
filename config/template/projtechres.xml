@@ -74,7 +74,7 @@
 
     <project name="PTR - fix data" taskName="collector">
 
-@config-fragment-lsm-input@
+@config-fragment-lsm-bz2-input@
 @config-fragment-lsm-sort@
         <plugins>
 

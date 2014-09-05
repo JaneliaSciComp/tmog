@@ -78,6 +78,7 @@
 
         <!-- top level fragments -->
         <load-fragment          name="global"           path="global.xml"/>
+        <load-fragment          name="lsm-bz2-input"    path="lsm-bz2-input.xml"/>
         <load-fragment          name="lsm-input"        path="lsm-input.xml"/>
         <load-fragment          name="lsm-sort"         path="lsm-sort.xml"/>
         <load-filtered-fragment name="output-flip"      path="output.xml" key="family_directory" value="flip"/>

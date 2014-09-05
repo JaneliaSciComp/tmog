@@ -51,7 +51,7 @@
 
     <project name="Fly Light - MCFO - fix data" taskName="collector">
 
-@config-fragment-lsm-input@
+@config-fragment-lsm-bz2-input@
 @config-fragment-lsm-sort@
         <plugins>
 
@@ -289,7 +289,7 @@
 
     <project name="Fly Light - MCFO - run sageLoader" taskName="collector">
 
-@config-fragment-lsm-input@
+@config-fragment-lsm-bz2-input@
         <plugins>
 
 @config-fragment-image-path-exists@
