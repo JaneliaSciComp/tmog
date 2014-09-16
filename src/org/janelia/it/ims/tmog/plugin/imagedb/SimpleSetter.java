@@ -147,7 +147,13 @@ public class SimpleSetter implements ImagePropertySetter {
             value = row.getCoreValue(getFieldName());
 
             if (coreValueToDbValueMap != null) {
-                final String mappedValue = coreValueToDbValueMap.get(value);
+                String mappedValue = coreValueToDbValueMap.get(value);
+
+                if ((mappedValue != null) && mappedValue.startsWith(FIELD_VALUE_OF_IDENTIFIER)) {
+                    final String valueOfFieldName = mappedValue.substring(FIELD_VALUE_OF_IDENTIFIER.length());
+                    mappedValue = row.getCoreValue(valueOfFieldName);
+                }
+
                 if (mappedValue == null) {
                     if (mapDefaultValue != null) {
                         value = mapDefaultValue;
@@ -177,5 +183,6 @@ public class SimpleSetter implements ImagePropertySetter {
 
     protected static final String FIELD_STATIC_IDENTIFIER = "$STATIC:";
     protected static final String FIELD_MAP_IDENTIFIER = "$MAP:";
+    protected static final String FIELD_VALUE_OF_IDENTIFIER = "$VALUE_OF:";
     protected static final String MAP_DEFAULT_KEY = "MAP_DEFAULT";
 }

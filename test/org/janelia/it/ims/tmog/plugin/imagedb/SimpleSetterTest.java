@@ -64,8 +64,12 @@ public class SimpleSetterTest
         final SimpleSetter setterWithMap = new SimpleSetter("propertyName", configuredPropertyValue);
 
 
-        validateMappedValue(setterWithMap, fieldName, explicitlyMappedValue, explicitlyMappedResult);
-        validateMappedValue(setterWithMap, fieldName, unmappedValue, unmappedValue);
+        validateMappedValue(setterWithMap,
+                            new String[]{fieldName, explicitlyMappedValue},
+                            explicitlyMappedResult);
+        validateMappedValue(setterWithMap,
+                            new String[]{fieldName, unmappedValue},
+                            unmappedValue);
     }
 
     /**
@@ -89,26 +93,64 @@ public class SimpleSetterTest
         final SimpleSetter setterWithMap = new SimpleSetter("propertyName", configuredPropertyValue);
 
 
-        validateMappedValue(setterWithMap, fieldName, explicitlyMappedValue, explicitlyMappedResult);
-        validateMappedValue(setterWithMap, fieldName, "left_optic_lobe", defaultMappedResult);
+        validateMappedValue(setterWithMap,
+                            new String[]{fieldName, explicitlyMappedValue},
+                            explicitlyMappedResult);
+        validateMappedValue(setterWithMap,
+                            new String[]{fieldName, "left_optic_lobe"},
+                            defaultMappedResult);
+    }
+
+    /**
+     * Tests the {@link SimpleSetter#deriveValue} method.
+     *
+     * @throws Exception
+     *   if any unexpected errors occur.
+     */
+    public void testDeriveValueWithMappedValueOf() throws Exception {
+
+        final String fieldOneName = "Tech Review";
+        final String fieldTwoName = "Data Set";
+
+        final String yesValue = "yes";
+        final String noValue = "no";
+        final String fieldTwoValue = "target_data_set";
+        final String staticValue = "projtechres_ants_alignment";
+
+        final String configuredPropertyValue = fieldOneName + SimpleSetter.FIELD_MAP_IDENTIFIER +
+                                               yesValue + '=' +  staticValue + '|' +
+                                               noValue + "=" + SimpleSetter.FIELD_VALUE_OF_IDENTIFIER + fieldTwoName;
+
+        final SimpleSetter setterWithMap = new SimpleSetter("propertyName", configuredPropertyValue);
+
+
+        validateMappedValue(setterWithMap,
+                            new String[]{fieldOneName, yesValue, fieldTwoName, fieldTwoValue},
+                            staticValue);
+        validateMappedValue(setterWithMap,
+                            new String[]{fieldOneName, noValue, fieldTwoName, fieldTwoValue},
+                            fieldTwoValue);
     }
 
     private void validateMappedValue(SimpleSetter setter,
-                                     String fieldName,
-                                     String fieldValue,
+                                     String[] fieldNameValuePairs,
                                      String expectedMappedResult) {
-        StaticDataModel field = new StaticDataModel();
-        field.setName(fieldName);
-        field.setValue(fieldValue);
 
         final FileTarget testTarget = new FileTarget(null);
         DataRow testDataRow = new DataRow(testTarget);
-        testDataRow.addField(field);
+
+        StaticDataModel field;
+        for (int i = 1; i < fieldNameValuePairs.length; i+=2) {
+            field = new StaticDataModel();
+            field.setName(fieldNameValuePairs[i-1]);
+            field.setValue(fieldNameValuePairs[i]);
+            testDataRow.addField(field);
+        }
 
         final PluginDataRow testRow = new PluginDataRow(testDataRow);
 
         final String result = setter.deriveValue(testRow);
-        assertEquals("incorrect mapped result returned for value '" + fieldValue + "'",
+        assertEquals("incorrect mapped result returned for value '" + testDataRow.getField(0) + "'",
                      expectedMappedResult, result);
     }
 }
