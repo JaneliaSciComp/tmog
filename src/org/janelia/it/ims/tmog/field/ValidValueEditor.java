@@ -56,6 +56,11 @@ public class ValidValueEditor extends DefaultCellEditor {
             }
 
             model = (ValidValueModel) value;
+
+            if (model.hasFilter()) {
+                model.filterValues(dataTable.getModel(), row);
+            }
+
             editorComboBox.setModel(model);
             if (model.isSharedForAllSessionFiles()) {
                 TableRepainter tableRepainter = new TableRepainter(table);

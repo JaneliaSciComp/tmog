@@ -8,13 +8,20 @@
 package org.janelia.it.ims.tmog.field;
 
 import ca.odell.glazedlists.BasicEventList;
+import ca.odell.glazedlists.EventList;
+import ca.odell.glazedlists.FilterList;
+import ca.odell.glazedlists.TextFilterator;
+import ca.odell.glazedlists.matchers.TextMatcherEditor;
 import org.janelia.it.ims.tmog.config.preferences.FieldDefault;
 import org.janelia.it.ims.tmog.config.preferences.FieldDefaultSet;
 import org.janelia.it.ims.tmog.target.Target;
+import org.janelia.it.utils.FilterMap;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * This model supports inserting a selected value from a predefined set
@@ -28,7 +35,10 @@ public class ValidValueModel extends AbstractListModel<ValidValue>
     private String displayName;
     private boolean isRequired;
     private boolean isAutoComplete;
-    private BasicEventList<ValidValue> validValues;
+    private TextMatcherEditor<ValidValue> matcherEditor;
+    private FilterList<ValidValue> validValues;
+    private String filterField;
+    private FilterMap filterMap;
     private ValidValue selectedValue;
     private String errorMessage;
     private String prefix;
@@ -41,12 +51,91 @@ public class ValidValueModel extends AbstractListModel<ValidValue>
     public ValidValueModel() {
         this.isRequired = false;
         this.isAutoComplete = false;
-        this.validValues = new BasicEventList<ValidValue>();
-        this.validValues.add(ValidValue.NONE);
+
+        validValues = new FilterList<ValidValue>(new BasicEventList<ValidValue>());
+        validValues.add(ValidValue.NONE);
+
+        TextFilterator<ValidValue> textFilterator = new TextFilterator<ValidValue>() {
+            @Override
+            public void getFilterStrings(List<String> baseList,
+                                         ValidValue element) {
+                if (element != null) {
+                    baseList.add(element.getValue());
+                }
+            }
+        };
+        matcherEditor = new TextMatcherEditor<ValidValue>();
+        matcherEditor.setFilterator(textFilterator);
+
+        validValues.setMatcherEditor(matcherEditor);
+
         this.isCopyable = true;
         this.markedForTask = true;
         this.sharedForAllSessionFiles = false;
         this.defaultValueList = new DefaultValueList();
+    }
+
+    public ValidValueModel(ValidValueModel instance) {
+        this.displayName = instance.displayName;
+        this.isRequired = instance.isRequired;
+        this.isAutoComplete = instance.isAutoComplete;
+        this.matcherEditor = instance.matcherEditor; // shallow copy should be safe
+        this.validValues = instance.validValues; // shallow copy should be safe
+        this.filterField = instance.filterField;
+        this.filterMap = instance.filterMap; // shallow copy should be safe
+        this.selectedValue = instance.selectedValue;
+        this.prefix = instance.prefix;
+        this.suffix = instance.suffix;
+        this.isCopyable = instance.isCopyable;
+        this.markedForTask = instance.markedForTask;
+        this.sharedForAllSessionFiles = instance.sharedForAllSessionFiles;
+        this.defaultValueList = instance.defaultValueList;  // shallow copy is ok
+    }
+
+    public boolean hasFilter() {
+        return ((filterField != null) && (filterMap != null));
+    }
+
+    public void filterValues(TableModel tableModel,
+                             int currentRow) {
+
+        if (hasFilter()) {
+
+            Integer filterFieldIndex = null;
+            final int columnCount = tableModel.getColumnCount();
+            for (int i = 0; i < columnCount; i++) {
+                if (filterField.equals(tableModel.getColumnName(i))) {
+                    filterFieldIndex = i;
+                    break;
+                }
+            }
+
+            if (filterFieldIndex != null) {
+
+                final Object filterModel = tableModel.getValueAt(currentRow, filterFieldIndex);
+
+                if (filterModel instanceof DataField) {
+
+                    final String filterMapKey = ((DataField) filterModel).getCoreValue();
+
+                    String[] newFilters = null;
+                    if ((filterMapKey != null) && (filterMapKey.length() > 0)) {
+                        newFilters = filterMap.getFilters(filterMapKey);
+                    }
+
+                    if (newFilters == null) {
+                        newFilters = new String[0];
+                    }
+
+                    matcherEditor.setFilterText(newFilters);
+
+                    // Not sure why, but matcher editor needs to be re-set with each filter change.
+                    // Without this, new filter text does not always get applied.
+                    validValues.setMatcherEditor(matcherEditor);
+                }
+            }
+        }
+
     }
 
     public void addValidValue(ValidValue validValue) {
@@ -116,6 +205,16 @@ public class ValidValueModel extends AbstractListModel<ValidValue>
         this.sharedForAllSessionFiles = sharedForAllSessionFiles;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
+    public void setFilterField(String filterField) {
+        this.filterField = filterField;
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    public void setFilterMap(String filterMapString) {
+        this.filterMap = new FilterMap(filterMapString);
+    }
+
     public void addDefaultValue(DefaultValue defaultValue) {
         defaultValueList.add(defaultValue);
     }
@@ -123,18 +222,7 @@ public class ValidValueModel extends AbstractListModel<ValidValue>
     public ValidValueModel getNewInstance(boolean isCloneRequired) {
         ValidValueModel instance = this;
         if (isCloneRequired || (! sharedForAllSessionFiles)) {
-            instance = new ValidValueModel();
-            instance.displayName = displayName;
-            instance.isRequired = isRequired;
-            instance.isAutoComplete = isAutoComplete;
-            instance.validValues = validValues; // shallow copy should be safe
-            instance.selectedValue = selectedValue;
-            instance.prefix = prefix;
-            instance.suffix = suffix;
-            instance.isCopyable = isCopyable;
-            instance.markedForTask = markedForTask;
-            instance.sharedForAllSessionFiles = sharedForAllSessionFiles;
-            instance.defaultValueList = defaultValueList;  // shallow copy is ok
+            instance = new ValidValueModel(this);
         }
         return instance;
     }
@@ -320,17 +408,17 @@ public class ValidValueModel extends AbstractListModel<ValidValue>
         return sb.toString();
     }
 
-    protected BasicEventList<ValidValue> getValidValues() {
+    protected EventList<ValidValue> getValidValues() {
         return validValues;
     }
 
     /**
-     * Sets the valid values for this model (shallow copy).
+     * Copies (shallow) the valid value list from the specified model to this model.
      *
-     * @param  validValues  new list of values.
+     * @param  model  model to copy value list from.
      */
-    protected void setValidValues(BasicEventList<ValidValue> validValues) {
-        this.validValues = validValues;
+    protected void setValuesFromModel(ValidValueModel model) {
+        this.validValues = model.validValues;
     }
 
     /**

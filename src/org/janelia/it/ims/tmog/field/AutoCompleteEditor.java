@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -62,7 +62,7 @@ public class AutoCompleteEditor extends DefaultCellEditor {
                 editorComboBox.addKeyListener(dtListener);
             }
 
-            if (model != value) {
+            if ((model != value) || (model.hasFilter())) {
                 model = (ValidValueModel) value;
 
                 if (autoCompleteSupport != null) {
@@ -70,6 +70,8 @@ public class AutoCompleteEditor extends DefaultCellEditor {
                     // same editor combo box is used for all cells
                     autoCompleteSupport.uninstall();
                 }
+
+                model.filterValues(dataTable.getModel(), row);
 
                 autoCompleteSupport =
                         AutoCompleteSupport.install(editorComboBox,

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Howard Hughes Medical Institute.
+ * Copyright (c) 2014 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -7,7 +7,6 @@
 
 package org.janelia.it.ims.tmog.field;
 
-import ca.odell.glazedlists.BasicEventList;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -119,7 +118,7 @@ public class HttpValidValueModel
             urlToModelMap.put(cacheKey, this);
         } else {
             // same config, use cached values directly
-            setValidValues(cachedModel.getValidValues());
+            setValuesFromModel(cachedModel);
         }
 
     }
@@ -166,8 +165,7 @@ public class HttpValidValueModel
     private void setValidValuesFromService() {
 
         if (staticValues == null) {
-            final BasicEventList<ValidValue> originalValues = getValidValues();
-            staticValues = new ArrayList<ValidValue>(originalValues);
+            staticValues = new ArrayList<ValidValue>(getValidValues());
         }
 
         clearValidValues();
