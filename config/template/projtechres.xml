@@ -27,8 +27,8 @@
                 <property name="screen_state" value="Screen State"/>
                 <property name="imaging_project" value="$STATIC:project_technical_resources"/>
                 <property name="relativePathDepth" value="3"/>
-                <property name="microscope_type" value="Microscope Type"/>
-                <property name="tissue_orientation" value="Tissue Orientation"/>
+                <property name="data_set" value="Tech Review$MAP:yes=projtechres_ants_alignment|no=$VALUE_OF:Data Set" />
+                <property name="target_data_set" value="Tech Review$MAP:yes=$VALUE_OF:Data Set" />
             </rowListener>
 
 @config-fragment-sage-loader-ptr@
@@ -39,15 +39,8 @@
 
             <separator value="JPTR_"/>
 @config-fragment-file-name-suffix@
-            <webServiceList displayName="Data Set" required="true"
-                            markedForTask="false"
-                            valueCreationPath="*/dataSet"
-                            relativeActualValuePath="dataSetIdentifier"
-                            relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet"
-                            autoComplete="true">
-            </webServiceList>
-
+@config-fragment-annotated_by@
+@config-fragment-data_set@
 @config-fragment-tile@
 @config-fragment-slide_code@
 @config-fragment-cross_barcode@
@@ -57,8 +50,6 @@
 @config-fragment-age@
 @config-fragment-full_age@
 @config-fragment-created_by@
-@config-fragment-annotated_by@
-@config-fragment-microscope_type-710-default@
 @config-fragment-mounting_protocol@
 @config-fragment-tissue_orientation@
 @config-fragment-screen_state@
@@ -67,6 +58,14 @@
                   markedForTask="false"
                   pattern="s*rs*">
             </text>
+
+            <validValueList displayName="Tech Review" required="true"
+                            markedForTask="false"
+                            sharedForAllSessionFiles="true"
+                            autoComplete="true">
+                <validValue value="yes" default="true"/>
+                <validValue value="no"/>
+            </validValueList>
 
         </dataFields>
 
@@ -90,28 +89,14 @@
                 <property name="relative_path" value="SAGE Name"/>
                 <property name="screen_state" value="Screen State"/>
                 <property name="relativePathDepth" value="3"/>
-                <property name="microscope_type" value="Microscope Type"/>
-                <property name="tissue_orientation" value="Tissue Orientation"/>
             </rowListener>
 
         </plugins>
 
         <dataFields>
 
-            <webServiceList displayName="Data Set" required="true"
-                            markedForTask="false"
-                            valueCreationPath="*/dataSet"
-                            relativeActualValuePath="dataSetIdentifier"
-                            relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet"
-                            autoComplete="true">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="projtechres"/>
-                    <property name="image_property" value="data_set"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-            </webServiceList>
-
+@config-fragment-annotated_by-with-projtechres-default@
+@config-fragment-data_set-with-projtechres-default@
 @config-fragment-cross_barcode-with-projtechres-default@
 @config-fragment-line-with-projtechres-default@
 @config-fragment-effector-with-projtechres-default@
@@ -123,10 +108,58 @@
 @config-fragment-age-with-projtechres-default@
 @config-fragment-full_age-with-projtechres-default@
 @config-fragment-created_by-with-projtechres-default@
-@config-fragment-annotated_by-with-projtechres-default@
-@config-fragment-microscope_type-with-projtechres-default@
 @config-fragment-mounting_protocol-with-projtechres-default@
 @config-fragment-tissue_orientation-with-projtechres-default@
+@config-fragment-name-with-projtechres-default@
+        </dataFields>
+
+    </project>
+
+    <project name="PTR - Promote To Target Data Set" taskName="collector">
+
+@config-fragment-lsm-bz2-input@
+@config-fragment-lsm-sort@
+        <plugins>
+
+@config-fragment-image-path-exists@
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="display" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="relative_path" value="SAGE Name"/>
+                <property name="relativePathDepth" value="3"/>
+                <property name="data_set" value="New Data Set"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Old Data Set" required="false"
+                  editable="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="projtechres"/>
+                    <property name="image_property" value="data_set"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+            <webServiceList displayName="New Data Set" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="projtechres"/>
+                    <property name="image_property" value="target_data_set"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </webServiceList>
+
 @config-fragment-name-with-projtechres-default@
         </dataFields>
 

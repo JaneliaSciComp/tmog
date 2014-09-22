@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="4.0.4" frameSizePercentage="95"/>
+    <global minimumVersion="4.0.9" frameSizePercentage="95"/>
 
     <project name="Fly Light - MCFO - scope to confocalStacks" default="true">
 
@@ -91,6 +91,7 @@
                 <property name="full_age" value="Full Age"/>
                 <property name="annotated_by" value="Annotator"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="First Slice of Z"/>
                 <property name="data_set" value="Data Set"/>
                 <property name="channel_spec" value="Channel Specification"/>
                 <property name="objective" value="Objective"/>
@@ -147,12 +148,37 @@
              included as components of the file name (markedForTask="false").
              -->
 
+            <validValueList displayName="Annotator" required="false"
+                            autoComplete="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Barry Dickson"/>
+                <validValue value="Chuan Zhou"/>
+                <validValue value="Clement Kent"/>
+                <validValue value="Daniel Turner-Evans"/>
+                <validValue value="Jim Truman"/>
+                <validValue value="Jon-Michael Knapp"/>
+                <validValue value="Julie Simpson"/>
+                <validValue value="Kataryna Keleman"/>
+                <validValue value="Lisha Shao"/>
+                <validValue value="Mark Eddison"/>
+                <validValue value="Michael Texada"/>
+                <validValue value="Shigehiro Namiki"/>
+                <validValue value="Tanya Wolff"/>
+                <validValue value="Vivek Jayaraman"/>
+                <validValue value="Yoshi Aso"/>
+            </validValueList>
+
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
+                            sharedForAllSessionFiles="true"
+                            filterField="Annotator"
+                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;user=group:dicksonlab&amp;user=group:ditp&amp;user=user:nerna&amp;user=user:wolfft"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet"
                             autoComplete="true">
             </webServiceList>
 
@@ -253,23 +279,20 @@
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
             </cvTermList>
 
-            <validValueList displayName="Annotator" required="false"
-                            autoComplete="true"
-                            sharedForAllSessionFiles="true"
-                            markedForTask="false">
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Barry Dickson"/>
-                <validValue value="Shigehiro Namiki"/>
-                <validValue value="Tanya Wolff"/>
-                <validValue value="Yoshi Aso"/>
-            </validValueList>
-
             <validValueList displayName="Tissue Mounting Protocol" required="true"
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
                 <validValue value="DPX Ethanol Mounting"/>
                 <validValue value="DPX PBS Mounting"/>
                 <validValue value="Glycerol-Based Mounting"/>
+            </validValueList>
+
+            <validValueList displayName="First Slice of Z" required="true"
+                            sharedForAllSessionFiles="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="Antennal Lobes" value="face_up"/>
+                <validValue displayName="Back of Brain" value="face_down"/>
             </validValueList>
 
             <validValueList displayName="Screen State" required="true"
@@ -400,6 +423,7 @@
                 <property name="full_age" value="Full Age"/>
                 <property name="annotated_by" value="Annotator"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="First Slice of Z"/>
                 <property name="data_set" value="Data Set"/>
                 <property name="channel_spec" value="Channel Specification"/>
                 <property name="objective" value="Objective"/>
@@ -427,12 +451,42 @@
 
         <dataFields>
 
+            <validValueList displayName="Annotator" required="false"
+                            autoComplete="true"
+                            sharedForAllSessionFiles="false"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="annotated_by"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Barry Dickson"/>
+                <validValue value="Chuan Zhou"/>
+                <validValue value="Clement Kent"/>
+                <validValue value="Daniel Turner-Evans"/>
+                <validValue value="Jim Truman"/>
+                <validValue value="Jon-Michael Knapp"/>
+                <validValue value="Julie Simpson"/>
+                <validValue value="Kataryna Keleman"/>
+                <validValue value="Lisha Shao"/>
+                <validValue value="Mark Eddison"/>
+                <validValue value="Michael Texada"/>
+                <validValue value="Shigehiro Namiki"/>
+                <validValue value="Tanya Wolff"/>
+                <validValue value="Vivek Jayaraman"/>
+                <validValue value="Yoshi Aso"/>
+            </validValueList>
+
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
+                            sharedForAllSessionFiles="false"
+                            filterField="Annotator"
+                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;user=group:dicksonlab&amp;user=group:ditp&amp;user=user:nerna&amp;user=user:wolfft"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet"
                             autoComplete="true">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_flip"/>
@@ -606,22 +660,6 @@
                 </pluginDefault>
             </cvTermList>
 
-            <validValueList displayName="Annotator" required="false"
-                            autoComplete="true"
-                            sharedForAllSessionFiles="false"
-                            markedForTask="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="flylight_flip"/>
-                    <property name="image_property" value="annotated_by"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Barry Dickson"/>
-                <validValue value="Shigehiro Namiki"/>
-                <validValue value="Tanya Wolff"/>
-                <validValue value="Yoshi Aso"/>
-            </validValueList>
-
             <validValueList displayName="Tissue Mounting Protocol" required="true"
                             sharedForAllSessionFiles="false"
                             markedForTask="false">
@@ -633,6 +671,19 @@
                 <validValue value="DPX Ethanol Mounting"/>
                 <validValue value="DPX PBS Mounting"/>
                 <validValue value="Glycerol-Based Mounting"/>
+            </validValueList>
+
+            <validValueList displayName="First Slice of Z" required="true"
+                            sharedForAllSessionFiles="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="tissue_orientation"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <validValue displayName="Antennal Lobes" value="face_up"/>
+                <validValue displayName="Back of Brain" value="face_down"/>
             </validValueList>
 
             <cvTermList displayName="Imaging Project" required="true"
@@ -764,6 +815,7 @@
                 <property name="full_age" value="Full Age"/>
                 <property name="annotated_by" value="Annotator"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="First Slice of Z"/>
                 <property name="data_set" value="Data Set"/>
                 <property name="channel_spec" value="Channel Specification"/>
                 <property name="objective" value="Objective"/>
@@ -824,6 +876,28 @@
              These values are collected for storage but are not
              included as components of the file name (markedForTask="false").
              -->
+
+            <validValueList displayName="Annotator" required="false"
+                            autoComplete="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Barry Dickson"/>
+                <validValue value="Chuan Zhou"/>
+                <validValue value="Clement Kent"/>
+                <validValue value="Daniel Turner-Evans"/>
+                <validValue value="Jim Truman"/>
+                <validValue value="Jon-Michael Knapp"/>
+                <validValue value="Julie Simpson"/>
+                <validValue value="Kataryna Keleman"/>
+                <validValue value="Lisha Shao"/>
+                <validValue value="Mark Eddison"/>
+                <validValue value="Michael Texada"/>
+                <validValue value="Shigehiro Namiki"/>
+                <validValue value="Tanya Wolff"/>
+                <validValue value="Vivek Jayaraman"/>
+                <validValue value="Yoshi Aso"/>
+            </validValueList>
 
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
@@ -904,23 +978,20 @@
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
             </cvTermList>
 
-            <validValueList displayName="Annotator" required="false"
-                            autoComplete="true"
-                            sharedForAllSessionFiles="true"
-                            markedForTask="false">
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Barry Dickson"/>
-                <validValue value="Shigehiro Namiki"/>
-                <validValue value="Tanya Wolff"/>
-                <validValue value="Yoshi Aso"/>
-            </validValueList>
-
             <validValueList displayName="Tissue Mounting Protocol" required="true"
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
                 <validValue value="DPX Ethanol Mounting"/>
                 <validValue value="DPX PBS Mounting"/>
                 <validValue value="Glycerol-Based Mounting"/>
+            </validValueList>
+
+            <validValueList displayName="First Slice of Z" required="true"
+                            sharedForAllSessionFiles="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="Antennal Lobes" value="face_up"/>
+                <validValue displayName="Back of Brain" value="face_down"/>
             </validValueList>
 
             <text displayName="Channel Specification" required="false"
@@ -1011,6 +1082,7 @@
                 <property name="full_age" value="Full Age"/>
                 <property name="annotated_by" value="Annotator"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="First Slice of Z"/>
                 <property name="data_set" value="Data Set"/>
                 <property name="channel_spec" value="Channel Specification"/>
                 <property name="objective" value="Objective"/>
@@ -1072,6 +1144,28 @@
              These values are collected for storage but are not
              included as components of the file name (markedForTask="false").
              -->
+
+            <validValueList displayName="Annotator" required="false"
+                            autoComplete="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Barry Dickson"/>
+                <validValue value="Chuan Zhou"/>
+                <validValue value="Clement Kent"/>
+                <validValue value="Daniel Turner-Evans"/>
+                <validValue value="Jim Truman"/>
+                <validValue value="Jon-Michael Knapp"/>
+                <validValue value="Julie Simpson"/>
+                <validValue value="Kataryna Keleman"/>
+                <validValue value="Lisha Shao"/>
+                <validValue value="Mark Eddison"/>
+                <validValue value="Michael Texada"/>
+                <validValue value="Shigehiro Namiki"/>
+                <validValue value="Tanya Wolff"/>
+                <validValue value="Vivek Jayaraman"/>
+                <validValue value="Yoshi Aso"/>
+            </validValueList>
 
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
@@ -1145,23 +1239,20 @@
                 <staticDefault value="Nirmala Iyer" />
             </cvTermList>
 
-            <validValueList displayName="Annotator" required="false"
-                            autoComplete="true"
-                            sharedForAllSessionFiles="true"
-                            markedForTask="false">
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Barry Dickson"/>
-                <validValue value="Shigehiro Namiki"/>
-                <validValue value="Tanya Wolff"/>
-                <validValue value="Yoshi Aso"/>
-            </validValueList>
-
             <validValueList displayName="Tissue Mounting Protocol" required="true"
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
                 <validValue value="DPX Ethanol Mounting"/>
                 <validValue value="DPX PBS Mounting"/>
                 <validValue value="Glycerol-Based Mounting"/>
+            </validValueList>
+
+            <validValueList displayName="First Slice of Z" required="true"
+                            sharedForAllSessionFiles="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="Antennal Lobes" value="face_up"/>
+                <validValue displayName="Back of Brain" value="face_down"/>
             </validValueList>
 
         </dataFields>
@@ -1196,10 +1287,13 @@
 
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
+                            sharedForAllSessionFiles="false"
+                            filterField="Annotator"
+                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;user=group:dicksonlab&amp;user=group:ditp&amp;user=user:nerna&amp;user=user:wolfft"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet"
                             autoComplete="true">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_flip"/>

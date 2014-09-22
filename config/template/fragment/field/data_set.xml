@@ -1,8 +1,11 @@
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
+                            sharedForAllSessionFiles="@is-shareable@"
+                            filterField="Annotator"
+                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;user=group:dicksonlab&amp;user=group:ditp&amp;user=user:nerna&amp;user=user:wolfft"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet"
                             autoComplete="true">@sage-data-default@
             </webServiceList>

@@ -1,6 +1,7 @@
-            <cvTermList displayName="Tissue Orientation" required="true"
-                        autoComplete="true"
-                        markedForTask="false"
-                        displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation">@sage-data-default@
-            </cvTermList>
+            <validValueList displayName="First Slice of Z" required="true"
+                            sharedForAllSessionFiles="@is-shareable@"
+                            autoComplete="true"
+                            markedForTask="false">@sage-data-default@
+                <validValue displayName="Antennal Lobes" value="face_up"/>
+                <validValue displayName="Back of Brain" value="face_down"/>
+            </validValueList>

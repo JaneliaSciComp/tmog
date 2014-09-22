@@ -28,6 +28,7 @@
 
             <separator value="FLFL_"/>
 @config-fragment-file-name-suffix@
+@config-fragment-annotated_by@
 @config-fragment-data_set@
 @config-fragment-tile@
 @config-fragment-slide_code@
@@ -38,8 +39,8 @@
 @config-fragment-age@
 @config-fragment-full_age@
 @config-fragment-created_by@
-@config-fragment-annotated_by@
 @config-fragment-mounting_protocol@
+@config-fragment-tissue_orientation@
 @config-fragment-screen_state@
 @config-fragment-imaging_project-mcfo@
 @config-fragment-objective@
@@ -73,6 +74,7 @@
 
         <dataFields>
 
+@config-fragment-annotated_by-with-flylight_flip-default@
 @config-fragment-data_set-with-flylight_flip-default@
 @config-fragment-cross_barcode-with-flylight_flip-default@
 @config-fragment-line-with-flylight_flip-default@
@@ -85,8 +87,8 @@
 @config-fragment-age-with-flylight_flip-default@
 @config-fragment-full_age-with-flylight_flip-default@
 @config-fragment-created_by-with-flylight_flip-default@
-@config-fragment-annotated_by-with-flylight_flip-default@
 @config-fragment-mounting_protocol-with-flylight_flip-default@
+@config-fragment-tissue_orientation-with-flylight_flip-default@
 @config-fragment-imaging_project-with-flylight_flip-default@
 @config-fragment-heat_shock_minutes-with-flylight_flip-default@
 @config-fragment-name-with-flylight_flip-default@
@@ -135,6 +137,7 @@
 
             <separator value="FLFL_"/>
 @config-fragment-hidden-file-name-suffix@
+@config-fragment-annotated_by@
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
                             sharedForAllSessionFiles="true"
@@ -178,8 +181,8 @@
                     maximumValue="21" />
 
 @config-fragment-created_by@
-@config-fragment-annotated_by@
 @config-fragment-mounting_protocol@
+@config-fragment-tissue_orientation@
             <text displayName="Channel Specification" required="false"
                   markedForTask="false"
                   pattern="s*rs*">
@@ -230,6 +233,7 @@
 
             <separator value="FLFL_"/>
 @config-fragment-hidden-file-name-suffix@
+@config-fragment-annotated_by@
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
                             sharedForAllSessionFiles="true"
@@ -281,8 +285,8 @@
                 <staticDefault value="Nirmala Iyer" />
             </cvTermList>
 
-@config-fragment-annotated_by@
 @config-fragment-mounting_protocol@
+@config-fragment-tissue_orientation@
         </dataFields>
 
     </project>

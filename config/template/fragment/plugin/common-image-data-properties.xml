@@ -13,6 +13,7 @@
                 <property name="full_age" value="Full Age"/>
                 <property name="annotated_by" value="Annotator"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="First Slice of Z"/>
                 <property name="data_set" value="Data Set"/>
                 <property name="channel_spec" value="Channel Specification"/>
                 <property name="objective" value="Objective"/>

@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="4.0.4" frameSizePercentage="95"/>
+    <global minimumVersion="4.0.9" frameSizePercentage="95"/>
 
     <project name="PTR - scope to confocalStacks" default="true">
 
@@ -90,6 +90,7 @@
                 <property name="full_age" value="Full Age"/>
                 <property name="annotated_by" value="Annotator"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="First Slice of Z"/>
                 <property name="data_set" value="Data Set"/>
                 <property name="channel_spec" value="Channel Specification"/>
                 <property name="objective" value="Objective"/>
@@ -109,8 +110,8 @@
                 <property name="screen_state" value="Screen State"/>
                 <property name="imaging_project" value="$STATIC:project_technical_resources"/>
                 <property name="relativePathDepth" value="3"/>
-                <property name="microscope_type" value="Microscope Type"/>
-                <property name="tissue_orientation" value="Tissue Orientation"/>
+                <property name="data_set" value="Tech Review$MAP:yes=projtechres_ants_alignment|no=$VALUE_OF:Data Set" />
+                <property name="target_data_set" value="Tech Review$MAP:yes=$VALUE_OF:Data Set" />
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.SageLoaderPlugin">
@@ -150,8 +151,33 @@
              included as components of the file name (markedForTask="false").
              -->
 
+            <validValueList displayName="Annotator" required="false"
+                            autoComplete="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Barry Dickson"/>
+                <validValue value="Chuan Zhou"/>
+                <validValue value="Clement Kent"/>
+                <validValue value="Daniel Turner-Evans"/>
+                <validValue value="Jim Truman"/>
+                <validValue value="Jon-Michael Knapp"/>
+                <validValue value="Julie Simpson"/>
+                <validValue value="Kataryna Keleman"/>
+                <validValue value="Lisha Shao"/>
+                <validValue value="Mark Eddison"/>
+                <validValue value="Michael Texada"/>
+                <validValue value="Shigehiro Namiki"/>
+                <validValue value="Tanya Wolff"/>
+                <validValue value="Vivek Jayaraman"/>
+                <validValue value="Yoshi Aso"/>
+            </validValueList>
+
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
+                            sharedForAllSessionFiles="true"
+                            filterField="Annotator"
+                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
@@ -256,26 +282,6 @@
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
             </cvTermList>
 
-            <validValueList displayName="Annotator" required="false"
-                            autoComplete="true"
-                            sharedForAllSessionFiles="true"
-                            markedForTask="false">
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Barry Dickson"/>
-                <validValue value="Shigehiro Namiki"/>
-                <validValue value="Tanya Wolff"/>
-                <validValue value="Yoshi Aso"/>
-            </validValueList>
-
-            <cvTermList displayName="Microscope Type" required="true"
-                        autoComplete="true"
-                        markedForTask="false"
-                        displayNamePrefixedForValues="false"
-                        sharedForAllSessionFiles="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/microscope_type">
-                <staticDefault value="zeiss_710"/>
-            </cvTermList>
-
             <validValueList displayName="Tissue Mounting Protocol" required="true"
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
@@ -284,12 +290,13 @@
                 <validValue value="Glycerol-Based Mounting"/>
             </validValueList>
 
-            <cvTermList displayName="Tissue Orientation" required="true"
-                        autoComplete="true"
-                        markedForTask="false"
-                        displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation">
-            </cvTermList>
+            <validValueList displayName="First Slice of Z" required="true"
+                            sharedForAllSessionFiles="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="Antennal Lobes" value="face_up"/>
+                <validValue displayName="Back of Brain" value="face_down"/>
+            </validValueList>
 
             <validValueList displayName="Screen State" required="true"
                             markedForTask="false"
@@ -309,6 +316,14 @@
                   markedForTask="false"
                   pattern="s*rs*">
             </text>
+
+            <validValueList displayName="Tech Review" required="true"
+                            markedForTask="false"
+                            sharedForAllSessionFiles="true"
+                            autoComplete="true">
+                <validValue value="yes" default="true"/>
+                <validValue value="no"/>
+            </validValueList>
 
         </dataFields>
 
@@ -354,6 +369,7 @@
                 <property name="full_age" value="Full Age"/>
                 <property name="annotated_by" value="Annotator"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="First Slice of Z"/>
                 <property name="data_set" value="Data Set"/>
                 <property name="channel_spec" value="Channel Specification"/>
                 <property name="objective" value="Objective"/>
@@ -376,16 +392,44 @@
                 <property name="relative_path" value="SAGE Name"/>
                 <property name="screen_state" value="Screen State"/>
                 <property name="relativePathDepth" value="3"/>
-                <property name="microscope_type" value="Microscope Type"/>
-                <property name="tissue_orientation" value="Tissue Orientation"/>
             </rowListener>
 
         </plugins>
 
         <dataFields>
 
+            <validValueList displayName="Annotator" required="false"
+                            autoComplete="true"
+                            sharedForAllSessionFiles="false"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="projtechres"/>
+                    <property name="image_property" value="annotated_by"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Barry Dickson"/>
+                <validValue value="Chuan Zhou"/>
+                <validValue value="Clement Kent"/>
+                <validValue value="Daniel Turner-Evans"/>
+                <validValue value="Jim Truman"/>
+                <validValue value="Jon-Michael Knapp"/>
+                <validValue value="Julie Simpson"/>
+                <validValue value="Kataryna Keleman"/>
+                <validValue value="Lisha Shao"/>
+                <validValue value="Mark Eddison"/>
+                <validValue value="Michael Texada"/>
+                <validValue value="Shigehiro Namiki"/>
+                <validValue value="Tanya Wolff"/>
+                <validValue value="Vivek Jayaraman"/>
+                <validValue value="Yoshi Aso"/>
+            </validValueList>
+
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
+                            sharedForAllSessionFiles="false"
+                            filterField="Annotator"
+                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
@@ -563,35 +607,6 @@
                 </pluginDefault>
             </cvTermList>
 
-            <validValueList displayName="Annotator" required="false"
-                            autoComplete="true"
-                            sharedForAllSessionFiles="false"
-                            markedForTask="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="projtechres"/>
-                    <property name="image_property" value="annotated_by"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-                <validValue value="Aljoscha Nern"/>
-                <validValue value="Barry Dickson"/>
-                <validValue value="Shigehiro Namiki"/>
-                <validValue value="Tanya Wolff"/>
-                <validValue value="Yoshi Aso"/>
-            </validValueList>
-
-            <cvTermList displayName="Microscope Type" required="true"
-                        autoComplete="true"
-                        markedForTask="false"
-                        displayNamePrefixedForValues="false"
-                        sharedForAllSessionFiles="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/microscope_type">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="projtechres"/>
-                    <property name="image_property" value="microscope_type"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-            </cvTermList>
-
             <validValueList displayName="Tissue Mounting Protocol" required="true"
                             sharedForAllSessionFiles="false"
                             markedForTask="false">
@@ -605,17 +620,86 @@
                 <validValue value="Glycerol-Based Mounting"/>
             </validValueList>
 
-            <cvTermList displayName="Tissue Orientation" required="true"
-                        autoComplete="true"
-                        markedForTask="false"
-                        displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation">
+            <validValueList displayName="First Slice of Z" required="true"
+                            sharedForAllSessionFiles="false"
+                            autoComplete="true"
+                            markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="projtechres"/>
                     <property name="image_property" value="tissue_orientation"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
-            </cvTermList>
+                <validValue displayName="Antennal Lobes" value="face_up"/>
+                <validValue displayName="Back of Brain" value="face_down"/>
+            </validValueList>
+
+            <text displayName="SAGE Name" required="true"
+                  editable="false"
+                  copyable="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="projtechres"/>
+                    <property name="image_property" value="name"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+        </dataFields>
+
+    </project>
+
+    <project name="PTR - Promote To Target Data Set" taskName="collector">
+
+        <inputFileFilter patternString=".+\.(lsm|lsm\.bz2)" />
+
+        <!-- standard scope file name pattern is: A1_ZB1_T1_BRN_20130604_33_20X_R1_L01 -->
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString="([A-Z])(\d++)_.*_(L\d++)[\._].*"
+                         patternGroupIndexes="1,2,3"/>
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathField" value="SAGE Name"/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="display" value="true"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="relative_path" value="SAGE Name"/>
+                <property name="relativePathDepth" value="3"/>
+                <property name="data_set" value="New Data Set"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <text displayName="Old Data Set" required="false"
+                  editable="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="projtechres"/>
+                    <property name="image_property" value="data_set"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+            <webServiceList displayName="New Data Set" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="projtechres"/>
+                    <property name="image_property" value="target_data_set"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </webServiceList>
 
             <text displayName="SAGE Name" required="true"
                   editable="false"
