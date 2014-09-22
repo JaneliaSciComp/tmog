@@ -11,6 +11,8 @@ import ca.odell.glazedlists.BasicEventList;
 import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.FilterList;
 import ca.odell.glazedlists.TextFilterator;
+import ca.odell.glazedlists.matchers.CompositeMatcherEditor;
+import ca.odell.glazedlists.matchers.MatcherEditor;
 import ca.odell.glazedlists.matchers.TextMatcherEditor;
 import org.janelia.it.ims.tmog.config.preferences.FieldDefault;
 import org.janelia.it.ims.tmog.config.preferences.FieldDefaultSet;
@@ -35,7 +37,6 @@ public class ValidValueModel extends AbstractListModel<ValidValue>
     private String displayName;
     private boolean isRequired;
     private boolean isAutoComplete;
-    private TextMatcherEditor<ValidValue> matcherEditor;
     private FilterList<ValidValue> validValues;
     private String filterField;
     private FilterMap filterMap;
@@ -55,20 +56,6 @@ public class ValidValueModel extends AbstractListModel<ValidValue>
         validValues = new FilterList<ValidValue>(new BasicEventList<ValidValue>());
         validValues.add(ValidValue.NONE);
 
-        TextFilterator<ValidValue> textFilterator = new TextFilterator<ValidValue>() {
-            @Override
-            public void getFilterStrings(List<String> baseList,
-                                         ValidValue element) {
-                if (element != null) {
-                    baseList.add(element.getValue());
-                }
-            }
-        };
-        matcherEditor = new TextMatcherEditor<ValidValue>();
-        matcherEditor.setFilterator(textFilterator);
-
-        validValues.setMatcherEditor(matcherEditor);
-
         this.isCopyable = true;
         this.markedForTask = true;
         this.sharedForAllSessionFiles = false;
@@ -79,7 +66,6 @@ public class ValidValueModel extends AbstractListModel<ValidValue>
         this.displayName = instance.displayName;
         this.isRequired = instance.isRequired;
         this.isAutoComplete = instance.isAutoComplete;
-        this.matcherEditor = instance.matcherEditor; // shallow copy should be safe
         this.validValues = instance.validValues; // shallow copy should be safe
         this.filterField = instance.filterField;
         this.filterMap = instance.filterMap; // shallow copy should be safe
@@ -124,14 +110,22 @@ public class ValidValueModel extends AbstractListModel<ValidValue>
                     }
 
                     if (newFilters == null) {
-                        newFilters = new String[0];
+                        newFilters = new String[]{""};
                     }
 
-                    matcherEditor.setFilterText(newFilters);
-
-                    // Not sure why, but matcher editor needs to be re-set with each filter change.
-                    // Without this, new filter text does not always get applied.
-                    validValues.setMatcherEditor(matcherEditor);
+                    if (newFilters.length == 1) {
+                        validValues.setMatcherEditor(buildTextMatcherEditor(newFilters[0]));
+                    } else {
+                        final EventList<MatcherEditor<ValidValue>> matcherEditors =
+                                new BasicEventList<MatcherEditor<ValidValue>>();
+                        for (String newFilter : newFilters) {
+                            matcherEditors.add(buildTextMatcherEditor(newFilter));
+                        }
+                        final CompositeMatcherEditor<ValidValue> compositeMatcherEditor =
+                                new CompositeMatcherEditor<ValidValue>(matcherEditors);
+                        compositeMatcherEditor.setMode(CompositeMatcherEditor.OR);
+                        validValues.setMatcherEditor(compositeMatcherEditor);
+                    }
                 }
             }
         }
@@ -429,4 +423,23 @@ public class ValidValueModel extends AbstractListModel<ValidValue>
         validValues.clear();
         selectedValue = null;
     }
+
+    private TextMatcherEditor<ValidValue> buildTextMatcherEditor(String filterText) {
+        final TextMatcherEditor<ValidValue> textMatcherEditor = new TextMatcherEditor<ValidValue>();
+        textMatcherEditor.setFilterator(TEXT_FILTERATOR);
+        textMatcherEditor.setFilterText(new String[] {filterText});
+        return textMatcherEditor;
+    }
+
+    private static final TextFilterator<ValidValue> TEXT_FILTERATOR = new TextFilterator<ValidValue>() {
+        @Override
+        public void getFilterStrings(List<String> baseList,
+                                     ValidValue element) {
+            if (element != null) {
+                baseList.add(element.getValue());
+            }
+        }
+    };
+
+
 }
