@@ -290,7 +290,7 @@
                 <validValue value="Glycerol-Based Mounting"/>
             </validValueList>
 
-            <validValueList displayName="First Slice of Z" required="true"
+            <validValueList displayName="First Slice of Z" required="false"
                             sharedForAllSessionFiles="true"
                             autoComplete="true"
                             markedForTask="false">
@@ -620,7 +620,7 @@
                 <validValue value="Glycerol-Based Mounting"/>
             </validValueList>
 
-            <validValueList displayName="First Slice of Z" required="true"
+            <validValueList displayName="First Slice of Z" required="false"
                             sharedForAllSessionFiles="false"
                             autoComplete="true"
                             markedForTask="false">
