@@ -68,6 +68,9 @@
                 <sourceFileMappedDefault pattern="^(FCF_).*">
                     <mappedValue from="FCF_" to="fly"/>
                 </sourceFileMappedDefault>
+                <sourceFileMappedDefault pattern="^(BJD_).*">
+                    <mappedValue from="BJD_" to="dickson"/>
+                </sourceFileMappedDefault>
             </cvTermList>
 
             <text displayName="Line" required="true"
@@ -242,6 +245,9 @@
                 </sourceFileMappedDefault>
                 <sourceFileMappedDefault pattern=".+?@(FCF_).+?@.+?@.+?@.+?@.+?@.*">
                     <mappedValue from="FCF_" to="fly"/>
+                </sourceFileMappedDefault>
+                <sourceFileMappedDefault pattern="^(BJD_).*">
+                    <mappedValue from="BJD_" to="dickson"/>
                 </sourceFileMappedDefault>
             </cvTermList>
 
@@ -721,6 +727,9 @@
                 </sourceFileMappedDefault>
                 <sourceFileMappedDefault pattern=".+?@(FCF_).+?@.+?@.+?@.+?@.+?@.*">
                     <mappedValue from="FCF_" to="fly"/>
+                </sourceFileMappedDefault>
+                <sourceFileMappedDefault pattern="^(BJD_).*">
+                    <mappedValue from="BJD_" to="dickson"/>
                 </sourceFileMappedDefault>
             </cvTermList>
 
