@@ -673,9 +673,26 @@
                 <property name="data_set" value="New Data Set"/>
             </rowListener>
 
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsSampleRemovalPlugin">
+                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/owner/projtechres/dataSet/${Old Data Set}/samplesWithSlideCode/${Slide Code}"/>
+                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
+            </rowListener>
+
         </plugins>
 
         <dataFields>
+
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  editable="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="projtechres"/>
+                    <property name="image_property" value="slide_code"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
 
             <text displayName="Old Data Set" required="false"
                   editable="false"
