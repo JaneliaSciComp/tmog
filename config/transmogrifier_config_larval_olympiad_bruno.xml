@@ -14,7 +14,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.janelia.priv|/groups/larvalolympiad]/larvalolympiad/MMF-files/tracking-results/" />
+            <path path="[\\tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad/MMF-files/tracking-results/" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line"/>
@@ -44,7 +44,7 @@
             </rowValidator>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionCompleteRenameWriter">
-                <property name="directory" value="[\\dm11.janelia.priv|/groups/larvalolympiad]/larvalolympiad/tmog/summaries"/>
+                <property name="directory" value="[\\tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad/tmog/summaries"/>
             </sessionListener>
 
         </plugins>
@@ -98,12 +98,21 @@
                     <mappedValue from="attP2" to="fly"/>
                 </sourceFileMappedDefault>
 
+                <sourceFileMappedDefault pattern="^(attP40).*">
+
+                    <mappedValue from="attP40" to="zlatic"/>
+                </sourceFileMappedDefault>
+
                 <sourceFileMappedDefault pattern="^(iav_).*">
                     <mappedValue from="iav_" to="zlatic"/>
                 </sourceFileMappedDefault>
 
                 <sourceFileMappedDefault pattern="^[Ww](111)[89]@.*">
                     <mappedValue from="111" to="fly"/>
+                </sourceFileMappedDefault>
+
+                <sourceFileMappedDefault pattern="^(MZZ_).*">
+                    <mappedValue from="MZZ_" to="zlatic"/>
                 </sourceFileMappedDefault>
 
                 <staticDefault value="none"/>
@@ -153,6 +162,8 @@
                     <mappedValue from="yw;Rh5(2);Rh6(1)" to="ywrh5rh6"/>
                     <mappedValue from="yw;Rh5[2];Rh6[1]" to="ywrh5rh6"/>
                     <mappedValue from="yw;Rh[5];Rh[6]" to="ywrh5rh6"/>
+                    <mappedValue from="attP40;attP2" to="MZZ_R_3013849"/>
+                    <mappedValue from="GMR_11F02" to="GMR_11F02_AE_01"/>
                 </sourceFileMappedDefault>
 
                 <sourceFileDefault pattern="(.+?)@.+?@.+?@.+?@.*"/>

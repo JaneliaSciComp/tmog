@@ -44,21 +44,12 @@ The following files:
 
 are deployed for the following lab groups:
 
-/archive/rubin/data1/rubinlab/tmog/config
-/groups/baker/bakerlab/tmog/config
 /groups/ditp/ditp/tmog/config
-/groups/flylight/flylight/tmog/config
-/tier2/flylight/tmog/config
-/groups/heberlein/heberleinlab/tmog/config
-/groups/kerr/kerrlab/tmog/config
 /groups/larvalolympiad/larvalolympiad/tmog/config
+/groups/simpson/MicroscopeData/tmog/config
+/groups/svoboda/wdbp/tmog/config
+/groups/zlatic/zlaticlab/tmog/config
+/tier2/flylight/tmog/config
 /tier2/leet/leetconfocal/tmog/config
 /tier2/leet/leetimg/leetlab/tmog/config
-/groups/rubin/data1/rubinlab/tmog/config
-/groups/rubin/rubinimg/tmog/config
-/groups/simpson/MicroscopeData/tmog/config
-/groups/simpson/simpsonimg/tmog/config
-/groups/svoboda/wdbp/tmog/config
-/groups/truman/LarvalScreen/tmog/config
-/groups/zlatic/zlaticlab/tmog/config
-/groups/zlatic/zlaticimg/tmog/config
+/tier2/rubin/data1/rubinlab/tmog/config

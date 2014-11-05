@@ -413,13 +413,13 @@ public class ConfigurationLoader
 
                     if (PathUtil.ON_WINDOWS) {
 
-                        final Pattern removalPattern = Pattern.compile("\\.janelia\\.priv");
+                        final Pattern removalPattern = Pattern.compile("\\.hhmi\\.org");
                         final Matcher m = removalPattern.matcher(convertedFileName);
                         final String alternateFileName = m.replaceFirst("");
                         final File alternateConfigFile = new File(alternateFileName);
 
                         if (alternateConfigFile.exists()) {
-                            final String fullDriveSuffix = ".janelia.priv";
+                            final String fullDriveSuffix = ".hhmi.org";
                             final int driveEnd = convertedFileName.indexOf(fullDriveSuffix) + fullDriveSuffix.length();
                             final String expectedDriveName = convertedFileName.substring(0, driveEnd);
                             throw new ConfigurationException(

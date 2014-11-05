@@ -14,7 +14,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.janelia.priv|/groups/zlatic]\zlaticlab\pipeline\screen\tracking-results\" />
+            <path path="[\\dm11.hhmi.org|/groups/zlatic]\zlaticlab\pipeline\screen\tracking-results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line"/>
@@ -192,7 +192,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.janelia.priv|/groups/zlatic]\zlaticlab\pipeline\screen\tracking-results\" />
+            <path path="[\\dm11.hhmi.org|/groups/zlatic]\zlaticlab\pipeline\screen\tracking-results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line"/>
@@ -336,7 +336,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.janelia.priv|/groups/zlatic]\zlaticlab\pipeline\rd\tracking-results\" />
+            <path path="[\\dm11.hhmi.org|/groups/zlatic]\zlaticlab\pipeline\rd\tracking-results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line And Effector"/>
@@ -442,7 +442,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.janelia.priv|/groups/zlatic]\zlaticlab\pipeline\rd\tracking-results\" />
+            <path path="[\\dm11.hhmi.org|/groups/zlatic]\zlaticlab\pipeline\rd\tracking-results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line And Effector"/>
@@ -674,7 +674,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.janelia.priv|/groups/zlatic]\zlaticlab\pipeline\screen\tracking-results\" />
+            <path path="[\\dm11.hhmi.org|/groups/zlatic]\zlaticlab\pipeline\screen\tracking-results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line"/>
@@ -818,7 +818,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.janelia.priv|/groups/zlatic]\zlaticlab\pipeline\rd\tracking-results\" />
+            <path path="[\\dm11.hhmi.org|/groups/zlatic]\zlaticlab\pipeline\rd\tracking-results\" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line And Effector"/>

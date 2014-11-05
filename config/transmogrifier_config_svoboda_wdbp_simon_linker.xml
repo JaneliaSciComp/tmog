@@ -99,7 +99,6 @@
                             markedForTask="false">
                 <validValue displayName="default.parameters" value="default.parameters"/>
                 <validValue displayName="simon1.parameters" value="simon1.parameters"/>
-                <validValue displayName="nick1.parameters" value="nick1.parameters"/>
             </validValueList>
 
             <validValueList displayName="Experimenter"
@@ -107,6 +106,7 @@
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
                 <validValue displayName="Daniel Huber" value="huberd"/>
+                <validValue displayName="Koen Vervaeke" value="vervaekek"/>
                 <validValue displayName="Dan O'Connor" value="oconnord"/>
                 <validValue displayName="Leopoldo Petreanu" value="petreanul"/>
                 <validValue displayName="Simon Peron" value="perons"/>
@@ -114,13 +114,8 @@
                 <validValue displayName="Diego Gutnisky" value="gutniskyd"/>
                 <validValue displayName="Ning-long Xu" value="xun"/>
                 <validValue displayName="Andrew Hires" value="sahires"/>
-                <validValue displayName="Nuo Li" value="lin"/>
-                <validValue displayName="Zengcai Guo" value="guoz"/>
-                <validValue displayName="Jianing Yu" value="yuj10"/>
-                <validValue displayName="Koen Vervaeke" value="vervakek"/>
-                <validValue displayName="Nattar Ranganathan, Gayathri" value="ranganathang"/>
-                <validValue displayName="Little, Justin" value="littlej"/>
-                <validValue displayName="Micheal Bale" value="balem"/>
+		<validValue displayName="Nattar Ranganathan, Gayathri" value="ranganathang"/>
+		<validValue displayName="Little, Justin" value="littlej"/>
             </validValueList>
 
             <validValueList displayName="Experiment Location"
@@ -137,6 +132,46 @@
                   required="true"
                   markedForTask="false"/>
 
+            <text displayName="Min Whisker Length"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="Max Follicle Y"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="Polynomial Max Follicle Y"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="Polynomial Distance From Face"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="Polynomial Offset"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="Kappa Position"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="Bar Template Trial"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="BarT Frame Number"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="BarT Center"
+                  required="true"
+                  markedForTask="false"/>
+
+            <text displayName="BarT WH"
+                  required="true"
+                  markedForTask="false"/>
+
             <number displayName="Number of Whiskers"
                     required="true"
                     minimumValue="0"
@@ -146,9 +181,8 @@
                             required="true"
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
-                <validValue value="yes/no two port task"/>
-                <validValue value="go/nogo with multiple go positions"/>
                 <validValue value="go/nogo"/>
+                <validValue value="go/nogo with multiple go positions"/>
             </validValueList>
 
             <number displayName="Frame Rate"
@@ -157,10 +191,15 @@
                     sharedForAllSessionFiles="true"
                     markedForTask="false"/>
 
-            <text displayName="Face Parameter"
-                  required="true"
-                  sharedForAllSessionFiles="true"
-                  markedForTask="false"/>
+            <validValueList displayName="Face Parameter"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue displayName="top" value="top"/>
+                <validValue displayName="bottom" value="bottom"/>
+                <validValue displayName="left" value="left"/>
+                <validValue displayName="right" value="right"/>
+            </validValueList>
 
             <decimal displayName="Px2mm"
                      required="true"

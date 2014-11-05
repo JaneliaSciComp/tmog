@@ -9,7 +9,7 @@
 
         <inputFileFilter patternString=".+\.lsm" />
 
-        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/ditp]/ditp/confocalStacks"
+        <outputDirectory basePath="[\\dm11.hhmi.org|/groups/ditp]/ditp/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -235,7 +235,7 @@
 
         <inputFileFilter patternString=".+\.lsm" />
 
-        <outputDirectory basePath="[\\dm11.janelia.priv|/groups/ditp]/ditp/confocalStacks"
+        <outputDirectory basePath="[\\dm11.hhmi.org|/groups/ditp]/ditp/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>

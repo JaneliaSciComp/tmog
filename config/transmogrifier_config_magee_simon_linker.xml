@@ -15,7 +15,7 @@
                          recursiveSearch="true"/>
 
         <outputDirectory>
-            <path path="[\\dm11.janelia.priv|/groups/magee]\mageelab\Justin\clustRuns\unprocessed\" />
+            <path path="[\\dm11|/groups/magee]\mageelab\Justin\clustRuns\unprocessed\" />
             <renameFieldValue fieldDisplayName="Experimenter" />
             <path path="/" />
             <renameFieldValue fieldDisplayName="Animal ID" />
@@ -81,7 +81,7 @@
             </text>
 
             <fileName displayName="Trial Number"
-                      patternString=".*_(\d{4})(\.seq|_\d+\.mp4|_\d+_bksub\.mp4|\.avi)"
+                      patternString=".*_(\d{4})(\.seq|_\d+\.mp4|_\d+_bksub\.mp4|\.avi|\.mp4)"
                       patternGroupNumber="1"
                       visible="true" />
 
