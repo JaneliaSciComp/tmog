@@ -164,6 +164,7 @@
                 <validValue value="Lisha Shao"/>
                 <validValue value="Mark Eddison"/>
                 <validValue value="Michael Texada"/>
+                <validValue value="Michael-John Dolan"/>
                 <validValue value="Shigehiro Namiki"/>
                 <validValue value="Tanya Wolff"/>
                 <validValue value="Vivek Jayaraman"/>
@@ -174,7 +175,7 @@
                             markedForTask="false"
                             sharedForAllSessionFiles="true"
                             filterField="Annotator"
-                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
+                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
@@ -467,6 +468,7 @@
                 <validValue value="Lisha Shao"/>
                 <validValue value="Mark Eddison"/>
                 <validValue value="Michael Texada"/>
+                <validValue value="Michael-John Dolan"/>
                 <validValue value="Shigehiro Namiki"/>
                 <validValue value="Tanya Wolff"/>
                 <validValue value="Vivek Jayaraman"/>
@@ -477,7 +479,7 @@
                             markedForTask="false"
                             sharedForAllSessionFiles="false"
                             filterField="Annotator"
-                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
+                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
@@ -870,6 +872,7 @@
                 <validValue value="Lisha Shao"/>
                 <validValue value="Mark Eddison"/>
                 <validValue value="Michael Texada"/>
+                <validValue value="Michael-John Dolan"/>
                 <validValue value="Shigehiro Namiki"/>
                 <validValue value="Tanya Wolff"/>
                 <validValue value="Vivek Jayaraman"/>
@@ -880,7 +883,7 @@
                             markedForTask="false"
                             sharedForAllSessionFiles="true"
                             filterField="Annotator"
-                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
+                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
@@ -1277,7 +1280,7 @@
                             markedForTask="false"
                             sharedForAllSessionFiles="false"
                             filterField="Annotator"
-                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
+                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
