@@ -15,7 +15,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[//dm11.hhmi.org|/groups/larvalolympiad]/larvalolympiad/ProjectsBruno/" />
+            <path path="[//tier2.hhmi.org|/tier2]/larvalolympiad/ProjectsBruno/" />
             <renameFieldValue fieldDisplayName="Project"/>
             <path path="/MMF-Files/tracking-results/"/>
             <renameFieldValue fieldDisplayName="Tracker"/>
@@ -31,25 +31,9 @@
 
         <plugins>
 
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/${Line Lab}/${Line}.janelia-sage"/>
-                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
-                <property name="errorMessage" value="There is no '${Line Lab}' lab line named '${Line}' in the SAGE database."/>
-                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
-                <!-- Bruno LOOK HERE -->
-                <property name="validResources"
-                          value="http://sage.int.janelia.org/sage-ws/lines/none/GH86.janelia-sage,
-                                 http://sage.int.janelia.org/sage-ws/lines/none/ywrh5rh6.janelia-sage,
-                                 http://sage.int.janelia.org/sage-ws/lines/none/MB049B.janelia-sage,
-                                 http://sage.int.janelia.org/sage-ws/lines/none/MB049B_tubby.janelia-sage,
-                                 http://sage.int.janelia.org/sage-ws/lines/none/tim.janelia-sage,
-                                 http://sage.int.janelia.org/sage-ws/lines/none/timA3crygal80.janelia-sage,
-                                 http://sage.int.janelia.org/sage-ws/lines/none/timA3.janelia-sage,
-                                 http://sage.int.janelia.org/sage-ws/lines/none/ppk.janelia-sage"/>
-            </rowValidator>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionCompleteRenameWriter">
-                <property name="directory" value="[\\dm11.hhmi.org|/groups/larvalolympiad]/larvalolympiad/tmog/summaries"/>
+                <property name="directory" value="[//tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad/tmog/summaries"/>
             </sessionListener>
 
         </plugins>
@@ -60,7 +44,7 @@
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
 
-                <!-- These should match directories in /groups/larvalolympiad/larvalolympiad/ProjectsBruno -->
+                <!-- These should match directories in /tier2/larvalolympiad/ProjectsBruno -->
 
                 <validValue value="ChrimsonNoise"/>
                 <validValue value="Circadian"/>
@@ -70,6 +54,7 @@
                 <validValue value="Riddiford"/>
                 <validValue value="Thermotaxis"/>
                 <validValue value="ThermoChrimson"/>
+                <validValue value="Josh"/>
 
             </validValueList>
 
@@ -97,148 +82,18 @@
 
             <separator value="@"/>
 
-            <cvTermList displayName="Line Lab" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/lab"
-                        displayNamePrefixedForValues="false"
-                        markedForTask="false">
-
-                <sourceFileMappedDefault pattern="^(GMR_|20C12).*">
-                    <mappedValue from="GMR_" to="rubin"/>
-                    <mappedValue from="20C12" to="rubin"/>
-                </sourceFileMappedDefault>
-
-                <sourceFileMappedDefault pattern="^(p[^@]*)@.*">
-                    <mappedValue from="pBDPGAL4U" to="simpson"/>
-                    <mappedValue from="pBDPUASGAL4" to="simpson"/>
-                    <mappedValue from="pBDPGAL4U" to="simpson"/>
-                    <mappedValue from="pBDP-Gal4" to="simpson"/>
-                    <mappedValue from="pBDP" to="simpson"/>
-                    <mappedValue from="pPBD" to="simpson"/>
-                </sourceFileMappedDefault>
-
-                <sourceFileMappedDefault pattern="^(iav_).*">
-                    <mappedValue from="iav_" to="zlatic"/>
-                </sourceFileMappedDefault>
-
-                <sourceFileMappedDefault pattern="^[Ww](111)[89]@.*">
-                    <mappedValue from="111" to="fly"/>
-                </sourceFileMappedDefault>
-
-
-                <sourceFileMappedDefault pattern="^(FCF_|attP2).*">
-                    <mappedValue from="FCF_" to="fly"/>
-                    <mappedValue from="attP2" to="fly"/>
-                </sourceFileMappedDefault>
-
-                <sourceFileMappedDefault pattern="^(MZZ_).*">
-                    <mappedValue from="MZZ_" to="zlatic"/>
-                </sourceFileMappedDefault>
-
-                <staticDefault value="none"/>
-
-            </cvTermList>
 
             <text displayName="Line" required="true"
                   pattern="[0-9A-Za-z\-\_]++">
-
-                <sourceFileMappedDefault pattern="(.+?)@.+?@.+?@.+?@.*">
-                    <mappedValue from="GH86_older" to="GH86"/>
-                    <mappedValue from="GH86_younger" to="GH86"/>
-                    <mappedValue from="20C12" to="GMR_20C12_AE_01"/>
-                    <mappedValue from="28E01AE_01" to="GMR_28E01_AE_01"/>
-                    <mappedValue from="attP2" to="FCF_attP2_1500062"/>
-                    <mappedValue from="attP2_younger" to="FCF_attP2_1500062"/>
-                    <mappedValue from="attP2_older" to="FCF_attP2_1500062"/>
-
-                    <mappedValue from="iav_younger" to="EXT_iav-GAL4"/>
-                    <mappedValue from="iav_older" to="EXT_iav-GAL4"/>
-                    <mappedValue from="GMR_496D11_AE_01" to="GMR_49D11_AE_01"/>
-                    <mappedValue from="GMR_496G11_AE_01" to="GMR_49G11_AE_01"/>
-                    <mappedValue from="GMR_61H07_AE_01" to="GMR_61H07_AD_01"/>
-                    <mappedValue from="GMR_65A05+AE_01" to="GMR_65A05_AE_01"/>
-                    <mappedValue from="GMR_74E04_AE_01" to="GMR_74E03_AE_01"/>
-                    <mappedValue from="GMR_90C07_AE_01" to="GMR_90C07_AD_01"/>
-                    <mappedValue from="GMR_F1D12_AE_01" to="GMR_71D12_AE_01"/>
-                    <mappedValue from="GMR_57H01_AE_01" to="GMR_57H01_AD_01"/>
-                    <mappedValue from="GMR_57B04_AE_01" to="GMR_57B04_AD_01"/>
-                    <mappedValue from="GMR_96A08_AE_01" to="GMR_96A08_AD_01"/>
-                    <mappedValue from="GMR_67G11_AE_01" to="GMR_76G11_AE_01"/>
-                    <mappedValue from="GMR_61D08_AE_01" to="GMR_61D08_AD_01"/>
-                    <mappedValue from="GMR_57E06_AE_01" to="GMR_57E06_AD_01"/>
-                    <mappedValue from="GMR_57F03_AE_01" to="GMR_57F03_AD_01"/>
-                    <mappedValue from="pBDP-Gal4" to="pBDPGAL4U"/>
-                    <mappedValue from=" pBDPGAL4U" to="pBDPGAL4U"/>
-                    <mappedValue from="pBDPUASGAL4" to="pBDPGAL4U"/>
-                    <mappedValue from="pPBDGAL4U" to="pBDPGAL4U"/>
-                    <mappedValue from="pPBD" to="pBDPGAL4U"/>
-                    <mappedValue from="w1118" to="FCF_w1118_1500005"/>
-                    <mappedValue from="W1118" to="FCF_w1118_1500005"/>
-                    <mappedValue from="w1119" to="FCF_w1118_1500005"/>
-                    <mappedValue from="yw;059059Rh[5];059059Rh[6]" to="ywrh5rh6"/>
-                    <mappedValue from="yw;059059Rh5(2);059059Rh6(1)" to="ywrh5rh6"/>
-                    <mappedValue from="yw;059059Rh5[2];059059Rh6[1]" to="ywrh5rh6"/>
-                    <mappedValue from="yw;059Rh[5];059Rh[6]" to="ywrh5rh6"/>
-                    <mappedValue from="yw;059Rh5(2);059Rh6(1)" to="ywrh5rh6"/>
-                    <mappedValue from="yw;059Rh5[2];059Rh6[1]" to="ywrh5rh6"/>
-                    <mappedValue from="yw;Rh5(2);Rh6(1)" to="ywrh5rh6"/>
-                    <mappedValue from="yw;Rh5[2];Rh6[1]" to="ywrh5rh6"/>
-                    <mappedValue from="yw;Rh[5];Rh[6]" to="ywrh5rh6"/>
-                </sourceFileMappedDefault>
-
                 <sourceFileDefault pattern="(.+?)@.+?@.+?@.+?@.*"/>
-
             </text>
 
             <separator value="@"/>
 
-            <cvTermList displayName="Effector" required="true"
-                        displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage">
-
-                <sourceFileMappedDefault pattern=".+?@(.+?)@.+?@.+?@.*">
-                    <mappedValue from="Ch2r" to="UAS_ChRh2_23_0011" />
-                    <mappedValue from="Ch2" to="UAS_ChRh2_23_0011" />
-                    <mappedValue from="Ch2v" to="UAS_ChRh2_23_0011" />
-                    <mappedValue from="KI2h30" to="DL_UAS_GAL80ts_Kir21_23_0010" />
-                    <mappedValue from="KIR24" to="UAS_GAL80ts_Kir21_23_0004" />
-                    <mappedValue from="KIR2" to="DL_UAS_GAL80ts_Kir21_23_0010" />
-                    <mappedValue from="Kir2_1" to="DL_UAS_GAL80ts_Kir21_23_0010" />
-                    <mappedValue from="KIR2h16" to="DL_UAS_GAL80ts_Kir21_23_0010" />
-                    <mappedValue from="KIR2h30" to="DL_UAS_GAL80ts_Kir21_23_0010" />
-                    <mappedValue from="KIR2h36" to="DL_UAS_GAL80ts_Kir21_23_0010" />
-                    <mappedValue from="Kir36HT4" to="DL_UAS_GAL80ts_Kir21_23_0010" />
-                    <mappedValue from="KIR3" to="VDRC_UAS_GAL80ts_Kir21_23_0013" />
-                    <mappedValue from="Kir40h" to="DL_UAS_GAL80ts_Kir21_23_0010" />
-                    <mappedValue from="kir40h" to="UAS_GAL80ts_Kir21_23_0004" />
-                    <mappedValue from="Kir48htest" to="DL_UAS_GAL80ts_Kir21_23_0010" />
-                    <mappedValue from="KIR48" to="UAS_GAL80ts_Kir21_23_0004" />
-                    <mappedValue from="kir" to="DL_UAS_GAL80ts_Kir21_23_0010" />
-                    <mappedValue from="Kir" to="UAS_GAL80ts_Kir21_23_0004" />
-                    <mappedValue from="KIR" to="UAS_GAL80ts_Kir21_23_0004" />
-                    <mappedValue from="Shibire1" to="UAS_Shi_ts1_3_0001" />
-                    <mappedValue from="sHIBIRE" to="UAS_Shi_ts1_3_0001" />
-                    <mappedValue from="Shibire" to="UAS_Shi_ts1_3_0001" />
-                    <mappedValue from="shi" to="UAS_Shi_ts1_3_0001" />
-                    <mappedValue from="SHI" to="UAS_Shi_ts1_3_0001" />
-                    <mappedValue from="TNT" to="UAS_TNT_2_0003" />
-                    <mappedValue from="TrpA1" to="UAS_dTrpA1_2_0012" />
-                    <mappedValue from="TrpA" to="UAS_dTrpA1_2_0012" />
-                    <mappedValue from="w1118" to="NoEffector_0_9999"/>
-                    <mappedValue from="W1118" to="NoEffector_0_9999"/>
-                    <mappedValue from="pPBD" to="NoEffector_0_9999"/>
-                    <mappedValue from="TNTE" to="UAS_TNT_2_0003"/>
-                    <mappedValue from="N" to="NoEffector_0_9999"/>
-                    <mappedValue from="UAS-TNT_2_0003" to="UAS_TNT_2_0003"/>
-                    <mappedValue from="VDRC_Kir2_1" to="VDRC_UAS_GAL80ts_Kir21_23_0013"/>
-                    <mappedValue from="MN_Kir2_1" to="UAS_FRT_Kir21_3_0024"/>
-                </sourceFileMappedDefault>
-
-                <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.*" />
-
-                <validValue value="ChrimsonRetinal" />
-                <validValue value="Chrimson" />
-
-            </cvTermList>
+            <text displayName="Effector" required="true"
+                  pattern="[0-9A-Za-z\-\_]++">
+                <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.*"/>
+            </text>
 
             <separator value="@"/>
 
