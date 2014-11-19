@@ -14,7 +14,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[//dm11.hhmi.org|/groups/larvalolympiad]/larvalolympiad/pipeline/screen/tracking-results/" />
+            <path path="[//tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad/pipeline/screen/tracking-results/" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line"/>

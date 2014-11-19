@@ -19,6 +19,6 @@
         <jar href="JaneliaTransmogrifier.jar" main="true" download="eager"/>
     </resources>
     <application-desc main-class="org.janelia.it.ims.tmog.JaneliaTransmogrifier">
-        <argument>[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/tmog/config/transmogrifier_config_zlatic.xml</argument>
+        <argument>[//tier2.hhmi.org|/tier2]/zlatic/zlaticlab/tmog/config/transmogrifier_config_zlatic.xml</argument>
     </application-desc>
 </jnlp>

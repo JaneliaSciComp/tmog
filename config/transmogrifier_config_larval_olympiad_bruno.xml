@@ -14,7 +14,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[\\dm11.hhmi.org|/groups/larvalolympiad]/larvalolympiad/MMF-files/tracking-results/" />
+            <path path="[//tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad/MMF-files/tracking-results/" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line"/>
@@ -44,7 +44,7 @@
             </rowValidator>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionCompleteRenameWriter">
-                <property name="directory" value="[\\dm11.hhmi.org|/groups/larvalolympiad]/larvalolympiad/tmog/summaries"/>
+                <property name="directory" value="[//tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad/tmog/summaries"/>
             </sessionListener>
 
         </plugins>
