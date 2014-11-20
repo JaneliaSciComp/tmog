@@ -201,7 +201,7 @@
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad"/>
         <build-jnlp-launch-file name="leet_lineage"
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/leet/leetimg/leetlab"/>
-        <build-jnlp-launch-file name="mmf_projects"
+        <build-jnlp-launch-file name="bruno_projects"
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad"/>
         <build-jnlp-launch-file name="projtechres"
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/projtechres"/>
