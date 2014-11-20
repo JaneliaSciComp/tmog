@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jnlp codebase="http://apps.int.janelia.org/webstart/tmog4/" href="tmog_larval_olympiad_bruno.jnlp">
+<jnlp codebase="http://apps.int.janelia.org/webstart/tmog4/" href="tmog_larval_olympiad_projects.jnlp">
     <information>
         <title>Janelia Transmogrifier</title>
         <vendor>Janelia Farm Scientific Computing</vendor>
@@ -19,6 +19,6 @@
         <jar href="JaneliaTransmogrifier.jar" main="true" download="eager"/>
     </resources>
     <application-desc main-class="org.janelia.it.ims.tmog.JaneliaTransmogrifier">
-        <argument>[//tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad/tmog/config/transmogrifier_config_larval_olympiad_bruno.xml</argument>
+        <argument>[//tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad/tmog/config/transmogrifier_config_larval_olympiad_projects.xml</argument>
     </application-desc>
 </jnlp>

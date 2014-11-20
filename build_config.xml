@@ -197,7 +197,7 @@
                                 config-resource-dir="[//tier2.hhmi.org|/tier2/flylight]/flylight"/>
         <build-jnlp-launch-file name="larval_olympiad"
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad"/>
-        <build-jnlp-launch-file name="larval_olympiad_bruno"
+        <build-jnlp-launch-file name="larval_olympiad_projects"
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad"/>
         <build-jnlp-launch-file name="leet_lineage"
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/leet/leetimg/leetlab"/>
