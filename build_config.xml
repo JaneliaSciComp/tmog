@@ -195,7 +195,7 @@
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/flylight"/>
         <build-jnlp-launch-file name="flylight_screen"
                                 config-resource-dir="[//tier2.hhmi.org|/tier2/flylight]/flylight"/>
-        <build-jnlp-launch-file name="larval_olympiad"
+        <build-jnlp-launch-file name="larval_olympiad_mwt"
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad"/>
         <build-jnlp-launch-file name="larval_olympiad_projects"
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad"/>
