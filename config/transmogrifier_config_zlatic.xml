@@ -336,7 +336,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[//tier2.hhmi.org|/tier2]/zlatic/zlaticlab/pipeline/screen/tracking-results/" />
+            <path path="[//tier2.hhmi.org|/tier2]/zlatic/zlaticlab/pipeline/rd/tracking-results/" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line And Effector"/>
@@ -442,7 +442,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[//tier2.hhmi.org|/tier2]/zlatic/zlaticlab/pipeline/screen/tracking-results/" />
+            <path path="[//tier2.hhmi.org|/tier2]/zlatic/zlaticlab/pipeline/rd/tracking-results/" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line And Effector"/>
@@ -818,7 +818,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[//tier2.hhmi.org|/tier2]/zlatic/zlaticlab/pipeline/screen/tracking-results/" />
+            <path path="[//tier2.hhmi.org|/tier2]/zlatic/zlaticlab/pipeline/rd/tracking-results/" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line And Effector"/>
