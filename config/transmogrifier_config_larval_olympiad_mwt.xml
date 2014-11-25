@@ -120,6 +120,7 @@
             <validValueList displayName="Tracker" required="true">
                 <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*"/>
                 <validValue value="t11"/>
+                <validValue value="t110"/>
             </validValueList>
 
             <separator value="@"/>
