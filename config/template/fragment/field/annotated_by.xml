@@ -2,6 +2,7 @@
                             autoComplete="true"
                             sharedForAllSessionFiles="@is-shareable@"
                             markedForTask="false">@sage-data-default@
+                <validValue value="Alice Robie"/>
                 <validValue value="Aljoscha Nern"/>
                 <validValue value="Barry Dickson"/>
                 <validValue value="Chuan Zhou"/>
@@ -15,7 +16,9 @@
                 <validValue value="Mark Eddison"/>
                 <validValue value="Michael Texada"/>
                 <validValue value="Michael-John Dolan"/>
+                <validValue value="Rajyashree Sen"/>
                 <validValue value="Shigehiro Namiki"/>
+                <validValue value="Stephen Huston"/>
                 <validValue value="Tanya Wolff"/>
                 <validValue value="Vivek Jayaraman"/>
                 <validValue value="Yoshi Aso"/>

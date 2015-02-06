@@ -155,6 +155,7 @@
                             autoComplete="true"
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
+                <validValue value="Alice Robie"/>
                 <validValue value="Aljoscha Nern"/>
                 <validValue value="Barry Dickson"/>
                 <validValue value="Chuan Zhou"/>
@@ -168,7 +169,9 @@
                 <validValue value="Mark Eddison"/>
                 <validValue value="Michael Texada"/>
                 <validValue value="Michael-John Dolan"/>
+                <validValue value="Rajyashree Sen"/>
                 <validValue value="Shigehiro Namiki"/>
+                <validValue value="Stephen Huston"/>
                 <validValue value="Tanya Wolff"/>
                 <validValue value="Vivek Jayaraman"/>
                 <validValue value="Yoshi Aso"/>
@@ -178,7 +181,7 @@
                             markedForTask="false"
                             sharedForAllSessionFiles="true"
                             filterField="Annotator"
-                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
+                            filterMap="Alice Robie=robiea|bransonlab|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
@@ -408,6 +411,7 @@
                     <property name="image_property" value="annotated_by"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
+                <validValue value="Alice Robie"/>
                 <validValue value="Aljoscha Nern"/>
                 <validValue value="Barry Dickson"/>
                 <validValue value="Chuan Zhou"/>
@@ -421,7 +425,9 @@
                 <validValue value="Mark Eddison"/>
                 <validValue value="Michael Texada"/>
                 <validValue value="Michael-John Dolan"/>
+                <validValue value="Rajyashree Sen"/>
                 <validValue value="Shigehiro Namiki"/>
+                <validValue value="Stephen Huston"/>
                 <validValue value="Tanya Wolff"/>
                 <validValue value="Vivek Jayaraman"/>
                 <validValue value="Yoshi Aso"/>
@@ -431,7 +437,7 @@
                             markedForTask="false"
                             sharedForAllSessionFiles="false"
                             filterField="Annotator"
-                            filterMap="Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Shigehiro Namiki=namikis,ditp,card|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
+                            filterMap="Alice Robie=robiea|bransonlab|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
