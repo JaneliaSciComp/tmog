@@ -180,12 +180,13 @@
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
                             sharedForAllSessionFiles="true"
+                            globalValueFilter="/^((?!leet).)*$/"
                             filterField="Annotator"
                             filterMap="Alice Robie=robiea,bransonlab|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?includeOnlySageSync=true"
                             autoComplete="true">
             </webServiceList>
 
@@ -436,12 +437,13 @@
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
                             sharedForAllSessionFiles="false"
+                            globalValueFilter="/^((?!leet).)*$/"
                             filterField="Annotator"
                             filterMap="Alice Robie=robiea,bransonlab|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?includeOnlySageSync=false"
                             autoComplete="true">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="projtechres"/>

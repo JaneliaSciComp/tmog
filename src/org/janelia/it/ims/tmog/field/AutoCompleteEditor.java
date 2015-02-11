@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Howard Hughes Medical Institute.
+ * Copyright (c) 2015 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -62,35 +62,36 @@ public class AutoCompleteEditor extends DefaultCellEditor {
                 editorComboBox.addKeyListener(dtListener);
             }
 
-            if ((model != value) || (model.hasFilter())) {
-                model = (ValidValueModel) value;
+            // NOTE: We always need to rebuild auto complete support and filter values
+            //       since the model can be shared between columns but the filters can differ.
 
-                if (autoCompleteSupport != null) {
-                    // must remove previous auto-complete support since the
-                    // same editor combo box is used for all cells
-                    autoCompleteSupport.uninstall();
-                }
+            model = (ValidValueModel) value;
 
-                model.filterValues(dataTable.getModel(), row);
+            if (autoCompleteSupport != null) {
+                // must remove previous auto-complete support since the
+                // same editor combo box is used for all cells
+                autoCompleteSupport.uninstall();
+            }
 
-                autoCompleteSupport =
-                        AutoCompleteSupport.install(editorComboBox,
-                                                    model.getValidValues());
+            model.filterValues(dataTable.getModel(), row);
 
-                autoCompleteSupport.setFilterMode(TextMatcherEditor.CONTAINS);
+            autoCompleteSupport =
+                    AutoCompleteSupport.install(editorComboBox,
+                                                model.getValidValues());
 
-                // NOTE: do not use autoCompleteSupport.setStrict(true)
-                // since it seems to disable contains filtering for
-                // partially entered strings
+            autoCompleteSupport.setFilterMode(TextMatcherEditor.CONTAINS);
 
-                // transfer previous model selection to auto-complete combo box
-                editorComboBox.setSelectedItem(model.getSelectedItem());
+            // NOTE: do not use autoCompleteSupport.setStrict(true)
+            // since it seems to disable contains filtering for
+            // partially entered strings
 
-                if (model.isSharedForAllSessionFiles()) {
-                    TableRepainter tableRepainter = new TableRepainter(table);
-                    model.removeListDataListener(tableRepainter);
-                    model.addListDataListener(tableRepainter);
-                }
+            // transfer previous model selection to auto-complete combo box
+            editorComboBox.setSelectedItem(model.getSelectedItem());
+
+            if (model.isSharedForAllSessionFiles()) {
+                TableRepainter tableRepainter = new TableRepainter(table);
+                model.removeListDataListener(tableRepainter);
+                model.addListDataListener(tableRepainter);
             }
 
         } else {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Howard Hughes Medical Institute.
+ * Copyright (c) 2015 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -57,9 +57,10 @@ public class ValidValueEditor extends DefaultCellEditor {
 
             model = (ValidValueModel) value;
 
-            if (model.hasFilter()) {
-                model.filterValues(dataTable.getModel(), row);
-            }
+            // NOTE: We always need to rebuild filter values since the model
+            // can be shared between columns but the filters can differ.
+
+            model.filterValues(dataTable.getModel(), row);
 
             editorComboBox.setModel(model);
             if (model.isSharedForAllSessionFiles()) {

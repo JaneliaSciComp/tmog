@@ -271,6 +271,7 @@
         <xs:attribute name="copyable" type="xs:boolean"/>
         <xs:attribute name="markedForTask" type="xs:boolean"/>
         <xs:attribute name="sharedForAllSessionFiles" type="xs:boolean"/>
+        <xs:attribute name="globalValueFilter" type="xs:string"/>
         <xs:attribute name="filterField" type="xs:string"/>
         <xs:attribute name="filterMap" type="xs:string"/>
     </xs:complexType>
@@ -296,6 +297,7 @@
         <xs:attribute name="copyable" type="xs:boolean"/>
         <xs:attribute name="markedForTask" type="xs:boolean"/>
         <xs:attribute name="sharedForAllSessionFiles" type="xs:boolean"/>
+        <xs:attribute name="globalValueFilter" type="xs:string"/>
         <xs:attribute name="filterField" type="xs:string"/>
         <xs:attribute name="filterMap" type="xs:string"/>
         <xs:attribute name="serviceUrl" type="xs:string" use="required"/>

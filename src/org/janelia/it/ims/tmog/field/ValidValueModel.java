@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Howard Hughes Medical Institute.
+ * Copyright (c) 2015 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -38,6 +38,7 @@ public class ValidValueModel extends AbstractListModel<ValidValue>
     private boolean isRequired;
     private boolean isAutoComplete;
     private FilterList<ValidValue> validValues;
+    private String globalValueFilter;
     private String filterField;
     private FilterMap filterMap;
     private ValidValue selectedValue;
@@ -67,6 +68,7 @@ public class ValidValueModel extends AbstractListModel<ValidValue>
         this.isRequired = instance.isRequired;
         this.isAutoComplete = instance.isAutoComplete;
         this.validValues = instance.validValues; // shallow copy should be safe
+        this.globalValueFilter = instance.globalValueFilter;
         this.filterField = instance.filterField;
         this.filterMap = instance.filterMap; // shallow copy should be safe
         this.selectedValue = instance.selectedValue;
@@ -79,56 +81,55 @@ public class ValidValueModel extends AbstractListModel<ValidValue>
     }
 
     public boolean hasFilter() {
-        return ((filterField != null) && (filterMap != null));
+        return ((globalValueFilter != null) || ((filterField != null) && (filterMap != null)));
     }
 
     public void filterValues(TableModel tableModel,
                              int currentRow) {
 
+        MatcherEditor<ValidValue> matcherEditor = null;
+
         if (hasFilter()) {
 
-            Integer filterFieldIndex = null;
-            final int columnCount = tableModel.getColumnCount();
-            for (int i = 0; i < columnCount; i++) {
-                if (filterField.equals(tableModel.getColumnName(i))) {
-                    filterFieldIndex = i;
-                    break;
-                }
-            }
+            if ((filterField == null) || (filterMap == null)) {
 
-            if (filterFieldIndex != null) {
+                // only globalValueFilter defined, apply it
+                matcherEditor = buildTextMatcherEditor(globalValueFilter);
 
-                final Object filterModel = tableModel.getValueAt(currentRow, filterFieldIndex);
+            } else {
 
-                if (filterModel instanceof DataField) {
+                // field filters defined, see if we can find them ...
 
-                    final String filterMapKey = ((DataField) filterModel).getCoreValue();
-
-                    String[] newFilters = null;
-                    if ((filterMapKey != null) && (filterMapKey.length() > 0)) {
-                        newFilters = filterMap.getFilters(filterMapKey);
-                    }
-
-                    if (newFilters == null) {
-                        newFilters = new String[]{""};
-                    }
-
-                    if (newFilters.length == 1) {
-                        validValues.setMatcherEditor(buildTextMatcherEditor(newFilters[0]));
-                    } else {
-                        final EventList<MatcherEditor<ValidValue>> matcherEditors =
-                                new BasicEventList<MatcherEditor<ValidValue>>();
-                        for (String newFilter : newFilters) {
-                            matcherEditors.add(buildTextMatcherEditor(newFilter));
-                        }
-                        final CompositeMatcherEditor<ValidValue> compositeMatcherEditor =
-                                new CompositeMatcherEditor<ValidValue>(matcherEditors);
-                        compositeMatcherEditor.setMode(CompositeMatcherEditor.OR);
-                        validValues.setMatcherEditor(compositeMatcherEditor);
+                Integer filterFieldIndex = null;
+                final int columnCount = tableModel.getColumnCount();
+                for (int i = 0; i < columnCount; i++) {
+                    if (filterField.equals(tableModel.getColumnName(i))) {
+                        filterFieldIndex = i;
+                        break;
                     }
                 }
+
+                if (filterFieldIndex == null) {
+
+                    if (globalValueFilter != null) {
+
+                        // can't find field, but can still apply globalValueFilter
+                        matcherEditor = buildTextMatcherEditor(globalValueFilter);
+                    }
+
+                } else {
+
+                    // apply field (and potentially global) filters
+                    final Object filterModel = tableModel.getValueAt(currentRow, filterFieldIndex);
+                    if (filterModel instanceof DataField) {
+                        matcherEditor = getMatcherEditor((DataField) filterModel);
+                    }
+                }
+
             }
         }
+
+        validValues.setMatcherEditor(matcherEditor);
 
     }
 
@@ -197,6 +198,11 @@ public class ValidValueModel extends AbstractListModel<ValidValue>
 
     public void setSharedForAllSessionFiles(boolean sharedForAllSessionFiles) {
         this.sharedForAllSessionFiles = sharedForAllSessionFiles;
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    public void setGlobalValueFilter(String globalValueFilter) {
+        this.globalValueFilter = globalValueFilter;
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
@@ -424,10 +430,87 @@ public class ValidValueModel extends AbstractListModel<ValidValue>
         selectedValue = null;
     }
 
+    private MatcherEditor<ValidValue> getMatcherEditor(DataField filterModel) {
+
+        MatcherEditor<ValidValue> matcherEditor;
+
+        final String filterMapKey = filterModel.getCoreValue();
+
+        String[] newFilters = null;
+        if ((filterMapKey != null) && (filterMapKey.length() > 0)) {
+            newFilters = filterMap.getFilters(filterMapKey);
+        }
+
+        if (newFilters == null) {
+            newFilters = new String[]{""};
+        }
+
+        if (newFilters.length == 1) {
+
+            if (globalValueFilter == null) {
+
+                // simply apply single field filter
+                matcherEditor = buildTextMatcherEditor(newFilters[0]);
+
+            } else {
+
+                // apply global filter AND field filter
+                final EventList<MatcherEditor<ValidValue>> matcherEditors = new BasicEventList<MatcherEditor<ValidValue>>();
+                matcherEditors.add(buildTextMatcherEditor(globalValueFilter));
+                matcherEditors.add(buildTextMatcherEditor(newFilters[0]));
+
+                final CompositeMatcherEditor<ValidValue> compositeMatcherEditor = new CompositeMatcherEditor<ValidValue>(matcherEditors);
+                compositeMatcherEditor.setMode(CompositeMatcherEditor.AND);
+
+                matcherEditor = compositeMatcherEditor;
+
+            }
+
+        } else {
+
+            // build composite field matcher (using OR)
+
+            final EventList<MatcherEditor<ValidValue>> fieldMatcherEditors = new BasicEventList<MatcherEditor<ValidValue>>();
+            for (String newFilter : newFilters) {
+                fieldMatcherEditors.add(buildTextMatcherEditor(newFilter));
+            }
+
+            final CompositeMatcherEditor<ValidValue> compositeFieldMatcherEditor = new CompositeMatcherEditor<ValidValue>(fieldMatcherEditors);
+            compositeFieldMatcherEditor.setMode(CompositeMatcherEditor.OR);
+
+            if (globalValueFilter == null) {
+
+                // simply apply composite field filters
+                matcherEditor = compositeFieldMatcherEditor;
+
+            } else {
+
+                // apply global filter AND composite field filters
+                final EventList<MatcherEditor<ValidValue>> matcherEditors = new BasicEventList<MatcherEditor<ValidValue>>();
+                matcherEditors.add(buildTextMatcherEditor(globalValueFilter));
+                matcherEditors.add(compositeFieldMatcherEditor);
+
+                final CompositeMatcherEditor<ValidValue> compositeMatcherEditor = new CompositeMatcherEditor<ValidValue>(matcherEditors);
+                compositeMatcherEditor.setMode(CompositeMatcherEditor.AND);
+
+                matcherEditor = compositeMatcherEditor;
+            }
+        }
+
+        return matcherEditor;
+    }
+
     private TextMatcherEditor<ValidValue> buildTextMatcherEditor(String filterText) {
         final TextMatcherEditor<ValidValue> textMatcherEditor = new TextMatcherEditor<ValidValue>();
         textMatcherEditor.setFilterator(TEXT_FILTERATOR);
         textMatcherEditor.setFilterText(new String[] {filterText});
+        if (filterText.startsWith("/") && filterText.endsWith("/")) {
+            final String regularExpression = filterText.substring(1, filterText.length() - 1);
+            textMatcherEditor.setFilterText(new String[] { regularExpression });
+            textMatcherEditor.setMode(TextMatcherEditor.REGULAR_EXPRESSION);
+        } else {
+            textMatcherEditor.setFilterText(new String[] {filterText});
+        }
         return textMatcherEditor;
     }
 
