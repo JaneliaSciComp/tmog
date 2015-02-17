@@ -5,6 +5,7 @@
                 <property name="Age" value="age" />
                 <property name="Annotator" value="annotatedBy" />
                 <property name="Cross Serial Number" value="crossBarcode" />
+                <property name="Full Age" value="fullAge" />
                 <property name="Reporter" value="effector" />
                 <property name="Gender" value="gender" />
                 <property name="GAL4 Line" value="line" />
