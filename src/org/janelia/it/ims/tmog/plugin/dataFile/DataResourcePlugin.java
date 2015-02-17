@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2015 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -154,7 +154,7 @@ public class DataResourcePlugin
 
         if (rowFieldNameToXPathMap.size() == 0) {
             throw new ExternalSystemException(
-                    INIT_FAILURE_MSG +
+                    getInitFailureMsg() +
                     "At least one field to XPath mapping must be specified.");
         }
 
@@ -166,12 +166,12 @@ public class DataResourcePlugin
             final Item testItem = fetchItem(testUrl);
             if (testItem == null) {
                 throw new ExternalSystemException(
-                        INIT_FAILURE_MSG + "The " + TEST_URL_PROPERTY_NAME +
+                        getInitFailureMsg() + "The " + TEST_URL_PROPERTY_NAME +
                         " property '" + testUrl +
                         "' identifies a non-existent resource.");
             } else if (testItem.size() == 0) {
                 throw new ExternalSystemException(
-                        INIT_FAILURE_MSG + "The " + TEST_URL_PROPERTY_NAME +
+                        getInitFailureMsg() + "The " + TEST_URL_PROPERTY_NAME +
                         " property '" + testUrl +
                         "' does not return any mapped values.  There may " +
                         "be a problem with the configured XPath values.");
@@ -199,27 +199,54 @@ public class DataResourcePlugin
     public PluginDataRow updateRow(PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
-        final Map<String, DataField> fieldMap =
-                row.getDisplayNameToFieldMap();
-        List<String> urlList = urlTokens.deriveValues(fieldMap, true);
-        clearCacheIfStale();
+        final Item item = getMappedItemForRow(row);
+        if (item != null) {
+            for (String fieldName : rowFieldNameToXPathMap.keySet()) {
+                row.applyPluginDataValue(fieldName,
+                                         item.getPropertyValue(fieldName));
+            }
+        }
+        return row;
+    }
 
-        if (urlList.size() > 0) {
-            final String url = urlList.get(0);
-            Item item = urlToItemCache.get(url);
+    protected Item getMappedItemForRow(PluginDataRow row)
+            throws ExternalDataException, ExternalSystemException {
+
+        Item item = null;
+
+        final String url = getUrlForRow(row);
+        if (url != null) {
+            clearCacheIfStale();
+            item = urlToItemCache.get(url);
             if ((item == null) && (! urlToItemCache.containsKey(url))) {
                 item = fetchItem(url);
                 cacheItem(url, item);
             }
-
-            if (item != null) {
-                for (String fieldName : rowFieldNameToXPathMap.keySet()) {
-                    row.applyPluginDataValue(fieldName,
-                                             item.getPropertyValue(fieldName));
-                }
-            }
         }
-        return row;
+
+        return item;
+    }
+
+    protected String getUrlForRow(PluginDataRow row) {
+        String url = null;
+        final Map<String, DataField> fieldMap = row.getDisplayNameToFieldMap();
+        final List<String> urlList = urlTokens.deriveValues(fieldMap, true);
+        if (urlList.size() > 0) {
+            url = urlList.get(0);
+        }
+        return url;
+    }
+
+    protected String getInitFailureMsg() {
+        return "Failed to initialize Data Resource plug-in.  ";
+    }
+
+    protected Map<String, String> getRowFieldNameToXPathMap() {
+        return rowFieldNameToXPathMap;
+    }
+
+    protected synchronized void removeItem(String url) {
+        urlToItemCache.remove(url);
     }
 
     private synchronized void cacheItem(String url,
@@ -232,7 +259,7 @@ public class DataResourcePlugin
             throws ExternalSystemException {
         if ((value == null) || (value.length() == 0)) {
             throw new ExternalSystemException(
-                    INIT_FAILURE_MSG + "The '" + name +
+                    getInitFailureMsg() + "The '" + name +
                     "' property must be defined.");
         }
     }
@@ -257,9 +284,7 @@ public class DataResourcePlugin
 
     private synchronized void clearCacheIfStale() {
 
-        if ((System.currentTimeMillis() - lastCacheAccessTime) >
-            clearCacheDuration) {
-
+        if ((System.currentTimeMillis() - lastCacheAccessTime) > clearCacheDuration) {
             LOG.info("clearing cache containing " +
                      urlToItemCache.size() + " items");
             urlToItemCache.clear();
@@ -329,7 +354,4 @@ public class DataResourcePlugin
 
     /** The logger for this class. */
     private static final Log LOG = LogFactory.getLog(DataResourcePlugin.class);
-
-    private static final String INIT_FAILURE_MSG =
-            "Failed to initialize Data Resource plug-in.  ";
 }

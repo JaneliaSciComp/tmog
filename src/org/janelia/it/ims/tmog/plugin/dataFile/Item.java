@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2015 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -56,6 +56,10 @@ public class Item {
         return name;
     }
 
+    public boolean hasPropertyValue(String propertyName) {
+        return (getPropertyValue(propertyName) != null);
+    }
+
     public String getPropertyValue(String propertyName) {
         if (propertyNameToValueMap == null) {
             mapItems();
@@ -68,6 +72,7 @@ public class Item {
             properties = new ArrayList<Property>();
         }
         properties.add(property);
+        propertyNameToValueMap = null;
     }
 
     public int size() {

@@ -33,6 +33,20 @@
                 <property name="Reporter" value="reporter" />
             </rowUpdater>
 
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.SlideCodeConsensusPlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/sage-ws/images/dataSet/${Data Set}/slideCode/${Slide Code}/consensusData" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/sage-ws/images/dataSet/nerna_mcfo_case_1/slideCode/20141203_19_A1/consensusData" />
+                <property name="plugin.root-xpath" value="slideCodeConsensusData" />
+                <property name="Age" value="age" />
+                <property name="Annotator" value="annotatedBy" />
+                <property name="Cross Serial Number" value="crossBarcode" />
+                <property name="Reporter" value="effector" />
+                <property name="Gender" value="gender" />
+                <property name="GAL4 Line" value="line" />
+                <property name="Tissue Mounting Protocol" value="mountingProtocol" />
+                <property name="First Slice of Z" value="tissueOrientation" />
+            </rowUpdater>
+
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
                 <property name="plugin-scale" value="0" />
                 <property name="Objective" value="Recording #1 Objective" />

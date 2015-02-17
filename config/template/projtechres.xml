@@ -16,6 +16,7 @@
         <plugins>
 
 @config-fragment-update-project-cross-data@
+@config-fragment-update-slide-consensus-data@
 @config-fragment-update-zeiss-lsm-data@
 @config-fragment-correct-objective@
 @config-fragment-validate-common-fields@

@@ -136,6 +136,7 @@
         <load-filtered-fragment name="sage-loader-ptr"              path="plugin/sage-loader.xml" key="grammar-file" value="projtechres.gra" relative-path-depth="3"/>
         <load-fragment          name="update-mapped-serial-data"    path="plugin/update-mapped-serial-data.xml"/>
         <load-fragment          name="update-project-cross-data"    path="plugin/update-project-cross-data.xml"/>
+        <load-fragment          name="update-slide-consensus-data"  path="plugin/update-slide-consensus-data.xml"/>
         <load-fragment          name="update-zeiss-lsm-data"        path="plugin/update-zeiss-lsm-data.xml"/>
         <load-fragment          name="validate-common-fields"       path="plugin/validate-common-fields.xml"/>
 
