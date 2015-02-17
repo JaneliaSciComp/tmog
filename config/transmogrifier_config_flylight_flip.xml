@@ -97,6 +97,7 @@
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="created_by" value="Imager"/>
+                <property name="renamed_by" value="Renamer"/>
                 <property name="effector" value="Reporter"/>
                 <property name="slide_code" value="Slide Code"/>
                 <property name="tile" value="Tile$MAP:vnc_verify=ventral_nerve_cord" />
@@ -305,6 +306,13 @@
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
             </cvTermList>
 
+            <cvTermList displayName="Renamer" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        sharedForAllSessionFiles="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+            </cvTermList>
+
             <validValueList displayName="Tissue Mounting Protocol" required="true"
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
@@ -439,6 +447,7 @@
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="created_by" value="Imager"/>
+                <property name="renamed_by" value="Renamer"/>
                 <property name="effector" value="Reporter"/>
                 <property name="slide_code" value="Slide Code"/>
                 <property name="tile" value="Tile$MAP:vnc_verify=ventral_nerve_cord" />
@@ -836,6 +845,7 @@
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="created_by" value="Imager"/>
+                <property name="renamed_by" value="Renamer"/>
                 <property name="effector" value="Reporter"/>
                 <property name="slide_code" value="Slide Code"/>
                 <property name="tile" value="Tile$MAP:vnc_verify=ventral_nerve_cord" />
@@ -1013,6 +1023,13 @@
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
             </cvTermList>
 
+            <cvTermList displayName="Renamer" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        sharedForAllSessionFiles="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+            </cvTermList>
+
             <validValueList displayName="Tissue Mounting Protocol" required="true"
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
@@ -1108,6 +1125,7 @@
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="created_by" value="Imager"/>
+                <property name="renamed_by" value="Renamer"/>
                 <property name="effector" value="Reporter"/>
                 <property name="slide_code" value="Slide Code"/>
                 <property name="tile" value="Tile$MAP:vnc_verify=ventral_nerve_cord" />

@@ -118,6 +118,7 @@
         <load-field-fragment    name="mounting_protocol" />
         <load-field-fragment    name="name" />
         <load-field-fragment    name="objective" />
+        <load-field-fragment    name="renamed_by" />
         <load-field-fragment    name="screen_state" />
         <load-field-fragment    name="slide_code" />
         <load-field-fragment    name="tile" />
