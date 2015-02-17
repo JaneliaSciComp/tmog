@@ -119,6 +119,7 @@
                 <property name="lsm_illumination_channel_3_power_bc_1" value="Channel 3 Power"/>
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="microscope_filename"/>
+                <property name="comment" value="Comment"/>
                 <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
                 <property name="family" value="$STATIC:projtechres"/>
                 <property name="screen_state" value="Screen State"/>
@@ -325,6 +326,10 @@
                 <validValue value="accepted_public"/>
                 <validValue value="rejected"/>
             </validValueList>
+
+            <text displayName="Comment" required="false"
+                  markedForTask="false">
+            </text>
 
             <text displayName="Objective" required="true"
                   markedForTask="false"

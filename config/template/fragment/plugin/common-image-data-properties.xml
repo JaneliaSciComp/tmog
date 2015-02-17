@@ -28,3 +28,4 @@
                 <property name="lsm_illumination_channel_3_power_bc_1" value="Channel 3 Power"/>
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="microscope_filename"/>
+                <property name="comment" value="Comment"/>

@@ -43,6 +43,7 @@
 @config-fragment-mounting_protocol@
 @config-fragment-tissue_orientation@
 @config-fragment-screen_state@
+@config-fragment-comment@
 @config-fragment-imaging_project-polarity@
 @config-fragment-objective@
 @config-fragment-channel-data@
@@ -61,7 +62,6 @@
 @config-fragment-image-path-exists@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@
-                <property name="comment" value="Comment"/>
                 <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
                 <property name="exclude.host.name" value="true"/>
                 <property name="family" value="$STATIC:flylight_polarity"/>
