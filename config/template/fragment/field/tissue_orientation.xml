@@ -1,4 +1,4 @@
-            <validValueList displayName="First Slice of Z" required="false"
+            <validValueList displayName="First Slice of Z" required="true"
                             sharedForAllSessionFiles="@is-shareable@"
                             autoComplete="true"
                             markedForTask="false">@sage-data-default@
