@@ -71,7 +71,7 @@ public class SlideCodeConsensusPlugin
                 consensusValue = item.getPropertyValue(fieldName);
                 rowValue = row.getCoreValue(fieldName);
 
-                if (((consensusValue == null) && (rowValue != null)) ||
+                if (((consensusValue == null) && (rowValue != null) && (rowValue.length() != 0)) ||
                     ((consensusValue != null) && (! consensusValue.equals(rowValue)))) {
 
                     // remove item from cache in case source value is the problem
