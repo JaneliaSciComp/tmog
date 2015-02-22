@@ -53,9 +53,9 @@ public class SlideCodeConsensusPlugin
         String rowValue;
         String consensusValue;
 
-        if (item.size() == 1) {
+        if (item.size() == 0) {
 
-            // only slide code was returned from web service, so treat this row as the definitive source
+            // nothing was returned from web service, so treat this row as the definitive source
             for (String fieldName : rowFieldNameToXPathMap.keySet()) {
                 rowValue = row.getCoreValue(fieldName);
                 item.addProperty(new Property(fieldName, rowValue));
