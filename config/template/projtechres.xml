@@ -28,8 +28,6 @@
                 <property name="screen_state" value="Screen State"/>
                 <property name="imaging_project" value="$STATIC:project_technical_resources"/>
                 <property name="relativePathDepth" value="3"/>
-                <property name="data_set" value="Tech Review$MAP:yes=projtechres_ants_alignment|no=$VALUE_OF:Data Set" />
-                <property name="target_data_set" value="Tech Review$MAP:yes=$VALUE_OF:Data Set" />
             </rowListener>
 
 @config-fragment-sage-loader-ptr@
@@ -61,14 +59,6 @@
                   markedForTask="false"
                   pattern="s*rs*">
             </text>
-
-            <validValueList displayName="Tech Review" required="true"
-                            markedForTask="false"
-                            sharedForAllSessionFiles="true"
-                            autoComplete="true">
-                <validValue value="yes" default="true"/>
-                <validValue value="no"/>
-            </validValueList>
 
         </dataFields>
 
@@ -112,73 +102,6 @@
 @config-fragment-created_by-with-projtechres-default@
 @config-fragment-mounting_protocol-with-projtechres-default@
 @config-fragment-tissue_orientation-with-projtechres-default@
-@config-fragment-name-with-projtechres-default@
-        </dataFields>
-
-    </project>
-
-    <project name="PTR - Promote To Target Data Set" taskName="collector">
-
-@config-fragment-lsm-bz2-input@
-@config-fragment-lsm-sort@
-        <plugins>
-
-@config-fragment-image-path-exists@
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="sage"/>
-                <property name="exclude.host.name" value="true"/>
-                <property name="display" value="true"/>
-                <property name="keep.existing.data" value="true"/>
-                <property name="relative_path" value="SAGE Name"/>
-                <property name="relativePathDepth" value="3"/>
-                <property name="data_set" value="New Data Set"/>
-            </rowListener>
-
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsSampleRemovalPlugin">
-                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/owner/projtechres/dataSet/${Old Data Set}/samplesWithSlideCode/${Slide Code}"/>
-                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
-            </rowListener>
-
-        </plugins>
-
-        <dataFields>
-
-            <text displayName="Slide Code" required="true"
-                  pattern="\d{8}_\d+_[A-Z]\d+"
-                  copyable="false"
-                  editable="false"
-                  markedForTask="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="projtechres"/>
-                    <property name="image_property" value="slide_code"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-            </text>
-
-            <text displayName="Old Data Set" required="false"
-                  editable="false"
-                  markedForTask="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="projtechres"/>
-                    <property name="image_property" value="data_set"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-            </text>
-
-            <webServiceList displayName="New Data Set" required="true"
-                            markedForTask="false"
-                            valueCreationPath="*/dataSet"
-                            relativeActualValuePath="dataSetIdentifier"
-                            relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet"
-                            autoComplete="true">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="projtechres"/>
-                    <property name="image_property" value="target_data_set"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-            </webServiceList>
-
 @config-fragment-name-with-projtechres-default@
         </dataFields>
 
