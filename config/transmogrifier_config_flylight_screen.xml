@@ -7,6 +7,8 @@
 
     <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="true">
 
+        <inputFileFilter patternString=".+\.(lsm|lsm\.bz2)" />
+
         <inputFileSorter sortAlgorithm="LNumber" />
 
         <outputDirectory basePath="[\\tier2.hhmi.org|/tier2/flylight]/flylight/screen/confocalStacks"

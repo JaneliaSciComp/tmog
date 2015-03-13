@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Howard Hughes Medical Institute.
+ * Copyright (c) 2015 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -89,9 +89,13 @@ public class FileExtensionModel implements DataField {
         extension = null;
         if (target != null) {
             String fileName = target.getName();
-            int extStart = fileName.lastIndexOf('.');
-            if ((extStart > -1) && (extStart < (fileName.length() - 1))) {
-                extension = fileName.substring(extStart);
+            if (fileName.endsWith(LSM_BZ2_EXTENSION)) {
+                extension = LSM_BZ2_EXTENSION;
+            } else {
+                final int extStart = fileName.lastIndexOf('.');
+                if ((extStart > -1) && (extStart < (fileName.length() - 1))) {
+                    extension = fileName.substring(extStart);
+                }
             }
         }
     }
@@ -121,5 +125,7 @@ public class FileExtensionModel implements DataField {
     @Override
     public String toString() {
         return getFileNameValue();
-    }    
+    }
+
+    private static final String LSM_BZ2_EXTENSION = ".lsm.bz2";
 }
