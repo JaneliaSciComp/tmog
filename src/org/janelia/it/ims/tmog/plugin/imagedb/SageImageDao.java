@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Howard Hughes Medical Institute.
+ * Copyright (c) 2015 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -98,6 +98,15 @@ public class SageImageDao
                 (! relativePath.equals(previousRelativePath))) {
                 deleteImage = connection.prepareStatement(SQL_DELETE_IMAGE);
                 deleteImage.setString(1, previousRelativePath);
+
+                // HACK: strip off .bz2 in case real file name no longer matches SAGE name
+                String previousRelativePathWithoutBz2 = previousRelativePath;
+                if (previousRelativePath.endsWith(".bz2")) {
+                    previousRelativePathWithoutBz2 =
+                            previousRelativePath.substring(0, (previousRelativePath.length() - 4));
+                }
+                deleteImage.setString(2, previousRelativePathWithoutBz2);
+
                 int rowsUpdated = deleteImage.executeUpdate();
                 if (rowsUpdated > 0) {
                     LOG.info("removed " + rowsUpdated +
@@ -613,9 +622,10 @@ public class SageImageDao
     /**
      * SQL for deleting all properties for an image.
      *   Parameter 1 is the image name.
+     *   Parameter 2 is the image name without a .bz2 suffix.
      */
     private static final String SQL_DELETE_IMAGE =
-            "DELETE FROM image WHERE name=?";
+            "DELETE FROM image WHERE name in (?,?)";
 
     /**
      * SQL for retrieving a line id.

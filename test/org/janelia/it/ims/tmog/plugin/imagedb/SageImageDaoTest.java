@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Howard Hughes Medical Institute.
+ * Copyright (c) 2015 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -229,6 +229,48 @@ public class SageImageDaoTest
         Integer previousId = dao.getImageId(previousRelativePath);
         assertNull("image for previous relative path '" +
                    previousRelativePath + "' should have been removed",
+                   previousId);
+
+        Integer imageId = dao.getImageId(relativePath);
+        assertEquals("invalid id returned for " + relativePath,
+                     testImage.getId(), imageId);
+    }
+
+    /**
+     * Tests the saveProperties method for an existing image whose
+     * relative path has changed and is bz2 compressed.
+     *
+     * @throws Exception
+     *   if any unexpected errors occur.
+     */
+    public void testSaveForChangedRelativeBz2Path() throws Exception {
+        String relativePath = IMAGE_PATH.format(new Date());
+        testImage.setRelativePaths(relativePath, null);
+        testImage.setCaptureDate(new Date());
+        testImage.setFamily(FAMILY_1);
+        testImage.addProperty(Image.LINE_PROPERTY, LINE_NAME_1);
+
+        testImage = dao.saveProperties(testImage);
+        Integer testImageId = testImage.getId();
+
+        assertNotNull("id not set after add", testImage.getId());
+
+        final String dbRelativePath = relativePath;
+        final String bz2RelativePath = relativePath + ".bz2";
+        relativePath = bz2RelativePath + "_changed";
+        testImage = new Image();
+        testImage.setId(testImageId);
+        testImage.setRelativePaths(relativePath, bz2RelativePath);
+        testImage.setCaptureDate(new Date());
+        testImage.setFamily(FAMILY_1);
+        // line info required since previous path image get deleted
+        testImage.addProperty(Image.LINE_PROPERTY, LINE_NAME_1);
+
+        testImage = dao.saveProperties(testImage);
+
+        Integer previousId = dao.getImageId(dbRelativePath);
+        assertNull("image for previous relative path '" +
+                   dbRelativePath + "' should have been removed",
                    previousId);
 
         Integer imageId = dao.getImageId(relativePath);
