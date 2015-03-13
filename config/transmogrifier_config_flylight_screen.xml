@@ -7,8 +7,6 @@
 
     <project name="Rubin Lab: ChaCRM verified TransformantIDs (GMR_*)" default="true">
 
-        <inputFileFilter patternString=".+\.(lsm|lsm\.bz2)" />
-
         <inputFileSorter sortAlgorithm="LNumber" />
 
         <outputDirectory basePath="[\\tier2.hhmi.org|/tier2/flylight]/flylight/screen/confocalStacks"
@@ -38,20 +36,6 @@
                 <property name="batchNameFieldName" value="Batch Name"/>
                 <property name="batchNumberFieldName" value="Batch Number"/>
                 <property name="batchColorFieldName" value="Batch Color"/>
-            </rowListener>
-
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="nighthawk"/>
-                <property name="family" value="$STATIC:rubin-chacrm"/>
-                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
-                <property name="uas_reporter" value="UAS Reporter"/>
-                <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
-                <property name="created_by" value="Imager"/>
-                <property name="renamed_by" value="Renamer"/>
-                <property name="class" value="Class"/>
-                <property name="ihc_batch" value="Batch Name"/>
-                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
-                <property name="tissue_orientation" value="Tissue Orientation"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
@@ -148,7 +132,7 @@
             <separator value=".lsm"/>
 
             <!--
-             These values are collected for the nighthawk database but are not
+             These values are collected for the SAGE database but are not
              included as components of the file name (markedForTask="false").
              -->
             <number displayName="Batch Number" required="true"
@@ -232,23 +216,6 @@
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="nighthawk"/>
-                <property name="family" value="$STATIC:rubin-chacrm"/>
-                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
-                <property name="uas_reporter" value="UAS Reporter"/>
-                <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
-                <property name="created_by" value="Imager"/>
-                <property name="renamed_by" value="Renamer"/>
-                <property name="class" value="Class"/>
-                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
-                <property name="tissue_orientation" value="Tissue Orientation"/>
-                <property name="dissector" value="Dissector"/>
-                <property name="dissection_date" value="${Dissection Date (yyyy-mm-dd)} 00:00:00"/>
-                <property name="mounter" value="Mounter"/>
-                <property name="mount_date" value="${Mount Date (yyyy-mm-dd)} 00:00:00"/>
-            </rowListener>
-
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:rubin"/>
                 <property name="family" value="$STATIC:rubin_chacrm"/>
@@ -345,7 +312,7 @@
             <separator value=".lsm"/>
 
             <!--
-             These values are collected for the nighthawk database but are not
+             These values are collected for the SAGE database but are not
              included as components of the file name (markedForTask="false").
              -->
             <validValueList displayName="Tissue Mounting Protocol" required="true"
@@ -430,82 +397,9 @@
 
     </project>
 
-    <project name="Rubin Lab: Load Batch Data" taskName="collector">
-
-        <plugins>
-
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
-                <property name="db.config.key" value="nighthawk"/>
-            </rowValidator>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="nighthawk"/>
-                <property name="exclude.host.name" value="true"/>
-                <property name="dissector" value="Dissector"/>
-                <property name="dissection_date" value="${Dissection Date (yyyy-mm-dd)} 00:00:00"/>
-                <property name="mounter" value="Mounter"/>
-                <property name="mount_date" value="${Mount Date (yyyy-mm-dd)} 00:00:00"/>
-            </rowListener>
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="sage"/>
-                <property name="lab" value="$STATIC:rubin"/>
-                <property name="exclude.host.name" value="true"/>
-                <property name="dissector" value="Dissector"/>
-                <property name="dissection_date" value="${Dissection Date (yyyy-mm-dd)} 00:00:00"/>
-                <property name="mounter" value="Mounter"/>
-                <property name="mount_date" value="${Mount Date (yyyy-mm-dd)} 00:00:00"/>
-            </rowListener>
-
-        </plugins>
-
-        <dataFields>
-            <validValueList displayName="Dissector" required="false"
-                            markedForTask="false">
-                <validValue value="Adrianne Enos"/>
-                <validValue value="Allison Sowell"/>
-                <validValue value="Amanda Cavallaro"/>
-                <validValue value="Chris Zugates"/>
-                <validValue value="Christine Murphy"/>
-                <validValue value="Dona Fetter"/>
-                <validValue value="Donald Hall"/>
-                <validValue value="Emily Willis"/>
-                <validValue value="Gina DePasquale"/>
-                <validValue value="Hsing-Hsi Li"/>
-                <validValue value="Hua-Peng Liaw"/>
-                <validValue value="Jennifer Jeter"/>
-                <validValue value="Joanna Hausenfluck"/>
-                <validValue value="Kitty Shah"/>
-                <validValue value="Nick Abel"/>
-                <validValue value="Nirmala Iyer"/>
-                <validValue value="Omotara Ogundeyi"/>
-                <validValue value="Phuson Hulamm"/>
-                <validValue value="Susana Tae"/>
-                <validValue value="Teri Ngo"/>
-            </validValueList>
-            <date displayName="Dissection Date (yyyy-mm-dd)"
-                  required="false"
-                  datePattern="yyyy-MM-dd"
-                  markedForTask="false"/>
-            <validValueList displayName="Mounter" required="false"
-                            markedForTask="false">
-                <validValue value="Adrianne Enos"/>
-                <validValue value="Amanda Cavallaro"/>
-                <validValue value="Christine Murphy"/>
-                <validValue value="Donald Hall"/>
-                <validValue value="Jennifer Jeter"/>
-                <validValue value="Joanna Hausenfluck"/>
-                <validValue value="Nirmala Iyer"/>
-                <validValue value="Phuson Hulamm"/>
-                <validValue value="Teri Ngo"/>
-            </validValueList>
-            <date displayName="Mount Date (yyyy-mm-dd)"
-                  required="false"
-                  datePattern="yyyy-MM-dd"
-                  markedForTask="false"/>
-        </dataFields>
-
-    </project>
-
     <project name="Rubin Lab: FIX ChaCRM verified TransformantIDs (GMR_*)">
+
+        <inputFileFilter patternString=".+\.(lsm|lsm\.bz2)" />
 
         <outputDirectory basePath="[\\tier2.hhmi.org|/tier2/flylight]/flylight/screen/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
@@ -522,20 +416,6 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
                 <property name="db.config.key" value="sage" />
                 <property name="rank" value="urn:lsid:janelia.org:rubin_chacrm:rank_GMR_${Plate}${Well}_${Vector ID}_${Landing Site}" />
-            </rowListener>
-
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
-                <property name="db.config.key" value="nighthawk"/>
-                <property name="family" value="$STATIC:rubin-chacrm"/>
-                <property name="imaging_project" value="$STATIC:broad_expression_patterns"/>
-                <property name="uas_reporter" value="UAS Reporter"/>
-                <property name="line" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"/>
-                <property name="created_by" value="Imager"/>
-                <property name="renamed_by" value="Renamer"/>
-                <property name="class" value="Class"/>
-                <property name="ihc_batch" value="Batch Name"/>
-                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
-                <property name="tissue_orientation" value="Tissue Orientation"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
@@ -641,25 +521,29 @@
             </date>
             <separator value="_"/>
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
-            <separator value=".lsm"/>
+            <fileExtension/>
 
             <!--
-             These values are collected for the nighthawk database but are not
+             These values are collected for the SAGE database but are not
              included as components of the file name (markedForTask="false").
              -->
             <text displayName="Batch Name" markedForTask="false"
                   pattern="\d{8}_[a-z]{3,6}">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
-                    <property name="family" value="rubin-chacrm"/>
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_chacrm"/>
                     <property name="image_property" value="ihc_batch"/>
+                    <property name="baseNameSearch" value="true"/>
+                    <property name="baseNamePattern" value="^(.*)\.lsm.*"/>
                 </pluginDefault>
             </text>
 
             <validValueList displayName="Tissue Mounting Protocol" required="true"
                             markedForTask="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
-                    <property name="family" value="rubin-chacrm"/>
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_chacrm"/>
                     <property name="image_property" value="mounting_protocol"/>
+                    <property name="baseNameSearch" value="true"/>
+                    <property name="baseNamePattern" value="^(.*)\.lsm.*"/>
                 </pluginDefault>
                 <validValue value="Glycerol-Based Mounting"/>
                 <validValue value="DPX Mounting"/>
@@ -668,16 +552,20 @@
                         markedForTask="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
                         displayNamePrefixedForValues="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
-                    <property name="family" value="rubin-chacrm"/>
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_chacrm"/>
                     <property name="image_property" value="tissue_orientation"/>
+                    <property name="baseNameSearch" value="true"/>
+                    <property name="baseNamePattern" value="^(.*)\.lsm.*"/>
                 </pluginDefault>
             </cvTermList>
             <validValueList displayName="UAS Reporter" required="true"
                             markedForTask="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
-                    <property name="family" value="rubin-chacrm"/>
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_chacrm"/>
                     <property name="image_property" value="uas_reporter"/>
+                    <property name="baseNameSearch" value="true"/>
+                    <property name="baseNamePattern" value="^(.*)\.lsm.*"/>
                 </pluginDefault>
                 <validValue value="UAS_IVS-mCD8_3_0007" default="true"/>
                 <validValue value="UAS_mCD8_2_0006"/>
@@ -690,9 +578,11 @@
                         autoComplete="true"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
 
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
-                    <property name="family" value="rubin-chacrm"/>
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_chacrm"/>
                     <property name="image_property" value="created_by"/>
+                    <property name="baseNameSearch" value="true"/>
+                    <property name="baseNamePattern" value="^(.*)\.lsm.*"/>
                 </pluginDefault>
 
             </cvTermList>
@@ -702,27 +592,33 @@
                         autoComplete="true"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
 
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
-                    <property name="family" value="rubin-chacrm"/>
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_chacrm"/>
                     <property name="image_property" value="renamed_by"/>
+                    <property name="baseNameSearch" value="true"/>
+                    <property name="baseNamePattern" value="^(.*)\.lsm.*"/>
                 </pluginDefault>
 
             </cvTermList>
 
             <validValueList displayName="Class" required="false"
                             markedForTask="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
-                    <property name="family" value="rubin-chacrm"/>
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_chacrm"/>
                     <property name="image_property" value="class"/>
+                    <property name="baseNameSearch" value="true"/>
+                    <property name="baseNamePattern" value="^(.*)\.lsm.*"/>
                 </pluginDefault>
                 <validValue displayName="Screening" value="Screening" default="true"/>
                 <validValue displayName="Rework" value="Rework"/>
             </validValueList>
 
-            <text displayName="hostname" markedForTask="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataDefaultValue">
-                    <property name="family" value="rubin-chacrm"/>
+            <text displayName="hostname" markedForTask="false" required="false" visible="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="rubin_chacrm"/>
                     <property name="image_property" value="hostname"/>
+                    <property name="baseNameSearch" value="true"/>
+                    <property name="baseNamePattern" value="^(.*)\.lsm.*"/>
                 </pluginDefault>
             </text>
 
