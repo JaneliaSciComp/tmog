@@ -19,11 +19,11 @@
                     <mappedValue from="LC" to="left_central"/>
                     <mappedValue from="LD" to="left_dorsal"/>
                     <mappedValue from="LV" to="left_ventral"/>
-                    <mappedValue from="MES" to="mesothorasic"/>
-                    <mappedValue from="META" to="metathorasic"/>
+                    <mappedValue from="MES" to="mesothoracic"/>
+                    <mappedValue from="META" to="metathoracic"/>
                     <mappedValue from="NEC-Ant" to="neck_anterior"/>
                     <mappedValue from="NEC-Pos" to="neck_posterior"/>
-                    <mappedValue from="PRO" to="prothorasic"/>
+                    <mappedValue from="PRO" to="prothoracic"/>
                     <mappedValue from="R" to="right_optic_lobe"/>
                     <mappedValue from="R1" to="right_optic_lobe_part_1"/>
                     <mappedValue from="R2" to="right_optic_lobe_part_2"/>

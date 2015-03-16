@@ -100,7 +100,7 @@
                 <property name="effector" value="Reporter"/>
                 <property name="slide_code" value="Slide Code"/>
                 <property name="tile" value="Tile$MAP:vnc_verify=ventral_nerve_cord" />
-                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|brain_with_lamina=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_lamina=Brain|left_optic_lobe=Brain|left_optic_lobe_part_1=Brain|left_optic_lobe_part_2=Brain|left_optic_lobe_with_lamina=Brain|left_ventral=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_lamina=Brain|right_optic_lobe=Brain|right_optic_lobe_part_1=Brain|right_optic_lobe_part_2=Brain|right_optic_lobe_with_lamina=Brain|right_ventral=Brain|ventral=Brain|ventral_nerve_cord=VNC|vnc_verify=VNC-Verify"/>
+                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|brain_with_lamina=Brain|central=Brain|dorsal_medial=Brain|left_central=Brain|left_dorsal=Brain|left_lamina=Brain|left_optic_lobe=Brain|left_optic_lobe_part_1=Brain|left_optic_lobe_part_2=Brain|left_optic_lobe_with_lamina=Brain|left_ventral=Brain|mesothoracic=VNC|metathoracic=VNC|neck_anterior=Neck|neck_posterior=Neck|prothoracic=VNC|right_central=Brain|right_dorsal=Brain|right_lamina=Brain|right_optic_lobe=Brain|right_optic_lobe_part_1=Brain|right_optic_lobe_part_2=Brain|right_optic_lobe_with_lamina=Brain|right_ventral=Brain|ventral=Brain|ventral_nerve_cord=VNC|vnc_verify=VNC-Verify"/>
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
                 <property name="full_age" value="Full Age"/>
@@ -226,11 +226,11 @@
                     <mappedValue from="LC" to="left_central"/>
                     <mappedValue from="LD" to="left_dorsal"/>
                     <mappedValue from="LV" to="left_ventral"/>
-                    <mappedValue from="MES" to="mesothorasic"/>
-                    <mappedValue from="META" to="metathorasic"/>
+                    <mappedValue from="MES" to="mesothoracic"/>
+                    <mappedValue from="META" to="metathoracic"/>
                     <mappedValue from="NEC-Ant" to="neck_anterior"/>
                     <mappedValue from="NEC-Pos" to="neck_posterior"/>
-                    <mappedValue from="PRO" to="prothorasic"/>
+                    <mappedValue from="PRO" to="prothoracic"/>
                     <mappedValue from="R" to="right_optic_lobe"/>
                     <mappedValue from="R1" to="right_optic_lobe_part_1"/>
                     <mappedValue from="R2" to="right_optic_lobe_part_2"/>
@@ -387,7 +387,7 @@
                 <property name="effector" value="Reporter"/>
                 <property name="slide_code" value="Slide Code"/>
                 <property name="tile" value="Tile$MAP:vnc_verify=ventral_nerve_cord" />
-                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|brain_with_lamina=Brain|central=Brain|left_central=Brain|left_dorsal=Brain|left_lamina=Brain|left_optic_lobe=Brain|left_optic_lobe_part_1=Brain|left_optic_lobe_part_2=Brain|left_optic_lobe_with_lamina=Brain|left_ventral=Brain|mesothorasic=VNC|metathorasic=VNC|prothorasic=VNC|right_central=Brain|right_dorsal=Brain|right_lamina=Brain|right_optic_lobe=Brain|right_optic_lobe_part_1=Brain|right_optic_lobe_part_2=Brain|right_optic_lobe_with_lamina=Brain|right_ventral=Brain|ventral=Brain|ventral_nerve_cord=VNC|vnc_verify=VNC-Verify"/>
+                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|brain_with_lamina=Brain|central=Brain|dorsal_medial=Brain|left_central=Brain|left_dorsal=Brain|left_lamina=Brain|left_optic_lobe=Brain|left_optic_lobe_part_1=Brain|left_optic_lobe_part_2=Brain|left_optic_lobe_with_lamina=Brain|left_ventral=Brain|mesothoracic=VNC|metathoracic=VNC|neck_anterior=Neck|neck_posterior=Neck|prothoracic=VNC|right_central=Brain|right_dorsal=Brain|right_lamina=Brain|right_optic_lobe=Brain|right_optic_lobe_part_1=Brain|right_optic_lobe_part_2=Brain|right_optic_lobe_with_lamina=Brain|right_ventral=Brain|ventral=Brain|ventral_nerve_cord=VNC|vnc_verify=VNC-Verify"/>
                 <property name="gender" value="Gender"/>
                 <property name="age" value="Age"/>
                 <property name="full_age" value="Full Age"/>
@@ -547,11 +547,11 @@
                     <mappedValue from="LC" to="left_central"/>
                     <mappedValue from="LD" to="left_dorsal"/>
                     <mappedValue from="LV" to="left_ventral"/>
-                    <mappedValue from="MES" to="mesothorasic"/>
-                    <mappedValue from="META" to="metathorasic"/>
+                    <mappedValue from="MES" to="mesothoracic"/>
+                    <mappedValue from="META" to="metathoracic"/>
                     <mappedValue from="NEC-Ant" to="neck_anterior"/>
                     <mappedValue from="NEC-Pos" to="neck_posterior"/>
-                    <mappedValue from="PRO" to="prothorasic"/>
+                    <mappedValue from="PRO" to="prothoracic"/>
                     <mappedValue from="R" to="right_optic_lobe"/>
                     <mappedValue from="R1" to="right_optic_lobe_part_1"/>
                     <mappedValue from="R2" to="right_optic_lobe_part_2"/>
