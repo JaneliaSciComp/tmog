@@ -71,6 +71,7 @@
             <load-field-fragment-with-default name="@{name}" family="flylight_flip"/>
             <load-field-fragment-with-default name="@{name}" family="flylight_polarity"/>
             <load-field-fragment-with-default name="@{name}" family="projtechres"/>
+            <load-field-fragment-with-default name="@{name}" family="flyfuncconn"/>
         </sequential>
     </macrodef>
 
@@ -132,9 +133,11 @@
         <load-filtered-fragment name="image-sequence-flip"          path="plugin/image-sequence.xml" key="family" value="flylight_flip"/>
         <load-filtered-fragment name="image-sequence-polarity"      path="plugin/image-sequence.xml" key="family" value="flylight_polarity"/>
         <load-filtered-fragment name="image-sequence-ptr"           path="plugin/image-sequence.xml" key="family" value="projtechres"/>
+        <load-filtered-fragment name="image-sequence-ffc"           path="plugin/image-sequence.xml" key="family" value="flyfuncconn"/>
         <load-filtered-fragment name="sage-loader-flip"             path="plugin/sage-loader.xml" key="grammar-file" value="flylightflip.gra"/>
         <load-filtered-fragment name="sage-loader-polarity"         path="plugin/sage-loader.xml" key="grammar-file" value="flylightpolarity.gra"/>
         <load-filtered-fragment name="sage-loader-ptr"              path="plugin/sage-loader.xml" key="grammar-file" value="projtechres.gra" relative-path-depth="3"/>
+        <load-filtered-fragment name="sage-loader-ffc"              path="plugin/sage-loader.xml" key="grammar-file" value="flyfuncconn.gra" relative-path-depth="3"/>
         <load-fragment          name="update-mapped-serial-data"    path="plugin/update-mapped-serial-data.xml"/>
         <load-fragment          name="update-project-cross-data"    path="plugin/update-project-cross-data.xml"/>
         <load-fragment          name="update-slide-consensus-data"  path="plugin/update-slide-consensus-data.xml"/>
