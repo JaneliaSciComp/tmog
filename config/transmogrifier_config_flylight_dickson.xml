@@ -70,7 +70,7 @@
 
             <number displayName="Cross Serial Number"
                     minimumValue="1"
-                    maximumValue="99999"
+                    maximumValue="199999"
                     markedForTask="false">
             </number>
 
