@@ -27,14 +27,6 @@
         </outputDirectory>
 
         <plugins>
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/${Line Lab}/${Line}.janelia-sage"/>
-                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
-                <property name="errorMessage" value="There is no '${Line Lab}' lab line named '${Line}' in the SAGE database."/>
-                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
-                <property name="validResources"
-                          value="http://sage.int.janelia.org/sage-ws/lines/none/Not_Applicable.janelia-sage"/>
-            </rowValidator>
         </plugins>
 
         <dataFields>
@@ -58,25 +50,14 @@
 
             <separator value="@"/>
 
-            <cvTermList displayName="Line Lab" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/lab"
-                        displayNamePrefixedForValues="false"
-                        markedForTask="false">
-                <sourceFileMappedDefault pattern="^(GMR_).*">
-                    <mappedValue from="GMR_" to="rubin"/>
-                </sourceFileMappedDefault>
-                <sourceFileMappedDefault pattern="^(FCF_).*">
-                    <mappedValue from="FCF_" to="fly"/>
-                </sourceFileMappedDefault>
-                <sourceFileMappedDefault pattern="^(BJD_).*">
-                    <mappedValue from="BJD_" to="dickson"/>
-                </sourceFileMappedDefault>
-            </cvTermList>
-
-            <text displayName="Line" required="true"
-                  pattern="[0-9A-Za-z\-\_]++">
+            <webServiceList displayName="Line" required="true"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=none&amp;lab=simpson&amp;lab=rubin&amp;lab=zlatic"
+                            autoComplete="true">
                 <sourceFileDefault pattern="(.+?)@.+?@.+?@.+?@.+?@.*"/>
-            </text>
+            </webServiceList>
 
             <separator value="@"/>
 
@@ -205,14 +186,6 @@
         </outputDirectory>
 
         <plugins>
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/${Line Lab}/${Line}.janelia-sage"/>
-                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
-                <property name="errorMessage" value="There is no '${Line Lab}' lab line named '${Line}' in the SAGE database."/>
-                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
-                <property name="validResources"
-                          value="http://sage.int.janelia.org/sage-ws/lines/none/Not_Applicable.janelia-sage"/>
-            </rowValidator>
         </plugins>
 
         <dataFields>
@@ -236,25 +209,14 @@
 
             <separator value="@"/>
 
-            <cvTermList displayName="Line Lab" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/lab"
-                        displayNamePrefixedForValues="false"
-                        markedForTask="false">
-                <sourceFileMappedDefault pattern=".+?@(GMR_).+?@.+?@.+?@.+?@.+?@.*">
-                    <mappedValue from="GMR_" to="rubin"/>
-                </sourceFileMappedDefault>
-                <sourceFileMappedDefault pattern=".+?@(FCF_).+?@.+?@.+?@.+?@.+?@.*">
-                    <mappedValue from="FCF_" to="fly"/>
-                </sourceFileMappedDefault>
-                <sourceFileMappedDefault pattern="^(BJD_).*">
-                    <mappedValue from="BJD_" to="dickson"/>
-                </sourceFileMappedDefault>
-            </cvTermList>
-
-            <text displayName="Line" required="true"
-                  pattern="[0-9A-Za-z\-\_]++">
+            <webServiceList displayName="Line" required="true"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=none&amp;lab=simpson&amp;lab=rubin&amp;lab=zlatic"
+                            autoComplete="true">
                 <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.+?@.*"/>
-            </text>
+            </webServiceList>
 
             <separator value="@"/>
 
@@ -687,14 +649,6 @@
         </outputDirectory>
 
         <plugins>
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.HttpResourceValidator">
-                <property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/${Line Lab}/${Line}.janelia-sage"/>
-                <property name="testUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/GMR_10A01_AE_01.janelia-sage"/>
-                <property name="errorMessage" value="There is no '${Line Lab}' lab line named '${Line}' in the SAGE database."/>
-                <property name="clearCacheDuration" value="6000000"/><!-- 100 minutes -->
-                <property name="validResources"
-                          value="http://sage.int.janelia.org/sage-ws/lines/none/Not_Applicable.janelia-sage"/>
-            </rowValidator>
         </plugins>
 
         <dataFields>
@@ -718,25 +672,14 @@
 
             <separator value="@"/>
 
-            <cvTermList displayName="Line Lab" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/lab"
-                        displayNamePrefixedForValues="false"
-                        markedForTask="false">
-                <sourceFileMappedDefault pattern=".+?@(GMR_).+?@.+?@.+?@.+?@.+?@.*">
-                    <mappedValue from="GMR_" to="rubin"/>
-                </sourceFileMappedDefault>
-                <sourceFileMappedDefault pattern=".+?@(FCF_).+?@.+?@.+?@.+?@.+?@.*">
-                    <mappedValue from="FCF_" to="fly"/>
-                </sourceFileMappedDefault>
-                <sourceFileMappedDefault pattern="^(BJD_).*">
-                    <mappedValue from="BJD_" to="dickson"/>
-                </sourceFileMappedDefault>
-            </cvTermList>
-
-            <text displayName="Line" required="true"
-                  pattern="[0-9A-Za-z\-\_]++">
+            <webServiceList displayName="Line" required="true"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=none&amp;lab=simpson&amp;lab=rubin&amp;lab=zlatic"
+                            autoComplete="true">
                 <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.+?@.*"/>
-            </text>
+            </webServiceList>
 
             <separator value="@"/>
 
