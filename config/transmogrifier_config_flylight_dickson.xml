@@ -59,9 +59,19 @@
                 <property name="cross_barcode" value="Cross Serial Number"/>
                 <property name="slide_code" value="sample_BJD${sample_number}"/>
                 <property name="tile" value="Area$MAP:b=brain|v=ventral_nerve_cord"/>
-                <property name="area" value="Area$MAP:b=Brain|v=Ventral Nerve Cord"/>
+                <property name="area" value="Area$MAP:b=Brain|v=VNC"/>
                 <property name="data_set" value="UAS Reporter$MAP:UAS_IVS-mCD8_3_0007=dicksonlab_vt_gal4_screen|LexAop_IVS-myr_3_0008=dicksonlab_vt_lexa_screen"/>
                 <property name="channel_spec" value="$STATIC:sr"/>
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.SageLoaderPlugin">
+                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/sageLoader"/>
+                <property name="owner" value="system"/>
+                <property name="config" value="/groups/scicomp/informatics/data/dickson_light_imagery-config.xml"/>
+                <property name="grammar" value="/usr/local/pipeline/grammar/dickson.gra"/>
+                <property name="lab" value="rubin"/>
+                <property name="debug" value="true"/>
+                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
             </rowListener>
 
         </plugins>

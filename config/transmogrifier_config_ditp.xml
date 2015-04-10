@@ -32,7 +32,7 @@
                 <property name="gender" value="Gender$MAP:m=Male|f=Female|x=unknown"/>
                 <property name="age" value="Age"/>
                 <property name="tile" value="Tile$MAP:vnc_verify=ventral_nerve_cord" />
-                <property name="area" value="Area$MAP:b=Brain|v=Ventral Nerve Cord"/>
+                <property name="area" value="Area$MAP:b=Brain|v=VNC"/>
                 <property name="created_by" value="Imager"/>
                 <property name="annotated_by" value="$STATIC:Shigehiro Namiki"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
@@ -263,7 +263,7 @@
                 <property name="gender" value="Gender$MAP:m=Male|f=Female|x=unknown"/>
                 <property name="age" value="Age"/>
                 <property name="tile" value="Tile$MAP:vnc_verify=ventral_nerve_cord" />
-                <property name="area" value="Area$MAP:b=Brain|v=Ventral Nerve Cord"/>
+                <property name="area" value="Area$MAP:b=Brain|v=VNC"/>
                 <property name="created_by" value="Imager"/>
                 <property name="annotated_by" value="$STATIC:Shigehiro Namiki"/>
                 <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
@@ -280,7 +280,7 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.SageLoaderPlugin">
                 <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/sageLoader"/>
                 <property name="owner" value="system"/>
-                <property name="config" value="/groups/scicomp/informatics/data/rubin_light_imagery-config.xml"/>
+                <property name="config" value="/groups/scicomp/informatics/data/dickson_light_imagery-config.xml"/>
                 <property name="grammar" value="/usr/local/pipeline/grammar/ditp.gra"/>
                 <property name="lab" value="flylight"/>
                 <property name="debug" value="true"/>
