@@ -221,6 +221,7 @@
             <separator value="@"/>
 
             <cvTermList displayName="Effector" required="true"
+                        autoComplete="true"
                         displayNamePrefixedForValues="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage">
                 <sourceFileMappedDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.+?@.*">
@@ -271,6 +272,7 @@
             <separator value="@"/>
 
             <cvTermList displayName="Protocol" required="true"
+                        autoComplete="true"
                         displayNamePrefixedForValues="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/larval_olympiad_protocol.janelia-sage">
                 <sourceFileDefault pattern=".+?@.+?@.+?@.+?@(.+?@.+?)@.*"/>
