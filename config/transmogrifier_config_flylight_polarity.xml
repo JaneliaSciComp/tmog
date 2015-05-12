@@ -184,6 +184,7 @@
                 <validValue value="Mark Eddison"/>
                 <validValue value="Michael Texada"/>
                 <validValue value="Michael-John Dolan"/>
+                <validValue value="Ming Wu"/>
                 <validValue value="Rajyashree Sen"/>
                 <validValue value="Shigehiro Namiki"/>
                 <validValue value="Stephen Huston"/>
@@ -197,7 +198,7 @@
                             sharedForAllSessionFiles="true"
                             globalValueFilter="/^((?!leet).)*$/"
                             filterField="Annotator"
-                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
+                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
@@ -505,6 +506,7 @@
                 <validValue value="Mark Eddison"/>
                 <validValue value="Michael Texada"/>
                 <validValue value="Michael-John Dolan"/>
+                <validValue value="Ming Wu"/>
                 <validValue value="Rajyashree Sen"/>
                 <validValue value="Shigehiro Namiki"/>
                 <validValue value="Stephen Huston"/>
@@ -518,7 +520,7 @@
                             sharedForAllSessionFiles="false"
                             globalValueFilter="/^((?!leet).)*$/"
                             filterField="Annotator"
-                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
+                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
@@ -1013,7 +1015,7 @@
                             sharedForAllSessionFiles="false"
                             globalValueFilter="/^((?!leet).)*$/"
                             filterField="Annotator"
-                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
+                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
