@@ -30,8 +30,8 @@
                 <property name="relativePathDepth" value="3"/>
             </rowListener>
 
-@config-fragment-sage-loader-ptr@
 @config-fragment-copy-zeiss-log-files@
+@config-fragment-sage-loader-ptr@
         </plugins>
 
         <dataFields>

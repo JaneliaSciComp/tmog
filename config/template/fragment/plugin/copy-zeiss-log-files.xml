@@ -1,7 +1,9 @@
             <!--
-                  The companion file listener (for log files) should be the
-                  last defined plug-in to ensure that log files are only
-                  copied if the source lsm processing succeeds.
+                  The companion file listener (for log files) should be defined after
+                  all other "transactional" lsm plug-ins to ensure that log files are
+                  only copied if the source lsm processing succeeds.
+                  However, it should be defined before the SageLoaderPlugin because the
+                  indexing process uses data from both the lsm and its companion log file.
             -->
             <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
                 <property name="sourceSuffix" value=".lsm"/>

@@ -21,8 +21,8 @@
                 <property name="screen_state" value="Screen State"/>
             </rowListener>
 
-@config-fragment-sage-loader-polarity@
 @config-fragment-copy-zeiss-log-files@
+@config-fragment-sage-loader-polarity@
         </plugins>
 
         <dataFields>
@@ -122,8 +122,8 @@
                 <property name="channel_spec" value="$STATIC:sr"/>
             </rowListener>
 
-@config-fragment-sage-loader-polarity@
 @config-fragment-copy-zeiss-log-files@
+@config-fragment-sage-loader-polarity@
         </plugins>
 
         <dataFields>

@@ -129,6 +129,19 @@
                 <property name="relativePathDepth" value="3"/>
             </rowListener>
 
+            <!--
+                  The companion file listener (for log files) should be defined after
+                  all other "transactional" lsm plug-ins to ensure that log files are
+                  only copied if the source lsm processing succeeds.
+                  However, it should be defined before the SageLoaderPlugin because the
+                  indexing process uses data from both the lsm and its companion log file.
+            -->
+            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
+                <property name="sourceSuffix" value=".lsm"/>
+                <property name="companionSuffix" value="_log.csv"/>
+                <property name="deleteAfterCopy" value="true"/>
+            </rowListener>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.SageLoaderPlugin">
                 <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/sageLoader"/>
                 <property name="owner" value="system"/>
@@ -138,17 +151,6 @@
                 <property name="debug" value="true"/>
                 <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
                 <property name="relativePathDepth" value="3"/>
-            </rowListener>
-
-            <!--
-                  The companion file listener (for log files) should be the
-                  last defined plug-in to ensure that log files are only
-                  copied if the source lsm processing succeeds.
-            -->
-            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
-                <property name="sourceSuffix" value=".lsm"/>
-                <property name="companionSuffix" value="_log.csv"/>
-                <property name="deleteAfterCopy" value="true"/>
             </rowListener>
 
         </plugins>
