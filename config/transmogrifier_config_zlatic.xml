@@ -109,6 +109,7 @@
                 <validValue value="t6"/>
                 <validValue value="t14"/>
                 <validValue value="t15"/>
+                <validValue value="t150"/>
             </validValueList>
 
             <separator value="@"/>
@@ -267,6 +268,7 @@
                 <validValue value="t6"/>
                 <validValue value="t14"/>
                 <validValue value="t15"/>
+                <validValue value="t150"/>
             </validValueList>
 
             <separator value="@"/>
@@ -374,6 +376,7 @@
                 <validValue value="t6"/>
                 <validValue value="t14"/>
                 <validValue value="t15"/>
+                <validValue value="t150"/>
             </validValueList>
 
             <separator value="@"/>
@@ -482,6 +485,7 @@
                 <validValue value="t6"/>
                 <validValue value="t14"/>
                 <validValue value="t15"/>
+                <validValue value="t150"/>
             </validValueList>
 
             <separator value="@"/>
@@ -731,6 +735,7 @@
                 <validValue value="t6"/>
                 <validValue value="t14"/>
                 <validValue value="t15"/>
+                <validValue value="t150"/>
             </validValueList>
 
             <separator value="@"/>
@@ -833,6 +838,7 @@
                 <validValue value="t6"/>
                 <validValue value="t14"/>
                 <validValue value="t15"/>
+                <validValue value="t150"/>
             </validValueList>
 
             <separator value="@"/>
