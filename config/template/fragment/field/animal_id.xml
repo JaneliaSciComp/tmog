@@ -1,0 +1,5 @@
+            <number displayName="Fly ID"
+                    minimumValue="1"
+                    maximumValue="200"
+                    markedForTask="false">@sage-data-default@
+            </number>

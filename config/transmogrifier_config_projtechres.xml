@@ -95,6 +95,7 @@
                 <property name="imaging_project" value="Imaging Project"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
+                <property name="animal_id" value="Fly ID"/>
                 <property name="created_by" value="Imager"/>
                 <property name="renamed_by" value="Renamer"/>
                 <property name="effector" value="Reporter"/>
@@ -264,6 +265,12 @@
                     markedForTask="false">
             </number>
 
+            <number displayName="Fly ID"
+                    minimumValue="1"
+                    maximumValue="200"
+                    markedForTask="false">
+            </number>
+
             <webServiceList displayName="GAL4 Line" required="true"
                             markedForTask="false"
                             valueCreationPath="*/line"
@@ -386,6 +393,7 @@
                 <property name="imaging_project" value="Imaging Project"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
+                <property name="animal_id" value="Fly ID"/>
                 <property name="created_by" value="Imager"/>
                 <property name="renamed_by" value="Renamer"/>
                 <property name="effector" value="Reporter"/>
@@ -484,6 +492,17 @@
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="projtechres"/>
                     <property name="image_property" value="cross_barcode"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </number>
+
+            <number displayName="Fly ID"
+                    minimumValue="1"
+                    maximumValue="200"
+                    markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="projtechres"/>
+                    <property name="image_property" value="animal_id"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
             </number>

@@ -43,6 +43,7 @@
 @config-fragment-tile@
 @config-fragment-slide_code@
 @config-fragment-cross_barcode@
+@config-fragment-animal_id@
 @config-fragment-line@
 @config-fragment-effector@
 @config-fragment-gender@
@@ -90,6 +91,7 @@
 @config-fragment-annotated_by-with-projtechres-default@
 @config-fragment-data_set-with-projtechres-default@
 @config-fragment-cross_barcode-with-projtechres-default@
+@config-fragment-animal_id-with-projtechres-default@
 @config-fragment-line-with-projtechres-default@
 @config-fragment-effector-with-projtechres-default@
 @config-fragment-slide_code-with-projtechres-default@

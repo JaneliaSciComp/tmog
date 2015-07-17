@@ -89,6 +89,7 @@
 
         <!-- field fragments -->
         <load-field-fragment    name="age" />
+        <load-field-fragment    name="animal_id" />
         <load-field-fragment    name="annotated_by" />
         <load-fragment          name="channel-data"             path="field/channel-data.xml"/>
         <load-field-fragment    name="comment" />

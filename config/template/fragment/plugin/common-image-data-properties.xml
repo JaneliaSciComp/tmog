@@ -3,6 +3,7 @@
                 <property name="imaging_project" value="Imaging Project"/>
                 <property name="line" value="GAL4 Line"/>
                 <property name="cross_barcode" value="Cross Serial Number"/>
+                <property name="animal_id" value="Fly ID"/>
                 <property name="created_by" value="Imager"/>
                 <property name="renamed_by" value="Renamer"/>
                 <property name="effector" value="Reporter"/>
