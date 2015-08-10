@@ -68,10 +68,11 @@
         <attribute name="name"/>
         <sequential>
             <load-filtered-fragment name="@{name}" path="field/@{name}.xml" key="sage-data-default" value=""/>
+            <load-field-fragment-with-default name="@{name}" family="flyfuncconn"/>
             <load-field-fragment-with-default name="@{name}" family="flylight_flip"/>
             <load-field-fragment-with-default name="@{name}" family="flylight_polarity"/>
             <load-field-fragment-with-default name="@{name}" family="projtechres"/>
-            <load-field-fragment-with-default name="@{name}" family="flyfuncconn"/>
+            <load-field-fragment-with-default name="@{name}" family="split_screen_review"/>
         </sequential>
     </macrodef>
 
@@ -84,6 +85,7 @@
         <load-fragment          name="lsm-sort"         path="lsm-sort.xml"/>
         <load-filtered-fragment name="output-flip"      path="output.xml" key="family_directory" value="flip"/>
         <load-filtered-fragment name="output-polarity"  path="output.xml" key="family_directory" value="polarity"/>
+        <load-filtered-fragment name="output-ssr"       path="output.xml" key="family_directory" value="split_screen_review"/>
         <load-fragment          name="tmog-begin"       path="tmog-begin.xml"/>
         <load-fragment          name="tmog-end"         path="tmog-end.xml"/>
 
@@ -131,14 +133,16 @@
         <load-fragment          name="copy-zeiss-log-files"         path="plugin/copy-zeiss-log-files.xml"/>
         <load-fragment          name="correct-objective"            path="plugin/correct-objective.xml"/>
         <load-fragment          name="image-path-exists"            path="plugin/image-path-exists.xml"/>
+        <load-filtered-fragment name="image-sequence-ffc"           path="plugin/image-sequence.xml" key="family" value="flyfuncconn"/>
         <load-filtered-fragment name="image-sequence-flip"          path="plugin/image-sequence.xml" key="family" value="flylight_flip"/>
         <load-filtered-fragment name="image-sequence-polarity"      path="plugin/image-sequence.xml" key="family" value="flylight_polarity"/>
         <load-filtered-fragment name="image-sequence-ptr"           path="plugin/image-sequence.xml" key="family" value="projtechres"/>
-        <load-filtered-fragment name="image-sequence-ffc"           path="plugin/image-sequence.xml" key="family" value="flyfuncconn"/>
+        <load-filtered-fragment name="image-sequence-ssr"           path="plugin/image-sequence.xml" key="family" value="split_screen_review"/>
+        <load-filtered-fragment name="sage-loader-ffc"              path="plugin/sage-loader.xml" key="grammar-file" value="flyfuncconn.gra" relative-path-depth="3"/>
         <load-filtered-fragment name="sage-loader-flip"             path="plugin/sage-loader.xml" key="grammar-file" value="flylightflip.gra"/>
         <load-filtered-fragment name="sage-loader-polarity"         path="plugin/sage-loader.xml" key="grammar-file" value="flylightpolarity.gra"/>
         <load-filtered-fragment name="sage-loader-ptr"              path="plugin/sage-loader.xml" key="grammar-file" value="projtechres.gra" relative-path-depth="3"/>
-        <load-filtered-fragment name="sage-loader-ffc"              path="plugin/sage-loader.xml" key="grammar-file" value="flyfuncconn.gra" relative-path-depth="3"/>
+        <load-filtered-fragment name="sage-loader-ssr"              path="plugin/sage-loader.xml" key="grammar-file" value="split_screen_review.gra"/>
         <load-fragment          name="update-mapped-serial-data"    path="plugin/update-mapped-serial-data.xml"/>
         <load-fragment          name="update-project-cross-data"    path="plugin/update-project-cross-data.xml"/>
         <load-fragment          name="update-slide-consensus-data"  path="plugin/update-slide-consensus-data.xml"/>
@@ -221,6 +225,8 @@
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/rubin/data1/rubinlab"/>
         <build-jnlp-launch-file name="simpson_scope"
                                 config-resource-dir="[//dm11.hhmi.org/simpsonmicro|/groups/simpson/MicroscopeData]"/>
+        <build-jnlp-launch-file name="split_screen_review"
+                                config-resource-dir="[//tier2.hhmi.org|/tier2]/flylight"/>
         <build-jnlp-launch-file name="zlatic"
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/zlatic/zlaticlab"/>
         <build-jnlp-launch-file name="zlatic_odor"
