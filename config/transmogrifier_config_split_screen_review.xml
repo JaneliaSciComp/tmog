@@ -19,6 +19,14 @@
 
         <plugins>
 
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="GAL4 Line" value="initialSplit" />
+                <property name="Reporter" value="reporter" />
+            </rowUpdater>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
                 <property name="db.config.key" value="sage" />
                 <property name="image_number" value="urn:lsid:janelia.org:split_screen_review:image_number" />
@@ -193,6 +201,12 @@
                 <sourceFileDefault pattern="^([A-Z]\d+)_ZB.*_(\d{8}_\d+_).*"
                                    patternGroupSpec="2,1"/>
             </text>
+
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="199999"
+                    markedForTask="false">
+            </number>
 
             <webServiceList displayName="GAL4 Line" required="true"
                             markedForTask="false"
@@ -386,6 +400,17 @@
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
             </webServiceList>
+
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="199999"
+                    markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="split_screen_review"/>
+                    <property name="image_property" value="cross_barcode"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </number>
 
             <webServiceList displayName="GAL4 Line" required="true"
                             markedForTask="false"

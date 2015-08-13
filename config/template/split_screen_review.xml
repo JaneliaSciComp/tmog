@@ -7,6 +7,14 @@
 @config-fragment-output-ssr@
         <plugins>
 
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="GAL4 Line" value="initialSplit" />
+                <property name="Reporter" value="reporter" />
+            </rowUpdater>
+
 @config-fragment-image-sequence-ssr@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@
@@ -27,6 +35,7 @@
 @config-fragment-data_set@
 @config-fragment-tile@
 @config-fragment-slide_code@
+@config-fragment-cross_barcode@
 @config-fragment-line@
 @config-fragment-effector@
 @config-fragment-gender@
@@ -69,6 +78,7 @@
 
 @config-fragment-annotated_by-with-split_screen_review-default@
 @config-fragment-data_set-with-split_screen_review-default@
+@config-fragment-cross_barcode-with-split_screen_review-default@
 @config-fragment-line-with-split_screen_review-default@
 @config-fragment-effector-with-split_screen_review-default@
 @config-fragment-slide_code-with-split_screen_review-default@
