@@ -127,4 +127,55 @@
 
     </project>
 
+<project name="Terra Incognita - MCFO - scope to confocalStacks" default="true">
+
+@config-fragment-lsm-input@
+@config-fragment-lsm-sort@
+@config-fragment-output-flip@
+<plugins>
+
+    @config-fragment-update-mapped-serial-data@
+    @config-fragment-update-project-cross-data@
+    @config-fragment-update-slide-consensus-data@
+    @config-fragment-update-zeiss-lsm-data@
+    @config-fragment-validate-common-fields@
+    @config-fragment-image-sequence-flip@
+    <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+        @config-fragment-common-image-data-properties@
+        <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
+        <property name="family" value="$STATIC:flylight_flip"/>
+        <property name="screen_state" value="Screen State"/>
+    </rowListener>
+
+    @config-fragment-copy-zeiss-log-files@
+    @config-fragment-sage-loader-flip@
+</plugins>
+
+<dataFields>
+
+    <separator value="FLFL_"/>
+    @config-fragment-file-name-suffix@
+    @config-fragment-annotated_by@
+    @config-fragment-data_set@
+    @config-fragment-tile@
+    @config-fragment-slide_code@
+    @config-fragment-cross_barcode@
+    @config-fragment-line@
+    @config-fragment-effector@
+    @config-fragment-gender@
+    @config-fragment-age@
+    @config-fragment-full_age@
+    @config-fragment-heat_shock_minutes@
+    @config-fragment-created_by@
+    @config-fragment-renamed_by@
+    @config-fragment-mounting_protocol@
+    @config-fragment-tissue_orientation@
+    @config-fragment-screen_state@
+    @config-fragment-comment@
+    @config-fragment-imaging_project-mcfo@
+    @config-fragment-channel-data@
+</dataFields>
+
+</project>
+
 @config-fragment-tmog-end@
