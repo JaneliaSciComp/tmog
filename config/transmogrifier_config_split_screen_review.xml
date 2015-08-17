@@ -281,7 +281,7 @@
             <text displayName="Channel Specification" required="false"
                   markedForTask="false"
                   pattern="s*rs*">
-                <staticDefault value="rs"/>
+                <staticDefault value="sr"/>
             </text>
 
         </dataFields>
