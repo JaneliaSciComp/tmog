@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="4.0.13" frameSizePercentage="95"/>
+    <global minimumVersion="4.1.1" frameSizePercentage="95"/>
 
     <project name="FFC - scope to confocalStacks" default="true">
 
@@ -123,6 +123,7 @@
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="microscope_filename"/>
                 <property name="comment" value="Comment"/>
+                <property name="class" value="Class"/>
                 <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
                 <property name="family" value="$STATIC:flyfuncconn"/>
                 <property name="screen_state" value="Screen State"/>
@@ -188,6 +189,7 @@
                 <validValue value="Kei Ito"/>
                 <validValue value="Lisha Shao"/>
                 <validValue value="Mark Eddison"/>
+                <validValue value="Masayoshi Ito"/>
                 <validValue value="Michael Texada"/>
                 <validValue value="Michael-John Dolan"/>
                 <validValue value="Ming Wu"/>
@@ -204,7 +206,7 @@
                             sharedForAllSessionFiles="true"
                             globalValueFilter="/^((?!leet).)*$/"
                             filterField="Annotator"
-                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jens Goldammer=goldammerj|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Kei Ito=itok,terraincognita|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
+                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jens Goldammer=goldammerj|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Kei Ito=itok,terraincognita|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Masayoshi Ito=itom10|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
@@ -417,6 +419,7 @@
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="microscope_filename"/>
                 <property name="comment" value="Comment"/>
+                <property name="class" value="Class"/>
                 <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
                 <property name="exclude.host.name" value="true"/>
                 <property name="family" value="$STATIC:flyfuncconn"/>
@@ -454,6 +457,7 @@
                 <validValue value="Kei Ito"/>
                 <validValue value="Lisha Shao"/>
                 <validValue value="Mark Eddison"/>
+                <validValue value="Masayoshi Ito"/>
                 <validValue value="Michael Texada"/>
                 <validValue value="Michael-John Dolan"/>
                 <validValue value="Ming Wu"/>
@@ -470,7 +474,7 @@
                             sharedForAllSessionFiles="false"
                             globalValueFilter="/^((?!leet).)*$/"
                             filterField="Annotator"
-                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jens Goldammer=goldammerj|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Kei Ito=itok,terraincognita|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
+                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jens Goldammer=goldammerj|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Kei Ito=itok,terraincognita|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Masayoshi Ito=itom10|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"

@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="4.0.13" frameSizePercentage="95"/>
+    <global minimumVersion="4.1.1" frameSizePercentage="95"/>
 
     <project name="Split Screen Review - scope to confocalStacks" default="true">
 
@@ -66,10 +66,34 @@
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="microscope_filename"/>
                 <property name="comment" value="Comment"/>
+                <property name="class" value="Class"/>
                 <property name="display" value="true"/>
                 <property name="family" value="$STATIC:split_screen_review"/>
                 <property name="imaging_project" value="$STATIC:screen"/>
             </rowListener>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DerivedFieldUpdaterPlugin">
+                <property name="forFieldName" value="Class"/>
+                <property name="setValueTo" value="ti"/>
+                <property name="whenFieldName" value="Data Set"/>
+                <property name="matchesPattern" value=".*_ti_.*" />
+            </rowUpdater>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Class"/>
+                <property name="matchesPattern" value="^ti$"/>
+                <property name="whenReferenceField" value="Data Set"/>
+                <property name="matchesReferencePattern" value=".*_ti_.*"/>
+                <property name="errorMessage" value="Class must be 'TI' when Data Set is ${Data Set}."/>
+            </rowValidator>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Class"/>
+                <property name="matchesPattern" value="^$"/>
+                <property name="whenReferenceField" value="Data Set"/>
+                <property name="matchesReferencePattern" value="^((?!_ti_).)*$"/>
+                <property name="errorMessage" value="Class should not be set for Data Set ${Data Set}."/>
+            </rowValidator>
 
             <!--
                   The companion file listener (for log files) should be defined after
@@ -129,6 +153,7 @@
                 <validValue value="Kei Ito"/>
                 <validValue value="Lisha Shao"/>
                 <validValue value="Mark Eddison"/>
+                <validValue value="Masayoshi Ito"/>
                 <validValue value="Michael Texada"/>
                 <validValue value="Michael-John Dolan"/>
                 <validValue value="Ming Wu"/>
@@ -145,7 +170,7 @@
                             sharedForAllSessionFiles="true"
                             globalValueFilter="/^((?!leet).)*$/"
                             filterField="Annotator"
-                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jens Goldammer=goldammerj|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Kei Ito=itok,terraincognita|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
+                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jens Goldammer=goldammerj|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Kei Ito=itok,terraincognita|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Masayoshi Ito=itom10|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
@@ -277,6 +302,12 @@
                   markedForTask="false">
             </text>
 
+            <validValueList displayName="Class" required="false"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue displayName="TI" value="ti"/>
+            </validValueList>
+
 
             <text displayName="Channel Specification" required="false"
                   markedForTask="false"
@@ -338,6 +369,7 @@
                 <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
                 <property name="microscope_filename"/>
                 <property name="comment" value="Comment"/>
+                <property name="class" value="Class"/>
                 <property name="exclude.host.name" value="true"/>
                 <property name="family" value="$STATIC:split_screen_review"/>
                 <property name="keep.existing.data" value="true"/>
@@ -372,6 +404,7 @@
                 <validValue value="Kei Ito"/>
                 <validValue value="Lisha Shao"/>
                 <validValue value="Mark Eddison"/>
+                <validValue value="Masayoshi Ito"/>
                 <validValue value="Michael Texada"/>
                 <validValue value="Michael-John Dolan"/>
                 <validValue value="Ming Wu"/>
@@ -388,7 +421,7 @@
                             sharedForAllSessionFiles="false"
                             globalValueFilter="/^((?!leet).)*$/"
                             filterField="Annotator"
-                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jens Goldammer=goldammerj|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Kei Ito=itok,terraincognita|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
+                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jens Goldammer=goldammerj|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Kei Ito=itok,terraincognita|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Masayoshi Ito=itom10|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
@@ -576,6 +609,17 @@
                 </pluginDefault>
                 <validValue displayName="Antennal Lobes" value="face_up"/>
                 <validValue displayName="Back of Brain" value="face_down"/>
+            </validValueList>
+
+            <validValueList displayName="Class" required="false"
+                            sharedForAllSessionFiles="false"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="split_screen_review"/>
+                    <property name="image_property" value="class"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <validValue displayName="TI" value="ti"/>
             </validValueList>
 
             <text displayName="SAGE Name" required="true"

@@ -1,0 +1,6 @@
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DerivedFieldUpdaterPlugin">
+                <property name="forFieldName" value="Class"/>
+                <property name="setValueTo" value="ti"/>
+                <property name="whenFieldName" value="Data Set"/>
+                <property name="matchesPattern" value=".*_ti_.*" />
+            </rowUpdater>

@@ -23,6 +23,8 @@
                 <property name="imaging_project" value="$STATIC:screen"/>
             </rowListener>
 
+@config-fragment-update-ti-class@
+@config-fragment-validate-ti-class@
 @config-fragment-copy-zeiss-log-files@
 @config-fragment-sage-loader-ssr@
         </plugins>
@@ -46,6 +48,7 @@
 @config-fragment-mounting_protocol@
 @config-fragment-tissue_orientation@
 @config-fragment-comment@
+@config-fragment-class@
 
             <text displayName="Channel Specification" required="false"
                   markedForTask="false"
@@ -90,6 +93,7 @@
 @config-fragment-created_by-with-split_screen_review-default@
 @config-fragment-mounting_protocol-with-split_screen_review-default@
 @config-fragment-tissue_orientation-with-split_screen_review-default@
+@config-fragment-class-with-split_screen_review-default@
 @config-fragment-name-with-split_screen_review-default@
         </dataFields>
 

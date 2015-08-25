@@ -1,0 +1,5 @@
+            <validValueList displayName="Class" required="false"
+                            sharedForAllSessionFiles="@is-shareable@"
+                            markedForTask="false">@sage-data-default@
+                <validValue displayName="TI" value="ti"/>
+            </validValueList>

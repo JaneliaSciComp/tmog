@@ -94,6 +94,7 @@
         <load-field-fragment    name="animal_id" />
         <load-field-fragment    name="annotated_by" />
         <load-fragment          name="channel-data"             path="field/channel-data.xml"/>
+        <load-field-fragment    name="class" />
         <load-field-fragment    name="comment" />
         <load-field-fragment    name="created_by" />
         <load-field-fragment    name="cross_barcode" />
@@ -146,8 +147,10 @@
         <load-fragment          name="update-mapped-serial-data"    path="plugin/update-mapped-serial-data.xml"/>
         <load-fragment          name="update-project-cross-data"    path="plugin/update-project-cross-data.xml"/>
         <load-fragment          name="update-slide-consensus-data"  path="plugin/update-slide-consensus-data.xml"/>
+        <load-fragment          name="update-ti-class"              path="plugin/update-ti-class.xml"/>
         <load-fragment          name="update-zeiss-lsm-data"        path="plugin/update-zeiss-lsm-data.xml"/>
         <load-fragment          name="validate-common-fields"       path="plugin/validate-common-fields.xml"/>
+        <load-fragment          name="validate-ti-class"            path="plugin/validate-ti-class.xml"/>
 
         <property name="consolidated-config-fragment-properties-file" value="dist/config-fragment.properties" />
 
