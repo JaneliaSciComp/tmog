@@ -1,8 +1,3 @@
-            <text displayName="Channel Specification" required="false"
-                    markedForTask="false"
-                    pattern="s*rs*">
-            </text>
-
             <text displayName="Channel 1 Name" required="false"
                   markedForTask="false"
                   editable="false">

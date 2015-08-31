@@ -50,6 +50,7 @@
 @config-fragment-imaging_project-polarity@
 @config-fragment-class@
 @config-fragment-objective@
+@config-fragment-channel-spec@
 @config-fragment-channel-data@
         </dataFields>
 

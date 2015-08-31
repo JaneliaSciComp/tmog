@@ -26,6 +26,45 @@
                 <property name="GAL4 Line" value="initialSplit" />
                 <property name="Reporter" value="reporter" />
             </rowUpdater>
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DerivedFieldUpdaterPlugin">
+                <property name="forFieldName" value="Class"/>
+                <property name="setValueTo" value="ti"/>
+                <property name="whenFieldName" value="Data Set"/>
+                <property name="matchesPattern" value=".*_ti_.*" />
+            </rowUpdater>
+
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
+                <property name="plugin-scale" value="0" />
+                <property name="Objective" value="Recording #1 Objective" />
+                <!-- SKIP ... <property name="Channel Specification" value="Recording #1 Number of Channels$MAP:1=r|2=rs|3=rss" /> -->
+                <property name="Channel 1 Name" value="IlluminationChannel #1 Name" />
+                <property name="Channel 1 Power" value="IlluminationChannel #1 Power B/C 1" />
+                <property name="Channel 1 Gain" value="DetectionChannel #1 Detector Gain" />
+                <property name="Channel 2 Name" value="IlluminationChannel #2 Name" />
+                <property name="Channel 2 Power" value="IlluminationChannel #2 Power B/C 1" />
+                <property name="Channel 2 Gain" value="DetectionChannel #2 Detector Gain" />
+                <property name="Channel 3 Name" value="IlluminationChannel #3 Name" />
+                <property name="Channel 3 Power" value="IlluminationChannel #3 Power B/C 1" />
+                <property name="Channel 3 Gain" value="DetectionChannel #3 Detector Gain" />
+            </rowUpdater>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Class"/>
+                <property name="matchesPattern" value="^ti$"/>
+                <property name="whenReferenceField" value="Data Set"/>
+                <property name="matchesReferencePattern" value=".*_ti_.*"/>
+                <property name="errorMessage" value="Class must be 'TI' when Data Set is ${Data Set}."/>
+            </rowValidator>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Class"/>
+                <property name="matchesPattern" value="^$"/>
+                <property name="whenReferenceField" value="Data Set"/>
+                <property name="matchesReferencePattern" value="^((?!_ti_).)*$"/>
+                <property name="errorMessage" value="Class should not be set for Data Set ${Data Set}."/>
+            </rowValidator>
+
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
                 <property name="db.config.key" value="sage" />
@@ -71,29 +110,6 @@
                 <property name="family" value="$STATIC:split_screen_review"/>
                 <property name="imaging_project" value="$STATIC:screen"/>
             </rowListener>
-
-            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DerivedFieldUpdaterPlugin">
-                <property name="forFieldName" value="Class"/>
-                <property name="setValueTo" value="ti"/>
-                <property name="whenFieldName" value="Data Set"/>
-                <property name="matchesPattern" value=".*_ti_.*" />
-            </rowUpdater>
-
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
-                <property name="validateField" value="Class"/>
-                <property name="matchesPattern" value="^ti$"/>
-                <property name="whenReferenceField" value="Data Set"/>
-                <property name="matchesReferencePattern" value=".*_ti_.*"/>
-                <property name="errorMessage" value="Class must be 'TI' when Data Set is ${Data Set}."/>
-            </rowValidator>
-
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
-                <property name="validateField" value="Class"/>
-                <property name="matchesPattern" value="^$"/>
-                <property name="whenReferenceField" value="Data Set"/>
-                <property name="matchesReferencePattern" value="^((?!_ti_).)*$"/>
-                <property name="errorMessage" value="Class should not be set for Data Set ${Data Set}."/>
-            </rowValidator>
 
             <!--
                   The companion file listener (for log files) should be defined after
@@ -314,6 +330,51 @@
                   pattern="s*rs*">
                 <staticDefault value="sr"/>
             </text>
+
+            <text displayName="Channel 1 Name" required="false"
+                  markedForTask="false"
+                  editable="false">
+            </text>
+
+            <decimal displayName="Channel 1 Power" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <decimal displayName="Channel 1 Gain" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <text displayName="Channel 2 Name" required="false"
+                  markedForTask="false"
+                  editable="false">
+            </text>
+
+            <decimal displayName="Channel 2 Power" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <decimal displayName="Channel 2 Gain" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <text displayName="Channel 3 Name" required="false"
+                  markedForTask="false"
+                  editable="false">
+            </text>
+
+            <decimal displayName="Channel 3 Power" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <decimal displayName="Channel 3 Gain" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
 
         </dataFields>
 
