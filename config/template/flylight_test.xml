@@ -1,0 +1,33 @@
+@config-fragment-tmog-begin@
+@config-fragment-global@
+    <project name="Fly Light - Test - scope to confocalStacks" default="true">
+
+@config-fragment-lsm-input@
+@config-fragment-lsm-sort@
+@config-fragment-output-test@
+        <plugins>
+
+@config-fragment-image-sequence-test@
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+@config-fragment-common-image-data-properties@
+                <property name="family" value="$STATIC:flylight_test"/>
+            </rowListener>
+
+@config-fragment-sage-loader-test@
+        </plugins>
+
+        <dataFields>
+
+            <separator value="TEST_"/>
+@config-fragment-file-name-suffix@
+@config-fragment-data_set@
+@config-fragment-tile@
+@config-fragment-line@
+@config-fragment-mounting_protocol@
+@config-fragment-tissue_orientation@
+@config-fragment-channel-spec@
+        </dataFields>
+
+    </project>
+
+@config-fragment-tmog-end@
