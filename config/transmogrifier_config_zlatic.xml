@@ -150,6 +150,7 @@
                     <mappedValue from="s$020$0s1x227s0s@n@n@n"
                                  to="s_020_0s1x227s0s#n#n#n@100" />
                 </sourceFileMappedDefault>
+                <sourceFileDefault pattern=".+?@.+?@.+?@([^@\.]+@[^@\.]+)@.*"/>
             </cvTermList>
 
             <separator value="@"/>
