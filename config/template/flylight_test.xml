@@ -22,6 +22,7 @@
 @config-fragment-file-name-suffix@
 @config-fragment-data_set@
 @config-fragment-tile@
+@config-fragment-slide_code@
 @config-fragment-line@
 @config-fragment-mounting_protocol@
 @config-fragment-tissue_orientation@
