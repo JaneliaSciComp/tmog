@@ -142,6 +142,14 @@
                 <validValue displayName="VNC-Verify" value="vnc_verify"/>
             </cvTermList>
 
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  markedForTask="false">
+                <sourceFileDefault pattern="^([A-Z]\d+)_ZB.*_(\d{8}_\d+_).*"
+                                   patternGroupSpec="2,1"/>
+            </text>
+
             <webServiceList displayName="GAL4 Line" required="true"
                             markedForTask="false"
                             valueCreationPath="*/line"
