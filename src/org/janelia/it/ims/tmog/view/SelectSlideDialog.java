@@ -289,6 +289,9 @@ public class SelectSlideDialog
         cancelBackgroundWorker(slideLoader);
         cancelBackgroundWorker(slideImageDataLoader);
 
+        slideComboBox.setSelectedIndex(-1);
+        objectiveComboBox.setSelectedIndex(-1);
+
         dispose();
     }
 
