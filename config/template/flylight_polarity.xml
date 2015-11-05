@@ -56,15 +56,12 @@
 
     </project>
 
-    <project name="Fly Light Polarity - fix data" taskName="collector">
+    <project name="Fly Light Polarity - fix data" taskName="sage-collector" imageFamilyName="flylight_polarity">
 
-@config-fragment-lsm-bz2-input@
-@config-fragment-lsm-sort@
         <plugins>
 
 @config-fragment-update-mapped-serial-data@
 @config-fragment-update-project-cross-data@
-@config-fragment-image-path-exists@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@
                 <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
@@ -79,6 +76,7 @@
 
         <dataFields>
 
+@config-fragment-microscope_filename-with-flylight_polarity-default@
 @config-fragment-annotated_by-with-flylight_polarity-default@
 @config-fragment-data_set-with-flylight_polarity-default@
 @config-fragment-cross_barcode-with-flylight_polarity-default@
@@ -96,7 +94,6 @@
 @config-fragment-tissue_orientation-with-flylight_polarity-default@
 @config-fragment-imaging_project-with-flylight_polarity-default@
 @config-fragment-class-with-flylight_polarity-default@
-@config-fragment-name-with-flylight_polarity-default@
         </dataFields>
 
     </project>

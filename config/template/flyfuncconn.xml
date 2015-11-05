@@ -64,14 +64,11 @@
 
     </project>
 
-    <project name="FFC - fix data" taskName="collector">
+    <project name="FFC - fix data" taskName="sage-collector" imageFamilyName="flyfuncconn">
 
-@config-fragment-lsm-bz2-input@
-@config-fragment-lsm-sort@
         <plugins>
 
 @config-fragment-update-project-cross-data@
-@config-fragment-image-path-exists@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@
                 <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
@@ -87,6 +84,7 @@
 
         <dataFields>
 
+@config-fragment-microscope_filename-with-flyfuncconn-default@
 @config-fragment-annotated_by-with-flyfuncconn-default@
 @config-fragment-data_set-with-flyfuncconn-default@
 @config-fragment-cross_barcode-with-flyfuncconn-default@
@@ -102,7 +100,6 @@
 @config-fragment-created_by-with-flyfuncconn-default@
 @config-fragment-mounting_protocol-with-flyfuncconn-default@
 @config-fragment-tissue_orientation-with-flyfuncconn-default@
-@config-fragment-name-with-flyfuncconn-default@
         </dataFields>
 
     </project>

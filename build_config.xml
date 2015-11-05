@@ -119,6 +119,7 @@
                                 value="&#10;                &lt;staticDefault value=&quot;polarity&quot;/&gt;"/>
 
         <load-field-fragment    name="line" />
+        <load-field-fragment    name="microscope_filename" />
         <load-field-fragment    name="microscope_type" />
         <load-filtered-fragment name="microscope_type-710-default"      path="field/microscope_type.xml"
                                 key="sage-data-default"

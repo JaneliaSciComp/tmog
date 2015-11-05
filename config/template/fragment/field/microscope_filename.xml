@@ -1,0 +1,5 @@
+            <text displayName="Scope File Name" required="false"
+                  editable="false"
+                  copyable="false"
+                  markedForTask="false">@sage-data-default@
+            </text>

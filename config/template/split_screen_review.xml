@@ -77,13 +77,10 @@
 
     </project>
 
-    <project name="Split Screen Review - fix data" taskName="collector">
+    <project name="Split Screen Review - fix data" taskName="sage-collector" imageFamilyName="split_screen_review">
 
-@config-fragment-lsm-bz2-input@
-@config-fragment-lsm-sort@
         <plugins>
 
-@config-fragment-image-path-exists@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@
                 <property name="exclude.host.name" value="true"/>
@@ -96,6 +93,7 @@
 
         <dataFields>
 
+@config-fragment-microscope_filename-with-split_screen_review-default@
 @config-fragment-annotated_by-with-split_screen_review-default@
 @config-fragment-data_set-with-split_screen_review-default@
 @config-fragment-cross_barcode-with-split_screen_review-default@
@@ -111,7 +109,6 @@
 @config-fragment-mounting_protocol-with-split_screen_review-default@
 @config-fragment-tissue_orientation-with-split_screen_review-default@
 @config-fragment-class-with-split_screen_review-default@
-@config-fragment-name-with-split_screen_review-default@
         </dataFields>
 
     </project>

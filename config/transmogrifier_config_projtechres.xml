@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="4.1.1" frameSizePercentage="95"/>
+    <global minimumVersion="4.1.2" frameSizePercentage="95"/>
 
     <project name="PTR - scope to confocalStacks" default="true">
 
@@ -367,14 +367,7 @@
 
     </project>
 
-    <project name="PTR - fix data" taskName="collector">
-
-        <inputFileFilter patternString=".+\.(lsm|lsm\.bz2)" />
-
-        <!-- standard scope file name pattern is: A1_ZB1_T1_BRN_20130604_33_20X_R1_L01 -->
-        <inputFileSorter sortAlgorithm="Number"
-                         patternString="([A-Z])(\d++)_.*_(L\d++)[\._].*"
-                         patternGroupIndexes="1,2,3"/>
+    <project name="PTR - fix data" taskName="sage-collector" imageFamilyName="projtechres">
 
         <plugins>
 
@@ -385,11 +378,6 @@
                 <property name="GAL4 Line" value="parent1StockName" />
                 <property name="Reporter" value="reporter" />
             </rowUpdater>
-
-            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.ImagePathExistsValidator">
-                <property name="db.config.key" value="sage"/>
-                <property name="relativePathField" value="SAGE Name"/>
-            </rowValidator>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
@@ -438,6 +426,17 @@
         </plugins>
 
         <dataFields>
+
+            <text displayName="Scope File Name" required="false"
+                  editable="false"
+                  copyable="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="projtechres"/>
+                    <property name="image_property" value="microscope_filename"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
 
             <validValueList displayName="Annotator" required="false"
                             autoComplete="true"
@@ -694,16 +693,6 @@
                 <validValue displayName="Antennal Lobes" value="face_up"/>
                 <validValue displayName="Back of Brain" value="face_down"/>
             </validValueList>
-
-            <text displayName="SAGE Name" required="true"
-                  editable="false"
-                  copyable="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="projtechres"/>
-                    <property name="image_property" value="name"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-            </text>
 
         </dataFields>
 
