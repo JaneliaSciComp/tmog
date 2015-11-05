@@ -48,7 +48,6 @@
             <properties>
               <horizontalAlignment value="0"/>
               <text value="Set"/>
-              <toolTipText value="Change Root Directory"/>
             </properties>
           </component>
           <component id="ce25d" class="javax.swing.JLabel">

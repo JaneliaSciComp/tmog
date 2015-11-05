@@ -100,6 +100,7 @@ public class CollectorView implements SessionView, InputSelectionView {
                                                   rootDirectoryBtn,
                                                   cancelTargetWorkerButton,
                                                   this);
+            rootDirectoryBtn.setToolTipText("Select Slide Images");
         } else {
             this.inputSelectionHandler =
                     new FileInputSelectionHandler(projectConfig,
@@ -111,6 +112,7 @@ public class CollectorView implements SessionView, InputSelectionView {
                                                   JFileChooser.DIRECTORIES_ONLY,
                                                   "Select Root Directory",
                                                   this);
+            rootDirectoryBtn.setToolTipText("Change Root Directory");
         }
 
         projectNamePane.setBorder(null);
