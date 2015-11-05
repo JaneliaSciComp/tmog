@@ -760,7 +760,7 @@ public class SageImageDao
             "                                  slide_code.value like ? " + // 3. slide
             "join image_property objective on objective.image_id=i.id and objective.type_id=33 and " +
             "                                 objective.value like ? " +   // 4. objective
-            "order by slide_code.value, i.name";
+            "order by slide_code.value, i.capture_date";
 
     private static final String SQL_INSERT_IMAGE_PROPERTY =
             "INSERT INTO image_property (image_id, type_id, value) VALUES (" +
