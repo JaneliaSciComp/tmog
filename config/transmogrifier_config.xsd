@@ -488,10 +488,12 @@
                     <xs:enumeration value="simple-move"/>
                     <xs:enumeration value="move-and-log-digest"/>
                     <xs:enumeration value="collector"/>
+                    <xs:enumeration value="sage-collector"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
         <xs:attribute name="copyPreviousButtonVisible" type="xs:boolean"/>
+        <xs:attribute name="imageFamilyName" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="globalType">

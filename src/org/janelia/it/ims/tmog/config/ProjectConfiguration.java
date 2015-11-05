@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Howard Hughes Medical Institute.
+ * Copyright (c) 2015 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -20,6 +20,7 @@ import org.janelia.it.ims.tmog.plugin.RowListener;
 import org.janelia.it.ims.tmog.plugin.RowUpdater;
 import org.janelia.it.ims.tmog.plugin.RowValidator;
 import org.janelia.it.ims.tmog.plugin.SessionListener;
+import org.janelia.it.ims.tmog.view.CollectorView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ public class ProjectConfiguration {
     private boolean isDefault;
     private String taskName;
     private boolean copyPreviousButtonVisible;
+    private String imageFamilyName;
     private DataFields dataFields;
     private String targetDisplayName;
     private InputFileFilter inputFileFilter;
@@ -48,6 +50,7 @@ public class ProjectConfiguration {
     public ProjectConfiguration() {
         this.isDefault = false;
         this.copyPreviousButtonVisible = true;
+        this.imageFamilyName = null;
         this.dataFields = new DataFields();
         this.inputFileFilter = new InputFileFilter();
         this.inputFileSorter = new InputFileSorter();
@@ -71,13 +74,16 @@ public class ProjectConfiguration {
         return copyPreviousButtonVisible;
     }
 
+    public String getImageFamilyName() {
+        return imageFamilyName;
+    }
+
     /**
      * @return a cloned (deep) copy of this project's field configurations.
      */
     public List<DataField> getFieldConfigurations() {
         List<DataField> fields = dataFields.getFields();
-        List<DataField> fieldConfigurations =
-                new ArrayList<DataField>(fields.size());
+        List<DataField> fieldConfigurations = new ArrayList<>(fields.size());
         for (DataField field : fields) {
             fieldConfigurations.add(field.getNewInstance(true));
         }
@@ -114,7 +120,7 @@ public class ProjectConfiguration {
         if (pluginFactory != null) {
             updaters = pluginFactory.getRowUpdaters();
         } else {
-            updaters = new ArrayList<RowUpdater>();
+            updaters = new ArrayList<>();
         }
         return updaters;
     }
@@ -124,7 +130,7 @@ public class ProjectConfiguration {
         if (pluginFactory != null) {
             listeners = pluginFactory.getRowListeners();
         } else {
-            listeners = new ArrayList<RowListener>();
+            listeners = new ArrayList<>();
         }
         return listeners;
     }
@@ -134,7 +140,7 @@ public class ProjectConfiguration {
         if (pluginFactory != null) {
             validators = pluginFactory.getRowValidators();
         } else {
-            validators = new ArrayList<RowValidator>();
+            validators = new ArrayList<>();
         }
         return validators;
     }
@@ -144,7 +150,7 @@ public class ProjectConfiguration {
         if (pluginFactory != null) {
             listeners = pluginFactory.getSessionListeners();
         } else {
-            listeners = new ArrayList<SessionListener>();
+            listeners = new ArrayList<>();
         }
         return listeners;
     }
@@ -167,6 +173,11 @@ public class ProjectConfiguration {
     @SuppressWarnings({"UnusedDeclaration"})
     public void setCopyPreviousButtonVisible(boolean copyPreviousButtonVisible) {
         this.copyPreviousButtonVisible = copyPreviousButtonVisible;
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    public void setImageFamilyName(String imageFamilyName) {
+        this.imageFamilyName = imageFamilyName;
     }
 
     public void setDataFields(DataFields dataFields) {
@@ -228,6 +239,12 @@ public class ProjectConfiguration {
         outputDirectoryConfiguration.verify(name, dataFields.getFields());
 
         fileTransferConfiguration.verify();
+
+        if (CollectorView.SAGE_TASK_NAME.equals(taskName) && (imageFamilyName == null)) {
+            throw new ConfigurationException(
+                    "The " + name + " project is a " + CollectorView.SAGE_TASK_NAME +
+                    " task but does not have imageFamilyName defined.");
+        }
 
         if (pluginFactory != null) {
             pluginFactory.constructInstances(name);

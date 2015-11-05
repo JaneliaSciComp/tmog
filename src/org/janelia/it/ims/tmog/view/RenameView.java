@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Howard Hughes Medical Institute.
+ * Copyright (c) 2015 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -97,15 +97,15 @@ public class RenameView implements SessionView, InputSelectionView {
         this.projectName.setText(projectNameText);
 
         this.inputSelectionHandler =
-                new InputSelectionHandler(projectConfig,
-                                          lsmDirectory,
-                                          lsmDirectoryLabel,
-                                          lsmDirectoryField,
-                                          lsmDirectoryBtn,
-                                          cancelInputSearch,
-                                          JFileChooser.FILES_AND_DIRECTORIES,
-                                          "Select Source",
-                                          this);
+                new FileInputSelectionHandler(projectConfig,
+                                              lsmDirectory,
+                                              lsmDirectoryLabel,
+                                              lsmDirectoryField,
+                                              lsmDirectoryBtn,
+                                              cancelInputSearch,
+                                              JFileChooser.FILES_AND_DIRECTORIES,
+                                              "Select Source",
+                                              this);
 
         projectNamePane.setBorder(null);
         lsmDirectoryPane.setBorder(null);
@@ -318,9 +318,9 @@ public class RenameView implements SessionView, InputSelectionView {
                             JFileChooser.DIRECTORIES_ONLY);
 
                     setFileChooserCurrentDirectory(fileChooser);
-                    InputSelectionHandler.setPreferredSize(fileChooser,
-                                                           appPanel,
-                                                           0.9);
+                    FileInputSelectionHandler.setPreferredSize(fileChooser,
+                                                               appPanel,
+                                                               0.9);
 
                     fileChooser.showDialog(appPanel, "Select Output Directory");
                     File selectedDirectory = fileChooser.getSelectedFile();

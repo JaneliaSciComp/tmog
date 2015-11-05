@@ -20,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -308,12 +309,38 @@ public class SageImageDaoTest
             connection = dbManager.getConnection();
             validateLineId("unique line", "GMR_10A01_AE_01", null, 1, connection);
             validateLineId("unique line", "GMR_10A01_AE_01", "rubin", 1, connection);
-            validateLineId("NON-unique line", "FCF_pBDPGAL4U_1500437", "olympiad", 13276, connection);
+            validateLineId("NON-unique line", "FCF_pBDPGAL4U_1500437", "rubin", 13276, connection);
             validateLineId("NON-unique line", "FCF_pBDPGAL4U_1500437", "fly", 13554, connection);
             validateLineId("NON-unique line", "FCF_pBDPGAL4U_1500437", "flylight", 13554, connection);
         } finally {
             DbManager.closeResources(null, null, connection, LOG);
         }
+    }
+
+//    public void testGetDataSetsForFamily() throws Exception {
+//        final String family = "flylight_polarity";
+//        final Set<String> dataSets = dao.getDataSetsForFamily(family);
+//        assertTrue("no data sets found for family '" + family + "'",
+//                   dataSets.size() > 0);
+//    }
+
+    public void testGetSlideToObjectiveMapForDataSet() throws Exception {
+        final String family = "flylight_polarity";
+        final String dataSetName = "nerna_polarity_case_3";
+        final Map<String, List<String>> slideToObjectivesMap =
+                dao.getSlideToObjectiveMapForDataSet(family, dataSetName);
+        assertTrue("no slide data found for family '" + family + "' and data set '" + dataSetName + "'",
+                   slideToObjectivesMap.size() > 0);
+    }
+
+    public void testGetImageNamesForSlide() throws Exception {
+        final String family = "flylight_polarity";
+        final String dataSetName = "nerna_polarity_case_3";
+        final String slide = "20130604_33";
+        final String objective = "20x";
+        final List<String> imageNames = dao.getImageNamesForSlide(family, dataSetName, slide, objective);
+        assertTrue("no image names found for family '" + family + "' slide '" + slide + "'",
+                   imageNames.size() > 0);
     }
 
     private void validateLineId(String context,

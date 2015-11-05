@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Howard Hughes Medical Institute.
+ * Copyright (c) 2015 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -56,7 +56,7 @@ public class TabbedView implements ActionListener {
 
         this.colorScheme = colorScheme;
 
-        this.sessionList = new HashMap<String, SessionView>();
+        this.sessionList = new HashMap<>();
         this.sessionCount = 0;
 
         createMenuBar(tmogConfig);
@@ -117,7 +117,7 @@ public class TabbedView implements ActionListener {
     }
 
     private boolean hasActiveSessions(Collection<String> sessionNames) {
-        ArrayList<String> sessionsInProgress = new ArrayList<String>();
+        ArrayList<String> sessionsInProgress = new ArrayList<>();
         for (String sessionName : sessionNames) {
             SessionView session = sessionList.get(sessionName);
             if (session.isTaskInProgress()) {
@@ -167,7 +167,7 @@ public class TabbedView implements ActionListener {
 
         List<ProjectConfiguration> projectList = tmogConfig.getProjectList();
         addSessionItems =
-                new HashMap<JMenuItem, ProjectConfiguration>(projectList.size());
+                new HashMap<>(projectList.size());
         JMenuItem addSessionItem;
         for (ProjectConfiguration project : projectList) {
             //noinspection NullableProblems
@@ -381,7 +381,7 @@ public class TabbedView implements ActionListener {
         int currentTab = tabbedPane.getSelectedIndex();
         if (currentTab > -1) {
             String sessionTitle = tabbedPane.getTitleAt(currentTab);
-            ArrayList<String> sessionNames = new ArrayList<String>();
+            ArrayList<String> sessionNames = new ArrayList<>();
             sessionNames.add(sessionTitle);
             if (! hasActiveSessions(sessionNames)) {
                 sessionList.remove(sessionTitle);
@@ -407,6 +407,11 @@ public class TabbedView implements ActionListener {
             newView = new CollectorView(sessionName,
                                         projectConfig,
                                         defaultDirectory,
+                                        tabbedPane);
+        } else if (CollectorView.SAGE_TASK_NAME.equals(projectConfig.getTaskName())) {
+            newView = new CollectorView(sessionName,
+                                        projectConfig,
+                                        null,
                                         tabbedPane);
         } else {
             // default to rename task and view

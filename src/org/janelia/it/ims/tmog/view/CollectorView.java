@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Howard Hughes Medical Institute.
+ * Copyright (c) 2015 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -48,6 +48,9 @@ public class CollectorView implements SessionView, InputSelectionView {
     /** The name of the task supported by this view. */
     public static final String TASK_NAME = "collector";
 
+    /** The name of the task supported by this view. */
+    public static final String SAGE_TASK_NAME = "sage-collector";
+
     private JPanel appPanel;
     @SuppressWarnings({"UnusedDeclaration"})
     private JPanel directoryPanel;
@@ -88,16 +91,27 @@ public class CollectorView implements SessionView, InputSelectionView {
         this.defaultDirectory = defaultDirectory;
         this.projectNameText = projectConfig.getName();
         this.projectName.setText(projectNameText);
-        this.inputSelectionHandler =
-                new InputSelectionHandler(projectConfig,
-                                          defaultDirectory,
-                                          rootDirectoryLabel,
-                                          rootDirectoryField,
-                                          rootDirectoryBtn,
-                                          cancelTargetWorkerButton,
-                                          JFileChooser.DIRECTORIES_ONLY,
-                                          "Select Root Directory",
-                                          this);
+
+        if (defaultDirectory == null) {
+            this.inputSelectionHandler =
+                    new SageInputSelectionHandler(projectConfig.getImageFamilyName(),
+                                                  rootDirectoryLabel,
+                                                  rootDirectoryField,
+                                                  rootDirectoryBtn,
+                                                  cancelTargetWorkerButton,
+                                                  this);
+        } else {
+            this.inputSelectionHandler =
+                    new FileInputSelectionHandler(projectConfig,
+                                                  defaultDirectory,
+                                                  rootDirectoryLabel,
+                                                  rootDirectoryField,
+                                                  rootDirectoryBtn,
+                                                  cancelTargetWorkerButton,
+                                                  JFileChooser.DIRECTORIES_ONLY,
+                                                  "Select Root Directory",
+                                                  this);
+        }
 
         projectNamePane.setBorder(null);
         rootDirectoryPane.setBorder(null);

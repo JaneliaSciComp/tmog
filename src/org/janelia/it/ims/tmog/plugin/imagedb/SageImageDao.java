@@ -122,7 +122,7 @@ public class SageImageDao
 
             Integer imageId = null;
             Integer lastImageId = null;
-            List<String> existingPropertyNames = new ArrayList<String>();
+            List<String> existingPropertyNames = new ArrayList<>();
             String propertyName;
             while (resultSet.next()) {
                 imageId = resultSet.getInt(1);
@@ -223,6 +223,127 @@ public class SageImageDao
         LOG.info("getImageId: returning " + imageId + " for " + relativePath);
 
         return imageId;
+    }
+
+//    /**
+//     * @return distinct data sets associated with images in the specified family.
+//     */
+//    public Set<String> getDataSetsForFamily(String family)
+//            throws ExternalSystemException {
+//
+//        Set<String> dataSets = new LinkedHashSet<>();
+//
+//        Connection connection = null;
+//        PreparedStatement select = null;
+//        ResultSet resultSet = null;
+//
+//        try {
+//            final DbManager dbManager = getDbManager();
+//            connection = dbManager.getConnection();
+//            select = connection.prepareStatement(SQL_SELECT_FAMILY_DATA_SETS);
+//            select.setString(1, family);
+//            resultSet = select.executeQuery();
+//
+//            while (resultSet.next()) {
+//                dataSets.add(resultSet.getString(1));
+//            }
+//        } catch (DbConfigException e) {
+//            throw new ExternalSystemException(e.getMessage(), e);
+//        } catch (SQLException e) {
+//            throw new ExternalSystemException("Failed to retrieve data sets for family '" + family + "'.  \n" +
+//                                              e.getMessage(), e);
+//        } finally {
+//            DbManager.closeResources(resultSet, select, connection, LOG);
+//        }
+//
+//        return dataSets;
+//    }
+
+    /**
+     * @return  distinct slide and objectives for all images in the specified family and data set.
+     */
+    public Map<String, List<String>> getSlideToObjectiveMapForDataSet(String family,
+                                                                      String dataSet)
+            throws ExternalSystemException {
+
+        Map<String, List<String>> slideToObjectivesMap = new LinkedHashMap<>();
+
+        Connection connection = null;
+        PreparedStatement select = null;
+        ResultSet resultSet = null;
+
+        try {
+            final DbManager dbManager = getDbManager();
+            connection = dbManager.getConnection();
+            select = connection.prepareStatement(SQL_SELECT_DATA_SET_SLIDES);
+            select.setString(1, family);
+            select.setString(2, dataSet);
+            resultSet = select.executeQuery();
+
+            String slide;
+            String objective;
+            List<String> objectiveList;
+            while (resultSet.next()) {
+                slide = resultSet.getString(1);
+                objective = resultSet.getString(2);
+                objectiveList = slideToObjectivesMap.get(slide);
+                if (objectiveList == null) {
+                    objectiveList = new ArrayList<>();
+                    slideToObjectivesMap.put(slide, objectiveList);
+                }
+                objectiveList.add(objective);
+            }
+        } catch (DbConfigException e) {
+            throw new ExternalSystemException(e.getMessage(), e);
+        } catch (SQLException e) {
+            throw new ExternalSystemException("Failed to retrieve slide data for data set '" + dataSet + "'.  \n" +
+                                              e.getMessage(), e);
+        } finally {
+            DbManager.closeResources(resultSet, select, connection, LOG);
+        }
+
+        return slideToObjectivesMap;
+    }
+
+    /**
+     * @return image names (relative paths) for all images with the specified family, data set, slide, and objective.
+     */
+    public List<String> getImageNamesForSlide(String family,
+                                              String dataSet,
+                                              String slide,
+                                              String objective)
+            throws ExternalSystemException {
+
+        List<String> imageNames = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement select = null;
+        ResultSet resultSet = null;
+
+        try {
+            final DbManager dbManager = getDbManager();
+            connection = dbManager.getConnection();
+            select = connection.prepareStatement(SQL_SELECT_SLIDE_IMAGE_NAMES);
+            select.setString(1, family);
+            select.setString(2, dataSet);
+            select.setString(3, slide + "\\_%");
+            select.setString(4, "%" + objective + "%");
+            resultSet = select.executeQuery();
+
+            while (resultSet.next()) {
+                imageNames.add(resultSet.getString(1));
+            }
+        } catch (DbConfigException e) {
+            throw new ExternalSystemException(e.getMessage(), e);
+        } catch (SQLException e) {
+            throw new ExternalSystemException("Failed to retrieve image names for slide '" + slide +
+                                              "' and objective '" + objective + "'.  \n" +
+                                              e.getMessage(), e);
+        } finally {
+            DbManager.closeResources(resultSet, select, connection, LOG);
+        }
+
+        return imageNames;
     }
 
     @Override
@@ -404,8 +525,8 @@ public class SageImageDao
         int imageId = image.getId();
         String relativePath = image.getRelativePath();
 
-        Set<String> insertPropertyNames = new LinkedHashSet<String>();
-        Set<String> updatePropertyNames = new LinkedHashSet<String>();
+        Set<String> insertPropertyNames = new LinkedHashSet<>();
+        Set<String> updatePropertyNames = new LinkedHashSet<>();
 
         Map<String, String> properties =
                 image.getPropertyTypeToValueMapForSage();
@@ -495,7 +616,7 @@ public class SageImageDao
             resultSet = select.executeQuery();
             int count = 0;
 
-            Map<String, Integer> labToLineNameMap = new LinkedHashMap<String, Integer>();
+            Map<String, Integer> labToLineNameMap = new LinkedHashMap<>();
 
             while (resultSet.next()) {
                 lineId = resultSet.getInt(1);
@@ -598,6 +719,48 @@ public class SageImageDao
 
     private static final String SQL_SELECT_IMAGE_ID =
             "SELECT id FROM image WHERE name=?"; // 1. image's relative path
+
+//    private static final String SQL_SELECT_FAMILY_DATA_SETS =
+//            "select distinct data_set.value from image_property data_set " +
+//            "where data_set.type_id=5766 and data_set.image_id in (select id from image_vw where family=?) " +
+//            "order by data_set.value";
+
+    // This query did not perform as well as the one above on dev-db.
+    // Keeping it here for reference ...
+
+//    private static final String SQL_SELECT_FAMILY_DATA_SETS_2 =
+//            "select distinct data_set.value from image i " +
+//            "join image_vw image_view on image_view.id=i.id and image_view.family=? " +
+//            "join image_property data_set on data_set.image_id=i.id and data_set.type_id=5766 " +
+//            "order by data_set.value";
+
+    private static final String SQL_SELECT_DATA_SET_SLIDES =
+            "select distinct substring(slide_code.value, " +
+            "                          1, " +
+            "                          locate('_', " +
+            "                                 slide_code.value, " +
+            "                                 locate('_', slide_code.value) + 1) - 1) as slide, " +
+            "       objective.value as objective " +
+            "from image_property slide_code " +
+            "join image_vw image_view on image_view.id=slide_code.image_id and " +
+            "                            image_view.family=? " +   // 1. family
+            "join image_property data_set on data_set.image_id=slide_code.image_id and data_set.type_id=5766 and " +
+            "                                data_set.value=? " +  // 2. data set
+            "join image_property objective on objective.image_id=slide_code.image_id and objective.type_id=33 " +
+            "where slide_code.type_id=3654 " +
+            "order by slide_code.value, objective.value";
+
+    private static final String SQL_SELECT_SLIDE_IMAGE_NAMES =
+            "select i.name from image i " +
+            "join image_vw image_view on image_view.id=i.id and " +
+            "                            image_view.family=? " +           // 1. family
+            "join image_property data_set on data_set.image_id=i.id and data_set.type_id=5766 and " +
+            "                                data_set.value=? " +          // 2. data set
+            "join image_property slide_code on slide_code.image_id=i.id and slide_code.type_id=3654 and " +
+            "                                  slide_code.value like ? " + // 3. slide
+            "join image_property objective on objective.image_id=i.id and objective.type_id=33 and " +
+            "                                 objective.value like ? " +   // 4. objective
+            "order by slide_code.value";
 
     private static final String SQL_INSERT_IMAGE_PROPERTY =
             "INSERT INTO image_property (image_id, type_id, value) VALUES (" +
