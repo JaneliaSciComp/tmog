@@ -44,7 +44,7 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
      * app is run from within an IDE (package information can be used
      * when the app is run from a jar file). 
      */
-    public static final String VERSION = "4.1.2";
+    public static final String VERSION = "4.1.3";
     
     /**
      * Set up a thread pool to limit the number of concurrent
@@ -223,6 +223,9 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
         String configPath = null;
         if (args.length > 0) {
             configPath = args[0];
+            if ("select_config".equals(configPath)) {
+                configPath = null;
+            }
         }
         JaneliaTransmogrifier frame = new JaneliaTransmogrifier(configPath);
         frame.setIconImage(APP_ICON.getImage());
