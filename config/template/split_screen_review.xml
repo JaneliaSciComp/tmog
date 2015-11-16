@@ -1,6 +1,6 @@
 @config-fragment-tmog-begin@
 @config-fragment-global@
-    <project name="Split Screen Review - scope to confocalStacks" default="true">
+    <project name="Split Screen Review - Initial Splits - scope to confocalStacks" default="true">
 
 @config-fragment-lsm-input@
 @config-fragment-lsm-sort@
@@ -14,6 +14,7 @@
                 <property name="GAL4 Line" value="initialSplit" />
                 <property name="Reporter" value="reporter" />
             </rowUpdater>
+
 @config-fragment-update-ti-class@
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
@@ -36,6 +37,90 @@
 @config-fragment-image-sequence-ssr@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@
+                <property name="display" value="true"/>
+                <property name="family" value="$STATIC:split_screen_review"/>
+                <property name="imaging_project" value="$STATIC:screen"/>
+            </rowListener>
+
+@config-fragment-copy-zeiss-log-files@
+@config-fragment-sage-loader-ssr@
+        </plugins>
+
+        <dataFields>
+
+            <separator value="FLSC_"/>
+@config-fragment-file-name-suffix@
+@config-fragment-annotated_by@
+@config-fragment-data_set@
+@config-fragment-tile@
+@config-fragment-slide_code@
+@config-fragment-cross_barcode@
+@config-fragment-line@
+@config-fragment-effector@
+@config-fragment-gender@
+@config-fragment-age@
+@config-fragment-full_age@
+@config-fragment-created_by@
+@config-fragment-renamed_by@
+@config-fragment-mounting_protocol@
+@config-fragment-tissue_orientation@
+@config-fragment-comment@
+@config-fragment-class@
+
+            <text displayName="Channel Specification" required="false"
+                  markedForTask="false"
+                  pattern="s*rs*">
+                <staticDefault value="sr"/>
+            </text>
+
+@config-fragment-channel-data@
+        </dataFields>
+
+    </project>
+
+    <project name="Split Screen Review - Stable Splits - scope to confocalStacks" default="true">
+
+@config-fragment-lsm-input@
+@config-fragment-lsm-sort@
+@config-fragment-output-ssr@
+        <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="GAL4 Line" value="parent1StockName" />
+                <property name="Reporter" value="reporter" />
+            </rowUpdater>
+
+@config-fragment-update-ti-class@
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
+                <property name="plugin-scale" value="0" />
+                <property name="Objective" value="Recording #1 Objective" />
+                <!-- SKIP ... <property name="Channel Specification" value="Recording #1 Number of Channels$MAP:1=r|2=rs|3=rss" /> -->
+                <property name="Channel 1 Name" value="IlluminationChannel #1 Name" />
+                <property name="Channel 1 Power" value="IlluminationChannel #1 Power B/C 1" />
+                <property name="Channel 1 Gain" value="DetectionChannel #1 Detector Gain" />
+                <property name="Channel 2 Name" value="IlluminationChannel #2 Name" />
+                <property name="Channel 2 Power" value="IlluminationChannel #2 Power B/C 1" />
+                <property name="Channel 2 Gain" value="DetectionChannel #2 Detector Gain" />
+                <property name="Channel 3 Name" value="IlluminationChannel #3 Name" />
+                <property name="Channel 3 Power" value="IlluminationChannel #3 Power B/C 1" />
+                <property name="Channel 3 Gain" value="DetectionChannel #3 Detector Gain" />
+            </rowUpdater>
+
+@config-fragment-validate-ti-class@
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="GAL4 Line"/>
+                <property name="matchesPattern" value="^JRC_SS.*"/>
+                <property name="whenReferenceField" value="GAL4 Line"/>
+                <property name="matchesReferencePattern" value=".*"/>
+                <property name="errorMessage" value="GAL4 Line must start with 'JRC_SS'."/>
+            </rowValidator>
+
+@config-fragment-image-sequence-ssr@
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                @config-fragment-common-image-data-properties@
                 <property name="display" value="true"/>
                 <property name="family" value="$STATIC:split_screen_review"/>
                 <property name="imaging_project" value="$STATIC:screen"/>

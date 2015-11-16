@@ -5,7 +5,7 @@
 
     <global minimumVersion="4.1.2" frameSizePercentage="95"/>
 
-    <project name="Split Screen Review - scope to confocalStacks" default="true">
+    <project name="Split Screen Review - Initial Splits - scope to confocalStacks" default="true">
 
         <inputFileFilter patternString=".+\.lsm" />
 
@@ -26,6 +26,7 @@
                 <property name="GAL4 Line" value="initialSplit" />
                 <property name="Reporter" value="reporter" />
             </rowUpdater>
+
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DerivedFieldUpdaterPlugin">
                 <property name="forFieldName" value="Class"/>
                 <property name="setValueTo" value="ti"/>
@@ -73,6 +74,388 @@
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
+                <property name="lab" value="$STATIC:flylight"/>
+                <property name="imaging_project" value="Imaging Project"/>
+                <property name="line" value="GAL4 Line"/>
+                <property name="cross_barcode" value="Cross Serial Number"/>
+                <property name="animal_id" value="Fly ID"/>
+                <property name="created_by" value="Imager"/>
+                <property name="renamed_by" value="Renamer"/>
+                <property name="effector" value="Reporter"/>
+                <property name="slide_code" value="Slide Code"/>
+                <property name="tile" value="Tile$MAP:vnc_verify=ventral_nerve_cord" />
+                <property name="area" value="Tile$MAP:abdominal=VNC|brain=Brain|brain_with_lamina=Brain|central=Brain|dorsal_medial=Brain|left_central=Brain|left_dorsal=Brain|left_lamina=Brain|left_optic_lobe=Brain|left_optic_lobe_part_1=Brain|left_optic_lobe_part_2=Brain|left_optic_lobe_with_lamina=Brain|left_ventral=Brain|mesothoracic=VNC|metathoracic=VNC|neck_anterior=Neck|neck_posterior=Neck|prothoracic=VNC|right_central=Brain|right_dorsal=Brain|right_lamina=Brain|right_optic_lobe=Brain|right_optic_lobe_part_1=Brain|right_optic_lobe_part_2=Brain|right_optic_lobe_with_lamina=Brain|right_ventral=Brain|ventral=Brain|ventral_nerve_cord=VNC|vnc_verify=VNC-Verify"/>
+                <property name="gender" value="Gender"/>
+                <property name="age" value="Age"/>
+                <property name="full_age" value="Full Age"/>
+                <property name="annotated_by" value="Annotator"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="First Slice of Z"/>
+                <property name="data_set" value="Data Set"/>
+                <property name="channel_spec" value="Channel Specification"/>
+                <property name="objective" value="Objective"/>
+                <property name="lsm_detection_channel_1_detector_gain" value="Channel 1 Gain"/>
+                <property name="lsm_detection_channel_2_detector_gain" value="Channel 2 Gain"/>
+                <property name="lsm_detection_channel_3_detector_gain" value="Channel 3 Gain"/>
+                <property name="lsm_illumination_channel_1_name" value="Channel 1 Name"/>
+                <property name="lsm_illumination_channel_2_name" value="Channel 2 Name"/>
+                <property name="lsm_illumination_channel_3_name" value="Channel 3 Name"/>
+                <property name="lsm_illumination_channel_1_power_bc_1" value="Channel 1 Power"/>
+                <property name="lsm_illumination_channel_2_power_bc_1" value="Channel 2 Power"/>
+                <property name="lsm_illumination_channel_3_power_bc_1" value="Channel 3 Power"/>
+                <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
+                <property name="microscope_filename"/>
+                <property name="comment" value="Comment"/>
+                <property name="class" value="Class"/>
+                <property name="display" value="true"/>
+                <property name="family" value="$STATIC:split_screen_review"/>
+                <property name="imaging_project" value="$STATIC:screen"/>
+            </rowListener>
+
+            <!--
+                  The companion file listener (for log files) should be defined after
+                  all other "transactional" lsm plug-ins to ensure that log files are
+                  only copied if the source lsm processing succeeds.
+                  However, it should be defined before the SageLoaderPlugin because the
+                  indexing process uses data from both the lsm and its companion log file.
+            -->
+            <rowListener className="org.janelia.it.ims.tmog.plugin.CompanionFileRowListener" >
+                <property name="sourceSuffix" value=".lsm"/>
+                <property name="companionSuffix" value="_log.csv"/>
+                <property name="deleteAfterCopy" value="true"/>
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.SageLoaderPlugin">
+                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/sageLoader"/>
+                <property name="owner" value="system"/>
+                <property name="config" value="/groups/scicomp/informatics/data/flylightflip_light_imagery-config.xml"/>
+                <property name="grammar" value="/usr/local/pipeline/grammar/split_screen_review.gra"/>
+                <property name="lab" value="flylight"/>
+                <property name="debug" value="true"/>
+                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
+                <property name="relativePathDepth" value="1"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <separator value="FLSC_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS" />
+            <separator value="_"/>
+            <pluginData displayName="image_number"/>
+            <separator value=".lsm"/>
+
+            <!--
+             These values are collected for storage but are not
+             included as components of the file name (markedForTask="false").
+             -->
+
+            <validValueList displayName="Annotator" required="false"
+                            autoComplete="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue value="Alice Robie"/>
+                <validValue value="Allan Wong"/>
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Barry Dickson"/>
+                <validValue value="Chuan Zhou"/>
+                <validValue value="Clement Kent"/>
+                <validValue value="Daniel Turner-Evans"/>
+                <validValue value="Jens Goldammer"/>
+                <validValue value="Jim Truman"/>
+                <validValue value="Jon-Michael Knapp"/>
+                <validValue value="Julie Simpson"/>
+                <validValue value="Kataryna Keleman"/>
+                <validValue value="Kei Ito"/>
+                <validValue value="Lisha Shao"/>
+                <validValue value="Mark Eddison"/>
+                <validValue value="Masayoshi Ito"/>
+                <validValue value="Michael Texada"/>
+                <validValue value="Michael-John Dolan"/>
+                <validValue value="Ming Wu"/>
+                <validValue value="Rajyashree Sen"/>
+                <validValue value="Shigehiro Namiki"/>
+                <validValue value="Stephen Huston"/>
+                <validValue value="Tanya Wolff"/>
+                <validValue value="Vivek Jayaraman"/>
+                <validValue value="Yoshi Aso"/>
+            </validValueList>
+
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            sharedForAllSessionFiles="true"
+                            globalValueFilter="/^((?!leet).)*$/"
+                            filterField="Annotator"
+                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|Jens Goldammer=goldammerj|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Julie Simpson=simpson|Kataryna Keleman=keleman|Kei Ito=itok,terraincognita|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Masayoshi Ito=itom10|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Rajyashree Sen=senr,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustons|Tanya Wolff=wolfft|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?includeOnlySageSync=true"
+                            autoComplete="true">
+            </webServiceList>
+
+            <cvTermList displayName="Tile" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        autoComplete="true"
+                        markedForTask="false">
+                <sourceFileMappedDefault pattern="^[^_]+_[^_]+_[^_]+_([^_]+)_.*">
+                    <mappedValue from="ABD" to="abdominal"/>
+                    <mappedValue from="BRN" to="brain"/>
+                    <mappedValue from="BRNwLam" to="brain_with_lamina"/>
+                    <mappedValue from="CEN" to="central"/>
+                    <mappedValue from="DM" to="dorsal_medial"/>
+                    <mappedValue from="L" to="left_optic_lobe"/>
+                    <mappedValue from="L1" to="left_optic_lobe_part_1"/>
+                    <mappedValue from="L2" to="left_optic_lobe_part_2"/>
+                    <mappedValue from="LwLam" to="left_optic_lobe_with_lamina"/>
+                    <mappedValue from="LLam" to="left_lamina"/>
+                    <mappedValue from="RLam" to="right_lamina"/>
+                    <mappedValue from="LamL" to="left_lamina"/>
+                    <mappedValue from="LamR" to="right_lamina"/>
+                    <mappedValue from="LC" to="left_central"/>
+                    <mappedValue from="LD" to="left_dorsal"/>
+                    <mappedValue from="LV" to="left_ventral"/>
+                    <mappedValue from="MES" to="mesothoracic"/>
+                    <mappedValue from="META" to="metathoracic"/>
+                    <mappedValue from="NEC-Ant" to="neck_anterior"/>
+                    <mappedValue from="NEC-Pos" to="neck_posterior"/>
+                    <mappedValue from="PRO" to="prothoracic"/>
+                    <mappedValue from="R" to="right_optic_lobe"/>
+                    <mappedValue from="R1" to="right_optic_lobe_part_1"/>
+                    <mappedValue from="R2" to="right_optic_lobe_part_2"/>
+                    <mappedValue from="RwLam" to="right_optic_lobe_with_lamina"/>
+                    <mappedValue from="RC" to="right_central"/>
+                    <mappedValue from="RD" to="right_dorsal"/>
+                    <mappedValue from="RV" to="right_ventral"/>
+                    <mappedValue from="V" to="ventral"/>
+                    <mappedValue from="VNC" to="ventral_nerve_cord"/>
+                    <mappedValue from="VNC-Adj" to="vnc_verify"/>
+                    <mappedValue from="VNC-Ver" to="vnc_verify"/>
+                </sourceFileMappedDefault>
+                <validValue displayName="VNC-Verify" value="vnc_verify"/>
+            </cvTermList>
+
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  markedForTask="false">
+                <sourceFileDefault pattern="^([A-Z]\d+)_ZB.*_(\d{8}_\d+_).*"
+                                   patternGroupSpec="2,1"/>
+            </text>
+
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="199999"
+                    markedForTask="false">
+            </number>
+
+            <webServiceList displayName="GAL4 Line" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=baker&amp;lab=descending_interneuron&amp;lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=fly_light&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=simpson&amp;lab=rubin&amp;lab=terra_incognita&amp;lab=zlatic"
+                            autoComplete="true">
+            </webServiceList>
+
+            <cvTermList displayName="Reporter" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
+            </cvTermList>
+
+            <validValueList displayName="Gender" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+
+            <cvTermList displayName="Age" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        displayNamePrefixedForValues="true"
+                        autoComplete="true"
+                        markedForTask="false">
+            </cvTermList>
+
+            <text displayName="Full Age" required="false"
+                  markedForTask="false">
+            </text>
+
+            <cvTermList displayName="Imager" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        sharedForAllSessionFiles="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+            </cvTermList>
+
+            <cvTermList displayName="Renamer" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        sharedForAllSessionFiles="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+            </cvTermList>
+
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue value="DPX Ethanol Mounting"/>
+                <validValue value="DPX PBS Mounting"/>
+                <validValue value="Glycerol-Based Mounting"/>
+            </validValueList>
+
+            <validValueList displayName="First Slice of Z" required="true"
+                            sharedForAllSessionFiles="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="Antennal Lobes" value="face_up"/>
+                <validValue displayName="Back of Brain" value="face_down"/>
+            </validValueList>
+
+            <text displayName="Comment" required="false"
+                  markedForTask="false">
+            </text>
+
+            <validValueList displayName="Class" required="false"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue displayName="TI" value="ti"/>
+            </validValueList>
+
+
+            <text displayName="Channel Specification" required="false"
+                  markedForTask="false"
+                  pattern="s*rs*">
+                <staticDefault value="sr"/>
+            </text>
+
+            <text displayName="Channel 1 Name" required="false"
+                  markedForTask="false"
+                  editable="false">
+            </text>
+
+            <decimal displayName="Channel 1 Power" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <decimal displayName="Channel 1 Gain" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <text displayName="Channel 2 Name" required="false"
+                  markedForTask="false"
+                  editable="false">
+            </text>
+
+            <decimal displayName="Channel 2 Power" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <decimal displayName="Channel 2 Gain" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <text displayName="Channel 3 Name" required="false"
+                  markedForTask="false"
+                  editable="false">
+            </text>
+
+            <decimal displayName="Channel 3 Power" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+            <decimal displayName="Channel 3 Gain" required="false"
+                     markedForTask="false"
+                     editable="false">
+            </decimal>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Split Screen Review - Stable Splits - scope to confocalStacks" default="true">
+
+        <inputFileFilter patternString=".+\.lsm" />
+
+        <!-- standard scope file name pattern is: A1_ZB1_T1_BRN_20130604_33_20X_R1_L01 -->
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString="([A-Z])(\d++)_.*_(L\d++)[\._].*"
+                         patternGroupIndexes="1,2,3"/>
+
+        <outputDirectory basePath="[//tier2.hhmi.org|/tier2]/flylight/split_screen_review/confocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+
+        <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="GAL4 Line" value="parent1StockName" />
+                <property name="Reporter" value="reporter" />
+            </rowUpdater>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DerivedFieldUpdaterPlugin">
+                <property name="forFieldName" value="Class"/>
+                <property name="setValueTo" value="ti"/>
+                <property name="whenFieldName" value="Data Set"/>
+                <property name="matchesPattern" value=".*_ti_.*" />
+            </rowUpdater>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.ZeissLsmDataPlugin">
+                <property name="plugin-scale" value="0" />
+                <property name="Objective" value="Recording #1 Objective" />
+                <!-- SKIP ... <property name="Channel Specification" value="Recording #1 Number of Channels$MAP:1=r|2=rs|3=rss" /> -->
+                <property name="Channel 1 Name" value="IlluminationChannel #1 Name" />
+                <property name="Channel 1 Power" value="IlluminationChannel #1 Power B/C 1" />
+                <property name="Channel 1 Gain" value="DetectionChannel #1 Detector Gain" />
+                <property name="Channel 2 Name" value="IlluminationChannel #2 Name" />
+                <property name="Channel 2 Power" value="IlluminationChannel #2 Power B/C 1" />
+                <property name="Channel 2 Gain" value="DetectionChannel #2 Detector Gain" />
+                <property name="Channel 3 Name" value="IlluminationChannel #3 Name" />
+                <property name="Channel 3 Power" value="IlluminationChannel #3 Power B/C 1" />
+                <property name="Channel 3 Gain" value="DetectionChannel #3 Detector Gain" />
+            </rowUpdater>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Class"/>
+                <property name="matchesPattern" value="^ti$"/>
+                <property name="whenReferenceField" value="Data Set"/>
+                <property name="matchesReferencePattern" value=".*_ti_.*"/>
+                <property name="errorMessage" value="Class must be 'TI' when Data Set is ${Data Set}."/>
+            </rowValidator>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Class"/>
+                <property name="matchesPattern" value="^$"/>
+                <property name="whenReferenceField" value="Data Set"/>
+                <property name="matchesReferencePattern" value="^((?!_ti_).)*$"/>
+                <property name="errorMessage" value="Class should not be set for Data Set ${Data Set}."/>
+            </rowValidator>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="GAL4 Line"/>
+                <property name="matchesPattern" value="^JRC_SS.*"/>
+                <property name="whenReferenceField" value="GAL4 Line"/>
+                <property name="matchesReferencePattern" value=".*"/>
+                <property name="errorMessage" value="GAL4 Line must start with 'JRC_SS'."/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="image_number" value="urn:lsid:janelia.org:split_screen_review:image_number" />
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                                <property name="db.config.key" value="sage"/>
                 <property name="lab" value="$STATIC:flylight"/>
                 <property name="imaging_project" value="Imaging Project"/>
                 <property name="line" value="GAL4 Line"/>
