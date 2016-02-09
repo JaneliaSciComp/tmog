@@ -446,10 +446,10 @@
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
                 <property name="validateField" value="GAL4 Line"/>
-                <property name="matchesPattern" value="^JRC_SS.*"/>
+                <property name="matchesPattern" value="^(BJD|GMR|JRC)_SS.*"/>
                 <property name="whenReferenceField" value="GAL4 Line"/>
                 <property name="matchesReferencePattern" value=".*"/>
-                <property name="errorMessage" value="GAL4 Line must start with 'JRC_SS'."/>
+                <property name="errorMessage" value="GAL4 Line must start with '(BJD|GMR|JRC)_SS'."/>
             </rowValidator>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
