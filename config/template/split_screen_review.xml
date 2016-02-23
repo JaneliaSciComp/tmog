@@ -172,6 +172,8 @@
                 <property name="family" value="$STATIC:split_screen_review"/>
                 <property name="keep.existing.data" value="true"/>
                 <property name="relative_path" value="SAGE Name"/>
+                <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
+                <property name="screen_state" value="Screen State"/>
             </rowListener>
 
         </plugins>
@@ -186,6 +188,7 @@
 @config-fragment-effector-with-split_screen_review-default@
 @config-fragment-slide_code-with-split_screen_review-default@
 @config-fragment-tile-with-split_screen_review-default@
+@config-fragment-screen_state-with-split_screen_review-default@
 @config-fragment-comment-with-split_screen_review-default@
 @config-fragment-gender-with-split_screen_review-default@
 @config-fragment-age-with-split_screen_review-default@

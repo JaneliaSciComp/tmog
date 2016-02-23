@@ -816,6 +816,8 @@
                 <property name="family" value="$STATIC:split_screen_review"/>
                 <property name="keep.existing.data" value="true"/>
                 <property name="relative_path" value="SAGE Name"/>
+                <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
+                <property name="screen_state" value="Screen State"/>
             </rowListener>
 
         </plugins>
@@ -987,6 +989,20 @@
                 </sourceFileMappedDefault>
                 <validValue displayName="VNC-Verify" value="vnc_verify"/>
             </cvTermList>
+
+            <validValueList displayName="Screen State" required="true"
+                            markedForTask="false"
+                            autoComplete="true">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="split_screen_review"/>
+                    <property name="image_property" value="screen_state"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <validValue value="pre_screen"/>
+                <validValue value="accepted" default="true"/>
+                <validValue value="accepted_public"/>
+                <validValue value="rejected"/>
+            </validValueList>
 
             <text displayName="Comment" required="false"
                   markedForTask="false">
