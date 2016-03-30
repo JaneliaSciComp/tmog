@@ -291,7 +291,7 @@ public class JacsLsmPipelinesPlugin
 
     private String convertPathsToJson(final Set<String> lsmPathSet) {
         final StringBuilder sb = new StringBuilder(4096);
-        sb.append("{'lsmNames':[");
+        sb.append("{\"lsmNames\":[");
         int count = 0;
         for (final String path : lsmPathSet) {
             if (count > 0) {
