@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="4.0.1"/>
+    <global minimumVersion="4.1.4"/>
 
     <project name="Simpson: IHC Optimizing from Nighthawk" taskName="collector">
 
@@ -131,14 +131,9 @@
                 <property name="tissue_orientation" value="Tissue Orientation"/>
             </rowListener>
 
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.SageLoaderPlugin">
-                <property name="serviceUrl" value="http://jacs-data2.int.janelia.org:8180/rest-v1/sageLoader"/>
-                <property name="owner" value="system"/>
-                <property name="config" value="/groups/scicomp/informatics/data/flylightflip_light_imagery-config.xml"/>
-                <property name="grammar" value="/usr/local/pipeline/grammar/simpson_descending.gra"/>
-                <property name="lab" value="simpson"/>
-                <property name="debug" value="true"/>
-                <property name="testUrl" value="http://jacs-data2.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
+                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/owner/system/lsmPipelines"/>
+                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
                 <property name="relativePathDepth" value="4"/> <!-- Steffi/Grooming/ConfocalData/Alignment -->
             </rowListener>
 

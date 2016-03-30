@@ -24,7 +24,7 @@
             </rowListener>
 
 @config-fragment-copy-zeiss-log-files@
-@config-fragment-sage-loader-polarity@
+@config-fragment-jacs-lsm-pipelines-1@
         </plugins>
 
         <dataFields>
@@ -104,7 +104,7 @@
         <plugins>
 
 @config-fragment-image-path-exists@
-@config-fragment-sage-loader-polarity@
+@config-fragment-jacs-lsm-pipelines-1@
         </plugins>
 
         <dataFields>

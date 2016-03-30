@@ -31,7 +31,7 @@
             </rowListener>
 
 @config-fragment-copy-zeiss-log-files@
-@config-fragment-sage-loader-ptr@
+@config-fragment-jacs-lsm-pipelines-3@
         </plugins>
 
         <dataFields>
