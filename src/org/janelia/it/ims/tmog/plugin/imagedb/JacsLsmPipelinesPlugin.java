@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Howard Hughes Medical Institute.
+ * Copyright (c) 2016 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -16,7 +16,6 @@ import org.apache.commons.logging.LogFactory;
 import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.field.DataField;
-import org.janelia.it.ims.tmog.field.StaticDataModel;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
@@ -44,18 +43,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class JacsLsmPipelinesPlugin
         implements RowListener, SessionListener {
 
-    public static final String DATA_SET_COLUMN_PROPERTY = "dataSetColumnName";
     public static final String RELATIVE_PATH_DEPTH_PROPERTY = "relativePathDepth";
     public static final String SERVICE_URL_PROPERTY = "serviceUrl";
     public static final String TEST_URL_PROPERTY = "testUrl";
 
-    public static final String DEFAULT_DATA_SET_COLUMN_NAME = "Data Set";
-
 
     /** The number of parent directories to include in item value. */
     private int relativePathDepth = 1;
-
-    private String dataSetColumnName;
 
     /** HTTP client for sageLoader requests. */
     private HttpClient httpClient;
@@ -68,7 +62,7 @@ public class JacsLsmPipelinesPlugin
      * so we need to track relative paths for successfully processed
      * LSM files for each thread.
      */
-    private Map<Thread, Map<String, Set<String>>> threadToDataSetPathMap;
+    private Map<Thread, Set<String>> threadToPathMap;
 
     /**
      * Empty constructor required by
@@ -76,7 +70,7 @@ public class JacsLsmPipelinesPlugin
      */
     public JacsLsmPipelinesPlugin() {
         this.httpClient = new HttpClient();
-        this.threadToDataSetPathMap = new ConcurrentHashMap<>();
+        this.threadToPathMap = new ConcurrentHashMap<>();
     }
 
     /**
@@ -91,8 +85,6 @@ public class JacsLsmPipelinesPlugin
     public void init(PluginConfiguration config)
             throws ExternalSystemException {
 
-        this.dataSetColumnName = DEFAULT_DATA_SET_COLUMN_NAME;
-
         String serviceUrl = null;
         String testUrl = null;
 
@@ -106,9 +98,6 @@ public class JacsLsmPipelinesPlugin
                     break;
                 case TEST_URL_PROPERTY:
                     testUrl = value;
-                    break;
-                case DATA_SET_COLUMN_PROPERTY:
-                    this.dataSetColumnName = value;
                     break;
                 case RELATIVE_PATH_DEPTH_PROPERTY:
                     this.relativePathDepth = getPathDepth(value);
@@ -166,18 +155,10 @@ public class JacsLsmPipelinesPlugin
             if (row instanceof RenamePluginDataRow) {
 
                 final Thread currentThread = Thread.currentThread();
-                Map<String, Set<String>> dataSetPathMap = threadToDataSetPathMap.get(currentThread);
-                if (dataSetPathMap == null) {
-                    dataSetPathMap = new HashMap<>();
-                    threadToDataSetPathMap.put(currentThread, dataSetPathMap);
-                }
-
-                final String dataSet = row.getCoreValue(dataSetColumnName);
-
-                Set<String> lsmPathSet = dataSetPathMap.get(dataSet);
+                Set<String> lsmPathSet = threadToPathMap.get(currentThread);
                 if (lsmPathSet == null) {
                     lsmPathSet = new HashSet<>();
-                    dataSetPathMap.put(dataSet, lsmPathSet);
+                    threadToPathMap.put(currentThread, lsmPathSet);
                 }
 
                 final String relativePath = RelativePathUtil.getRelativePath(row.getTargetFile(), relativePathDepth);
@@ -259,20 +240,19 @@ public class JacsLsmPipelinesPlugin
     private void submitLaunchRequestForCurrentThread() {
 
         final Thread currentThread = Thread.currentThread();
-        final Map<String, Set<String>> dataSetPathMap = threadToDataSetPathMap.get(currentThread);
+        final Set<String> lsmPathSet = threadToPathMap.get(currentThread);
 
-        try {
-            for (final String dataSet : dataSetPathMap.keySet()) {
-                submitLaunchRequestForDataSet(dataSet, dataSetPathMap.get(dataSet));
+        if (lsmPathSet != null) {
+            try {
+                submitLaunchRequest(lsmPathSet);
+            } finally {
+                threadToPathMap.remove(currentThread);
             }
-        } finally {
-            threadToDataSetPathMap.remove(currentThread);
         }
 
     }
 
-    private void submitLaunchRequestForDataSet(final String dataSet,
-                                               final Set<String> lsmPathSet) {
+    private void submitLaunchRequest(final Set<String> lsmPathSet) {
 
         int responseCode;
         String url = null;
@@ -280,7 +260,6 @@ public class JacsLsmPipelinesPlugin
         try {
             // construct URL
             final Map<String, DataField> fieldMap = new HashMap<>();
-            fieldMap.put(dataSetColumnName, new StaticDataModel(dataSetColumnName, dataSet));
             final List<String> urlList = urlTokens.deriveValues(fieldMap, true);
             url = urlList.get(0);
 
@@ -291,9 +270,13 @@ public class JacsLsmPipelinesPlugin
 
             responseCode = httpClient.executeMethod(method);
 
-            LOG.info("submitLaunchRequest: " + responseCode + " returned for " + url);
-            if (responseCode != HttpURLConnection.HTTP_OK) {
-                LOG.error("submitLaunchRequest: request failed for " + url);
+            final String responseBody = method.getResponseBodyAsString();
+            final String logMessage = "submitLaunchRequest: " + responseCode + " returned for " + url +
+                                      " with response body " + responseBody;
+            if (responseCode == HttpURLConnection.HTTP_CREATED) {
+                LOG.info(logMessage);
+            } else{
+                LOG.error(logMessage);
             }
 
         } catch (Exception e) {
@@ -308,7 +291,7 @@ public class JacsLsmPipelinesPlugin
 
     private String convertPathsToJson(final Set<String> lsmPathSet) {
         final StringBuilder sb = new StringBuilder(4096);
-        sb.append('[');
+        sb.append("{'lsmNames':[");
         int count = 0;
         for (final String path : lsmPathSet) {
             if (count > 0) {
@@ -319,7 +302,7 @@ public class JacsLsmPipelinesPlugin
             sb.append('"');
             count++;
         }
-        sb.append(']');
+        sb.append("]}");
         return sb.toString();
     }
 
