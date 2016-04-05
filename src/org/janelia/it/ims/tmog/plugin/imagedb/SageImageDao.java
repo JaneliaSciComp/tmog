@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Howard Hughes Medical Institute.
+ * Copyright (c) 2016 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -36,6 +36,7 @@ public class SageImageDao
 
     public static final String NONE_LAB = "none";
     public static final String NOT_APPLICABLE = "Not_Applicable";
+    public static final String UNDEFINED_OBJECTIVE = "undefined";
 
     /**
      * Constructs a dao using the default manager and configuration.
@@ -291,6 +292,9 @@ public class SageImageDao
                     objectiveList = new ArrayList<>();
                     slideToObjectivesMap.put(slide, objectiveList);
                 }
+                if (objective == null) {
+                    objective = UNDEFINED_OBJECTIVE;
+                }
                 objectiveList.add(objective);
             }
         } catch (DbConfigException e) {
@@ -327,12 +331,29 @@ public class SageImageDao
             select.setString(1, family);
             select.setString(2, dataSet);
             select.setString(3, slide + "\\_%");
-            select.setString(4, "%" + objective + "%");
             resultSet = select.executeQuery();
 
-            while (resultSet.next()) {
-                imageNames.add(resultSet.getString(1));
+            if (objective == null) {
+                objective = UNDEFINED_OBJECTIVE;
             }
+            final boolean findUnknownObjectives = UNDEFINED_OBJECTIVE.equals(objective);
+
+            String imageName;
+            String imageObjective;
+            while (resultSet.next()) {
+
+                // filter images with matching objectives here instead of in sql since we have deal with nulls
+                imageName = resultSet.getString(1);
+                imageObjective = resultSet.getString(2);
+                if (imageObjective == null) {
+                    if (findUnknownObjectives) {
+                        imageNames.add(imageName);
+                    }
+                } else if (imageObjective.contains(objective)) {
+                    imageNames.add(imageName);
+                }
+            }
+
         } catch (DbConfigException e) {
             throw new ExternalSystemException(e.getMessage(), e);
         } catch (SQLException e) {
@@ -746,20 +767,19 @@ public class SageImageDao
             "                            image_view.family=? " +   // 1. family
             "join image_property data_set on data_set.image_id=slide_code.image_id and data_set.type_id=5766 and " +
             "                                data_set.value=? " +  // 2. data set
-            "join image_property objective on objective.image_id=slide_code.image_id and objective.type_id=33 " +
+            "left join image_property objective on objective.image_id=slide_code.image_id and objective.type_id=33 " +
             "where slide_code.type_id=3654 " +
             "order by slide_code.value, objective.value";
 
     private static final String SQL_SELECT_SLIDE_IMAGE_NAMES =
-            "select i.name from image i " +
+            "select i.name, objective.value from image i " +
             "join image_vw image_view on image_view.id=i.id and " +
             "                            image_view.family=? " +           // 1. family
             "join image_property data_set on data_set.image_id=i.id and data_set.type_id=5766 and " +
             "                                data_set.value=? " +          // 2. data set
             "join image_property slide_code on slide_code.image_id=i.id and slide_code.type_id=3654 and " +
             "                                  slide_code.value like ? " + // 3. slide
-            "join image_property objective on objective.image_id=i.id and objective.type_id=33 and " +
-            "                                 objective.value like ? " +   // 4. objective
+            "left join image_property objective on objective.image_id=i.id and objective.type_id=33 " +
             "order by slide_code.value, i.capture_date, i.name";
 
     private static final String SQL_INSERT_IMAGE_PROPERTY =
