@@ -24,9 +24,11 @@
 @config-fragment-tile@
 @config-fragment-slide_code@
 @config-fragment-line@
+@config-fragment-gender@
 @config-fragment-mounting_protocol@
 @config-fragment-tissue_orientation@
 @config-fragment-channel-spec@
+@config-fragment-comment@
         </dataFields>
 
     </project>

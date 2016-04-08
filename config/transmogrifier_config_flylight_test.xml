@@ -154,6 +154,14 @@
                             autoComplete="true">
             </webServiceList>
 
+            <validValueList displayName="Gender" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+
             <validValueList displayName="Tissue Mounting Protocol" required="true"
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
@@ -173,6 +181,10 @@
             <text displayName="Channel Specification" required="false"
                     markedForTask="false"
                     pattern="s*rs*">
+            </text>
+
+            <text displayName="Comment" required="false"
+                  markedForTask="false">
             </text>
 
         </dataFields>
