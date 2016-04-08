@@ -63,7 +63,7 @@
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
-                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/owner/system/lsmPipelines"/>
+                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/owner/system/dataSet/${Data Set}/lsmPipelines"/>
                 <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
                 <property name="relativePathDepth" value="1"/>
             </rowListener>
