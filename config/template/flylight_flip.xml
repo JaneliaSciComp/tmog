@@ -51,7 +51,7 @@
 @config-fragment-imaging_project-mcfo@
 @config-fragment-class@
 @config-fragment-objective@
-@config-fragment-channel-spec@
+@config-fragment-channel_spec@
 @config-fragment-channel-data@
         </dataFields>
 
@@ -96,7 +96,7 @@
 @config-fragment-tissue_orientation-with-flylight_flip-default@
 @config-fragment-imaging_project-with-flylight_flip-default@
 @config-fragment-class-with-flylight_flip-default@
-@config-fragment-channel-spec-with-flylight_flip-default@
+@config-fragment-channel_spec-with-flylight_flip-default@
         </dataFields>
 
     </project>

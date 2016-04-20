@@ -27,7 +27,7 @@
 @config-fragment-gender@
 @config-fragment-mounting_protocol@
 @config-fragment-tissue_orientation@
-@config-fragment-channel-spec@
+@config-fragment-channel_spec@
 @config-fragment-comment@
         </dataFields>
 
