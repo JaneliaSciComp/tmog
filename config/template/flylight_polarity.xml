@@ -94,6 +94,7 @@
 @config-fragment-tissue_orientation-with-flylight_polarity-default@
 @config-fragment-imaging_project-with-flylight_polarity-default@
 @config-fragment-class-with-flylight_polarity-default@
+@config-fragment-channel-spec-with-flylight_polarity-default@
         </dataFields>
 
     </project>

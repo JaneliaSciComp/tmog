@@ -197,6 +197,7 @@
 @config-fragment-mounting_protocol-with-split_screen_review-default@
 @config-fragment-tissue_orientation-with-split_screen_review-default@
 @config-fragment-class-with-split_screen_review-default@
+@config-fragment-channel-spec-with-split_screen_review-default@
         </dataFields>
 
     </project>

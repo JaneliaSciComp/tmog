@@ -94,7 +94,7 @@
         <load-field-fragment    name="animal_id" />
         <load-field-fragment    name="annotated_by" />
         <load-fragment          name="channel-data"             path="field/channel-data.xml"/>
-        <load-fragment          name="channel-spec"             path="field/channel-spec.xml"/>
+        <load-field-fragment    name="channel-spec" />
         <load-field-fragment    name="class" />
         <load-field-fragment    name="comment" />
         <load-field-fragment    name="created_by" />

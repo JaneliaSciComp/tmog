@@ -96,6 +96,7 @@
 @config-fragment-tissue_orientation-with-flylight_flip-default@
 @config-fragment-imaging_project-with-flylight_flip-default@
 @config-fragment-class-with-flylight_flip-default@
+@config-fragment-channel-spec-with-flylight_flip-default@
         </dataFields>
 
     </project>

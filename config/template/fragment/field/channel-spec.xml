@@ -1,4 +1,4 @@
             <text displayName="Channel Specification" required="false"
                     markedForTask="false"
-                    pattern="s*rs*">
+                    pattern="s*rs*">@sage-data-default@
             </text>
