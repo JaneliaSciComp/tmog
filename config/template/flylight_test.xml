@@ -33,4 +33,32 @@
 
     </project>
 
+    <project name="Fly Light - Test - fix data" taskName="sage-collector" imageFamilyName="flylight_test">
+
+        <plugins>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+@config-fragment-common-image-data-properties@
+                <property name="exclude.host.name" value="true"/>
+                <property name="family" value="$STATIC:flylight_test"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="relative_path" value="SAGE Name"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+@config-fragment-data_set-with-flylight_test-default@
+@config-fragment-tile-with-flylight_test-default@
+@config-fragment-slide_code-with-flylight_test-default@
+@config-fragment-line-with-flylight_test-default@
+@config-fragment-gender-with-flylight_test-default@
+@config-fragment-mounting_protocol-with-flylight_test-default@
+@config-fragment-tissue_orientation-with-flylight_test-default@
+@config-fragment-channel_spec-with-flylight_test-default@
+@config-fragment-comment-with-flylight_test-default@
+        </dataFields>
+
+    </project>
+
 @config-fragment-tmog-end@
