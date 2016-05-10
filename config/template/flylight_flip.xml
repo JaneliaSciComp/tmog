@@ -101,6 +101,46 @@
 
     </project>
 
+    <project name="Fly Light - Rubin SSplit - fix data" taskName="sage-collector" imageFamilyName="rubin_ssplit">
+
+        <plugins>
+
+@config-fragment-update-mapped-serial-data@
+@config-fragment-update-project-cross-data@
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+@config-fragment-common-image-data-properties@
+                <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
+                <property name="exclude.host.name" value="true"/>
+                <property name="family" value="$STATIC:rubin_ssplit"/>
+                <property name="keep.existing.data" value="true"/>
+                <property name="relative_path" value="SAGE Name"/>
+                <property name="screen_state" value="Screen State"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+@config-fragment-microscope_filename-with-rubin_ssplit-default@
+@config-fragment-data_set-with-rubin_ssplit-default@
+@config-fragment-cross_barcode-with-rubin_ssplit-default@
+@config-fragment-line-with-rubin_ssplit-default@
+@config-fragment-effector-with-rubin_ssplit-default@
+@config-fragment-slide_code-with-rubin_ssplit-default@
+@config-fragment-tile-with-rubin_ssplit-default@
+@config-fragment-screen_state-with-rubin_ssplit-default@
+@config-fragment-comment-with-rubin_ssplit-default@
+@config-fragment-gender-with-rubin_ssplit-default@
+@config-fragment-age-with-rubin_ssplit-default@
+@config-fragment-created_by-with-rubin_ssplit-default@
+@config-fragment-mounting_protocol-with-rubin_ssplit-default@
+@config-fragment-tissue_orientation-with-rubin_ssplit-default@
+@config-fragment-imaging_project-with-rubin_ssplit-default@
+@config-fragment-channel_spec-with-rubin_ssplit-default@
+        </dataFields>
+
+    </project>
+
     <project name="Fly Light - MCFO - run sageLoader" taskName="collector">
 
 @config-fragment-lsm-bz2-input@
