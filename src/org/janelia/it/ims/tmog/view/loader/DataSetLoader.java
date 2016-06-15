@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Howard Hughes Medical Institute.
+ * Copyright (c) 2016 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -50,7 +50,7 @@ public class DataSetLoader
         model.setValueCreationPath("*/dataSet");
         model.setRelativeActualValuePath("dataSetIdentifier");
         model.setRelativeValueDisplayNamePath("dataSetIdentifier");
-        model.setServiceUrl("http://jacs.int.janelia.org:8180/rest-v1/dataSet");
+        model.setServiceUrl("http://jacs.int.janelia.org:8180/rest-v1/data/dataSet/sage?sageSync=true");
 
         model.retrieveAndSetValidValues();
 

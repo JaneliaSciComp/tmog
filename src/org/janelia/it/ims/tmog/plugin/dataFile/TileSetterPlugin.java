@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Howard Hughes Medical Institute.
+ * Copyright (c) 2016 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -95,7 +95,7 @@ public class TileSetterPlugin implements RowUpdater {
         dataSetToTilesMap = new HashMap<String, DataSetTiles>();
 
         // logic/mapping pulled from Rebecca's spreadsheet
-        // data set names pulled from "http://jacs.int.janelia.org:8180/rest-v1/dataSet?user=user:asoy&amp;includeOnlySageSync=true"
+        // data set names pulled from "http://jacs.int.janelia.org:8180/rest-v1/data/dataSet/sage?owners=user:asoy&amp;sageSync=true"
         // tile names pulled from "http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
 
 //        final String a = "abdominal";

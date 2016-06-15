@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="4.1.4" frameSizePercentage="95"/>
+    <global minimumVersion="4.1.8" frameSizePercentage="95"/>
 
     <project name="FFC - scope to confocalStacks" default="true">
 
@@ -145,8 +145,8 @@
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
-                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/owner/system/dataSet/${Data Set}/lsmPipelines"/>
-                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/task/1593757153544372426/currentStatus"/>
+                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/process/owner/system/dataSet/${Data Set}/lsmPipelines"/>
+                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/data/dataSet/sage?owners=user:trautmane"/>
                 <property name="relativePathDepth" value="3"/>
             </rowListener>
 
@@ -212,7 +212,7 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?includeOnlySageSync=true"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/data/dataSet/sage?sageSync=true"
                             autoComplete="true">
             </webServiceList>
 
@@ -486,7 +486,7 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/dataSet?includeOnlySageSync=false"
+                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/data/dataSet/sage?sageSync=false"
                             autoComplete="true">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flyfuncconn"/>
