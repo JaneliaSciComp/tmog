@@ -22,7 +22,6 @@ import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.PropertyTokenList;
 import org.janelia.it.ims.tmog.plugin.RelativePathUtil;
-import org.janelia.it.ims.tmog.plugin.RenamePluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RowListener;
 import org.janelia.it.ims.tmog.plugin.SessionListener;
 
@@ -162,26 +161,24 @@ public class JacsLsmPipelinesPlugin
             throws ExternalDataException, ExternalSystemException {
 
         if (RowListener.EventType.END_ROW_SUCCESS.equals(eventType)) {
-            if (row instanceof RenamePluginDataRow) {
 
-                final Thread currentThread = Thread.currentThread();
-                Map<String, Set<String>> dataSetPathMap = threadToDataSetPathMap.get(currentThread);
-                if (dataSetPathMap == null) {
-                    dataSetPathMap = new HashMap<>();
-                    threadToDataSetPathMap.put(currentThread, dataSetPathMap);
-                }
-
-                final String dataSet = row.getCoreValue(dataSetColumnName);
-
-                Set<String> lsmPathSet = dataSetPathMap.get(dataSet);
-                if (lsmPathSet == null) {
-                    lsmPathSet = new HashSet<>();
-                    dataSetPathMap.put(dataSet, lsmPathSet);
-                }
-
-                final String relativePath = RelativePathUtil.getRelativePath(row.getTargetFile(), relativePathDepth);
-                lsmPathSet.add(relativePath);
+            final Thread currentThread = Thread.currentThread();
+            Map<String, Set<String>> dataSetPathMap = threadToDataSetPathMap.get(currentThread);
+            if (dataSetPathMap == null) {
+                dataSetPathMap = new HashMap<>();
+                threadToDataSetPathMap.put(currentThread, dataSetPathMap);
             }
+
+            final String dataSet = row.getCoreValue(dataSetColumnName);
+
+            Set<String> lsmPathSet = dataSetPathMap.get(dataSet);
+            if (lsmPathSet == null) {
+                lsmPathSet = new HashSet<>();
+                dataSetPathMap.put(dataSet, lsmPathSet);
+            }
+
+            final String relativePath = RelativePathUtil.getRelativePath(row.getTargetFile(), relativePathDepth);
+            lsmPathSet.add(relativePath);
         }
 
         return row;

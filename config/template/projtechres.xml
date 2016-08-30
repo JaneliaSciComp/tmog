@@ -81,6 +81,7 @@
                 <property name="relativePathDepth" value="3"/>
             </rowListener>
 
+@config-fragment-jacs-lsm-pipelines-3@
         </plugins>
 
         <dataFields>

@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="4.1.8" frameSizePercentage="95"/>
+    <global minimumVersion="4.1.9" frameSizePercentage="95"/>
 
     <project name="FFC - scope to confocalStacks" default="true">
 
@@ -416,6 +416,12 @@
                 <property name="keep.existing.data" value="true"/>
                 <property name="relative_path" value="SAGE Name"/>
                 <property name="screen_state" value="Screen State"/>
+                <property name="relativePathDepth" value="3"/>
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
+                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/process/owner/system/dataSet/${Data Set}/lsmPipelines"/>
+                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/data/dataSet/sage?owners=user:trautmane"/>
                 <property name="relativePathDepth" value="3"/>
             </rowListener>
 

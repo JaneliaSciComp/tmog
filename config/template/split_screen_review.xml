@@ -176,6 +176,7 @@
                 <property name="screen_state" value="Screen State"/>
             </rowListener>
 
+@config-fragment-jacs-lsm-pipelines-1@
         </plugins>
 
         <dataFields>
