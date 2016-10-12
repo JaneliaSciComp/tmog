@@ -14,7 +14,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[//tier2.hhmi.org|/tier2]/zlatic/zlaticlab/Projects/odor/MMF-Files/tracking-results/t14/" />
+            <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/Projects/odor/MMF-Files/tracking-results/t14/" />
             <renameFieldValue fieldDisplayName="Line"/>
             <renameFieldValue fieldDisplayName="Effector" prefix="@"/>
             <path path="/"/>
@@ -99,7 +99,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[//tier2.hhmi.org|/tier2]/zlatic/zlaticlab/Projects/odor-rd/MMF-Files/tracking-results/t14/" />
+            <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/Projects/odor-rd/MMF-Files/tracking-results/t14/" />
             <renameFieldValue fieldDisplayName="Line"/>
             <renameFieldValue fieldDisplayName="Effector" prefix="@"/>
             <path path="/"/>
