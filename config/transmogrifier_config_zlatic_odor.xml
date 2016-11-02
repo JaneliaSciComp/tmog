@@ -14,7 +14,9 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/Projects/odor/MMF-Files/tracking-results/t14/" />
+            <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/Projects/odor/MMF-Files/tracking-results/" />
+            <renameFieldValue fieldDisplayName="Tracker"/>
+            <path path="/"/>
             <renameFieldValue fieldDisplayName="Line"/>
             <renameFieldValue fieldDisplayName="Effector" prefix="@"/>
             <path path="/"/>
@@ -30,9 +32,17 @@
                   copyable="false"
                   markedForTask="false"
                   editable="false">
-                <sourceFileDefault pattern=".*[/\\\\]t14[/\\\\][^@/\\\\]+@[^/\\\\]+[/\\\\](([^/\\\\]+[/\\\\])+).*"
+                <sourceFileDefault pattern=".*[/\\\\]t\d+[/\\\\][^@/\\\\]+@[^/\\\\]+[/\\\\](([^/\\\\]+[/\\\\])+).*"
                                    matchType="path"/>
             </text>
+
+            <validValueList displayName="Tracker" required="true">
+                <sourceFileDefault pattern=".*[/\\\\](t\d+)[/\\\\].*"
+                                   matchType="path"/>
+                <validValue value="t8"/>
+                <validValue value="t14"/>
+                <validValue value="t16"/>
+            </validValueList>
 
             <webServiceList displayName="Line" required="true"
                             markedForTask="false"
@@ -42,7 +52,7 @@
                             serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=zlatic&amp;lab=rubin&amp;lab=simpson&amp;lab=fly&amp;lab=flylight&amp;lab=olympiad&amp;lab=jayaraman"
                             autoComplete="true">
 
-                <sourceFileMappedDefault pattern=".*[/\\\\]t14[/\\\\]([^@/\\\\]+)@.*"
+                <sourceFileMappedDefault pattern=".*[/\\\\]t\d+[/\\\\]([^@/\\\\]+)@.*"
                                          matchType="path">
                     <mappedValue from="attp2" to="FCF_attP2_1500062"/>
                     <mappedValue from="ppk-gal4" to="MZZ_ppk1d9GAL4"/>
@@ -50,7 +60,7 @@
                     <mappedValue from="ppklexa" to="JHS_ppk_LexAattp40"/>
                 </sourceFileMappedDefault>
 
-                <sourceFileDefault pattern=".*[/\\\\]t14[/\\\\]([^@/\\\\]+)@.*"
+                <sourceFileDefault pattern=".*[/\\\\]t\d+[/\\\\]([^@/\\\\]+)@.*"
                                    matchType="path"/>
             </webServiceList>
 
@@ -61,7 +71,7 @@
                         autoComplete="true"
                         markedForTask="false">
 
-                <sourceFileMappedDefault pattern=".*[/\\\\]t14[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
+                <sourceFileMappedDefault pattern=".*[/\\\\]t\d+[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
                                          matchType="path">
                     <mappedValue from="w118" to="UAS_IVS_myr_3_0009" />
                     <mappedValue from="none" to="NoEffector_0_9999"/>
@@ -69,7 +79,7 @@
                     <mappedValue from="ChR2" to="UAS_ChRh2_23_0011" />
                 </sourceFileMappedDefault>
 
-                <sourceFileDefault pattern=".*[/\\\\]t14[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
+                <sourceFileDefault pattern=".*[/\\\\]t\d+[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
                                    matchType="path"/>
 
             </cvTermList>
@@ -79,7 +89,7 @@
                   markedForTask="false"
                   copyable="false"
                   editable="false">
-                <sourceFileDefault pattern=".*[/\\\\]t14[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
+                <sourceFileDefault pattern=".*[/\\\\]t\d+[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
                                    matchType="path"/>
             </text>
             -->
@@ -99,7 +109,9 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/Projects/odor-rd/MMF-Files/tracking-results/t14/" />
+            <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/Projects/odor-rd/MMF-Files/tracking-results/" />
+            <renameFieldValue fieldDisplayName="Tracker"/>
+            <path path="/"/>
             <renameFieldValue fieldDisplayName="Line"/>
             <renameFieldValue fieldDisplayName="Effector" prefix="@"/>
             <path path="/"/>
@@ -115,15 +127,23 @@
                   copyable="false"
                   markedForTask="false"
                   editable="false">
-                <sourceFileDefault pattern=".*[/\\\\]t14[/\\\\][^@/\\\\]+@[^/\\\\]+[/\\\\](([^/\\\\]+[/\\\\])+).*"
+                <sourceFileDefault pattern=".*[/\\\\]t\d+[/\\\\][^@/\\\\]+@[^/\\\\]+[/\\\\](([^/\\\\]+[/\\\\])+).*"
                                    matchType="path"/>
             </text>
+
+            <validValueList displayName="Tracker" required="true">
+                <sourceFileDefault pattern=".*[/\\\\](t\d+)[/\\\\].*"
+                                   matchType="path"/>
+                <validValue value="t8"/>
+                <validValue value="t14"/>
+                <validValue value="t16"/>
+            </validValueList>
 
             <text displayName="Line" required="true"
                   pattern="[0-9A-Za-z\-\_]++"
                   markedForTask="false">
 
-                <sourceFileMappedDefault pattern=".*[/\\\\]t14[/\\\\]([^@/\\\\]+)@.*"
+                <sourceFileMappedDefault pattern=".*[/\\\\]t\d+[/\\\\]([^@/\\\\]+)@.*"
                                          matchType="path">
                     <mappedValue from="attp2" to="FCF_attP2_1500062"/>
                     <mappedValue from="nolarva" to="Do NOT tmog!"/>
@@ -132,14 +152,14 @@
                     <mappedValue from="ppklexa" to="JHS_ppk_LexAattp40"/>
                 </sourceFileMappedDefault>
 
-                <sourceFileDefault pattern=".*[/\\\\]t14[/\\\\]([^@/\\\\]+)@.*"
+                <sourceFileDefault pattern=".*[/\\\\]t\d+[/\\\\]([^@/\\\\]+)@.*"
                                    matchType="path"/>
             </text>
 
             <text displayName="Effector" required="true"
                   markedForTask="false">
 
-                <sourceFileMappedDefault pattern=".*[/\\\\]t14[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
+                <sourceFileMappedDefault pattern=".*[/\\\\]t\d+[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
                                          matchType="path">
                     <mappedValue from="w118" to="UAS_IVS_myr_3_0009" />
                     <mappedValue from="none" to="NoEffector_0_9999"/>
@@ -147,7 +167,7 @@
                     <mappedValue from="ChR2" to="UAS_ChRh2_23_0011" />
                 </sourceFileMappedDefault>
 
-                <sourceFileDefault pattern=".*[/\\\\]t14[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
+                <sourceFileDefault pattern=".*[/\\\\]t\d+[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
                                    matchType="path"/>
 
             </text>
