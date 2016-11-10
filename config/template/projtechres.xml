@@ -5,7 +5,7 @@
 @config-fragment-lsm-input@
 @config-fragment-lsm-sort@
         <outputDirectory>
-            <path path="[//tier2.hhmi.org|/tier2]/projtechres/confocalStacks/" />
+            <path path="[//dm11.hhmi.org|/groups/projtechres]/projtechres/confocalStacks/" />
             <sourceFileModificationTime datePattern="yyyy"/>
             <path path="/" />
             <sourceFileModificationTime datePattern="MM"/>
