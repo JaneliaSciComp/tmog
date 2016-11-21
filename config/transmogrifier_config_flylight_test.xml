@@ -14,7 +14,7 @@
                          patternString="([A-Z])(\d++)_.*_(L\d++)[\._].*"
                          patternGroupIndexes="1,2,3"/>
 
-        <outputDirectory basePath="[//tier2.hhmi.org|/tier2]/flylight/image_test/confocalStacks"
+        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/image_test/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>

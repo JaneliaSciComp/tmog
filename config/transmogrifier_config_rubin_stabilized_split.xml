@@ -19,14 +19,14 @@
 
         <inputFileFilter patternString=".+\.lsm" />
 
-        <outputDirectory basePath="[//tier2.hhmi.org|/tier2]/flylight/ssplit/data/confocalStacks"
+        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/ssplit/data/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[//tier2.hhmi.org|/tier2]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[//dm11.hhmi.org|/groups/flylight]/flylight/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="Line" value="Line" />
             </rowUpdater>
@@ -243,7 +243,7 @@
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[//tier2.hhmi.org|/tier2]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[//dm11.hhmi.org|/groups/flylight]/flylight/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="Line" value="Line" />
             </rowUpdater>

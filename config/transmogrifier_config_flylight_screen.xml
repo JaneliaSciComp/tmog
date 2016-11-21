@@ -9,7 +9,7 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="[\\tier2.hhmi.org|/tier2/flylight]/flylight/screen/confocalStacks"
+        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/screen/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -54,7 +54,7 @@
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[\\tier2.hhmi.org|/tier2/flylight]/flylight/tmog/summaries/screen"/>
+                <property name="directory" value="[//dm11.hhmi.org|/groups/flylight]/flylight/tmog/summaries/screen"/>
             </sessionListener>
 
         </plugins>
@@ -198,7 +198,7 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="[\\tier2.hhmi.org|/tier2/flylight]/flylight/screen/confocalStacks"
+        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/screen/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -234,7 +234,7 @@
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[\\tier2.hhmi.org|/tier2/flylight]/flylight/tmog/summaries/screen"/>
+                <property name="directory" value="[//dm11.hhmi.org|/groups/flylight]/flylight/tmog/summaries/screen"/>
             </sessionListener>
 
         </plugins>
@@ -401,7 +401,7 @@
 
         <inputFileFilter patternString=".+\.(lsm|lsm\.bz2)" />
 
-        <outputDirectory basePath="[\\tier2.hhmi.org|/tier2/flylight]/flylight/screen/confocalStacks"
+        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/screen/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
@@ -434,7 +434,7 @@
             </rowListener>
 
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[\\tier2.hhmi.org|/tier2/flylight]/flylight/tmog/summaries/screen"/>
+                <property name="directory" value="[//dm11.hhmi.org|/groups/flylight]/flylight/tmog/summaries/screen"/>
             </sessionListener>
 
         </plugins>

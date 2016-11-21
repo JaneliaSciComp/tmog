@@ -49,7 +49,7 @@ are deployed for the following lab groups:
 /groups/simpson/MicroscopeData/tmog/config
 /groups/svoboda/wdbp/tmog/config
 /groups/zlatic/zlaticlab/tmog/config
-/tier2/flylight/tmog/config
+/groups/flylight/flylight/tmog/config
 /tier2/leet/leetconfocal/tmog/config
 /tier2/leet/leetimg/leetlab/tmog/config
 /tier2/rubin/data1/rubinlab/tmog/config

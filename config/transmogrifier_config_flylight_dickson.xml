@@ -11,7 +11,7 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="[//tier2.hhmi.org|/tier2]/flylight/dickson/confocalStacks"
+        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/dickson/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>

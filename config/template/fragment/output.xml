@@ -1,2 +1,2 @@
-        <outputDirectory basePath="[//tier2.hhmi.org|/tier2]/flylight/@family_directory@/confocalStacks"
+        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/@family_directory@/confocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
