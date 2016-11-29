@@ -231,8 +231,6 @@
                                 config-resource-dir="[//dm11.hhmi.org|/groups/projtechres]/projtechres"/>
         <build-jnlp-launch-file name="rubin_rd"
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/rubin/data1/rubinlab"/>
-        <build-jnlp-launch-file name="rubin_wu"
-                                config-resource-dir="[//tier2.hhmi.org|/tier2]/rubin/data1/rubinlab"/>
         <build-jnlp-launch-file name="simpson_scope"
                                 config-resource-dir="[//dm11.hhmi.org/simpsonmicro|/groups/simpson/MicroscopeData]"/>
         <build-jnlp-launch-file name="split_screen_review"
