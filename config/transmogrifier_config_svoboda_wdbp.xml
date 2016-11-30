@@ -11,7 +11,7 @@
              taskName="rename-without-delete"
              copyPreviousButtonVisible="false">
 
-        <inputFileFilter patternString=".+\.seq"
+        <inputFileFilter patternString=".+\.(seq|avi|mp4)"
                          recursiveSearch="true"/>
 
         <outputDirectory>
