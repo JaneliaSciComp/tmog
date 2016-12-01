@@ -204,7 +204,7 @@
         <build-jnlp-launch-file name="ditp"
                                 config-resource-dir="[//dm11.hhmi.org|/groups/ditp]/ditp"/>
         <build-jnlp-launch-file name="flyfuncconn"
-                                config-resource-dir="[//tier2.hhmi.org|/tier2]/flyfuncconn"/>
+                                config-resource-dir="[//dm11.hhmi.org|/groups/flyfuncconn]/flyfuncconn"/>
         <build-jnlp-launch-file name="flylight_collaborations"
                                 config-resource-dir="[//dm11.hhmi.org|/groups/flylight]/flylight"/>
         <build-jnlp-launch-file name="flylight_dickson"
