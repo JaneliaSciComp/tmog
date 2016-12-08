@@ -50,7 +50,7 @@ public class DataSetLoader
         model.setValueCreationPath("*/dataSet");
         model.setRelativeActualValuePath("dataSetIdentifier");
         model.setRelativeValueDisplayNamePath("dataSetIdentifier");
-        model.setServiceUrl("http://jacs.int.janelia.org:8180/rest-v1/data/dataSet/sage?sageSync=true");
+        model.setServiceUrl("http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?sageSync=true");
 
         model.retrieveAndSetValidValues();
 

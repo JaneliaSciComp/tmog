@@ -80,7 +80,7 @@ public class TileSetterPlugin implements RowUpdater {
         }
         this.targetComparator = new NumberComparator(sortPattern);
 
-        this.targetFileToTileMap = new HashMap<File, String>();
+        this.targetFileToTileMap = new HashMap<>();
         buildDataSetToTilesMap();
     }
 
@@ -92,10 +92,10 @@ public class TileSetterPlugin implements RowUpdater {
      */
     private void buildDataSetToTilesMap() {
 
-        dataSetToTilesMap = new HashMap<String, DataSetTiles>();
+        dataSetToTilesMap = new HashMap<>();
 
         // logic/mapping pulled from Rebecca's spreadsheet
-        // data set names pulled from "http://jacs.int.janelia.org:8180/rest-v1/data/dataSet/sage?owners=user:asoy&amp;sageSync=true"
+        // data set names pulled from "http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?owners=user:asoy&amp;sageSync=true"
         // tile names pulled from "http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
 
 //        final String a = "abdominal";
@@ -198,7 +198,7 @@ public class TileSetterPlugin implements RowUpdater {
 
         // map location (slideCode + dataSet) to list of targets
         Map<SlideAndDataSet, List<FileTarget>> locToTargetListMap =
-                new HashMap<SlideAndDataSet, List<FileTarget>>();
+                new HashMap<>();
 
         String dataSet = null;
         SlideAndDataSet slideAndDataSet;
@@ -220,7 +220,7 @@ public class TileSetterPlugin implements RowUpdater {
 
             targetsForCodeList = locToTargetListMap.get(slideAndDataSet);
             if (targetsForCodeList == null) {
-                targetsForCodeList = new ArrayList<FileTarget>();
+                targetsForCodeList = new ArrayList<>();
                 locToTargetListMap.put(slideAndDataSet, targetsForCodeList);
             }
 
@@ -391,7 +391,7 @@ public class TileSetterPlugin implements RowUpdater {
         private Map<Integer, List<String>> countToTileNameListMap;
 
         public DataSetTiles(String[][] tileNameLists) {
-            countToTileNameListMap = new HashMap<Integer, List<String>>();
+            countToTileNameListMap = new HashMap<>();
             for (String[] tileNameList : tileNameLists) {
                 countToTileNameListMap.put(tileNameList.length,
                                            Arrays.asList(tileNameList));

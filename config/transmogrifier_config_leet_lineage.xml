@@ -82,8 +82,8 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.XmlWriterPlugin" />
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
-                <property name="serviceUrl" value="http://jacs.int.janelia.org:8180/rest-v1/process/owner/system/dataSet/${Data Set}/lsmPipelines"/>
-                <property name="testUrl" value="http://jacs.int.janelia.org:8180/rest-v1/data/dataSet/sage?owners=user:trautmane"/>
+                <property name="serviceUrl" value="http://jacs-data.int.janelia.org:8180/rest-v1/process/owner/system/dataSet/${Data Set}/lsmPipelines"/>
+                <property name="testUrl" value="http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?owners=user:trautmane"/>
                 <property name="relativePathDepth" value="2"/>
             </rowListener>
 
@@ -281,7 +281,7 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs.int.janelia.org:8180/rest-v1/data/dataSet/sage?owners=group:leetlab"
+                            serviceUrl="http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?owners=group:leetlab"
                             autoComplete="true">
             </webServiceList>
 
