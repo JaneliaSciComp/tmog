@@ -9,12 +9,12 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="[//tier2.hhmi.org|/tier2]/rubin/data1/rubinlab/RD/RDconfocalStacks"
+        <outputDirectory basePath="[//dm11.hhmi.org/rubindata|/groups/rubin/data1/rubinlab]/RD/RDconfocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[//tier2.hhmi.org|/tier2]/rubin/data1/rubinlab/tmog/summaries/RD"/>
+                <property name="directory" value="[//dm11.hhmi.org/rubindata|/groups/rubin/data1/rubinlab]/tmog/summaries/RD"/>
             </sessionListener>
         </plugins>
 
@@ -63,12 +63,12 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="[//tier2.hhmi.org|/tier2]/rubin/data1/rubinlab/RD/RDconfocalStacks"
+        <outputDirectory basePath="[//dm11.hhmi.org/rubindata|/groups/rubin/data1/rubinlab]/RD/RDconfocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[//tier2.hhmi.org|/tier2]/rubin/data1/rubinlab/tmog/summaries/RD"/>
+                <property name="directory" value="[//dm11.hhmi.org/rubindata|/groups/rubin/data1/rubinlab]/tmog/summaries/RD"/>
             </sessionListener>
         </plugins>
 
@@ -112,12 +112,12 @@
 
         <inputFileSorter sortAlgorithm="LNumber" />
 
-        <outputDirectory basePath="[//tier2.hhmi.org|/tier2]/rubin/data1/rubinlab/RD/RDconfocalStacks"
+        <outputDirectory basePath="[//dm11.hhmi.org/rubindata|/groups/rubin/data1/rubinlab]/RD/RDconfocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
             <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
-                <property name="directory" value="[//tier2.hhmi.org|/tier2]/rubin/data1/rubinlab/tmog/summaries/RD"/>
+                <property name="directory" value="[//dm11.hhmi.org/rubindata|/groups/rubin/data1/rubinlab]/tmog/summaries/RD"/>
             </sessionListener>
         </plugins>
 
