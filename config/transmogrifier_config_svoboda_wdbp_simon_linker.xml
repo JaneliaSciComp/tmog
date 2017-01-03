@@ -335,56 +335,56 @@
 
 
             <text displayName="Whiskers Present"
-                  required="true"
+                  required="false"
                   markedForTask="false"/>
 
             <text displayName="Min Whisker Length"
-                  required="true"
+                  required="false"
                   markedForTask="false"/>
 
             <text displayName="Max Follicle Y"
-                  required="true"
+                  required="false"
                   markedForTask="false"/>
 
             <text displayName="Polynomial Max Follicle Y"
-                  required="true"
+                  required="false"
                   markedForTask="false"/>
 
             <text displayName="Polynomial Distance From Face"
-                  required="true"
+                  required="false"
                   markedForTask="false"/>
 
             <text displayName="Polynomial Offset"
-                  required="true"
+                  required="false"
                   markedForTask="false"/>
 
             <text displayName="Kappa Position"
-                  required="true"
+                  required="false"
                   markedForTask="false"/>
 
             <text displayName="Bar Template Trial"
-                  required="true"
+                  required="false"
                   markedForTask="false"/>
 
             <text displayName="BarT Frame Number"
-                  required="true"
+                  required="false"
                   markedForTask="false"/>
 
             <text displayName="BarT Center"
-                  required="true"
+                  required="false"
                   markedForTask="false"/>
 
             <text displayName="BarT WH"
-                  required="true"
+                  required="false"
                   markedForTask="false"/>
 
             <number displayName="Number of Whiskers"
-                    required="true"
+                    required="false"
                     minimumValue="0"
                     markedForTask="false"/>
 
             <validValueList displayName="Stimulation Protocol"
-                            required="true"
+                            required="false"
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
                 <validValue value="go/nogo"/>
@@ -392,13 +392,13 @@
             </validValueList>
 
             <number displayName="Frame Rate"
-                    required="true"
+                    required="false"
                     minimumValue="0"
                     sharedForAllSessionFiles="true"
                     markedForTask="false"/>
 
             <validValueList displayName="Face Parameter"
-                            required="true"
+                            required="false"
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
                 <validValue displayName="top" value="top"/>
@@ -408,7 +408,7 @@
             </validValueList>
 
             <decimal displayName="Px2mm"
-                     required="true"
+                     required="false"
                      minimumValue="0.00"
                      sharedForAllSessionFiles="true"
                      markedForTask="false">
