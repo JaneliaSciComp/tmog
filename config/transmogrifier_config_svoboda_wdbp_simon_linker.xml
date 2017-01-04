@@ -319,6 +319,8 @@
                             required="true"
                             sharedForAllSessionFiles="true"
                             markedForTask="false">
+                <validValue displayName="Gayathri Ranganathan" value="ranganathang"/>
+                <validValue displayName="Justin Little" value="littlej"/>
                 <validValue displayName="Pierre Apostolides" value="apostolidesp"/>
                 <validValue displayName="Sachin Vaidya" value="vaidyas"/>
             </validValueList>
