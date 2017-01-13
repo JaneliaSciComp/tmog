@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Howard Hughes Medical Institute.
+ * Copyright (c) 2017 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -85,6 +85,7 @@ public class CollectorView implements SessionView, InputSelectionView {
     public CollectorView(String sessionName,
                          ProjectConfiguration projectConfig,
                          File defaultDirectory,
+                         boolean isSageCollector,
                          JTabbedPane parentTabbedPane) {
         this.sessionName = sessionName;
         this.projectConfig = projectConfig;
@@ -92,7 +93,7 @@ public class CollectorView implements SessionView, InputSelectionView {
         this.projectNameText = projectConfig.getName();
         this.projectName.setText(projectNameText);
 
-        if (defaultDirectory == null) {
+        if (isSageCollector) {
             this.inputSelectionHandler =
                     new SageInputSelectionHandler(projectConfig.getImageFamilyName(),
                                                   rootDirectoryLabel,

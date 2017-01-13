@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Howard Hughes Medical Institute.
+ * Copyright (c) 2017 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -407,11 +407,13 @@ public class TabbedView implements ActionListener {
             newView = new CollectorView(sessionName,
                                         projectConfig,
                                         defaultDirectory,
+                                        false,
                                         tabbedPane);
         } else if (CollectorView.SAGE_TASK_NAME.equals(projectConfig.getTaskName())) {
             newView = new CollectorView(sessionName,
                                         projectConfig,
                                         null,
+                                        true,
                                         tabbedPane);
         } else {
             // default to rename task and view
