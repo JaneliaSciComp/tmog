@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Howard Hughes Medical Institute.
+ * Copyright (c) 2017 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -191,15 +191,18 @@ public class ObjectiveCorrectionPluginTest
             }
         }
 
-        final String[] validTestValues = {
-                "valid test values", "data_set", "tile", "recorded-63x-objective", "foo.lsm"
+        final String[][] validTestValues = {
+                { "valid 63x test", "data_set", "tile", "recorded-63x-objective", "foo.lsm" },
+                { "valid 40x test", "data_set", "tile", "Plan-Apochromat 40x/1.3 Oil DIC", "foo.lsm" }
         };
-        pluginDataRow = buildPluginDataRow(validTestValues);
-        try {
-            plugin.validate("test-session", pluginDataRow);
-            // test passed
-        } catch (ExternalDataException e) {
-            fail("valid test values caused exception: " + e.getMessage());
+        for (final String[] testValues : validTestValues) {
+            pluginDataRow = buildPluginDataRow(testValues);
+            try {
+                plugin.validate("test-session", pluginDataRow);
+                // test passed
+            } catch (ExternalDataException e) {
+                fail("valid test values caused exception: " + e.getMessage());
+            }
         }
 
     }

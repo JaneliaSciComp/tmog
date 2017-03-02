@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Howard Hughes Medical Institute.
+ * Copyright (c) 2017 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -78,7 +78,7 @@ public class ObjectiveCorrectionPlugin
         this.fileNamePattern = Pattern.compile(DEFAULT_FILE_NAME_PATTERN);
         this.recordedValuePattern = Pattern.compile(DEFAULT_RECORDED_VALUE_PATTERN);
 
-        Map<String, String> dataSetMap = new HashMap<String, String>();
+        Map<String, String> dataSetMap = new HashMap<>();
         dataSetMap.put("heberleinlab_central_brain_npf_flpl_20x", FIX_20X_OBJECTIVE_NAME);
 
         dataSetMap.put("asoy_mb_lexa_gal4_40X_1024px", FIX_40X_OBJECTIVE_NAME);
@@ -94,9 +94,9 @@ public class ObjectiveCorrectionPlugin
 
         // if tile group = Brain, Ventral Nerve Cord, or VNC-Verify-ver,
         // then objective = 20X
-        // else objective = 63X
+        // else objective = 63X or 40X
 
-        Map<String, String> tileMap = new HashMap<String, String>();
+        Map<String, String> tileMap = new HashMap<>();
         tileMap.put("brain", FIX_20X_OBJECTIVE_NAME);
         tileMap.put("brain_with_lamina", FIX_20X_OBJECTIVE_NAME);
         tileMap.put("ventral_nerve_cord", FIX_20X_OBJECTIVE_NAME);
@@ -184,7 +184,7 @@ public class ObjectiveCorrectionPlugin
                                             "this new type of name.");
         }
 
-        final String fixedValue = getFixedValue(dataSet, tile);
+        final String fixedValue = getFixedValue(dataSet, tile, recordedCoreObjective);
         final String fixedCoreObjective =
                 getCoreObjective("fixed objective value", fixedValue, recordedValuePattern);
 
@@ -243,7 +243,7 @@ public class ObjectiveCorrectionPlugin
                                             String fileName) {
         String fixedValue;
         if (StringUtil.isDefined(dataSet) && StringUtil.isDefined(tile)) {
-            fixedValue = getFixedValue(dataSet, tile);
+            fixedValue = getFixedValue(dataSet, tile, recordedCoreObjective);
             final String fixedCoreObjective =
                     getCoreObjective("fixed objective value", fixedValue, recordedValuePattern);
 
@@ -294,12 +294,21 @@ public class ObjectiveCorrectionPlugin
     }
 
     private String getFixedValue(String dataSet,
-                                 String tile) {
+                                 String tile,
+                                 String recordedCoreObjective) {
         String fixedValue = dataSetToObjectiveMap.get(dataSet);
         if (fixedValue == null) {
             fixedValue = tileToObjectiveMap.get(tile);
             if (fixedValue == null) {
-                fixedValue = FIX_63X_OBJECTIVE_NAME;
+                // if a fixed value was not explicitly mapped by data set or tile,
+                // assume the fixed value should be ...
+                if (recordedCoreObjective.equalsIgnoreCase("40x")) {
+                    // 40x if the recorded core objective is 40x
+                    fixedValue = FIX_40X_OBJECTIVE_NAME;
+                } else {
+                    // 63x in all other cases
+                    fixedValue = FIX_63X_OBJECTIVE_NAME;
+                }
             }
         }
         return fixedValue;
