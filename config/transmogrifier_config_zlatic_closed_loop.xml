@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="4.2.1" frameSizePercentage="90"/>
+
+    <project name="Zlatic Lab: Closed Loop"
+             default="true"
+             copyPreviousButtonVisible="false">
+
+        <inputFileFilter patternString=".+\.txt"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <outputDirectory fileModeReadOnly="false">
+            <path path="[//nearline.hhmi.org|/nearline/zlatic]/zlaticlab/closed_loop" />
+            <renameFieldValue prefix="/" fieldDisplayName="Rig"/>
+            <renameFieldValue prefix="/" fieldDisplayName="Experimental Mode"/>
+            <renameFieldValue prefix="/" fieldDisplayName="Genotype 1"/>
+            <renameFieldValue prefix="/" fieldDisplayName="Genotype 2"/>
+            <renameFieldValue prefix="/" fieldDisplayName="Extension"/>
+            <renameFieldValue prefix="/" fieldDisplayName="Experiment Timestamp" pattern="(\d{6}).*"/>
+            <renameFieldValue prefix="/" fieldDisplayName="Experiment Timestamp" pattern="\d{6}(\d{2}).*"/>
+        </outputDirectory>
+
+        <plugins>
+        </plugins>
+
+        <dataFields>
+
+            <validValueList displayName="Rig"
+                            required="true"
+                            autoComplete="true">
+                <sourceFileDefault pattern="(.+?)@.+?@.+?@.+?@.+?@.*"/>
+                <validValue value="t20"/>
+            </validValueList>
+
+            <separator value="@"/>
+
+            <validValueList displayName="Experimental Mode"
+                            required="true"
+                            autoComplete="true">
+                <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.*"/>
+                <validValue value="Operant_open_loop_with_context"/>
+                <validValue value="Operant_open_loop_without_context"/>
+                <validValue value="Operant_closed_loop_with_pretest_bend"/>
+                <validValue value="Operant_closed_loop_with_pretest_nonbend"/>
+                <validValue value="Operant_closed_loop_with_pretest_left_bend"/>
+                <validValue value="Operant_closed_loop_with_pretest_backup"/>
+                <validValue value="Bandit_unrestricted"/>
+            </validValueList>
+
+            <separator value="@"/>
+
+            <webServiceList displayName="Genotype 1" required="true"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=none&amp;lab=simpson&amp;lab=rubin&amp;lab=zlatic"
+                            autoComplete="true">
+                <sourceFileMappedDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*">
+                    <mappedValue from="58E02-LexAp65" to="MZZ_K_86635" />     <!-- robot id 3020399 -->
+                    <mappedValue from="72F11-Gal4" to="MZZ_K_87092" />        <!-- robot id 3020667 -->
+                    <mappedValue from="UAS-CsChrimson" to="MZZ_K_87093" />    <!-- robot id 3020668 -->
+                    <mappedValue from="58E02-Gal4" to="MZZ_K_99394" />        <!-- robot id 3026429 -->
+                    <mappedValue from="ppk1.9-Gal4" to="MZZ_ppk1d9GAL4" />
+                </sourceFileMappedDefault>
+                <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*"/>
+            </webServiceList>
+
+            <separator value="@"/>
+
+            <webServiceList displayName="Genotype 2" required="true"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=none&amp;lab=simpson&amp;lab=rubin&amp;lab=zlatic"
+                            autoComplete="true">
+                <sourceFileMappedDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.*">
+                    <mappedValue from="58E02-LexAp65" to="MZZ_K_86635" />     <!-- robot id 3020399 -->
+                    <mappedValue from="72F11-Gal4" to="MZZ_K_87092" />        <!-- robot id 3020667 -->
+                    <mappedValue from="UAS-CsChrimson" to="MZZ_K_87093" />    <!-- robot id 3020668 -->
+                    <mappedValue from="58E02-Gal4" to="MZZ_K_99394" />        <!-- robot id 3026429 -->
+                    <mappedValue from="ppk1.9-Gal4" to="MZZ_ppk1d9GAL4" />
+                </sourceFileMappedDefault>
+                <sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.*"/>
+            </webServiceList>
+
+            <!--<cvTermList displayName="Effector" required="true"-->
+                        <!--autoComplete="true"-->
+                        <!--displayNamePrefixedForValues="false"-->
+                        <!--serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage">-->
+                <!--<sourceFileMappedDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.*">-->
+                    <!--<mappedValue from="Cherry" to="LexAop2_Chronos_mCherry_X_0100" /> &lt;!&ndash; robot id 3017829 &ndash;&gt;-->
+                    <!--<mappedValue from="Venus" to="LexAop2_Chronos_Venus_X_0092" />    &lt;!&ndash; robot id 3017828 &ndash;&gt;-->
+                <!--</sourceFileMappedDefault>-->
+                <!--<sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.*"/>-->
+            <!--</cvTermList>-->
+
+            <separator value="@"/>
+
+            <date displayName="Experiment Timestamp" required="true"
+                  datePattern="yyyyMMdd_HHmmss">
+                <sourceFileDateDefault pattern=".+?@.+?@.+?@.+?@(\d{8}_\d{6})@.*"
+                                       fromDatePattern="yyyyMMdd_HHmmss"
+                                       toDatePattern="yyyyMMdd_HHmmss"/>
+            </date>
+
+            <separator value="@"/>
+
+            <validValueList displayName="Extension"
+                            required="true"
+                            autoComplete="true">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@(.+?)\..*"/>
+                <validValue value="data"/>
+                <validValue value="yoked-data"/>
+            </validValueList>
+
+            <fileExtension/>
+            
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
