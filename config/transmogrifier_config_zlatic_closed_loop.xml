@@ -15,9 +15,10 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[//nearline.hhmi.org|/nearline/zlatic]/zlaticlab/closed_loop" />
+            <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/closed_loop" />
             <renameFieldValue prefix="/" fieldDisplayName="Rig"/>
-            <renameFieldValue prefix="/" fieldDisplayName="Experimental Mode"/>
+            <renameFieldValue prefix="/" fieldDisplayName="Experimental Mode" pattern="([^_]+).*"/>
+            <renameFieldValue prefix="/" fieldDisplayName="Experimental Mode" pattern="[^_]+?_(.*)"/>
             <renameFieldValue prefix="/" fieldDisplayName="Genotype 1"/>
             <renameFieldValue prefix="/" fieldDisplayName="Genotype 2"/>
             <renameFieldValue prefix="/" fieldDisplayName="Extension"/>
@@ -42,14 +43,31 @@
             <validValueList displayName="Experimental Mode"
                             required="true"
                             autoComplete="true">
+
+                <sourceFileMappedDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.*">
+                    <mappedValue from="Operant_open_loop_with_context" to="Operant_OL_w_context" />
+                    <mappedValue from="Operant_open_loop_without_context" to="Operant_OL_wo_context" />
+                    <mappedValue from="Operant_closed_loop_with_pretest_bend" to="Operant_CL_bend" />
+                    <mappedValue from="Operant_closed_loop_with_pretest_nonbend" to="Operant_CL_nonbend" />
+                    <mappedValue from="Operant_closed_loop_with_pretest_left_bend" to="Operant_CL_left_bend" />
+                    <mappedValue from="Operant_closed_loop_with_pretest_right_bend" to="Operant_CL_right_bend" />
+                    <mappedValue from="Operant_closed_loop_with_pretest_backup" to="Operant_CL_backup" />
+                </sourceFileMappedDefault>
+
                 <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.*"/>
-                <validValue value="Operant_open_loop_with_context"/>
-                <validValue value="Operant_open_loop_without_context"/>
-                <validValue value="Operant_closed_loop_with_pretest_bend"/>
-                <validValue value="Operant_closed_loop_with_pretest_nonbend"/>
-                <validValue value="Operant_closed_loop_with_pretest_left_bend"/>
-                <validValue value="Operant_closed_loop_with_pretest_backup"/>
+
+                <validValue value="Operant_OL_w_context"/>
+                <validValue value="Operant_OL_wo_context"/>
+                <validValue value="Operant_CL_bend"/>
+                <validValue value="Operant_CL_nonbend"/>
+                <validValue value="Operant_CL_left_bend"/>
+                <validValue value="Operant_CL_right_bend"/>
+                <validValue value="Operant_CL_backup"/>
+                <validValue value="Operant_no_light"/>
+                <validValue value="Operant_OCL_roll"/>
+
                 <validValue value="Bandit_unrestricted"/>
+
             </validValueList>
 
             <separator value="@"/>
@@ -61,10 +79,20 @@
                             serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=none&amp;lab=simpson&amp;lab=rubin&amp;lab=zlatic"
                             autoComplete="true">
                 <sourceFileMappedDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*">
-                    <mappedValue from="58E02-LexAp65" to="MZZ_K_86635" />     <!-- robot id 3020399 -->
-                    <mappedValue from="72F11-Gal4" to="MZZ_K_87092" />        <!-- robot id 3020667 -->
-                    <mappedValue from="UAS-CsChrimson" to="MZZ_K_87093" />    <!-- robot id 3020668 -->
-                    <mappedValue from="58E02-Gal4" to="MZZ_K_99394" />        <!-- robot id 3026429 -->
+                    <mappedValue from="58E02-Gal4" to="GMR_58E02_AE_01" />
+                    <mappedValue from="58E02-LexA" to="GMR_58E02_LJ_21" />
+                    <mappedValue from="58E02-LexA;LexAop-CsChrimson,UAS-GCaMP6s" to="MZZ_K_86635" />
+                    <mappedValue from="69E06-LexA" to="GMR_69E06_LJ_21" />
+                    <mappedValue from="LexAop-Chronos-mCherry" to="VZJ_K_82674" />
+                    <mappedValue from="LexAop-Chronos-mVenus" to="VZJ_K_82673" />
+                    <mappedValue from="MB049B" to="GMR_MB049B" />
+                    <mappedValue from="SS04261" to="JRC_SS04261" />
+                    <mappedValue from="UAS-CsChrimson" to="VZJ_K_45195" />
+                    <mappedValue from="UAS-CsChrimson;;58E02-Gal4" to="MZZ_K_99394" />
+                    <mappedValue from="UAS-CsChrimson;;69F06-Gal4" to="MZZ_K_87093" />
+                    <mappedValue from="UAS-CsChrimson;;72F11-Gal4" to="MZZ_K_87092" />
+                    <mappedValue from="attP2" to="FCF_attP2_1500062" />
+                    <mappedValue from="attP40" to="FCF_R_1500095" />
                     <mappedValue from="ppk1.9-Gal4" to="MZZ_ppk1d9GAL4" />
                 </sourceFileMappedDefault>
                 <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*"/>
@@ -79,25 +107,24 @@
                             serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=none&amp;lab=simpson&amp;lab=rubin&amp;lab=zlatic"
                             autoComplete="true">
                 <sourceFileMappedDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.*">
-                    <mappedValue from="58E02-LexAp65" to="MZZ_K_86635" />     <!-- robot id 3020399 -->
-                    <mappedValue from="72F11-Gal4" to="MZZ_K_87092" />        <!-- robot id 3020667 -->
-                    <mappedValue from="UAS-CsChrimson" to="MZZ_K_87093" />    <!-- robot id 3020668 -->
-                    <mappedValue from="58E02-Gal4" to="MZZ_K_99394" />        <!-- robot id 3026429 -->
+                    <mappedValue from="58E02-Gal4" to="GMR_58E02_AE_01" />
+                    <mappedValue from="58E02-LexA" to="GMR_58E02_LJ_21" />
+                    <mappedValue from="58E02-LexA;LexAop-CsChrimson,UAS-GCaMP6s" to="MZZ_K_86635" />
+                    <mappedValue from="69E06-LexA" to="GMR_69E06_LJ_21" />
+                    <mappedValue from="LexAop-Chronos-mCherry" to="VZJ_K_82674" />
+                    <mappedValue from="LexAop-Chronos-mVenus" to="VZJ_K_82673" />
+                    <mappedValue from="MB049B" to="GMR_MB049B" />
+                    <mappedValue from="SS04261" to="JRC_SS04261" />
+                    <mappedValue from="UAS-CsChrimson" to="VZJ_K_45195" />
+                    <mappedValue from="UAS-CsChrimson;;58E02-Gal4" to="MZZ_K_99394" />
+                    <mappedValue from="UAS-CsChrimson;;69F06-Gal4" to="MZZ_K_87093" />
+                    <mappedValue from="UAS-CsChrimson;;72F11-Gal4" to="MZZ_K_87092" />
+                    <mappedValue from="attP2" to="FCF_attP2_1500062" />
+                    <mappedValue from="attP40" to="FCF_R_1500095" />
                     <mappedValue from="ppk1.9-Gal4" to="MZZ_ppk1d9GAL4" />
                 </sourceFileMappedDefault>
                 <sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.*"/>
             </webServiceList>
-
-            <!--<cvTermList displayName="Effector" required="true"-->
-                        <!--autoComplete="true"-->
-                        <!--displayNamePrefixedForValues="false"-->
-                        <!--serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage">-->
-                <!--<sourceFileMappedDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.*">-->
-                    <!--<mappedValue from="Cherry" to="LexAop2_Chronos_mCherry_X_0100" /> &lt;!&ndash; robot id 3017829 &ndash;&gt;-->
-                    <!--<mappedValue from="Venus" to="LexAop2_Chronos_Venus_X_0092" />    &lt;!&ndash; robot id 3017828 &ndash;&gt;-->
-                <!--</sourceFileMappedDefault>-->
-                <!--<sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.*"/>-->
-            <!--</cvTermList>-->
 
             <separator value="@"/>
 
@@ -114,12 +141,14 @@
                             required="true"
                             autoComplete="true">
                 <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@(.+?)\..*"/>
+                <validValue value="contingent-data"/>
                 <validValue value="data"/>
                 <validValue value="yoked-data"/>
+                <validValue value="LEDvals"/>
             </validValueList>
 
             <fileExtension/>
-            
+
         </dataFields>
 
     </project>
