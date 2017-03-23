@@ -7,6 +7,7 @@
 @config-fragment-output-test@
         <plugins>
 
+@config-fragment-jacs-data-set-quota@
 @config-fragment-image-sequence-test@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@

@@ -15,6 +15,7 @@
 
         <plugins>
 
+@config-fragment-jacs-data-set-quota@
 @config-fragment-update-project-cross-data@
 @config-fragment-update-slide-consensus-data@
 @config-fragment-update-zeiss-lsm-data@

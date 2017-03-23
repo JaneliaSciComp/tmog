@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="4.1.8" frameSizePercentage="95"/>
+    <global minimumVersion="4.2.2" frameSizePercentage="95"/>
 
     <project name="Descending Interneurons" default="true">
 
@@ -13,6 +13,11 @@
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.JacsDataSetQuotaValidator">
+                <property name="serviceUrl" value="http://jacs-webdav:8080/JFS/api/quota/filestore/status/${Data Set}"/>
+                <property name="testDataSet" value="nerna_polarity_case_3"/>
+            </rowValidator>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
                 <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />

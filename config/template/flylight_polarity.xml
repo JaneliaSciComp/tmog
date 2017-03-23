@@ -7,6 +7,7 @@
 @config-fragment-output-polarity@
         <plugins>
 
+@config-fragment-jacs-data-set-quota@
 @config-fragment-update-mapped-serial-data@
 @config-fragment-update-project-cross-data@
 @config-fragment-update-slide-consensus-data@

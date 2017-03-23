@@ -143,6 +143,7 @@
         <load-filtered-fragment name="image-sequence-ptr"           path="plugin/image-sequence.xml" key="family" value="projtechres"/>
         <load-filtered-fragment name="image-sequence-ssr"           path="plugin/image-sequence.xml" key="family" value="split_screen_review"/>
         <load-filtered-fragment name="image-sequence-test"          path="plugin/image-sequence.xml" key="family" value="flylight_test"/>
+        <load-fragment          name="jacs-data-set-quota"          path="plugin/jacs-data-set-quota.xml"/>
         <load-filtered-fragment name="jacs-lsm-pipelines-1"         path="plugin/jacs-lsm-pipelines.xml" key="relative-path-depth" value="1"/>
         <load-filtered-fragment name="jacs-lsm-pipelines-3"         path="plugin/jacs-lsm-pipelines.xml" key="relative-path-depth" value="3"/>
         <load-fragment          name="update-mapped-serial-data"    path="plugin/update-mapped-serial-data.xml"/>

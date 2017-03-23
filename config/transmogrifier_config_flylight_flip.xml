@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="4.2.1" frameSizePercentage="95"/>
+    <global minimumVersion="4.2.2" frameSizePercentage="95"/>
 
     <project name="Fly Light - MCFO - scope to confocalStacks" default="true">
 
@@ -18,6 +18,11 @@
                          derivedFromEarliestModifiedFile="true"/>
 
         <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.JacsDataSetQuotaValidator">
+                <property name="serviceUrl" value="http://jacs-webdav:8080/JFS/api/quota/filestore/status/${Data Set}"/>
+                <property name="testDataSet" value="nerna_polarity_case_3"/>
+            </rowValidator>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
