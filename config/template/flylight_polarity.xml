@@ -101,7 +101,7 @@
 
     </project>
 
-    <project name="Fly Light Polarity - run sageLoader" taskName="collector">
+    <project name="Fly Light Polarity - Launch JACS LSM Pipelines" taskName="collector">
 
 @config-fragment-lsm-bz2-input@
         <plugins>
