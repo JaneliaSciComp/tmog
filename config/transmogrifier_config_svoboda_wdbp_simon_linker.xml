@@ -606,4 +606,203 @@
 
     </project>
 
+    <project name="Magee WDBP - PFA v2"
+             taskName="rename"
+             copyPreviousButtonVisible="false">
+
+        <inputFileFilter patternString=".+\.(seq|avi|mp4)"
+                         recursiveSearch="true"/>
+
+        <outputDirectory>
+        </outputDirectory>
+
+        <fileTransfer bufferSize="10000000"
+                      digestAlgorithm="adler32"
+                      validationRequired="false"/>
+
+        <plugins>
+            <rowListener className="org.janelia.it.ims.tmog.plugin.XmlWriterPlugin" />
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionCompleteFileWriter">
+                <property name="fileName" value="transfer-complete"/>
+            </sessionListener>
+        </plugins>
+
+        <dataFields>
+
+            <!-- The following fields are collected
+                 AND included in the file name. -->
+
+            <separator value="WDBP_"/>
+
+            <text displayName="Animal ID"
+                  required="true"
+                  sharedForAllSessionFiles="true"
+                  suffix="-">
+                <sourceFileDefault pattern=".*[/\\\\]([0-9A-Za-z]++)_\d++[/\\\\].*"
+                                   matchType="path"/>
+            </text>
+
+            <date displayName="Experiment Date"
+                  required="true"
+                  datePattern="yyyy_MM_dd"
+                  sharedForAllSessionFiles="true"
+                  suffix="-">
+                <sourceFileDateDefault pattern=".*[/\\\\](\d{8})[/\\\\].*"
+                                       fromDatePattern="yyyyMMdd"
+                                       toDatePattern="yyyy_MM_dd"
+                                       matchType="path"/>
+            </date>
+
+            <text displayName="Session ID"
+                  required="true"
+                  sharedForAllSessionFiles="false"
+                  suffix="_">
+                <sourceFileDefault pattern=".*[/\\\\][0-9A-Za-z]++_(\d++)[/\\\\].*"
+                                   matchType="path"/>
+                <staticDefault value="1"/>
+            </text>
+
+            <text displayName="Trial Number"
+                  pattern="\d++"
+                  required="true">
+                <sourceFileDefault pattern=".*_(\d++)\..*"
+                                   matchType="name"/>
+            </text>
+
+            <runTime datePattern="_yyyyMMddHHmmssSSS"/>
+            <fileExtension/>
+
+            <!-- The following fields are collected but
+                 NOT included in the file name (markedForTask == false). -->
+
+            <validValueList displayName="Autodelete SEQ files"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue value="yes"/>
+                <validValue value="no"/>
+            </validValueList>
+
+            <validValueList displayName="Parameters File"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue displayName="default.parameters" value="default.parameters"/>
+                <validValue displayName="simon1.parameters" value="simon1.parameters"/>
+            </validValueList>
+
+            <validValueList displayName="Experimenter"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue displayName="Gayathri Ranganathan" value="ranganathang"/>
+                <validValue displayName="Justin Little" value="littlej"/>
+                <validValue displayName="Pierre Apostolides" value="apostolidesp"/>
+                <validValue displayName="Sachin Vaidya" value="vaidyas"/>
+            </validValueList>
+
+            <validValueList displayName="Experiment Location"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue value="rig 1 in 2W.387"/>
+                <validValue value="rig 2 in 2W.333"/>
+                <validValue value="rig 3 in 2C.373"/>
+                <validValue value="rig 4 in 2C.387"/>
+            </validValueList>
+
+
+            <text displayName="Whiskers Present"
+                  required="false"
+                  markedForTask="false"/>
+
+            <text displayName="Min Whisker Length"
+                  required="false"
+                  markedForTask="false"/>
+
+            <text displayName="Max Follicle Y"
+                  required="false"
+                  markedForTask="false"/>
+
+            <text displayName="Polynomial Max Follicle Y"
+                  required="false"
+                  markedForTask="false"/>
+
+            <text displayName="Polynomial Distance From Face"
+                  required="false"
+                  markedForTask="false"/>
+
+            <text displayName="Polynomial Offset"
+                  required="false"
+                  markedForTask="false"/>
+
+            <text displayName="Kappa Position"
+                  required="false"
+                  markedForTask="false"/>
+
+            <text displayName="Bar Template Trial"
+                  required="false"
+                  markedForTask="false"/>
+
+            <text displayName="BarT Frame Number"
+                  required="false"
+                  markedForTask="false"/>
+
+            <text displayName="BarT Center"
+                  required="false"
+                  markedForTask="false"/>
+
+            <text displayName="BarT WH"
+                  required="false"
+                  markedForTask="false"/>
+
+            <number displayName="Number of Whiskers"
+                    required="false"
+                    minimumValue="0"
+                    markedForTask="false"/>
+
+            <validValueList displayName="Stimulation Protocol"
+                            required="false"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue value="go/nogo"/>
+                <validValue value="go/nogo with multiple go positions"/>
+            </validValueList>
+
+            <number displayName="Frame Rate"
+                    required="false"
+                    minimumValue="0"
+                    sharedForAllSessionFiles="true"
+                    markedForTask="false"/>
+
+            <validValueList displayName="Face Parameter"
+                            required="false"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue displayName="top" value="top"/>
+                <validValue displayName="bottom" value="bottom"/>
+                <validValue displayName="left" value="left"/>
+                <validValue displayName="right" value="right"/>
+            </validValueList>
+
+            <decimal displayName="Px2mm"
+                     required="false"
+                     minimumValue="0.00"
+                     sharedForAllSessionFiles="true"
+                     markedForTask="false">
+            </decimal>
+
+            <text displayName="Limit Parameter"
+                  required="false"
+                  markedForTask="false"/>
+
+            <text displayName="Follicle Parameter"
+                  required="false"
+                  markedForTask="false"/>
+
+
+        </dataFields>
+
+    </project>
+
 </transmogrifierConfiguration>
