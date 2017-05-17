@@ -63,10 +63,26 @@
                 <validValue value="Operant_CL_left_bend"/>
                 <validValue value="Operant_CL_right_bend"/>
                 <validValue value="Operant_CL_backup"/>
+                <validValue value="Operant_CL_bend_short"/>
+                <validValue value="Operant_CL_left_bend_short"/>
+                <validValue value="Operant_CL_right_bend_short"/>
+                <validValue value="Operant_CL_bend_short_asymm"/>
+                <validValue value="Operant_CL_nonbend_pause_short"/>
+                <validValue value="Operant_CL_bend_relief"/>
+                <validValue value="Operant_CL_bend_relief_asymm"/>
+                <validValue value="Operant_cue_relief_bend"/>
+                <validValue value="Operant_cue_relief_backup"/>
+                <validValue value="Operant_cue_relief_roll"/>
+                <validValue value="Operant_Bandit_Clark"/>
                 <validValue value="Operant_no_light"/>
                 <validValue value="Operant_OCL_roll"/>
+                <validValue value="Operant_random_pulse_by_time_bend"/>
+                <validValue value="Operant_random_pulse_by_time_nonbend"/>
+                <validValue value="Operant_random_pulse_by_number_bend"/>
+                <validValue value="Operant_random_pulse_by_number_nonbend"/>
 
                 <validValue value="Bandit_unrestricted"/>
+                <validValue value="Bandit_limit_exposure"/>
 
             </validValueList>
 
@@ -95,6 +111,15 @@
                     <mappedValue from="attP2" to="FCF_attP2_1500062" />
                     <mappedValue from="attP40" to="FCF_R_1500095" />
                     <mappedValue from="ppk1.9-Gal4" to="MZZ_ppk1d9GAL4" />
+                    <mappedValue from="NPF-Gal4" to="UAH_K_67185" />
+                    <mappedValue from="c346-Gal4" to="VZJ_C346" />
+                    <mappedValue from="Gr43a-Gal4_2nd" to="MZZ_K_148565" />
+                    <mappedValue from="Gr43a-Gal4_3rd" to="MZZ_K_148566" />
+                    <mappedValue from="Gr5a-Gal4" to="MZZ_K_148563" />
+                    <mappedValue from="Gr64f-Gal4" to="MZZ_K_148564" />
+                    <mappedValue from="Ir76b-Gal4" to="GMR_K_70492" />
+                    <mappedValue from="Ir25a-Gal4" to="GMR_K_70490" />
+                    <mappedValue from="Tdc2-Gal4" to="UAH_TDC2" />
                 </sourceFileMappedDefault>
                 <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*"/>
             </webServiceList>
@@ -124,6 +149,15 @@
                     <mappedValue from="attP2" to="FCF_attP2_1500062" />
                     <mappedValue from="attP40" to="FCF_R_1500095" />
                     <mappedValue from="ppk1.9-Gal4" to="MZZ_ppk1d9GAL4" />
+                    <mappedValue from="NPF-Gal4" to="UAH_K_67185" />
+                    <mappedValue from="c346-Gal4" to="VZJ_C346" />
+                    <mappedValue from="Gr43a-Gal4_2nd" to="MZZ_K_148565" />
+                    <mappedValue from="Gr43a-Gal4_3rd" to="MZZ_K_148566" />
+                    <mappedValue from="Gr5a-Gal4" to="MZZ_K_148563" />
+                    <mappedValue from="Gr64f-Gal4" to="MZZ_K_148564" />
+                    <mappedValue from="Ir76b-Gal4" to="GMR_K_70492" />
+                    <mappedValue from="Ir25a-Gal4" to="GMR_K_70490" />
+                    <mappedValue from="Tdc2-Gal4" to="UAH_TDC2" />
                 </sourceFileMappedDefault>
                 <sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.*"/>
             </webServiceList>
