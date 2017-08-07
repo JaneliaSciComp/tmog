@@ -283,12 +283,15 @@ public class JacsDataSetQuotaValidator
         }
 
         public boolean isFail() {
-            return "FAIL".equalsIgnoreCase(state);
+            // TODO: remove hack to skip blocking of failure cases requested by Oz and Rob
+            return false; //"FAIL".equalsIgnoreCase(state);
         }
 
         public synchronized boolean isNewWarning() {
             boolean isNewWarning = false;
-            if ((! isOldWarning) && "WARN".equalsIgnoreCase(state)) {
+            // TODO: remove hack to skip blocking of failure cases requested by Oz and Rob
+//            if ((! isOldWarning) && "WARN".equalsIgnoreCase(state)) {
+            if ((! isOldWarning) && ("WARN".equalsIgnoreCase(state) || "FAIL".equalsIgnoreCase(state))) {
                 isOldWarning = true;
                 isNewWarning = true;
             }
