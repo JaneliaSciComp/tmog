@@ -16,6 +16,14 @@
 @config-fragment-correct-objective@
 @config-fragment-validate-common-fields@
 @config-fragment-validate-ti-class@
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Imaging Project"/>
+                <property name="matchesPattern" value="mcfo"/>
+                <property name="whenReferenceField" value="Data Set"/>
+                <property name="matchesReferencePattern" value="^.*(mcfo).*$"/>
+                <property name="errorMessage" value="Data Set ${Data Set} should not be used for polarity images.  Did you launch the correct tmog?"/>
+            </rowValidator>
+
 @config-fragment-image-sequence-polarity@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@

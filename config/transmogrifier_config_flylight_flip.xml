@@ -113,6 +113,14 @@
                 <property name="errorMessage" value="Class should not be set for Data Set ${Data Set}."/>
             </rowValidator>
 
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Imaging Project"/>
+                <property name="matchesPattern" value="polarity"/>
+                <property name="whenReferenceField" value="Data Set"/>
+                <property name="matchesReferencePattern" value="^.*(polarity).*$"/>
+                <property name="errorMessage" value="Data Set ${Data Set} should not be used for MCFO images.  Did you launch the correct tmog?"/>
+            </rowValidator>
+
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
                 <property name="db.config.key" value="sage" />
                 <property name="image_number" value="urn:lsid:janelia.org:flylight_flip:image_number" />
