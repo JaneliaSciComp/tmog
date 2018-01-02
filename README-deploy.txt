@@ -12,22 +12,17 @@ Build and Deployment Instructions:
             to be setup with an appropriate alias and password
             (see build.xml for details).
 
-4. scp dist/JaneliaTransmogrifier__Va.b.c.jar to wiki:/tmp
-   -- NOTE: webstart app is hosted on wiki server,
-            replace jar version number (a.b.c) with current version
+4. scp dist/JaneliaTransmogrifier__Va.b.c.jar to apps.int.janelia.org:/tmp
+   -- NOTE: webstart app is hosted on same VM (vm144) as sage web service,
 
-5. ssh wiki
+5. ssh apps.int.janelia.org
 
    > cd /opt/local/webstart/tmog4
    > su jbossadmin
-   > cp /tmp/JaneliaTransmogrifier__Va.b.c.jar . # replace jar version number with current version
-   > rm JaneliaTransmogrifier__Va.b.c-2.jar      # remove n-2 version of jar file (keep n-1 around just in case)
-   > vi transmogrifier.jnlp
-     # update jar version number:
-     #   <jar href="JaneliaTransmogrifier.jar" version="a.b.c" main="true" download="eager"/>
-
+   > cp /tmp/JaneliaTransmogrifier__Va.b.c.jar old                       # save versioned jar in 'old' sub-directory
+   > cp old/JaneliaTransmogrifier__Va.b.c.jar JaneliaTransmogrifier.jar  # copy versioned jar to generically named instance
    > exit
-   > rm /tmp/JaneliaTransmogrifier__Va.b.c.jar # remove temp copy of jar file
+   > rm /tmp/JaneliaTransmogrifier__Va.b.c.jar                           # remove temp copy of jar file
    > exit
 
 6. Test launch of app from lab share and make sure latest version is loaded.
@@ -39,7 +34,7 @@ JNLP and Configuration File Deployment:
 The following files:
 
   transmogrifier.jnlp
-  transmogrifier_config.xsd        # TODO: deploy xsd on central server instead
+  transmogrifier_config.xsd
   transmogrifier_config_<lab>.xml
 
 are deployed for the following lab groups:
