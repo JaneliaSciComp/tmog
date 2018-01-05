@@ -463,10 +463,10 @@
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
                 <property name="validateField" value="GAL4 Line"/>
-                <property name="matchesPattern" value="^(BJD|GMR|JRC)_SS.*"/>
+                <property name="matchesPattern" value="^((BJD|GMR|JRC)_SS|GMR_OL|GMR_MB).*"/>
                 <property name="whenReferenceField" value="GAL4 Line"/>
                 <property name="matchesReferencePattern" value=".*"/>
-                <property name="errorMessage" value="GAL4 Line must start with '(BJD|GMR|JRC)_SS'."/>
+                <property name="errorMessage" value="Stable split lines must start with '(BJD|GMR|JRC)_SS', 'GMR_OL', or 'GMR_MB'."/>
             </rowValidator>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
