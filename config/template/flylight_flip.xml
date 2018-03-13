@@ -151,31 +151,82 @@
 
     </project>
 
-    <project name="Fly Light - MCFO - run sageLoader" taskName="collector">
+    <project name="Fly Light - MCFO - scope to confocalStacks (Mixed orientation)">
 
-@config-fragment-lsm-bz2-input@
+@config-fragment-lsm-input@
+@config-fragment-lsm-sort@
+@config-fragment-output-flip@
         <plugins>
 
-@config-fragment-image-path-exists@
+@config-fragment-jacs-data-set-quota@
+@config-fragment-update-mapped-serial-data@
+@config-fragment-update-project-cross-data@
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.SlideCodeConsensusPlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/sage-ws/images/dataSet/${Data Set}/slideCode/${Slide Code}/consensusData" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/sage-ws/images/dataSet/nerna_mcfo_case_1/slideCode/20141203_19_A1/consensusData" />
+                <property name="plugin.root-xpath" value="slideCodeConsensusData" />
+                <property name="Age" value="age" />
+                <property name="Annotator" value="annotatedBy" />
+                <property name="Cross Serial Number" value="crossBarcode" />
+                <property name="Full Age" value="fullAge" />
+                <property name="Reporter" value="effector" />
+                <property name="Gender" value="gender" />
+                <property name="GAL4 Line" value="line" />
+                <property name="Tissue Mounting Protocol" value="mountingProtocol" />
+                <!-- <property name="First Slice of Z" value="tissueOrientation" /> -->
+            </rowUpdater>
+
+@config-fragment-update-ti-class@
+@config-fragment-update-zeiss-lsm-data@
+@config-fragment-correct-objective@
+@config-fragment-validate-common-fields@
+@config-fragment-validate-ti-class@
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Imaging Project"/>
+                <property name="matchesPattern" value="polarity"/>
+                <property name="whenReferenceField" value="Data Set"/>
+                <property name="matchesReferencePattern" value="^.*(polarity).*$"/>
+                <property name="errorMessage" value="Data Set ${Data Set} should not be used for MCFO images.  Did you launch the correct tmog?"/>
+            </rowValidator>
+
+@config-fragment-image-sequence-flip@
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+@config-fragment-common-image-data-properties@
+                <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
+                <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="screen_state" value="Screen State"/>
+            </rowListener>
+
+@config-fragment-copy-zeiss-log-files@
 @config-fragment-jacs-lsm-pipelines-1@
         </plugins>
 
         <dataFields>
 
-@config-fragment-data_set-with-flylight_flip-default@
-@config-fragment-slide_code-with-flylight_flip-default@
-@config-fragment-tile-with-flylight_flip-default@
-            <text displayName="Capture Date" required="false"
-                  markedForTask="false"
-                  editable="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="flylight_flip"/>
-                    <property name="image_property" value="capture_date"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-            </text>
-
-@config-fragment-name-with-flylight_flip-default@
+            <separator value="FLFL_"/>
+@config-fragment-file-name-suffix@
+@config-fragment-annotated_by@
+@config-fragment-data_set@
+@config-fragment-tile@
+@config-fragment-slide_code@
+@config-fragment-cross_barcode@
+@config-fragment-line@
+@config-fragment-effector@
+@config-fragment-gender@
+@config-fragment-age@
+@config-fragment-full_age@
+@config-fragment-heat_shock_minutes@
+@config-fragment-created_by@
+@config-fragment-renamed_by@
+@config-fragment-mounting_protocol@
+@config-fragment-tissue_orientation@
+@config-fragment-screen_state@
+@config-fragment-comment@
+@config-fragment-imaging_project-mcfo@
+@config-fragment-class@
+@config-fragment-objective@
+@config-fragment-channel_spec@
+@config-fragment-channel-data@
         </dataFields>
 
     </project>
