@@ -176,7 +176,7 @@
 @config-fragment-created_by@
 @config-fragment-renamed_by@
 @config-fragment-mounting_protocol@
-@config-fragment-tissue_orientation@
+@config-fragment-tissue_orientation_mixed@
 @config-fragment-screen_state@
 @config-fragment-comment@
 @config-fragment-imaging_project-polarity@

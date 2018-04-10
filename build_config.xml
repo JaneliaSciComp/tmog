@@ -131,6 +131,9 @@
         <load-field-fragment    name="slide_code" />
         <load-field-fragment    name="tile" />
         <load-field-fragment    name="tissue_orientation" />
+        <load-filtered-fragment name="tissue_orientation_mixed" path="field/tissue_orientation.xml"
+                                key="sage-data-default" value=""
+                                is-shareable="false"/>
 
         <!-- plug-in fragments -->
         <load-fragment          name="common-image-data-properties" path="plugin/common-image-data-properties.xml"/>

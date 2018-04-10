@@ -1529,7 +1529,7 @@
             </validValueList>
 
             <validValueList displayName="First Slice of Z" required="true"
-                            sharedForAllSessionFiles="true"
+                            sharedForAllSessionFiles="false"
                             autoComplete="true"
                             markedForTask="false">
                 <validValue displayName="Antennal Lobes" value="face_up"/>
