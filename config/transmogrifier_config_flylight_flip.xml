@@ -164,6 +164,7 @@
                 <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
                 <property name="family" value="$STATIC:flylight_flip"/>
                 <property name="screen_state" value="Screen State"/>
+                <property name="probe_set" value="Probe Set"/>
             </rowListener>
 
             <!--
@@ -409,6 +410,13 @@
                 <validValue displayName="TI" value="ti"/>
             </validValueList>
 
+            <cvTermList displayName="Probe Set" required="false"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/probe_set">
+            </cvTermList>
+
             <text displayName="Objective" required="true"
                   markedForTask="false"
                   editable="false">
@@ -528,6 +536,7 @@
                 <property name="keep.existing.data" value="true"/>
                 <property name="relative_path" value="SAGE Name"/>
                 <property name="screen_state" value="Screen State"/>
+                <property name="probe_set" value="Probe Set"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
@@ -841,6 +850,18 @@
                 </pluginDefault>
                 <validValue displayName="TI" value="ti"/>
             </validValueList>
+
+            <cvTermList displayName="Probe Set" required="false"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/probe_set">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_flip"/>
+                    <property name="image_property" value="probe_set"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </cvTermList>
 
             <text displayName="Channel Specification" required="false"
                     markedForTask="false"
@@ -1318,6 +1339,7 @@
                 <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
                 <property name="family" value="$STATIC:flylight_flip"/>
                 <property name="screen_state" value="Screen State"/>
+                <property name="probe_set" value="Probe Set"/>
             </rowListener>
 
             <!--
@@ -1562,6 +1584,13 @@
                             markedForTask="false">
                 <validValue displayName="TI" value="ti"/>
             </validValueList>
+
+            <cvTermList displayName="Probe Set" required="false"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/probe_set">
+            </cvTermList>
 
             <text displayName="Objective" required="true"
                   markedForTask="false"

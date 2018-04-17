@@ -30,6 +30,7 @@
                 <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
                 <property name="family" value="$STATIC:flylight_flip"/>
                 <property name="screen_state" value="Screen State"/>
+                <property name="probe_set" value="Probe Set"/>
             </rowListener>
 
 @config-fragment-copy-zeiss-log-files@
@@ -59,6 +60,7 @@
 @config-fragment-comment@
 @config-fragment-imaging_project-mcfo@
 @config-fragment-class@
+@config-fragment-probe_set@
 @config-fragment-objective@
 @config-fragment-channel_spec@
 @config-fragment-channel-data@
@@ -80,6 +82,7 @@
                 <property name="keep.existing.data" value="true"/>
                 <property name="relative_path" value="SAGE Name"/>
                 <property name="screen_state" value="Screen State"/>
+                <property name="probe_set" value="Probe Set"/>
             </rowListener>
 
 @config-fragment-jacs-lsm-pipelines-1@
@@ -106,6 +109,7 @@
 @config-fragment-tissue_orientation-with-flylight_flip-default@
 @config-fragment-imaging_project-with-flylight_flip-default@
 @config-fragment-class-with-flylight_flip-default@
+@config-fragment-probe_set-with-flylight_flip-default@
 @config-fragment-channel_spec-with-flylight_flip-default@
         </dataFields>
 
@@ -195,6 +199,7 @@
                 <property name="display" value="Screen State$MAP:accepted=true|accepted_public=true|pre_screen=false|rejected=false"/>
                 <property name="family" value="$STATIC:flylight_flip"/>
                 <property name="screen_state" value="Screen State"/>
+                <property name="probe_set" value="Probe Set"/>
             </rowListener>
 
 @config-fragment-copy-zeiss-log-files@
@@ -224,6 +229,7 @@
 @config-fragment-comment@
 @config-fragment-imaging_project-mcfo@
 @config-fragment-class@
+@config-fragment-probe_set@
 @config-fragment-objective@
 @config-fragment-channel_spec@
 @config-fragment-channel-data@
