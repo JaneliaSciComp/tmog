@@ -3,7 +3,7 @@
 <transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
 
-    <global minimumVersion="3.1.0"/>
+    <global minimumVersion="4.2.4"/>
 
     <project name="Zlatic Lab: Screen Pipeline" default="true"
             copyPreviousButtonVisible="false">
@@ -294,7 +294,7 @@
 
     </project>
 
-    <project name="Zlatic Lab: RD Pipeline"
+    <project name="Zlatic Lab: RD/Memory Pipeline"
             copyPreviousButtonVisible="false">
 
         <inputFileFilter patternString=".+\.(png|blob|blobs|set|summary)"
@@ -303,7 +303,9 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/pipeline/rd/tracking-results/" />
+            <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/pipeline/" />
+            <renameFieldValue fieldDisplayName="Experiment Type"/>
+            <path path="/tracking-results/" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line And Effector"/>
@@ -340,6 +342,14 @@
         </plugins>
 
         <dataFields>
+
+            <validValueList displayName="Experiment Type" required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue displayName="RD" value="rd"/>
+                <validValue displayName="Memory" value="memory"/>
+            </validValueList>
+
             <date displayName="Date" required="true"
                   datePattern="yyyyMMdd">
                 <sourceFileDateDefault pattern=".*[/\\\\](\d{8})_\d{6}[/\\\\].*"
@@ -527,7 +537,7 @@
 
     </project>
 
-    <project name="Zlatic Lab: Fix RD Pipeline"
+    <project name="Zlatic Lab: Fix RD/Memory Pipeline"
             copyPreviousButtonVisible="false">
 
         <inputFileFilter patternString=".+\.(png|blob|blobs|set|summary)"
@@ -536,7 +546,9 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/pipeline/rd/tracking-results/" />
+            <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/pipeline/" />
+            <renameFieldValue fieldDisplayName="Experiment Type"/>
+            <path path="/tracking-results/" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
             <renameFieldValue fieldDisplayName="Line And Effector"/>
@@ -567,6 +579,15 @@
         </plugins>
 
         <dataFields>
+
+            <validValueList displayName="Experiment Type" required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <sourceFileDefault pattern=".*/([^/]++)/tracking-results/.*" matchType="path"/>
+                <validValue displayName="RD" value="rd"/>
+                <validValue displayName="Memory" value="memory"/>
+            </validValueList>
+
             <date displayName="Date" required="true"
                   datePattern="yyyyMMdd">
                 <sourceFileDateDefault pattern="(\d{8}).*"
