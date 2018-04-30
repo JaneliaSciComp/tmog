@@ -58,11 +58,14 @@
 
                 <validValue value="Operant_OL_w_context"/>
                 <validValue value="Operant_OL_wo_context"/>
+                <validValue value="Operant_OL_sound"/>
                 <validValue value="Operant_CL_bend"/>
                 <validValue value="Operant_CL_nonbend"/>
                 <validValue value="Operant_CL_left_bend"/>
                 <validValue value="Operant_CL_right_bend"/>
+                <validValue value="Operant_CL_random_bend"/>
                 <validValue value="Operant_CL_backup"/>
+                <validValue value="Operant_CL_cue_backup"/>
                 <validValue value="Operant_CL_bend_short"/>
                 <validValue value="Operant_CL_left_bend_short"/>
                 <validValue value="Operant_CL_right_bend_short"/>
@@ -70,19 +73,37 @@
                 <validValue value="Operant_CL_nonbend_pause_short"/>
                 <validValue value="Operant_CL_bend_relief"/>
                 <validValue value="Operant_CL_bend_relief_asymm"/>
+                <validValue value="Operant_CL_backup_relief"/>
+                <validValue value="Operant_CL_left_right_backup_relief"/>
+                <validValue value="Operant_CL_left_bend_limited"/>
+                <validValue value="Operant_CL_right_bend_limited"/>
                 <validValue value="Operant_cue_relief_bend"/>
                 <validValue value="Operant_cue_relief_backup"/>
+                <validValue value="Operant_cue_relief_backup_no_cycle"/>
                 <validValue value="Operant_cue_relief_roll"/>
+                <validValue value="Operant_cue_relief_roll_no_cycle"/>
+                <validValue value="Operant_cue_response_left"/>
+                <validValue value="Operant_cue_response_right"/>
                 <validValue value="Operant_Bandit_Clark"/>
+                <validValue value="Operant_CL_left_bend_derivative"/>
+                <validValue value="Operant_CL_right_bend_derivative"/>
+                <validValue value="Operant_CL_left_bend_derivative_restricted"/>
+                <validValue value="Operant_CL_right_bend_derivative_restricted"/>
                 <validValue value="Operant_no_light"/>
                 <validValue value="Operant_OCL_roll"/>
+                <validValue value="Operant_OCL_roll_pulses"/>
+                <validValue value="Operant_OCL_roll_pulses_test"/>
                 <validValue value="Operant_random_pulse_by_time_bend"/>
                 <validValue value="Operant_random_pulse_by_time_nonbend"/>
                 <validValue value="Operant_random_pulse_by_number_bend"/>
                 <validValue value="Operant_random_pulse_by_number_nonbend"/>
 
+                <validValue value="State_dependency_1"/>
+                <validValue value="State_dependency_2"/>
+
                 <validValue value="Bandit_unrestricted"/>
                 <validValue value="Bandit_limit_exposure"/>
+                <validValue value="Bandit_open_loop"/>
 
             </validValueList>
 
@@ -120,6 +141,19 @@
                     <mappedValue from="Ir76b-Gal4" to="GMR_K_70492" />
                     <mappedValue from="Ir25a-Gal4" to="GMR_K_70490" />
                     <mappedValue from="Tdc2-Gal4" to="UAH_TDC2" />
+                    <mappedValue from="Ddc-Gal4" to="UAH_K_67195" />
+                    <mappedValue from="72F11-Gal4" to="GMR_72F11_AE_01" />
+                    <mappedValue from="72F11-LexA" to="GMR_72F11_LJ_21" />
+                    <mappedValue from="Trh-Gal4" to="UAH_Trh_AE_01" />
+                    <mappedValue from="Tph-Gal4" to="EXT_Tph-GAL4" />
+                    <mappedValue from="UAS-CsChrimson;Tsh-LexA,LexAop-Gal80" to="GMR_K_85389" />
+                    <mappedValue from="TH-Gal4" to="UAH_K_40351" />
+                    <mappedValue from="Gr43a-Gal4_Amrein" to="VZJ_K_149817" />
+                    <mappedValue from="Ddc-Gal4_attP2" to="GMR_Ddc-GAL4" />
+                    <mappedValue from="UAS-dTrpA1" to="UAS_dTrpA1_2_0012" />
+                    <mappedValue from="HL9-Gal4" to="...3013933" />
+                    <mappedValue from="UAS-CsChrimson;;Ddc-Gal4-HL8-3D,TM6B" to="MZZ_K_152356" />
+                    <mappedValue from="yw;attP40;attP2" to="MZZ_R_3013849" />
                 </sourceFileMappedDefault>
                 <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*"/>
             </webServiceList>
@@ -158,6 +192,19 @@
                     <mappedValue from="Ir76b-Gal4" to="GMR_K_70492" />
                     <mappedValue from="Ir25a-Gal4" to="GMR_K_70490" />
                     <mappedValue from="Tdc2-Gal4" to="UAH_TDC2" />
+                    <mappedValue from="Ddc-Gal4" to="UAH_K_67195" />
+                    <mappedValue from="72F11-Gal4" to="GMR_72F11_AE_01" />
+                    <mappedValue from="72F11-LexA" to="GMR_72F11_LJ_21" />
+                    <mappedValue from="Trh-Gal4" to="UAH_Trh_AE_01" />
+                    <mappedValue from="Tph-Gal4" to="EXT_Tph-GAL4" />
+                    <mappedValue from="UAS-CsChrimson;Tsh-LexA,LexAop-Gal80" to="GMR_K_85389" />
+                    <mappedValue from="TH-Gal4" to="UAH_K_40351" />
+                    <mappedValue from="Gr43a-Gal4_Amrein" to="VZJ_K_149817" />
+                    <mappedValue from="Ddc-Gal4_attP2" to="GMR_Ddc-GAL4" />
+                    <mappedValue from="UAS-dTrpA1" to="UAS_dTrpA1_2_0012" />
+                    <mappedValue from="HL9-Gal4" to="...3013933" />
+                    <mappedValue from="UAS-CsChrimson;;Ddc-Gal4-HL8-3D,TM6B" to="MZZ_K_152356" />
+                    <mappedValue from="yw;attP40;attP2" to="MZZ_R_3013849" />
                 </sourceFileMappedDefault>
                 <sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.*"/>
             </webServiceList>
