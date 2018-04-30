@@ -1,0 +1,471 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="4.2.4"/>
+
+    <project name="Zlatic Lab: FPGA Pipeline" copyPreviousButtonVisible="false" default="true">
+
+        <inputFileFilter patternString=".+\.(outline|spine|stimulation|config)"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <outputDirectory fileModeReadOnly="false">
+            <path path="[//nearline.hhmi.org|/nearline/zlatic]/zlaticlab/Screens_Behaviours_Display_and_Analysis/" />
+            <renameFieldValue fieldDisplayName="Experiment Type"/>
+            <path path="/" />
+            <renameFieldValue fieldDisplayName="Tracker"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Line And Effector"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Stimulus 1 Type"/>
+            <renameFieldValue fieldDisplayName="Stimulus 1 Specs" prefix="_"/>
+            <renameFieldValue fieldDisplayName="Stimulus 1 Times" prefix="_"/>
+            <path path="#"/>
+            <renameFieldValue fieldDisplayName="Stimulus 2 Type"/>
+            <renameFieldValue fieldDisplayName="Stimulus 2 Specs" prefix="_"/>
+            <renameFieldValue fieldDisplayName="Stimulus 2 Times" prefix="_"/>
+            <path path="#"/>
+            <renameFieldValue fieldDisplayName="Stimulus 3 Type"/>
+            <renameFieldValue fieldDisplayName="Stimulus 3 Specs" prefix="_"/>
+            <renameFieldValue fieldDisplayName="Stimulus 3 Times" prefix="_"/>
+            <path path="#"/>
+            <renameFieldValue fieldDisplayName="Stimulus 4 Type"/>
+            <renameFieldValue fieldDisplayName="Stimulus 4 Specs" prefix="_"/>
+            <renameFieldValue fieldDisplayName="Stimulus 4 Times" prefix="_"/>
+            <path path="@"/>
+            <renameFieldValue fieldDisplayName="Animal Number"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Date"/>
+            <renameFieldValue fieldDisplayName="Time" prefix="_"/>
+        </outputDirectory>
+
+        <plugins>
+            <!--<rowValidator className="org.janelia.it.mwt.SetFileValidator">-->
+            <!--<property name="baseFileNamePattern"-->
+            <!--value="(.+?)(_\d+k)?\.(png|blob|blobs|set|summary)"/>-->
+            <!--<property name="baseFileNameGroupIndex"-->
+            <!--value="1"/>-->
+            <!--</rowValidator>-->
+        </plugins>
+
+        <dataFields>
+
+            <validValueList displayName="Experiment Type" required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue displayName="FPGA" value="FPGA"/>
+                <validValue displayName="FPGA-memory" value="FPGA-memory"/>
+            </validValueList>
+
+            <date displayName="Date" required="true"
+                  datePattern="yyyyMMdd">
+                <sourceFileDateDefault pattern=".*[/\\\\](\d{8})_\d{6}[/\\\\].*"
+                                       fromDatePattern="yyyyMMdd"
+                                       toDatePattern="yyyyMMdd"
+                                       matchType="path"/>
+            </date>
+
+            <separator value="_"/>
+
+            <date displayName="Time" required="true"
+                  datePattern="HHmmss">
+                <sourceFileDateDefault pattern=".*[/\\\\]\d{8}_(\d{6})[/\\\\].*"
+                                       fromDatePattern="HHmmss"
+                                       toDatePattern="HHmmss"
+                                       matchType="path"/>
+            </date>
+
+            <separator value="@"/>
+
+            <cvTermList displayName="Line And Effector" required="true"
+                        autoComplete="true"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/zlatic_rd_line_effector">
+                <sourceFileDefault pattern="(.+?@.+?)@.+?@.+?@.+?@.*"/>
+            </cvTermList>
+
+            <separator value="@"/>
+
+            <validValueList displayName="Tracker" required="true">
+                <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*"/>
+                <validValue value="t21"/>
+            </validValueList>
+
+            <separator value="@"/>
+
+            <validValueList displayName="Stimulus 1 Type" required="true">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@([^\$]+?)\$.+?@.+?@.+?@.+?@.*"/>
+                <sourceFileDefault pattern=".*@([n])@n@n@n@.*"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="b: buzz" value="b"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="a: blue" value="a"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n" default="true"/>
+            </validValueList>
+
+            <text displayName="Stimulus 1 Specs" required="false"
+                  pattern="[0-9A-Za-z]++" prefix="_">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$.+?@.+?@.+?@.+?@.*"/>
+            </text>
+
+            <text displayName="Stimulus 1 Times" required="false"
+                  pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
+                  prefix="_">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?\$.+?\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.+?@.+?@.+?@.*"/>
+            </text>
+
+            <separator value="#"/>
+
+            <validValueList displayName="Stimulus 2 Type" required="true">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@([^\$]+?)\$.+?@.+?@.+?@.*"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="b: buzz" value="b"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="a: blue" value="a"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n" default="true"/>
+            </validValueList>
+
+            <text displayName="Stimulus 2 Specs" required="false"
+                  pattern="[0-9A-Za-z]++" prefix="_">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$.+?@.+?@.+?@.*"/>
+            </text>
+
+            <text displayName="Stimulus 2 Times" required="false"
+                  pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
+                  prefix="_">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?\$.+?\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.+?@.+?@.*"/>
+            </text>
+
+            <separator value="#"/>
+
+            <validValueList displayName="Stimulus 3 Type" required="true">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@([^\$]+?)\$.+?@.+?@.*"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="b: buzz" value="b"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="a: blue" value="a"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n" default="true"/>
+            </validValueList>
+
+            <text displayName="Stimulus 3 Specs" required="false"
+                  pattern="[0-9A-Za-z]++" prefix="_">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$.+?@.+?@.*"/>
+            </text>
+
+            <text displayName="Stimulus 3 Times" required="false"
+                  pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
+                  prefix="_">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?\$.+?\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.+?@.*"/>
+            </text>
+
+            <separator value="#"/>
+
+            <validValueList displayName="Stimulus 4 Type" required="true">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?@([^\$]+?)\$.+?@.*"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="b: buzz" value="b"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="a: blue" value="a"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n" default="true"/>
+            </validValueList>
+
+            <text displayName="Stimulus 4 Specs" required="false"
+                  pattern="[0-9A-Za-z]++" prefix="_">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?@[^\$]+?\$([^\$]+?)\$.+?@.*"/>
+            </text>
+
+            <text displayName="Stimulus 4 Times" required="false"
+                  pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
+                  prefix="_">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?@.+?\$.+?\$(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.*"/>
+            </text>
+
+            <separator value="@"/>
+
+            <number displayName="Animal Number" required="true"
+                    minimumValue="0" maximumValue="100">
+                <sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.*"/>
+            </number>
+
+            <separator value="@"/>
+
+            <text displayName="Suffix" required="false"
+                  copyable="false" pattern="^_?\d{3,}\w+$">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"/>
+            </text>
+
+            <fileExtension/>
+
+        </dataFields>
+
+    </project>
+
+    <project name="Zlatic Lab: Fix FPGA Pipeline"
+             copyPreviousButtonVisible="false">
+
+        <inputFileFilter patternString=".+\.(outline|spine|stimulation|config)"
+                         recursiveSearch="true"/>
+
+        <inputFileSorter sortAlgorithm="Path"/>
+
+        <outputDirectory fileModeReadOnly="false">
+            <path path="[//nearline.hhmi.org|/nearline/zlatic]/zlaticlab/Screens_Behaviours_Display_and_Analysis/" />
+            <renameFieldValue fieldDisplayName="Experiment Type"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Tracker"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Line And Effector"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Stimulus 1 Type"/>
+            <renameFieldValue fieldDisplayName="Stimulus 1 Specs" prefix="_"/>
+            <renameFieldValue fieldDisplayName="Stimulus 1 Times" prefix="_"/>
+            <path path="#"/>
+            <renameFieldValue fieldDisplayName="Stimulus 2 Type"/>
+            <renameFieldValue fieldDisplayName="Stimulus 2 Specs" prefix="_"/>
+            <renameFieldValue fieldDisplayName="Stimulus 2 Times" prefix="_"/>
+            <path path="#"/>
+            <renameFieldValue fieldDisplayName="Stimulus 3 Type"/>
+            <renameFieldValue fieldDisplayName="Stimulus 3 Specs" prefix="_"/>
+            <renameFieldValue fieldDisplayName="Stimulus 3 Times" prefix="_"/>
+            <path path="#"/>
+            <renameFieldValue fieldDisplayName="Stimulus 4 Type"/>
+            <renameFieldValue fieldDisplayName="Stimulus 4 Specs" prefix="_"/>
+            <renameFieldValue fieldDisplayName="Stimulus 4 Times" prefix="_"/>
+            <path path="@"/>
+            <renameFieldValue fieldDisplayName="Animal Number"/>
+            <path path="/"/>
+            <renameFieldValue fieldDisplayName="Date"/>
+            <renameFieldValue fieldDisplayName="Time" prefix="_"/>
+        </outputDirectory>
+
+        <plugins>
+        </plugins>
+
+        <dataFields>
+
+            <validValueList displayName="Experiment Type" required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <sourceFileDefault pattern=".*/Screens_Behaviours_Display_and_Analysis/([^/]++)/.*" matchType="path"/>
+                <validValue displayName="FPGA" value="FPGA"/>
+                <validValue displayName="FPGA-memory" value="FPGA-memory"/>
+            </validValueList>
+
+            <date displayName="Date" required="true"
+                  datePattern="yyyyMMdd">
+                <sourceFileDateDefault pattern="(\d{8}).*"
+                                       fromDatePattern="yyyyMMdd"
+                                       toDatePattern="yyyyMMdd"
+                                       matchType="name"/>
+            </date>
+
+            <separator value="_"/>
+
+            <date displayName="Time" required="true"
+                  datePattern="HHmmss">
+                <sourceFileDateDefault pattern="^\d{8}_(\d{6}).*"
+                                       fromDatePattern="HHmmss"
+                                       toDatePattern="HHmmss"
+                                       matchType="name"/>
+            </date>
+
+            <separator value="@"/>
+
+            <cvTermList displayName="Line And Effector" required="true"
+                        autoComplete="true"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/zlatic_rd_line_effector">
+                <sourceFileDefault pattern=".+?@(.+?@.+?)@.+?@.+?@.+?@.*"/>
+            </cvTermList>
+
+            <separator value="@"/>
+
+            <validValueList displayName="Tracker" required="true">
+                <sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.+?@.*"/>
+                <validValue value="t21"/>
+            </validValueList>
+
+            <separator value="@"/>
+
+            <validValueList displayName="Stimulus 1 Type" required="true">
+                <sourceFileDefault pattern=".*@([^_]+?)_.*#.*#.*#.*@.*"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="b: buzz" value="b"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="a: blue" value="a"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n" default="true"/>
+            </validValueList>
+
+            <text displayName="Stimulus 1 Specs" required="false"
+                  pattern="[0-9A-Za-z]++" prefix="_">
+                <sourceFileDefault pattern=".*@[^_]+?_([^_]+?)_.*#.*#.*#.*@.*"/>
+            </text>
+
+            <text displayName="Stimulus 1 Times" required="false"
+                  pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
+                  prefix="_">
+                <sourceFileDefault pattern=".*_(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)#.*#.*#.*@.*"/>
+            </text>
+
+            <separator value="#"/>
+
+            <validValueList displayName="Stimulus 2 Type" required="true">
+                <sourceFileDefault pattern=".*#([^_]+?)_.*#.*#.*@.*"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="b: buzz" value="b"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="a: blue" value="a"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n" default="true"/>
+            </validValueList>
+
+            <text displayName="Stimulus 2 Specs" required="false"
+                  pattern="[0-9A-Za-z]++" prefix="_">
+                <sourceFileDefault pattern=".*#[^_]+?_([^_]+?)_.*#.*#.*@.*"/>
+            </text>
+
+            <text displayName="Stimulus 2 Times" required="false"
+                  pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
+                  prefix="_">
+                <sourceFileDefault pattern=".*#.*_(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)#.*#.*@.*"/>
+            </text>
+
+            <separator value="#"/>
+
+            <validValueList displayName="Stimulus 3 Type" required="true">
+                <sourceFileDefault pattern=".*#.*#([^_]+?)_.*#.*@.*"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="b: buzz" value="b"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="a: blue" value="a"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n" default="true"/>
+            </validValueList>
+
+            <text displayName="Stimulus 3 Specs" required="false"
+                  pattern="[0-9A-Za-z]++" prefix="_">
+                <sourceFileDefault pattern=".*#.*#[^_]+?_([^_]+?)_.*#.*@.*"/>
+            </text>
+
+            <text displayName="Stimulus 3 Times" required="false"
+                  pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
+                  prefix="_">
+                <sourceFileDefault pattern=".*#.*#.*_(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)#.*@.*"/>
+            </text>
+
+            <separator value="#"/>
+
+            <validValueList displayName="Stimulus 4 Type" required="true">
+                <sourceFileDefault pattern=".*#.*#.*#([^_]+?)_.*@.*"/>
+                <validValue displayName="p: puff" value="p"/>
+                <validValue displayName="b: buzz" value="b"/>
+                <validValue displayName="g: green" value="g"/>
+                <validValue displayName="a: blue" value="a"/>
+                <validValue displayName="l: light" value="l"/>
+                <validValue displayName="i: IR pinch" value="i"/>
+                <validValue displayName="h: hot" value="h"/>
+                <validValue displayName="c: cold" value="c"/>
+                <validValue displayName="t: temperature" value="t"/>
+                <validValue displayName="o: hole" value="o"/>
+                <validValue displayName="s: scratch" value="s"/>
+                <validValue displayName="r: channel rhodopsin" value="r"/>
+                <validValue displayName="y: yeast" value="y"/>
+                <validValue displayName="n: none" value="n" default="true"/>
+            </validValueList>
+
+            <text displayName="Stimulus 4 Specs" required="false"
+                  pattern="[0-9A-Za-z]++" prefix="_">
+                <sourceFileDefault pattern=".*#.*#.*#[^_]+?_([^_]+?)_.*@.*"/>
+            </text>
+
+            <text displayName="Stimulus 4 Times" required="false"
+                  pattern="^\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s$"
+                  prefix="_">
+                <sourceFileDefault pattern=".*#.*#.*#.*_(\d+(\.\d+)*s\d+x\d+(\.\d+)*s\d+(\.\d+)*s)@.*"/>
+            </text>
+
+            <separator value="@"/>
+
+            <number displayName="Animal Number" required="true"
+                    minimumValue="0" maximumValue="100">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@(.+?)@.*"/>
+            </number>
+
+            <separator value="@"/>
+
+            <text displayName="Suffix" required="false"
+                  copyable="false" pattern="^_?\d{3,}\w+$">
+                <sourceFileDefault pattern=".+?@.+?@.+?@.+?@.+?@.+?@([^@\.]+)??\..+"/>
+            </text>
+
+            <fileExtension/>
+
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>

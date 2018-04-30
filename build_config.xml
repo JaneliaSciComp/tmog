@@ -229,13 +229,13 @@
         <build-jnlp-launch-file name="larval_olympiad_ruben"
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad"/>
         <build-jnlp-launch-file name="leet_lineage"
-                                config-resource-dir="[//tier2.hhmi.org|/tier2]/leet/leetimg/leetlab"/>
+                                config-resource-dir="[//dm11.hhmi.org/leetimg|/groups/leet/leetimg/leetlab]"/>
         <build-jnlp-launch-file name="bruno_projects"
                                 config-resource-dir="[//tier2.hhmi.org|/tier2]/larvalolympiad/larvalolympiad"/>
         <build-jnlp-launch-file name="projtechres"
                                 config-resource-dir="[//dm11.hhmi.org|/groups/projtechres]/projtechres"/>
         <build-jnlp-launch-file name="rubin_rd"
-                                config-resource-dir="[//tier2.hhmi.org|/tier2]/rubin/data1/rubinlab"/>
+                                config-resource-dir="[//dm11.hhmi.org/rubindata|/groups/rubin/data1/rubinlab]"/>
         <build-jnlp-launch-file name="simpson_scope"
                                 config-resource-dir="[//dm11.hhmi.org/simpsonmicro|/groups/simpson/MicroscopeData]"/>
         <build-jnlp-launch-file name="split_screen_review"
@@ -244,6 +244,8 @@
                                 config-resource-dir="[//dm11.hhmi.org|/groups/svoboda]/wdbp"/>
         <build-jnlp-launch-file name="zlatic"
                                 config-resource-dir="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab"/>
+        <build-jnlp-launch-file name="zlatic_fpga"
+                                config-resource-dir="[//nearline.hhmi.org|/nearline/zlatic]/zlaticlab"/>
         <build-jnlp-launch-file name="zlatic_odor"
                                 config-resource-dir="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab"/>
     </target>
