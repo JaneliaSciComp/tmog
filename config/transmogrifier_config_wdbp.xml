@@ -15,7 +15,7 @@
                          recursiveSearch="true"/>
 
         <outputDirectory>
-            <path path="[\\dm11|/groups/svoboda]\wdbp\unprocessed\" />
+            <path path="[//dm11.hhmi.org|/groups/svoboda]/wdbp/unprocessed/" />
             <renameFieldValue fieldDisplayName="Experimenter" />
             <path path="/" />
             <renameFieldValue fieldDisplayName="Animal ID" />
@@ -120,7 +120,19 @@
                 <validValue displayName="Koen Vervaeke" value="vervakek"/>
                 <validValue displayName="Nattar Ranganathan, Gayathri" value="ranganathang"/>
                 <validValue displayName="Little, Justin" value="littlej"/>
+                <validValue displayName="Inagaki, Hidehiko" value="inagakih"/>
                 <validValue displayName="Micheal Bale" value="balem"/>
+                <validValue displayName="Aric Agmon" value="agmona"/>
+                <validValue displayName="Yurii Vlasov" value="vlasovy"/>
+                <validValue displayName="Dario C" value="campagnerd"/>
+            </validValueList>
+
+            <validValueList displayName="Streampix Header Size"
+                            required="true"
+                            sharedForAllSessionFiles="true"
+                            markedForTask="false">
+                <validValue value="1024"/>
+                <validValue value="8192"/>
             </validValueList>
 
             <validValueList displayName="Experiment Location"
@@ -129,7 +141,7 @@
                             markedForTask="false">
                 <validValue value="rig 1 in 2W.387"/>
                 <validValue value="rig 2 in 2W.333"/>
-		<validValue value="rig 3 in 2C.373"/>
+                <validValue value="rig 3 in 2C.373"/>
             </validValueList>
 
             

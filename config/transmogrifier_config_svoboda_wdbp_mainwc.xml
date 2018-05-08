@@ -15,7 +15,7 @@
                          recursiveSearch="true"/>
 
         <outputDirectory>
-            <path path="[\\dm11|/groups/svoboda]\wdbp\unprocessed\" />
+            <path path="[//dm11.hhmi.org|/groups/svoboda]/wdbp/unprocessed/" />
             <renameFieldValue fieldDisplayName="Experimenter" />
             <path path="/" />
             <renameFieldValue fieldDisplayName="Animal ID" />
