@@ -19,6 +19,6 @@
         <jar href="JaneliaTransmogrifier.jar" main="true" download="eager"/>
     </resources>
     <application-desc main-class="org.janelia.it.ims.tmog.JaneliaTransmogrifier">
-        <argument>[//nearline.hhmi.org|/nearline/zlatic]/zlaticlab/tmog/config/transmogrifier_config_zlatic_fpga.xml</argument>
+        <argument>[//nearline.hhmi.org|/nearline]/zlatic/zlaticlab/tmog/config/transmogrifier_config_zlatic_fpga.xml</argument>
     </application-desc>
 </jnlp>
