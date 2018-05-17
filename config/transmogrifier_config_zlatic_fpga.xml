@@ -13,7 +13,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
-            <path path="[//nearline.hhmi.org|/nearline]/zlatic/zlaticlab/Screens_Behaviours_Display_and_Analysis/" />
+            <path path="[//nrs.hhmi.org|/nrs]/zlatic/zlaticlab/Screens_Behaviours_Display_and_Analysis/" />
             <renameFieldValue fieldDisplayName="Experiment Type"/>
             <path path="/" />
             <renameFieldValue fieldDisplayName="Tracker"/>
