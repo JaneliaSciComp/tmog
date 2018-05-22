@@ -93,6 +93,7 @@
                 <validValue value="Operant_OCL_roll"/>
                 <validValue value="Operant_OCL_roll_pulses"/>
                 <validValue value="Operant_OCL_roll_pulses_test"/>
+                <validValue value="Operant_OCL_roll_pulses_test_adjustable"/>
                 <validValue value="Operant_random_pulse_by_time_bend"/>
                 <validValue value="Operant_random_pulse_by_time_nonbend"/>
                 <validValue value="Operant_random_pulse_by_number_bend"/>
@@ -104,6 +105,7 @@
                 <validValue value="Bandit_unrestricted"/>
                 <validValue value="Bandit_limit_exposure"/>
                 <validValue value="Bandit_open_loop"/>
+                <validValue value="Bandit_unrestricted_after_forward"/>
 
             </validValueList>
 
@@ -154,6 +156,7 @@
                     <mappedValue from="HL9-Gal4" to="...3013933" />
                     <mappedValue from="UAS-CsChrimson;;Ddc-Gal4-HL8-3D,TM6B" to="MZZ_K_152356" />
                     <mappedValue from="yw;attP40;attP2" to="MZZ_R_3013849" />
+                    <mappedValue from="eg-Gal4" to="MZZ_egGAL4" />
                 </sourceFileMappedDefault>
                 <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*"/>
             </webServiceList>
@@ -205,6 +208,7 @@
                     <mappedValue from="HL9-Gal4" to="...3013933" />
                     <mappedValue from="UAS-CsChrimson;;Ddc-Gal4-HL8-3D,TM6B" to="MZZ_K_152356" />
                     <mappedValue from="yw;attP40;attP2" to="MZZ_R_3013849" />
+                    <mappedValue from="eg-Gal4" to="MZZ_egGAL4" />
                 </sourceFileMappedDefault>
                 <sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.*"/>
             </webServiceList>
