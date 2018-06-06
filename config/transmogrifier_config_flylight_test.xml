@@ -65,6 +65,7 @@
                 <property name="comment" value="Comment"/>
                 <property name="class" value="Class"/>
                 <property name="family" value="$STATIC:flylight_test"/>
+                <property name="probe_set" value="Probe Set"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
@@ -192,6 +193,13 @@
                   markedForTask="false">
             </text>
 
+            <cvTermList displayName="Probe Set" required="false"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/probe_set">
+            </cvTermList>
+
         </dataFields>
 
     </project>
@@ -239,6 +247,7 @@
                 <property name="family" value="$STATIC:flylight_test"/>
                 <property name="keep.existing.data" value="true"/>
                 <property name="relative_path" value="SAGE Name"/>
+                <property name="probe_set" value="Probe Set"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
@@ -398,6 +407,18 @@
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
             </text>
+
+            <cvTermList displayName="Probe Set" required="false"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/probe_set">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="flylight_test"/>
+                    <property name="image_property" value="probe_set"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </cvTermList>
 
         </dataFields>
 

@@ -12,6 +12,7 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@
                 <property name="family" value="$STATIC:flylight_test"/>
+                <property name="probe_set" value="Probe Set"/>
             </rowListener>
 
 @config-fragment-jacs-lsm-pipelines-1@
@@ -30,6 +31,7 @@
 @config-fragment-tissue_orientation@
 @config-fragment-channel_spec@
 @config-fragment-comment@
+@config-fragment-probe_set@
         </dataFields>
 
     </project>
@@ -44,6 +46,7 @@
                 <property name="family" value="$STATIC:flylight_test"/>
                 <property name="keep.existing.data" value="true"/>
                 <property name="relative_path" value="SAGE Name"/>
+                <property name="probe_set" value="Probe Set"/>
             </rowListener>
 
 @config-fragment-jacs-lsm-pipelines-1@
@@ -59,6 +62,7 @@
 @config-fragment-tissue_orientation-with-flylight_test-default@
 @config-fragment-channel_spec-with-flylight_test-default@
 @config-fragment-comment-with-flylight_test-default@
+@config-fragment-probe_set-with-flylight_test-default@
         </dataFields>
 
     </project>
