@@ -7,7 +7,8 @@
 
     <project name="Rubin Lab: Research and Development (RD_*: MMddyy)" default="true">
 
-        <inputFileSorter sortAlgorithm="LNumber" />
+        <inputFileFilter patternString=".*\.(czi|lsm)"/>
+        <inputFileSorter sortAlgorithm="Number" patternString="(.*)_L(\d++)_(.*)\.(czi|lsm)" patternGroupIndexes="1,2,3"/>
 
         <outputDirectory basePath="[//dm11.hhmi.org/rubindata|/groups/rubin/data1/rubinlab]/RD/RDconfocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
@@ -33,10 +34,10 @@
                   pattern="[0-9A-Za-z\\-]++"/>
             <date displayName="Capture Date" required="true"
                   datePattern="yyMMdd" prefix="_" copyable="false">
-                <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d)_L[0-9]++_Sum\.lsm"
+                <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d)_L[0-9]++_Sum\.(czi|lsm)"
                                        fromDatePattern="MMddyy"
                                        toDatePattern="yyMMdd"/>
-                <sourceFileDateDefault pattern=".*_(\d\d\d\d\d\d)_R.*\.lsm"
+                <sourceFileDateDefault pattern=".*_(\d\d\d\d\d\d)_R.*\.(czi|lsm)"
                                        fromDatePattern="MMddyy"
                                        toDatePattern="yyMMdd"/>
             </date>
@@ -47,21 +48,22 @@
             </validValueList>
             <text displayName="L-Number" required="false" prefix="-L"
                   pattern="[0-9]++" copyable="false">
-                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>
-                <sourceFileDefault pattern=".*_L([0-9]++)\.lsm"/>
+                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.(czi|lsm)"/>
+                <sourceFileDefault pattern=".*_L([0-9]++)\.(czi|lsm)"/>
             </text>
             <text displayName="Comment" required="false" prefix="-"
                   pattern="[0-9A-Za-z\\-]++"/>
             <separator value="_"/>
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
-            <separator value=".lsm"/>
+            <fileExtension/>
         </dataFields>
 
     </project>
 
     <project name="Rubin Lab: Research and Development (RD_*: yyMMdd)">
 
-        <inputFileSorter sortAlgorithm="LNumber" />
+        <inputFileFilter patternString=".*\.(czi|lsm)"/>
+        <inputFileSorter sortAlgorithm="Number" patternString="(.*)_L(\d++)_(.*)\.(czi|lsm)" patternGroupIndexes="1,2,3"/>
 
         <outputDirectory basePath="[//dm11.hhmi.org/rubindata|/groups/rubin/data1/rubinlab]/RD/RDconfocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
@@ -87,7 +89,7 @@
                   pattern="[0-9A-Za-z\\-]++"/>
             <date displayName="Capture Date" required="true"
                   datePattern="yyMMdd" prefix="_" copyable="false">
-                <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d)_L[0-9]++_Sum\.lsm"
+                <sourceFileDateDefault pattern=".*(\d\d\d\d\d\d)_L[0-9]++_Sum\.(czi|lsm)"
                                        fromDatePattern="yyMMdd"
                                        toDatePattern="yyMMdd"/>
             </date>
@@ -97,20 +99,21 @@
             </validValueList>
             <text displayName="L-Number" required="false" prefix="-L"
                   pattern="[0-9]++" copyable="false">
-                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>
+                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.(czi|lsm)"/>
             </text>
             <text displayName="Comment" required="false" prefix="-"
                   pattern="[0-9A-Za-z\\-]++"/>
             <separator value="_"/>
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
-            <separator value=".lsm"/>
+            <fileExtension/>
         </dataFields>
 
     </project>
 
     <project name="Rubin Lab: Research and Development (RD_*: manual date)">
 
-        <inputFileSorter sortAlgorithm="LNumber" />
+        <inputFileFilter patternString=".*\.(czi|lsm)"/>
+        <inputFileSorter sortAlgorithm="Number" patternString="(.*)_L(\d++)_(.*)\.(czi|lsm)" patternGroupIndexes="1,2,3"/>
 
         <outputDirectory basePath="[//dm11.hhmi.org/rubindata|/groups/rubin/data1/rubinlab]/RD/RDconfocalStacks"
                          derivedFromEarliestModifiedFile="true"/>
@@ -142,13 +145,13 @@
             </validValueList>
             <text displayName="L-Number" required="false" prefix="-L"
                   pattern="[0-9]++" copyable="false">
-                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.lsm"/>
+                <sourceFileDefault pattern=".*_L([0-9]++)_Sum\.(czi|lsm)"/>
             </text>
             <text displayName="Comment" required="false" prefix="-"
                   pattern="[0-9A-Za-z\\-]++"/>
             <separator value="_"/>
             <runTime datePattern="yyyyMMddHHmmssSSS"/>
-            <separator value=".lsm"/>
+            <fileExtension/>
         </dataFields>
 
     </project>
