@@ -1141,8 +1141,8 @@
             </validValueList>
 
             <text displayName="Channel Specification" required="false"
-                    markedForTask="false"
-                    pattern="s*rs*">
+                  markedForTask="false"
+                  pattern="s*rs*">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="split_screen_review"/>
                     <property name="image_property" value="channel_spec"/>

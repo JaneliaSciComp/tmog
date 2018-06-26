@@ -427,8 +427,8 @@
             </text>
 
             <text displayName="Channel Specification" required="false"
-                    markedForTask="false"
-                    pattern="s*rs*">
+                  markedForTask="false"
+                  pattern="s*rs*">
             </text>
 
             <text displayName="Channel 1 Name" required="false"
@@ -872,8 +872,8 @@
             </cvTermList>
 
             <text displayName="Channel Specification" required="false"
-                    markedForTask="false"
-                    pattern="s*rs*">
+                  markedForTask="false"
+                  pattern="s*rs*">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_flip"/>
                     <property name="image_property" value="channel_spec"/>
@@ -1175,8 +1175,8 @@
             </cvTermList>
 
             <text displayName="Channel Specification" required="false"
-                    markedForTask="false"
-                    pattern="s*rs*">
+                  markedForTask="false"
+                  pattern="s*rs*">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="rubin_ssplit"/>
                     <property name="image_property" value="channel_spec"/>
@@ -1610,8 +1610,8 @@
             </text>
 
             <text displayName="Channel Specification" required="false"
-                    markedForTask="false"
-                    pattern="s*rs*">
+                  markedForTask="false"
+                  pattern="s*rs*">
             </text>
 
             <text displayName="Channel 1 Name" required="false"

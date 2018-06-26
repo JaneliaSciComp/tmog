@@ -734,6 +734,16 @@
                 <validValue displayName="Back of Brain" value="face_down"/>
             </validValueList>
 
+            <text displayName="Channel Specification" required="false"
+                  markedForTask="false"
+                  pattern="s*rs*">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="projtechres"/>
+                    <property name="image_property" value="channel_spec"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
         </dataFields>
 
     </project>

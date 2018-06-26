@@ -414,8 +414,8 @@
             </text>
 
             <text displayName="Channel Specification" required="false"
-                    markedForTask="false"
-                    pattern="s*rs*">
+                  markedForTask="false"
+                  pattern="s*rs*">
             </text>
 
             <text displayName="Channel 1 Name" required="false"
@@ -836,8 +836,8 @@
             </validValueList>
 
             <text displayName="Channel Specification" required="false"
-                    markedForTask="false"
-                    pattern="s*rs*">
+                  markedForTask="false"
+                  pattern="s*rs*">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_polarity"/>
                     <property name="image_property" value="channel_spec"/>
@@ -1258,8 +1258,8 @@
             </text>
 
             <text displayName="Channel Specification" required="false"
-                    markedForTask="false"
-                    pattern="s*rs*">
+                  markedForTask="false"
+                  pattern="s*rs*">
             </text>
 
             <text displayName="Channel 1 Name" required="false"

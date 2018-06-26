@@ -57,11 +57,7 @@
 @config-fragment-screen_state@
 @config-fragment-comment@
 @config-fragment-objective@
-            <text displayName="Channel Specification" required="false"
-                  markedForTask="false"
-                  pattern="s*rs*">
-            </text>
-
+@config-fragment-channel_spec@
         </dataFields>
 
     </project>
@@ -104,6 +100,7 @@
 @config-fragment-created_by-with-projtechres-default@
 @config-fragment-mounting_protocol-with-projtechres-default@
 @config-fragment-tissue_orientation-with-projtechres-default@
+@config-fragment-channel_spec-with-projtechres-default@
         </dataFields>
 
     </project>
