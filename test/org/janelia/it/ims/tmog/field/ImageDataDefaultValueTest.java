@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2018 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -57,19 +57,19 @@ public class ImageDataDefaultValueTest
     public void testGetValue() throws Exception {
 
         ImageDataDefaultValue dataDefault = new ImageDataDefaultValue();
-        Map<String, String> properties = new HashMap<String, String>();
-        properties.put("family", "rubin-chacrm");
-        properties.put("image_property", "uas_reporter");
+        Map<String, String> properties = new HashMap<>();
+        properties.put("family", "flylight_polarity");
+        properties.put("image_property", "effector");
         dataDefault.init(properties);
 
         final File lsmFile = new File(
-                "20070223",
-                "GMR_9B06_AE_01_04-xX00v_C070224_20070414103931413.lsm");
+                "20121110",
+                "FLPO_20121114222136397_1.lsm");
         final FileTarget target = new FileTarget(lsmFile);
 
         String value = dataDefault.getValue(target);
         assertEquals("invalid value",
-                     "mcd8GFP", value);
+                     "TLN-V5_myr-FLAG_Syt-HA_23_0037", value);
 
         properties.put("image_property", "gender");
         ImageDataDefaultValue dataDefault2 = new ImageDataDefaultValue();
@@ -77,7 +77,7 @@ public class ImageDataDefaultValueTest
 
         value = dataDefault2.getValue(target);
         assertEquals("invalid value",
-                     "unknown", value);        
+                     "f", value);
     }
 
     /**
@@ -89,7 +89,7 @@ public class ImageDataDefaultValueTest
     public void testGetSageValue() throws Exception {
 
         SageImageDataDefaultValue dataDefault = new SageImageDataDefaultValue();
-        Map<String, String> properties = new HashMap<String, String>();
+        Map<String, String> properties = new HashMap<>();
         properties.put("family", "baker_lab");
         properties.put("image_property", "short_genotype");
         dataDefault.init(properties);

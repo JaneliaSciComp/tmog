@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Howard Hughes Medical Institute.
+ * Copyright (c) 2018 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -20,7 +20,4 @@ public class SageImageDataDefaultValue
     public SageImageDataDefaultValue() {
     }
 
-    protected String getDbConfigurationKey() {
-        return "sage";
-    }
 }

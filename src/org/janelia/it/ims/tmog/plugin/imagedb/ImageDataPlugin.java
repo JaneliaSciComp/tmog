@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Howard Hughes Medical Institute.
+ * Copyright (c) 2018 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -8,7 +8,6 @@
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
-import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.PropertyToken;
@@ -35,7 +34,7 @@ public class ImageDataPlugin implements RowListener {
      * List of property setter instances for the data fields
      * configured to be persisted by this plug-in.
      */
-    List<ImagePropertySetter> propertySetters;
+    private List<ImagePropertySetter> propertySetters;
 
     /**
      * Flag indicating whether existing data should be kept when
@@ -73,7 +72,7 @@ public class ImageDataPlugin implements RowListener {
      *   if the plugin can not be initialized.
      */
     public void init(PluginConfiguration config) throws ExternalSystemException {
-        this.propertySetters = new ArrayList<ImagePropertySetter>();
+        this.propertySetters = new ArrayList<>();
         Map<String, String> props = config.getProperties();
         String dbConfigurationKey = null;
         String xmlBaseDirectoryName = null;
@@ -123,12 +122,7 @@ public class ImageDataPlugin implements RowListener {
             }
 
             try {
-                // support nighthawk and sage versions of image database
-                if ("nighthawk".equals(dbConfigurationKey)) {
-                    propertyWriter = new ImageDao(dbConfigurationKey);
-                } else {
-                    propertyWriter = new SageImageDao(dbConfigurationKey);
-                }
+                propertyWriter = new SageImageDao(dbConfigurationKey);
                 propertyWriter.checkAvailability();
             } catch (ExternalSystemException e) {
                 throw new ExternalSystemException(
@@ -175,14 +169,12 @@ public class ImageDataPlugin implements RowListener {
      * @return the rename field row for processing (with any
      *         updates from this plugin).
      *
-     * @throws ExternalDataException
-     *   if a recoverable data error occurs during processing.
      * @throws ExternalSystemException
      *   if a non-recoverable system error occurs during processing.
      */
     public PluginDataRow processEvent(EventType eventType,
                                       PluginDataRow row)
-            throws ExternalDataException, ExternalSystemException {
+            throws ExternalSystemException {
         if (EventType.END_ROW_SUCCESS.equals(eventType)) {
             saveImageProperties(row);
         }
@@ -194,13 +186,11 @@ public class ImageDataPlugin implements RowListener {
      *
      * @param  row  the row information for the event.
      *
-     * @throws ExternalDataException
-     *   if a recoverable data error occurs during processing.
      * @throws ExternalSystemException
      *   if a non-recoverable system error occurs during processing.
      */
     private void saveImageProperties(PluginDataRow row)
-            throws ExternalDataException, ExternalSystemException {
+            throws ExternalSystemException {
 
         String relativePath = null;
         try {

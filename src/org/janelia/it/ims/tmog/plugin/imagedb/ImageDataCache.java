@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Howard Hughes Medical Institute.
+ * Copyright (c) 2018 Howard Hughes Medical Institute.
  * All rights reserved.
  * Use is subject to Janelia Farm Research Campus Software Copyright 1.1
  * license terms (http://license.janelia.org/license/jfrc_copyright_1_1.html).
@@ -23,22 +23,17 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ImageDataCache {
 
     private static Map<String, ImageDataCache> familyDbKeyToCacheMap =
-            new ConcurrentHashMap<String, ImageDataCache>();
+            new ConcurrentHashMap<>();
 
-    public static ImageDataCache getCache(String dbConfigurationKey,
-                                          String family)
+    static ImageDataCache getCache(String dbConfigurationKey,
+                                   String family)
             throws ExternalSystemException {
 
         final String key = dbConfigurationKey + ":" + family;
         ImageDataCache cache = familyDbKeyToCacheMap.get(key);
         if (cache == null) {
 
-            ImageReader imageReader;
-            if ("nighthawk".equals(dbConfigurationKey)) {
-                imageReader = new ImageDao(dbConfigurationKey);
-            } else {
-                imageReader = new SageImageDao(dbConfigurationKey);
-            }
+            final ImageReader imageReader = new SageImageDao(dbConfigurationKey);
 
             imageReader.checkAvailability();
 
@@ -58,7 +53,7 @@ public class ImageDataCache {
     public ImageDataCache(String family,
                           ImageReader imageReader) {
         this.pathToDataMap =
-                new ConcurrentHashMap<String, Map<String, String>>();
+                new ConcurrentHashMap<>();
         this.family = family;
         this.imageReader = imageReader;
 
@@ -84,7 +79,7 @@ public class ImageDataCache {
             } catch (ExternalSystemException e) {
                 LOG.warn("failed to retrieve properties for " + family +
                          " image " + relativePath, e);
-                data = new HashMap<String, String>();
+                data = new HashMap<>();
             }
             pathToDataMap.put(relativePath, data);
         }
