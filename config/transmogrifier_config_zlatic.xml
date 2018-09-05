@@ -333,12 +333,6 @@
         </outputDirectory>
 
         <plugins>
-            <!--<rowValidator className="org.janelia.it.mwt.SetFileValidator">-->
-                <!--<property name="baseFileNamePattern"-->
-                          <!--value="(.+?)(_\d+k)?\.(png|blob|blobs|set|summary)"/>-->
-                <!--<property name="baseFileNameGroupIndex"-->
-                          <!--value="1"/>-->
-            <!--</rowValidator>-->
         </plugins>
 
         <dataFields>
