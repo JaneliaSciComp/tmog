@@ -1,5 +1,3 @@
-# The Janelia Research Campus Software License 1.2
-
 Copyright (c) 2018, Howard Hughes Medical Institute, All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
