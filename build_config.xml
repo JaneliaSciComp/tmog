@@ -206,13 +206,9 @@
                                 full-jnlp-name="tmog.jnlp"
                                 config-resource-dir=""
                                 config-resource="select_config"/>
-        <build-jnlp-launch-file name="ditp"
-                                config-resource-dir="[//dm11.hhmi.org|/groups/ditp]/ditp"/>
         <build-jnlp-launch-file name="flyfuncconn"
                                 config-resource-dir="[//dm11.hhmi.org|/groups/flyfuncconn]/flyfuncconn"/>
         <build-jnlp-launch-file name="flylight_collaborations"
-                                config-resource-dir="[//dm11.hhmi.org|/groups/flylight]/flylight"/>
-        <build-jnlp-launch-file name="flylight_dickson"
                                 config-resource-dir="[//dm11.hhmi.org|/groups/flylight]/flylight"/>
         <build-jnlp-launch-file name="flylight_flip"
                                 config-resource-dir="[//dm11.hhmi.org|/groups/flylight]/flylight"/>
@@ -236,8 +232,6 @@
                                 config-resource-dir="[//dm11.hhmi.org|/groups/projtechres]/projtechres"/>
         <build-jnlp-launch-file name="rubin_rd"
                                 config-resource-dir="[//dm11.hhmi.org/rubindata|/groups/rubin/data1/rubinlab]"/>
-        <build-jnlp-launch-file name="simpson_scope"
-                                config-resource-dir="[//dm11.hhmi.org/simpsonmicro|/groups/simpson/MicroscopeData]"/>
         <build-jnlp-launch-file name="split_screen_review"
                                 config-resource-dir="[//dm11.hhmi.org|/groups/flylight]/flylight"/>
         <build-jnlp-launch-file name="wdbp"
