@@ -120,3 +120,14 @@ The destination for renamed files can be explicitly configured or you can let th
 ## File List Sorting
 
 The order in which files are sorted for each session can be configured.
+
+## Renaming the Renamer
+
+This tool was formerly called the 'Image Renamer' because its original use was to rename microscope image files, 
+embedding collected meta data into the new file names. As the tool's feature set expanded beyond just renaming, 
+we decided to rename the tool itself to something less restrictive. 
+
+Don Olbris, our resident naming expert, came up with the name 'Transmogrifier' which was likely inspired 
+by this [Calvin and Hobbes cartoon sketch](http://www.lovine.com/hobbes/comics/transmogrifier.html).
+
+Over the years, 'Transmogrifier' got shortened to simply 'tmog' and that name has stuck.
