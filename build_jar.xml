@@ -76,12 +76,6 @@
                 <include name="org/janelia/**" />
             </fileset>
             
-            <!-- not sure why IntelliJ doesn't put this in the classes dir -->
-            <fileset dir="config">
-                <include name="*.xsd" />
-                <include name="JNLP-INF/*"/>
-            </fileset>
-
             <fileset dir="${dist.classes.dir}">
                 <include name="**/*" />
             </fileset>
