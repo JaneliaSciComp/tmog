@@ -49,7 +49,7 @@ public class RelativePathUtil {
 
                 name = parent.getName();
 
-                if (name.equals("")) {
+                if (name.equals("..")) {
                     parent = parent.getParentFile();
                 } else if ((name.length() > 0) && (! name.equals("."))) {
                     nameStack.push(name);
