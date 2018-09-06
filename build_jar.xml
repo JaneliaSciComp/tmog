@@ -8,7 +8,7 @@
     <property name="transmogrifier.jar" value="${dist.dir}/JaneliaTransmogrifier__V${app.version}.jar"/>
     <property name="junit.jar" value="lib/junit-4.8.1.jar"/>
     <property name="main.class" value="org.janelia.it.ims.tmog.JaneliaTransmogrifier"/>
-    <property name="main.classes.dir" value="classes/production/IMSImageRenamer"/>
+    <property name="main.classes.dir" value="classes/production/tmog"/>
     <property name="codebase-host" value="apps.int.janelia.org"/>
 
     <property environment="env"/>
@@ -72,7 +72,7 @@
                 <exclude name="*.properties" />
                 <exclude name="log4j.xml" />
             </fileset>
-            <fileset dir="classes/test/IMSImageRenamer">
+            <fileset dir="classes/test/tmog">
                 <include name="org/janelia/**" />
             </fileset>
             
@@ -143,7 +143,7 @@
             description="Builds a test environment jar file.">
 
         <jar destfile="${transmogrifier.jar}" update="yes">
-            <fileset dir="classes/test/IMSImageRenamer">
+            <fileset dir="classes/test/tmog">
                 <include name="org/janelia/**" />
             </fileset>
         </jar>
