@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="4.0.4" frameSizePercentage="95"/>
+
+    <project name="FlyLight Collaborations" default="true">
+
+        <inputFileSorter sortAlgorithm="LNumber" />
+
+        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/collaborations/confocalStacks"
+                         derivedFromEarliestModifiedFile="true"/>
+
+        <plugins>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="image_number" value="urn:lsid:janelia.org:flylight_collaborations:image_number" />
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="lab" value="Line Lab"/>
+                <property name="family" value="$STATIC:flylight_collaborations"/>
+                <property name="line" value="Line"/>
+                <property name="gender" value="Gender"/>
+                <property name="age" value="Age"/>
+                <property name="chron_interval" value="Hours After Pupa Formation"/>
+                <property name="area" value="Area"/>
+                <property name="stain_antibody" value="Stain Antibody"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
+                <property name="effector" value="UAS Reporter"/>
+                <property name="created_by" value="Imager"/>
+                <property name="renamed_by" value="Renamer"/>
+                <property name="class" value="Class"/>
+            </rowListener>
+
+            <sessionListener className="org.janelia.it.ims.tmog.plugin.SessionSummaryFileWriter">
+                <property name="directory" value="[//dm11.hhmi.org|/groups/flylight]/flylight/tmog/summaries/collaborations"/>
+            </sessionListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <separator value="FLCO_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS" />
+            <separator value="_"/>
+            <pluginData displayName="image_number"/>
+            <separator value=".lsm"/>
+
+            <!--
+             These values are collected for storage but are not
+             included as components of the file name (markedForTask="false").
+             -->
+
+            <cvTermList displayName="Line Lab" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/lab"
+                        displayNamePrefixedForValues="false"
+                        markedForTask="false">
+                <staticDefault value="olympiad" />
+            </cvTermList>
+
+            <webServiceList displayName="Line" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=baker&amp;lab=fly&amp;lab=flylight&amp;lab=olympiad&amp;lab=jayaraman&amp;lab=rubin&amp;lab=simpson&amp;lab=leet&amp;lab=truman&amp;lab=zlatic"
+                            autoComplete="true">
+            </webServiceList>
+
+            <validValueList displayName="Gender" required="true"
+                            markedForTask="false">
+                <validValue value="Female"/>
+                <validValue value="Male"/>
+                <validValue value="unknown"/>
+            </validValueList>
+
+            <validValueList displayName="Age" required="true" markedForTask="false">
+                <validValue value="undefined"/>
+                <validValue value="Prepupa"/>
+                <validValue value="Pupa"/>
+                <validValue value="First Instar"/>
+                <validValue value="Second Instar"/>
+                <validValue value="Third Instar"/>
+                <validValue value="Day 1-5"/>
+                <validValue value="Day 6-10"/>
+                <validValue value="Day 11-15"/>
+                <validValue value="Day 16-20"/>
+                <validValue value="Day 21-25"/>
+                <validValue value="Day 26-30"/>
+            </validValueList>
+
+            <number displayName="Hours After Pupa Formation" required="false"
+                    minimumValue="0" maximumValue="100"
+                    markedForTask="false">
+            </number>
+
+            <validValueList displayName="Area" required="true"
+                            markedForTask="false">
+                <validValue value="Brain" />
+                <validValue value="Salivary Gland" />
+                <validValue value="Ventral Nerve Cord" />
+            </validValueList>
+
+            <cvTermList displayName="Stain Antibody" required="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/antibody">
+                <staticDefault value="NC82"/>
+            </cvTermList>
+
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            markedForTask="false">
+                <validValue value="Glycerol-Based Mounting" default="true"/>
+                <validValue value="DPX Mounting"/>
+            </validValueList>
+
+            <cvTermList displayName="Tissue Orientation" required="true"
+                        markedForTask="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
+                        displayNamePrefixedForValues="false">
+            </cvTermList>
+
+            <validValueList displayName="UAS Reporter" required="true"
+                            markedForTask="false">
+                <validValue value="UAS_IVS-mCD8_3_0007" default="true"/>
+                <validValue value="UAS_mCD8_2_0006"/>
+                <validValue value="LexAop_IVS-myr_3_0008"/>
+            </validValueList>
+
+            <cvTermList displayName="Imager" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+            </cvTermList>
+
+            <cvTermList displayName="Renamer" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager"
+                        sharedForAllSessionFiles="true">
+            </cvTermList>
+
+            <validValueList displayName="Class" required="false"
+                            markedForTask="false">
+                <validValue displayName="Screening" value="Screening" default="true"/>
+                <validValue displayName="Rework" value="Rework"/>
+            </validValueList>
+
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>

@@ -1,0 +1,297 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="4.2.2" frameSizePercentage="95"/>
+
+    <project name="Lee Lab: Lineage Images" default="true">
+
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString=".*_(L)(\d++)(\.lsm)"/>
+
+        <outputDirectory fileModeReadOnly="true">
+            <path path="[//dm11.hhmi.org/leetimg|/groups/leet/leetimg/leetlab]/lineage/" />
+            <renameFieldValue fieldDisplayName="Image Family"/>
+            <path path="/confocalStacks/"/>
+            <renameFieldValue fieldDisplayName="Slide ID"
+                              pattern="^(\w\w\w\d\d\d)\d\d"/>
+            <path path="xx/"/>
+            <renameFieldValue fieldDisplayName="Slide ID"/>
+        </outputDirectory>
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.JacsDataSetQuotaValidator">
+                <property name="serviceUrl" value="http://jacs-webdav:8080/JFS/api/quota/filestore/status/${Data Set}"/>
+                <property name="testDataSet" value="nerna_polarity_case_3"/>
+            </rowValidator>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
+                <property name="tmog-row.key" value="${Slide ID}" />
+                <property name="data-file.name" value="[//dm11.hhmi.org/leetimg|/groups/leet/leetimg/leetlab]/tmog/data/scopeSlide.tsv" />
+                <property name="data-file.tsv-key" value="Slide ID" />
+                <property name="Image Family" value="Image Family" />
+                <property name="GAL4 Line" value="GAL4 Line" />
+                <property name="Progenitor" value="Progenitor" />
+                <property name="tsMARCM" value="tsMARCM" />
+                <property name="Gender" value="Gender" />
+                <property name="Stage Basis" value="Stage Basis" />
+                <property name="Heat Shock Age Hour" value="Heat Shock Age Hour" />
+                <property name="Heat Shock Age Interval" value="Heat Shock Age Interval" />
+                <property name="Heat Shock Minutes" value="Heat Shock Minutes" />
+                <property name="Dissection Age" value="Dissection Age" />
+                <property name="Dissector" value="Dissector" />
+                <property name="Cross Date" value="Cross Date" />
+                <property name="Mount Date" value="Mount Date" />
+                <property name="IHC Protocol Number" value="IHC Protocol Number" />
+                <property name="Tissue Mounting Protocol" value="Tissue Mounting Protocol" />
+                <property name="Tissue Orientation" value="Tissue Orientation" />
+                <property name="Channel Specification" value="Channel Specification" />
+            </rowUpdater>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="image_number" value="urn:lsid:janelia.org:leet_lineage:image_number" />
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="relativePathDepth" value="2"/>
+                <property name="family" value="Image Family"/>
+                <property name="lab" value="Line Lab (optional)"/>
+                <property name="line" value="GAL4 Line"/>
+                <property name="progenitor" value="Progenitor"/>
+                <property name="ts_marcm" value="tsMARCM"/>
+                <property name="mutant" value="Mutant"/>
+                <property name="stage_basis" value="Stage Basis" />
+                <property name="heat_shock_hour" value="Heat Shock Age Hour"/>
+                <property name="heat_shock_interval" value="Heat Shock Age Interval"/>
+                <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
+                <property name="age" value="Dissection Age"/>
+                <property name="gender" value="Gender"/>
+                <property name="cross_date" value="Cross Date"/>
+                <property name="slide_code" value="${Slide ID}_${Slide Row}${Slide Column}"/>
+                <property name="data_set" value="Data Set"/>
+                <property name="ihc_protocol" value="TZL-IHC-${IHC Protocol Number}"/>
+                <property name="mount_date" value="Mount Date"/>
+                <property name="mounting_protocol" value="Tissue Mounting Protocol"/>
+                <property name="tissue_orientation" value="Tissue Orientation"/>
+                <property name="dissector" value="Dissector"/>
+                <property name="created_by" value="Imager"/>
+                <property name="channel_spec" value="Channel Specification"/>
+                <property name="microscope_filename"/>
+                <property name="base_path" value="Image Family$MAP:leet_central_brain_lineage=/groups/leet/leetimg/leetlab/lineage/leet_central_brain_lineage/confocalStacks/|leet_pan_lineage=/groups/leet/leetimg/leetlab/lineage/leet_pan_lineage/confocalStacks/"/>
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.XmlWriterPlugin" />
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
+                <property name="serviceUrl" value="http://jacs-data.int.janelia.org:8180/rest-v1/process/owner/system/dataSet/${Data Set}/lsmPipelines"/>
+                <property name="testUrl" value="http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?owners=user:trautmane"/>
+                <property name="relativePathDepth" value="2"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+            <separator value="TZLL_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS" />
+            <separator value="_"/>
+            <pluginData displayName="image_number"/>
+            <separator value=".lsm"/>
+
+            <!--
+             These values are collected for storage but are not
+             included as components of the file name (markedForTask="false").
+             -->
+
+            <text displayName="Slide ID"
+                  required="true"
+                  markedForTask="false"
+                  pattern="(BLM|Hey|SSM|MDS|Mut|RQZ|RTL|VND|WYC)\d{5}">
+                <targetPropertyDefault propertyName="slide"/>
+            </text>
+
+            <text displayName="Slide Row" pattern="[A-Z]" required="true"
+                  markedForTask="false" convertToUpperCase="true">
+                <targetPropertyDefault propertyName="row"/>
+            </text>
+
+            <number displayName="Slide Column" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="99">
+                <targetPropertyDefault propertyName="column"/>
+            </number>
+
+            <validValueList displayName="Image Family" required="true"
+                            sharedForAllSessionFiles="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="Central Brain Lineage" value="leet_central_brain_lineage"/>
+                <validValue displayName="PAN Lineage" value="leet_pan_lineage"/>
+            </validValueList>
+
+            <cvTermList displayName="Line Lab (optional)" required="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/lab"
+                        displayNamePrefixedForValues="false"
+                        markedForTask="false">
+            </cvTermList>
+
+            <webServiceList displayName="GAL4 Line" required="true"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=rubin&amp;lab=leet&amp;lab=none"
+                            autoComplete="true"
+                            markedForTask="false">
+            </webServiceList>
+
+            <validValueList displayName="Progenitor" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="progenitor-01" default="true"/>
+                <validValue value="progenitor-02"/>
+            </validValueList>
+
+            <validValueList displayName="tsMARCM" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="tsMARCM-01" default="true"/>
+                <validValue value="tsMARCM-02"/>
+                <validValue value="tsMARCM-03"/>
+            </validValueList>
+
+            <validValueList displayName="mutant" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="chinmo[1]" />
+                <validValue value="Df(2L)ED773" />
+                <validValue value="Su(H)[delta47]" />
+            </validValueList>
+
+            <date displayName="Cross Date" required="false"
+                  datePattern="yyyyMMdd" markedForTask="false">
+            </date>
+
+            <validValueList displayName="Gender" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f" default="true"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+
+            <validValueList displayName="Stage Basis" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="ALH: after larva hatching" value="ALH" default="true"/>
+                <validValue displayName="APF: after pupa formation" value="APF"/>
+                <validValue displayName="BPF: before pupa formation" value="BPF"/>
+            </validValueList>
+
+            <decimal displayName="Heat Shock Age Hour" required="true"
+                     minimumValue="0"
+                     markedForTask="false">
+            </decimal>
+
+            <decimal displayName="Heat Shock Age Interval" required="true"
+                     minimumValue="0"
+                     markedForTask="false">
+                <staticDefault value="2" />
+            </decimal>
+
+            <decimal displayName="Heat Shock Minutes" required="true"
+                     minimumValue="0"
+                     markedForTask="false">
+            </decimal>
+
+            <validValueList displayName="Dissector" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="Ching-Po Yang"/>
+                <validValue value="Haojiang Luan"/>
+                <validValue value="Mark Schroeder"/>
+                <validValue value="Ling Yu Liu"/>
+                <validValue value="Nicholas Abel"/>
+                <validValue value="Rebecca Johnston"/>
+                <validValue value="Rebecca Vorima"/>
+                <validValue value="Susana Tae"/>
+                <validValue value="Takeshi Awasaki"/>
+                <validValue value="Qingzhong Ren"/>
+                <validValue value="Xiaotang Jing"/>
+                <validValue value="Ying-Jou Lee"/>
+                <validValue value="Yisheng Hey"/>
+                <validValue value="Yu-Chun Wang"/>
+                <validValue value="Yu-Fen Huang"/>
+            </validValueList>
+
+            <cvTermList displayName="Dissection Age" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        displayNamePrefixedForValues="true"
+                        autoComplete="true"
+                        markedForTask="false">
+                <staticDefault value="A"/>
+            </cvTermList>
+
+            <date displayName="Mount Date" required="false"
+                  datePattern="yyyyMMdd" markedForTask="false">
+            </date>
+
+            <decimal displayName="IHC Protocol Number" required="true"
+                     minimumValue="0.0" maximumValue="99.9"
+                     markedForTask="false"/>
+
+            <validValueList displayName="Tissue Mounting Protocol" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="Glycerol-Based Mounting"/>
+                <validValue value="DPX Mounting" default="true"/>
+            </validValueList>
+
+            <cvTermList displayName="Tissue Orientation" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/tissue_orientation"
+                        displayNamePrefixedForValues="false">
+                <staticDefault value="face_down"/>
+            </cvTermList>
+
+            <validValueList displayName="Imager" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="Haojiang Luan"/>
+                <validValue value="Mark Schroeder"/>
+                <validValue value="Ling Yu Liu"/>
+                <validValue value="Nicholas Abel"/>
+                <validValue value="Rebecca Johnston"/>
+                <validValue value="Rebecca Vorima"/>
+                <validValue value="Susana Tae"/>
+                <validValue value="Takeshi Awasaki"/>
+                <validValue value="Qingzhong Ren"/>
+                <validValue value="Xiaotang Jing"/>
+                <validValue value="Ying-Jou Lee"/>
+                <validValue value="Yu-Chun Wang"/>
+                <validValue value="Yu-Fen Huang"/>
+            </validValueList>
+
+            <text displayName="Channel Specification" required="false"
+                    markedForTask="false"
+                    pattern="s*rs*">
+                <staticDefault value="ssr"/>
+            </text>
+
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?owners=group:leetlab"
+                            autoComplete="true">
+            </webServiceList>
+
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>

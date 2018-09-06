@@ -8,7 +8,7 @@
         <attribute name="sageProperty"/>
         <sequential>
             <loadfile property="plugin-default-@{sageFamily}-@{sageProperty}"
-                      srcFile="config/template/fragment/plugin/sage-data-default.xml">
+                      srcFile="src/main/resources/template/fragment/plugin/sage-data-default.xml">
             <filterchain>
                     <replacetokens>
                         <token key="family" value="@{sageFamily}"/>
@@ -25,7 +25,7 @@
         <element name="filterchain" implicit="true" optional="true"/>
         <sequential>
             <!--suppress AntResolveInspection -->
-            <loadfile property="config-fragment-@{name}" srcFile="config/template/fragment/@{path}"/>
+            <loadfile property="config-fragment-@{name}" srcFile="src/main/resources/template/fragment/@{path}"/>
         </sequential>
     </macrodef>
 
@@ -37,7 +37,7 @@
         <attribute name="is-shareable" default="true"/>
         <sequential>
             <!--suppress AntResolveInspection -->
-            <loadfile property="config-fragment-@{name}" srcFile="config/template/fragment/@{path}">
+            <loadfile property="config-fragment-@{name}" srcFile="src/main/resources/template/fragment/@{path}">
                 <filterchain>
                     <replacetokens>
                         <token key="@{key}" value="@{value}"/>
@@ -162,9 +162,9 @@
 
         <echoproperties prefix="config-fragment-" destfile="${consolidated-config-fragment-properties-file}" />
 
-        <copy todir="config" overwrite="true" force="true">
+        <copy todir="src/main/resources" overwrite="true" force="true">
             <mappedresources>
-                <fileset dir="config/template" includes="*.xml"/>
+                <fileset dir="src/main/resources/template" includes="*.xml"/>
                 <globmapper from="*" to="transmogrifier_config_*"/>
             </mappedresources>
             <filterchain>
@@ -184,9 +184,9 @@
 
 
         <sequential>
-            <copy todir="config/jnlp-launch-files" overwrite="true" force="true">
+            <copy todir="src/main/resources/jnlp-launch-files" overwrite="true" force="true">
                 <mappedresources>
-                    <fileset dir="config/JNLP-INF" includes="APPLICATION_TEMPLATE.JNLP"/>
+                    <fileset dir="src/main/resources/JNLP-INF" includes="APPLICATION_TEMPLATE.JNLP"/>
                     <globmapper from="*" to="@{full-jnlp-name}"/>
                 </mappedresources>
                 <filterchain>

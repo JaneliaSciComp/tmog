@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="org.janelia.it.ims.tmog.view.RenameView">
+  <grid id="2c25a" binding="appPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="668" height="400"/>
+    </constraints>
+    <properties>
+      <minimumSize width="100" height="249"/>
+      <preferredSize width="1280" height="500"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <grid id="bfb16" binding="directoryPanel" layout-manager="GridLayoutManager" row-count="3" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="10">
+        <margin top="5" left="5" bottom="2" right="5"/>
+        <constraints border-constraint="North"/>
+        <properties/>
+        <border type="none">
+          <color color="-65536"/>
+        </border>
+        <children>
+          <component id="5ffcf" class="javax.swing.JLabel" binding="lsmDirectoryLabel">
+            <constraints>
+              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="74" height="14"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text value="Source File Directory:"/>
+            </properties>
+          </component>
+          <component id="bad2a" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <labelFor value="da277"/>
+              <text value="Output Directory:"/>
+            </properties>
+          </component>
+          <component id="acf97" class="javax.swing.JButton" binding="lsmDirectoryBtn">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="20" height="25"/>
+              </grid>
+            </constraints>
+            <properties>
+              <horizontalAlignment value="0"/>
+              <text value="Set"/>
+              <toolTipText value="Change Source File Directory"/>
+            </properties>
+          </component>
+          <component id="84d05" class="javax.swing.JButton" binding="outputDirectoryBtn">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="20" height="25"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text value="Set"/>
+              <toolTipText value="Change Output Directory"/>
+            </properties>
+          </component>
+          <component id="ce25d" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Project:"/>
+            </properties>
+          </component>
+          <component id="473ba" class="javax.swing.JButton" binding="cancelInputSearch">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="20" height="25"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text value="Cancel"/>
+              <toolTipText value="Cancel Source File Search"/>
+              <visible value="false"/>
+            </properties>
+          </component>
+          <scrollpane id="da277" binding="outputDirectoryPane">
+            <constraints>
+              <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <horizontalScrollBarPolicy value="31"/>
+              <verticalScrollBarPolicy value="21"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="a99d3" class="javax.swing.JTextArea" binding="outputDirectoryField">
+                <constraints/>
+                <properties>
+                  <background swing-color="Label.background"/>
+                  <editable value="false"/>
+                  <lineWrap value="true"/>
+                  <requestFocusEnabled value="false"/>
+                  <wrapStyleWord value="true"/>
+                </properties>
+              </component>
+            </children>
+          </scrollpane>
+          <scrollpane id="ad825" binding="lsmDirectoryPane">
+            <constraints>
+              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <horizontalScrollBarPolicy value="31"/>
+              <verticalScrollBarPolicy value="21"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="5da1e" class="javax.swing.JTextArea" binding="lsmDirectoryField">
+                <constraints/>
+                <properties>
+                  <background swing-color="Label.background"/>
+                  <editable value="false"/>
+                  <lineWrap value="true"/>
+                  <requestFocusEnabled value="false"/>
+                  <wrapStyleWord value="true"/>
+                </properties>
+              </component>
+            </children>
+          </scrollpane>
+          <scrollpane id="e5399" binding="projectNamePane">
+            <constraints>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <horizontalScrollBarPolicy value="31"/>
+              <verticalScrollBarPolicy value="21"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="db062" class="javax.swing.JTextArea" binding="projectName">
+                <constraints/>
+                <properties>
+                  <background swing-color="Label.background"/>
+                  <editable value="false"/>
+                  <lineWrap value="true"/>
+                  <rows value="0"/>
+                  <wrapStyleWord value="true"/>
+                </properties>
+              </component>
+            </children>
+          </scrollpane>
+        </children>
+      </grid>
+      <grid id="146cd" binding="dataPanel" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="3" left="5" bottom="5" right="5"/>
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="631d3" binding="dataButtonPanel" layout-manager="GridLayoutManager" row-count="1" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="5" left="0" bottom="5" right="0"/>
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="34432" class="javax.swing.JButton" binding="copyAndRenameBtn">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Copy and Rename" noi18n="true"/>
+                  <toolTipText value="Copy and rename all files using specified information"/>
+                </properties>
+              </component>
+              <hspacer id="65df5">
+                <constraints>
+                  <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
+              <hspacer id="c1ecd">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="10" height="-1"/>
+                  </grid>
+                </constraints>
+              </hspacer>
+              <component id="941a7" class="javax.swing.JLabel" binding="copyProgressLabel">
+                <constraints>
+                  <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Label"/>
+                </properties>
+              </component>
+              <component id="918b8" class="javax.swing.JProgressBar" binding="copyProgressBar">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="true"/>
+                </properties>
+              </component>
+              <component id="d34c" class="javax.swing.JButton" binding="loadMappedDataButton">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Load Mapped Data"/>
+                  <visible value="false"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <scrollpane id="31884" binding="dataTableScrollPane">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+            <border type="bevel-raised"/>
+            <children>
+              <component id="914d6" class="org.janelia.it.ims.tmog.view.component.DataTable" binding="dataTable">
+                <constraints/>
+                <properties>
+                  <autoResizeMode value="2"/>
+                </properties>
+              </component>
+            </children>
+          </scrollpane>
+        </children>
+      </grid>
+    </children>
+  </grid>
+  <inspectionSuppressions>
+    <suppress inspection="MissingMnemonic" id="acf97"/>
+    <suppress inspection="MissingMnemonic" id="84d05"/>
+    <suppress inspection="MissingMnemonic" id="34432"/>
+  </inspectionSuppressions>
+</form>

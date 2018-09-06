@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+
+<transmogrifierConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="transmogrifier_config.xsd">
+
+    <global minimumVersion="2.8.7"/>
+
+    <project name="Fly Light Flip - manual entry (FLFL*)" default="true">
+
+        <inputFileSorter sortAlgorithm="Number"
+                         patternString=".*_(L)(\d++)(\.lsm)"/>
+
+        <outputDirectory basePath="/tmp"
+                         derivedFromEarliestModifiedFile="true"/>
+
+        <plugins>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
+                <property name="validateField" value="Gender"/>
+                <property name="matchesPattern" value="\S+"/>
+                <property name="whenReferenceField" value="Age"/>
+                <property name="matchesReferencePattern" value="^[^L].*"/>
+                <property name="errorMessage" value="Gender value is required when age is ${Age}."/>
+            </rowValidator>
+
+            <rowValidator className="org.janelia.it.ims.tmog.plugin.WritableFromFileValidator">
+                <property name="errorMessage"
+                          value="The source file %s must be writable to allow meta data insertion before transfer."/>
+            </rowValidator>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
+                <property name="db.config.key" value="sage" />
+                <property name="image_number" value="urn:lsid:janelia.org:flylight_flip:image_number" />
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.LsmMetaDataPlugin" >
+                <property name="line" value="${GAL4 Line}"/>
+            </rowListener>
+
+            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
+                <property name="db.config.key" value="sage"/>
+                <property name="lab" value="$STATIC:flylight"/>
+                <property name="family" value="$STATIC:flylight_flip"/>
+                <property name="line" value="GAL4 Line"/>
+                <property name="created_by" value="Imager"/>
+                <property name="gal4_vial" value="GAL4 Vial"/>
+                <property name="effector" value="Effector"/>
+                <property name="slide_code" value="${Mount Date}_${Slide Number}_${Slide Row}${Slide Column}"/>
+                <property name="tile" value="Tile"/>
+                <property name="gender" value="Gender"/>
+                <property name="age" value="Age"/>
+                <property name="full_age" value="Full Age"/>
+                <property name="days_after_eclosion" value="Days After Eclosion"/>
+                <property name="area" value="$STATIC:Brain"/>
+                <property name="heat_shock_minutes" value="Heat Shock Minutes"/>
+                <property name="annotated_by" value="Annotator"/>
+            </rowListener>
+
+        </plugins>
+
+        <dataFields>
+
+            <separator value="FLFL_"/>
+            <runTime datePattern="yyyyMMddHHmmssSSS" />
+            <separator value="_"/>
+            <pluginData displayName="image_number"/>
+            <separator value=".lsm"/>
+
+            <!--
+             These values are collected for storage but are not
+             included as components of the file name (markedForTask="false").
+             -->
+
+            <webServiceList displayName="GAL4 Line" required="true"
+                            markedForTask="false"
+                            valueCreationPath="*/line"
+                            relativeActualValuePath="name"
+                            relativeValueDisplayNamePath="name"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"
+                            autoComplete="true">
+            </webServiceList>
+
+            <text displayName="GAL4 Vial" pattern="^[A-Z]$"
+                  markedForTask="false" convertToUpperCase="true">
+            </text>
+
+            <cvTermList displayName="Effector" required="true"
+                        autoComplete="true"
+                        markedForTask="false"
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
+            </cvTermList>
+
+            <date displayName="Mount Date" required="true"
+                  datePattern="yyyyMMdd" markedForTask="false">
+            </date>
+
+            <number displayName="Slide Number" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="99" />
+
+            <text displayName="Slide Row" pattern="[A-Z]" required="true"
+                  markedForTask="false" convertToUpperCase="true">
+            </text>
+
+            <number displayName="Slide Column" required="true"
+                    markedForTask="false"
+                    minimumValue="1" maximumValue="99" />
+
+            <validValueList displayName="Tile" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="01: Left Optic Lobe" value="Left Optic Lobe" />
+                <validValue displayName="02: Ventral Brain" value="Ventral Brain"/>
+                <validValue displayName="03: Left Dorsal Brain" value="Left Dorsal Brain"/>
+                <validValue displayName="04: Right Dorsal Brain" value="Right Dorsal Brain"/>
+                <validValue displayName="05: Right Optic Lobe" value="Right Optic Lobe"/>
+                <validValue displayName="06: Central Brain" value="Central Brain"/>
+                <validValue displayName="07: Left Central Brain" value="Left Central Brain"/>
+                <validValue displayName="08: Right Central Brain" value="Right Central Brain"/>
+                <validValue displayName="09: Dorsal Brain" value="Dorsal Brain"/>
+                <validValue displayName="10: Neck" value="Neck"/>
+                <validValue displayName="11: Thorax" value="Thorax"/>
+                <validValue displayName="12: Abdomen" value="Abdomen"/>
+                <validValue displayName="13: Terminus" value="Terminus"/>
+            </validValueList>
+
+            <validValueList displayName="Gender" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue displayName="m: Male" value="m"/>
+                <validValue displayName="f: Female" value="f"/>
+                <validValue displayName="x: Not Defined" value="x"/>
+            </validValueList>
+            <cvTermList displayName="Age" required="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        displayNamePrefixedForValues="true"
+                        autoComplete="true"
+                        markedForTask="false">
+            </cvTermList>
+
+            <text displayName="Full Age" required="false"
+                  markedForTask="false">
+            </text>
+
+            <number displayName="Days After Eclosion" required="false"
+                    markedForTask="false"
+                    minimumValue="0" maximumValue="21" />
+
+            <decimal displayName="Heat Shock Minutes" required="false"
+                     minimumValue="0" markedForTask="false" />
+
+            <cvTermList displayName="Imager" required="true"
+                        markedForTask="false"
+                        autoComplete="true"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+            </cvTermList>
+
+            <validValueList displayName="Annotator" required="false"
+                            autoComplete="true"
+                            markedForTask="false">
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Yoshi Aso"/>
+                <validValue value="Tanya Wolff"/>
+            </validValueList>
+        </dataFields>
+
+    </project>
+
+</transmogrifierConfiguration>
