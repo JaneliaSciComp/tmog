@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="package_transmogrifier" default="build-prod-jar" basedir=".">
+
+    <property file="build.properties"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="dist.classes.dir" value="${dist.dir}/classes"/>
+    <property name="dist.main.dir" value="${dist.dir}/main"/>
+    <property name="transmogrifier.jar" value="${dist.dir}/JaneliaTransmogrifier__V${app.version}.jar"/>
+    <property name="junit.jar" value="lib/junit-4.8.1.jar"/>
+    <property name="main.class" value="org.janelia.it.ims.tmog.JaneliaTransmogrifier"/>
+    <property name="main.classes.dir" value="classes/production/IMSImageRenamer"/>
+    <property name="codebase-host" value="apps.int.janelia.org"/>
+
+    <property environment="env"/>
+    <property name="default-keystore" value="${env.HOME}/ssl/code-cert/2018/codesignstore.p12"/>
+    <property name="sage-prod-properties" value="${env.HOME}/ssl/code-cert/2018/sage.properties"/>
+    <property name="code-cert-alias" value="codesigncert"/>
+    <property name="code-cert-tsa" value="http://tsa.starfieldtech.com"/> <!-- GoDaddy time stamp authority -->
+    <!--<property name="code-cert-tsa" value="http://timestamp.entrust.net/TSS/JavaHttpTS"/>-->
+    <!--<property name="code-cert-tsa" value="https://timestamp.geotrust.com/tsa"/>-->
+
+    <fileset id="configFiles" dir="${main.classes.dir}" >
+        <include name="*.properties"/>
+        <include name="log4j.xml"/>
+    </fileset>
+
+    <target name="clean_dist" description="Removes all build artifacts.">
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <target name="init_dist" description="Creates the distribution directories for packaging the application.">
+        <mkdir dir="${dist.dir}" />
+        <mkdir dir="${dist.main.dir}" />
+    </target>
+
+    <target name="configure-test" description="Modifies configuration files for test environments.">
+        <copy todir="${dist.classes.dir}">
+            <fileset refid="configFiles" />
+        </copy>
+    </target>
+
+    <target name="configure" description="Modifies configuration files for production environments.">
+        <copy todir="${dist.classes.dir}">
+            <fileset refid="configFiles" />
+        </copy>
+        <copy file="${sage-prod-properties}" todir="${dist.classes.dir}" overwrite="true"/>
+        <replaceregexp file="${dist.classes.dir}/log4j.xml"
+                       match='ref="SYSLOG_STUB'
+                       replace='ref="SYSLOG'/>
+    </target>
+
+    <target name="build-jar"
+            description="Extracts all files from the library jars into single jar that also contains the application classes.">
+
+        <!-- This initializes the ${DSTAMP} and ${TSTAMP} ant properties. -->
+        <tstamp/>
+
+        <unjar dest="${dist.classes.dir}">
+            <fileset dir=".">
+                <include name="lib/*.jar" />
+                <exclude name="${junit.jar}" />
+            </fileset>
+        </unjar>
+
+        <!-- remove META-INF files from other libraries so that web start process is not confused -->
+        <delete dir="${dist.classes.dir}/META-INF" />
+
+        <jar destfile="${transmogrifier.jar}" update="yes">
+            <fileset dir="${main.classes.dir}">
+                <include name="**/*" />
+                <exclude name="transmogrifier*.xml" />
+                <exclude name="*.properties" />
+                <exclude name="log4j.xml" />
+            </fileset>
+            <fileset dir="classes/test/IMSImageRenamer">
+                <include name="org/janelia/**" />
+            </fileset>
+            
+            <!-- not sure why IntelliJ doesn't put this in the classes dir -->
+            <fileset dir="config">
+                <include name="*.xsd" />
+                <include name="JNLP-INF/*"/>
+            </fileset>
+
+            <fileset dir="${dist.classes.dir}">
+                <include name="**/*" />
+            </fileset>
+
+            <!--
+             See the following link for details on Package Versioning:
+               http://java.sun.com/j2se/1.5.0/docs/guide/versioning/spec/versioning2.html#wp90779
+               
+             Original idea was stolen from:
+               http://home.subnet.at/peter/2006/04/automatically-adding-version-information-into-a-java-manifest-file-with-ant/
+            -->
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+                <attribute name="Built-By" value="${user.name}"/>
+                <attribute name="Built-On" value="${DSTAMP}-${TSTAMP}"/>
+                <attribute name="Permissions" value="all-permissions"/>
+                <attribute name="Codebase" value="${codebase-host}"/>
+                <attribute name="Application-Name" value="Janelia Transmogrifier"/>
+                <attribute name="Application-Library-Allowable-Codebase" value="${codebase-host}"/>
+                <attribute name="Caller-Allowable-Codebase" value="*"/>
+                <section name="org/janelia/it/ims/tmog/">
+                    <attribute name="Specification-Title" value="Janelia Transmogrifier"/>
+                    <attribute name="Specification-Version" value="${app.version}"/>
+                    <attribute name="Specification-Vendor" value="Janelia Farm Scientific Computing"/>
+                    <attribute name="Implementation-Title" value="org.janelia.it.ims.tmog"/>
+                    <attribute name="Implementation-Version" value="${app.version}"/>
+                    <attribute name="Implementation-Vendor" value="Janelia Farm Scientific Computing"/>
+                </section>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="init-cert-properties">
+        <input message="enter keystore file:"
+               addproperty="keystore"
+               defaultvalue="${default-keystore}"/>
+        <input message="enter password for ${keystore}:" addproperty="keystore-password"/>
+    </target>
+
+    <target name="build-prod-jar" depends="clean_dist, init_dist, configure, build-jar, init-cert-properties"
+            description="Builds a production environment jar file.">
+
+        <signjar jar="${transmogrifier.jar}"
+                 verbose="true"
+                 storetype="pkcs12"
+                 keystore="${keystore}"
+                 alias="${code-cert-alias}"
+                 storepass="${keystore-password}"
+                 tsaurl="${code-cert-tsa}"/>
+
+        <!-- verify the signed jar in case anything like timestamp authority issues screwed up the signature -->
+        <verifyjar jar="${transmogrifier.jar}"
+                   storepass="${keystore-password}"
+                   verbose="true"/>
+
+    </target>
+
+    <target name="build-test-jar" depends="clean_dist, init_dist, configure-test, build-jar, init-cert-properties"
+            description="Builds a test environment jar file.">
+
+        <jar destfile="${transmogrifier.jar}" update="yes">
+            <fileset dir="classes/test/IMSImageRenamer">
+                <include name="org/janelia/**" />
+            </fileset>
+        </jar>
+
+        <signjar jar="${transmogrifier.jar}"
+                 verbose="true"
+                 keystore="${keystore}"
+                 alias="${code-cert-alias}"
+                 storepass="${keystore-password}"
+                 tsaurl="${code-cert-tsa}"/>
+
+        <!-- verify the signed jar in case anything like timestamp authority issues screwed up the signature -->
+        <verifyjar jar="${transmogrifier.jar}"
+                   storepass="${keystore-password}"
+                   verbose="true"/>
+
+    </target>
+
+</project>
