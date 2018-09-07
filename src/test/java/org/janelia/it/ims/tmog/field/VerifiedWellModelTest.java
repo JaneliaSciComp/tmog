@@ -42,25 +42,23 @@ public class VerifiedWellModelTest extends TestCase {
     /**
      * Tests the setFormFactor method.
      *
-     * @throws Exception
-     *   if any unexpected errors occur.
      */
-    public void testSetFormFactor() throws Exception {
+    public void testSetFormFactor() {
 
         VerifiedWellModel well = new VerifiedWellModel();
         well.setFormFactor(96);
-        assertEquals("Incorrect minimum X coordinate",new Integer(1),well.getMinimumX());
-        assertEquals("Incorrect maximum X coordinate",new Integer(12),well.getMaximumX());
+        assertEquals("Incorrect minimum X coordinate", Integer.valueOf(1), well.getMinimumX());
+        assertEquals("Incorrect maximum X coordinate", Integer.valueOf(12), well.getMaximumX());
         assertEquals("Incorrect minimum Y coordinate",'A',well.getMinimumY());
         assertEquals("Incorrect maximum Y coordinate",'H',well.getMaximumY());
         well.setFormFactor(192);
-        assertEquals("Incorrect minimum X coordinate",new Integer(1),well.getMinimumX());
-        assertEquals("Incorrect maximum X coordinate",new Integer(24),well.getMaximumX());
+        assertEquals("Incorrect minimum X coordinate", Integer.valueOf(1), well.getMinimumX());
+        assertEquals("Incorrect maximum X coordinate", Integer.valueOf(24), well.getMaximumX());
         assertEquals("Incorrect minimum Y coordinate",'A',well.getMinimumY());
         assertEquals("Incorrect maximum Y coordinate",'H',well.getMaximumY());
         well.setFormFactor(384);
-        assertEquals("Incorrect minimum X coordinate",new Integer(1),well.getMinimumX());
-        assertEquals("Incorrect maximum X coordinate",new Integer(24),well.getMaximumX());
+        assertEquals("Incorrect minimum X coordinate", Integer.valueOf(1), well.getMinimumX());
+        assertEquals("Incorrect maximum X coordinate", Integer.valueOf(24), well.getMaximumX());
         assertEquals("Incorrect minimum Y coordinate",'A',well.getMinimumY());
         assertEquals("Incorrect maximum Y coordinate",'P',well.getMaximumY());
 
@@ -76,10 +74,8 @@ public class VerifiedWellModelTest extends TestCase {
     /**
      * Tests the verify method.
      *
-     * @throws Exception
-     *   if any unexpected errors occur.
      */
-    public void testVerify() throws Exception {
+    public void testVerify() {
 
         VerifiedWellModel well = new VerifiedWellModel();
 
@@ -96,18 +92,18 @@ public class VerifiedWellModelTest extends TestCase {
         assertEquals("Well g7 not properly converted","G07",well.getFullText());
 
         well.setText("A13");
-        assertEquals("Exception for illegal well A13",false,well.verify());
+        assertFalse("Exception for illegal well A13", well.verify());
 
         well.setText("A");
-        assertEquals("Exception for illegal well A",false,well.verify());
+        assertFalse("Exception for illegal well A", well.verify());
 
         well.setText("A00");
-        assertEquals("Exception for illegal well A00",false,well.verify());
+        assertFalse("Exception for illegal well A00", well.verify());
 
         well.setText("22");
-        assertEquals("Exception for illegal well 22",false,well.verify());
+        assertFalse("Exception for illegal well 22", well.verify());
 
         well.setText("G012");
-        assertEquals("Exception for illegal well G012",false,well.verify());        
+        assertFalse("Exception for illegal well G012", well.verify());
     }
 }
