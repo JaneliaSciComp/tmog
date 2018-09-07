@@ -1,8 +1,5 @@
 package org.janelia.it.utils.security;
 
-import sun.misc.BASE64Encoder;
-import sun.misc.BASE64Decoder;
-
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
@@ -13,6 +10,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.KeySpec;
 import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 
 /**
  * This code was copied from
@@ -89,8 +87,8 @@ public class StringEncrypter {
             byte[] cleartext = unencryptedString.getBytes(UNICODE_FORMAT);
             byte[] ciphertext = cipher.doFinal(cleartext);
 
-            BASE64Encoder base64encoder = new BASE64Encoder();
-            return base64encoder.encode(ciphertext);
+            Base64.Encoder base64encoder = Base64.getEncoder();
+            return new String(base64encoder.encode(ciphertext));
         }
         catch (Exception e) {
             throw new EncryptionException(e);
@@ -105,11 +103,11 @@ public class StringEncrypter {
         try {
             SecretKey key = keyFactory.generateSecret(keySpec);
             cipher.init(Cipher.DECRYPT_MODE, key);
-            BASE64Decoder base64decoder = new BASE64Decoder();
-            byte[] cleartext = base64decoder.decodeBuffer(encryptedString);
-            byte[] ciphertext = cipher.doFinal(cleartext);
+            Base64.Decoder base64decoder = Base64.getDecoder();
+            byte[] clearText = base64decoder.decode(encryptedString);
+            byte[] cipherText = cipher.doFinal(clearText);
 
-            return bytes2String(ciphertext);
+            return bytes2String(cipherText);
         }
         catch (Exception e) {
             throw new EncryptionException(e);

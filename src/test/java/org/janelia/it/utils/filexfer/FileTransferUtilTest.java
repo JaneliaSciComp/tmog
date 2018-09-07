@@ -41,14 +41,14 @@ public class FileTransferUtilTest {
     public void setUp() throws Exception {
         bufferSize = 100 * 1024;
         util = new FileTransferUtil(bufferSize, null);
-        sourceFile = new File("lib/junit-4.8.1.jar"); // 237,047 bytes
+        sourceFile = new File("build.gradle");
         String targetName = SDF.format(new Date());
         targetFile = new File(targetName + ".test");
         nestedTargetFile = new File(targetName, "target.test");
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         if (targetFile.exists()) {
             LOG.info("deleting " + targetFile.getAbsolutePath());
             //noinspection ResultOfMethodCallIgnored
@@ -146,7 +146,8 @@ public class FileTransferUtilTest {
         Assert.assertEquals("copy and target digests do not match",
                             copyDigestBytes, actualDigestBytes);
 
-        util = new FileTransferUtil((int)sourceFile.length() + 100,
+        final int bufferSize = Math.max(1024, (int)sourceFile.length() + 100);
+        util = new FileTransferUtil(bufferSize,
                                     DigestAlgorithms.MD5);
         copyDigestBytes = util.copy(sourceFile, nestedTargetFile);
         actualDigestBytes = util.calculateDigest(nestedTargetFile);

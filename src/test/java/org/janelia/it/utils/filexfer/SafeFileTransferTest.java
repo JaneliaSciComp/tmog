@@ -40,7 +40,7 @@ public class SafeFileTransferTest {
                 new FileTransferUtil(500000,
                                      SafeFileTransfer.DIGEST_ALGORITHM);
 
-        sourceFile = new File("lib/junit-4.8.1.jar"); // 237,047 bytes
+        sourceFile = new File("build.gradle");
 
         String targetName = SDF.format(new Date());
         // need to specify parent path to avoid NPE in copy calls
@@ -48,7 +48,7 @@ public class SafeFileTransferTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         if (targetFile.exists()) {
             LOG.info("deleting " + targetFile.getAbsolutePath());
             //noinspection ResultOfMethodCallIgnored

@@ -13,5 +13,9 @@
       <entry name="?*.tld" />
       <entry name="?*.ftl" />
     </wildcardResourcePatterns>
+    <bytecodeTargetLevel>
+      <module name="tmog_main" target="1.10" />
+      <module name="tmog_test" target="1.10" />
+    </bytecodeTargetLevel>
   </component>
 </project>
