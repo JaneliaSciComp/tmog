@@ -21,9 +21,13 @@ import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.awt.*;
+import java.io.IOException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 /**
  * This class launches the transmogrifier user interface.
@@ -37,14 +41,25 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
     private static final Logger LOG =
             Logger.getLogger(JaneliaTransmogrifier.class);
 
+    private static String version = null;
+
     /**
-     * The current version of this application.
-     * This needs to be kept in sync with the version in build.properties
-     * until I find a better way to dynamically populate this when the
-     * app is run from within an IDE (package information can be used
-     * when the app is run from a jar file). 
+     * @return the current version of this application.
      */
-    public static final String VERSION = "4.2.4";
+    public static String getVersion() {
+        if (version == null) {
+            final ClassLoader cl = JaneliaTransmogrifier.class.getClassLoader();
+            try {
+                URL url = cl.getResource("META-INF/MANIFEST.MF");
+                Manifest manifest = new Manifest(url.openStream());
+                Attributes mainAttributes = manifest.getMainAttributes();
+                version = mainAttributes.getValue("Implementation-Version");
+            } catch (IOException e) {
+                LOG.warn("failed to determine implementation version", e);
+            }
+        }
+        return version;
+    }
     
     /**
      * Set up a thread pool to limit the number of concurrent
@@ -70,7 +85,7 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
      * Construct the application
      */
     public JaneliaTransmogrifier(String configResource) {
-        super("Janelia Transmogrifier " + VERSION);
+        super("Janelia Transmogrifier " + getVersion());
 
         // attempt to load preferences
         TransmogrifierPreferences tmogPreferences =
@@ -212,13 +227,7 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
             ex.printStackTrace();
         }
 
-        Package pkg = JaneliaTransmogrifier.class.getPackage();
-        String revision = pkg.getImplementationVersion();
-        if (revision == null) {
-            revision = "?";
-        }
-        LOG.info("starting Janelia Transmogrifier version " + VERSION +
-                 ", revision " + revision);
+        LOG.info("starting Janelia Transmogrifier version " + getVersion());
 
         String configPath = null;
         if (args.length > 0) {

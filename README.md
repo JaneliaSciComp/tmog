@@ -1,16 +1,18 @@
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-orange.svg)](https://github.com/JaneliaSciComp/tmog/blob/master/LICENSE.md)
+
 # Janelia Transmogrifier - tmog
 
 The Janelia Transmogrifier - 'tmog' - is a Java Swing application that supports the collection and 
-validation of meta data associated with files. 
+validation of meta data associated with files.  You can find [build instructions here](BUILD.md). 
 
 ## Key Features
 
-* Simple user interface for entering tag information.
-  * Drop-down selection lists for enumerated tags.
-  * Allows tags entered for one file to be copied the next file with a single click.
+* Simple user interface for entering meta data information.
+  * Drop-down selection lists for enumerated values.
+  * Allows values entered for one file to be copied the next file with a single click.
   * Supports mouse and keyboard navigation.
   
-* Configurable tag, syntax validation, and naming rules.
+* Configurable data field, syntax validation, and naming rules.
 
 * Validated file transfer from source to destination file systems 
   (e.g. from local scope file system to a network mounted file system).
@@ -73,7 +75,7 @@ The following data field elements can be used to collect and validate values ent
 ```
 > Inserts a user provided well identifier and validates against a configured form factor.
 
-The following rename pattern tag elements can be used to insert derived or configured values not provided 
+The following data field elements can be used to insert derived or configured values not provided 
 directly by the user:
 
 ```xml

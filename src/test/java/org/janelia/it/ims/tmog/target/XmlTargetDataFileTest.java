@@ -67,14 +67,14 @@ public class XmlTargetDataFileTest
                 "    <lineName><![CDATA[line1]]></lineName>\n" +
                 "    <gender><![CDATA[female]]></gender>\n" +
                 "    <lsm>\n" +
-                "      <fileName><![CDATA[build_jar.xml]]></fileName>\n" +
+                "      <fileName><![CDATA[settings.gradle]]></fileName>\n" +
                 "      <laminaPresent><![CDATA[true]]></laminaPresent>\n" +
                 "    </lsm>\n" +
                 "    <lsm>\n" +
                 "      <fileName>file-does-not-exist</fileName>\n" +
                 "    </lsm>\n" +
                 "    <lsm>\n" +
-                "      <fileName>build.properties</fileName>\n" +
+                "      <fileName>build.gradle</fileName>\n" +
                 "      <gender>male</gender>\n" +
                 "    </lsm>\n" +
                 "  </sample>\n" +
@@ -82,7 +82,7 @@ public class XmlTargetDataFileTest
                 "    <lineName>line2</lineName>\n" +
                 "    <gender>male</gender>\n" +
                 "    <lsm>\n" +
-                "      <fileName>build_jar.xml</fileName>\n" +
+                "      <fileName>settings.gradle</fileName>\n" +
                 "      <laminaPresent>false</laminaPresent>\n" +
                 "    </lsm>\n" +
                 "  </sample>\n" +

@@ -165,7 +165,7 @@ public class ConfigurationLoader
      *
      * @param  message  message to add to progress frame.
      */
-    protected void publishMessage(String message) {
+    void publishMessage(String message) {
         publish(message);
     }
 
@@ -330,7 +330,7 @@ public class ConfigurationLoader
                 } else if (element instanceof GlobalConfiguration) {
                     publish("loading global configuration");
                     GlobalConfiguration globalConfiguration = (GlobalConfiguration) element;
-                    globalConfiguration.verify(JaneliaTransmogrifier.VERSION);
+                    globalConfiguration.verify(JaneliaTransmogrifier.getVersion());
                     config.setGlobalConfiguration(globalConfiguration);
                 }
                 percentComplete = ((double) elementCount * 100) / (double) totalElementCount;
