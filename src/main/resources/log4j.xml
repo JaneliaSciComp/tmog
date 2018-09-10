@@ -29,7 +29,7 @@
 
     <!-- stub appender used for testing -->
     <appender name="SYSLOG_STUB" class="org.apache.log4j.FileAppender">
-        <param name="File" value="transmogrifierSyslog.log"/>
+        <param name="File" value="build/tmp/transmogrifierSyslog.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="[%c] %m%n"/>
         </layout>
