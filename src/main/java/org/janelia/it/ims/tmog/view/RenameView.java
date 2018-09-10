@@ -7,6 +7,10 @@
 
 package org.janelia.it.ims.tmog.view;
 
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
+
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
@@ -47,13 +51,13 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * This class manages the main or overall view for renaming a set of
- * files in a particular directory.
+ * This class manages the main or overall view for renaming a set of files in a particular directory.
  *
  * @author Peter Davies
  * @author Eric Trautman
  */
-public class RenameView implements SessionView, InputSelectionView {
+public class RenameView
+        implements SessionView, InputSelectionView {
 
     private JTextArea projectName;
     private JButton lsmDirectoryBtn;
@@ -148,7 +152,7 @@ public class RenameView implements SessionView, InputSelectionView {
         return taskComponents.getSessionIcon();
     }
 
-    // TODO: refactor duplicated view preferences methods into abstract base class    
+    // TODO: refactor duplicated view preferences methods into abstract base class
     public void setPreferencesForCurrentProject() {
         if (tableModel != null) {
             dataTable.setColumnDefaultsToCurrent();
@@ -158,8 +162,8 @@ public class RenameView implements SessionView, InputSelectionView {
             viewDefault.deepCopyAndSetColumnDefaults(columnDefaults);
 
             TransmogrifierPreferences.updateProjectViewPreferences(
-                                    projectNameText,
-                                    viewDefault);
+                    projectNameText,
+                    viewDefault);
         }
     }
 
@@ -168,8 +172,8 @@ public class RenameView implements SessionView, InputSelectionView {
             dataTable.setColumnDefaults(null, true);
             ViewDefault viewDefault = new ViewDefault(ViewDefault.CURRENT);
             TransmogrifierPreferences.updateProjectViewPreferences(
-                                    projectNameText,
-                                    viewDefault);
+                    projectNameText,
+                    viewDefault);
         }
     }
 
@@ -182,7 +186,7 @@ public class RenameView implements SessionView, InputSelectionView {
                         dataTableScrollPane.getHorizontalScrollBar();
                 if ((scrollBar != null) && scrollBar.isVisible()) {
                     int fitWidth = dataPanel.getWidth();
-                    // HACK: reduce data panel width by 20% to ensure 
+                    // HACK: reduce data panel width by 20% to ensure
                     // data table completely fits in displayable area
                     final int magicFactor = fitWidth / 5;
                     fitWidth = fitWidth - magicFactor;
@@ -247,7 +251,7 @@ public class RenameView implements SessionView, InputSelectionView {
                 acceptSelectedFile = FileUtil.canWriteToDirectory(outputBaseDir);
             }
 
-            if (! acceptSelectedFile) {
+            if (!acceptSelectedFile) {
                 reject.append("The derived output directory for your selection (");
                 reject.append(outputPath);
                 if (outputDirExists) {
@@ -261,7 +265,7 @@ public class RenameView implements SessionView, InputSelectionView {
         }
 
         if (acceptSelectedFile) {
-            inputSelectionHandler.setEnabled(true);            
+            inputSelectionHandler.setEnabled(true);
             if (isOutputDerivedFromSelection) {
                 outputDirectoryField.setText(outputPath);
             }
@@ -284,7 +288,7 @@ public class RenameView implements SessionView, InputSelectionView {
     private void setFileTableEnabled(boolean isEnabled,
                                      boolean isCopyButtonEnabled) {
         inputSelectionHandler.setEnabled(isEnabled);
-        Component[] cList = { outputDirectoryBtn, dataTable };
+        Component[] cList = {outputDirectoryBtn, dataTable};
         for (Component c : cList) {
             if (isEnabled != c.isEnabled()) {
                 c.setEnabled(isEnabled);
@@ -330,8 +334,8 @@ public class RenameView implements SessionView, InputSelectionView {
                     }
                 }
             });
-        } else if (! odCfg.isDerivedFromEarliestModifiedFile()) {
-            // add space after description to work around Metal clipping error 
+        } else if (!odCfg.isDerivedFromEarliestModifiedFile()) {
+            // add space after description to work around Metal clipping error
             outputDirectoryField.setText(odCfg.getDescription() + " ");
         }
 
@@ -349,17 +353,19 @@ public class RenameView implements SessionView, InputSelectionView {
                     protected Task getNewTask() {
                         return getNewTaskForView();
                     }
+
                     protected boolean isTaskReadyToStart() {
                         return isSessionReadyToStartForView();
                     }
+
                     protected void processTaskCompletion() {
                         processTaskCompletionForView();
                     }
-        };
+                };
     }
 
     private Task getNewTaskForView() {
-        final String taskName = projectConfig.getTaskName();        
+        final String taskName = projectConfig.getTaskName();
         if (RenameWithoutDeleteTask.TASK_NAME.equals(taskName)) {
 
             task = new RenameWithoutDeleteTask(
@@ -503,7 +509,7 @@ public class RenameView implements SessionView, InputSelectionView {
             if (isValid) {
 
                 for (DataRow row : rows) {
-                    Target rowTarget= row.getTarget();
+                    Target rowTarget = row.getTarget();
                     File rowFile = (File) rowTarget.getInstance();
 
                     if (isOutputDirectoryAlreadyValidated) {
@@ -551,7 +557,7 @@ public class RenameView implements SessionView, InputSelectionView {
                         }
                     }
 
-                    if (! isValid) {
+                    if (!isValid) {
                         break;
                     }
 
@@ -646,4 +652,142 @@ public class RenameView implements SessionView, InputSelectionView {
     /** The logger for this class. */
     private static final Logger LOG = Logger.getLogger(RenameView.class);
 
+    {
+// GUI initializer generated by IntelliJ IDEA GUI Designer
+// >>> IMPORTANT!! <<<
+// DO NOT EDIT OR ADD ANY CODE HERE!
+        $$$setupUI$$$();
+    }
+
+    /**
+     * Method generated by IntelliJ IDEA GUI Designer >>> IMPORTANT!! <<< DO NOT edit this method OR call it in your
+     * code!
+     *
+     * @noinspection ALL
+     */
+    private void $$$setupUI$$$() {
+        appPanel = new JPanel();
+        appPanel.setLayout(new BorderLayout(0, 0));
+        appPanel.setMinimumSize(new Dimension(100, 249));
+        appPanel.setPreferredSize(new Dimension(1280, 500));
+        directoryPanel = new JPanel();
+        directoryPanel.setLayout(new GridLayoutManager(3, 4, new Insets(5, 5, 2, 5), -1, 10));
+        appPanel.add(directoryPanel, BorderLayout.NORTH);
+        lsmDirectoryLabel = new JLabel();
+        lsmDirectoryLabel.setText("Source File Directory:");
+        directoryPanel.add(lsmDirectoryLabel, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED,
+                                                                  GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                                                                  GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(74, 14), null, 0, false));
+        final JLabel label1 = new JLabel();
+        label1.setText("Output Directory:");
+        directoryPanel.add(label1, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        lsmDirectoryBtn = new JButton();
+        lsmDirectoryBtn.setHorizontalAlignment(0);
+        lsmDirectoryBtn.setText("Set");
+        lsmDirectoryBtn.setToolTipText("Change Source File Directory");
+        directoryPanel.add(lsmDirectoryBtn, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(20, 25), null, 0, false));
+        outputDirectoryBtn = new JButton();
+        outputDirectoryBtn.setText("Set");
+        outputDirectoryBtn.setToolTipText("Change Output Directory");
+        directoryPanel.add(outputDirectoryBtn, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(20, 25), null, 0, false));
+        final JLabel label2 = new JLabel();
+        label2.setText("Project:");
+        directoryPanel.add(label2, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        cancelInputSearch = new JButton();
+        cancelInputSearch.setText("Cancel");
+        cancelInputSearch.setToolTipText("Cancel Source File Search");
+        cancelInputSearch.setVisible(false);
+        directoryPanel.add(cancelInputSearch, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(20, 25), null, 0, false));
+        outputDirectoryPane = new JScrollPane();
+        outputDirectoryPane.setHorizontalScrollBarPolicy(31);
+        outputDirectoryPane.setVerticalScrollBarPolicy(21);
+        directoryPanel.add(outputDirectoryPane, new GridConstraints(2, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
+                                                                    GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                                                                    GridConstraints.SIZEPOLICY_WANT_GROW,
+                                                                    GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                                                                    GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        outputDirectoryField = new JTextArea();
+        outputDirectoryField.setBackground(UIManager.getColor("Label.background"));
+        outputDirectoryField.setEditable(false);
+        outputDirectoryField.setLineWrap(true);
+        outputDirectoryField.setRequestFocusEnabled(false);
+        outputDirectoryField.setWrapStyleWord(true);
+        outputDirectoryPane.setViewportView(outputDirectoryField);
+        lsmDirectoryPane = new JScrollPane();
+        lsmDirectoryPane.setHorizontalScrollBarPolicy(31);
+        lsmDirectoryPane.setVerticalScrollBarPolicy(21);
+        directoryPanel.add(lsmDirectoryPane, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
+                                                                 GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                                                                 GridConstraints.SIZEPOLICY_WANT_GROW,
+                                                                 GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                                                                 GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        lsmDirectoryField = new JTextArea();
+        lsmDirectoryField.setBackground(UIManager.getColor("Label.background"));
+        lsmDirectoryField.setEditable(false);
+        lsmDirectoryField.setLineWrap(true);
+        lsmDirectoryField.setRequestFocusEnabled(false);
+        lsmDirectoryField.setWrapStyleWord(true);
+        lsmDirectoryPane.setViewportView(lsmDirectoryField);
+        projectNamePane = new JScrollPane();
+        projectNamePane.setHorizontalScrollBarPolicy(31);
+        projectNamePane.setVerticalScrollBarPolicy(21);
+        directoryPanel.add(projectNamePane, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
+                                                                GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                                                                GridConstraints.SIZEPOLICY_WANT_GROW,
+                                                                GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                                                                GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        projectName = new JTextArea();
+        projectName.setBackground(UIManager.getColor("Label.background"));
+        projectName.setEditable(false);
+        projectName.setLineWrap(true);
+        projectName.setRows(0);
+        projectName.setWrapStyleWord(true);
+        projectNamePane.setViewportView(projectName);
+        dataPanel = new JPanel();
+        dataPanel.setLayout(new GridLayoutManager(2, 1, new Insets(3, 5, 5, 5), -1, -1));
+        appPanel.add(dataPanel, BorderLayout.CENTER);
+        dataButtonPanel = new JPanel();
+        dataButtonPanel.setLayout(new GridLayoutManager(1, 6, new Insets(5, 0, 5, 0), -1, -1));
+        dataPanel.add(dataButtonPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                                                           GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                                                           GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
+        copyAndRenameBtn = new JButton();
+        copyAndRenameBtn.setEnabled(false);
+        copyAndRenameBtn.setText("Copy and Rename");
+        copyAndRenameBtn.setToolTipText("Copy and rename all files using specified information");
+        dataButtonPanel.add(copyAndRenameBtn, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer1 = new Spacer();
+        dataButtonPanel.add(spacer1, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer2 = new Spacer();
+        dataButtonPanel.add(spacer2, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, 1, null, new Dimension(10, -1), null, 0, false));
+        copyProgressLabel = new JLabel();
+        copyProgressLabel.setText("Label");
+        dataButtonPanel.add(copyProgressLabel, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        copyProgressBar = new JProgressBar();
+        copyProgressBar.setEnabled(true);
+        dataButtonPanel.add(copyProgressBar, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        loadMappedDataButton = new JButton();
+        loadMappedDataButton.setEnabled(false);
+        loadMappedDataButton.setText("Load Mapped Data");
+        loadMappedDataButton.setVisible(false);
+        dataButtonPanel.add(loadMappedDataButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
+                                                                      GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                                                                      GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        dataTableScrollPane = new JScrollPane();
+        dataPanel.add(dataTableScrollPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                                                               GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                                                               GridConstraints.SIZEPOLICY_WANT_GROW,
+                                                               GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                                                               GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        dataTableScrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createRaisedBevelBorder(), null));
+        dataTable = new DataTable();
+        dataTable.setAutoResizeMode(2);
+        dataTableScrollPane.setViewportView(dataTable);
+        label1.setLabelFor(outputDirectoryPane);
+    }
+
+    /** @noinspection ALL */
+    public JComponent $$$getRootComponent$$$() {
+        return appPanel;
+    }
 }
