@@ -172,6 +172,29 @@ task logUsefulBuildInfo {
 
 build.dependsOn(logUsefulBuildInfo)
 
+task addModuleInfoToLibs(type: Exec, dependsOn: build) {
+    environment 'PATH', "/usr/local/opt/coreutils/libexec/gnubin:${environment.PATH}"
+    commandLine 'src/module_build/scripts/01_fix_libs.sh', 'keep_existing'
+}
+
+task assembleRunTimeImages(type: Exec, dependsOn: addModuleInfoToLibs) {
+    environment 'PATH', "/usr/local/opt/coreutils/libexec/gnubin:${environment.PATH}"
+    commandLine 'src/module_build/scripts/02_link.sh'
+}
+
+task deployImages(type: Exec, dependsOn: assembleRunTimeImages) {
+    environment 'PATH', "/usr/local/opt/coreutils/libexec/gnubin:${environment.PATH}"
+    commandLine 'src/module_build/scripts/03_deploy_images.sh', version
+}
+
+// adds task 'antBuildConfig' from build_config.xml
+ant.importBuild('build_config.xml')
+
+task deployConfig(type: Exec, dependsOn: antBuildConfig) {
+    environment 'PATH', "/usr/local/opt/coreutils/libexec/gnubin:${environment.PATH}"
+    commandLine 'src/module_build/scripts/04_deploy_config.sh'
+}
+
 static Properties loadProperties(List<String> keys,
                                  File propsFile) {
     def props = new Properties()
