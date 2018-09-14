@@ -11,7 +11,7 @@ SCRIPTS_DIR=`dirname ${ABSOLUTE_SCRIPT}`
 TMOG_BUILD_DIR=`readlink -m ${SCRIPTS_DIR}/../../../build`
 
 
-TMOG_JAR=`ls ${TMOG_BUILD_DIR}/libs/tmog-*-prod.jar`
+TMOG_LIBS_DIR="${TMOG_BUILD_DIR}/libs_prod"
 FIXED_LIBS_DIR="${TMOG_BUILD_DIR}/libs_fixed"
 JLINK_IMAGES_DIR="${TMOG_BUILD_DIR}/jlink_images"
 
@@ -25,7 +25,7 @@ TMOG_MAIN="${TMOG_MODULE}/org.janelia.it.ims.tmog.JaneliaTransmogrifier"
 OUT_MAC_DIR="${JLINK_IMAGES_DIR}/mac"
 
 echo "assembling mac runtime image into ${OUT_MAC_DIR}"
-${MAC_JAVA_HOME}/bin/jlink --output ${OUT_MAC_DIR} --module-path ${TMOG_JAR}:${FIXED_LIBS_DIR} --add-modules ${TMOG_MODULE} --launcher command=${TMOG_MAIN}
+${MAC_JAVA_HOME}/bin/jlink --output ${OUT_MAC_DIR} --module-path ${TMOG_LIBS_DIR}:${FIXED_LIBS_DIR} --add-modules ${TMOG_MODULE} --launcher command=${TMOG_MAIN}
 
 
 # ------------------------------------------------------
@@ -42,4 +42,4 @@ OUT_WINDOWS_DIR="${JLINK_IMAGES_DIR}/windows"
 WINDOWS_JMODS="${WINDOWS_JDK}/jmods"
 
 echo "assembling windows runtime image into ${OUT_WINDOWS_DIR}"
-${MAC_JAVA_HOME}/bin/jlink --output ${OUT_WINDOWS_DIR} --module-path ${WINDOWS_JMODS}:${TMOG_JAR}:${FIXED_LIBS_DIR} --add-modules ${TMOG_MODULE} --launcher command=${TMOG_MAIN}
+${MAC_JAVA_HOME}/bin/jlink --output ${OUT_WINDOWS_DIR} --module-path ${WINDOWS_JMODS}:${TMOG_LIBS_DIR}:${FIXED_LIBS_DIR} --add-modules ${TMOG_MODULE} --launcher command=${TMOG_MAIN}

@@ -146,6 +146,7 @@ task prodJar(type: Jar) {
     }
 
     classifier='prod'
+    destinationDir = file(destinationDir.absolutePath + "_prod")
 
     manifest {
         attributes(manifestAttributes)
