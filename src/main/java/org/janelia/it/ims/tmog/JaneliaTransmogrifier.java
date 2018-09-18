@@ -7,6 +7,24 @@
 
 package org.janelia.it.ims.tmog;
 
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.config.ConfigurationException;
 import org.janelia.it.ims.tmog.config.ConfigurationLoadCompletionHandler;
@@ -17,17 +35,6 @@ import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
 import org.janelia.it.ims.tmog.view.ColorScheme;
 import org.janelia.it.ims.tmog.view.TabbedView;
 import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
-
-import javax.swing.*;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import java.awt.*;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 
 /**
  * This class launches the transmogrifier user interface.
@@ -51,10 +58,11 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
             final ClassLoader cl = JaneliaTransmogrifier.class.getClassLoader();
             try {
                 URL url = cl.getResource("META-INF/MANIFEST.MF");
+                @SuppressWarnings("ConstantConditions")
                 Manifest manifest = new Manifest(url.openStream());
                 Attributes mainAttributes = manifest.getMainAttributes();
                 version = mainAttributes.getValue("Implementation-Version");
-            } catch (IOException e) {
+            } catch (Exception e) {
                 LOG.warn("failed to determine implementation version", e);
             }
         }
@@ -76,15 +84,10 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
     private static final ThreadPoolExecutor THREAD_POOL_EXECUTOR =
             (ThreadPoolExecutor) Executors.newFixedThreadPool(4);
 
-    private static final URL APP_IMAGE_URL =
-            JaneliaTransmogrifier.class.getResource("/transmogrifier_icon.png");
-    private static final ImageIcon APP_ICON =
-            new ImageIcon(APP_IMAGE_URL, "Janelia Transmogrifier");
-
     /**
      * Construct the application
      */
-    public JaneliaTransmogrifier(String configResource) {
+    private JaneliaTransmogrifier(String configResource) {
         super("Janelia Transmogrifier " + getVersion());
 
         // attempt to load preferences
@@ -165,12 +168,7 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
         setSize(frameSize.width, frameSize.height);
         setPreferredSize(frameSize);
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(() -> setVisible(true));
     }
 
     @Override
@@ -237,7 +235,17 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
             }
         }
         JaneliaTransmogrifier frame = new JaneliaTransmogrifier(configPath);
-        frame.setIconImage(APP_ICON.getImage());
+
+        final java.util.List<Image> iconList = new ArrayList<>();
+
+        final int[] iconSizes = { 16, 24, 32, 48, 64, 96, 128, 256, 512 };
+        for (final int iconSize : iconSizes) {
+            final String name = String.format("/images/tmog_%dx%d.png", iconSize, iconSize);
+            final URL imageUrl = JaneliaTransmogrifier.class.getResource(name);
+            iconList.add(new ImageIcon(imageUrl, "Janelia Transmogrifier").getImage());
+        }
+        frame.setIconImages(iconList);
+
     }
 
 }

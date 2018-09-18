@@ -53,17 +53,17 @@ public class SessionIcon extends ImageIcon {
     }
 
     private static final URL ENTER_VALUES_IMAGE_URL =
-            SessionIcon.class.getResource("/16-transmogrifier_icon.png");
+            SessionIcon.class.getResource("/images/tmog_16x16.png");
     private static final ImageIcon ENTER_VALUES_ICON =
             new ImageIcon(ENTER_VALUES_IMAGE_URL, "Entering Values");
 
     private static final URL WAIT_IMAGE_URL =
-            SessionIcon.class.getResource("/16-clock.png");
+            SessionIcon.class.getResource("/images/16-clock.png");
     private static final ImageIcon WAIT_ICON =
             new ImageIcon(WAIT_IMAGE_URL, "Waiting to Begin Processing");
 
     private static final URL PROCESSING_IMAGE_URL =
-            SessionIcon.class.getResource("/16-spinner.gif");
+            SessionIcon.class.getResource("/images/16-spinner.gif");
     private static final ImageIcon PROCESSING_ICON =
             new ImageIcon(PROCESSING_IMAGE_URL, "Processing Files");
 

@@ -119,7 +119,7 @@
               </grid>
             </constraints>
             <properties>
-              <icon value="16-spinner.gif"/>
+              <icon value="images/16-spinner.gif"/>
               <text value="loading data sets"/>
             </properties>
           </component>

@@ -21,10 +21,10 @@ import java.net.URL;
 public class ButtonPanel extends JPanel {
 
     public enum ButtonType {
-        EXCLUDE_TARGET("/removeTarget.png", "exclude target"),
-        COPY_PREVIOUS_ROW("/copyArrowSimple.png", "copy values from previous row"),
-        ROW_MENU("/16-em-pencil.png", "show editing short cuts"),
-        FIELD_GROUP_ROW_MENU("/16-em-pencil.png", "field group options");
+        EXCLUDE_TARGET("/images/removeTarget.png", "exclude target"),
+        COPY_PREVIOUS_ROW("/images/copyArrowSimple.png", "copy values from previous row"),
+        ROW_MENU("/images/16-em-pencil.png", "show editing short cuts"),
+        FIELD_GROUP_ROW_MENU("/images/16-em-pencil.png", "field group options");
 
         private String imagePath;
         private String toolTip;

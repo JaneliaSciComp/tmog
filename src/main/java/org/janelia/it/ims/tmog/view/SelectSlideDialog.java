@@ -474,7 +474,7 @@ public class SelectSlideDialog
         objectiveComboBox = new JComboBox();
         panel3.add(objectiveComboBox, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         spinnerLabel = new JLabel();
-        spinnerLabel.setIcon(new ImageIcon(getClass().getResource("/16-spinner.gif")));
+        spinnerLabel.setIcon(new ImageIcon(getClass().getResource("/images/16-spinner.gif")));
         spinnerLabel.setText("loading data sets");
         panel3.add(spinnerLabel, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(600, -1), null, null, 0, false));
         label1.setLabelFor(dataSetComboBox);
