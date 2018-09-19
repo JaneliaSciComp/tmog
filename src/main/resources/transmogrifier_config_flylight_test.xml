@@ -156,7 +156,7 @@
                             valueCreationPath="*/line"
                             relativeActualValuePath="name"
                             relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=aso&amp;lab=baker&amp;lab=card&amp;lab=descending_interneuron&amp;lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=fly_functional_connectome&amp;lab=fly_light&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=none&amp;lab=simpson&amp;lab=rubin&amp;lab=stern&amp;lab=terra_incognita&amp;lab=visitor&amp;lab=zlatic"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forAllLabs.janelia-sage"
                             autoComplete="true">
             </webServiceList>
 
@@ -341,7 +341,7 @@
                             valueCreationPath="*/line"
                             relativeActualValuePath="name"
                             relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=aso&amp;lab=baker&amp;lab=card&amp;lab=descending_interneuron&amp;lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=fly_functional_connectome&amp;lab=fly_light&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=none&amp;lab=simpson&amp;lab=rubin&amp;lab=stern&amp;lab=terra_incognita&amp;lab=visitor&amp;lab=zlatic"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forAllLabs.janelia-sage"
                             autoComplete="true">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_test"/>
