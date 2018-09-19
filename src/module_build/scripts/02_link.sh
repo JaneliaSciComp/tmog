@@ -8,27 +8,38 @@ WINDOWS_JDK="${HOME}/windows_jdks/jdk-10.0.2_windows-x64"
 
 ABSOLUTE_SCRIPT=`readlink -m $0`
 SCRIPTS_DIR=`dirname ${ABSOLUTE_SCRIPT}`
+MODULE_BUILD_DIR=`readlink -m ${SCRIPTS_DIR}/..`
 TMOG_BUILD_DIR=`readlink -m ${SCRIPTS_DIR}/../../../build`
-
 
 TMOG_LIBS_DIR="${TMOG_BUILD_DIR}/libs_prod"
 FIXED_LIBS_DIR="${TMOG_BUILD_DIR}/libs_fixed"
-JLINK_IMAGES_DIR="${TMOG_BUILD_DIR}/jlink_images"
+PACKAGES_DIR="${TMOG_BUILD_DIR}/packages"
 
-mkdir -p ${JLINK_IMAGES_DIR}
-rm -rf ${JLINK_IMAGES_DIR}/*
+mkdir -p ${PACKAGES_DIR}
+rm -rf ${PACKAGES_DIR}/*
 
 TMOG_MODULE="org.janelia.tmog"
 TMOG_MAIN="${TMOG_MODULE}/org.janelia.it.ims.tmog.JaneliaTransmogrifier"
 
 # ------------------------------------------------------
-OUT_MAC_DIR="${JLINK_IMAGES_DIR}/mac"
+# For now, skip linking Mac runtime image and just package it directly since builds will be run on Mac.
 
-echo "assembling mac runtime image into ${OUT_MAC_DIR}"
-${MAC_JAVA_HOME}/bin/jlink --output ${OUT_MAC_DIR} --module-path ${TMOG_LIBS_DIR}:${FIXED_LIBS_DIR} --add-modules ${TMOG_MODULE} --launcher command=${TMOG_MAIN}
+#OUT_MAC_DIR="${JLINK_IMAGES_DIR}/mac"
+
+#echo "assembling mac runtime image into ${OUT_MAC_DIR}"
+#${MAC_JAVA_HOME}/bin/jlink --output ${OUT_MAC_DIR} --module-path ${TMOG_LIBS_DIR}:${FIXED_LIBS_DIR} --add-modules ${TMOG_MODULE} --launcher command=${TMOG_MAIN}
+
+echo """
+================================================================
+Packaging mac runtime image into ${PACKAGES_DIR}/mac ...
+"""
+${SCRIPTS_DIR}/package_mac.sh
 
 
 # ------------------------------------------------------
+# Link windows image so that it can be "plugged-in" to package template.
+# This allows everything to be built on a Mac.
+# A Windows box build is only needed if the packaging template needs to change.
 
 # From https://stackoverflow.com/questions/47593409/create-java-runtime-image-on-one-platform-for-another-using-jlink
 #   The jlink tool can create a run-time image for another platform (cross targeting).
@@ -38,8 +49,17 @@ ${MAC_JAVA_HOME}/bin/jlink --output ${OUT_MAC_DIR} --module-path ${TMOG_LIBS_DIR
 
 # see download_windows_jdk_to_mac.sh for details on downloading Windows JDK to Mac
 
-OUT_WINDOWS_DIR="${JLINK_IMAGES_DIR}/windows"
+WINDOWS_PACKAGE_DIR="${PACKAGES_DIR}/windows"
+echo """
+================================================================
+Assembling windows runtime image into ${WINDOWS_PACKAGE_DIR} ...
+"""
+
+cp -r ${MODULE_BUILD_DIR}/package_templates/windows ${PACKAGES_DIR}
+# template copy may have too restrictive file permissions so reset them here before deploying
+chmod 750 ${WINDOWS_PACKAGE_DIR}/*.* ${WINDOWS_PACKAGE_DIR}/app/*.*
+
+OUT_WINDOWS_DIR="${WINDOWS_PACKAGE_DIR}/runtime"
 WINDOWS_JMODS="${WINDOWS_JDK}/jmods"
 
-echo "assembling windows runtime image into ${OUT_WINDOWS_DIR}"
 ${MAC_JAVA_HOME}/bin/jlink --output ${OUT_WINDOWS_DIR} --module-path ${WINDOWS_JMODS}:${TMOG_LIBS_DIR}:${FIXED_LIBS_DIR} --add-modules ${TMOG_MODULE} --launcher command=${TMOG_MAIN}

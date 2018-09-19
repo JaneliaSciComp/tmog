@@ -183,9 +183,14 @@ task assembleRunTimeImages(type: Exec, dependsOn: addModuleInfoToLibs) {
     commandLine 'src/module_build/scripts/02_link.sh'
 }
 
-task deployImages(type: Exec, dependsOn: assembleRunTimeImages) {
+task deployPackages(type: Exec, dependsOn: assembleRunTimeImages) {
     environment 'PATH', "/usr/local/opt/coreutils/libexec/gnubin:${environment.PATH}"
-    commandLine 'src/module_build/scripts/03_deploy_images.sh', version
+    commandLine 'src/module_build/scripts/03_deploy_packages.sh', version
+}
+
+task setupWindowsPackageBuild(type: Exec, dependsOn: addModuleInfoToLibs) {
+    environment 'PATH', "/usr/local/opt/coreutils/libexec/gnubin:${environment.PATH}"
+    commandLine 'src/module_build/scripts/setup_windows_package_build.sh', version
 }
 
 // adds task 'antBuildConfig' from build_config.xml

@@ -9,42 +9,53 @@ SCRIPTS_DIR=`dirname ${ABSOLUTE_SCRIPT}`
 TMOG_BUILD_DIR=`readlink -m ${SCRIPTS_DIR}/../../../build`
 RESOURCES_DIR="${TMOG_BUILD_DIR}/resources/main"
 
-DATE=`date +"%Y%m%d_%H%M%S"`
-CONFIG_DATE_DIR="config_${DATE}"
+DATE_TAG=`date +"%Y%m%d_%H%M%S"`
 
 function deployConfig {
 
-  local DEPLOY_DIR="${1}/deploy/${CONFIG_DATE_DIR}"
+  local DEPLOY_PARENT_DIR="${1}/deploy/config"
+  local DATED_DIR="${DEPLOY_PARENT_DIR}/${DATE_TAG}"
+  local CURRENT_DIR="${DEPLOY_PARENT_DIR}/current"
+
   shift 1
 
-  ssh ${DEPLOY_HOST} "mkdir -p ${DEPLOY_DIR}"
+  ssh ${DEPLOY_HOST} "mkdir -p ${DATED_DIR}"
 
   if (( $# > 0 )); then
 
     echo """
-      deploying $# config file(s) to ${DEPLOY_HOST}:${DEPLOY_DIR} ... """
+      deploying $# config file(s) to ${DEPLOY_HOST}:${DATED_DIR} ... """
 
-    for CONFIG in $*; do
-      scp -p ${RESOURCES_DIR}/transmogrifier_config_${CONFIG}.xml ${DEPLOY_HOST}:${DEPLOY_DIR}
+    for CONFIG_NAME in $*; do
+      scp -p ${RESOURCES_DIR}/transmogrifier_config_${CONFIG_NAME}.xml ${DEPLOY_HOST}:${DATED_DIR}
     done
+
+    # update current config copy
+    ssh ${DEPLOY_HOST} "rm -rf ${CURRENT_DIR}; mkdir -p ${CURRENT_DIR}; cp -r ${DATED_DIR}/* ${CURRENT_DIR}; chmod 664 ${CURRENT_DIR}/*.xml"
 
   else
 
     echo """
-      deploying ALL config file(s) to ${DEPLOY_HOST}:${DEPLOY_DIR} ... """
+      deploying ALL config file(s) to ${DEPLOY_HOST}:${DATED_DIR} ... """
 
-    scp -p ${RESOURCES_DIR}/transmogrifier_config* ${DEPLOY_HOST}:${DEPLOY_DIR}
+    scp -p ${RESOURCES_DIR}/transmogrifier_config* ${DEPLOY_HOST}:${DATED_DIR}
 
   fi
 
-  ssh ${DEPLOY_HOST} "chmod 664 ${DEPLOY_DIR}/*.xml"
-
 }
 
-# deploy fly configs to appropriate areas
+# deploy configs to appropriate areas
 deployConfig /groups/flylight/flylight/tmog flylight_flip flylight_polarity flylight_test split_screen_review
 deployConfig /groups/projtechres/projtechres/tmog projtechres
 deployConfig /groups/flyfuncconn/flyfuncconn/tmog flyfuncconn
+
+# legacy (to be migrated from java web start) configs:
+#deployConfig /groups/leet/leetimg/leetlab/tmog leet_lineage
+#deployConfig /groups/magee/mageelab/tmog magee_simon_linker
+#deployConfig /groups/rubin/data1/rubinlab/tmog rubin_rd
+#deployConfig /groups/svoboda/wdbp/tmog svoboda_wdbp_mainwc svoboda_wdbp_simon_linker wdbp
+#deployConfig /groups/zlatic/zlaticlab/tmog zlatic zlatic_closed_loop zlatic_odor
+#deployConfig /nrs/zlatic/zlaticlab/tmog zlatic_fpga
 
 # deploy everything to central location for later individual distribution (as needed)
 deployConfig /groups/scicompsoft/home/trautmane/tmog
