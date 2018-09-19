@@ -6,8 +6,7 @@ set -e
 
 ABSOLUTE_SCRIPT=`readlink -m $0`
 SCRIPTS_DIR=`dirname ${ABSOLUTE_SCRIPT}`
-TMOG_BUILD_DIR=`readlink -m ${SCRIPTS_DIR}/../../../build`
-RESOURCES_DIR="${TMOG_BUILD_DIR}/resources/main"
+SRC_RESOURCES_DIR=`readlink -m ${SCRIPTS_DIR}/../../main/resources`
 
 DATE_TAG=`date +"%Y%m%d_%H%M%S"`
 
@@ -27,7 +26,7 @@ function deployConfig {
       deploying $# config file(s) to ${DEPLOY_HOST}:${DATED_DIR} ... """
 
     for CONFIG_NAME in $*; do
-      scp -p ${RESOURCES_DIR}/transmogrifier_config_${CONFIG_NAME}.xml ${DEPLOY_HOST}:${DATED_DIR}
+      scp -p ${SRC_RESOURCES_DIR}/transmogrifier_config_${CONFIG_NAME}.xml ${DEPLOY_HOST}:${DATED_DIR}
     done
 
     # update current config copy
@@ -38,7 +37,7 @@ function deployConfig {
     echo """
       deploying ALL config file(s) to ${DEPLOY_HOST}:${DATED_DIR} ... """
 
-    scp -p ${RESOURCES_DIR}/transmogrifier_config* ${DEPLOY_HOST}:${DATED_DIR}
+    scp -p ${SRC_RESOURCES_DIR}/transmogrifier_config* ${DEPLOY_HOST}:${DATED_DIR}
 
   fi
 
