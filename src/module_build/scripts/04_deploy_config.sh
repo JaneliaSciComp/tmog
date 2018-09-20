@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEPLOY_HOST="trautmane-ws1"
+DEPLOY_HOST="login1.int.janelia.org"
 
 set -e
 
