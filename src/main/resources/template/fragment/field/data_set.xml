@@ -7,6 +7,6 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?sageSync=@is-shareable@"
+                            serviceUrl="http://jacs-data.int.janelia.org:8180/rest-v3/data/dataSet/sage?sageSync=@is-shareable@"
                             autoComplete="true">@sage-data-default@
             </webServiceList>

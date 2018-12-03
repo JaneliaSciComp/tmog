@@ -180,8 +180,8 @@
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
-                <property name="serviceUrl" value="http://jacs-data.int.janelia.org:8180/rest-v1/process/owner/system/dataSet/${Data Set}/lsmPipelines"/>
-                <property name="testUrl" value="http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?owners=user:trautmane"/>
+                <property name="serviceUrl" value="http://jacs-data.int.janelia.org:8180/rest-v3/process/owner/system/dataSet/${Data Set}/lsmPipelines"/>
+                <property name="testUrl" value="http://jacs-data.int.janelia.org:8180/rest-v3/data/dataSet/sage?owners=user:trautmane"/>
                 <property name="relativePathDepth" value="1"/>
             </rowListener>
 
@@ -257,7 +257,7 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?sageSync=true"
+                            serviceUrl="http://jacs-data.int.janelia.org:8180/rest-v3/data/dataSet/sage?sageSync=true"
                             autoComplete="true">
             </webServiceList>
 
@@ -530,8 +530,8 @@
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
-                <property name="serviceUrl" value="http://jacs-data.int.janelia.org:8180/rest-v1/process/owner/system/dataSet/${Data Set}/lsmPipelines"/>
-                <property name="testUrl" value="http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?owners=user:trautmane"/>
+                <property name="serviceUrl" value="http://jacs-data.int.janelia.org:8180/rest-v3/process/owner/system/dataSet/${Data Set}/lsmPipelines"/>
+                <property name="testUrl" value="http://jacs-data.int.janelia.org:8180/rest-v3/data/dataSet/sage?owners=user:trautmane"/>
                 <property name="relativePathDepth" value="1"/>
             </rowListener>
 
@@ -612,7 +612,7 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?sageSync=false"
+                            serviceUrl="http://jacs-data.int.janelia.org:8180/rest-v3/data/dataSet/sage?sageSync=false"
                             autoComplete="true">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_polarity"/>
@@ -912,8 +912,8 @@
         </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
-                <property name="serviceUrl" value="http://jacs-data.int.janelia.org:8180/rest-v1/process/owner/system/dataSet/${Data Set}/lsmPipelines"/>
-                <property name="testUrl" value="http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?owners=user:trautmane"/>
+                <property name="serviceUrl" value="http://jacs-data.int.janelia.org:8180/rest-v3/process/owner/system/dataSet/${Data Set}/lsmPipelines"/>
+                <property name="testUrl" value="http://jacs-data.int.janelia.org:8180/rest-v3/data/dataSet/sage?owners=user:trautmane"/>
                 <property name="relativePathDepth" value="1"/>
             </rowListener>
 
@@ -994,7 +994,7 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?sageSync=false"
+                            serviceUrl="http://jacs-data.int.janelia.org:8180/rest-v3/data/dataSet/sage?sageSync=false"
                             autoComplete="true">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_polarity"/>
@@ -1407,8 +1407,8 @@
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
-                <property name="serviceUrl" value="http://jacs-data.int.janelia.org:8180/rest-v1/process/owner/system/dataSet/${Data Set}/lsmPipelines"/>
-                <property name="testUrl" value="http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?owners=user:trautmane"/>
+                <property name="serviceUrl" value="http://jacs-data.int.janelia.org:8180/rest-v3/process/owner/system/dataSet/${Data Set}/lsmPipelines"/>
+                <property name="testUrl" value="http://jacs-data.int.janelia.org:8180/rest-v3/data/dataSet/sage?owners=user:trautmane"/>
                 <property name="relativePathDepth" value="1"/>
             </rowListener>
 
@@ -1484,7 +1484,7 @@
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
-                            serviceUrl="http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?sageSync=true"
+                            serviceUrl="http://jacs-data.int.janelia.org:8180/rest-v3/data/dataSet/sage?sageSync=true"
                             autoComplete="true">
             </webServiceList>
 
