@@ -28,13 +28,14 @@ function deployPackages {
 
 }
 
-deployPackages /groups/flyfuncconn/flyfuncconn/tmog
-deployPackages /groups/flylight/flylight/tmog
-deployPackages /groups/projtechres/projtechres/tmog
+#deployPackages /groups/flyfuncconn/flyfuncconn/tmog
+#deployPackages /groups/flylight/flylight/tmog
+#deployPackages /groups/projtechres/projtechres/tmog
 
 #deployPackages /groups/leet/leetimg/leetlab/tmog
 #deployPackages /groups/magee/mageelab/tmog
 #deployPackages /groups/rubin/data1/rubinlab/tmog
 #deployPackages /groups/svoboda/wdbp/tmog
+
 #deployPackages /groups/zlatic/zlaticlab/tmog
 #deployPackages /nrs/zlatic/zlaticlab/tmog
