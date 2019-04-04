@@ -7,14 +7,6 @@
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
-import org.janelia.it.utils.StringUtil;
-import org.janelia.it.utils.db.AbstractDao;
-import org.janelia.it.utils.db.DbConfigException;
-import org.janelia.it.utils.db.DbManager;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,6 +20,14 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
+import org.janelia.it.utils.StringUtil;
+import org.janelia.it.utils.db.AbstractDao;
+import org.janelia.it.utils.db.DbConfigException;
+import org.janelia.it.utils.db.DbManager;
 
 /**
  * This class supports management of image data within an image database.
@@ -457,7 +457,8 @@ public class ImageDao extends AbstractDao
     public List<String> getImageNamesForSlide(String family,
                                               String dataSet,
                                               String slide,
-                                              String objective)
+                                              String objective,
+                                              String plateWell)
             throws ExternalSystemException {
 
         List<String> imageNames = new ArrayList<>();
@@ -472,7 +473,8 @@ public class ImageDao extends AbstractDao
             select = connection.prepareStatement(SQL_SELECT_SLIDE_IMAGE_NAMES);
             select.setString(1, family);
             select.setString(2, dataSet);
-            select.setString(3, slide + "\\_%");
+            final String slideQuery = plateWell == null ? slide + "\\_%" : slide + "\\_" + plateWell + "%";
+            select.setString(3, slideQuery);
             resultSet = select.executeQuery();
 
             if (objective == null) {

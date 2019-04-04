@@ -7,14 +7,6 @@
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
-import org.janelia.it.utils.db.DbManager;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -22,6 +14,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.janelia.it.utils.db.DbManager;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 /**
  * Tests the ImageDao class.
@@ -338,9 +338,16 @@ public class SageImageDaoTest
         final String dataSetName = "nerna_polarity_case_3";
         final String slide = "20130604_33";
         final String objective = "20x";
-        final List<String> imageNames = dao.getImageNamesForSlide(family, dataSetName, slide, objective);
+        final List<String> imageNames = dao.getImageNamesForSlide(family, dataSetName, slide, objective, null);
         assertTrue("no image names found for family '" + family + "' slide '" + slide + "'",
                    imageNames.size() > 0);
+        final List<String> filteredImageNames =
+                dao.getImageNamesForSlide(family, dataSetName, slide, objective, "A");
+        assertTrue("no plate well filtered image names found",
+                   filteredImageNames.size() > 0);
+        assertTrue("should be more image names (" + imageNames.size() +
+                   ") than filtered image names (" + filteredImageNames.size() + ")",
+                   imageNames.size() > filteredImageNames.size());
     }
 
     private void validateLineId(String context,
@@ -348,7 +355,7 @@ public class SageImageDaoTest
                                 String defaultLineLabName,
                                 Integer expectedLineId,
                                 Connection connection)
-            throws SQLException, ExternalSystemException {
+            throws SQLException {
         final Integer lineId = dao.getLineId(lineName, defaultLineLabName, connection);
         assertEquals("invalid id returned for " + context + " line '" + lineName +
                      "' with '" + defaultLineLabName + "' defaultLineLabName",

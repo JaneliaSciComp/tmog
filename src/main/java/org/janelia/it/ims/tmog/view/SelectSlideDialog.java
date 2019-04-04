@@ -11,21 +11,6 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
-import ca.odell.glazedlists.EventList;
-import ca.odell.glazedlists.GlazedLists;
-import ca.odell.glazedlists.impl.filter.StringTextFilterator;
-import ca.odell.glazedlists.matchers.TextMatcherEditor;
-import ca.odell.glazedlists.swing.AutoCompleteSupport;
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.target.FileTarget;
-import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
-import org.janelia.it.ims.tmog.view.loader.DataSetLoader;
-import org.janelia.it.ims.tmog.view.loader.SlideImageDataLoader;
-import org.janelia.it.ims.tmog.view.loader.SlideLoader;
-import org.janelia.it.utils.BackgroundWorker;
-
-import javax.swing.*;
-
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -38,6 +23,33 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.Set;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+
+import org.apache.log4j.Logger;
+import org.janelia.it.ims.tmog.target.FileTarget;
+import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
+import org.janelia.it.ims.tmog.view.loader.DataSetLoader;
+import org.janelia.it.ims.tmog.view.loader.SlideImageDataLoader;
+import org.janelia.it.ims.tmog.view.loader.SlideLoader;
+import org.janelia.it.utils.BackgroundWorker;
+
+import ca.odell.glazedlists.EventList;
+import ca.odell.glazedlists.GlazedLists;
+import ca.odell.glazedlists.impl.filter.StringTextFilterator;
+import ca.odell.glazedlists.matchers.TextMatcherEditor;
+import ca.odell.glazedlists.swing.AutoCompleteSupport;
 
 /**
  * A dialog window for selecting slide images.
@@ -53,6 +65,7 @@ public class SelectSlideDialog
     private JComboBox<String> slideComboBox;
     private JComboBox<String> objectiveComboBox;
     private JLabel spinnerLabel;
+    private JTextField plateWellTextField;
 
     private String family;
     private InputSelectionView inputSelectionView;
@@ -230,11 +243,19 @@ public class SelectSlideDialog
         final String slide = getSelectedItem(slideComboBox);
         final String objective = getSelectedItem(objectiveComboBox);
 
+        String plateWell = plateWellTextField.getText();
+        if (plateWell != null) {
+            plateWell = plateWell.trim();
+            if (plateWell.length() == 0) {
+                plateWell = null;
+            }
+        }
+
         if ((dataSet != null) && (slide != null) && (objective != null)) {
 
             buttonOK.setEnabled(false);
 
-            slideImageDataLoader = new SlideImageDataLoader(family, dataSet, slide, objective);
+            slideImageDataLoader = new SlideImageDataLoader(family, dataSet, slide, objective, plateWell);
 
             slideImageDataLoader.addPropertyChangeListener(new PropertyChangeListener() {
                 @Override
@@ -444,7 +465,7 @@ public class SelectSlideDialog
                                                      GridConstraints.SIZEPOLICY_CAN_SHRINK |
                                                      GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(5, 2, new Insets(10, 10, 10, 10), -1, 20));
+        panel3.setLayout(new GridLayoutManager(6, 2, new Insets(10, 10, 10, 10), -1, 20));
         contentPane.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                                                     GridConstraints.SIZEPOLICY_CAN_SHRINK |
                                                     GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -456,7 +477,7 @@ public class SelectSlideDialog
         label1.setDisplayedMnemonicIndex(0);
         panel3.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(56, 28), null, 0, false));
         final Spacer spacer2 = new Spacer();
-        panel3.add(spacer2, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel3.add(spacer2, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JLabel label2 = new JLabel();
         label2.setText("Slide:");
         label2.setDisplayedMnemonic('S');
@@ -472,14 +493,22 @@ public class SelectSlideDialog
         slideComboBox = new JComboBox();
         panel3.add(slideComboBox, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         objectiveComboBox = new JComboBox();
+        final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
+        objectiveComboBox.setModel(defaultComboBoxModel1);
         panel3.add(objectiveComboBox, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         spinnerLabel = new JLabel();
         spinnerLabel.setIcon(new ImageIcon(getClass().getResource("/images/16-spinner.gif")));
         spinnerLabel.setText("loading data sets");
-        panel3.add(spinnerLabel, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(600, -1), null, null, 0, false));
+        panel3.add(spinnerLabel, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(600, -1), null, null, 0, false));
+        final JLabel label4 = new JLabel();
+        label4.setText("Plate Well (optional):");
+        panel3.add(label4, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        plateWellTextField = new JTextField();
+        panel3.add(plateWellTextField, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         label1.setLabelFor(dataSetComboBox);
         label2.setLabelFor(slideComboBox);
         label3.setLabelFor(objectiveComboBox);
+        label4.setLabelFor(plateWellTextField);
     }
 
     /** @noinspection ALL */

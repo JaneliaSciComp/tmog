@@ -7,17 +7,17 @@
 
 package org.janelia.it.ims.tmog.view.loader;
 
-import org.janelia.it.ims.tmog.config.ConfigurationException;
-import org.janelia.it.ims.tmog.plugin.imagedb.SageImageDao;
-import org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue;
-import org.janelia.it.ims.tmog.target.FileTarget;
-import org.janelia.it.utils.BackgroundWorker;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.janelia.it.ims.tmog.config.ConfigurationException;
+import org.janelia.it.ims.tmog.plugin.imagedb.SageImageDao;
+import org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue;
+import org.janelia.it.ims.tmog.target.FileTarget;
+import org.janelia.it.utils.BackgroundWorker;
 
 /**
  * Retrieves list of slide image names (relative paths) and
@@ -32,6 +32,7 @@ public class SlideImageDataLoader
     private String dataSet;
     private String slide;
     private String objective;
+    private String plateWell;
 
     private SageImageDataDefaultValue imageDataDefaultValue;
 
@@ -40,12 +41,14 @@ public class SlideImageDataLoader
     public SlideImageDataLoader(String family,
                                 String dataSet,
                                 String slide,
-                                String objective) throws IllegalStateException {
+                                String objective,
+                                String plateWell) throws IllegalStateException {
 
         this.family = family;
         this.dataSet = dataSet;
         this.slide = slide;
         this.objective = objective;
+        this.plateWell = plateWell;
 
         this.imageDataDefaultValue = new SageImageDataDefaultValue();
         Map<String, String> properties = new HashMap<>();
@@ -82,7 +85,7 @@ public class SlideImageDataLoader
             throws Exception {
 
         final SageImageDao dao = new SageImageDao("sage");
-        final List<String> relativePaths = dao.getImageNamesForSlide(family, dataSet, slide, objective);
+        final List<String> relativePaths = dao.getImageNamesForSlide(family, dataSet, slide, objective, plateWell);
 
         FileTarget target;
         for (String relativePath : relativePaths) {
