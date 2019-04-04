@@ -2,7 +2,7 @@
 
 set -e
 
-MAC_JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk-10.0.2.jdk/Contents/Home"
+MAC_JAVA_HOME="/Library/Java/JavaVirtualMachines/open/jdk-10.0.2.jdk/Contents/Home"
 WINDOWS_JDK="${HOME}/windows_jdks/jdk-10.0.2_windows-x64"
 
 

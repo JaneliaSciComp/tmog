@@ -1,5 +1,9 @@
 #!/bin/bash
 
+MAC_JAVA_HOME="/Library/Java/JavaVirtualMachines/open/jdk-10.0.2.jdk/Contents/Home"
+echo "MAC_JAVA_HOME is ${MAC_JAVA_HOME}"
+export PATH="${MAC_JAVA_HOME}/bin:${PATH}"
+
 if (( $# < 3 )); then
   echo "USAGE: `basename $0` <module-name> <source-jar> <fixed-libs-dir> [--add-modules <module>]"
   exit 1
