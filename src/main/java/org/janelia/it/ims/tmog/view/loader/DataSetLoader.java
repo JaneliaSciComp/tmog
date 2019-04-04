@@ -7,11 +7,11 @@
 
 package org.janelia.it.ims.tmog.view.loader;
 
-import org.janelia.it.ims.tmog.field.HttpValidValueModel;
-import org.janelia.it.utils.BackgroundWorker;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import org.janelia.it.ims.tmog.field.HttpValidValueModel;
+import org.janelia.it.utils.BackgroundWorker;
 
 /**
  * Loads list of data sets in background thread.
@@ -36,8 +36,7 @@ public class DataSetLoader
     }
 
     @Override
-    protected Void executeBackgroundOperation()
-            throws Exception {
+    protected Void executeBackgroundOperation() {
 
         dataSetNames.clear();
 
@@ -50,7 +49,7 @@ public class DataSetLoader
         model.setValueCreationPath("*/dataSet");
         model.setRelativeActualValuePath("dataSetIdentifier");
         model.setRelativeValueDisplayNamePath("dataSetIdentifier");
-        model.setServiceUrl("http://jacs-data.int.janelia.org:8180/rest-v1/data/dataSet/sage?sageSync=true");
+        model.setServiceUrl("http://jacs-data.int.janelia.org:8180/rest-v3/data/dataSet/sage?sageSync=true");
 
         model.retrieveAndSetValidValues();
 
