@@ -184,6 +184,7 @@
                 <validValue value="Clement Kent"/>
                 <validValue value="Daniel Turner-Evans"/>
                 <validValue value="David Stern"/>
+                <validValue value="Edward Rogers"/>
                 <validValue value="Erica Ehrhardt"/>
                 <validValue value="Gabriella Sterne"/>
                 <validValue value="Geoffrey Meissner"/>
@@ -225,7 +226,7 @@
                             sharedForAllSessionFiles="true"
                             globalValueFilter="/^((?!leet).)*$/"
                             filterField="Annotator"
-                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Christa Baker=bakerc10|Claire McKellar=mckellarc|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|David Stern=sternlab,sternd|Erica Ehrhardt=ehrhardte,card,ditp|Gabriella Sterne=sterneg|Geoffrey Meissner=meissnerg,flylight|Gerry Rubin=rubing|Jens Goldammer=goldammerj|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Joshua Lillvis=lillvisj,dicksonlab|Julie Simpson=simpson|Kaiyu Wang=wangk11,dicksonlab|Kei Ito=itok,terraincognita|Krystyna Keleman=kelemank|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Martin Peek=peekm,ditp,card|Masayoshi Ito=itom10|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Oz Malkesman=malkesmano,flylight|Paola Correa=correap,dicksonlab|Paul Tillberg=tillbergp|Rajyashree Sen=senr,dicksonlab|Richard Mann=sternlab,mannr10|Ryan Williamson=williamsonw,card|Ryo Minegishi=minegishir,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustonlab,hustons|Sung Soo Kim=kims11|Tanya Wolff=wolfft|Troy Shirangi=shirangit|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy|Zhengchang Lei=leiz,kelemanlab"
+                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Christa Baker=bakerc10|Claire McKellar=mckellarc|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|David Stern=sternlab,sternd|Edward Rogers=rogerse10|Erica Ehrhardt=ehrhardte,card,ditp|Gabriella Sterne=sterneg|Geoffrey Meissner=meissnerg,flylight|Gerry Rubin=rubing|Jens Goldammer=goldammerj|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Joshua Lillvis=lillvisj,dicksonlab|Julie Simpson=simpson|Kaiyu Wang=wangk11,dicksonlab|Kei Ito=itok,terraincognita|Krystyna Keleman=kelemank|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Martin Peek=peekm,ditp,card|Masayoshi Ito=itom10|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Oz Malkesman=malkesmano,flylight|Paola Correa=correap,dicksonlab|Paul Tillberg=tillbergp|Rajyashree Sen=senr,dicksonlab|Richard Mann=sternlab,mannr10|Ryan Williamson=williamsonw,card|Ryo Minegishi=minegishir,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustonlab,hustons|Sung Soo Kim=kims11|Tanya Wolff=wolfft|Troy Shirangi=shirangit|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy|Zhengchang Lei=leiz,kelemanlab"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
@@ -476,6 +477,7 @@
                 <validValue value="Clement Kent"/>
                 <validValue value="Daniel Turner-Evans"/>
                 <validValue value="David Stern"/>
+                <validValue value="Edward Rogers"/>
                 <validValue value="Erica Ehrhardt"/>
                 <validValue value="Gabriella Sterne"/>
                 <validValue value="Geoffrey Meissner"/>
@@ -517,7 +519,7 @@
                             sharedForAllSessionFiles="false"
                             globalValueFilter="/^((?!leet).)*$/"
                             filterField="Annotator"
-                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Christa Baker=bakerc10|Claire McKellar=mckellarc|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|David Stern=sternlab,sternd|Erica Ehrhardt=ehrhardte,card,ditp|Gabriella Sterne=sterneg|Geoffrey Meissner=meissnerg,flylight|Gerry Rubin=rubing|Jens Goldammer=goldammerj|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Joshua Lillvis=lillvisj,dicksonlab|Julie Simpson=simpson|Kaiyu Wang=wangk11,dicksonlab|Kei Ito=itok,terraincognita|Krystyna Keleman=kelemank|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Martin Peek=peekm,ditp,card|Masayoshi Ito=itom10|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Oz Malkesman=malkesmano,flylight|Paola Correa=correap,dicksonlab|Paul Tillberg=tillbergp|Rajyashree Sen=senr,dicksonlab|Richard Mann=sternlab,mannr10|Ryan Williamson=williamsonw,card|Ryo Minegishi=minegishir,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustonlab,hustons|Sung Soo Kim=kims11|Tanya Wolff=wolfft|Troy Shirangi=shirangit|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy|Zhengchang Lei=leiz,kelemanlab"
+                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Chuan Zhou=zhouc,baker|Christa Baker=bakerc10|Claire McKellar=mckellarc|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|David Stern=sternlab,sternd|Edward Rogers=rogerse10|Erica Ehrhardt=ehrhardte,card,ditp|Gabriella Sterne=sterneg|Geoffrey Meissner=meissnerg,flylight|Gerry Rubin=rubing|Jens Goldammer=goldammerj|Jim Truman=truman|Jon-Michael Knapp=knappj,simpson|Joshua Lillvis=lillvisj,dicksonlab|Julie Simpson=simpson|Kaiyu Wang=wangk11,dicksonlab|Kei Ito=itok,terraincognita|Krystyna Keleman=kelemank|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Martin Peek=peekm,ditp,card|Masayoshi Ito=itom10|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Oz Malkesman=malkesmano,flylight|Paola Correa=correap,dicksonlab|Paul Tillberg=tillbergp|Rajyashree Sen=senr,dicksonlab|Richard Mann=sternlab,mannr10|Ryan Williamson=williamsonw,card|Ryo Minegishi=minegishir,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=hustonlab,hustons|Sung Soo Kim=kims11|Tanya Wolff=wolfft|Troy Shirangi=shirangit|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy|Zhengchang Lei=leiz,kelemanlab"
                             valueCreationPath="*/dataSet"
                             relativeActualValuePath="dataSetIdentifier"
                             relativeValueDisplayNamePath="dataSetIdentifier"
