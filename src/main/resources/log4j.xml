@@ -14,27 +14,6 @@
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
 
-    <!-- ================================= -->
-    <!-- Send messages to syslog           -->
-    <!-- ================================= -->
-
-    <appender name="SYSLOG" class="org.apache.log4j.net.SyslogAppender">
-        <param name="Facility" value="DAEMON"/>
-        <param name="FacilityPrinting" value="true"/>
-        <param name="SyslogHost" value="loghost.int.janelia.org"/>
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="[%c] %m%n"/>
-        </layout>
-    </appender>
-
-    <!-- stub appender used for testing -->
-    <appender name="SYSLOG_STUB" class="org.apache.log4j.FileAppender">
-        <param name="File" value="build/tmp/transmogrifierSyslog.log"/>
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="[%c] %m%n"/>
-        </layout>
-    </appender>
-
     <!-- ============================== -->
     <!-- Append messages to the console -->
     <!-- ============================== -->
@@ -67,7 +46,6 @@
     <root>
         <priority value="ERROR" />
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="SYSLOG_STUB"/>
     </root>
 
 </log4j:configuration>
