@@ -488,7 +488,6 @@
                     <xs:enumeration value="simple-move"/>
                     <xs:enumeration value="move-and-log-digest"/>
                     <xs:enumeration value="collector"/>
-                    <xs:enumeration value="sage-collector"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
