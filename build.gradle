@@ -3,10 +3,10 @@ plugins {
 }
 
 group 'org.janelia.scicomp'
-version '4.3.0'
+version '4.4.0'
 
-sourceCompatibility = '10'
-targetCompatibility = '10'
+sourceCompatibility = '8'
+targetCompatibility = '8'
 
 repositories {
     mavenCentral()
@@ -18,62 +18,23 @@ ext {
 }
 
 dependencies {
-    implementation "com.sun.activation:javax.activation:1.2.0"
-    implementation "javax.xml.bind:jaxb-api:" + jaxbVersion
-    implementation "com.sun.xml.bind:jaxb-core:" + jaxbVersion
+    compile "com.sun.activation:javax.activation:1.2.0"
+    compile "javax.xml.bind:jaxb-api:" + jaxbVersion
+    compile "com.sun.xml.bind:jaxb-core:" + jaxbVersion
     runtime "com.sun.xml.bind:jaxb-impl:" + jaxbVersion
-    
-    implementation "commons-digester:commons-digester:1.8"
-    implementation "commons-httpclient:commons-httpclient:3.1"
-    implementation "commons-logging:commons-logging:1.1"
-    implementation "com.google.code.gson:gson:2.7"
-    implementation 'com.intellij:forms_rt:7.0.3'
-    implementation "log4j:log4j:1.2.8"
-    implementation "mysql:mysql-connector-java:5.1.22"
-    implementation "net.java.dev.glazedlists:glazedlists_java15:1.8.0"
-    implementation "org.jdesktop:swing-worker:1.1"
+
+    compile "commons-digester:commons-digester:1.8"
+    compile "commons-httpclient:commons-httpclient:3.1"
+    compile "commons-logging:commons-logging:1.1"
+    compile "com.google.code.gson:gson:2.7"
+    compile 'com.intellij:forms_rt:7.0.3'
+    compile "log4j:log4j:1.2.17"
+    compile "mysql:mysql-connector-java:5.1.22"
+    compile "net.java.dev.glazedlists:glazedlists_java15:1.8.0"
+    compile "org.jdesktop:swing-worker:1.1"
 
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
-
-
-compileJava {
-    inputs.property("moduleName", moduleName)
-    doFirst {
-        options.compilerArgs = [
-                '--module-path', classpath.asPath,
-        ]
-        classpath = files()
-    }
-}
-
-compileTestJava {
-    inputs.property("moduleName", moduleName)
-    doFirst {
-        options.compilerArgs = [
-                '--module-path', classpath.asPath,
-                '--add-modules', 'junit',
-                '--add-reads', "$moduleName=junit",
-                '--patch-module', "$moduleName=" + files(sourceSets.test.java.srcDirs).asPath,
-        ]
-        classpath = files()
-    }
-}
-
-// suggested by https://guides.gradle.org/building-java-9-modules/ but breaks build ...
-
-//test {
-//    inputs.property("moduleName", moduleName)
-//    doFirst {
-//        jvmArgs = [
-//                '--module-path', classpath.asPath,
-//                '--add-modules', 'ALL-MODULE-PATH',
-//                '--add-reads', "$moduleName=junit",
-//                '--patch-module', "$moduleName=" + files(sourceSets.test.java.outputDir).asPath,
-//        ]
-//        classpath = files()
-//    }
-//}
 
 // stolen from https://stackoverflow.com/questions/3963708/gradle-how-to-display-test-results-in-the-console-in-real-time
 tasks.withType(Test) {
@@ -107,12 +68,15 @@ Map<String, ?> manifestAttributes = [
         'Main-Class': 'org.janelia.it.ims.tmog.JaneliaTransmogrifier'
 ]
 
-jar {
+task devJar(type: Jar)  {
+    
     classifier='dev'
 
     manifest {
         attributes(manifestAttributes)
     }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 
     doLast {
         println 'created ' + archivePath
@@ -173,26 +137,6 @@ task logUsefulBuildInfo {
 
 build.dependsOn(logUsefulBuildInfo)
 
-task addModuleInfoToLibs(type: Exec, dependsOn: build) {
-    environment 'PATH', "/usr/local/opt/coreutils/libexec/gnubin:${environment.PATH}"
-    commandLine 'src/module_build/scripts/01_fix_libs.sh', 'keep_existing'
-}
-
-task assembleRunTimeImages(type: Exec, dependsOn: addModuleInfoToLibs) {
-    environment 'PATH', "/usr/local/opt/coreutils/libexec/gnubin:${environment.PATH}"
-    commandLine 'src/module_build/scripts/02_link.sh'
-}
-
-task deployPackages(type: Exec, dependsOn: assembleRunTimeImages) {
-    environment 'PATH', "/usr/local/opt/coreutils/libexec/gnubin:${environment.PATH}"
-    commandLine 'src/module_build/scripts/03_deploy_packages.sh', version
-}
-
-task setupWindowsPackageBuild(type: Exec, dependsOn: addModuleInfoToLibs) {
-    environment 'PATH', "/usr/local/opt/coreutils/libexec/gnubin:${environment.PATH}"
-    commandLine 'src/module_build/scripts/setup_windows_package_build.sh', version
-}
-
 // adds task 'antBuildConfig' from build_config.xml
 ant.importBuild('build_config.xml')
 
@@ -208,7 +152,7 @@ static Properties loadProperties(List<String> keys,
     keys.each {
         if (! props.containsKey(it)) {
             def message = "required key '" + it + "' is missing in " + propsFile.getAbsolutePath()
-            throw new GradleScriptException(message, null)
+            throw new GradleException(message)
         }
     }
     println "loaded properties from " + propsFile.getAbsolutePath()
