@@ -15,6 +15,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
+            <!-- TODO: change base path to match file system at Cambridge -->
             <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/closed_loop" />
             <renameFieldValue prefix="/" fieldDisplayName="Rig"/>
             <renameFieldValue prefix="/" fieldDisplayName="Experimental Mode" pattern="([^_]+).*"/>
@@ -114,12 +115,9 @@
 
             <separator value="@"/>
 
-            <webServiceList displayName="Genotype 1" required="true"
-                            valueCreationPath="*/line"
-                            relativeActualValuePath="name"
-                            relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=none&amp;lab=simpson&amp;lab=rubin&amp;lab=zlatic"
+            <validValueList displayName="Genotype 1" required="true"
                             autoComplete="true">
+
                 <sourceFileMappedDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*">
                     <mappedValue from="58E02-Gal4" to="GMR_58E02_AE_01" />
                     <mappedValue from="69F06-Gal4" to="GMR_69F06_AE_01" />
@@ -161,17 +159,19 @@
                     <mappedValue from="yw;attP40;attP2" to="MZZ_R_3013849" />
                     <mappedValue from="eg-Gal4" to="MZZ_egGAL4" />
                 </sourceFileMappedDefault>
+
                 <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*"/>
-            </webServiceList>
+
+                <!-- TODO: add genotype names as validValue elements -->
+                <validValue value="MZZ_R_3013849"/>
+
+            </validValueList>
 
             <separator value="@"/>
 
-            <webServiceList displayName="Genotype 2" required="true"
-                            valueCreationPath="*/line"
-                            relativeActualValuePath="name"
-                            relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=none&amp;lab=simpson&amp;lab=rubin&amp;lab=zlatic"
+            <validValueList displayName="Genotype 2" required="true"
                             autoComplete="true">
+
                 <sourceFileMappedDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.*">
                     <mappedValue from="58E02-Gal4" to="GMR_58E02_AE_01" />
                     <mappedValue from="69F06-Gal4" to="GMR_69F06_AE_01" />
@@ -213,8 +213,13 @@
                     <mappedValue from="yw;attP40;attP2" to="MZZ_R_3013849" />
                     <mappedValue from="eg-Gal4" to="MZZ_egGAL4" />
                 </sourceFileMappedDefault>
+
                 <sourceFileDefault pattern=".+?@.+?@.+?@(.+?)@.+?@.*"/>
-            </webServiceList>
+
+                <!-- TODO: add genotype names as validValue elements -->
+                <validValue value="MZZ_R_3013849"/>
+
+            </validValueList>
 
             <separator value="@"/>
 

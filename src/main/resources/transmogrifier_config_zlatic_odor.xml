@@ -14,6 +14,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
+            <!-- TODO: change base path to match file system at Cambridge -->
             <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/Projects/odor/MMF-Files/tracking-results/" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
@@ -44,12 +45,8 @@
                 <validValue value="t16"/>
             </validValueList>
 
-            <webServiceList displayName="Line" required="true"
+            <validValueList displayName="Line" required="true"
                             markedForTask="false"
-                            valueCreationPath="*/line"
-                            relativeActualValuePath="name"
-                            relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=zlatic&amp;lab=rubin&amp;lab=simpson&amp;lab=fly&amp;lab=flylight&amp;lab=olympiad&amp;lab=jayaraman"
                             autoComplete="true">
 
                 <sourceFileMappedDefault pattern=".*[/\\\\]t\d+[/\\\\]([^@/\\\\]+)@.*"
@@ -62,14 +59,18 @@
 
                 <sourceFileDefault pattern=".*[/\\\\]t\d+[/\\\\]([^@/\\\\]+)@.*"
                                    matchType="path"/>
-            </webServiceList>
+
+                <!-- TODO: add line names as validValue elements -->
+                <validValue value="FCF_attP2_1500062"/>
+                <validValue value="MZZ_ppk1d9GAL4"/>
+                <validValue value="JHS_ppk_LexAattp40"/>
+
+            </validValueList>
 
 
-            <cvTermList displayName="Effector" required="true"
-                        displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage"
-                        autoComplete="true"
-                        markedForTask="false">
+            <validValueList displayName="Effector" required="true"
+                            autoComplete="true"
+                            markedForTask="false">
 
                 <sourceFileMappedDefault pattern=".*[/\\\\]t\d+[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
                                          matchType="path">
@@ -82,7 +83,12 @@
                 <sourceFileDefault pattern=".*[/\\\\]t\d+[/\\\\][^@/\\\\]+@([^/\\\\]+).*"
                                    matchType="path"/>
 
-            </cvTermList>
+                <!-- TODO: add effector names as validValue elements -->
+                <validValue value="UAS_IVS_myr_3_0009"/>
+                <validValue value="NoEffector_0_9999"/>
+                <validValue value="UAS_ChRh2_23_0011"/>
+
+            </validValueList>
 
             <!-- uncomment to see original effector names to build map
             <text displayName="Original Effector"
@@ -109,6 +115,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
+            <!-- TODO: change base path to match file system at Cambridge -->
             <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/Projects/odor-rd/MMF-Files/tracking-results/" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>

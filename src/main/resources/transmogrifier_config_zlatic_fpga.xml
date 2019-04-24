@@ -13,6 +13,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
+            <!-- TODO: change base path to match file system at Cambridge -->
             <path path="[//nrs.hhmi.org|/nrs]/zlatic/zlaticlab/Screens_Behaviours_Display_and_Analysis/" />
             <renameFieldValue fieldDisplayName="Experiment Type"/>
             <path path="/" />

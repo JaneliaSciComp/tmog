@@ -14,6 +14,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
+            <!-- TODO: change base path to match file system at Cambridge -->
             <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/pipeline/screen/tracking-results/" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
@@ -50,21 +51,21 @@
 
             <separator value="@"/>
 
-            <webServiceList displayName="Line" required="true"
-                            valueCreationPath="*/line"
-                            relativeActualValuePath="name"
-                            relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=none&amp;lab=simpson&amp;lab=rubin&amp;lab=zlatic"
+            <validValueList displayName="Line" required="true"
                             autoComplete="true">
-                <sourceFileDefault pattern="(.+?)@.+?@.+?@.+?@.+?@.*"/>
-            </webServiceList>
+
+                <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*"/>
+
+                <!-- TODO: add line names as validValue elements -->
+                <validValue value="MZZ_ppk1d9GAL4"/>
+
+            </validValueList>
 
             <separator value="@"/>
 
-            <cvTermList displayName="Effector" required="true"
-                        autoComplete="true"
-                        displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage">
+            <validValueList displayName="Effector" required="true"
+                            autoComplete="true">
+
                 <sourceFileMappedDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.*">
                     <mappedValue from="Ch2r" to="UAS_ChRh2_23_0011" />
                     <mappedValue from="Ch2" to="UAS_ChRh2_23_0011" />
@@ -93,8 +94,13 @@
                     <mappedValue from="TrpA1" to="UAS_dTrpA1_2_0012" />
                     <mappedValue from="TrpA" to="UAS_dTrpA1_2_0012" />
                 </sourceFileMappedDefault>
+
                 <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.*" />
-            </cvTermList>
+
+                <!-- TODO: add effector names as validValue elements -->
+                <validValue value="UAS_ChRh2_23_0011"/>
+
+            </validValueList>
 
             <separator value="@"/>
 
@@ -114,10 +120,9 @@
 
             <separator value="@"/>
 
-            <cvTermList displayName="Protocol" required="true"
-                        autoComplete="true"
-                        displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/larval_olympiad_protocol.janelia-sage">
+            <validValueList displayName="Protocol" required="true"
+                            autoComplete="true">
+
                 <sourceFileMappedDefault pattern=".+?@.+?@.+?@.+?@(.+?@.+?@.+?@.+?)@.*">
                     <mappedValue from="b$25C50hz2V$30s1x30s0s@b$1000hz2V$90s1x30s0s@b$200hz2V$150s20x0.2s5s@n"
                                  to="b_25C50hz2V_30s1x30s0s#b_1000hz2V_90s1x30s0s#b_200hz2V_150s20x0.2s5s#n@100" />
@@ -150,8 +155,13 @@
                     <mappedValue from="s$020$0s1x227s0s@n@n@n"
                                  to="s_020_0s1x227s0s#n#n#n@100" />
                 </sourceFileMappedDefault>
+
                 <sourceFileDefault pattern=".+?@.+?@.+?@([^@\.]+@[^@\.]+)@.*"/>
-            </cvTermList>
+
+                <!-- TODO: add protocol names as validValue elements -->
+                <validValue value="s_020_0s1x227s0s#n#n#n@100"/>
+
+            </validValueList>
 
             <separator value="@"/>
 
@@ -175,6 +185,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
+            <!-- TODO: change base path to match file system at Cambridge -->
             <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/pipeline/screen/tracking-results/" />
             <renameFieldValue fieldDisplayName="Tracker"/>
             <path path="/"/>
@@ -211,21 +222,21 @@
 
             <separator value="@"/>
 
-            <webServiceList displayName="Line" required="true"
-                            valueCreationPath="*/line"
-                            relativeActualValuePath="name"
-                            relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=dickson&amp;lab=fly&amp;lab=flylight&amp;lab=heberlein&amp;lab=jayaraman&amp;lab=leet&amp;lab=none&amp;lab=simpson&amp;lab=rubin&amp;lab=zlatic"
+            <validValueList displayName="Line" required="true"
                             autoComplete="true">
-                <sourceFileDefault pattern=".+?@(.+?)@.+?@.+?@.+?@.+?@.*"/>
-            </webServiceList>
+
+                <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.*"/>
+
+                <!-- TODO: add line names as validValue elements -->
+                <validValue value="MZZ_ppk1d9GAL4"/>
+
+            </validValueList>
 
             <separator value="@"/>
 
-            <cvTermList displayName="Effector" required="true"
-                        autoComplete="true"
-                        displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector.janelia-sage">
+            <validValueList displayName="Effector" required="true"
+                            autoComplete="true">
+
                 <sourceFileMappedDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.+?@.*">
                     <mappedValue from="Ch2r" to="UAS_ChRh2_23_0011" />
                     <mappedValue from="Ch2" to="UAS_ChRh2_23_0011" />
@@ -254,8 +265,13 @@
                     <mappedValue from="TrpA1" to="UAS_dTrpA1_2_0012" />
                     <mappedValue from="TrpA" to="UAS_dTrpA1_2_0012" />
                 </sourceFileMappedDefault>
+
                 <sourceFileDefault pattern=".+?@.+?@(.+?)@.+?@.+?@.+?@.*" />
-            </cvTermList>
+
+                <!-- TODO: add effector names as validValue elements -->
+                <validValue value="UAS_ChRh2_23_0011"/>
+
+            </validValueList>
 
             <separator value="@"/>
 
@@ -274,12 +290,15 @@
 
             <separator value="@"/>
 
-            <cvTermList displayName="Protocol" required="true"
-                        autoComplete="true"
-                        displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/larval_olympiad_protocol.janelia-sage">
+            <validValueList displayName="Protocol" required="true"
+                            autoComplete="true">
+
                 <sourceFileDefault pattern=".+?@.+?@.+?@.+?@(.+?@.+?)@.*"/>
-            </cvTermList>
+
+                <!-- TODO: add protocol names as validValue elements -->
+                <validValue value="s_020_0s1x227s0s#n#n#n@100"/>
+
+            </validValueList>
 
             <separator value="@"/>
 
@@ -303,6 +322,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
+            <!-- TODO: change base path to match file system at Cambridge -->
             <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/pipeline/" />
             <renameFieldValue fieldDisplayName="Experiment Type"/>
             <path path="/tracking-results/" />
@@ -364,12 +384,15 @@
 
             <separator value="@"/>
 
-            <cvTermList displayName="Line And Effector" required="true"
-                        autoComplete="true"
-                        displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/zlatic_rd_line_effector">
+            <validValueList displayName="Line And Effector" required="true"
+                            autoComplete="true">
+
                 <sourceFileDefault pattern="(.+?@.+?)@.+?@.+?@.+?@.*"/>
-            </cvTermList>
+
+                <!-- TODO: add line@effector names as validValue elements -->
+                <validValue value="MZZ_ppk1d9GAL4@CantonS"/>
+
+            </validValueList>
 
             <separator value="@"/>
 
@@ -540,6 +563,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
+            <!-- TODO: change base path to match file system at Cambridge -->
             <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/pipeline/" />
             <renameFieldValue fieldDisplayName="Experiment Type"/>
             <path path="/tracking-results/" />
@@ -602,12 +626,15 @@
 
             <separator value="@"/>
 
-            <cvTermList displayName="Line And Effector" required="true"
-                        autoComplete="true"
-                        displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/zlatic_rd_line_effector">
+            <validValueList displayName="Line And Effector" required="true"
+                            autoComplete="true">
+
                 <sourceFileDefault pattern=".+?@(.+?@.+?)@.+?@.+?@.+?@.*"/>
-            </cvTermList>
+
+                <!-- TODO: add line@effector names as validValue elements -->
+                <validValue value="MZZ_ppk1d9GAL4@CantonS"/>
+
+            </validValueList>
 
             <separator value="@"/>
 
@@ -777,6 +804,7 @@
         <inputFileSorter sortAlgorithm="Path"/>
 
         <outputDirectory fileModeReadOnly="false">
+            <!-- TODO: change base path to match file system at Cambridge -->
             <path path="[//dm11.hhmi.org|/groups/zlatic]/zlaticlab/pipeline/" />
             <renameFieldValue fieldDisplayName="Experiment Type"/>
             <path path="/tracking-results/" />
