@@ -14,8 +14,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -48,24 +46,12 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
     private static final Logger LOG =
             Logger.getLogger(JaneliaTransmogrifier.class);
 
-    private static String version = null;
+    private static String version = JaneliaTransmogrifier.class.getPackage().getImplementationVersion();
 
     /**
      * @return the current version of this application.
      */
     public static String getVersion() {
-        if (version == null) {
-            final ClassLoader cl = JaneliaTransmogrifier.class.getClassLoader();
-            try {
-                URL url = cl.getResource("META-INF/MANIFEST.MF");
-                @SuppressWarnings("ConstantConditions")
-                Manifest manifest = new Manifest(url.openStream());
-                Attributes mainAttributes = manifest.getMainAttributes();
-                version = mainAttributes.getValue("Implementation-Version");
-            } catch (Exception e) {
-                LOG.warn("failed to determine implementation version", e);
-            }
-        }
         return version;
     }
     
@@ -154,7 +140,6 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
             frameSizePct = maxPct;
         }
 
-        @SuppressWarnings({"RedundantCast"})
         final double frameSizeFactor = (double) frameSizePct / 100;
         frameSize.height = (int) (screenSize.height * frameSizeFactor);
         frameSize.width = (int) (screenSize.width * frameSizeFactor);
