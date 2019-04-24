@@ -18,14 +18,6 @@ validation of meta data associated with files.  You can find [build instructions
   (e.g. from local scope file system to a network mounted file system).
   * Digests (default is md5) of file contents are calculated before and after transfer to ensure integrity.
 
-* Logging of renamed file information to a centralized database.
-  * Logged information includes:
-    * full path names of the source and destination (renamed) files
-    * digest of renamed file contents
-    * renamed file size
-  * Logged information can be used for future troubleshooting or audit needs 
-    (e.g. digest can be used to determine if the file contents have changed since the move occurred).
-
 * Supports addition of external system plug-in components for validation and/or process integration.
  
 ## Configuration
@@ -104,12 +96,6 @@ Plug-in component classes can be mapped to events in the collection process (e.g
 
 * Session Summary File Writer
   * Writes the summary message from each completed session into a file so that the information can be referenced later (e.g. for pasting into lab notebooks).
-
-* Image Data Plug-in
-  * Writes collected meta data into a Janelia Image database.
-
-* Image Sequence Number Plug-in
-  * Retrieves the next available sequence number for a configured name space from a Janelia Image database.
 
 * REST Data Plug-in
   * Converts collected meta data into HTTP POST requests for a Representational State Transfer data server.

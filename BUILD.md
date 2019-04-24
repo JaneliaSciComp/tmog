@@ -12,9 +12,9 @@
 ```bash
 git clone https://github.com/JaneliaSciComp/tmog.git
 
-# switch to jdk8 branch
+# switch to jdk8-zlatic branch
 cd tmog
-git checkout jdk8
+git checkout jdk8-zlatic
 ```
 
 
