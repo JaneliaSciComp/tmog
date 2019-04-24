@@ -1,6 +1,0 @@
-            <cvTermList displayName="Probe Set" required="false"
-                        autoComplete="true"
-                        markedForTask="false"
-                        displayNamePrefixedForValues="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/probe_set">@sage-data-default@
-            </cvTermList>

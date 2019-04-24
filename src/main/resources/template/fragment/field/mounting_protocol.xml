@@ -1,7 +1,0 @@
-            <validValueList displayName="Tissue Mounting Protocol" required="true"
-                            sharedForAllSessionFiles="@is-shareable@"
-                            markedForTask="false">@sage-data-default@
-                <validValue value="DPX Ethanol Mounting"/>
-                <validValue value="DPX PBS Mounting"/>
-                <validValue value="Glycerol-Based Mounting"/>
-            </validValueList>

@@ -68,63 +68,19 @@ Map<String, ?> manifestAttributes = [
         'Main-Class': 'org.janelia.it.ims.tmog.JaneliaTransmogrifier'
 ]
 
-task devJar(type: Jar)  {
+jar {
+    manifest {
+        attributes(manifestAttributes)
+    }
     
-    classifier='dev'
-
-    manifest {
-        attributes(manifestAttributes)
+    from { 
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } 
     }
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 
     doLast {
         println 'created ' + archivePath
     }
 }
-
-task prodJar(type: Jar) {
-
-    def dbSageKeys = ["db.sage.url", "db.sage.password"]
-    def dbSagePropsFile = file(System.getProperty("user.home") + '/ssl/code-cert/2018/sage.properties')
-    Properties prodSageProps
-
-    doFirst {
-        prodSageProps = loadProperties(dbSageKeys, dbSagePropsFile)
-    }
-
-    // remove lab specific config files from deployed jar
-    exclude('**/transmogrifier_config_*.xml')
-
-    // overwrite dev environment configuration with production values
-    filesMatching('**/sage.properties') {
-        filter {
-            replacePropertiesInLine(dbSageKeys, prodSageProps, it)
-        }
-    }
-
-    filesMatching('**/log4j.xml') {
-        filter {
-            it.replace('ref="SYSLOG_STUB', 'ref="SYSLOG')
-        }
-    }
-
-    classifier='prod'
-    destinationDir = file(destinationDir.absolutePath + "_prod")
-
-    manifest {
-        attributes(manifestAttributes)
-    }
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-
-    doLast {
-        println 'created ' + archivePath
-    }
-}
-
-// include prodJar task as part of assemble lifecycle task
-assemble.dependsOn(prodJar)
 
 task logUsefulBuildInfo {
     doLast {
@@ -136,38 +92,3 @@ task logUsefulBuildInfo {
 }
 
 build.dependsOn(logUsefulBuildInfo)
-
-// adds task 'antBuildConfig' from build_config.xml
-ant.importBuild('build_config.xml')
-
-task deployConfig(type: Exec, dependsOn: antBuildConfig) {
-    environment 'PATH', "/usr/local/opt/coreutils/libexec/gnubin:${environment.PATH}"
-    commandLine 'src/module_build/scripts/04_deploy_config.sh'
-}
-
-static Properties loadProperties(List<String> keys,
-                                 File propsFile) {
-    def props = new Properties()
-    propsFile.withInputStream { props.load(it) }
-    keys.each {
-        if (! props.containsKey(it)) {
-            def message = "required key '" + it + "' is missing in " + propsFile.getAbsolutePath()
-            throw new GradleException(message)
-        }
-    }
-    println "loaded properties from " + propsFile.getAbsolutePath()
-    return props
-}
-
-static String replacePropertiesInLine(List<String> keys,
-                                      Properties props,
-                                      String line) {
-    def replacedLine = line
-    keys.each {
-        if (line.startsWith(it)) {
-            replacedLine = it + "=" + props.getProperty(it)
-            // println "replaced '" + it + "' value"
-        }
-    }
-    return replacedLine
-}

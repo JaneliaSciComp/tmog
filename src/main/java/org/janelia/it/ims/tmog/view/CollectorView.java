@@ -11,6 +11,32 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingWorker;
+import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
+
 import org.apache.log4j.Logger;
 import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
@@ -31,15 +57,6 @@ import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
 import org.janelia.it.ims.tmog.view.component.SessionIcon;
 import org.janelia.it.ims.tmog.view.component.TaskButtonText;
 import org.janelia.it.ims.tmog.view.component.TaskComponents;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * This class manages the main or overall view for collecting data for a set of files in a particular directory.
@@ -98,14 +115,7 @@ public class CollectorView
         this.projectName.setText(projectNameText);
 
         if (isSageCollector) {
-            this.inputSelectionHandler =
-                    new SageInputSelectionHandler(projectConfig.getImageFamilyName(),
-                                                  rootDirectoryLabel,
-                                                  rootDirectoryField,
-                                                  rootDirectoryBtn,
-                                                  cancelTargetWorkerButton,
-                                                  this);
-            rootDirectoryBtn.setToolTipText("Select Slide Images");
+            throw new UnsupportedOperationException("SAGE collector is not supported by external distribution");
         } else {
             this.inputSelectionHandler =
                     new FileInputSelectionHandler(projectConfig,

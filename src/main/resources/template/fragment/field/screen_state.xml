@@ -1,8 +1,0 @@
-            <validValueList displayName="Screen State" required="true"
-                            markedForTask="false"
-                            autoComplete="true">@sage-data-default@
-                <validValue value="pre_screen"/>
-                <validValue value="accepted" default="true"/>
-                <validValue value="accepted_public"/>
-                <validValue value="rejected"/>
-            </validValueList>

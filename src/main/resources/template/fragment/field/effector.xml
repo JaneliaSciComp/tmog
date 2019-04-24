@@ -1,6 +1,0 @@
-            <cvTermList displayName="Reporter" required="true"
-                        autoComplete="true"
-                        markedForTask="false"
-                        displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">@sage-data-default@
-            </cvTermList>

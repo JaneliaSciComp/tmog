@@ -1,8 +1,0 @@
-            <webServiceList displayName="GAL4 Line" required="true"
-                            markedForTask="false"
-                            valueCreationPath="*/line"
-                            relativeActualValuePath="name"
-                            relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forAllLabs.janelia-sage"
-                            autoComplete="true">@sage-data-default@
-            </webServiceList>

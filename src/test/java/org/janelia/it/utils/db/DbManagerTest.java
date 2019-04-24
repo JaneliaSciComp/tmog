@@ -7,20 +7,24 @@
 
 package org.janelia.it.utils.db;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.sql.Connection;
 import java.util.Properties;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.junit.Ignore;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 /**
  * Tests the DbManager class.
+ * This test is ignored for the external simple deployment because there is no database to use.
  *
  * @author Eric Trautman
  */
+@Ignore
 public class DbManagerTest extends TestCase {
 
     private static final Log LOG = LogFactory.getLog(DbManagerTest.class);
