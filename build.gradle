@@ -5,8 +5,8 @@ plugins {
 group 'org.janelia.scicomp'
 version '4.3.0'
 
-sourceCompatibility = '10'
-targetCompatibility = '10'
+sourceCompatibility = '11'
+targetCompatibility = '11'
 
 repositories {
     mavenCentral()
@@ -208,7 +208,7 @@ static Properties loadProperties(List<String> keys,
     keys.each {
         if (! props.containsKey(it)) {
             def message = "required key '" + it + "' is missing in " + propsFile.getAbsolutePath()
-            throw new GradleScriptException(message, null)
+            throw new GradleException(message)
         }
     }
     println "loaded properties from " + propsFile.getAbsolutePath()
