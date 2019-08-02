@@ -5,17 +5,13 @@
 
     <global minimumVersion="4.2.2" frameSizePercentage="95"/>
 
-    <project name="Fly Light - Test - scope to confocalStacks" default="true">
+    <project name="Truman - copy LSMs" taskName="rename-without-delete" default="true">
 
         <inputFileFilter patternString=".+\.lsm" />
 
-        <!-- standard scope file name pattern is: A1_ZB1_T1_BRN_20130604_33_20X_R1_L01 -->
-        <inputFileSorter sortAlgorithm="Number"
-                         patternString="([A-Z])(\d++)_.*_(L\d++)[\._].*"
-                         patternGroupIndexes="1,2,3"/>
-
-        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/image_test/confocalStacks"
-                         derivedFromEarliestModifiedFile="true"/>
+        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/trumanj/confocalStacks/">
+            <renameFieldValue fieldDisplayName="Directory" />
+        </outputDirectory>
 
         <plugins>
 
@@ -24,10 +20,20 @@
                 <property name="testDataSet" value="nerna_polarity_case_3"/>
             </rowValidator>
 
-            <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageSequencePlugin">
-                <property name="db.config.key" value="sage" />
-                <property name="image_number" value="urn:lsid:janelia.org:flylight_test:image_number" />
-            </rowListener>
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
+                <property name="tmog-row.key" value="${Cross Serial Number}" />
+                <property name="data-file.name" value="[//dm11.hhmi.org|/groups/flylight]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.tsv-key" value="Serial" />
+                <property name="GAL4 Line" value="GAL4 Line" />
+            </rowUpdater>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="GAL4 Line" value="parent1StockName" />
+                <property name="Reporter" value="reporter" />
+            </rowUpdater>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
@@ -64,8 +70,7 @@
                 <property name="microscope_filename"/>
                 <property name="comment" value="Comment"/>
                 <property name="class" value="Class"/>
-                <property name="family" value="$STATIC:flylight_test"/>
-                <property name="probe_set" value="Probe Set"/>
+                <property name="family" value="$STATIC:trumanj"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
@@ -78,16 +83,17 @@
 
         <dataFields>
 
-            <separator value="TEST_"/>
-            <runTime datePattern="yyyyMMddHHmmssSSS" />
-            <separator value="_"/>
-            <pluginData displayName="image_number"/>
-            <separator value=".lsm"/>
+            <!-- Keep source file name. -->
+            <fileName displayName="File" markedForTask="true" />
 
             <!--
              These values are collected for storage but are not
              included as components of the file name (markedForTask="false").
              -->
+
+            <static name="Annotator" value="Jim Truman" markedForTask="false" />
+            <static name="Tile" value="brain" markedForTask="false" />
+            <static name="Channel Specification" value="ssr" markedForTask="false" />
 
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
@@ -102,47 +108,6 @@
                             autoComplete="true">
             </webServiceList>
 
-            <cvTermList displayName="Tile" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
-                        autoComplete="true"
-                        markedForTask="false">
-                <sourceFileMappedDefault pattern="^[^_]+_[^_]+_[^_]+_([^_]+)_.*">
-                    <mappedValue from="ABD" to="abdominal"/>
-                    <mappedValue from="BRN" to="brain"/>
-                    <mappedValue from="BRNwLam" to="brain_with_lamina"/>
-                    <mappedValue from="CEN" to="central"/>
-                    <mappedValue from="DM" to="dorsal_medial"/>
-                    <mappedValue from="L" to="left_optic_lobe"/>
-                    <mappedValue from="L1" to="left_optic_lobe_part_1"/>
-                    <mappedValue from="L2" to="left_optic_lobe_part_2"/>
-                    <mappedValue from="LwLam" to="left_optic_lobe_with_lamina"/>
-                    <mappedValue from="LLam" to="left_lamina"/>
-                    <mappedValue from="RLam" to="right_lamina"/>
-                    <mappedValue from="LamL" to="left_lamina"/>
-                    <mappedValue from="LamR" to="right_lamina"/>
-                    <mappedValue from="LC" to="left_central"/>
-                    <mappedValue from="LD" to="left_dorsal"/>
-                    <mappedValue from="LV" to="left_ventral"/>
-                    <mappedValue from="MES" to="mesothoracic"/>
-                    <mappedValue from="META" to="metathoracic"/>
-                    <mappedValue from="NEC-Ant" to="neck_anterior"/>
-                    <mappedValue from="NEC-Pos" to="neck_posterior"/>
-                    <mappedValue from="PRO" to="prothoracic"/>
-                    <mappedValue from="R" to="right_optic_lobe"/>
-                    <mappedValue from="R1" to="right_optic_lobe_part_1"/>
-                    <mappedValue from="R2" to="right_optic_lobe_part_2"/>
-                    <mappedValue from="RwLam" to="right_optic_lobe_with_lamina"/>
-                    <mappedValue from="RC" to="right_central"/>
-                    <mappedValue from="RD" to="right_dorsal"/>
-                    <mappedValue from="RV" to="right_ventral"/>
-                    <mappedValue from="V" to="ventral"/>
-                    <mappedValue from="VNC" to="ventral_nerve_cord"/>
-                    <mappedValue from="VNC-Adj" to="vnc_verify"/>
-                    <mappedValue from="VNC-Ver" to="vnc_verify"/>
-                </sourceFileMappedDefault>
-                <validValue displayName="VNC-Verify" value="vnc_verify"/>
-            </cvTermList>
-
             <text displayName="Slide Code" required="true"
                   pattern="\d{8}_\d+_[A-Z]\d+"
                   copyable="false"
@@ -150,6 +115,12 @@
                 <sourceFileDefault pattern="^([A-Z]\d+)_ZB.*_(\d{8}_\d+_).*"
                                    patternGroupSpec="2,1"/>
             </text>
+
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="199999"
+                    markedForTask="false">
+            </number>
 
             <webServiceList displayName="GAL4 Line" required="true"
                             markedForTask="false"
@@ -160,53 +131,36 @@
                             autoComplete="true">
             </webServiceList>
 
-            <validValueList displayName="Gender" required="false"
-                            autoComplete="true"
-                            markedForTask="false">
-                <validValue displayName="m: Male" value="m"/>
-                <validValue displayName="f: Female" value="f"/>
-                <validValue displayName="x: Not Defined" value="x"/>
-            </validValueList>
-
-            <validValueList displayName="Tissue Mounting Protocol" required="true"
-                            sharedForAllSessionFiles="true"
-                            markedForTask="false">
-                <validValue value="DPX Ethanol Mounting"/>
-                <validValue value="DPX PBS Mounting"/>
-                <validValue value="Glycerol-Based Mounting"/>
-            </validValueList>
-
-            <validValueList displayName="First Slice of Z" required="true"
-                            sharedForAllSessionFiles="true"
-                            autoComplete="true"
-                            markedForTask="false">
-                <validValue displayName="Antennal Lobes" value="face_up"/>
-                <validValue displayName="Back of Brain" value="face_down"/>
-            </validValueList>
-
-            <text displayName="Channel Specification" required="false"
-                  markedForTask="false"
-                  pattern="s*rs*">
-            </text>
-
-            <text displayName="Comment" required="false"
-                  markedForTask="false">
-            </text>
-
-            <cvTermList displayName="Probe Set" required="false"
+            <cvTermList displayName="Reporter" required="true"
                         autoComplete="true"
                         markedForTask="false"
-                        displayNamePrefixedForValues="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/probe_set">
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
             </cvTermList>
 
+            <fileRelativePath displayName="Directory" markedForTask="false" visible="true" />
         </dataFields>
 
     </project>
 
-    <project name="Fly Light - Test - fix data" taskName="sage-collector" imageFamilyName="flylight_test">
+    <project name="Truman - fix data" taskName="sage-collector" imageFamilyName="trumanj">
 
         <plugins>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
+                <property name="tmog-row.key" value="${Cross Serial Number}" />
+                <property name="data-file.name" value="[//dm11.hhmi.org|/groups/flylight]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.tsv-key" value="Serial" />
+                <property name="GAL4 Line" value="GAL4 Line" />
+            </rowUpdater>
+
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
+                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.root-xpath" value="projectCross" />
+                <property name="GAL4 Line" value="parent1StockName" />
+                <property name="Reporter" value="reporter" />
+            </rowUpdater>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
                 <property name="db.config.key" value="sage"/>
@@ -244,10 +198,9 @@
                 <property name="comment" value="Comment"/>
                 <property name="class" value="Class"/>
                 <property name="exclude.host.name" value="true"/>
-                <property name="family" value="$STATIC:flylight_test"/>
+                <property name="family" value="$STATIC:trumanj"/>
                 <property name="keep.existing.data" value="true"/>
                 <property name="relative_path" value="SAGE Name"/>
-                <property name="probe_set" value="Probe Set"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
@@ -259,6 +212,73 @@
         </plugins>
 
         <dataFields>
+            <text displayName="Scope File Name" required="false"
+                  editable="false"
+                  copyable="false"
+                  markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="trumanj"/>
+                    <property name="image_property" value="microscope_filename"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </text>
+
+            <validValueList displayName="Annotator" required="false"
+                            autoComplete="true"
+                            sharedForAllSessionFiles="false"
+                            markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="trumanj"/>
+                    <property name="image_property" value="annotated_by"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+                <validValue value="Alice Robie"/>
+                <validValue value="Allan Wong"/>
+                <validValue value="Aljoscha Nern"/>
+                <validValue value="Barry Dickson"/>
+                <validValue value="Christa Baker"/>
+                <validValue value="Chuan Zhou"/>
+                <validValue value="Claire McKellar"/>
+                <validValue value="Clement Kent"/>
+                <validValue value="Daniel Turner-Evans"/>
+                <validValue value="David Stern"/>
+                <validValue value="Edward Rogers"/>
+                <validValue value="Erica Ehrhardt"/>
+                <validValue value="Gabriella Sterne"/>
+                <validValue value="Geoffrey Meissner"/>
+                <validValue value="Gerry Rubin"/>
+                <validValue value="Jens Goldammer"/>
+                <validValue value="Jim Truman"/>
+                <validValue value="Jon-Michael Knapp"/>
+                <validValue value="Joshua Lillvis"/>
+                <validValue value="Julie Simpson"/>
+                <validValue value="Kaiyu Wang"/>
+                <validValue value="Kei Ito"/>
+                <validValue value="Krystyna Keleman"/>
+                <validValue value="Lisha Shao"/>
+                <validValue value="Mark Eddison"/>
+                <validValue value="Martin Peek"/>
+                <validValue value="Masayoshi Ito"/>
+                <validValue value="Michael Texada"/>
+                <validValue value="Michael-John Dolan"/>
+                <validValue value="Ming Wu"/>
+                <validValue value="Oz Malkesman"/>
+                <validValue value="Paola Correa"/>
+                <validValue value="Paul Tillberg"/>
+                <validValue value="Rajyashree Sen"/>
+                <validValue value="Richard Mann"/>
+                <validValue value="Ryan Williamson"/>
+                <validValue value="Ryo Minegishi"/>
+                <validValue value="Shigehiro Namiki"/>
+                <validValue value="Stephen Huston"/>
+                <validValue value="Sung Soo Kim"/>
+                <validValue value="Tanya Wolff"/>
+                <validValue value="Troy Shirangi"/>
+                <validValue value="Vivek Jayaraman"/>
+                <validValue value="Yoshi Aso"/>
+                <validValue value="Zhengchang Lei"/>
+            </validValueList>
+
             <webServiceList displayName="Data Set" required="true"
                             markedForTask="false"
                             sharedForAllSessionFiles="false"
@@ -271,70 +291,35 @@
                             serviceUrl="http://jacs-data.int.janelia.org:8180/rest-v3/data/dataSet/sage?sageSync=false"
                             autoComplete="true">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="flylight_test"/>
+                    <property name="family" value="trumanj"/>
                     <property name="image_property" value="data_set"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
             </webServiceList>
-
-            <cvTermList displayName="Tile" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
-                        autoComplete="true"
-                        markedForTask="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="flylight_test"/>
-                    <property name="image_property" value="tile"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-                <sourceFileMappedDefault pattern="^[^_]+_[^_]+_[^_]+_([^_]+)_.*">
-                    <mappedValue from="ABD" to="abdominal"/>
-                    <mappedValue from="BRN" to="brain"/>
-                    <mappedValue from="BRNwLam" to="brain_with_lamina"/>
-                    <mappedValue from="CEN" to="central"/>
-                    <mappedValue from="DM" to="dorsal_medial"/>
-                    <mappedValue from="L" to="left_optic_lobe"/>
-                    <mappedValue from="L1" to="left_optic_lobe_part_1"/>
-                    <mappedValue from="L2" to="left_optic_lobe_part_2"/>
-                    <mappedValue from="LwLam" to="left_optic_lobe_with_lamina"/>
-                    <mappedValue from="LLam" to="left_lamina"/>
-                    <mappedValue from="RLam" to="right_lamina"/>
-                    <mappedValue from="LamL" to="left_lamina"/>
-                    <mappedValue from="LamR" to="right_lamina"/>
-                    <mappedValue from="LC" to="left_central"/>
-                    <mappedValue from="LD" to="left_dorsal"/>
-                    <mappedValue from="LV" to="left_ventral"/>
-                    <mappedValue from="MES" to="mesothoracic"/>
-                    <mappedValue from="META" to="metathoracic"/>
-                    <mappedValue from="NEC-Ant" to="neck_anterior"/>
-                    <mappedValue from="NEC-Pos" to="neck_posterior"/>
-                    <mappedValue from="PRO" to="prothoracic"/>
-                    <mappedValue from="R" to="right_optic_lobe"/>
-                    <mappedValue from="R1" to="right_optic_lobe_part_1"/>
-                    <mappedValue from="R2" to="right_optic_lobe_part_2"/>
-                    <mappedValue from="RwLam" to="right_optic_lobe_with_lamina"/>
-                    <mappedValue from="RC" to="right_central"/>
-                    <mappedValue from="RD" to="right_dorsal"/>
-                    <mappedValue from="RV" to="right_ventral"/>
-                    <mappedValue from="V" to="ventral"/>
-                    <mappedValue from="VNC" to="ventral_nerve_cord"/>
-                    <mappedValue from="VNC-Adj" to="vnc_verify"/>
-                    <mappedValue from="VNC-Ver" to="vnc_verify"/>
-                </sourceFileMappedDefault>
-                <validValue displayName="VNC-Verify" value="vnc_verify"/>
-            </cvTermList>
 
             <text displayName="Slide Code" required="true"
                   pattern="\d{8}_\d+_[A-Z]\d+"
                   copyable="false"
                   markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="flylight_test"/>
+                    <property name="family" value="trumanj"/>
                     <property name="image_property" value="slide_code"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
                 <sourceFileDefault pattern="^([A-Z]\d+)_ZB.*_(\d{8}_\d+_).*"
                                    patternGroupSpec="2,1"/>
             </text>
+
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="199999"
+                    markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="trumanj"/>
+                    <property name="image_property" value="cross_barcode"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </number>
 
             <webServiceList displayName="GAL4 Line" required="true"
                             markedForTask="false"
@@ -344,78 +329,20 @@
                             serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forAllLabs.janelia-sage"
                             autoComplete="true">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="flylight_test"/>
+                    <property name="family" value="trumanj"/>
                     <property name="image_property" value="line"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
             </webServiceList>
 
-            <validValueList displayName="Gender" required="false"
-                            autoComplete="true"
-                            markedForTask="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="flylight_test"/>
-                    <property name="image_property" value="gender"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-                <validValue displayName="m: Male" value="m"/>
-                <validValue displayName="f: Female" value="f"/>
-                <validValue displayName="x: Not Defined" value="x"/>
-            </validValueList>
-
-            <validValueList displayName="Tissue Mounting Protocol" required="true"
-                            sharedForAllSessionFiles="false"
-                            markedForTask="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="flylight_test"/>
-                    <property name="image_property" value="mounting_protocol"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-                <validValue value="DPX Ethanol Mounting"/>
-                <validValue value="DPX PBS Mounting"/>
-                <validValue value="Glycerol-Based Mounting"/>
-            </validValueList>
-
-            <validValueList displayName="First Slice of Z" required="true"
-                            sharedForAllSessionFiles="false"
-                            autoComplete="true"
-                            markedForTask="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="flylight_test"/>
-                    <property name="image_property" value="tissue_orientation"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-                <validValue displayName="Antennal Lobes" value="face_up"/>
-                <validValue displayName="Back of Brain" value="face_down"/>
-            </validValueList>
-
-            <text displayName="Channel Specification" required="false"
-                  markedForTask="false"
-                  pattern="s*rs*">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="flylight_test"/>
-                    <property name="image_property" value="channel_spec"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-            </text>
-
-            <text displayName="Comment" required="false"
-                  markedForTask="false">
-                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="flylight_test"/>
-                    <property name="image_property" value="comment"/>
-                    <property name="baseNameSearch" value="true"/>
-                </pluginDefault>
-            </text>
-
-            <cvTermList displayName="Probe Set" required="false"
+            <cvTermList displayName="Reporter" required="true"
                         autoComplete="true"
                         markedForTask="false"
-                        displayNamePrefixedForValues="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/probe_set">
+                        displayNamePrefixedForValues="false"
+                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="flylight_test"/>
-                    <property name="image_property" value="probe_set"/>
+                    <property name="family" value="trumanj"/>
+                    <property name="image_property" value="effector"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
             </cvTermList>

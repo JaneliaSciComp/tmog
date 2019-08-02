@@ -1,4 +1,4 @@
             <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.JacsDataSetQuotaValidator">
-                <property name="serviceUrl" value="http://jacs-webdav1:8880/JFS/api/quota/filestore/status/${Data Set}"/>
+                <property name="serviceUrl" value="https://api.int.janelia.org/SCSW/JADEServices/v1/storage/quota/nrsFilestore/report/${Data Set}"/>
                 <property name="testDataSet" value="nerna_polarity_case_3"/>
             </rowValidator>
