@@ -23,7 +23,7 @@
         <dataFields>
 
             <!-- Keep source file name. -->
-            <fileName displayName="File" markedForTask="true" />
+            <fileName displayName="File" markedForTask="true" visible="false"/>
 
             <!--
              These values are collected for storage but are not
@@ -39,7 +39,20 @@
 @config-fragment-cross_barcode@
 @config-fragment-line@
 @config-fragment-effector@
-            <fileRelativePath displayName="Directory" markedForTask="false" visible="true" />
+            <text displayName="Directory"
+                  required="true"
+                  pattern="^[^\s]*$"
+                  patternMatchFailureMessage="Directory values cannot contain any whitespace characters.">
+                <sourceFileDefault matchType="path" pattern=".*[/\\\\](.*)[/\\\\].*\.lsm$"/>
+            </text>
+
+            <text displayName="Annotator"
+                  editable="false"
+                  markedForTask="false"
+                  required="true">
+                <staticDefault value="Jim Truman"/>
+            </text>
+
         </dataFields>
 
     </project>
