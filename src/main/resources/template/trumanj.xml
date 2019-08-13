@@ -3,7 +3,7 @@
     <project name="Truman - copy LSMs" taskName="rename-without-delete" default="true">
 
 @config-fragment-lsm-input@
-        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/trumanj/confocalStacks/">
+        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/trumanj_larval_ss/confocalStacks/">
             <renameFieldValue fieldDisplayName="Directory" />
         </outputDirectory>
 
@@ -14,7 +14,7 @@
 @config-fragment-update-project-cross-data@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@
-                <property name="family" value="$STATIC:trumanj"/>
+                <property name="family" value="$STATIC:trumanj_larval_ss"/>
             </rowListener>
 
 @config-fragment-jacs-lsm-pipelines-1@
@@ -57,7 +57,7 @@
 
     </project>
 
-    <project name="Truman - fix data" taskName="sage-collector" imageFamilyName="trumanj">
+    <project name="Truman - fix data" taskName="sage-collector" imageFamilyName="trumanj_larval_ss">
 
         <plugins>
 
@@ -66,7 +66,7 @@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@
                 <property name="exclude.host.name" value="true"/>
-                <property name="family" value="$STATIC:trumanj"/>
+                <property name="family" value="$STATIC:trumanj_larval_ss"/>
                 <property name="keep.existing.data" value="true"/>
                 <property name="relative_path" value="SAGE Name"/>
             </rowListener>
@@ -75,13 +75,13 @@
         </plugins>
 
         <dataFields>
-@config-fragment-microscope_filename-with-trumanj-default@
-@config-fragment-annotated_by-with-trumanj-default@
-@config-fragment-data_set-with-trumanj-default@
-@config-fragment-slide_code-with-trumanj-default@
-@config-fragment-cross_barcode-with-trumanj-default@
-@config-fragment-line-with-trumanj-default@
-@config-fragment-effector-with-trumanj-default@
+@config-fragment-microscope_filename-with-trumanj_larval_ss-default@
+@config-fragment-annotated_by-with-trumanj_larval_ss-default@
+@config-fragment-data_set-with-trumanj_larval_ss-default@
+@config-fragment-slide_code-with-trumanj_larval_ss-default@
+@config-fragment-cross_barcode-with-trumanj_larval_ss-default@
+@config-fragment-line-with-trumanj_larval_ss-default@
+@config-fragment-effector-with-trumanj_larval_ss-default@
         </dataFields>
 
     </project>

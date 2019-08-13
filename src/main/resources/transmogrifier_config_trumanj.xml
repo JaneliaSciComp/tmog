@@ -9,7 +9,7 @@
 
         <inputFileFilter patternString=".+\.lsm" />
 
-        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/trumanj/confocalStacks/">
+        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/trumanj_larval_ss/confocalStacks/">
             <renameFieldValue fieldDisplayName="Directory" />
         </outputDirectory>
 
@@ -70,7 +70,7 @@
                 <property name="microscope_filename"/>
                 <property name="comment" value="Comment"/>
                 <property name="class" value="Class"/>
-                <property name="family" value="$STATIC:trumanj"/>
+                <property name="family" value="$STATIC:trumanj_larval_ss"/>
             </rowListener>
 
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.JacsLsmPipelinesPlugin">
@@ -156,7 +156,7 @@
 
     </project>
 
-    <project name="Truman - fix data" taskName="sage-collector" imageFamilyName="trumanj">
+    <project name="Truman - fix data" taskName="sage-collector" imageFamilyName="trumanj_larval_ss">
 
         <plugins>
 
@@ -211,7 +211,7 @@
                 <property name="comment" value="Comment"/>
                 <property name="class" value="Class"/>
                 <property name="exclude.host.name" value="true"/>
-                <property name="family" value="$STATIC:trumanj"/>
+                <property name="family" value="$STATIC:trumanj_larval_ss"/>
                 <property name="keep.existing.data" value="true"/>
                 <property name="relative_path" value="SAGE Name"/>
             </rowListener>
@@ -230,7 +230,7 @@
                   copyable="false"
                   markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="trumanj"/>
+                    <property name="family" value="trumanj_larval_ss"/>
                     <property name="image_property" value="microscope_filename"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
@@ -241,7 +241,7 @@
                             sharedForAllSessionFiles="false"
                             markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="trumanj"/>
+                    <property name="family" value="trumanj_larval_ss"/>
                     <property name="image_property" value="annotated_by"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
@@ -304,7 +304,7 @@
                             serviceUrl="http://jacs-data.int.janelia.org:8180/rest-v3/data/dataSet/sage?sageSync=false"
                             autoComplete="true">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="trumanj"/>
+                    <property name="family" value="trumanj_larval_ss"/>
                     <property name="image_property" value="data_set"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
@@ -315,7 +315,7 @@
                   copyable="false"
                   markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="trumanj"/>
+                    <property name="family" value="trumanj_larval_ss"/>
                     <property name="image_property" value="slide_code"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
@@ -328,7 +328,7 @@
                     maximumValue="199999"
                     markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="trumanj"/>
+                    <property name="family" value="trumanj_larval_ss"/>
                     <property name="image_property" value="cross_barcode"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
@@ -342,7 +342,7 @@
                             serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forAllLabs.janelia-sage"
                             autoComplete="true">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="trumanj"/>
+                    <property name="family" value="trumanj_larval_ss"/>
                     <property name="image_property" value="line"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
@@ -354,7 +354,7 @@
                         displayNamePrefixedForValues="false"
                         serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
-                    <property name="family" value="trumanj"/>
+                    <property name="family" value="trumanj_larval_ss"/>
                     <property name="image_property" value="effector"/>
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
