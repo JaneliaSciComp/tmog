@@ -40,6 +40,7 @@
 @config-fragment-line@
 @config-fragment-effector@
             <text displayName="Directory"
+                  markedForTask="false"
                   required="true"
                   pattern="^[^\s]*$"
                   patternMatchFailureMessage="Directory values cannot contain any whitespace characters.">
