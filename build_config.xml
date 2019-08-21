@@ -68,7 +68,7 @@
             <load-field-fragment-with-default name="@{name}" family="flylight_flip"/>
             <load-field-fragment-with-default name="@{name}" family="flylight_polarity"/>
             <load-field-fragment-with-default name="@{name}" family="flylight_test"/>
-            <load-field-fragment-with-default name="@{name}" family="trumanj"/>
+            <load-field-fragment-with-default name="@{name}" family="trumanj_larval_ss"/>
             <load-field-fragment-with-default name="@{name}" family="projtechres"/>
             <load-field-fragment-with-default name="@{name}" family="rubin_ssplit"/>
             <load-field-fragment-with-default name="@{name}" family="split_screen_review"/>

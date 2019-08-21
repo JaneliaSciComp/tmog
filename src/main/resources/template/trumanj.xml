@@ -11,6 +11,15 @@
 
 @config-fragment-jacs-data-set-quota@
 @config-fragment-update-mapped-serial-data@
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
+                <property name="tmog-row.key" value="${Directory}/${File}" />
+                <property name="data-file.name" value="[//dm11.hhmi.org|/groups/flylight]/flylight/tmog/data/mapped-larval-data.tsv" />
+                <property name="data-file.tsv-key" value="Directory/File" />
+                <property name="Data Set" value="Data Set" />
+                <property name="Slide Code" value="Slide Code" />
+                <property name="Cross Serial Number" value="Cross Serial Number" />
+            </rowUpdater>
+
 @config-fragment-update-project-cross-data@
             <rowListener className="org.janelia.it.ims.tmog.plugin.imagedb.ImageDataPlugin">
 @config-fragment-common-image-data-properties@
@@ -32,6 +41,8 @@
 
             <static name="Annotator" value="Jim Truman" markedForTask="false" />
             <static name="Tile" value="brain" markedForTask="false" />
+            <static name="Age" value="L03" markedForTask="false" />
+            <static name="Gender" value="x" markedForTask="false" />
             <static name="Channel Specification" value="ssr" markedForTask="false" />
 
 @config-fragment-data_set@
@@ -80,9 +91,13 @@
 @config-fragment-annotated_by-with-trumanj_larval_ss-default@
 @config-fragment-data_set-with-trumanj_larval_ss-default@
 @config-fragment-slide_code-with-trumanj_larval_ss-default@
+@config-fragment-tile-with-trumanj_larval_ss-default@
 @config-fragment-cross_barcode-with-trumanj_larval_ss-default@
 @config-fragment-line-with-trumanj_larval_ss-default@
 @config-fragment-effector-with-trumanj_larval_ss-default@
+@config-fragment-gender-with-trumanj_larval_ss-default@
+@config-fragment-age-with-trumanj_larval_ss-default@
+@config-fragment-channel_spec-with-trumanj_larval_ss-default@
         </dataFields>
 
     </project>
