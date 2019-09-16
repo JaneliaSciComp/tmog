@@ -51,7 +51,6 @@ function deployConfig {
 # legacy (to be migrated from java web start) configs:
 #deployConfig /groups/leet/leetimg/leetlab/tmog leet_lineage
 #deployConfig /groups/magee/mageelab/tmog magee_simon_linker
-#deployConfig /groups/rubin/data1/rubinlab/tmog rubin_rd
 #deployConfig /groups/svoboda/wdbp/tmog svoboda_wdbp_mainwc svoboda_wdbp_simon_linker wdbp
 #deployConfig /groups/zlatic/zlaticlab/tmog zlatic zlatic_closed_loop zlatic_odor
 #deployConfig /nrs/zlatic/zlaticlab/tmog zlatic_fpga
