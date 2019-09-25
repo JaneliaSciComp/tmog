@@ -1,5 +1,5 @@
             <number displayName="Cross Serial Number"
                     minimumValue="1"
-                    maximumValue="199999"
+                    maximumValue="1000000"
                     markedForTask="false">@sage-data-default@
             </number>

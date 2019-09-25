@@ -317,7 +317,7 @@
 
             <number displayName="Cross Serial Number"
                     minimumValue="1"
-                    maximumValue="199999"
+                    maximumValue="1000000"
                     markedForTask="false">
             </number>
 
@@ -644,7 +644,7 @@
 
             <number displayName="Cross Serial Number"
                     minimumValue="1"
-                    maximumValue="199999"
+                    maximumValue="1000000"
                     markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_flip"/>
@@ -989,7 +989,7 @@
 
             <number displayName="Cross Serial Number"
                     minimumValue="1"
-                    maximumValue="199999"
+                    maximumValue="1000000"
                     markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="rubin_ssplit"/>
@@ -1506,7 +1506,7 @@
 
             <number displayName="Cross Serial Number"
                     minimumValue="1"
-                    maximumValue="199999"
+                    maximumValue="1000000"
                     markedForTask="false">
             </number>
 
