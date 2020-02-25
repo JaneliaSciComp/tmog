@@ -116,10 +116,10 @@
 @config-fragment-validate-ti-class@
             <rowValidator className="org.janelia.it.ims.tmog.plugin.CrossFieldValidator">
                 <property name="validateField" value="GAL4 Line"/>
-                <property name="matchesPattern" value="^((BJD|GMR|JRC)_S[LS]|EXT|GMR_OL|GMR_MB).*"/>
+                <property name="matchesPattern" value="^((BJD|GMR|JRC)_S[LS]|EXT|GMR_OL|GMR_MB|JHS).*"/>
                 <property name="whenReferenceField" value="GAL4 Line"/>
                 <property name="matchesReferencePattern" value=".*"/>
-                <property name="errorMessage" value="Stable split lines must start with '(BJD|GMR|JRC)_S[LS]', 'EXT', 'GMR_OL', or 'GMR_MB'."/>
+                <property name="errorMessage" value="Stable split lines must start with '(BJD|GMR|JRC)_S[LS]', 'EXT', 'GMR_OL', 'GMR_MB', or 'JHS'."/>
             </rowValidator>
 
 @config-fragment-image-sequence-ssr@
