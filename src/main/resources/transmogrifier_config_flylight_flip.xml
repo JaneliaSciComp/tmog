@@ -41,7 +41,7 @@
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.SlideCodeConsensusPlugin">
                 <property name="plugin.service-url" value="http://sage.int.janelia.org/sage-ws/images/dataSet/${Data Set}/slideCode/${Slide Code}/consensusData" />
-                <property name="plugin.test-url" value="http://sage.int.janelia.org/sage-ws/images/dataSet/nerna_mcfo_case_1/slideCode/20141203_19_A1/consensusData" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/sage-ws/images/dataSet/sterneg_ti_mcfo_case_1/slideCode/20161201_19_A1/consensusData" />
                 <property name="plugin.root-xpath" value="slideCodeConsensusData" />
                 <property name="Age" value="age" />
                 <property name="Annotator" value="annotatedBy" />
@@ -1243,7 +1243,7 @@
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.SlideCodeConsensusPlugin">
                 <property name="plugin.service-url" value="http://sage.int.janelia.org/sage-ws/images/dataSet/${Data Set}/slideCode/${Slide Code}/consensusData" />
-                <property name="plugin.test-url" value="http://sage.int.janelia.org/sage-ws/images/dataSet/nerna_mcfo_case_1/slideCode/20141203_19_A1/consensusData" />
+                <property name="plugin.test-url" value="http://sage.int.janelia.org/sage-ws/images/dataSet/sterneg_ti_mcfo_case_1/slideCode/20161201_19_A1/consensusData" />
                 <property name="plugin.root-xpath" value="slideCodeConsensusData" />
                 <property name="Age" value="age" />
                 <property name="Annotator" value="annotatedBy" />
