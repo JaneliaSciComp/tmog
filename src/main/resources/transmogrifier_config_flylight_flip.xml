@@ -32,8 +32,8 @@
             </rowUpdater>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
-                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
-                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.service-url" value="http://informatics-prod.int.janelia.org/cgi-bin/flycore_responder.cgi?request=crossdatatmog;format=xml;cross_barcode=${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://informatics-prod.int.janelia.org/cgi-bin/flycore_responder.cgi?request=crossdatatmog;format=xml;cross_barcode=51418" />
                 <property name="plugin.root-xpath" value="projectCross" />
                 <property name="GAL4 Line" value="parent1StockName" />
                 <property name="Reporter" value="reporter" />
@@ -505,8 +505,8 @@
             </rowUpdater>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
-                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
-                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.service-url" value="http://informatics-prod.int.janelia.org/cgi-bin/flycore_responder.cgi?request=crossdatatmog;format=xml;cross_barcode=${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://informatics-prod.int.janelia.org/cgi-bin/flycore_responder.cgi?request=crossdatatmog;format=xml;cross_barcode=51418" />
                 <property name="plugin.root-xpath" value="projectCross" />
                 <property name="GAL4 Line" value="parent1StockName" />
                 <property name="Reporter" value="reporter" />
@@ -922,8 +922,8 @@
             </rowUpdater>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
-                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
-                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.service-url" value="http://informatics-prod.int.janelia.org/cgi-bin/flycore_responder.cgi?request=crossdatatmog;format=xml;cross_barcode=${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://informatics-prod.int.janelia.org/cgi-bin/flycore_responder.cgi?request=crossdatatmog;format=xml;cross_barcode=51418" />
                 <property name="plugin.root-xpath" value="projectCross" />
                 <property name="GAL4 Line" value="parent1StockName" />
                 <property name="Reporter" value="reporter" />
@@ -1240,8 +1240,8 @@
             </rowUpdater>
 
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataResourcePlugin">
-                <property name="plugin.service-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/${Cross Serial Number}" />
-                <property name="plugin.test-url" value="http://sage.int.janelia.org/flyboy-ws/project_crosses/withSerialNumber/51418" />
+                <property name="plugin.service-url" value="http://informatics-prod.int.janelia.org/cgi-bin/flycore_responder.cgi?request=crossdatatmog;format=xml;cross_barcode=${Cross Serial Number}" />
+                <property name="plugin.test-url" value="http://informatics-prod.int.janelia.org/cgi-bin/flycore_responder.cgi?request=crossdatatmog;format=xml;cross_barcode=51418" />
                 <property name="plugin.root-xpath" value="projectCross" />
                 <property name="GAL4 Line" value="parent1StockName" />
                 <property name="Reporter" value="reporter" />
