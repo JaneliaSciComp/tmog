@@ -64,7 +64,6 @@
         <attribute name="name"/>
         <sequential>
             <load-filtered-fragment name="@{name}" path="field/@{name}.xml" key="sage-data-default" value=""/>
-            <load-field-fragment-with-default name="@{name}" family="flyfuncconn"/>
             <load-field-fragment-with-default name="@{name}" family="flylight_flip"/>
             <load-field-fragment-with-default name="@{name}" family="flylight_polarity"/>
             <load-field-fragment-with-default name="@{name}" family="flylight_test"/>
@@ -140,7 +139,6 @@
         <load-fragment          name="copy-zeiss-log-files"         path="plugin/copy-zeiss-log-files.xml"/>
         <load-fragment          name="correct-objective"            path="plugin/correct-objective.xml"/>
         <load-fragment          name="image-path-exists"            path="plugin/image-path-exists.xml"/>
-        <load-filtered-fragment name="image-sequence-ffc"           path="plugin/image-sequence.xml" key="family" value="flyfuncconn"/>
         <load-filtered-fragment name="image-sequence-flip"          path="plugin/image-sequence.xml" key="family" value="flylight_flip"/>
         <load-filtered-fragment name="image-sequence-polarity"      path="plugin/image-sequence.xml" key="family" value="flylight_polarity"/>
         <load-filtered-fragment name="image-sequence-ptr"           path="plugin/image-sequence.xml" key="family" value="projtechres"/>

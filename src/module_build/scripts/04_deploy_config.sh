@@ -46,7 +46,6 @@ function deployConfig {
 # deploy configs to appropriate areas
 #deployConfig /groups/flylight/flylight/tmog flylight_flip flylight_polarity flylight_test split_screen_review
 #deployConfig /groups/projtechres/projtechres/tmog projtechres
-#deployConfig /groups/flyfuncconn/flyfuncconn/tmog flyfuncconn
 
 # legacy (to be migrated from java web start) configs:
 #deployConfig /groups/leet/leetimg/leetlab/tmog leet_lineage

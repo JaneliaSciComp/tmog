@@ -28,7 +28,6 @@ function deployPackages {
 
 }
 
-#deployPackages /groups/flyfuncconn/flyfuncconn/tmog
 #deployPackages /groups/flylight/flylight/tmog
 #deployPackages /groups/projtechres/projtechres/tmog
 
