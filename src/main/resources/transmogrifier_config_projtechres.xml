@@ -340,6 +340,11 @@
                   markedForTask="false">
             </text>
 
+            <number displayName="Heat Shock Minutes" required="false"
+                    minimumValue="1" maximumValue="99"
+                    markedForTask="false">
+            </number>
+
             <cvTermList displayName="Imager" required="true"
                         markedForTask="false"
                         autoComplete="true"
@@ -720,6 +725,16 @@
                     <property name="baseNameSearch" value="true"/>
                 </pluginDefault>
             </text>
+
+            <number displayName="Heat Shock Minutes" required="false"
+                    minimumValue="1" maximumValue="99"
+                    markedForTask="false">
+                <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
+                    <property name="family" value="projtechres"/>
+                    <property name="image_property" value="heat_shock_minutes"/>
+                    <property name="baseNameSearch" value="true"/>
+                </pluginDefault>
+            </number>
 
             <cvTermList displayName="Imager" required="true"
                         markedForTask="false"
