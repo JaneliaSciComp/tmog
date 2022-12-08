@@ -366,7 +366,7 @@
             </text>
 
             <number displayName="Heat Shock Minutes" required="false"
-                    minimumValue="1" maximumValue="99"
+                    minimumValue="0" maximumValue="99"
                     markedForTask="false">
             </number>
 
@@ -814,7 +814,7 @@
             </text>
 
             <number displayName="Heat Shock Minutes" required="false"
-                    minimumValue="1" maximumValue="99"
+                    minimumValue="0" maximumValue="99"
                     markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_flip"/>
@@ -1573,7 +1573,7 @@
             </text>
 
             <number displayName="Heat Shock Minutes" required="false"
-                    minimumValue="1" maximumValue="99"
+                    minimumValue="0" maximumValue="99"
                     markedForTask="false">
             </number>
 
