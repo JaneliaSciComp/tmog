@@ -38,7 +38,7 @@ public class JacsDataSetQuotaValidatorTest
         // http://jacs-webdav1:8880/JFS/api/quota/filestore/status/${Data Set}
         // http://jacs-dev.int.janelia.org:8880/jacsstorage/master_api/v1/storage/quota/nrsFilestore/report/${Data Set}
         pluginConfig.setProperty(JacsDataSetQuotaValidator.SERVICE_URL_PROPERTY,
-                                 "https://api.int.janelia.org/SCSW/JADEServices/v1/storage/quota/nrsFilestore/report/${Data Set}");
+                                 "https://workstation.int.janelia.org/SCSW/JADEServices/v1/storage/quota/nrsFilestore/report/${Data Set}");
         pluginConfig.setProperty(JacsDataSetQuotaValidator.TEST_DATA_SET_PROPERTY,
                                  "nerna_polarity_case_3");
 
