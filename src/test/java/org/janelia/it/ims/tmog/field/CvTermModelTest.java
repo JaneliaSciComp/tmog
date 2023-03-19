@@ -7,12 +7,14 @@
 
 package org.janelia.it.ims.tmog.field;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * Tests the CvTermModel class.
@@ -58,6 +60,19 @@ public class CvTermModelTest
         final int modelSize = model.getSize();
         assertTrue("empty model built for " + valueOf(model),
                    modelSize > 0);
+
+        final List<ValidValue> xaList = model.getValidValues().stream()
+                .filter(validValue -> "XA".equals(validValue.getValue()))
+                .collect(Collectors.toList());
+
+        assertEquals("incorrect size for list of XA values",
+                     1, xaList.size());
+
+        final ValidValue xaValidValue = xaList.get(0);
+        assertEquals("incorrect XA value",
+                     "XA", xaValidValue.getValue());
+        assertEquals("incorrect XA display name",
+                     "Activation domain with balancer", xaValidValue.getDisplayName());
 
         CvTermModel prefixedModel = new CvTermModel();
         prefixedModel.setServiceUrl(VECTOR_URL);

@@ -7,11 +7,7 @@
 
 package org.janelia.it.ims.tmog.field;
 
-import org.apache.commons.digester.Digester;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.log4j.Logger;
-import org.janelia.it.utils.StringUtil;
+import com.jayway.jsonpath.JsonPath;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +17,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.apache.commons.digester.Digester;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.log4j.Logger;
+import org.janelia.it.utils.StringUtil;
 
 /**
  * This model supports selecting a value from a predefined set of values.
@@ -36,13 +38,14 @@ public class HttpValidValueModel
     private String valueCreationPath;
     private String relativeActualValuePath;
     private String relativeValueDisplayNamePath;
+    private String responseContentType;
 
     private List<ValidValue> staticValues;
 
-    private static Map<String, HttpValidValueModel> urlToModelMap =
-            new ConcurrentHashMap<String, HttpValidValueModel>();
+    private static final Map<String, HttpValidValueModel> urlToModelMap = new ConcurrentHashMap<>();
 
     public HttpValidValueModel() {
+        this.responseContentType = null;
         this.staticValues = null;
     }
 
@@ -92,6 +95,10 @@ public class HttpValidValueModel
         this.relativeValueDisplayNamePath = relativeValueDisplayNamePath;
     }
 
+    public void setResponseContentType(final String responseContentType) {
+        this.responseContentType = responseContentType;
+    }
+
     /**
      * Clears any existing values in this model and adds a new set of values
      * retrieved via http request.
@@ -110,10 +117,19 @@ public class HttpValidValueModel
         checkRequiredConfigurationParameter("relativeActualValuePath",
                                             relativeActualValuePath);
 
+        final String trimmedContentType = responseContentType == null ? "" : responseContentType.trim();
+        final boolean isJson = "application/json".equals(trimmedContentType);
+        if ((trimmedContentType.length() > 0) && (! isJson)) {
+            throw new IllegalArgumentException(
+                    "Content type must be application/json or empty (for xml).  " +
+                    "Please check the configuration for the '" +
+                    getDisplayName() + "' field.");
+        }
+
         final String cacheKey = getCacheKey();
         HttpValidValueModel cachedModel = urlToModelMap.get(cacheKey);
         if (cachedModel == null) {
-            setValidValuesFromService();
+            setValidValuesFromService(isJson);
             prefixDisplayNamesAndSortAsNeeded();
             urlToModelMap.put(cacheKey, this);
         } else {
@@ -162,10 +178,10 @@ public class HttpValidValueModel
         return digester;
     }
 
-    private void setValidValuesFromService() {
+    private void setValidValuesFromService(final boolean isJson) {
 
         if (staticValues == null) {
-            staticValues = new ArrayList<ValidValue>(getValidValues());
+            staticValues = new ArrayList<>(getValidValues());
         }
 
         clearValidValues();
@@ -175,7 +191,6 @@ public class HttpValidValueModel
         int responseCode;
         GetMethod method = new GetMethod(serviceUrl);
         try {
-            Digester digester = getDigester();
             HttpClient httpClient = new HttpClient();
             LOG.info("sending GET " + serviceUrl);
             responseCode = httpClient.executeMethod(method);
@@ -186,7 +201,13 @@ public class HttpValidValueModel
             }
 
             responseStream = method.getResponseBodyAsStream();
-            digester.parse(responseStream);
+
+            if (isJson) {
+                parseJsonStream(responseStream);
+            } else {
+                final Digester digester = getDigester();
+                digester.parse(responseStream);
+            }
 
         } catch (IOException e) {
             throw new IllegalArgumentException(
@@ -215,6 +236,37 @@ public class HttpValidValueModel
             addValidValue(value);
         }
 
+    }
+
+    private void parseJsonStream(final InputStream responseStream)
+            throws IOException
+    {
+        @SuppressWarnings("unchecked")
+        final List<Map<String, Object>> valueList = JsonPath
+                .parse(responseStream)
+                .read(valueCreationPath, List.class);
+
+        for (int i = 0; i < valueList.size(); i++) {
+            final Map<String, Object> valueAttributes = valueList.get(i);
+            final Object value = valueAttributes.get(relativeActualValuePath);
+            if (value instanceof String) {
+                if (isDisplayNamePathDefined()) {
+                    final Object displayName = valueAttributes.get(relativeValueDisplayNamePath);
+                    if (displayName instanceof String) {
+                        addValidValue(new ValidValue((String) displayName,
+                                                     (String) value));
+                    } else {
+                        throw new IOException(valueCreationPath + "[" + i + "]" + "." +
+                                              relativeValueDisplayNamePath + " must be a string");
+                    }
+                } else {
+                    addValidValue(new ValidValue((String) value));
+                }
+            } else {
+                throw new IOException(valueCreationPath + "[" + i + "]" + "." +
+                                      relativeActualValuePath + " must be a string");
+            }
+        }
     }
 
     private void prefixDisplayNamesAndSortAsNeeded() {
@@ -251,27 +303,23 @@ public class HttpValidValueModel
             Logger.getLogger(HttpValidValueModel.class);
 
     private static final Comparator<ValidValue> DISPLAY_NAME_COMPARATOR =
-            new Comparator<ValidValue>() {
-                @Override
-                public int compare(ValidValue o1,
-                                   ValidValue o2) {
-                    int result;
-                    final String displayName1 = o1.getDisplayName();
-                    final String displayName2 = o2.getDisplayName();
-                    if (displayName1 == null) {
-                        if (displayName2 == null) {
-                            final String value1 = o1.getValue();
-                            final String value2 = o2.getValue();
-                            result = value1.compareTo(value2);
-                        } else {
-                            result = -1;
-                        }
-                    } else if (displayName2 == null) {
-                        result = 1;
+            (o1, o2) -> {
+                int result;
+                final String displayName1 = o1.getDisplayName();
+                final String displayName2 = o2.getDisplayName();
+                if (displayName1 == null) {
+                    if (displayName2 == null) {
+                        final String value1 = o1.getValue();
+                        final String value2 = o2.getValue();
+                        result = value1.compareTo(value2);
                     } else {
-                        result = displayName1.compareTo(displayName2);
+                        result = -1;
                     }
-                    return result;
+                } else if (displayName2 == null) {
+                    result = 1;
+                } else {
+                    result = displayName1.compareTo(displayName2);
                 }
+                return result;
             };
 }
