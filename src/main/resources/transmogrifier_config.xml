@@ -34,12 +34,19 @@
              included as components of the file name (markedForTask="false").
              -->
 
+            <number displayName="Cross Serial Number"
+                    minimumValue="1"
+                    maximumValue="1000000"
+                    markedForTask="false">
+                <staticDefault value="51418"/>
+            </number>
+
             <webServiceList displayName="GAL4 Line" required="true"
                             markedForTask="false"
                             valueCreationPath="*/line"
                             relativeActualValuePath="name"
                             relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=fly&amp;lab=flylight&amp;lab=rubin"
+                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forMultipleLabs.janelia-sage?lab=aso"
                             autoComplete="true">
             </webServiceList>
 
