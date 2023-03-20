@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'org.janelia.scicomp'
-version '4.4.0'
+version '4.5.0'
 
 sourceCompatibility = '8'
 targetCompatibility = '8'
@@ -86,7 +86,7 @@ task devJar(type: Jar)  {
 
 task prodJar(type: Jar) {
 
-    def dbSageKeys = ["db.sage.url", "db.sage.password"]
+    def dbSageKeys = ["db.sage.username", "db.sage.url", "db.sage.password"]
     def dbSagePropsFile = file(System.getProperty("user.home") + '/ssl/code-cert/2018/sage.properties')
     Properties prodSageProps
 
