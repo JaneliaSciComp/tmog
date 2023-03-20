@@ -21,6 +21,13 @@
                 <property name="GAL4 Line" value="parent1StockName" />
                 <property name="Reporter" value="reporter" />
             </rowUpdater>
+            <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.SlideCodeConsensusPlugin">
+                <property name="plugin.service-url" value="https://sage-responder.int.janelia.org/slide_code_consensus/${Data Set}/${Slide Code}" />
+                <property name="plugin.test-url" value="https://sage-responder.int.janelia.org/slide_code_consensus/sterneg_ti_mcfo_case_1/20161201_19_A1" />
+                <property name="plugin.root-xpath" value="slideCodeConsensusData" />
+                <property name="Age" value="age" />
+                <property name="GAL4 Line" value="line" />
+            </rowUpdater>
         </plugins>
 
         <dataFields>
@@ -33,6 +40,25 @@
              These values are collected for storage but are not
              included as components of the file name (markedForTask="false").
              -->
+
+            <webServiceList displayName="Data Set" required="true"
+                            markedForTask="false"
+                            sharedForAllSessionFiles="false"
+                            globalValueFilter="/^((?!leet).)*$/"
+                            filterField="Annotator"
+                            filterMap="Alice Robie=robiea,bransonlab|Allan Wong=wonga10|Aljoscha Nern=nerna|Barry Dickson=dickson|Brad Hulse=hulseb,jayaraman,sternlab|Chenghao Chen=chenc,card|Christa Baker=bakerc10|Christina Christoforou=christoforouc,projtechres|Chuan Zhou=zhouc,baker|Chuntao Dan=danc,jayaraman|Claire McKellar=mckellarc|Clement Kent=kentc,heberlein|Daniel Turner-Evans=turnerevansd,jayaraman|David Stern=sternlab,sternd|Edward Rogers=rogerse10|Emily Behrman=behrmane,sternlab|Erica Ehrhardt=ehrhardte,card,ditp|Gabriella Sterne=sterneg|Geoffrey Meissner=meissnerg,flylight|Gerry Rubin=rubing|Glenn Turner=turnerg,turnerlab|Han Cheong=cheongh,card,ditp|Hiroshi Shiozaki=sternlab,shiozakih|Jens Goldammer=goldammerj|Jim Truman=trumanj|Jon-Michael Knapp=knappj,simpson|Joshua Lillvis=lillvisj,dicksonlab|Julie Simpson=simpson|Kaiyu Wang=wangk11,dicksonlab|Katie Schretter=schretterc|Kei Ito=itok,terraincognita|Krystyna Keleman=kelemank|Lisha Shao=shaol10,heberlein|Mark Eddison=eddisonm,heberlein|Martin Peek=peekm,ditp,card|Masayoshi Ito=itom10|Michael-John Dolan=dolanm|Michael Texada=texadam,truman|Ming Wu=wum10|Oz Malkesman=malkesmano,flylight|Paola Correa=correap,dicksonlab|Paul Tillberg=tillbergp|Rajyashree Sen=senr,dicksonlab|Richard Mann=sternlab,mannr10|Ryan Williamson=williamsonw,card|Ryo Minegishi=minegishir,dicksonlab|Shigehiro Namiki=namikis,ditp,card|Stephen Huston=ditp,hustonlab,hustons|Sung Soo Kim=kims11|Tanya Wolff=wolfft|Troy Shirangi=shirangit|Vivek Jayaraman=jayaraman|Yoshi Aso=asoy|Zhengchang Lei=leiz,kelemanlab"
+                            valueCreationPath="*/dataSet"
+                            relativeActualValuePath="dataSetIdentifier"
+                            relativeValueDisplayNamePath="dataSetIdentifier"
+                            serviceUrl="http://jacs-data.int.janelia.org:8180/rest-v3/data/dataSet/sage?sageSync=false"
+                            autoComplete="true">
+            </webServiceList>
+
+            <text displayName="Slide Code" required="true"
+                  pattern="\d{8}_\d+_[A-Z]\d+"
+                  copyable="false"
+                  markedForTask="false">
+            </text>
 
             <number displayName="Cross Serial Number"
                     minimumValue="1"
