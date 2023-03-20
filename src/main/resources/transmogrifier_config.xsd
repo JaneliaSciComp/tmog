@@ -305,6 +305,7 @@
         <xs:attribute name="valueCreationPath" type="xs:string"/>
         <xs:attribute name="relativeActualValuePath" type="xs:string"/>
         <xs:attribute name="relativeValueDisplayNamePath" type="xs:string"/>
+        <xs:attribute name="responseContentType" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="pluginDataType">

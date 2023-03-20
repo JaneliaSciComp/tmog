@@ -306,10 +306,10 @@
 
             <webServiceList displayName="GAL4 Line" required="true"
                             markedForTask="false"
-                            valueCreationPath="*/line"
+                            valueCreationPath="$.line_data[*]"
                             relativeActualValuePath="name"
-                            relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forAllLabs.janelia-sage"
+                            responseContentType="application/json"
+                            serviceUrl="https://sage-responder.int.janelia.org/lines?_columns=name"
                             autoComplete="true">
             </webServiceList>
 
@@ -585,10 +585,10 @@
 
             <webServiceList displayName="GAL4 Line" required="true"
                             markedForTask="false"
-                            valueCreationPath="*/line"
+                            valueCreationPath="$.line_data[*]"
                             relativeActualValuePath="name"
-                            relativeValueDisplayNamePath="name"
-                            serviceUrl="http://sage.int.janelia.org/sage-ws/lines/forAllLabs.janelia-sage"
+                            responseContentType="application/json"
+                            serviceUrl="https://sage-responder.int.janelia.org/lines?_columns=name"
                             autoComplete="true">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="projtechres"/>
