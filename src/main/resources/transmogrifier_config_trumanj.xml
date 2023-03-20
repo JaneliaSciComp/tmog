@@ -16,7 +16,7 @@
         <plugins>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.JacsDataSetQuotaValidator">
-                <property name="serviceUrl" value="https://api.int.janelia.org/SCSW/JADEServices/v1/storage/quota/nrsFilestore/report/${Data Set}"/>
+                <property name="serviceUrl" value="https://workstation.int.janelia.org/SCSW/JADEServices/v1/storage/quota/nrsFilestore/report/${Data Set}"/>
                 <property name="testDataSet" value="nerna_polarity_case_3"/>
             </rowValidator>
 
@@ -146,7 +146,7 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=effector">
             </cvTermList>
 
             <text displayName="Directory"
@@ -345,7 +345,7 @@
             </text>
 
             <cvTermList displayName="Tile" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=fly_light_adult_tiles"
                         autoComplete="true"
                         markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
@@ -419,7 +419,7 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=effector">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="trumanj_larval_ss"/>
                     <property name="image_property" value="effector"/>
@@ -441,7 +441,7 @@
             </validValueList>
 
             <cvTermList displayName="Age" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=age_remap"
                         displayNamePrefixedForValues="true"
                         autoComplete="true"
                         markedForTask="false">

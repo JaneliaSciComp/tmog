@@ -2,5 +2,5 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">@sage-data-default@
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=effector">@sage-data-default@
             </cvTermList>

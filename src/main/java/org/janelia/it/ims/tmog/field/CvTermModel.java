@@ -18,24 +18,23 @@ public class CvTermModel
 
     public CvTermModel() {
 
-        // <cv>
-        //     <name>age_remap</name>
-        //     <displayName>Age</displayName>
-        //     <definition>Age remapping</definition>
-        //     <termSet>
-        //         <term>
-        //             <name>A</name>
-        //             <displayName>Adult</displayName>
-        //             <dataType>text</dataType>
-        //             <definition>Adult</definition>
-        //         </term>
-        //         ...
-        //     </termSet>
-        //     ...
-        // </cv>
+        // https://sage-responder.int.janelia.org/cvterms?cv=age_remap&_columns=cv_term,display_name
+        // {
+        //   "cvterm_data": [
+        //     {
+        //       "cv_term": "A",
+        //       "display_name": "Adult"
+        //     },
+        //     {
+        //       "cv_term": "A00",
+        //       "display_name": "Adult (unspecified)"
+        //     }, ...
+        //   ]
+        // }
 
-        setValueCreationPath("*/term");
-        setRelativeActualValuePath("name");
-        setRelativeValueDisplayNamePath("displayName");
+        setValueCreationPath("$.cvterm_data[*]"); // see https://github.com/json-path/JsonPath
+        setRelativeActualValuePath("cv_term");
+        setRelativeValueDisplayNamePath("display_name");
+        setResponseContentType("application/json");
     }
 }

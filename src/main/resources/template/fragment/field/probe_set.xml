@@ -2,5 +2,5 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/probe_set">@sage-data-default@
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=probe_set">@sage-data-default@
             </cvTermList>

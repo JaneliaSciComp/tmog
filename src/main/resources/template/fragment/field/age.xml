@@ -1,5 +1,5 @@
             <cvTermList displayName="Age" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=age_remap"
                         displayNamePrefixedForValues="true"
                         autoComplete="true"
                         markedForTask="false">@sage-data-default@

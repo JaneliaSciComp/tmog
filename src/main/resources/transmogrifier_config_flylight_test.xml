@@ -20,7 +20,7 @@
         <plugins>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.JacsDataSetQuotaValidator">
-                <property name="serviceUrl" value="https://api.int.janelia.org/SCSW/JADEServices/v1/storage/quota/nrsFilestore/report/${Data Set}"/>
+                <property name="serviceUrl" value="https://workstation.int.janelia.org/SCSW/JADEServices/v1/storage/quota/nrsFilestore/report/${Data Set}"/>
                 <property name="testDataSet" value="nerna_polarity_case_3"/>
             </rowValidator>
 
@@ -103,7 +103,7 @@
             </webServiceList>
 
             <cvTermList displayName="Tile" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=fly_light_adult_tiles"
                         autoComplete="true"
                         markedForTask="false">
                 <sourceFileMappedDefault pattern="^[^_]+_[^_]+_[^_]+_([^_]+)_.*">
@@ -197,7 +197,7 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/probe_set">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=probe_set">
             </cvTermList>
 
         </dataFields>
@@ -278,7 +278,7 @@
             </webServiceList>
 
             <cvTermList displayName="Tile" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=fly_light_adult_tiles"
                         autoComplete="true"
                         markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
@@ -412,7 +412,7 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/probe_set">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=probe_set">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_test"/>
                     <property name="image_property" value="probe_set"/>

@@ -54,11 +54,11 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=effector">
             </cvTermList>
 
             <cvTermList displayName="Age" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=age_remap"
                         displayNamePrefixedForValues="true"
                         autoComplete="true"
                         markedForTask="false">
@@ -67,7 +67,7 @@
             <cvTermList displayName="Imager" required="true"
                         markedForTask="false"
                         autoComplete="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=imager">
             </cvTermList>
 
         </dataFields>

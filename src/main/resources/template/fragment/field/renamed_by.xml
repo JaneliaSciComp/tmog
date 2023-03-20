@@ -2,5 +2,5 @@
                         markedForTask="false"
                         autoComplete="true"
                         sharedForAllSessionFiles="@is-shareable@"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">@sage-data-default@
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=imager">@sage-data-default@
             </cvTermList>

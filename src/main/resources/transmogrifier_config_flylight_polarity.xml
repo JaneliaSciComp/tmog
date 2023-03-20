@@ -20,7 +20,7 @@
         <plugins>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.JacsDataSetQuotaValidator">
-                <property name="serviceUrl" value="https://api.int.janelia.org/SCSW/JADEServices/v1/storage/quota/nrsFilestore/report/${Data Set}"/>
+                <property name="serviceUrl" value="https://workstation.int.janelia.org/SCSW/JADEServices/v1/storage/quota/nrsFilestore/report/${Data Set}"/>
                 <property name="testDataSet" value="nerna_polarity_case_3"/>
             </rowValidator>
 
@@ -275,7 +275,7 @@
             </webServiceList>
 
             <cvTermList displayName="Tile" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=fly_light_adult_tiles"
                         autoComplete="true"
                         markedForTask="false">
                 <sourceFileMappedDefault pattern="^[^_]+_[^_]+_[^_]+_([^_]+)_.*">
@@ -342,7 +342,7 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=effector">
             </cvTermList>
 
             <validValueList displayName="Gender" required="false"
@@ -354,7 +354,7 @@
             </validValueList>
 
             <cvTermList displayName="Age" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=age_remap"
                         displayNamePrefixedForValues="true"
                         autoComplete="true"
                         markedForTask="false">
@@ -368,14 +368,14 @@
                         markedForTask="false"
                         autoComplete="true"
                         sharedForAllSessionFiles="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=imager">
             </cvTermList>
 
             <cvTermList displayName="Renamer" required="true"
                         markedForTask="false"
                         autoComplete="true"
                         sharedForAllSessionFiles="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=imager">
             </cvTermList>
 
             <validValueList displayName="Tissue Mounting Protocol" required="true"
@@ -411,7 +411,7 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imaging_project">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=imaging_project">
                 <staticDefault value="polarity"/>
             </cvTermList>
 
@@ -675,7 +675,7 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=effector">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_polarity"/>
                     <property name="image_property" value="effector"/>
@@ -697,7 +697,7 @@
             </text>
 
             <cvTermList displayName="Tile" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=fly_light_adult_tiles"
                         autoComplete="true"
                         markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
@@ -779,7 +779,7 @@
             </validValueList>
 
             <cvTermList displayName="Age" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=age_remap"
                         displayNamePrefixedForValues="true"
                         autoComplete="true"
                         markedForTask="false">
@@ -803,7 +803,7 @@
                         markedForTask="false"
                         autoComplete="true"
                         sharedForAllSessionFiles="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=imager">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_polarity"/>
                     <property name="image_property" value="created_by"/>
@@ -841,7 +841,7 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imaging_project">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=imaging_project">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_polarity"/>
                     <property name="image_property" value="imaging_project"/>
@@ -1069,7 +1069,7 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=effector">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_polarity"/>
                     <property name="image_property" value="effector"/>
@@ -1091,7 +1091,7 @@
             </text>
 
             <cvTermList displayName="Tile" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=fly_light_adult_tiles"
                         autoComplete="true"
                         markedForTask="false">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
@@ -1173,7 +1173,7 @@
             </validValueList>
 
             <cvTermList displayName="Age" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=age_remap"
                         displayNamePrefixedForValues="true"
                         autoComplete="true"
                         markedForTask="false">
@@ -1197,7 +1197,7 @@
                         markedForTask="false"
                         autoComplete="true"
                         sharedForAllSessionFiles="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=imager">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_polarity"/>
                     <property name="image_property" value="created_by"/>
@@ -1235,7 +1235,7 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imaging_project">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=imaging_project">
                 <pluginDefault className="org.janelia.it.ims.tmog.plugin.imagedb.SageImageDataDefaultValue">
                     <property name="family" value="flylight_polarity"/>
                     <property name="image_property" value="imaging_project"/>
@@ -1284,7 +1284,7 @@
         <plugins>
 
             <rowValidator className="org.janelia.it.ims.tmog.plugin.imagedb.JacsDataSetQuotaValidator">
-                <property name="serviceUrl" value="https://api.int.janelia.org/SCSW/JADEServices/v1/storage/quota/nrsFilestore/report/${Data Set}"/>
+                <property name="serviceUrl" value="https://workstation.int.janelia.org/SCSW/JADEServices/v1/storage/quota/nrsFilestore/report/${Data Set}"/>
                 <property name="testDataSet" value="nerna_polarity_case_3"/>
             </rowValidator>
 
@@ -1538,7 +1538,7 @@
             </webServiceList>
 
             <cvTermList displayName="Tile" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=fly_light_adult_tiles"
                         autoComplete="true"
                         markedForTask="false">
                 <sourceFileMappedDefault pattern="^[^_]+_[^_]+_[^_]+_([^_]+)_.*">
@@ -1605,7 +1605,7 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/effector">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=effector">
             </cvTermList>
 
             <validValueList displayName="Gender" required="false"
@@ -1617,7 +1617,7 @@
             </validValueList>
 
             <cvTermList displayName="Age" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/age_remap"
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=age_remap"
                         displayNamePrefixedForValues="true"
                         autoComplete="true"
                         markedForTask="false">
@@ -1631,14 +1631,14 @@
                         markedForTask="false"
                         autoComplete="true"
                         sharedForAllSessionFiles="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=imager">
             </cvTermList>
 
             <cvTermList displayName="Renamer" required="true"
                         markedForTask="false"
                         autoComplete="true"
                         sharedForAllSessionFiles="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imager">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=imager">
             </cvTermList>
 
             <validValueList displayName="Tissue Mounting Protocol" required="true"
@@ -1674,7 +1674,7 @@
                         autoComplete="true"
                         markedForTask="false"
                         displayNamePrefixedForValues="false"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/imaging_project">
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=imaging_project">
                 <staticDefault value="polarity"/>
             </cvTermList>
 

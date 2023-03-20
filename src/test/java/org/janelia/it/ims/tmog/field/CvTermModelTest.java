@@ -47,11 +47,8 @@ public class CvTermModelTest
 
     /**
      * Tests the getFileNameValue method.
-     *
-     * @throws Exception
-     *   if any unexpected errors occur.
      */
-    public void testRetrieveValidValues() throws Exception {
+    public void testRetrieveValidValues() {
         CvTermModel model = new CvTermModel();
         model.setServiceUrl(VECTOR_URL);
 
@@ -85,19 +82,18 @@ public class CvTermModelTest
                      valueOf(prefixedModel),
                      modelSize, prefixedModelSize);
 
-        Map<ValidValue, ValidValue> map =
-                new LinkedHashMap<ValidValue, ValidValue>();
+        Map<ValidValue, ValidValue> map = new LinkedHashMap<>();
         ValidValue value;
         ValidValue prefixedValue;
         String displayName;
         String prefixedDisplayName;
         for (int i = 0; i < modelSize; i++) {
-            value = (ValidValue) model.getElementAt(i);
+            value = model.getElementAt(i);
             map.put(value, value);
         }
 
         for (int i = 0; i < prefixedModelSize; i++) {
-            prefixedValue = (ValidValue) prefixedModel.getElementAt(i);
+            prefixedValue = prefixedModel.getElementAt(i);
             value = map.get(prefixedValue);
             assertNotNull("prefixed value '" + prefixedValue +
                           "' missing from " + map.keySet(),
@@ -116,8 +112,6 @@ public class CvTermModelTest
         return model.getServiceUrl() + ", " + model.isDisplayNamePrefixedForValues();
     }
 
-    private static final String BASE_SERVICE_URL =
-            "http://sage.int.janelia.org/sage-ws/cvs/";
     private static final String VECTOR_URL =
-            BASE_SERVICE_URL + "rubin_crm_vector";
+            "https://sage-responder.int.janelia.org/cvterms?cv=rubin_crm_vector&_columns=cv_term,display_name";
 }

@@ -1,5 +1,5 @@
             <cvTermList displayName="Tile" required="true"
-                        serviceUrl="http://sage.int.janelia.org/sage-ws/cvs/fly_light_adult_tiles"
+                        serviceUrl="https://sage-responder.int.janelia.org/cvterms?_columns=cv_term,display_name&amp;cv=fly_light_adult_tiles"
                         autoComplete="true"
                         markedForTask="false">@sage-data-default@
                 <sourceFileMappedDefault pattern="^[^_]+_[^_]+_[^_]+_([^_]+)_.*">
