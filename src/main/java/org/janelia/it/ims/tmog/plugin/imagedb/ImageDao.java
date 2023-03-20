@@ -913,7 +913,7 @@ public class ImageDao extends AbstractDao
             "                                data_set.value=? " +  // 2. data set
             "left join image_property objective on objective.image_id=slide_code.image_id and objective.type_id=33 " +
             "where slide_code.type_id=3654 " +
-            "order by slide_code.value, objective.value";
+            "order by slide, objective.value";
 
     private static final String SQL_SELECT_SLIDE_IMAGE_NAMES =
             "select i.name, objective.value from image i " +
