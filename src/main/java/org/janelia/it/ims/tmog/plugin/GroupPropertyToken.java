@@ -7,9 +7,6 @@
 
 package org.janelia.it.ims.tmog.plugin;
 
-import org.janelia.it.ims.tmog.field.DataField;
-import org.janelia.it.ims.tmog.field.DataFieldGroupModel;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.janelia.it.ims.tmog.field.DataField;
+import org.janelia.it.ims.tmog.field.DataFieldGroupModel;
 
 /**
  * This class encapsulates a list of tokens parsed from
@@ -39,7 +39,7 @@ public class GroupPropertyToken
      *
      * The following example checks each line in a group individually:
      * <pre>
-     *       property name="serviceUrl" value="http://sage.int.janelia.org/sage-ws/lines/rubin/${GROUP-1:Line}.janelia-sage"
+     *       property name="serviceUrl" value="https://sage-responder.int.janelia.org/line_ids?name=${GROUP-1:Line}"
      *       property name="errorMessage" value="There is no Rubin lab line named '${GROUP-1:Line}' in the SAGE database."
      *       property name="GROUP-1:Line:rowFormat" value="GMR_${Plate}${Well}_${Vector ID}_${Landing Site}"
      * </pre>
