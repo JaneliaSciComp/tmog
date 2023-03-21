@@ -172,8 +172,8 @@
 @config-fragment-update-mapped-serial-data@
 @config-fragment-update-project-cross-data@
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.SlideCodeConsensusPlugin">
-                <property name="plugin.service-url" value="http://sage.int.janelia.org/sage-ws/images/dataSet/${Data Set}/slideCode/${Slide Code}/consensusData" />
-                <property name="plugin.test-url" value="http://sage.int.janelia.org/sage-ws/images/dataSet/sterneg_ti_mcfo_case_1/slideCode/20161201_19_A1/consensusData" />
+                <property name="plugin.service-url" value="https://sage-responder.int.janelia.org/slide_code_consensus/${Data Set}/${Slide Code}" />
+                <property name="plugin.test-url" value="https://sage-responder.int.janelia.org/slide_code_consensus/sterneg_ti_mcfo_case_1/20161201_19_A1" />
                 <property name="plugin.root-xpath" value="slideCodeConsensusData" />
                 <property name="Age" value="age" />
                 <property name="Annotator" value="annotatedBy" />
