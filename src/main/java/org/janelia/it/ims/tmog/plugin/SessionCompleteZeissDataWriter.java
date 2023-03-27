@@ -7,13 +7,6 @@
 
 package org.janelia.it.ims.tmog.plugin;
 
-import loci.formats.CoreMetadata;
-import loci.formats.in.ZeissLSMReader;
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.DataRow;
-import org.janelia.it.ims.tmog.config.PluginConfiguration;
-import org.janelia.it.ims.tmog.target.FileTarget;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -30,6 +23,14 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.DataRow;
+import org.janelia.it.ims.tmog.config.PluginConfiguration;
+import org.janelia.it.ims.tmog.target.FileTarget;
+
+import loci.formats.CoreMetadata;
+import loci.formats.in.ZeissLSMReader;
 
 /**
  * <p>
@@ -397,7 +398,7 @@ public class SessionCompleteZeissDataWriter
     }
 
     private static final Logger LOG =
-            Logger.getLogger(SessionCompleteZeissDataWriter.class);
+            org.apache.logging.log4j.LogManager.getLogger(SessionCompleteZeissDataWriter.class);
 
     private static final String INIT_FAILURE_MSG =
             "Failed to initialize SessionCompleteZeissDataWriter plug-in.  ";

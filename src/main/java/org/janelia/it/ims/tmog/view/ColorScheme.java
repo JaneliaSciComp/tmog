@@ -7,17 +7,22 @@
 
 package org.janelia.it.ims.tmog.view;
 
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
-
-import javax.swing.*;
-import javax.swing.plaf.ColorUIResource;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.config.preferences.TransmogrifierPreferences;
 
 /**
  * Allows users to toggle between a light (default) and dark color scheme.
@@ -117,7 +122,7 @@ public class ColorScheme {
         tmogPreferences.save();
     }
 
-    private static final Logger LOG = Logger.getLogger(ColorScheme.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(ColorScheme.class);
 
     // NOTE: colors must be UI resources to allow for run-time changes
 

@@ -7,10 +7,6 @@
 
 package org.janelia.it.ims.tmog.plugin;
 
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.DataRow;
-import org.janelia.it.ims.tmog.config.PluginConfiguration;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,6 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.DataRow;
+import org.janelia.it.ims.tmog.config.PluginConfiguration;
 
 /**
  * <p>
@@ -46,7 +46,7 @@ public class SessionCompleteFileWriter
      * The logger for this class.
      */
     private static final Logger LOG =
-            Logger.getLogger(SessionCompleteFileWriter.class);
+            org.apache.logging.log4j.LogManager.getLogger(SessionCompleteFileWriter.class);
 
     /**
      * Plug-in instances are shared across all session threads,

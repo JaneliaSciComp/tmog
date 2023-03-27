@@ -7,12 +7,12 @@
 
 package org.janelia.it.ims.tmog.field;
 
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.target.Target;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.target.Target;
 
 /**
  * This class encapsulates a default field value that is based upon
@@ -93,6 +93,6 @@ public class SourceFileDateDefaultValue extends SourceFileDefaultValue {
 
     /** The logger for this class. */
     private static final Logger LOG =
-            Logger.getLogger(SourceFileDateDefaultValue.class);
+            org.apache.logging.log4j.LogManager.getLogger(SourceFileDateDefaultValue.class);
 
 }

@@ -7,18 +7,18 @@
 
 package org.janelia.it.ims.tmog.target;
 
-import org.apache.commons.digester.Digester;
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.config.ConfigurationException;
-import org.janelia.it.utils.StringUtil;
-import org.janelia.it.utils.digester.ElementNameCallParamRule;
-
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.commons.digester.Digester;
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.config.ConfigurationException;
+import org.janelia.it.utils.StringUtil;
+import org.janelia.it.utils.digester.ElementNameCallParamRule;
 
 /**
  * {@link TargetDataFile} implementation for an XML file that adheres to
@@ -269,5 +269,5 @@ public class XmlTargetDataFile
     }
 
     private static final Logger LOG =
-            Logger.getLogger(XmlTargetDataFile.class);
+            org.apache.logging.log4j.LogManager.getLogger(XmlTargetDataFile.class);
 }

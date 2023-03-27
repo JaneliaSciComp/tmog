@@ -7,16 +7,17 @@
 
 package org.janelia.it.ims.tmog.field;
 
-import org.apache.log4j.Logger;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.event.TableModelEvent;
+
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.AbstractTransmogrifierTableModel;
 import org.janelia.it.ims.tmog.TransmogrifierTableModel;
 import org.janelia.it.ims.tmog.config.preferences.FieldDefaultSet;
 import org.janelia.it.ims.tmog.target.Target;
 import org.janelia.it.ims.tmog.view.component.ButtonPanel;
-
-import javax.swing.event.TableModelEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This model supports a list of field groups with each group containing
@@ -418,7 +419,7 @@ public class DataFieldGroupModel
 
     /** The logger for this class. */
     private static final Logger LOG =
-            Logger.getLogger(DataFieldGroupModel.class);
+            org.apache.logging.log4j.LogManager.getLogger(DataFieldGroupModel.class);
 
     private static final int NUMBER_OF_BUTTON_COLUMNS = 1;
 }

@@ -7,12 +7,12 @@
 
 package org.janelia.it.ims.tmog.plugin;
 
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.config.PluginConfiguration;
-import org.janelia.it.utils.PathUtil;
-
 import java.io.File;
 import java.io.FileWriter;
+
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.config.PluginConfiguration;
+import org.janelia.it.utils.PathUtil;
 
 /**
  * This base class provides common support for plug-ins that
@@ -168,5 +168,5 @@ public abstract class RowWriterPlugin
         }
     }
 
-    private static final Logger LOG = Logger.getLogger(RowWriterPlugin.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(RowWriterPlugin.class);
 }

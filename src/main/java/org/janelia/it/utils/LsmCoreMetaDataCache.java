@@ -7,13 +7,14 @@
 
 package org.janelia.it.utils;
 
-import loci.formats.CoreMetadata;
-import loci.formats.in.ZeissLSMReader;
-import org.apache.log4j.Logger;
-
 import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.apache.logging.log4j.Logger;
+
+import loci.formats.CoreMetadata;
+import loci.formats.in.ZeissLSMReader;
 
 /**
  * A simple cache of core meta data for LSM files. 
@@ -48,5 +49,5 @@ public class LsmCoreMetaDataCache {
     }
 
     private static final Logger LOG =
-            Logger.getLogger(LsmCoreMetaDataCache.class);
+            org.apache.logging.log4j.LogManager.getLogger(LsmCoreMetaDataCache.class);
 }

@@ -7,14 +7,14 @@
 
 package org.janelia.it.utils;
 
-import org.apache.log4j.Logger;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
+
+import org.apache.logging.log4j.Logger;
 
 /**
  *  This class provides utilities for working with files.
@@ -82,6 +82,6 @@ public class FileUtil {
         return canWrite;
     }
 
-    private static final Logger LOG = Logger.getLogger(FileUtil.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(FileUtil.class);
     private static final Random RANDOM = new Random();
 }

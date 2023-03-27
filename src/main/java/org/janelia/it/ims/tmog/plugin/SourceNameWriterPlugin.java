@@ -7,15 +7,15 @@
 
 package org.janelia.it.ims.tmog.plugin;
 
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.config.PluginConfiguration;
-
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
+
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.config.PluginConfiguration;
 
 /**
  * This plug-in writes the source (from) file name for the current
@@ -129,5 +129,5 @@ public class SourceNameWriterPlugin
     }
 
     private static final Logger LOG =
-            Logger.getLogger(SourceNameWriterPlugin.class);
+            org.apache.logging.log4j.LogManager.getLogger(SourceNameWriterPlugin.class);
 }

@@ -7,7 +7,7 @@
 
 package org.janelia.it.ims.tmog.plugin;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 
 /**
@@ -33,7 +33,7 @@ public class SleepingRowListener implements RowListener {
 
     /** The logger for this class. */
     private static final Logger LOG =
-            Logger.getLogger(SleepingRowListener.class);
+            org.apache.logging.log4j.LogManager.getLogger(SleepingRowListener.class);
 
     private int seconds;
 

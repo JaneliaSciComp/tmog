@@ -1,0 +1,42 @@
+<Configuration>
+
+    <Appenders>
+        <!--
+             For more configuration information and examples see:
+             https://logging.apache.org/log4j/2.x/manual/appenders.html
+        -->
+
+        <!-- append messages to the console -->
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
+        </Console>
+
+        <!-- send messages to syslog, use TCP protocol to prevent truncation of long messages -->
+        <Syslog name="SYSLOG" host="loghost.int.janelia.org" port="514" protocol="TCP">
+            <PatternLayout pattern="daemon [%c] %m"/>
+        </Syslog>
+
+        <!-- stub appender used for testing -->
+        <File name="SYSLOG_STUB" fileName="build/tmp/transmogrifierSyslog.log">
+            <PatternLayout>
+                <Pattern>%d{ABSOLUTE} %-5p [%c] %m%n</Pattern>
+            </PatternLayout>
+        </File>
+
+    </Appenders>
+
+    <Loggers>
+
+        <Logger name="org.janelia" level="info"/>
+
+        <!-- uncomment to debug Digester -->
+        <!-- <Logger name="org.apache" level="debug"/> -->
+
+        <Root level="error">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="SYSLOG_STUB"/>
+        </Root>
+
+    </Loggers>
+
+</Configuration>

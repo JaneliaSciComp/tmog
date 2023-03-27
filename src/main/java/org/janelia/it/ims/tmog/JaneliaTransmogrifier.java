@@ -23,7 +23,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.config.ConfigurationException;
 import org.janelia.it.ims.tmog.config.ConfigurationLoadCompletionHandler;
 import org.janelia.it.ims.tmog.config.ConfigurationLoader;
@@ -44,7 +44,7 @@ public class JaneliaTransmogrifier extends JFrame implements ConfigurationLoadCo
 
     /** The logger for this class. */
     private static final Logger LOG =
-            Logger.getLogger(JaneliaTransmogrifier.class);
+            org.apache.logging.log4j.LogManager.getLogger(JaneliaTransmogrifier.class);
 
     private static String version = JaneliaTransmogrifier.class.getPackage().getImplementationVersion();
 

@@ -7,15 +7,15 @@
 
 package org.janelia.it.ims.tmog.field;
 
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.target.FileTarget;
-import org.janelia.it.ims.tmog.target.Target;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.target.FileTarget;
+import org.janelia.it.ims.tmog.target.Target;
 
 /**
  * This class encapsulates a default field value that is based upon the
@@ -156,6 +156,6 @@ public class SourceFileDefaultValue implements DefaultValue {
 
     /** The logger for this class. */
     private static final Logger LOG =
-            Logger.getLogger(SourceFileDefaultValue.class);
+            org.apache.logging.log4j.LogManager.getLogger(SourceFileDefaultValue.class);
 
 }

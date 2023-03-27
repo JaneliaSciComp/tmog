@@ -7,7 +7,10 @@
 
 package org.janelia.it.ims.tmog.task;
 
-import org.apache.log4j.Logger;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
@@ -19,9 +22,6 @@ import org.janelia.it.ims.tmog.target.Target;
 import org.janelia.it.utils.LoggingUtils;
 import org.jdesktop.swingworker.SwingWorker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * This class provides the core methods to support background execution of a
  * task that is dependent upon {@link DataTableModel} information.
@@ -31,7 +31,7 @@ import java.util.List;
 public class SimpleTask extends SwingWorker<Void, TaskProgressInfo> implements Task {
 
     /** The logger for this class. */
-    private static final Logger LOG = Logger.getLogger(SimpleTask.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(SimpleTask.class);
 
     /** The data model for this task. */
     private DataTableModel model;

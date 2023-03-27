@@ -7,11 +7,11 @@
 
 package org.janelia.it.ims.tmog.config;
 
-import org.apache.log4j.Logger;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.logging.log4j.Logger;
 
 /**
  * Configured logical to physical path name mappings for the current OS.
@@ -54,5 +54,5 @@ public class PathMapConfiguration {
     }
 
     private static final Logger LOG =
-            Logger.getLogger(PathMapConfiguration.class);
+            org.apache.logging.log4j.LogManager.getLogger(PathMapConfiguration.class);
 }

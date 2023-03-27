@@ -7,17 +7,17 @@
 
 package org.janelia.it.ims.tmog.plugin;
 
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.DataRow;
-import org.janelia.it.ims.tmog.config.PluginConfiguration;
-import org.janelia.it.utils.PathUtil;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.DataRow;
+import org.janelia.it.ims.tmog.config.PluginConfiguration;
+import org.janelia.it.utils.PathUtil;
 
 /**
  * This class handles session events "published" by the transmogrifier tool.
@@ -32,7 +32,7 @@ public class SessionSummaryFileWriter implements SessionListener {
      * The logger for this class.
      */
     private static final Logger LOG =
-            Logger.getLogger(SessionSummaryFileWriter.class);
+            org.apache.logging.log4j.LogManager.getLogger(SessionSummaryFileWriter.class);
 
     /**
      * The configured directory for all summary files.

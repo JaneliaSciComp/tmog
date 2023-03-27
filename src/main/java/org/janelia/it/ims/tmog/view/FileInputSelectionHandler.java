@@ -7,7 +7,24 @@
 
 package org.janelia.it.ims.tmog.view;
 
-import org.apache.log4j.Logger;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.FileFilter;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.config.InputFileFilter;
 import org.janelia.it.ims.tmog.config.InputFileSorter;
 import org.janelia.it.ims.tmog.config.ProjectConfiguration;
@@ -18,16 +35,6 @@ import org.janelia.it.ims.tmog.filefilter.FileNamePatternFilter;
 import org.janelia.it.ims.tmog.target.FileTarget;
 import org.janelia.it.ims.tmog.target.FileTargetWorker;
 import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.FileFilter;
-import java.util.List;
 
 /**
  * This class manages File based input selection components.
@@ -376,5 +383,5 @@ public class FileInputSelectionHandler implements InputSelectionHandler {
 
     /** The logger for this class. */
     private static final Logger LOG =
-            Logger.getLogger(FileInputSelectionHandler.class);
+            org.apache.logging.log4j.LogManager.getLogger(FileInputSelectionHandler.class);
 }

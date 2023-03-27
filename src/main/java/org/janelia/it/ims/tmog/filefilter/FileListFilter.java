@@ -7,9 +7,6 @@
 
 package org.janelia.it.ims.tmog.filefilter;
 
-import org.apache.log4j.Logger;
-import org.janelia.it.utils.PathUtil;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -18,6 +15,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.utils.PathUtil;
 
 /**
  * This filter accepts files whose names match a specified pattern
@@ -177,5 +177,5 @@ public class FileListFilter
     }
 
     /** The logger for this class. */
-    private static final Logger LOG = Logger.getLogger(FileListFilter.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(FileListFilter.class);
 }

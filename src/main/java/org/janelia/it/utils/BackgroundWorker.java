@@ -7,12 +7,12 @@
 
 package org.janelia.it.utils;
 
-import org.apache.log4j.Logger;
-import org.jdesktop.swingworker.SwingWorker;
-
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
+
+import org.apache.logging.log4j.Logger;
+import org.jdesktop.swingworker.SwingWorker;
 
 /**
  * This class supports task execution in a background thread.
@@ -128,5 +128,5 @@ public abstract class BackgroundWorker<T, V> extends SwingWorker<T, V> {
     protected abstract T executeBackgroundOperation() throws Exception;
 
     /** The logger for this class. */
-    private static final Logger LOG = Logger.getLogger(BackgroundWorker.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(BackgroundWorker.class);
 }

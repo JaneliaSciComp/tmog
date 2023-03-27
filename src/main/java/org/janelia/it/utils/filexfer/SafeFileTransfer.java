@@ -7,8 +7,6 @@
 
 package org.janelia.it.utils.filexfer;
 
-import org.apache.log4j.Logger;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -23,6 +21,8 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.logging.log4j.Logger;
+
 /**
  * This utility supports safe file transfers.
  * 
@@ -31,7 +31,7 @@ import java.util.Date;
 public class SafeFileTransfer {
 
     /** The logger for this class. */
-    private static final Logger LOG = Logger.getLogger(SafeFileTransfer.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(SafeFileTransfer.class);
     public static final String DIGEST_ALGORITHM = "md5";
     public static final int BUFFER_SIZE = 1024 * 1024;
 

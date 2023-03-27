@@ -7,15 +7,15 @@
 
 package org.janelia.it.ims.tmog.config.output;
 
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.config.ConfigurationException;
-import org.janelia.it.ims.tmog.field.DataField;
-import org.janelia.it.ims.tmog.target.FileTarget;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.config.ConfigurationException;
+import org.janelia.it.ims.tmog.field.DataField;
+import org.janelia.it.ims.tmog.target.FileTarget;
 
 /**
  * This class encapsulates configuration information about the
@@ -372,7 +372,7 @@ public class OutputDirectoryConfiguration {
 
 
     /** The logger for this class. */
-    private static final Logger LOG = Logger.getLogger(OutputDirectoryConfiguration.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(OutputDirectoryConfiguration.class);
 
     private static final String FILE_SEP = System.getProperty("file.separator");
 }

@@ -7,7 +7,12 @@
 
 package org.janelia.it.ims.tmog.task;
 
-import org.apache.log4j.Logger;
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.config.FileTransferConfiguration;
@@ -19,11 +24,6 @@ import org.janelia.it.utils.filexfer.FileCopyFailedException;
 import org.janelia.it.utils.filexfer.FileTransferUtil;
 import org.janelia.it.utils.filexfer.SafeFileTransfer;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
-
 /**
  * This class supports the execution of the copy and rename process.
  *
@@ -34,7 +34,7 @@ public class RenameTask extends SimpleTask {
     /**
      * The logger for this class.
      */
-    private static final Logger LOG = Logger.getLogger(RenameTask.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(RenameTask.class);
 
     /**
      * The output directory configuration information for the project.

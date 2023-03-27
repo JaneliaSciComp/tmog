@@ -7,14 +7,14 @@
 
 package org.janelia.it.ims.tmog.field;
 
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.target.Target;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.target.Target;
 
 /**
  * This class encapsulates a default field value that is based upon
@@ -100,6 +100,6 @@ public class TargetPropertyDefaultValue
 
     /** The logger for this class. */
     private static final Logger LOG =
-            Logger.getLogger(TargetPropertyDefaultValue.class);
+            org.apache.logging.log4j.LogManager.getLogger(TargetPropertyDefaultValue.class);
 
 }

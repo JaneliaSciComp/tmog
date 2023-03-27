@@ -11,16 +11,6 @@
 
 package loci.formats.in;
 
-import loci.common.RandomAccessInputStream;
-import loci.formats.CoreMetadata;
-import loci.formats.FormatException;
-import loci.formats.tiff.IFD;
-import loci.formats.tiff.IFDList;
-import loci.formats.tiff.PhotoInterp;
-import loci.formats.tiff.TiffConstants;
-import loci.formats.tiff.TiffParser;
-import org.apache.log4j.Logger;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +22,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.Vector;
+
+import org.apache.logging.log4j.Logger;
+
+import loci.common.RandomAccessInputStream;
+import loci.formats.CoreMetadata;
+import loci.formats.FormatException;
+import loci.formats.tiff.IFD;
+import loci.formats.tiff.IFDList;
+import loci.formats.tiff.PhotoInterp;
+import loci.formats.tiff.TiffConstants;
+import loci.formats.tiff.TiffParser;
 
 /**
  * ZeissLSMReader is the file format reader for Zeiss LSM files.
@@ -1376,7 +1377,7 @@ public class ZeissLSMReader {
     class Timer extends SubBlock { }
     class Marker extends SubBlock { }
 
-    private static final Logger LOG = Logger.getLogger(ZeissLSMReader.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(ZeissLSMReader.class);
 
 
 }

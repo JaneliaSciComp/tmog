@@ -7,12 +7,12 @@
 
 package org.janelia.it.ims.tmog.task;
 
-import org.apache.log4j.Logger;
+import java.io.File;
+
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.config.FileTransferConfiguration;
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
-
-import java.io.File;
 
 /**
  * This is simply an extension of the rename task that does not delete
@@ -23,7 +23,7 @@ import java.io.File;
 public class RenameWithoutDeleteTask extends RenameTask {
 
     private static final Logger LOG =
-            Logger.getLogger(RenameWithoutDeleteTask.class);
+            org.apache.logging.log4j.LogManager.getLogger(RenameWithoutDeleteTask.class);
 
     /** The name of the task supported by this view. */
     public static final String TASK_NAME = "rename-without-delete";

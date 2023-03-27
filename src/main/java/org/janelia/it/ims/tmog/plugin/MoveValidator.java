@@ -7,13 +7,13 @@
 
 package org.janelia.it.ims.tmog.plugin;
 
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.config.PluginConfiguration;
-import org.janelia.it.utils.PathUtil;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.config.PluginConfiguration;
+import org.janelia.it.utils.PathUtil;
 
 /**
  * This class validates that a file can be moved using the current mount.
@@ -127,7 +127,7 @@ public class MoveValidator
      * The logger for this class.
      */
     private static final Logger LOG =
-            Logger.getLogger(MoveValidator.class);
+            org.apache.logging.log4j.LogManager.getLogger(MoveValidator.class);
 
     private static final String VERIFICATION_FAILURE_MSG =
             "Failed to verify that moves are permitted for the current mapped drive.  ";

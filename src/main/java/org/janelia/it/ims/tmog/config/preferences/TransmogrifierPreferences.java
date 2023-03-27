@@ -7,10 +7,6 @@
 
 package org.janelia.it.ims.tmog.config.preferences;
 
-import org.apache.commons.digester.Digester;
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.config.ConfigurationException;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,6 +15,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.apache.commons.digester.Digester;
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.config.ConfigurationException;
 
 /**
  * All application preference settings.
@@ -411,7 +411,7 @@ public class TransmogrifierPreferences {
     }
 
     private static final Logger LOG =
-            Logger.getLogger(TransmogrifierPreferences.class);
+            org.apache.logging.log4j.LogManager.getLogger(TransmogrifierPreferences.class);
 
     private static final String FILE_NAME = ".tmog-preferences.xml";
     private static final String GLOBAL_PREFERENCES_NAME = "tmog-global-preferences";

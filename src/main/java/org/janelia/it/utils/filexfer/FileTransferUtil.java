@@ -7,8 +7,6 @@
 
 package org.janelia.it.utils.filexfer;
 
-import org.apache.log4j.Logger;
-
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +16,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import org.apache.logging.log4j.Logger;
 
 /**
  * This utility supports file transfer and file digest calculation/validation
@@ -459,7 +459,7 @@ public class FileTransferUtil {
         return sb.toString();
     }
 
-    private static final Logger LOG = Logger.getLogger(FileTransferUtil.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(FileTransferUtil.class);
 
     public static void main(String[] args) {
         if (args.length > 1) {

@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'org.janelia.scicomp'
-version '4.5.0'
+version '4.5.1'
 
 sourceCompatibility = '8'
 targetCompatibility = '8'
@@ -29,7 +29,8 @@ dependencies {
     compile "com.google.code.gson:gson:2.7"
     compile "com.jayway.jsonpath:json-path:2.7.0"
     compile 'com.intellij:forms_rt:7.0.3'
-    compile "log4j:log4j:1.2.17"
+    compile "org.apache.logging.log4j:log4j-api:2.20.0"
+    compile "org.apache.logging.log4j:log4j-core:2.20.0"
     compile "mysql:mysql-connector-java:5.1.22"
     compile "net.java.dev.glazedlists:glazedlists_java15:1.8.0"
     compile "org.jdesktop:swing-worker:1.1"

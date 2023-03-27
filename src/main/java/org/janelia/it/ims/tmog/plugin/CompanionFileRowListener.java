@@ -7,12 +7,12 @@
 
 package org.janelia.it.ims.tmog.plugin;
 
-import org.apache.log4j.Logger;
+import java.io.File;
+
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.utils.filexfer.FileCopyFailedException;
 import org.janelia.it.utils.filexfer.SafeFileTransfer;
-
-import java.io.File;
 
 /**
  * This plug-in transfers and renames a "companion" file that is related to
@@ -147,7 +147,7 @@ public class CompanionFileRowListener
     }
 
     private static final Logger LOG =
-            Logger.getLogger(CompanionFileRowListener.class);
+            org.apache.logging.log4j.LogManager.getLogger(CompanionFileRowListener.class);
 
     private static final String INIT_FAILURE_MSG =
             "Failed to initialize the Companion File Row Listener Plugin.  ";

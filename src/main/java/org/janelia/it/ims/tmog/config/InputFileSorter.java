@@ -7,13 +7,13 @@
 
 package org.janelia.it.ims.tmog.config;
 
-import org.apache.log4j.Logger;
+import java.util.Comparator;
+
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.filefilter.LNumberComparator;
 import org.janelia.it.ims.tmog.filefilter.NumberComparator;
 import org.janelia.it.ims.tmog.filefilter.PathComparator;
 import org.janelia.it.ims.tmog.target.FileTarget;
-
-import java.util.Comparator;
 
 
 /**
@@ -25,7 +25,7 @@ import java.util.Comparator;
 public class InputFileSorter {
 
     /** The logger for this class. */
-    private static final Logger LOG = Logger.getLogger(InputFileSorter.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(InputFileSorter.class);
 
     /** Algorithm name for sorting by numbers. */
     public static final String NUMBER_NAME = "Number";

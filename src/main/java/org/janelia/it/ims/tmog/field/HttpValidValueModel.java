@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.utils.StringUtil;
 
 /**
@@ -300,7 +300,7 @@ public class HttpValidValueModel
     }
 
     private static final Logger LOG = 
-            Logger.getLogger(HttpValidValueModel.class);
+            org.apache.logging.log4j.LogManager.getLogger(HttpValidValueModel.class);
 
     private static final Comparator<ValidValue> DISPLAY_NAME_COMPARATOR =
             (o1, o2) -> {

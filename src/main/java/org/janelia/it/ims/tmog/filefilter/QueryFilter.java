@@ -7,12 +7,6 @@
 
 package org.janelia.it.ims.tmog.filefilter;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.URI;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.log4j.Logger;
-import org.janelia.it.ims.tmog.target.FileTargetNamer;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +14,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.URI;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.target.FileTargetNamer;
 
 /**
  * This filter accepts files whose names either match or do not match
@@ -121,5 +121,5 @@ public class QueryFilter extends javax.swing.filechooser.FileFilter
     }
 
     /** The logger for this class. */
-    private static final Logger LOG = Logger.getLogger(QueryFilter.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(QueryFilter.class);
 }

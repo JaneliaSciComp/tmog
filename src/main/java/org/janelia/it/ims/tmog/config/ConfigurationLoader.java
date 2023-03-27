@@ -7,8 +7,26 @@
 
 package org.janelia.it.ims.tmog.config;
 
+import java.awt.Component;
+import java.awt.Dimension;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
+import javax.swing.WindowConstants;
+
 import org.apache.commons.digester.Digester;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.JaneliaTransmogrifier;
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.ims.tmog.config.output.Path;
@@ -47,18 +65,6 @@ import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
 import org.janelia.it.ims.tmog.view.component.ProgressPanel;
 import org.janelia.it.utils.PathUtil;
 import org.xml.sax.SAXException;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Loads configuration data in a background thread while
@@ -509,5 +515,5 @@ public class ConfigurationLoader
         return selectedFile;
     }
 
-    private static final Logger LOG = Logger.getLogger(ConfigurationLoader.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(ConfigurationLoader.class);
 }

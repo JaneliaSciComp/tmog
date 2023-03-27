@@ -7,11 +7,11 @@
 
 package org.janelia.it.utils;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.MDC;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
+import org.apache.log4j.MDC;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class contains methods that support application logging.
@@ -21,7 +21,7 @@ import java.net.UnknownHostException;
 public class LoggingUtils {
 
     /** The logger for this class. */
-    private static final Logger LOG = Logger.getLogger(LoggingUtils.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(LoggingUtils.class);
 
     public static void setLoggingContext() {
         try {

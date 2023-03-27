@@ -7,10 +7,6 @@
 
 package org.janelia.it.ims.tmog.target;
 
-import org.apache.log4j.Logger;
-import org.janelia.it.utils.BackgroundWorker;
-import org.janelia.it.utils.StringUtil;
-
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -22,6 +18,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.utils.BackgroundWorker;
+import org.janelia.it.utils.StringUtil;
 
 /**
  * This task locates file targets for a selected directory.
@@ -280,6 +280,6 @@ public class FileTargetWorker
     }
 
     private static final Logger LOG =
-            Logger.getLogger(FileTargetWorker.class);
+            org.apache.logging.log4j.LogManager.getLogger(FileTargetWorker.class);
 
 }

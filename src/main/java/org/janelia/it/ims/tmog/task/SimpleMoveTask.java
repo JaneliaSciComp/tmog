@@ -7,14 +7,14 @@
 
 package org.janelia.it.ims.tmog.task;
 
-import org.apache.log4j.Logger;
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.DataTableModel;
 import org.janelia.it.ims.tmog.config.FileTransferConfiguration;
 import org.janelia.it.ims.tmog.config.output.OutputDirectoryConfiguration;
 import org.janelia.it.utils.filexfer.FileCopyFailedException;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * This task should only be used as an optimized way to move files
@@ -130,5 +130,5 @@ public class SimpleMoveTask
                renamedFile.getAbsolutePath();
     }
 
-    private static final Logger LOG = Logger.getLogger(SimpleMoveTask.class);
+    private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(SimpleMoveTask.class);
 }
