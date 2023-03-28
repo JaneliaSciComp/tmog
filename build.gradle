@@ -105,7 +105,7 @@ task prodJar(type: Jar) {
         }
     }
 
-    filesMatching('**/log4j.xml') {
+    filesMatching('**/log4j2.xml') {
         filter {
             it.replace('ref="SYSLOG_STUB', 'ref="SYSLOG')
         }

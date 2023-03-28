@@ -13,7 +13,7 @@
 
         <!-- send messages to syslog, use TCP protocol to prevent truncation of long messages -->
         <Syslog name="SYSLOG" host="loghost.int.janelia.org" port="514" protocol="TCP">
-            <PatternLayout pattern="daemon [%c] %m"/>
+            <PatternLayout pattern="daemon [%c] %m%n"/>
         </Syslog>
 
         <!-- stub appender used for testing -->
