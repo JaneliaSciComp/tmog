@@ -107,7 +107,7 @@ task prodJar(type: Jar) {
 
     filesMatching('**/log4j2.xml') {
         filter {
-            it.replace('ref="SYSLOG_STUB', 'ref="SYSLOG')
+            it.replace('<!-- <AppenderRef ref="SYSLOG"/> -->', '<AppenderRef ref="SYSLOG"/>')
         }
     }
 

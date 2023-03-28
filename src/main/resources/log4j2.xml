@@ -16,13 +16,6 @@
             <PatternLayout pattern="daemon [%c] %m%n"/>
         </Syslog>
 
-        <!-- stub appender used for testing -->
-        <File name="SYSLOG_STUB" fileName="build/tmp/transmogrifierSyslog.log">
-            <PatternLayout>
-                <Pattern>%d{ABSOLUTE} %-5p [%c] %m%n</Pattern>
-            </PatternLayout>
-        </File>
-
     </Appenders>
 
     <Loggers>
@@ -34,7 +27,7 @@
 
         <Root level="error">
             <AppenderRef ref="STDOUT"/>
-            <AppenderRef ref="SYSLOG_STUB"/>
+            <!-- <AppenderRef ref="SYSLOG"/> -->
         </Root>
 
     </Loggers>
