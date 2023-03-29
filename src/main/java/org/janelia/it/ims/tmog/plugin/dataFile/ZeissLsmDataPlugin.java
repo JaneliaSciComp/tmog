@@ -7,10 +7,14 @@
 
 package org.janelia.it.ims.tmog.plugin.dataFile;
 
-import loci.formats.CoreMetadata;
-import loci.formats.in.ZeissLSMReader;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
@@ -18,11 +22,8 @@ import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RowUpdater;
 import org.janelia.it.utils.StringUtil;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.Map;
+import loci.formats.CoreMetadata;
+import loci.formats.in.ZeissLSMReader;
 
 /**
  * This plug-in loads data from the Zeiss meta data block in an LSM file
@@ -223,7 +224,7 @@ public class ZeissLsmDataPlugin
     }
 
     /** The logger for this class. */
-    private static final Log LOG = LogFactory.getLog(ZeissLsmDataPlugin.class);
+    private static final Logger LOG = LogManager.getLogger(ZeissLsmDataPlugin.class);
 
     private static final String INIT_FAILURE_MSG =
             "Failed to initialize Zeiss LSM Data plug-in.  ";

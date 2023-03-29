@@ -7,18 +7,18 @@
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
-import org.janelia.it.utils.PathUtil;
-import org.janelia.it.utils.StringUtil;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
+import org.janelia.it.utils.PathUtil;
+import org.janelia.it.utils.StringUtil;
 
 /**
  * This class supports writing image properties to an XML file.
@@ -146,7 +146,7 @@ public class ImagePropertyFileWriter implements ImagePropertyWriter {
     }
 
     /** The logger for this class. */
-    private static final Log LOG = LogFactory.getLog(ImagePropertyFileWriter.class);
+    private static final Logger LOG = LogManager.getLogger(ImagePropertyFileWriter.class);
 
     private static final SimpleDateFormat CAPTURE_DATE_FMT =
             new SimpleDateFormat("yyyy-MM-dd");

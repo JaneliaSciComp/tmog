@@ -7,14 +7,14 @@
 
 package org.janelia.it.utils.db;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
-import org.janelia.it.utils.security.StringEncrypter;
-
 import java.io.InputStream;
 import java.sql.Connection;
 import java.util.Properties;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
+import org.janelia.it.utils.security.StringEncrypter;
 
 /**
  * This class provides common methods for data access objects.
@@ -116,6 +116,6 @@ public abstract class AbstractDao {
     }
 
     /** The logger for this class. */
-    private static final Log LOG = LogFactory.getLog(AbstractDao.class);
+    private static final Logger LOG = LogManager.getLogger(AbstractDao.class);
 
 }

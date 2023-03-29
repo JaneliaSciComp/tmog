@@ -7,14 +7,15 @@
 
 package org.janelia.it.utils.db;
 
+import java.sql.Connection;
+import java.util.Properties;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import java.sql.Connection;
-import java.util.Properties;
 
 /**
  * Tests the DbManager class.
@@ -23,7 +24,7 @@ import java.util.Properties;
  */
 public class DbManagerTest extends TestCase {
 
-    private static final Log LOG = LogFactory.getLog(DbManagerTest.class);
+    private static final Logger LOG = LogManager.getLogger(DbManagerTest.class);
 
     /**
      * Constructs a test case with the given name.

@@ -8,18 +8,6 @@
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
 import com.google.gson.Gson;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.janelia.it.ims.tmog.config.PluginConfiguration;
-import org.janelia.it.ims.tmog.field.DataField;
-import org.janelia.it.ims.tmog.field.StaticDataModel;
-import org.janelia.it.ims.tmog.plugin.ExternalDataException;
-import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
-import org.janelia.it.ims.tmog.plugin.PluginDataRow;
-import org.janelia.it.ims.tmog.plugin.PropertyTokenList;
-import org.janelia.it.ims.tmog.plugin.SimpleRowValidator;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -29,6 +17,19 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.config.PluginConfiguration;
+import org.janelia.it.ims.tmog.field.DataField;
+import org.janelia.it.ims.tmog.field.StaticDataModel;
+import org.janelia.it.ims.tmog.plugin.ExternalDataException;
+import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
+import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.plugin.PropertyTokenList;
+import org.janelia.it.ims.tmog.plugin.SimpleRowValidator;
 
 /**
  * This validator queries the JFS storage quota service to prevent processing
@@ -308,7 +309,7 @@ public class JacsDataSetQuotaValidator
         }
     }
 
-    private static final Log LOG = LogFactory.getLog(JacsDataSetQuotaValidator.class);
+    private static final Logger LOG = LogManager.getLogger(JacsDataSetQuotaValidator.class);
     private static final Gson GSON = new Gson();
     private static final DataSetQuota UNDEFINED_QUOTA = new DataSetQuota();
 

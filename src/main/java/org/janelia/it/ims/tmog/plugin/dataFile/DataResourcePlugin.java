@@ -7,12 +7,19 @@
 
 package org.janelia.it.ims.tmog.plugin.dataFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.ObjectParamRule;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
@@ -21,13 +28,6 @@ import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.PropertyTokenList;
 import org.janelia.it.ims.tmog.plugin.RowUpdater;
 import org.janelia.it.utils.StringUtil;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This plug-in loads data from an HTTP web service
@@ -353,5 +353,5 @@ public class DataResourcePlugin
     }
 
     /** The logger for this class. */
-    private static final Log LOG = LogFactory.getLog(DataResourcePlugin.class);
+    private static final Logger LOG = LogManager.getLogger(DataResourcePlugin.class);
 }

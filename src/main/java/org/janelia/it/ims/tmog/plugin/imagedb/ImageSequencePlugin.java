@@ -7,16 +7,16 @@
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RowListener;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This plug-in retrieves sequence numbers from the Image database.
@@ -165,7 +165,7 @@ public class ImageSequencePlugin implements RowListener {
     }
 
     /** The logger for this class. */
-    private static final Log LOG = LogFactory.getLog(ImageSequencePlugin.class);
+    private static final Logger LOG = LogManager.getLogger(ImageSequencePlugin.class);
 
     private static final String INIT_FAILURE_MSG =
             "Failed to initialize Sequence Number plug-in.  ";

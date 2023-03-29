@@ -15,8 +15,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.utils.db.DbManager;
 
 import junit.framework.Test;
@@ -32,7 +32,7 @@ public class SageImageDaoTest
         extends TestCase {
 
     /** The logger for this class. */
-    private static final Log LOG = LogFactory.getLog(SageImageDaoTest.class);
+    private static final Logger LOG = LogManager.getLogger(SageImageDaoTest.class);
 
     private SageImageDao dao;
     private Image testImage;

@@ -7,8 +7,17 @@
 
 package org.janelia.it.ims.tmog.plugin.dataFile;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.JOptionPane;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
@@ -18,14 +27,6 @@ import org.janelia.it.ims.tmog.plugin.RowUpdater;
 import org.janelia.it.ims.tmog.plugin.RowValidator;
 import org.janelia.it.ims.tmog.view.component.NarrowOptionPane;
 import org.janelia.it.utils.StringUtil;
-
-import javax.swing.*;
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Checks for inconsistencies between the objective information embedded in the source file name and
@@ -39,7 +40,7 @@ import java.util.regex.Pattern;
 public class ObjectiveCorrectionPlugin
         implements RowUpdater, RowValidator {
 
-    private static final Log LOG = LogFactory.getLog(ObjectiveCorrectionPlugin.class);
+    private static final Logger LOG = LogManager.getLogger(ObjectiveCorrectionPlugin.class);
 
     private static final String INIT_FAILURE_MSG =
             "Failed to initialize Objective Correction plug-in.  ";

@@ -7,22 +7,23 @@
 
 package org.janelia.it.ims.tmog.plugin;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.janelia.it.ims.tmog.DataRow;
-import org.janelia.it.ims.tmog.config.PluginConfiguration;
-import org.janelia.it.ims.tmog.field.StaticDataModel;
-import org.janelia.it.ims.tmog.target.FileTarget;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.DataRow;
+import org.janelia.it.ims.tmog.config.PluginConfiguration;
+import org.janelia.it.ims.tmog.field.StaticDataModel;
+import org.janelia.it.ims.tmog.target.FileTarget;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 /**
  * Tests the {@link CompanionFileRowListener} class.
@@ -248,7 +249,6 @@ public class CompanionFileRowListenerTest
         }
     }
 
-    private static final Log LOG =
-            LogFactory.getLog(CompanionFileRowListenerTest.class);
+    private static final Logger LOG = LogManager.getLogger(CompanionFileRowListenerTest.class);
 
 }

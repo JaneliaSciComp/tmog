@@ -7,12 +7,22 @@
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.field.DataField;
@@ -24,16 +34,6 @@ import org.janelia.it.ims.tmog.plugin.PropertyTokenList;
 import org.janelia.it.ims.tmog.plugin.RelativePathUtil;
 import org.janelia.it.ims.tmog.plugin.RowListener;
 import org.janelia.it.ims.tmog.plugin.SessionListener;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This plug-in invokes the JACS lsm pipelines API.
@@ -323,7 +323,7 @@ public class JacsLsmPipelinesPlugin
         return sb.toString();
     }
 
-    private static final Log LOG = LogFactory.getLog(JacsLsmPipelinesPlugin.class);
+    private static final Logger LOG = LogManager.getLogger(JacsLsmPipelinesPlugin.class);
 
     private static final String INIT_FAILURE_MSG = "Failed to initialize JACS LSM Pipelines plug-in.  ";
 

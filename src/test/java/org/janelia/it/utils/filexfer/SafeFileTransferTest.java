@@ -7,18 +7,18 @@
 
 package org.janelia.it.utils.filexfer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.File;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Tests the {@link SafeFileTransfer} class.
@@ -27,8 +27,7 @@ import java.util.Date;
  */
 public class SafeFileTransferTest {
 
-    private static final Log LOG =
-            LogFactory.getLog(SafeFileTransferTest.class);
+    private static final Logger LOG = LogManager.getLogger(SafeFileTransferTest.class);
 
     private FileTransferUtil validationUtil;
     private File sourceFile;

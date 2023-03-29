@@ -7,8 +7,11 @@
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.config.PluginConfiguration;
 import org.janelia.it.ims.tmog.field.DataField;
@@ -16,9 +19,6 @@ import org.janelia.it.ims.tmog.field.PluginDataModel;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.SessionListener;
-
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * This plug-in retrieves sequence numbers from the Image database.
@@ -209,7 +209,7 @@ public class GroupSequencePlugin
     }
 
     /** The logger for this class. */
-    private static final Log LOG = LogFactory.getLog(GroupSequencePlugin.class);
+    private static final Logger LOG = LogManager.getLogger(GroupSequencePlugin.class);
 
     private static final String INIT_FAILURE_MSG =
             "Failed to initialize the Group Sequence Plugin.  ";

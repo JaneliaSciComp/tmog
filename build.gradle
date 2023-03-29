@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'org.janelia.scicomp'
-version '4.5.1'
+version '4.5.2'
 
 sourceCompatibility = '8'
 targetCompatibility = '8'
@@ -25,7 +25,6 @@ dependencies {
 
     compile "commons-digester:commons-digester:1.8"
     compile "commons-httpclient:commons-httpclient:3.1"
-    compile "commons-logging:commons-logging:1.1"
     compile "com.google.code.gson:gson:2.7"
     compile "com.jayway.jsonpath:json-path:2.7.0"
     compile 'com.intellij:forms_rt:7.0.3'

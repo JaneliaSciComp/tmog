@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.utils.StringUtil;
 import org.janelia.it.utils.db.AbstractDao;
@@ -854,7 +854,7 @@ public class ImageDao extends AbstractDao
 
 
     /** The logger for this class. */
-    private static final Log LOG = LogFactory.getLog(ImageDao.class);
+    private static final Logger LOG = LogManager.getLogger(ImageDao.class);
 
     private static final String SQL_SELECT_FAMILY_ID =
             "SELECT id FROM cv_term_vw " +

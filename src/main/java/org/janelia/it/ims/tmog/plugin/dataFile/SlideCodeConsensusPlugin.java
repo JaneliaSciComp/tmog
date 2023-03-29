@@ -7,16 +7,16 @@
 
 package org.janelia.it.ims.tmog.plugin.dataFile;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.DataRow;
 import org.janelia.it.ims.tmog.plugin.ExternalDataException;
 import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RowValidator;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * This plugin retrieves slide code consensus values from an image data web service and utilizes them
@@ -104,7 +104,7 @@ public class SlideCodeConsensusPlugin
         // nothing to do
     }
 
-    private static final Log LOG = LogFactory.getLog(SlideCodeConsensusPlugin.class);
+    private static final Logger LOG = LogManager.getLogger(SlideCodeConsensusPlugin.class);
 
     private static final String DERIVED_FROM_CURRENT_SESSION_KEY = "DERIVED_FROM_CURRENT_SESSION";
 }

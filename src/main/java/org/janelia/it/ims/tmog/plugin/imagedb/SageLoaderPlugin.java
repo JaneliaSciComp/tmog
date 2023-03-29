@@ -7,22 +7,6 @@
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
-import org.apache.commons.digester.Digester;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.HeadMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.janelia.it.ims.tmog.config.PluginConfiguration;
-import org.janelia.it.ims.tmog.field.DataField;
-import org.janelia.it.ims.tmog.field.StaticDataModel;
-import org.janelia.it.ims.tmog.plugin.ExternalDataException;
-import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
-import org.janelia.it.ims.tmog.plugin.PluginDataRow;
-import org.janelia.it.ims.tmog.plugin.PropertyTokenList;
-import org.janelia.it.ims.tmog.plugin.RelativePathUtil;
-import org.janelia.it.ims.tmog.plugin.RowListener;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -33,6 +17,22 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.digester.Digester;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.HeadMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.config.PluginConfiguration;
+import org.janelia.it.ims.tmog.field.DataField;
+import org.janelia.it.ims.tmog.field.StaticDataModel;
+import org.janelia.it.ims.tmog.plugin.ExternalDataException;
+import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
+import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.plugin.PropertyTokenList;
+import org.janelia.it.ims.tmog.plugin.RelativePathUtil;
+import org.janelia.it.ims.tmog.plugin.RowListener;
 
 /**
  * This plug-in invokes the sageLoader via HTTP request.
@@ -350,8 +350,7 @@ public class SageLoaderPlugin
         return statusLink;
     }
 
-    private static final Log LOG =
-            LogFactory.getLog(SageLoaderPlugin.class);
+    private static final Logger LOG = LogManager.getLogger(SageLoaderPlugin.class);
 
     private static final String INIT_FAILURE_MSG =
             "Failed to initialize SageLoader plug-in.  ";

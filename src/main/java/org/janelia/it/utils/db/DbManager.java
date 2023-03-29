@@ -7,14 +7,14 @@
 
 package org.janelia.it.utils.db;
 
-import org.apache.commons.logging.Log;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class supports the management and configuration of basic
@@ -128,7 +128,7 @@ public class DbManager {
     public static void closeResources(ResultSet resultSet,
                                       Statement statement,
                                       Connection connection,
-                                      Log logger) {
+                                      Logger logger) {
         if (resultSet != null) {
             try {
                 resultSet.close();

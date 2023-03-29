@@ -7,16 +7,16 @@
 
 package org.janelia.it.ims.tmog.plugin.imagedb;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.janelia.it.ims.tmog.field.DataField;
 import org.janelia.it.ims.tmog.field.DatePatternField;
 import org.janelia.it.ims.tmog.plugin.PluginDataRow;
 import org.janelia.it.ims.tmog.plugin.RelativePathUtil;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * This class sets the image capture date using a configured field name
@@ -74,6 +74,6 @@ public class CaptureDateSetter extends SimpleSetter {
     }
 
     /** The logger for this class. */
-    private static final Log LOG = LogFactory.getLog(CaptureDateSetter.class);
+    private static final Logger LOG = LogManager.getLogger(CaptureDateSetter.class);
 
 }

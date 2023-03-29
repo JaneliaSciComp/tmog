@@ -7,17 +7,6 @@
 
 package org.janelia.it.ims.tmog.plugin;
 
-import loci.common.RandomAccessInputStream;
-import loci.common.RandomAccessOutputStream;
-import loci.formats.in.ZeissLSMReader;
-import loci.formats.tiff.IFD;
-import loci.formats.tiff.TiffIFDEntry;
-import loci.formats.tiff.TiffParser;
-import loci.formats.tiff.TiffSaver;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.janelia.it.ims.tmog.config.PluginConfiguration;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +15,18 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.config.PluginConfiguration;
+
+import loci.common.RandomAccessInputStream;
+import loci.common.RandomAccessOutputStream;
+import loci.formats.in.ZeissLSMReader;
+import loci.formats.tiff.IFD;
+import loci.formats.tiff.TiffIFDEntry;
+import loci.formats.tiff.TiffParser;
+import loci.formats.tiff.TiffSaver;
 
 /**
  * This plug-in embeds an xml representation of each row's data fields into
@@ -191,7 +192,7 @@ public class LsmMetaDataPlugin
     }
 
     /** The logger for this class. */
-    private static final Log LOG = LogFactory.getLog(LsmMetaDataPlugin.class);
+    private static final Logger LOG = LogManager.getLogger(LsmMetaDataPlugin.class);
 
     /** Tag number reserved by Gene Myers for his tiff formatted files. */
     private static final int TIFF_JF_TAGGER_TAG = 36036;

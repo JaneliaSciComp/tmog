@@ -7,19 +7,6 @@
 
 package org.janelia.it.ims.tmog.plugin.dataFile;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.janelia.it.ims.tmog.config.PluginConfiguration;
-import org.janelia.it.ims.tmog.plugin.ExternalDataException;
-import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
-import org.janelia.it.ims.tmog.plugin.PluginDataRow;
-import org.janelia.it.ims.tmog.plugin.PropertyTokenList;
-import org.janelia.it.ims.tmog.plugin.RowUpdater;
-import org.janelia.it.utils.PathUtil;
-import org.janelia.it.utils.StringUtil;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -28,6 +15,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.janelia.it.ims.tmog.config.PluginConfiguration;
+import org.janelia.it.ims.tmog.plugin.ExternalDataException;
+import org.janelia.it.ims.tmog.plugin.ExternalSystemException;
+import org.janelia.it.ims.tmog.plugin.PluginDataRow;
+import org.janelia.it.ims.tmog.plugin.PropertyTokenList;
+import org.janelia.it.ims.tmog.plugin.RowUpdater;
+import org.janelia.it.utils.PathUtil;
+import org.janelia.it.utils.StringUtil;
 
 /**
  * This plug-in loads a formatted data file that can be used to populate
@@ -302,7 +303,7 @@ public class DataFilePlugin
     }
 
     /** The logger for this class. */
-    private static final Log LOG = LogFactory.getLog(DataFilePlugin.class);
+    private static final Logger LOG = LogManager.getLogger(DataFilePlugin.class);
 
     private static final String INIT_FAILURE_MSG =
             "Failed to initialize Data File plug-in.  ";
