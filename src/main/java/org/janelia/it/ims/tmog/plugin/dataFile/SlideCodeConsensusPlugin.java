@@ -46,7 +46,10 @@ public class SlideCodeConsensusPlugin
                          PluginDataRow row)
             throws ExternalDataException, ExternalSystemException {
 
-        final Item item = getMappedItemForRow(row);
+        Item item = getMappedItemForRow(row);
+        if (item == null) {
+            item = new Item();
+        }
         final Map<String, String> rowFieldNameToXPathMap = getRowFieldNameToXPathMap();
         final String slideCode = row.getCoreValue("Slide Code");
 
