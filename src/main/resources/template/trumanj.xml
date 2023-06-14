@@ -3,7 +3,7 @@
     <project name="Truman - copy LSMs" taskName="rename-without-delete" default="true">
 
 @config-fragment-lsm-input@
-        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/trumanj_larval_ss/confocalStacks/">
+        <outputDirectory basePath="[//prfs.hhmi.org|/groups/flylight]/flylight/trumanj_larval_ss/confocalStacks/">
             <renameFieldValue fieldDisplayName="Directory" />
         </outputDirectory>
 
@@ -13,7 +13,7 @@
 @config-fragment-update-mapped-serial-data@
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Directory}/${File}" />
-                <property name="data-file.name" value="[//dm11.hhmi.org|/groups/flylight]/flylight/tmog/data/mapped-larval-data.tsv" />
+                <property name="data-file.name" value="[//prfs.hhmi.org|/groups/flylight]/flylight/tmog/data/mapped-larval-data.tsv" />
                 <property name="data-file.tsv-key" value="Directory/File" />
                 <property name="Data Set" value="Data Set" />
                 <property name="Slide Code" value="Slide Code" />

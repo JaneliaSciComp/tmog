@@ -1,6 +1,6 @@
             <rowUpdater className="org.janelia.it.ims.tmog.plugin.dataFile.DataFilePlugin">
                 <property name="tmog-row.key" value="${Cross Serial Number}" />
-                <property name="data-file.name" value="[//dm11.hhmi.org|/groups/flylight]/flylight/tmog/data/mapped-serial-data.tsv" />
+                <property name="data-file.name" value="[//prfs.hhmi.org|/groups/flylight]/flylight/tmog/data/mapped-serial-data.tsv" />
                 <property name="data-file.tsv-key" value="Serial" />
                 <property name="GAL4 Line" value="GAL4 Line" />
             </rowUpdater>

@@ -14,7 +14,7 @@
                          patternString="([A-Z])(\d++)_.*_(L\d++)[\._].*"
                          patternGroupIndexes="1,2,3"/>
 
-        <outputDirectory basePath="[//dm11.hhmi.org|/groups/flylight]/flylight/projtechres/confocalStacks/">
+        <outputDirectory basePath="[//prfs.hhmi.org|/groups/flylight]/flylight/projtechres/confocalStacks/">
             <sourceFileModificationTime datePattern="yyyy"/>
             <path path="/" />
             <sourceFileModificationTime datePattern="MM"/>
