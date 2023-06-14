@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'org.janelia.scicomp'
-version '4.5.3'
+version '4.5.5'
 
 sourceCompatibility = '8'
 targetCompatibility = '8'

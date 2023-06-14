@@ -115,6 +115,7 @@ public class TransmogrifierPreferences {
         if (fieldDefault != null) {
             value = fieldDefault.getValue();
         }
+        LOG.info("getGlobalPreference: returning {} for name {}", value, name);
         return value;
     }
 
@@ -335,6 +336,7 @@ public class TransmogrifierPreferences {
 
             if (this.globalPreferences == null) {
                 this.globalPreferences = new FieldDefaultSet();
+                this.globalPreferences.setName(GLOBAL_PREFERENCES_NAME);
             }
 
         } catch (IOException e) {

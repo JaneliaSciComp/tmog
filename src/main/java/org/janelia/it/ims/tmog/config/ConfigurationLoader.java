@@ -479,13 +479,13 @@ public class ConfigurationLoader
 
         File chooserDirectory = null;
         if (tmogPreferences.areLoaded()) {
-            String preferredDirectory =
-                    tmogPreferences.getGlobalPreference(chooserDirectoryName);
+            String preferredDirectory = tmogPreferences.getGlobalPreference(chooserDirectoryName);
             if (preferredDirectory != null) {
-                chooserDirectory =
-                        new File(PathUtil.convertPath(preferredDirectory));
+                chooserDirectory = new File(PathUtil.convertPath(preferredDirectory));
             }
         }
+
+        LOG.info("selectConfigFile: chooserDirectory is '" + chooserDirectory + "'");
 
         final FileNamePatternFilter xmlFileFilter =
                 new FileNamePatternFilter(".*\\.xml");
