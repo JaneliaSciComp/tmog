@@ -2,6 +2,7 @@
                             autoComplete="true"
                             sharedForAllSessionFiles="@is-shareable@"
                             markedForTask="false">@sage-data-default@
+                <validValue value="Adriane Otopalik"/>
                 <validValue value="Alice Robie"/>
                 <validValue value="Allan Wong"/>
                 <validValue value="Aljoscha Nern"/>
