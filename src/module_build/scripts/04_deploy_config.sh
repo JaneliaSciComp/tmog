@@ -18,6 +18,8 @@ function deployConfig {
 
   shift 1
 
+  echo "running: ssh ${DEPLOY_HOST} 'mkdir -p ${DATED_DIR}'"
+
   ssh ${DEPLOY_HOST} "mkdir -p ${DATED_DIR}"
 
   if (( $# > 0 )); then
