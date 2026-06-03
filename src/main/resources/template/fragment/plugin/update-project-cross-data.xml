@@ -3,5 +3,6 @@
                 <property name="plugin.test-url" value="http://informatics-prod.int.janelia.org/cgi-bin/flycore_responder.cgi?request=crossdatatmog;format=xml;cross_barcode=51418" />
                 <property name="plugin.root-xpath" value="projectCross" />
                 <property name="GAL4 Line" value="parent1StockName" />
+                <property name="Line Description (from Load Mapped Data)" value="parent1Genotype_GSI_Name_PlateWell" />
                 <property name="Reporter" value="reporter" />
             </rowUpdater>
