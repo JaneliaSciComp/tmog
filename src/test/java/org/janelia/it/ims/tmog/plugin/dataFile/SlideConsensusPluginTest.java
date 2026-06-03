@@ -116,7 +116,7 @@ public class SlideConsensusPluginTest
             slideCodeField = (DataField) model.getValueAt(i, slideCodeIndex);
             slideCodeField.applyValue("20230406_32_L4");
             ageField = (DataField) model.getValueAt(i, ageIndex);
-            ageField.applyValue("A1");
+            ageField.applyValue("A");
         }
     }
 
