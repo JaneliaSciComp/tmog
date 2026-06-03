@@ -4,9 +4,9 @@ DEPLOY_HOST="c13u01.int.janelia.org"
 
 set -e
 
-ABSOLUTE_SCRIPT=`readlink -m $0`
-SCRIPTS_DIR=`dirname ${ABSOLUTE_SCRIPT}`
-SRC_RESOURCES_DIR=`readlink -m ${SCRIPTS_DIR}/../../main/resources`
+ABSOLUTE_SCRIPT=$(realpath "$0" 2>/dev/null || readlink -f "$0")
+SCRIPTS_DIR=$(dirname ${ABSOLUTE_SCRIPT})
+SRC_RESOURCES_DIR=$(realpath "${SCRIPTS_DIR}"/../../main/resources 2>/dev/null || readlink -f "${SCRIPTS_DIR}"/../../main/resources)
 
 DATE_TAG=`date +"%Y%m%d_%H%M%S"`
 
